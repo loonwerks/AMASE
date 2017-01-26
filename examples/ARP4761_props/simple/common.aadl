@@ -1,0 +1,58 @@
+package common
+
+public
+with Base_Types;
+
+bus power
+end power;
+
+bus implementation power.generic
+end power.generic;
+
+bus pwm
+end pwm;
+
+bus implementation pwm.generic
+end pwm.generic;
+ 
+data command
+end command;
+
+data implementation command.brake
+end command.brake;
+
+data implementation command.skid
+	subcomponents
+		activate_antiskid : data Base_Types::Boolean; 
+end command.skid;
+
+data implementation command.pedal
+  	subcomponents
+  		pressure : data Base_Types::Integer ; 
+end command.pedal;
+
+data implementation command.announce
+end command.announce;
+
+-- The pressure bus represents the pressure sent/received by
+-- other devices/pumps
+--
+-- How do I represent data sent along the bus?  Obviously, 
+-- I'd like to represent 'pressure'.
+
+bus pressure
+end pressure;
+
+
+bus implementation pressure.i
+end pressure.i;
+
+
+system pipe
+features
+	input : in data port Base_Types::Float_64;
+	output : out data port Base_Types::Float_64;
+end pipe;
+
+
+end common;

@@ -1,0 +1,6 @@
+*.camkes
+*.ramses-log*
+.aadlbin-gen
+diagrams
+imv
+.aadlsettings
