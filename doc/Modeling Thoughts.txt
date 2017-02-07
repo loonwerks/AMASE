@@ -64,3 +64,19 @@ Mitre is using the tools.
 |//
 //
 /
+
+Feb 6th, 2017 (Danielle's notes)
+Went through ARP4761 files and converted the bus connections to ports. 
+Most of them were very straightforward given the simple diagram
+(https://wiki.sei.cmu.edu/aadl/index.php/Simple_version_of_the_ARP4761/AIR6110_example)
+but there were a couple of places I had to just make a judgement call. For example: 
+In valves.aadl: 
+  system generic
+     features
+       input : in data port common::pressure.i;
+       output : out data port common::pressure.i;
+       ...
+       
+It was unclear to me if they should be in data ports or out, so 
+I just assumed since it was input/output, the port should match. 
+Similar cases in wbs.aadl and wheel.aadl. 
