@@ -9,7 +9,7 @@ with EMV2;
 
 system pump
 features
-	pressure_output : provides bus access common::pressure.i;
+	pressure_output : out data port common::pressure.i;
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;
@@ -46,6 +46,13 @@ annex EMV2 {**
 		
 **};
 end pump;
+
+
+system implementation pump.i
+end pump.i;
+
+end pump;
+
 
 
 system implementation pump.i
