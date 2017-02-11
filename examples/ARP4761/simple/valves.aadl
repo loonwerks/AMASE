@@ -7,8 +7,8 @@ with common;
 
 system generic
 features
-	input : requires bus access common::pressure.i;
-	output : provides bus access common::pressure.i;
+	input : in data port common::pressure.i;
+	output : out data port common::pressure.i;
 annex EMV2 {**
 	use types     error_library;
 	use behavior  error_library::simple;
@@ -70,9 +70,9 @@ end cmd_shutoff;
 
 system selector
 features
-	accumulator_input: requires bus access common::pressure.i;
-	green_input      : requires bus access common::pressure.i;
-	blue_input       : requires bus access common::pressure.i;
+	accumulator_input: in data port common::pressure.i;
+	green_input      : in data port common::pressure.i;
+	blue_input       : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	cmd_nor          : in data port common::command.skid;
 	cmd_alt          : in data port common::command.skid;
@@ -101,7 +101,7 @@ end selector.i;
 
 system selector_basic extends selector
 features
-	output           : provides bus access common::pressure.i;
+	output           : out data port common::pressure.i;
 annex EMV2 {**
 	use types error_library;
 	
@@ -118,8 +118,8 @@ end selector_basic;
 
 system selector_detailed extends selector
 features
-	green_output : provides bus access common::pressure.i;
-	blue_output  : provides bus access common::pressure.i;
+	green_output : out data port common::pressure.i;
+	blue_output  : out data port common::pressure.i;
 annex EMV2 {**
 	use types       error_library;
 	use behavior    error_library::simple;
@@ -151,4 +151,6 @@ end selector_detailed;
 
 
 end valves;
+
+
 
