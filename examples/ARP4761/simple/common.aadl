@@ -8,10 +8,10 @@ end power;
 data implementation power.generic
 end power.generic;
 
-bus pwm
+data pwm
 end pwm;
 
-bus implementation pwm.generic
+data implementation pwm.generic
 end pwm.generic;
  
 data command
