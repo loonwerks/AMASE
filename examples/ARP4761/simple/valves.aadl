@@ -26,7 +26,7 @@ end generic.i;
 
 system generic_pwm_input extends generic
 features
-	input_pwm : requires bus access common::pwm.generic;
+	input_pwm : in data port common::pwm.generic;
 end generic_pwm_input;
 
 system implementation generic_pwm_input.i
