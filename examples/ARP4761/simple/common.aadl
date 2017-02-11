@@ -2,10 +2,10 @@ package common
 
 public
 
-bus power
+data power
 end power;
 
-bus implementation power.generic
+data implementation power.generic
 end power.generic;
 
 bus pwm
@@ -31,11 +31,11 @@ end command.announce;
 
 -- The pressure bus represents the pressure sent/received by
 -- other devices/pumps
-bus pressure
+data pressure
 end pressure;
 
 
-bus implementation pressure.i
+data implementation pressure.i
 end pressure.i;
 
 
