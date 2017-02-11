@@ -18,7 +18,7 @@ end wheel;
 
 system wheel_one_input extends wheel
 features
-	input : requires bus access common::pressure.i;
+	input : in data port common::pressure.i;
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;
@@ -49,8 +49,8 @@ end wheel_one_input.i;
 
 system wheel_two_inputs extends wheel_one_input
 features
-	green_input : requires bus access common::pressure.i;
-	blue_input : requires bus access common::pressure.i;
+	green_input : in data port common::pressure.i;
+	blue_input : in data port common::pressure.i;
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;
