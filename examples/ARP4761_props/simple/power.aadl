@@ -74,6 +74,11 @@ system power
 features
 	line1 : provides bus access common::power.generic;
 	line2 : provides bus access common::power.generic;
+
+annex agree {**
+	guarantee "There is always power coming from one line." : true ;	
+**};
+
 end power;
 
 system implementation power.generic

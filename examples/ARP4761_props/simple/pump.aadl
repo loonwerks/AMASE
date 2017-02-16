@@ -9,13 +9,13 @@ with EMV2;
 
 system pump
 features
-	pressure_output : provides bus access common::pressure.i;
+	pressure_output : out data port common::pressure.i;
 	
 annex AGREE {**
-	eq dummy : bool = true;
 	
-	-- This contract should just set a prescribed pressure for the output line.  The pump is apparently "always on".
-	guarantee "pump nominal output" : true;	
+	-- There should be some pressure always coming through
+	-- the lines.  
+	guarantee "Pump always outputs something" : pressure_output.val > 0.0 ;	
 **}	;
 
 annex EMV2 {**

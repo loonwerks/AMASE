@@ -17,6 +17,9 @@ with EMV2;
 --  Dummy component for the wheel brake system.
 --
 system wbs
+	annex agree {**
+		guarantee "silly" : true;
+	**};
 end wbs;
 
 system implementation wbs.generic
@@ -43,7 +46,7 @@ subcomponents
 	-- Annunciation device
 	annunciation 	: device communication::annunciation.i;
 connections
-    accu_to_sel: bus access selector.accumulator_input <-> accumulator.pressure_output;
+    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input ;
 	power1     : bus access bscu.pwr1 <-> power.line1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
@@ -133,14 +136,14 @@ system implementation wbs.basic extends wbs.generic
 	selector   : refined to system valves::selector_basic{Classifier_Substitution_Rule => Type_Extension;};
 	wheel      : refined to system wheel::wheel_one_input.i{Classifier_Substitution_Rule => Type_Extension;};
 connections 
-	blue_to_selector    : bus access blue_pump.pressure_output  <-> selector.blue_input; 
-	green_to_selector   : bus access green_pump.pressure_output <-> selector.green_input;
+	blue_to_selector    : port blue_pump.pressure_output -> selector.blue_input; 
+	green_to_selector   : port green_pump.pressure_output -> selector.green_input;
 	
 	bscu_sel_to_selector : port bscu.Select_Alternate -> selector.Select_Alternate;
 	bscu_cmdnor_to_selector : port bscu.cmd_nor -> selector.cmd_nor;
 	bscu_cmdalt_to_selector : port bscu.cmd_alt -> selector.cmd_alt;
 	
-	selector_to_wheel   : bus access selector.output <-> wheel.input;
+	selector_to_wheel   : port selector.output -> wheel.input;
 end wbs.basic;
 
 
@@ -169,7 +172,7 @@ system implementation wbs.federated
 	blue_skid  : system valves::cmd_shutoff; 
 	wheel      : system wheel::wheel_two_inputs.i ; 
 connections
-    accu_to_sel: bus access selector.accumulator_input <-> accumulator.pressure_output;
+    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
 	power1     : bus access bscu.pwr1 <-> power.line1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
@@ -177,9 +180,9 @@ connections
     --  We connect the blue pump directly to the selector valve.
     --  For the green pump, we connect it to the shutoff valve that
     --  is later connected to the selector valve after.
-	blue_to_selector    : bus access blue_pump.pressure_output  <-> selector.blue_input; 
-	green_to_shutoff    : bus access green_pump.pressure_output <-> shutoff.input;
-	shutoff_to_selector : bus access shutoff.output <-> selector.green_input;
+	blue_to_selector    : port blue_pump.pressure_output -> selector.blue_input; 
+	green_to_shutoff    : port green_pump.pressure_output -> shutoff.input;
+	shutoff_to_selector : port shutoff.output -> selector.green_input;
 	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
 	
 	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
@@ -190,32 +193,32 @@ connections
 	
 	--  Connect the output pressure from the selector
 	--  to the anti-skid components
-	selector_to_gskid   : bus access selector.green_output <-> green_skid.input;
-	selector_to_bskid   : bus access selector.blue_output  <-> blue_skid.input;
+	selector_to_gskid   : port selector.green_output -> green_skid.input;
+	selector_to_bskid   : port selector.blue_output -> blue_skid.input;
 	
 	--  Connect the anti-skid system to the wheel. In this version,
 	--  we see the wheel as having two paths for getting the pressure.
 	--  We see that as a physical model, not a logical one.
-	bskid_to_wheel      : bus access blue_skid.output <-> wheel.blue_input;
-	gskid_to_wheel      : bus access green_skid.output <-> wheel.green_input;
+	bskid_to_wheel      : port blue_skid.output -> wheel.blue_input;
+	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
 	-- Need to have data port access where currently we have bus access.
 	
 	annex agree {**
-		fun pedal_pressed(pedal: common::command.pedal): bool = pedal.pressure > 0;
+		fun pedal_pressed(pedal: common::command.pedal): bool = pedal.val > 0.0;
 		
-		eq one_pedal_pressed : bool = 
-			pedal_pressed(pedals.signal1) or pedal_pressed(pedals.signal2); 
+		eq pedals_pressed : bool = 
+			pedal_pressed(pedals.signal1) and pedal_pressed(pedals.signal2); 
 		
 		eq no_skid : bool = not bscu.cmd_nor.activate_antiskid and
 						    not bscu.cmd_alt.activate_antiskid;
 		
 		-- To represent brake pressure applied, we would need a notion of 
 		-- values sent along a bus, and I don't know how to do this in AADL.
-		eq brake_pressure : bool = wheel.green_input_in > 0.0 and wheel.blue_input_in > 0.0;
+		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
 		
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
-			one_pedal_pressed and no_skid => brake_pressure;
+			pedals_pressed and no_skid => brake_pressure;
 			
 		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
 		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;
@@ -251,7 +254,7 @@ subcomponents
 	blue_skid  : system valves::cmd_shutoff; 
 	wheel      : system wheel::wheel_two_inputs.i ; 
 connections
-    accu_to_sel: bus access selector.accumulator_input <-> accumulator.pressure_output;
+    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
 	power1     : bus access bscu.pwr1 <-> power.line1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
@@ -259,9 +262,9 @@ connections
     --  We connect the blue pump directly to the selector valve.
     --  For the green pump, we connect it to the shutoff valve that
     --  is later connected to the selector valve after.
-	blue_to_selector    : bus access blue_pump.pressure_output  <-> selector.blue_input; 
-	green_to_shutoff    : bus access green_pump.pressure_output <-> shutoff.input;
-	shutoff_to_selector : bus access shutoff.output <-> selector.green_input;
+	blue_to_selector    : port blue_pump.pressure_output -> selector.blue_input; 
+	green_to_shutoff    : port green_pump.pressure_output -> shutoff.input;
+	shutoff_to_selector : port shutoff.output -> selector.green_input;
 	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
 	
 	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
@@ -272,14 +275,14 @@ connections
 	
 	--  Connect the output pressure from the selector
 	--  to the anti-skid components
-	selector_to_gskid   : bus access selector.green_output <-> green_skid.input;
-	selector_to_bskid   : bus access selector.blue_output  <-> blue_skid.input;
+	selector_to_gskid   : port selector.green_output -> green_skid.input;
+	selector_to_bskid   : port selector.blue_output  -> blue_skid.input;
 	
 	--  Connect the anti-skid system to the wheel. In this version,
 	--  we see the wheel as having two paths for getting the pressure.
 	--  We see that as a physical model, not a logical one.
-	bskid_to_wheel      : bus access blue_skid.output <-> wheel.blue_input;
-	gskid_to_wheel      : bus access green_skid.output <-> wheel.green_input;
+	bskid_to_wheel      : port blue_skid.output -> wheel.blue_input;
+	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
 	annex agree {**
 		eq foo: int;

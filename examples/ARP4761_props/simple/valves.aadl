@@ -7,8 +7,8 @@ with common;
 
 system generic
 features
-	input : requires bus access common::pressure.i;
-	output : provides bus access common::pressure.i;
+	input : in data port common::pressure.i;
+	output : out data port common::pressure.i;
 annex EMV2 {**
 	use types     error_library;
 	use behavior  error_library::simple;
@@ -35,29 +35,38 @@ end generic_pwm_input.i;
 
 system boolean_shutoff 
 features
-	input : requires bus access common::pressure.i;
-	output : provides bus access common::pressure.i;
+	input : in data port common::pressure.i;
+	output : out data port common::pressure.i;
 	boolean_input : in data port Base_Types::Boolean;
+	
+annex agree {**
+		
+		-- If boolean_input is true, then the output should be zero.
+	guarantee "Pressure on boolean shutoff" : 
+	       if boolean_input then output.val = 0.0 
+	       else output.val = input.val ;
+	
+	-- This seems super obvious... I don't even think it's physically possible
+	-- to break this contract...       
+	guarantee "Output is never greater than input" :
+	       output.val <= input.val;
+**};
+
 end boolean_shutoff;
 
 system cmd_shutoff 
 features
-	input : requires bus access common::pressure.i;
-	output : provides bus access common::pressure.i;
+	input : in data port common::pressure.i;
+	output : out data port common::pressure.i;
 	cmd_input : in data port common::command.skid;
 
 annex AGREE {**
-	-- this space for rent.
-	eq dummy: bool = true;
 	
-	-- Note: need some way of mentioning what is "going over the bus".
-	guarantee "shutoff_valve_behavior" : 
-		if (cmd_input.activate_antiskid) then 
-			true
-			-- output.pressure = 0.0;
-		else 
-			true ; 
-			-- output.pressure = input.pressure;
+	-- cmd_input limits what pressure is delivered down the line.
+	guarantee "valve metering" : 
+		if (cmd_input.val > input.val) then 
+			output.val = input.val 
+		else output.val = cmd_input.val ; 
 		
 **}	;
 
@@ -93,9 +102,9 @@ end cmd_shutoff;
 
 system selector
 features
-	accumulator_input: requires bus access common::pressure.i;
-	green_input      : requires bus access common::pressure.i;
-	blue_input       : requires bus access common::pressure.i;
+	accumulator_input: in data port common::pressure.i;
+	green_input      : in data port common::pressure.i;
+	blue_input       : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	cmd_nor          : in data port common::command.skid;
 	cmd_alt          : in data port common::command.skid;
@@ -115,6 +124,8 @@ annex EMV2 {**
 		f3 : error sink select_alternate{NoValue};
 	end propagations;
 **};
+
+
 end selector;
 
 
@@ -124,7 +135,7 @@ end selector.i;
 
 system selector_basic extends selector
 features
-	output           : provides bus access common::pressure.i;
+	output           : out data port common::pressure.i;
 annex EMV2 {**
 	use types error_library;
 	
@@ -141,36 +152,24 @@ end selector_basic;
 
 system selector_detailed 
 features
-	accumulator_input: requires bus access common::pressure.i;
-	green_input      : requires bus access common::pressure.i;
-	blue_input       : requires bus access common::pressure.i;
+	accumulator_input: in data port common::pressure.i;
+	green_input      : in data port common::pressure.i;
+	blue_input       : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	cmd_nor          : in data port common::command.skid;
 	cmd_alt          : in data port common::command.skid;
-	green_output : provides bus access common::pressure.i;
-	blue_output  : provides bus access common::pressure.i;
-annex AGREE {**
-  eq dummy: bool = true;
+	green_output : out data port common::pressure.i;
+	blue_output  : out data port common::pressure.i;
+annex AGREE {** 
+	
+	guarantee "Pressure selector: either green or blue output. " : 
+		if (green_input.val > 0.0) then 
+			(blue_output.val = 0.0 and green_output = green_input)
+		else (blue_output = blue_input and green_output.val = 0.0);
 
-  -- The behavior of this component is underspecified in the original model.
+  
     
-  -- The selector valve in the AADL model is much more complicated than was 
-  -- modeled in the Simulink model.  Given two pressurized lines, it is only 
-  -- supposed to pass through one of the lines.  In the AADL model there is 
-  -- substantial associated logic.
   
-  
-  -- One possible implementation would favor the green side. 
-  -- green_output = if (green_input > threshold) then green_input else 0;
-  -- blue_output = if (green_input > threshold) then 0 else blue_output;
-  
-  -- Another contract would favor the blue side.  
-  
-  -- Many of the propagations specified in the error annex below are wrong, 
-  -- as I see it.  The point of the selector valve is to provide some 
-  -- fault protection in case both lines are pressurized for some reason.
-  -- This functionality gets lost in the error propagations.
-  -- Also, there are no faults like "overpressure", "underpressure", etc.
 **};
 
 annex EMV2 {**
@@ -213,4 +212,3 @@ end selector_detailed;
 
 
 end valves;
-

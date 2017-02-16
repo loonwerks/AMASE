@@ -21,14 +21,16 @@ end command;
 data implementation command.brake
 end command.brake;
 
+-- This is being used as the meter valve amount.
 data implementation command.skid
 	subcomponents
-		activate_antiskid : data Base_Types::Boolean; 
+		val: data Base_Types::Float; 
+		activate_antiskid: data Base_Types::Boolean;
 end command.skid;
 
 data implementation command.pedal
   	subcomponents
-  		pressure : data Base_Types::Integer ; 
+  		val : data Base_Types::Float ; 
 end command.pedal;
 
 data implementation command.announce
@@ -40,18 +42,20 @@ end command.announce;
 -- How do I represent data sent along the bus?  Obviously, 
 -- I'd like to represent 'pressure'.
 
-bus pressure
+data pressure
 end pressure;
 
 
-bus implementation pressure.i
+data implementation pressure.i
+	subcomponents
+		val: data Base_Types::Float;
 end pressure.i;
 
 
 system pipe
 features
-	input : in data port Base_Types::Float_64;
-	output : out data port Base_Types::Float_64;
+	input : in data port Base_Types::Float;
+	output : out data port Base_Types::Float;
 end pipe;
 
 

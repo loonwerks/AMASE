@@ -12,6 +12,12 @@ system pedals
 features
 	signal1 : out data port common::command.pedal;
 	signal2 : out data port common::command.pedal;
+	
+annex AGREE {**
+	guarantee "range for pedal1" : signal1.val >= 0.0 and signal1.val <= 100.0;
+	guarantee "range for pedal2" : signal2.val >= 0.0 and signal2.val <= 100.0;
+**}	;
+
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;

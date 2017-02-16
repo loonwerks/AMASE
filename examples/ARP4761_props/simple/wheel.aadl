@@ -18,7 +18,7 @@ end wheel;
 
 system wheel_one_input extends wheel
 features
-	input : requires bus access common::pressure.i;
+	input : in data port common::pressure.i;
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;
@@ -49,10 +49,8 @@ end wheel_one_input.i;
 
 system wheel_two_inputs 
 features
-	green_input : requires bus access common::pressure.i;	
-	blue_input : requires bus access common::pressure.i;
-	green_input_in : in data port Base_Types::Float_64;
-	blue_input_in : in data port Base_Types::Float_64;
+	green_input : in data port common::pressure.i;	
+	blue_input : in data port common::pressure.i;
 	
 annex EMV2 {**
 	use types error_library;
@@ -72,7 +70,14 @@ annex EMV2 {**
 	end component;
 **};
 
--- No initial AGREE contract for wheels to match the Simulink model from Anjali.
+annex agree {**
+	
+	-- Shouldn't get pressure from both inputs at the same time.'	
+	guarantee "Either green or blue or neither has positive pressure." : 
+               not(green_input.val > 0.0 and blue_input.val > 0.0);
+		
+**};
+
 end wheel_two_inputs;
 
 system implementation wheel_two_inputs.i
