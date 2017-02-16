@@ -59,7 +59,7 @@ annex EMV2 {**
 		green_input : in propagation{NoService};
 		blue_input : in propagation{NoService};
 --	flows
---		ns1 : error sink green_input{NoService};
+--		ns1 :error sink green_input{NoService};
 --		ns2 : error sink blue_input{NoService};
 	end propagations;
 	
