@@ -1,0 +1,29 @@
+package faults
+public
+annex agree {**	
+		
+		
+	-- Failures (based on Simulink model):
+	-- 
+	-- result returns true if there is an error, false otherwise 
+	
+	-- Green_Fail -> Green pump failure 
+	-- select_alternate is false but we have no pressure
+	-- coming from green pump. 
+	node green_fail(pressure_in: Base_Types::Float, select_alternate: bool) returns(result: bool);
+	let 
+		result = (pressure_in = 0.0 and not(select_alternate));
+	tel;
+	
+	-- Blue_Fail -> Blue pump failure 
+	-- Here is the case when alternate is selected (select_alternate = true) and
+	-- yet we have no pressure coming from the blue pump. 
+	node blue_fail(pressure_in: Base_Types::Float, select_alternate: bool) returns(result: bool);
+	let 
+		result = (pressure_in = 0.0 and select_alternate);
+	tel;
+	
+	-- 
+	
+**};	
+end faults;
