@@ -1,9 +1,25 @@
 package faults
 public
 annex agree {**	
+	
+	-- We may or may not need these modes defined. 
+	 
+    -- EMERGENCY MODE: if the Blue Pump or the Accumulator Pump are below the
+    -- threshold and Sel_Alt = true
+    -- The Accumulator supplies the Alternate system in the 
+	-- EMERGENCY braking mode.
+    const EMERGENCY: int = 2;
+    -- ALTERNATE MODE: if Sel_Alt = true - use blue pump or alternate system.
+    const ALTERNATE: int = 1;
+    -- NORMAL MODE: otherwise (use green pump).
+    const NORMAL: int = 0;
+    
+    fun is_emergency(m: int) : bool = (m = 2) ; 
+    fun is_ealternate(m: int) : bool = (m = 1) ;
+    fun is_normal(m: int) : bool = (m = 0) ;
 		
 		
-	-- Failures (based on Simulink model):
+	-- Failure Nodes (based on Simulink model)
 	-- 
 	-- result returns true if there is an error, false otherwise 
 	
@@ -21,6 +37,18 @@ annex agree {**
 	node blue_fail(pressure_in: Base_Types::Float, select_alternate: bool) returns(result: bool);
 	let 
 		result = (pressure_in = 0.0 and select_alternate);
+	tel;
+	
+	-- accumulator_fail 
+	--
+	-- When both green and blue pumps fail, we are in emergency mode.
+	-- This failure is in emergency mode but no pressure is coming from accumulator. 
+	
+	-- NOTE: Why can't I use is_emergency here? Can I use braking mode = 2 to mean emergency?
+	node accumulator_fail(braking_mode: int, accum_pressure: Base_Types::Float)
+	           returns(result: bool);
+	let
+	  result = (braking_mode = 2) and (accum_pressure = 0.0);
 	tel;
 	
 	-- 
