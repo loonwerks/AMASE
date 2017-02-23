@@ -16,7 +16,7 @@ annex agree {**
     
     -- Setting some threshold for the pressure. 
     -- Totally making this up.
-    const THRESHOLD: Base_Types::Float = 100.0;
+    const THRESHOLD: Base_Types::Float = 10.0;
     
     fun is_emergency(m: int) : bool = (m = 2) ; 
     fun is_ealternate(m: int) : bool = (m = 1) ;
@@ -56,7 +56,43 @@ annex agree {**
 	  result = (braking_mode = 2) and (accum_pressure = 0.0);
 	tel;
 	
-	-- 
+	
+	
+	
+	
+	-- meter_failures (Nor_meter, Alt_meter, etc)
+	-- The meters will regulate pressure from the lines. 
+	-- Cmd should tell meter what to do with regulation, so it seems
+	-- that these failures will occur when:
+	--    * Pressure above threshold, input = output, cmd value ignored.
+	--    * Pressure below threshold, cmd value ignored (will not switch to alternate system)
+	
+	
+	
+	
+	-- selector_failure:
+	-- The Selector takes in blue and green pressure and will output
+	-- the pressure that is above the threshold on only one of the two pipes.
+	-- Failure: Outputs pressure in both pipes.
+	-- (Paper assumes that when both pipes are above threshold, the system
+	-- will go with Normal, but this is not clearly stated in ARP4761.)
+	
+	
+	
+	-- pwr1/pwr2 failure: 
+	-- I don't know how to represent power values. 
+	-- This failure will occur when there is not enough or no power.
+	-- Since the power is represented as buses and there really is no value
+	-- associated with them, I don't know how to proceed.
+	
+	
+	-- monitor_failure:
+	-- The monitor will see if corresponding Command unit output is valid (Nor_Cmd, Alt_Cmd).
+	-- When both are valid, BSCU forwards command.
+	-- When both are invalid, BSCU not valid (switches to Alternate system).
+	-- Failure occurs when 
+	--     * Monitor negates input values (Inverted failure mode)
+	--     * new output = old output (Stuck_at failure mode)
 	
 **};	
 end faults;
