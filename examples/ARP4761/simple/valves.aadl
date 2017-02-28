@@ -4,6 +4,7 @@ public
 
 with base_types;
 with common; 
+with faults;
 
 system generic
 features
@@ -39,40 +40,79 @@ features
 	output : out data port common::pressure.i;
 	boolean_input : in data port Base_Types::Boolean;
 	
+	-- failure-related information: we can have a stuck-at fault.
+	stuck_at_occurred: in data port Base_Types::Boolean;
+	
+	-- QUESTION:
+	-- Do we need a boolean inverted fault as well?
+	-- I vote yes. We can change it if need be...
+	inverted_occurred: in data port Base_Types::Boolean;
+	 
+	
 annex agree {**
+	eq nominal_output : common::pressure.i;
+	eq inverted_boolean_input : Base_Types::Boolean;
+	
+	-- Used to show nondeterministic or stuck_at failure
+	eq alt_val : common::pressure.i; 
+	
 		
     -- If boolean_input is true, then the output should be zero.
 	guarantee "Pressure on boolean shutoff" : 
-	       if boolean_input then output.val = 0.0 
-	       else output.val = input.val ;
+	       if inverted_boolean_input then output.val = 0.0 
+	       else nominal_output.val = input.val ;
 	
 	-- This seems super obvious... I don't even think it's physically possible
 	-- to break this contract...       
 	guarantee "Output is never greater than input" :
-	       not(output.val > input.val);
-**};
-
-end boolean_shutoff;
+	       not(nominal_output.val > input.val);
+	       
+	 -- guarantee mapping output (fail_to)
+	 guarantee "Output failure binding for boolean_shutoff (fail_to)" : 
+	    output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
+	    
+	 -- guarantee mapping output (inverted)
+	 guarantee "Output failure binding for boolean_shutoff (fail_to)" : 
+	    boolean_input = faults.inverted_fail(inverted_boolean_input, inverted_occurred);
+	              
+**};end boolean_shutoff;
 
 system cmd_shutoff 
 features
 	input : in data port common::pressure.i;
 	output : out data port common::pressure.i;
 	cmd_input : in data port common::command.skid;
+	
+	-- failure-related information: we can have a stuck-at fault.
+	stuck_at_occurred: in data port Base_Types::Boolean;
 
 annex AGREE {**
+	
+	-- Fault occurred:
+	eq nominal_output : common::pressure.i;
+	
+	-- Used to show nondeterministic or stuck_at failure
+	eq alt_val : common::pressure.i;
+	
+	-- QUESTION: 
+	-- In this case, we are setting the output value. Should this contract change
+	-- to show the fault modeling? 
+	-- As it is, it seems like the fault will not affect cmd_shutoff at all. 
 	
 	-- Depending on cmd_input (skidding), the output can either be the same as the cmd_input 
 	-- (this occurs when cmd_input < input) or the output is equal to the input
 	-- (cmd_input does nothing to change output when cmd_input <= input).
 	guarantee "Valve pressure limits by cmd_input." : 
 		if (cmd_input.val < input.val) then 
-			output.val = cmd_input.val 
-		else output.val = input.val ; 
+			nominal_output.val = cmd_input.val 
+		else nominal_output.val = input.val ; 
 	
 	-- Do we even need this one? Not sure. 
 	guarantee "Output is never greater than input." :
-	    not(output.val > input.val);	
+	    not(nominal_output.val > input.val);	
+	    
+	guarantee "Output failure binding for cmd_shutoff" : 
+	    output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
 **}	;
 
 annex EMV2 {**
@@ -116,7 +156,7 @@ features
 	
 annex AGREE {**
 	
-	-- 	
+	-- 	ADD SYSTEM SELECTOR CONTRACTS HERE
 **}	;
 
 annex EMV2 {**
@@ -171,20 +211,30 @@ features
 	cmd_alt          : in data port common::command.skid;
 	green_output : out data port common::pressure.i;
 	blue_output  : out data port common::pressure.i;
+	stuck_at_occurred : in data port Base_Types::Boolean;
+	inverted_occurred : in data port Base_Types::Boolean;
 annex AGREE {** 
+	
+	-- Fault occurred:
+	eq blue_nominal_output : common::pressure.i;
+	eq green_nominal_output : common::pressure.i;
+	eq inverted_select_alternate : Base_Types::Boolean;
+	
+	-- Used to show nondeterministic or stuck_at failure
+	eq alt_val : common::pressure.i;
 	
 	-- We have blue input, green input, or neither. Not both. 
 	guarantee "Pressure selector: either green or blue output. " : 
 		if (green_input.val > 0.0) then 
-			(blue_output.val = 0.0 and green_output = green_input)
-		else (blue_output = blue_input and green_output.val = 0.0);
+			(blue_nominal_output.val = 0.0 and green_nominal_output = green_input)
+		else (blue_nominal_output = blue_input and green_nominal_output.val = 0.0);
 
   
     -- If select_alternate is not selected (normal pressure) 
     -- then green pressure is positive. 
     guarantee "If select_alternate is selected, then blue input is positive, else green
                is positive." :
-        if select_alternate then blue_input.val > 0.0
+        if inverted_select_alternate then blue_input.val > 0.0
         else green_input.val > 0.0;
         
     -- cmd_nor and cmd_alt cannot both be positive.
@@ -193,12 +243,24 @@ annex AGREE {**
         
     -- If select_alt is true, then cmd_alt should be positive.
     guarantee "If select_alternate is true, then cmd_alt > 0.0, else cmd_nor > 0.0." :
-        if select_alternate then cmd_alt.val > 0.0 
+        if inverted_select_alternate then cmd_alt.val > 0.0 
         else cmd_nor.val > 0.0;
         
     -- The output is never greater than the input for either green or blue.
     guarantee "Output is never greater than input." :
-        (green_output.val <= green_input.val) and (blue_output.val <= blue_input.val);
+        (green_nominal_output.val <= green_input.val) and (blue_nominal_output.val <= blue_input.val);
+        
+    -- guarantee mapping output (fail_to) green_output
+	 guarantee "Output failure binding for green_output (fail_to)" : 
+	    green_output.val = faults.fail_to(green_nominal_output.val, alt_val.val, stuck_at_occurred);
+	 
+	 -- guarantee mapping output (fail_to) blue_output
+	 guarantee "Output failure binding for blue_output (fail_to)" : 
+	    blue_output.val = faults.fail_to(blue_nominal_output.val, alt_val.val, stuck_at_occurred);
+	       
+	 -- guarantee mapping output (inverted) select_alternate
+	 guarantee "Output failure binding for select_alternate (fail_to)" : 
+	    select_alternate = faults.inverted_fail(inverted_select_alternate, inverted_occurred);
   
 **};
 
