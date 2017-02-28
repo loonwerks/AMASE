@@ -104,9 +104,20 @@ tel;
 
 -- Seems that we need a boolean failure as well (vs the real valued streams above)
 -- The inverted failure is the negation of the input when triggered.
-node inverted_fail(val_in: bool) returns (val_out:bool);
+node inverted_fail(val_in: bool, fail_occurred: bool) returns (val_out:bool);
 let
-  val_out = not(val_in);
+   val_out = if fail_occurred then not(val_in) else val_in;
 tel;
 
+Need to do: 
+-----------
+(1) Fault modeling
+- Add agree contracts to system selector in valves.aadl
+- Finish hooking up the fault model with the nominal model
+
+(2) Paper
+ - Finish background
+ - Describe WBS model
+ - Add figures
+ - Describe fault modeling idea
 
