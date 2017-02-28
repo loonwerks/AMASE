@@ -201,14 +201,23 @@ features
 	input2 : in data port Base_Types::Boolean;
 	result : out data port Base_Types::Boolean;
 	
-annex AGREE {**
+	-- Inverted failure for result
+	inverted_occurred : in data port Base_Types::Boolean;
 	
+annex AGREE {**
+	eq inverted_result : Base_Types::Boolean;
 	-- If first input is true, output is false
 	-- otherwise output is true.  
 	-- Not sure if I can do this without using some
 	-- notion of prestate... if pre(input1)=true then result = false...  
 	guarantee "If input1 is true, result is false. Else result is true" : true ->
-	     (pre(input1) = true => result = false) or (pre(input1) = false => result = true) ;	
+	     (pre(input1) = true => inverted_result = false) or (pre(input1) = false => 
+	     	    inverted_result = true
+	     ) ;	
+	     
+	-- guarantee mapping output (inverted)
+	 guarantee "Output failure binding for boolean_shutoff (inverted_fail)" : 
+	    result = faults.inverted_fail(inverted_result, inverted_occurred);
 **}	;
 
 annex EMV2 {**
@@ -269,7 +278,10 @@ features
 	pedal2            : in data port common::command.pedal;
 	Select_Alternate  : out data port Base_Types::Boolean;
 	cmd_nor           : out data port common::command.skid; 
-	cmd_alt           : out data port common::command.skid; 
+	cmd_alt           : out data port common::command.skid;
+	-- Inverted failure for result
+	inverted_occurred : in data port Base_Types::Boolean; 
+	
 annex EMV2 {**
 	use types error_library;
 	
@@ -283,7 +295,7 @@ annex EMV2 {**
 **};
 
 annex AGREE {**
-	eq dummy: bool = true;	
+	eq nominal_Select_Alternate : Base_Types::Boolean;	
 	
 	-- Need contracts for the selectors in terms of the pedals and alternate selections.
 	-- However, there are currently missing many inputs necessary to put together a BSCU in the 
@@ -298,11 +310,11 @@ annex AGREE {**
 	eq pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
 	
 	guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
-		pedals_pressed and (not skid_active) and (not Select_Alternate) =>
+		pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) =>
 			pressure; 
 	
 	guarantee "Pedals pressed and no skid and alternate implies pressure commanded" : 
-		pedals_pressed and (not skid_active) and (Select_Alternate) =>
+		pedals_pressed and (not skid_active) and (nominal_Select_Alternate) =>
 			pressure;
 	
 	-- Alternate pressure, normal pressure, or neither, never both. 
@@ -311,7 +323,9 @@ annex AGREE {**
 	          not(cmd_alt.val > 0.0 and cmd_nor.val > 0.0); 
 	
 
-    
+    -- guarantee mapping output (inverted)
+	 guarantee "Output failure binding for Select_Alternate (inverted_fail)" : 
+	    Select_Alternate = faults.inverted_fail(nominal_Select_Alternate, inverted_occurred);
 	
 	
 	
