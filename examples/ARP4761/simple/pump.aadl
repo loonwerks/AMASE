@@ -6,16 +6,28 @@ public
 with common;
 with ARP4761;
 with EMV2;
+with base_types;
+with faults;
 
 system pump
 features
 	pressure_output : out data port common::pressure.i;
+	stuck_at_occurred: in data port Base_Types::Boolean;
 	
 annex AGREE {**
 	
+	-- 
+	eq nominal_pressure_output : common::pressure.i;
+	-- Used to show nondeterministic or stuck_at failure
+	eq alt_val : common::pressure.i; 
+	
 	-- There should be some pressure always coming through
 	-- the lines.  
-	guarantee "Pump always outputs something" : pressure_output.val > 0.0 ;	
+	guarantee "Pump always outputs something" : nominal_pressure_output.val > 0.0 ;
+	
+	-- guarantee mapping output (fail_to) pump
+	 guarantee "Output failure binding for pump (fail_to)" : 
+	    pressure_output.val = faults.fail_to(nominal_pressure_output.val, alt_val.val, stuck_at_occurred);	
 **}	;
 
 annex EMV2 {**
