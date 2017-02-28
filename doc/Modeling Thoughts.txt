@@ -80,3 +80,33 @@ In valves.aadl:
 It was unclear to me if they should be in data ports or out, so 
 I just assumed since it was input/output, the port should match. 
 Similar cases in wbs.aadl and wheel.aadl. 
+
+
+Danielle's Notes:
+Feb 28, 2017
+Started putting together the paper last week (AMASE/doc).
+Some notes on failure nodes: 
+What I had was incorrect, so I am attempting to start over. 
+
+Mikes suggestions: 
+-- Both non-deterministic and stuck_at failures will occur at all meter valves
+-- and pumps. 
+node fail_to(val_in: real, alt_val: real, fail_occurred: bool) returns (val_out: real); 
+let
+   val_out = if (historically(fail_latch)) then alt_val else val_in;
+tel;
+
+-- 
+node ramp_down(val_in: real, delta: real, val_max: real, fail_occurred: bool) returns (val_out: real); 
+let
+   val_out = val_in -> if (historically(fail_latch)) then min(val_max, pre(val_out + delta)) else val_in; 
+tel;
+
+-- Seems that we need a boolean failure as well (vs the real valued streams above)
+-- The inverted failure is the negation of the input when triggered.
+node inverted_fail(val_in: bool) returns (val_out:bool);
+let
+  val_out = not(val_in);
+tel;
+
+
