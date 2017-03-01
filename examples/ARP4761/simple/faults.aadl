@@ -3,7 +3,10 @@ public
 annex agree {**	
 	
 	
-	fun min(m: real, n: real) : real = if (m < n) then m else n;
+	node min(m: real, n: real) returns (r:real);
+	let
+	   r = if (m < n) then m else n;
+	tel;
 	
 	node historically(m: bool) returns (h: bool);
 	let
@@ -18,7 +21,7 @@ annex agree {**
 	tel;
 
 	-- 
-	node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real); 
+	node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real);
 	let
  	  val_out = val_in -> if (historically(fail_occurred)) then min(val_max, pre(val_out + delt)) else val_in; 
 	tel;	
@@ -30,8 +33,80 @@ annex agree {**
 	  val_out = if fail_occurred then not(val_in) else val_in;
 	tel;
 	
+	-- Failure Nodes (based on Simulink model)
+	-- 
+	-- result returns true if there is an error, false otherwise 
 	
+	-- Green_Fail -> Green pump failure 
+	-- select_alternate is false but we have no pressure
+	-- coming from green pump. 
+
+	
+	-- Blue_Fail -> Blue pump failure 
+	-- Here is the case when alternate is selected (select_alternate = true) and
+	-- yet we have no pressure coming from the blue pump. 
+	
+	
+	-- accumulator_fail 
+	--
+	-- When both green and blue pumps fail, we are in emergency mode.
+	-- This failure is in emergency mode but no pressure is coming from accumulator. 
+
+	
+	
+	-- All meter failures (accumulator, normal, alternate, stuck):
+	-- For normal_meter_fail and normal_meter_stuck it seems that we need 
+	-- a notion of threshold for the pressure. 
+	-- The meter should make sure the pressure isn't below threshold (or above) 
+	-- but I don't know what that threshold is... same with stuck meter. 
+	-- Not sure what do do with those.
+	
+	
+	
+	-- pwr1/2 faillure: 
+	-- Not sure how to represent power given that the battery lines are buses. 
+	-- There isn't really a value (that I can see) associated with them to
+	-- check power...
+	
+	
+	
+	-- monitor_fail:
+	-- Monitor checks if corresponding Command unit output is valid (Nor_Cmd, Alt_Cmd).
+	-- This fails when:
+	--   * both are not valid but Monitor says they are valid
+	--   * either is invalid but Monitor outputs it is valid
+	-- These cases can be summed up as simply the negation of input. 
+	-- Another failure is stuck_at where the output of the monitor is the same
+	-- as the previous output (inputs didn't change new output)
+	--
+	-- Question: we have cmd_nor.val, cmd_alt.val (floats). If these are positive, 
+	-- does that mean cmd_nor should be true as a boolean input? 
+	
+	
+	
+	-- selector_fail:
+	-- Takes as input the pressure from each hydraulic system (green/blue) and 
+	-- outputs one of them - the one that is above threshold. 
+	-- Select the system that has adequate pressure, block the system that has 
+	-- no (or not enough) pressure.
+	-- Failure: selecting system that doesn't have enough pressure, blocking
+	-- system that does have adequate pressure.
+	--
+	-- (Paper assumes that if both systems are above threshold, selector will
+    -- select Normal. Unclear if this is true.)
     
-	
 **};	
+	
 end faults;
+
+	--node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real); 
+   -- var
+   --   cond : bool;
+   --   then_branch : real;
+   --   else_branch : real;
+	--let
+	--  cond = historically(fail_occurred);
+	--  then_branch =  min(val_max, pre(val_out + delt));
+	--  else_branch = val_in;
+ 	--  val_out = val_in -> if (cond) then then_branch else else_branch; 
+	--tel;	
