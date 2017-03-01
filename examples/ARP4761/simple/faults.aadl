@@ -2,97 +2,36 @@ package faults
 public
 annex agree {**	
 	
-	-- We may or may not need these modes defined. 
-	 
-    -- EMERGENCY MODE: if the Blue Pump or the Accumulator Pump are below the
-    -- threshold and Sel_Alt = true
-    -- The Accumulator supplies the Alternate system in the 
-	-- EMERGENCY braking mode.
-    const EMERGENCY: int = 2;
-    -- ALTERNATE MODE: if Sel_Alt = true - use blue pump or alternate system.
-    const ALTERNATE: int = 1;
-    -- NORMAL MODE: otherwise (use green pump).
-    const NORMAL: int = 0;
-    
-    -- Setting some threshold for the pressure. 
-    -- Totally making this up.
-    const THRESHOLD: Base_Types::Float = 10.0;
-    
-    fun is_emergency(m: int) : bool = (m = 2) ; 
-    fun is_ealternate(m: int) : bool = (m = 1) ;
-    fun is_normal(m: int) : bool = (m = 0) ;
-    fun is_below_threshold(m: Base_Types::Float): bool = (m > 100.0);
-		
-		
-	-- Failure Nodes (based on Simulink model)
-	-- 
-	-- result returns true if there is an error, false otherwise 
 	
-	-- Green_Fail -> Green pump failure 
-	-- select_alternate is false but we have no pressure
-	-- coming from green pump. 
-	node green_fail(pressure_in: Base_Types::Float, select_alternate: bool) returns(result: bool);
-	let 
-		result = (pressure_in = 0.0 and not(select_alternate));
-	tel;
+	fun min(m: real, n: real) : real: (if m < n then m else n);
 	
-	-- Blue_Fail -> Blue pump failure 
-	-- Here is the case when alternate is selected (select_alternate = true) and
-	-- yet we have no pressure coming from the blue pump. 
-	node blue_fail(pressure_in: Base_Types::Float, select_alternate: bool) returns(result: bool);
-	let 
-		result = (pressure_in = 0.0 and select_alternate);
-	tel;
-	
-	-- accumulator_fail 
-	--
-	-- When both green and blue pumps fail, we are in emergency mode.
-	-- This failure is in emergency mode but no pressure is coming from accumulator. 
-	
-	-- NOTE: Why can't I use is_emergency here? Can I use braking mode = 2 to mean emergency?
-	node accumulator_fail(braking_mode: int, accum_pressure: Base_Types::Float)
-	           returns(result: bool);
+	node historically(m: bool) returns (h: bool);
 	let
-	  result = (braking_mode = 2) and (accum_pressure = 0.0);
+	   h = m -> m or (pre (h));
+	tel;	
+		
+	-- Both non-deterministic and stuck_at failures will occur at all meter valves
+	-- and pumps. 
+	node fail_to(val_in: real, alt_val: real, fail_occurred: bool) returns (val_out: real); 
+	let
+	   val_out = if (historically(fail_occurred)) then alt_val else val_in;
+	tel;
+
+	-- 
+	node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real); 
+	let
+ 	  val_out = val_in -> if (historically(fail_occurred)) then min(val_max, pre(val_out + delt)) else val_in; 
+	tel;	
+
+	-- Seems that we need a boolean failure as well.
+	-- The inverted failure is the negation of the input when triggered.
+	node inverted_fail(val_in: bool, fail_occurred: bool) returns (val_out:bool);
+	let
+	  val_out = if fail_occurred then not(val_in) else val_in;
 	tel;
 	
 	
-	
-	
-	
-	-- meter_failures (Nor_meter, Alt_meter, etc)
-	-- The meters will regulate pressure from the lines. 
-	-- Cmd should tell meter what to do with regulation, so it seems
-	-- that these failures will occur when:
-	--    * Pressure above threshold, input = output, cmd value ignored.
-	--    * Pressure below threshold, cmd value ignored (will not switch to alternate system)
-	
-	
-	
-	
-	-- selector_failure:
-	-- The Selector takes in blue and green pressure and will output
-	-- the pressure that is above the threshold on only one of the two pipes.
-	-- Failure: Outputs pressure in both pipes.
-	-- (Paper assumes that when both pipes are above threshold, the system
-	-- will go with Normal, but this is not clearly stated in ARP4761.)
-	
-	
-	
-	-- pwr1/pwr2 failure: 
-	-- I don't know how to represent power values. 
-	-- This failure will occur when there is not enough or no power.
-	-- Since the power is represented as buses and there really is no value
-	-- associated with them, I don't know how to proceed.
-	
-	
-	-- monitor_failure:
-	-- The monitor will see if corresponding Command unit output is valid (Nor_Cmd, Alt_Cmd).
-	-- When both are valid, BSCU forwards command.
-	-- When both are invalid, BSCU not valid (switches to Alternate system).
-	-- Failure occurs when 
-	--     * Monitor negates input values (Inverted failure mode)
-	--     * new output = old output (Stuck_at failure mode)
+    
 	
 **};	
 end faults;
