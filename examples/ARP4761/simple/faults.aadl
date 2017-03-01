@@ -3,7 +3,7 @@ public
 annex agree {**	
 	
 	
-	fun min(m: real, n: real) : real: (if m < n then m else n);
+	fun min(m: real, n: real) : real = if (m < n) then m else n;
 	
 	node historically(m: bool) returns (h: bool);
 	let
