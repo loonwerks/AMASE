@@ -7,23 +7,19 @@ annex agree {**
 	let
 	   r = if (m < n) then m else n;
 	tel;
-	
-	node historically(m: bool) returns (h: bool);
-	let
-	   h = m -> m or (pre (h));
-	tel;	
+		
 		
 	-- Both non-deterministic and stuck_at failures will occur at all meter valves
 	-- and pumps. 
 	node fail_to(val_in: real, alt_val: real, fail_occurred: bool) returns (val_out: real); 
 	let
-	   val_out = if (historically(fail_occurred)) then alt_val else val_in;
+	   val_out = if (fail_occurred) then alt_val else val_in;
 	tel;
 
 	-- 
 	node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real);
 	let
- 	  val_out = val_in -> if (historically(fail_occurred)) then min(val_max, pre(val_out + delt)) else val_in; 
+ 	  val_out = val_in -> if (fail_occurred) then min(val_max, pre(val_out + delt)) else val_in; 
 	tel;	
 
 	-- Seems that we need a boolean failure as well.
