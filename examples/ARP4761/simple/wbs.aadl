@@ -246,6 +246,24 @@ connections
 		eq green_skid_stuck_at_transient : bool;
 		eq green_skid_stuck_at_permanent : bool = faults.historically(green_skid_stuck_at_transient);
 
+                eq blue_skid_stuck_at_transient : bool;
+		eq blue_skid_stuck_at_permanent : bool = faults.historically(blue_skid_stuck_at_transient);
+		
+		eq shutoff_stuck_at_transient : bool;
+		eq shutoff_stuck_at_permanent : bool = faults.historically(shutoff_stuck_at_transient);
+		
+		eq selector_stuck_at_transient : bool;
+		eq selector_stuck_at_permanent : bool = faults.historically(selector_stuck_at_transient);
+		
+		eq blue_pump_stuck_at_transient : bool;
+		eq blue_pump_stuck_at_permanent : bool = faults.historically(blue_pump_stuck_at_transient);
+		
+		eq green_pump_stuck_at_transient : bool;
+		eq green_pump_stuck_at_permanent : bool = faults.historically(green_pump_stuck_at_transient);
+		
+		eq accumulator_stuck_at_transient : bool;
+		eq accumulator_stuck_at_permanent : bool = faults.historically(accumulator_stuck_at_transient);
+
 		
 		-- cmd_shutoff faults (valves.aadl)
 		assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
