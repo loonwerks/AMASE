@@ -1,0 +1,15 @@
+\section{ARP4761: Wheel Brake System}
+
+As a preliminary case study, we utilized the Wheel Brake System described in ARP 4761 - Appendix L \cite{AIR6110}. The informal wheel brake system diagram is shown in Figure XX and is taken from the ARP 4761 document. The Wheel Brake System is installed on the two main landing gears and is used during taxi, landing, and rejected take off. Braking is either commanded manually using brake pedals or automatically with no need for the pedals (autobrake). When the wheels have traction, the autobrake function will provide a constant smooth deceleration. \\
+
+Each wheel has a brake assembly that is operated by two sets of hydraulic pistons which operate independently. One set is operated by the Green hydraulic line which is used in NORMAL braking mode. The second system (Alternate) is operated by the Blue hydraulic line which is used when the Normal system fails. The Alternate system is also supplied by an Accumulator which is a device with built up pressure that can be released if both of the two primary pumps (Blue and Green) fail. The accumulator supplies the Alternate system in case of EMERGENCY braking mode. \\
+
+Switching between the hydraulic pistons and sources can be done automatically or manually. If the normal pressure (Green) is below a certain threshold, there is an automatic switchover to the Blue supply. If the Blue pump fails, then the Accumulator is used for hydraulic pressure. \\
+
+In both NORMAL and ALTERNATE modes, an anti-skid capability is available. In the Normal mode, the brake pedal position is electronically fed to a braking computer called the Braking System Control Unit (BSCU). The BSCU monitors signals that denote critical aircraft and system states to provide correct braking function, detect anomalies, broadcast warnings, and sent maintenance information to other systems. \\
+
+\subsection{Nominal System Modeling}
+A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. \\
+
+The highest level component is the Wheel Braking System (WBS). It consists of a digital control unit, the BSCU, and Normal and Alternate hydraulic pressure lines (supplied by Green Pump and Blue Pump/Accumulator respectively). The system takes the following inputs from
+

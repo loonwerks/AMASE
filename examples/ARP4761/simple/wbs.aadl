@@ -11,12 +11,16 @@ with power;
 with pedals;
 with ARP4761;
 with EMV2;
+with faults;
 
 
 --
 --  Dummy component for the wheel brake system.
 --
 system wbs
+	annex agree {**
+		guarantee "silly" : true;
+	**};
 end wbs;
 
 system implementation wbs.generic
@@ -43,9 +47,9 @@ subcomponents
 	-- Annunciation device
 	annunciation 	: device communication::annunciation.i;
 connections
-    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
-	power1     : port power.line1 -> bscu.pwr1;
-	power2     : port power.line2 -> bscu.pwr2;
+    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input ;
+	power1     : bus access bscu.pwr1 <-> power.line1;
+	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
 	pedal2     : port pedals.signal2 -> bscu.pedal2;
 annex EMV2 {**
@@ -128,13 +132,12 @@ end wbs.generic;
 --  the physical logic behind the selector, shutoff and meter/anti-skid
 --  valves.
 system implementation wbs.basic extends wbs.generic
-subcomponents
-	bscu : refined to system bscu::bscu.basic;
+	subcomponents	bscu : refined to system bscu::bscu.basic;
 	--  The selector subsystem
 	selector   : refined to system valves::selector_basic{Classifier_Substitution_Rule => Type_Extension;};
 	wheel      : refined to system wheel::wheel_one_input.i{Classifier_Substitution_Rule => Type_Extension;};
 connections 
-	blue_to_selector    : port blue_pump.pressure_output  -> selector.blue_input; 
+	blue_to_selector    : port blue_pump.pressure_output -> selector.blue_input; 
 	green_to_selector   : port green_pump.pressure_output -> selector.green_input;
 	
 	bscu_sel_to_selector : port bscu.Select_Alternate -> selector.Select_Alternate;
@@ -149,18 +152,185 @@ end wbs.basic;
 --  Version with more details of the implementation, showing detail
 --  about the hydraulic system.
 -- 
-system implementation wbs.detailed extends wbs.generic
-subcomponents
-	selector   : refined to system valves::selector_detailed{Classifier_Substitution_Rule => Type_Extension;};
+system implementation wbs.federated
+	subcomponents
+	-- Pedal subsystem
+	pedals			: system pedals::pedals.generic;
+	-- Power subsystem
+	power      		: system power::power.generic;
+    --  The two pumps at the top of the diagram
+	blue_pump  		: system pump::pump.i;
+	green_pump 		: system pump::pump.i;
+	--  The accumulator pump
+	accumulator		: system pump::pump.i;
+	bscu 			: system bscu::bscu.federated;
+	
+	-- Annunciation device
+	annunciation 	: device communication::annunciation.i;
+	selector   : system valves::selector_detailed;
 	shutoff    : system valves::boolean_shutoff;
 	green_skid : system valves::cmd_shutoff; 
 	blue_skid  : system valves::cmd_shutoff; 
-	wheel      : refined to system wheel::wheel_two_inputs.i {Classifier_Substitution_Rule => Type_Extension;}; 
+	wheel      : system wheel::wheel_two_inputs.i ; 
 connections
+    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
+	power1     : bus access bscu.pwr1 <-> power.line1;
+	power2     : bus access power.line2 <-> bscu.pwr2;
+	pedal1     : port pedals.signal1 -> bscu.pedal1;
+	pedal2     : port pedals.signal2 -> bscu.pedal2;
     --  We connect the blue pump directly to the selector valve.
     --  For the green pump, we connect it to the shutoff valve that
     --  is later connected to the selector valve after.
-	blue_to_selector    : port blue_pump.pressure_output  -> selector.blue_input; 
+	blue_to_selector    : port blue_pump.pressure_output -> selector.blue_input; 
+	green_to_shutoff    : port green_pump.pressure_output -> shutoff.input;
+	shutoff_to_selector : port shutoff.output -> selector.green_input;
+	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
+	
+	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
+	 
+	--  Connect the command from the BSCU to the skid valves
+	bscu_to_gskid       : port bscu.cmd_nor -> green_skid.cmd_input;
+	bscu_to_bskid       : port bscu.cmd_alt -> blue_skid.cmd_input;
+	
+	--  Connect the output pressure from the selector
+	--  to the anti-skid components
+	selector_to_gskid   : port selector.green_output -> green_skid.input;
+	selector_to_bskid   : port selector.blue_output -> blue_skid.input;
+	
+	--  Connect the anti-skid system to the wheel. In this version,
+	--  we see the wheel as having two paths for getting the pressure.
+	--  We see that as a physical model, not a logical one.
+	bskid_to_wheel      : port blue_skid.output -> wheel.blue_input;
+	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
+	
+	-- Need to have data port access where currently we have bus access.
+	
+	annex agree {**
+			
+		fun pedal_pressed(pedal: common::command.pedal): bool = pedal.val > 0.0;
+		
+		eq pedals_pressed : bool = 
+			pedal_pressed(pedals.signal1) and pedal_pressed(pedals.signal2); 
+		
+		eq no_skid : bool = not bscu.cmd_nor.activate_antiskid and
+						    not bscu.cmd_alt.activate_antiskid;
+		
+		-- To represent brake pressure applied, we would need a notion of 
+		-- values sent along a bus, and I don't know how to do this in AADL.
+		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
+		
+		lemma "Pedal pressed and no skid implies brake pressure applied" : 
+			pedals_pressed and no_skid => brake_pressure;
+			
+		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
+		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;
+		-- IsPressed is a predicate that returns true when the pedal is pressed. 
+		-- PedP_NoSkid and SomeP are then used in a CTL property as:
+		-- SPEC AG(PedP_NoSkid -> SomeP) ;                                                  
+
+		-- define two sets of equations representing faults.
+		-- The first set is transient: these define an initial occurrence of a fault.
+		-- The second set is permanent: these are historically(transient);
+		
+		-- We will assert that given one permanent fault, the system should still provide pressure.
+		-- This should prove.
+		
+		-- We will then assert that given one transient fault, the system should still provide pressure.
+		-- This may not prove...I think it will because the system is currently combinatoric, but if 
+		-- we make it more complex in the future it will certainly fail.  
+
+		-- To encode the "one fault" assumption, we need a bool to int converter.
+		-- Then just sum up the faults (depending on whether we are measuring permanent or transient), and assert
+		-- this is <= 1.
+		
+		eq green_skid_stuck_at_transient : bool;
+		eq green_skid_stuck_at_permanent : bool = faults.historically(green_skid_stuck_at_transient);
+
+        eq blue_skid_stuck_at_transient : bool;
+		eq blue_skid_stuck_at_permanent : bool = faults.historically(blue_skid_stuck_at_transient);
+		
+		eq shutoff_stuck_at_transient : bool;
+		eq shutoff_stuck_at_permanent : bool = faults.historically(shutoff_stuck_at_transient);
+		
+		eq selector_stuck_at_transient : bool;
+		eq selector_stuck_at_permanent : bool = faults.historically(selector_stuck_at_transient);
+		
+		eq blue_pump_stuck_at_transient : bool;
+		eq blue_pump_stuck_at_permanent : bool = faults.historically(blue_pump_stuck_at_transient);
+		
+		eq green_pump_stuck_at_transient : bool;
+		eq green_pump_stuck_at_permanent : bool = faults.historically(green_pump_stuck_at_transient);
+		
+		eq accumulator_stuck_at_transient : bool;
+		eq accumulator_stuck_at_permanent : bool = faults.historically(accumulator_stuck_at_transient);
+
+		-- cmd_shutoff faults (valves.aadl)
+		assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
+		assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
+		
+		-- boolean_shutoff (valves.aadl)
+		assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
+		
+		-- selector_detailed (valves)
+		assert selector.stuck_at_occurred = selector_stuck_at_permanent;
+		
+		-- system blue pump (pump.aadl)
+		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
+		
+		-- system green pump
+		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
+		
+		-- system accumulation pump
+		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;		 	
+		
+		eq fail_count : int = 
+			faults.bool_to_int(green_skid_stuck_at_permanent) +  
+			faults.bool_to_int(blue_skid_stuck_at_permanent) +  
+			faults.bool_to_int(shutoff_stuck_at_permanent) +  
+			faults.bool_to_int(selector_stuck_at_permanent) +  
+			faults.bool_to_int(blue_pump_stuck_at_permanent) +  
+			faults.bool_to_int(green_pump_stuck_at_permanent) +  
+			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
+		
+		assert(fail_count = 1);
+	**};
+	
+end wbs.federated;
+ 
+system implementation wbs.ima
+subcomponents
+	-- Pedal subsystem
+	pedals			: system pedals::pedals.generic;
+
+	-- Power subsystem
+	power      		: system power::power.generic;
+	
+    --  The two pumps at the top of the diagram
+	blue_pump  		: system pump::pump.i;
+	green_pump 		: system pump::pump.i;
+	
+	--  The accumulator pump
+	accumulator		: system pump::pump.i;
+	
+	bscu 			: system bscu::bscu.ima;
+	
+	-- Annunciation device
+	annunciation 	: device communication::annunciation.i;
+	selector   : system valves::selector_detailed;
+	shutoff    : system valves::boolean_shutoff;
+	green_skid : system valves::cmd_shutoff; 
+	blue_skid  : system valves::cmd_shutoff; 
+	wheel      : system wheel::wheel_two_inputs.i ; 
+connections
+    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
+	power1     : bus access bscu.pwr1 <-> power.line1;
+	power2     : bus access power.line2 <-> bscu.pwr2;
+	pedal1     : port pedals.signal1 -> bscu.pedal1;
+	pedal2     : port pedals.signal2 -> bscu.pedal2;
+    --  We connect the blue pump directly to the selector valve.
+    --  For the green pump, we connect it to the shutoff valve that
+    --  is later connected to the selector valve after.
+	blue_to_selector    : port blue_pump.pressure_output -> selector.blue_input; 
 	green_to_shutoff    : port green_pump.pressure_output -> shutoff.input;
 	shutoff_to_selector : port shutoff.output -> selector.green_input;
 	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
@@ -181,23 +351,24 @@ connections
 	--  We see that as a physical model, not a logical one.
 	bskid_to_wheel      : port blue_skid.output -> wheel.blue_input;
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
-end wbs.detailed;
- 
-
-system implementation wbs.federated extends wbs.detailed
-subcomponents
-	bscu : refined to system bscu::bscu.federated;
-end wbs.federated;
-
-
-system implementation wbs.ima extends wbs.detailed
-subcomponents
-	bscu : refined to system bscu::bscu.ima;
-annex resolute {**  
-      	prove contain_two_power_supply()
-      	prove contain_two_selector_valve() 
-      	prove contain_two_bscu()
-**};
+	
+	annex agree {**
+		eq foo: int;
+	
+		lemma "hello" : true;
+		--eq pedal_pressed : bool = selector.accumulator_input;
+		
+		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
+		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;
+		-- IsPressed is a predicate that returns true when the pedal is pressed. PedP_NoSkid and SomeP are then used in a CTL property as:
+		-- SPEC AG(PedP_NoSkid -> SomeP) ; 
+		
+		-- Select_Alternate (bscu.aadl)
+		assert bscu.inverted_occurred = false;                                                 
+		 	
+	**};
+	
 end wbs.ima;
+
 
 end wbs;
