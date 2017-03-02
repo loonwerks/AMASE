@@ -43,15 +43,11 @@ features
 	-- failure-related information: we can have a stuck-at fault.
 	stuck_at_occurred: in data port Base_Types::Boolean;
 	
-	-- QUESTION:
-	-- Do we need a boolean inverted fault as well?
-	-- I vote yes. We can change it if need be...
-	inverted_occurred: in data port Base_Types::Boolean;
+	
 	 
 	
 annex agree {**
 	eq nominal_output : common::pressure.i;
-	eq inverted_boolean_input : Base_Types::Boolean;
 	
 	-- Used to show nondeterministic or stuck_at failure
 	eq alt_val : common::pressure.i; 
@@ -59,7 +55,7 @@ annex agree {**
 		
     -- If boolean_input is true, then the output should be zero.
 	guarantee "Pressure on boolean shutoff" : 
-	       if inverted_boolean_input then output.val = 0.0 
+	       if boolean_input then output.val = 0.0 
 	       else nominal_output.val = input.val ;
 	
 	-- This seems super obvious... I don't even think it's physically possible
@@ -71,9 +67,6 @@ annex agree {**
 	 guarantee "Output failure binding for boolean_shutoff (fail_to)" : 
 	    output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
 	    
-	 -- guarantee mapping output (inverted)
-	 guarantee "Output failure binding for boolean_shutoff (fail_to)" : 
-	    boolean_input = faults.inverted_fail(inverted_boolean_input, inverted_occurred);
 	              
 **};end boolean_shutoff;
 
@@ -212,13 +205,11 @@ features
 	green_output : out data port common::pressure.i;
 	blue_output  : out data port common::pressure.i;
 	stuck_at_occurred : in data port Base_Types::Boolean;
-	inverted_occurred : in data port Base_Types::Boolean;
 annex AGREE {** 
 	
 	-- Fault occurred:
 	eq blue_nominal_output : common::pressure.i;
 	eq green_nominal_output : common::pressure.i;
-	eq inverted_select_alternate : Base_Types::Boolean;
 	
 	-- Used to show nondeterministic or stuck_at failure
 	eq alt_val : common::pressure.i;
@@ -234,7 +225,7 @@ annex AGREE {**
     -- then green pressure is positive. 
     guarantee "If select_alternate is selected, then blue input is positive, else green
                is positive." :
-        if inverted_select_alternate then blue_input.val > 0.0
+        if select_alternate then blue_input.val > 0.0
         else green_input.val > 0.0;
         
     -- cmd_nor and cmd_alt cannot both be positive.
@@ -243,7 +234,7 @@ annex AGREE {**
         
     -- If select_alt is true, then cmd_alt should be positive.
     guarantee "If select_alternate is true, then cmd_alt > 0.0, else cmd_nor > 0.0." :
-        if inverted_select_alternate then cmd_alt.val > 0.0 
+        if select_alternate then cmd_alt.val > 0.0 
         else cmd_nor.val > 0.0;
         
     -- The output is never greater than the input for either green or blue.
@@ -258,9 +249,6 @@ annex AGREE {**
 	 guarantee "Output failure binding for blue_output (fail_to)" : 
 	    blue_output.val = faults.fail_to(blue_nominal_output.val, alt_val.val, stuck_at_occurred);
 	       
-	 -- guarantee mapping output (inverted) select_alternate
-	 guarantee "Output failure binding for select_alternate (fail_to)" : 
-	    select_alternate = faults.inverted_fail(inverted_select_alternate, inverted_occurred);
   
 **};
 
