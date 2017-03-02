@@ -2,6 +2,15 @@ package faults
 public
 annex agree {**	
 	
+	node bool_to_int(b: bool) returns (i: int); 
+	let
+		i = if (b) then 1 else 0;
+	tel; 
+	
+	node historically(b: bool) returns (h: bool); 
+	let
+	   h = b -> b or pre(h); 
+	tel;
 	
 	node min(m: real, n: real) returns (r:real);
 	let
