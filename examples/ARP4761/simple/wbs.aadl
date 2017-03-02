@@ -228,7 +228,8 @@ connections
 		-- SPEC AG(PedP_NoSkid -> SomeP) ;                                                  
 		
 		-- cmd_shutoff faults (valves.aadl)
-		assert green_skid.stuck_at_occurred = false and blue_skid.stuck_at_occurred = false;
+		assert green_skid.stuck_at_occurred = false;
+		assert blue_skid.stuck_at_occurred = false;
 		
 		-- boolean_shutoff (valves.aadl)
 		assert shutoff.stuck_at_occurred = false;
