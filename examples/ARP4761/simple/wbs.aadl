@@ -11,6 +11,7 @@ with power;
 with pedals;
 with ARP4761;
 with EMV2;
+with faults;
 
 
 --
@@ -226,9 +227,28 @@ connections
 		-- IsPressed is a predicate that returns true when the pedal is pressed. 
 		-- PedP_NoSkid and SomeP are then used in a CTL property as:
 		-- SPEC AG(PedP_NoSkid -> SomeP) ;                                                  
+
+		-- define two sets of equations representing faults.
+		-- The first set is transient: these define an initial occurrence of a fault.
+		-- The second set is permanent: these are historically(transient);
+		
+		-- We will assert that given one permanent fault, the system should still provide pressure.
+		-- This should prove.
+		
+		-- We will then assert that given one transient fault, the system should still provide pressure.
+		-- This may not prove...I think it will because the system is currently combinatoric, but if 
+		-- we make it more complex in the future it will certainly fail.  
+
+		-- To encode the "one fault" assumption, we need a bool to int converter.
+		-- Then just sum up the faults (depending on whether we are measuring permanent or transient), and assert
+		-- this is <= 1.
+		
+		eq green_skid_stuck_at_transient : bool;
+		eq green_skid_stuck_at_permanent : bool = faults.historically(green_skid_stuck_at_transient);
+
 		
 		-- cmd_shutoff faults (valves.aadl)
-		assert green_skid.stuck_at_occurred = false;
+		assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
 		assert blue_skid.stuck_at_occurred = false;
 		
 		-- boolean_shutoff (valves.aadl)

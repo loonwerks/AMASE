@@ -205,7 +205,7 @@ features
 	inverted_occurred : in data port Base_Types::Boolean;
 	
 annex AGREE {**
-	eq inverted_result : Base_Types::Boolean;
+	eq inverted_result : bool;
 	-- If first input is true, output is false
 	-- otherwise output is true.  
 	-- Not sure if I can do this without using some
@@ -295,7 +295,7 @@ annex EMV2 {**
 **};
 
 annex AGREE {**
-	eq nominal_Select_Alternate : Base_Types::Boolean;	
+	eq nominal_Select_Alternate : bool;	
 	
 	-- Need contracts for the selectors in terms of the pedals and alternate selections.
 	-- However, there are currently missing many inputs necessary to put together a BSCU in the 

@@ -96,7 +96,7 @@ annex AGREE {**
 	-- (this occurs when cmd_input < input) or the output is equal to the input
 	-- (cmd_input does nothing to change output when cmd_input <= input).
 	guarantee "Valve pressure limits by cmd_input." : 
-		if (cmd_input.val < input.val) then 
+		if (cmd_input.activate_antiskid and cmd_input.val < input.val) then 
 			nominal_output.val = cmd_input.val 
 		else nominal_output.val = input.val ; 
 	
@@ -147,10 +147,10 @@ features
 	cmd_nor          : in data port common::command.skid;
 	cmd_alt          : in data port common::command.skid;
 	
-annex AGREE {**
+--annex AGREE {**
 	
 	-- 	ADD SYSTEM SELECTOR CONTRACTS HERE
-**}	;
+-- **}	;
 
 annex EMV2 {**
 	use types error_library;
