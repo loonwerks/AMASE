@@ -87,7 +87,7 @@ annex agree {**
     -- just a value that shows how much pressure is coming into the wheel.
     -- This should always equal incoming pressure value. 
     guarantee "Output 'pressure' is equal to incoming pressure. " :
-              (output_realized_pressure.val = green_input.val) or (output_realized_pressure.val = green_input.val);
+              (output_realized_pressure.val = green_input.val) or (output_realized_pressure.val = blue_input.val);
 		
 **};
 
