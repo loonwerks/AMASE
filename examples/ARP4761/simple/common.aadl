@@ -21,6 +21,10 @@ end command;
 data implementation command.brake
 end command.brake;
 
+data wheel
+end wheel;
+
+
 -- This is being used as the meter valve amount.
 data implementation command.skid
 	subcomponents

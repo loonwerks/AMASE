@@ -140,7 +140,7 @@ end cmd_shutoff;
 
 system selector
 features
-	accumulator_input: in data port common::pressure.i;
+	--accumulator_input: in data port common::pressure.i;
 	green_input      : in data port common::pressure.i;
 	blue_input       : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
@@ -159,7 +159,7 @@ annex EMV2 {**
 		select_alternate    : in propagation{NoValue};
 		cmd_nor    			: in propagation{NoValue};
 		cmd_alt    			: in propagation{NoValue};
-		accumulator_input 	: in propagation{NoService};
+		--accumulator_input 	: in propagation{NoService};
 		green_input 		: in propagation{NoService};
 		blue_input  		: in propagation{NoService};
 	flows
@@ -188,7 +188,7 @@ annex EMV2 {**
 	flows
 		ns1 : error path green_input{NoService} 		-> output;
 		ns2 : error path blue_input{NoService} 			-> output;
-		ns3 : error path accumulator_input{NoService} 	-> output;
+		--ns3 : error path accumulator_input{NoService} 	-> output;
 	end propagations;
 **};
 end selector_basic;
@@ -196,7 +196,7 @@ end selector_basic;
 
 system selector_detailed 
 features
-	accumulator_input: in data port common::pressure.i;
+	--accumulator_input: in data port common::pressure.i;
 	green_input      : in data port common::pressure.i;
 	blue_input       : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
@@ -259,7 +259,7 @@ annex EMV2 {**
 		select_alternate    : in propagation{NoValue};
 		cmd_nor    			: in propagation{NoValue};
 		cmd_alt    			: in propagation{NoValue};
-		accumulator_input 	: in propagation{NoService};
+		--accumulator_input 	: in propagation{NoService};
 		green_input 		: in propagation{NoService};
 		blue_input  		: in propagation{NoService};
 		green_output 	: out propagation{NoService};
@@ -270,8 +270,8 @@ annex EMV2 {**
 		f3 : error sink select_alternate{NoValue};
 		ns1 : error path green_input{NoService} 		-> green_output;
 		ns2 : error path blue_input{NoService} 			-> blue_output;
-		ns3 : error path accumulator_input{NoService} 	-> green_output;
-		ns4 : error path accumulator_input{NoService} 	-> blue_output;
+		--ns3 : error path accumulator_input{NoService} 	-> green_output;
+		--ns4 : error path accumulator_input{NoService} 	-> blue_output;
 		ns5 : error path cmd_alt{NoValue}               -> blue_output{NoService};
 		ns6 : error path cmd_nor{NoValue}               -> green_output{NoService};
 		ns7 : error path Select_Alternate{NoValue}      -> green_output{NoService};
@@ -290,5 +290,35 @@ annex EMV2 {**
 **};
 end selector_detailed;
 
+system accumulator_valve
+features
+	blue_input : in data port common::pressure.i;
+	accumulator_input : in data port common::pressure.i;
+	select_alternate : in data port Base_Types::Boolean;
+	blue_skid_output : out data port common::pressure.i;
+	stuck_off_occurred : out data port Base_Types::Boolean;
+annex AGREE{**
+		
+		-- faults
+	eq blue_skid_nominal_output : common::pressure.i;
+	eq alt_val : common::pressure.i;
+	
+	-- Contract: Accumulator valve will emit no pressure unless select_alternate
+	-- is true
+	guarantee "No pressure emitted unless select_alternate is true" :
+	  if (select_alternate) then blue_skid_nominal_output.val > 0.0 else blue_skid_nominal_output.val = 0.0;
+	  
+	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
+	-- else emit accumulator pressure
+	guarantee "If select_alternate true, then emit blue pressure, else emit accumulator pressure" :
+	  if (select_alternate) then blue_skid_nominal_output = blue_input 
+	    else blue_skid_nominal_output = accumulator_input;
+	    
+	-- Fault binding
+	guarantee "Output failure binding for blue_skid_output (fail_to)" : 
+	    blue_skid_output.val = faults.fail_to(blue_skid_nominal_output.val, alt_val.val, stuck_off_occurred);
+	    
+**}	;
+end accumulator_valve;
 
 end valves;

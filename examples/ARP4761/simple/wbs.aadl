@@ -42,12 +42,16 @@ subcomponents
 	selector   		: system valves::selector;
 	bscu       		: system bscu::bscu.generic;
 
+    -- The accumulator subsystem (new)
+    accumulator_valve		: system valves::accumulator_valve;
+    
+    -- The wheel
 	wheel      		: system wheel::wheel;
 	
 	-- Annunciation device
 	annunciation 	: device communication::annunciation.i;
 connections
-    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input ;
+    --accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input ;
 	power1     : bus access bscu.pwr1 <-> power.line1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
@@ -171,9 +175,13 @@ system implementation wbs.federated
 	shutoff    : system valves::boolean_shutoff;
 	green_skid : system valves::cmd_shutoff; 
 	blue_skid  : system valves::cmd_shutoff; 
-	wheel      : system wheel::wheel_two_inputs.i ; 
+	wheel      : system wheel::wheel_two_inputs.i ;
+	
+	-- accumulator valve (new)
+	accumulator_valve : system valves::accumulator_valve;
+	 
 connections
-    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
+    --accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
 	power1     : bus access bscu.pwr1 <-> power.line1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
@@ -187,15 +195,23 @@ connections
 	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
 	
 	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
+	
+	-- Added bscu to accumulator_valve (new)
+	bscu_to_accumulator_valve : port bscu.Select_Alt_Accum -> accumulator_valve.select_alternate;
 	 
 	--  Connect the command from the BSCU to the skid valves
 	bscu_to_gskid       : port bscu.cmd_nor -> green_skid.cmd_input;
 	bscu_to_bskid       : port bscu.cmd_alt -> blue_skid.cmd_input;
 	
 	--  Connect the output pressure from the selector
-	--  to the anti-skid components
+	--  to the anti-skid components (changed to only send to green_skid, not blue_skid)
 	selector_to_gskid   : port selector.green_output -> green_skid.input;
-	selector_to_bskid   : port selector.blue_output -> blue_skid.input;
+	
+	-- Connect output pressure from selector 
+	-- to the accumulator valve component (new)
+	selector_to_accumulator_valve   : port selector.blue_output -> accumulator_valve.blue_input;
+	
+
 	
 	--  Connect the anti-skid system to the wheel. In this version,
 	--  we see the wheel as having two paths for getting the pressure.
@@ -203,7 +219,9 @@ connections
 	bskid_to_wheel      : port blue_skid.output -> wheel.blue_input;
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
-	-- Need to have data port access where currently we have bus access.
+	-- Connect the output from wheel to the bscu here.............................................................
+	--wheel_to_bscu		: port wheel.output_realized_pressure -> select_accumulator_valve.wheel_pressure;
+	
 	
 	annex agree {**
 			
@@ -265,23 +283,31 @@ connections
 		eq accumulator_stuck_at_permanent : bool = faults.historically(accumulator_stuck_at_transient);
 
 		-- cmd_shutoff faults (valves.aadl)
-		assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
-		assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
+		--assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
+		--assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
+		assert green_skid.stuck_at_occurred = false;
+		assert blue_skid.stuck_at_occurred = false;
 		
 		-- boolean_shutoff (valves.aadl)
-		assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
+		--assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
+		assert shutoff.stuck_at_occurred = false;
 		
 		-- selector_detailed (valves)
-		assert selector.stuck_at_occurred = selector_stuck_at_permanent;
-		
+		--assert selector.stuck_at_occurred = selector_stuck_at_permanent;
+		assert selector.stuck_at_occurred = false;
 		-- system blue pump (pump.aadl)
-		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
+		--assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
+		assert blue_pump.stuck_at_occurred = false;
 		
 		-- system green pump
-		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
+		--assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
+		assert green_pump.stuck_at_occurred = false;
 		
 		-- system accumulation pump
-		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;		 	
+		--assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
+		assert accumulator.stuck_at_occurred = false;	
+		
+		assert bscu.inverted_occurred = false;	 	
 		
 		eq fail_count : int = 
 			faults.bool_to_int(green_skid_stuck_at_permanent) +  
@@ -292,7 +318,7 @@ connections
 			faults.bool_to_int(green_pump_stuck_at_permanent) +  
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
-		assert(fail_count = 1);
+		assert(fail_count <= 1);
 	**};
 	
 end wbs.federated;
@@ -322,7 +348,7 @@ subcomponents
 	blue_skid  : system valves::cmd_shutoff; 
 	wheel      : system wheel::wheel_two_inputs.i ; 
 connections
-    accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
+    --accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
 	power1     : bus access bscu.pwr1 <-> power.line1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
