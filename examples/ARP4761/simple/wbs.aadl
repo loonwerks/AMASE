@@ -178,7 +178,10 @@ system implementation wbs.federated
 	wheel      : system wheel::wheel_two_inputs.i ;
 	
 	-- accumulator valve (new)
-	accumulator_valve : system valves::accumulator_valve;
+	accumulator_valve_input : system valves::accumulator_valve;
+	
+	-- The bscu selector for accum valve
+	Select_Accum_Valve : system bscu::select_accumulator_valve;
 	 
 connections
     --accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
@@ -197,7 +200,9 @@ connections
 	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
 	
 	-- Added bscu to accumulator_valve (new)
-	bscu_to_accumulator_valve : port bscu.Select_Alt_Accum -> accumulator_valve.select_alternate;
+	bscu_to_accumulator_valve : port bscu.Select_Alt_Accum -> accumulator_valve_input.select_alternate;
+	-- Add accumulator_valve.blue_skid _output to blue_skid input (new)
+	accum_valve_to_blue_skid : port accumulator_valve_input.blue_skid_output -> blue_skid.input;
 	 
 	--  Connect the command from the BSCU to the skid valves
 	bscu_to_gskid       : port bscu.cmd_nor -> green_skid.cmd_input;
@@ -209,7 +214,7 @@ connections
 	
 	-- Connect output pressure from selector 
 	-- to the accumulator valve component (new)
-	selector_to_accumulator_valve   : port selector.blue_output -> accumulator_valve.blue_input;
+	selector_to_accumulator_valve   : port selector.blue_output -> accumulator_valve_input.blue_input;
 	
 
 	
@@ -220,7 +225,7 @@ connections
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
 	-- Connect the output from wheel to the bscu here.............................................................
-	--wheel_to_bscu		: port wheel.output_realized_pressure -> select_accumulator_valve.wheel_pressure;
+	wheel_to_bscu		: port wheel.output_realized_pressure -> Select_Accum_Valve.wheel_pressure;
 	
 	
 	annex agree {**
@@ -238,7 +243,7 @@ connections
 		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
 		
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
-			pedals_pressed and no_skid => brake_pressure;
+			pre(pedals_pressed) and pedals_pressed and no_skid => brake_pressure;
 			
 		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
 		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;

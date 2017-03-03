@@ -446,7 +446,11 @@ subcomponents
 	sub2    : system bscu_subsystem.generic;
 	select  : system select_alternate;
 	platform : system platform::platform.federated;
+	
+	-- NEW select_accumulator subcomponet will flag accumulator
+	-- valve if no pressure at wheel
 	select_accumulator : system select_accumulator_valve;
+	
 connections
 	sub1pwr        : bus access pwr1 <-> sub1.pwr;
 	sub2pwr        : bus access pwr2 <-> sub2.pwr;
