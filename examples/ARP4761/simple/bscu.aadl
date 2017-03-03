@@ -273,20 +273,20 @@ end select_alternate;
 
 -- Added new subcomponent to gather input from wheel regarding
 -- the pressure received there and turn on accumulator valve if needed.
-system select_alternate_accumulator
+system select_accumulator_valve
 features
 	-- Added input from wheel (new)
-	realized_wheel_pressure : in data port common::pressure.i;
-	select_accumulator : out data port Base_Types::Boolean;
+	wheel_pressure : in data port common::pressure.i;
+	select_alt_accumulator : out data port Base_Types::Boolean;
 	
 annex AGREE{**
 	
 	-- If input is zero, select_alternate_accumulator is true
 	guarantee "if input is zero (pressure found at the wheel), output select_alternate to accumulator as true" :
-	      (realized_wheel_pressure.val = 0.0) => select_accumulator = true;
+	      (wheel_pressure.val = 0.0) => select_alt_accumulator = true;
 	
 **};
-end select_alternate_accumulator;
+end select_accumulator_valve;
 
 
 
@@ -297,13 +297,10 @@ features
 	pedal1            : in data port common::command.pedal;
 	pedal2            : in data port common::command.pedal;
 	Select_Alternate  : out data port Base_Types::Boolean;
+	Select_Alt_Accum  : out data port Base_Types::Boolean;
 	cmd_nor           : out data port common::command.skid; 
 	cmd_alt           : out data port common::command.skid;
 	
-	-- Added input from wheel (new)
-	wheel_pressure : in data port common::pressure.i;
-	-- Added output for accumulator valve (new)
-	Select_Alternate_Accumulator : out data port Base_Types::Boolean;
 	
 	-- Inverted failure for result
 	inverted_occurred : in data port Base_Types::Boolean; 
@@ -449,7 +446,7 @@ subcomponents
 	sub2    : system bscu_subsystem.generic;
 	select  : system select_alternate;
 	platform : system platform::platform.federated;
-	select_accumulator : system select_alternate_accumulator;
+	select_accumulator : system select_accumulator_valve;
 connections
 	sub1pwr        : bus access pwr1 <-> sub1.pwr;
 	sub2pwr        : bus access pwr2 <-> sub2.pwr;
@@ -461,8 +458,8 @@ connections
 	sub1skid       : port sub1.cmd_skid -> cmd_nor;
 	sub2skid       : port sub2.cmd_skid -> cmd_alt;
 	
-	-- Connect wheel pressure value to selectAccum value
-	--selectAccum	   : port select_alternate_accumulator.realized_wheel_pressure -> Select_Alternate_Accumulator; 
+	-- Connect subcomponent select_accumulator_valve to an output in bscu called Select_Alt_Accum
+	selectAccumInput : port select_accumulator.select_alt_accumulator -> Select_Alt_Accum; 
 	 
 properties
 	Actual_Processor_Binding => (reference (platform.cpu1)) applies to sub1.cmd;
