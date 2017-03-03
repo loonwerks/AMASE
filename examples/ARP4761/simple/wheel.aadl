@@ -19,7 +19,9 @@ end wheel;
 system wheel_one_input extends wheel
 features
 	input : in data port common::pressure.i;
-	
+	-- Note: the sensed pressure is *not* pressure, but only a sensor value.
+	-- In the future  
+	output_sensed: out data port common::sensor.i;  
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;

@@ -55,6 +55,14 @@ data implementation pressure.i
 		val: data Base_Types::Float;
 end pressure.i;
 
+data sensor	
+end sensor;
+
+data implementation sensor.i
+	subcomponents
+		val: data Base_Types::Float;
+end sensor.i;
+
 
 system pipe
 features
