@@ -216,7 +216,8 @@ connections
 	-- to the accumulator valve component (new)
 	selector_to_accumulator_valve   : port selector.blue_output -> accumulator_valve_input.blue_input;
 	
-
+	-- Connect accumulator pump to accumulator valve
+    accum_pump_to_accum_valve : port accumulator.pressure_output -> accumulator_valve_input.accumulator_input;
 	
 	--  Connect the anti-skid system to the wheel. In this version,
 	--  we see the wheel as having two paths for getting the pressure.
