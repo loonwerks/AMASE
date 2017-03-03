@@ -14,6 +14,7 @@ with EMV2;
 with faults;
 
 
+
 --
 --  Dummy component for the wheel brake system.
 --
@@ -176,6 +177,7 @@ system implementation wbs.federated
 	green_skid : system valves::cmd_shutoff; 
 	blue_skid  : system valves::cmd_shutoff; 
 	wheel      : system wheel::wheel_two_inputs.i ;
+	accumulator_valve : system valves::accumulator_valve;
 	
 	-- accumulator valve (new)
 	accumulator_valve_input : system valves::accumulator_valve;
@@ -198,6 +200,7 @@ connections
 	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
 	
 	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
+	
 	
 	-- Added bscu to accumulator_valve (new)
 	bscu_to_accumulator_valve : port bscu.Select_Alt_Accum -> accumulator_valve_input.select_alternate;
@@ -246,6 +249,8 @@ connections
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
 			pre(pedals_pressed) and pedals_pressed and no_skid => brake_pressure;
 			
+		
+		
 		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
 		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;
 		-- IsPressed is a predicate that returns true when the pedal is pressed. 
@@ -287,33 +292,36 @@ connections
 		
 		eq accumulator_stuck_at_transient : bool;
 		eq accumulator_stuck_at_permanent : bool = faults.historically(accumulator_stuck_at_transient);
+		
+		eq accumulator_valve_stuck_at_transient : bool;
+		eq accumulator_valve_stuck_at_permanent : bool = faults.historically(accumulator_valve_stuck_at_transient);
+
+        eq bscu_accumSelect_inverted_occurred_transient : bool;
+		eq bscu_accumSelect_inverted_occurred_permanent : bool = faults.historically(bscu_accumSelect_inverted_occurred_transient);
+        
 
 		-- cmd_shutoff faults (valves.aadl)
-		--assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
-		--assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
-		assert green_skid.stuck_at_occurred = false;
-		assert blue_skid.stuck_at_occurred = false;
+		assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
+		assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
 		
 		-- boolean_shutoff (valves.aadl)
-		--assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
-		assert shutoff.stuck_at_occurred = false;
+		assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
 		
 		-- selector_detailed (valves)
-		--assert selector.stuck_at_occurred = selector_stuck_at_permanent;
-		assert selector.stuck_at_occurred = false;
+		assert selector.stuck_at_occurred = selector_stuck_at_permanent;
+		
 		-- system blue pump (pump.aadl)
-		--assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
-		assert blue_pump.stuck_at_occurred = false;
+		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
 		
 		-- system green pump
-		--assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
-		assert green_pump.stuck_at_occurred = false;
+		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
 		
 		-- system accumulation pump
-		--assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
-		assert accumulator.stuck_at_occurred = false;	
+		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
 		
-		assert bscu.inverted_occurred = false;	 	
+		assert accumulator_valve_input.stuck_at_occurred = accumulator_stuck_at_permanent;
+		
+		assert bscu.inverted_occurred = bscu_accumSelect_inverted_occurred_permanent;	 	
 		
 		eq fail_count : int = 
 			faults.bool_to_int(green_skid_stuck_at_permanent) +  
@@ -324,7 +332,7 @@ connections
 			faults.bool_to_int(green_pump_stuck_at_permanent) +  
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
-		assert(fail_count <= 1);
+		assert(fail_count = 0);
 	**};
 	
 end wbs.federated;
