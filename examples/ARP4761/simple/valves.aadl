@@ -311,7 +311,7 @@ annex AGREE{**
 	-- Contract: Accumulator valve will emit no pressure unless select_alternate
 	-- is true
 	guarantee "No pressure emitted unless select_alternate is true" :
-	  if (select_alternate) then blue_skid_nominal_output.val = blue_input.val else blue_skid_nominal_output.val = 0.0;
+	  (select_alternate) => blue_skid_nominal_output.val = accumulator_input.val;
 	  
 	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
 	-- else emit accumulator pressure
