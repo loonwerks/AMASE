@@ -237,6 +237,10 @@ annex AGREE {**
         if select_alternate then cmd_alt.val > 0.0 
         else cmd_nor.val > 0.0;
         
+    -- If green pressure below threshold then select_alternate
+    guarantee "If green pressure below threshold, then select_alternate" :
+       green_input.val <= 0.0 => select_alternate;
+        
     -- The output is never greater than the input for either green or blue.
     guarantee "Output is never greater than input." :
         (green_nominal_output.val <= green_input.val) and (blue_nominal_output.val <= blue_input.val);
@@ -296,27 +300,28 @@ features
 	accumulator_input : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	blue_skid_output : out data port common::pressure.i;
-	stuck_off_occurred : out data port Base_Types::Boolean;
+	stuck_at_occurred : out data port Base_Types::Boolean;
 annex AGREE{**
 		
 		-- faults
 	eq blue_skid_nominal_output : common::pressure.i;
 	eq alt_val : common::pressure.i;
 	
+	
 	-- Contract: Accumulator valve will emit no pressure unless select_alternate
 	-- is true
 	guarantee "No pressure emitted unless select_alternate is true" :
-	  if (select_alternate) then blue_skid_nominal_output.val > 0.0 else blue_skid_nominal_output.val = 0.0;
+	  (select_alternate) => blue_skid_nominal_output.val = accumulator_input.val;
 	  
 	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
 	-- else emit accumulator pressure
-	guarantee "If select_alternate true, then emit blue pressure, else emit accumulator pressure" :
-	  if (select_alternate) then blue_skid_nominal_output = blue_input 
-	    else blue_skid_nominal_output = accumulator_input;
+	guarantee "If select_alternate true and blue > threshold, then emit blue pressure, else emit accum pressure" :
+	   if (select_alternate) and blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
+	        else blue_skid_nominal_output = accumulator_input;
 	    
 	-- Fault binding
 	guarantee "Output failure binding for blue_skid_output (fail_to)" : 
-	    blue_skid_output.val = faults.fail_to(blue_skid_nominal_output.val, alt_val.val, stuck_off_occurred);
+	    blue_skid_output.val = faults.fail_to(blue_skid_nominal_output.val, alt_val.val, stuck_at_occurred);
 	    
 **}	;
 end accumulator_valve;
