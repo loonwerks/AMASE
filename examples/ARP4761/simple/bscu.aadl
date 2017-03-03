@@ -276,6 +276,7 @@ features
 	pwr2              : requires bus access common::power.generic;
 	pedal1            : in data port common::command.pedal;
 	pedal2            : in data port common::command.pedal;
+	wheel_pressure_sensor: in data port common::sensor.i; 
 	Select_Alternate  : out data port Base_Types::Boolean;
 	cmd_nor           : out data port common::command.skid; 
 	cmd_alt           : out data port common::command.skid;
