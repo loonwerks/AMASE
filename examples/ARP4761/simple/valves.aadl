@@ -296,7 +296,7 @@ features
 	accumulator_input : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	blue_skid_output : out data port common::pressure.i;
-	stuck_off_occurred : in data port Base_Types::Boolean;
+	stuck_off_occurred : out data port Base_Types::Boolean;
 annex AGREE{**
 		
 		-- faults

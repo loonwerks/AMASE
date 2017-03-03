@@ -220,8 +220,8 @@ connections
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
 	-- Connect the output from wheel to the bscu here.............................................................
+	--wheel_to_bscu		: port wheel.output_realized_pressure -> select_accumulator_valve.wheel_pressure;
 	
-	-- Need to have data port access where currently we have bus access.
 	
 	annex agree {**
 			
@@ -238,7 +238,7 @@ connections
 		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
 		
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
-			pedals_pressed and no_skid => pre(brake_pressure) or brake_pressure;
+			pedals_pressed and no_skid => brake_pressure;
 			
 		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
 		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;
@@ -289,19 +289,25 @@ connections
 		assert blue_skid.stuck_at_occurred = false;
 		
 		-- boolean_shutoff (valves.aadl)
-		assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
+		--assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
+		assert shutoff.stuck_at_occurred = false;
 		
 		-- selector_detailed (valves)
 		--assert selector.stuck_at_occurred = selector_stuck_at_permanent;
 		assert selector.stuck_at_occurred = false;
 		-- system blue pump (pump.aadl)
-		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
+		--assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
+		assert blue_pump.stuck_at_occurred = false;
 		
 		-- system green pump
-		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
+		--assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
+		assert green_pump.stuck_at_occurred = false;
 		
 		-- system accumulation pump
-		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;		 	
+		--assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
+		assert accumulator.stuck_at_occurred = false;	
+		
+		assert bscu.inverted_occurred = false;	 	
 		
 		eq fail_count : int = 
 			faults.bool_to_int(green_skid_stuck_at_permanent) +  
@@ -312,7 +318,7 @@ connections
 			faults.bool_to_int(green_pump_stuck_at_permanent) +  
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
-		assert(fail_count = 1);
+		assert(fail_count <= 1);
 	**};
 	
 end wbs.federated;
