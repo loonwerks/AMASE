@@ -316,7 +316,7 @@ annex AGREE{**
 	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
 	-- else emit accumulator pressure
 	guarantee "If select_alternate true and blue > threshold, then emit blue pressure, else emit accum pressure" :
-	   if (select_alternate) and blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
+	   if (select_alternate) or blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
 	        else blue_skid_nominal_output = accumulator_input;
 	    
 	-- Fault binding
