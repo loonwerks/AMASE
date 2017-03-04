@@ -60,10 +60,6 @@
 \newcommand{\rbb}{]\!]}
 \newcommand{\expr}{\phi}
 \newcommand{\exprS}{\Phi}
-\newcommand{\mike}[1]{\textcolor{red}{#1}}
-\newcommand{\mats}[1]{\textcolor{blue}{#1}}
-\newcommand{\darren}[1]}{\textcolor{green}{#1}}
-
 
 \sloppypar
 
@@ -74,6 +70,8 @@
 \definecolor{gold}{rgb}{0.90,.66,0}
 \definecolor{dgreen}{rgb}{0,0.6,0}
 \newcommand{\mike}[1]{\textcolor{red}{#1}}
+\newcommand{\mats}[1]{\textcolor{blue}{#1}}
+\newcommand{\darren}[1]{\textcolor{green}{#1}}
 \newcommand{\fixed}[1]{\textcolor{purple}{#1}}
 \newcommand{\andrew}[1]{\textcolor{green}{#1}}
 \newcommand{\ela}[1]{\textcolor{blue}{#1}}
@@ -90,7 +88,8 @@
 %
 \author{Danielle Stewart\inst{1}
 \and Michael W. Whalen\inst{1}
-\and Darren Cofer\inst{2} }
+\and Darren Cofer\inst{2}
+\and Mats P.E. Heimdahl\inst{1} }
 \institute{University of Minnesota\\Department of Computer
 Science and Engineering\\
 200 Union Street\\
@@ -104,9 +103,10 @@ Cedar Rapids, IA, 52498, USA\\ \email{ darren.cofer@rockwellcollins.com}
 \maketitle
 
 \begin{abstract}
-Model-based systems engineering (MBSE) methods and tools permit system-level requirements to be specified and analyzed early in the development process of airborne and ground-based systems. These tools can also be used to perform safety analysis based on the system architecture and initial functional decomposition.
+Architecture description languages such as AADL allow systems engineers to specify the structure of system architectures and perform several analyses over them, including schedulability, resource analysis, and information flow.  In addition, they 
+permit system-level requirements to be specified and analyzed early in the development process of airborne and ground-based systems. These tools can also be used to perform safety analysis based on the system architecture and initial functional decomposition.
 
-Previously, Rockwell Collins and the University of Minnesota developed and demonstrated an approach to model-based safety analysis. New MBSE tools that incorporate assume-guarantee compositional analysis techniques provide the basis for greatly improving earlier approaches to safety analysis and can be used to ensure model consistency, correctness of assumptions, and better scalability.
+%Previously, Rockwell Collins and the University of Minnesota developed and demonstrated an approach to behavioral model-based safety analysis using Simulink. New MBSE tools that incorporate assume-guarantee compositional analysis techniques provide the basis for greatly improving earlier approaches to safety analysis and can be used to ensure model consistency, correctness of assumptions, and better scalability.
 
 Using AADL-based system architecture modeling and analysis tools as an exemplar, we extend existing analysis methods to support system safety objectives of ARP4754A and ARP4761. This includes extensions to existing modeling languages to better describe failure conditions, interactions, and mitigations, and improvements to compositional reasoning approaches focused on the specific needs of system safety analysis. We develop example systems based on the Wheel Braking System in SAE AIR6110 to evaluate the effectiveness and practicality of our approach.
 \end{abstract}
@@ -114,6 +114,8 @@ Using AADL-based system architecture modeling and analysis tools as an exemplar,
 \keywords{Model-based systems engineering, fault analysis, safety engineering}
 
 \input{introduction}
+
+\input{safety}
 
 \input{background}
 
