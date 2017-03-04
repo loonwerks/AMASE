@@ -333,8 +333,9 @@ annex AGREE {**
 	eq skid_active: bool = (cmd_nor.activate_antiskid) or (cmd_alt.activate_antiskid);
 	eq pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
 	
-	--guarantee "If cmd_alt then nominal_Select_Alternate" :
-	  --  cmd_alt.val <= 0.0 => nominal_Select_Alternate;
+	-- If wheel pressure sensor shows 0 or less pressure, then select_Alt_Accum is true.
+	guarantee "If wheel pressure sensor shows 0 or less pressure, then Select_Alt_Accum is true" :
+	    wheel_pressure_sensor.val <= 0.0 => Select_Alt_Accum = true;
 	
 	guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
 		pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) =>
