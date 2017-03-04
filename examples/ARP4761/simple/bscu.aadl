@@ -283,7 +283,7 @@ annex AGREE{**
 	
 	-- If input is zero, select_alternate_accumulator is true
 	guarantee "if input is zero (pressure found at the wheel), output select_alternate to accumulator as true" :
-	      (wheel_pressure.val = 0.0) => select_alt_accumulator = true;
+	      (wheel_pressure.val <= 0.0) => select_alt_accumulator = true;
 	
 **};
 end select_accumulator_valve;
@@ -296,7 +296,7 @@ features
 	pwr2              : requires bus access common::power.generic;
 	pedal1            : in data port common::command.pedal;
 	pedal2            : in data port common::command.pedal;
-	wheel_pressure_sensor: in data port common::sensor.i;  
+	wheel_pressure: in data port common::pressure.i;  
 	Select_Alternate  : out data port Base_Types::Boolean;
 	Select_Alt_Accum  : out data port Base_Types::Boolean;
 	cmd_nor           : out data port common::command.skid; 
@@ -335,7 +335,7 @@ annex AGREE {**
 	
 	-- If wheel pressure sensor shows 0 or less pressure, then select_Alt_Accum is true.
 	guarantee "If wheel pressure sensor shows 0 or less pressure, then Select_Alt_Accum is true" :
-	    wheel_pressure_sensor.val <= 0.0 => Select_Alt_Accum = true;
+	    wheel_pressure.val <= 0.0 => Select_Alt_Accum = true;
 	
 	guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
 		pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) =>
