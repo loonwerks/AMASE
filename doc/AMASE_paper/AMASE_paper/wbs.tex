@@ -1,12 +1,12 @@
 \section{ARP4761: Wheel Brake System}
 
-As a preliminary case study, we utilized the Wheel Brake System described in ARP 4761 - Appendix L \cite{AIR6110}. The informal wheel brake system diagram is shown in Figure XX and is taken from the ARP 4761 document. The Wheel Brake System is installed on the two main landing gears and is used during taxi, landing, and rejected take off. Braking is either commanded manually using brake pedals or automatically with no need for the pedals (autobrake). When the wheels have traction, the autobrake function will provide a constant smooth deceleration. \\
+As a preliminary case study, we utilized the Wheel Brake System described in ARP 4761 - Appendix L \cite{AIR6110}. The informal wheel brake system diagram is shown in Figure ~\ref{fig:Wbs_ima} and is the AADL simple model of the WBS system. The Wheel Brake System is installed on the two main landing gears and is used during taxi, landing, and rejected take off. Braking is either commanded manually using brake pedals or automatically with no need for the pedals (autobrake). When the wheels have traction, the autobrake function will provide a constant smooth deceleration. \\
 
-%%%%%%%%%%%% Try to get a better figure here... this one is all blurry... 
+
 \begin{figure}[htb]
 \begin{center}
-\includegraphics[scale=.75]{images/Wbs-ima}
-\caption{WBS model diagram from Simple Version ARP4761 }\label{fig:wbs_diagram}
+\includegraphics[scale=.5]{images/Wbs-ima}
+\caption{AADL Simple Model of the Wheel Brake System }\label{fig:wbs_ima}
 \end{center}
 \end{figure}
 
@@ -19,10 +19,10 @@ In both NORMAL and ALTERNATE modes, an anti-skid capability is available. In the
 \subsection{Nominal System Modeling}
 A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. Figure~\ref{fig:wbs_diagram} illustrates how the wheel braking system is modeled using Architecture Analysis and Design Language (AADL). The following section describes this nominal model from which the fault model was generated. 
 
-\subsection{Wheel Braking System (WBS)}
+\subsubsection{Wheel Braking System (WBS)}
 The highest level component is the WBS. It consists of a digital control unit, the BSCU, and Normal and Alternate hydraulic pressure lines (supplied by Green Pump and Blue Pump/Accumulator respectively), a Selector which selects between normal and alternate modes of hydraulic pressure, and the Wheel system. The WBS takes inputs from the environment including PedalPos1, AutoBrake, DecRate, AC\_Speed, and Skid. All of these inputs are forwarded to the BSCU to compute the brake commands.
 
-\subsection{Braking System Control Unit (BSCU)}
+\subsubsection{Braking System Control Unit (BSCU)}
 The BSCU is the digital component in the system that receives inputs from the WBS. It also receives feedback from the Normal and Alternate lines and two power inputs from two separate power sources. The BSCU is composed of two Command and Monitor subsystems each powered independently from separate power sources. The pedal position maps into these units and when skidding occurs, the Command and Monitor units will decrease the pressure to the brakes. 
 
 The Command unit regulates the pressure to the brakes in the normal hydraulic line through the command cmd\_nor. Computing this command requires both the brake requested power and the skid information. The Command unit also regulates the pressure in the alternate hydraulic line in order to prevent skidding which it does through the cmd\_alt command. The Monitor unit monitors the validity of the Command unit output. 
@@ -35,18 +35,18 @@ The BSCU switches to the alternate hydraulic system (cmd\_alt = true) under the 
 
 Once the system has switched into alternate mode, it will not switch into normal mode again. 
 
-\subsection{Hydraulic Pumps}
+\subsubsection{Hydraulic Pumps}
 There are three hydraulic pumps in the system, Green pump (Normal mode), Blue pump (Alternate mode), and Accumulator pump (Emergency mode). Each pump provides pressure to the system and is modeled in AADL as a floating point value. 
 
-\subsection{Shutoff Valve}
+\subsubsection{Shutoff Valve}
 %%%%%%%%%%%%%%%%%% Look at this more closely in wbs.aadl %%%%%%%%%%
 
 The Shutoff valve is a meter valve situated between the Green pump and the Selector. It receives an input from the BSCU regarding valve position and regulates the pressure coming through the Green pipe accordingly.  
 
-\subsection{Selector Valve}
+\subsubsection{Selector Valve}
 The selector receives inputs from the pumps regarding pressure output and the BSCU regarding which mode the system is in. It will output the appropriate pressure from Green, Blue, or Accumulator pump. An added requirement of the Selector system is that it will only output pressure from one of these sources. Thus, the case of having pressure supplied to the wheels from more than one pump is avoided. The Selector takes the two pipe pressures (Green and Blue) as input, selects the system with adequate pressure and blocks the system with inadequate pressure. It is unclear how the Selector valve operates if both incoming pipes have pressure greater than the threshold. The AADL model assumes that the default in this case is Normal mode. 
 
-\subsection{Skid Valves}
+\subsubsection{Skid Valves}
 The Blue\_Skid and Green\_Skid valves receive input from the Selector as pressure coming through the respective pipes as well as input from the BSCU that commands Normal or Alternate mode. The Skid valves will use these inputs to choose between the Green or the Blue pressure to send off to the wheel. 
 
 
