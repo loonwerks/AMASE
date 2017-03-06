@@ -1,4 +1,61 @@
 \section{Fault Modeling}
 
+In order to start from the error model notions of error types and look more closely at the state machines that describe transitions from the nominal state to the error state, we focus on the types of errors that can be present in the components of the system. 
+
+To begin with, we proved a top level property of the WBS using AGREE. This property states: \\
+
+\begin{tt}
+If pedals are pressed and no skid occurs, then the brakes will receive pressure. \\
+\end{tt}
+
+Using the AADL nominal model, this property proves. From this point, we focus our attention on component failures and how this will affect the top level property of the system. 
+
+We would like to specify different component failure modes. These failure modes can be triggered by some internal error or propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our simple fault model contains two types of faults:
+
+\begin{itemize}
+\item \textit{fail\_to} fault: This type of failure accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be modeled in such a way as to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure mode for the Command subsystems in the BSCU component. This causes the Command units to become stuck at a previous value. An example of a mechanical error that is captured by this fault is a valve stuck open (or closed). The definition in AGREE of this fault is shown in Figure~REFERENCEME.\\
+
+%%%%%%% DANIELLE
+%                     CHECK INTO MECHANICAL FAILURES
+
+\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An examples of this is the Selector.
+\end{itemize}
+
+While modeling these errors, the duration of the fault must also be taken into account. There are both permanent faults and transient faults. We defined an AGREE node called 
+\begin{tt}
+historically
+\end{tt}
+which will model the permanent faults based on whether transient faults are historically true. This node is shown in Figure~REFERENCEME. 
+
+The following is a short summary of the failures defined in the fault model. 
+
+\subsection{AADL Faults}
+\begin{itemize}
+
+\item Valves and Pumps: All valves and pumps have the possibility of a \textit{fail\_to} fault. This includes Green pump, Blue pump, Accumulator, and the Shutoff valves. 
+
+\item  The Selector can also have a digital \textit{fail\_to} fault regarding the inputs from BSCU commanding to use normal or alternate means of pressure along with an \textit{inverted\_fail} fault which would change the boolean value that commands antiskid to activate. 
+
+\end{itemize}
+
+Given our understanding of the AADL system, the assumption was that transient faults could be introduced into the system and we would still be able to prove our top level property. Upon connecting the faults into the WBS, it was shown that this top level property could not be proven using these transient faults. Upon further reflection, it was clear why that was the case. 
+
+In the AADL model, the Selector is situated between the 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
