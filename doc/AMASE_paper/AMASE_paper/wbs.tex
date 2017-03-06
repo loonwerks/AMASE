@@ -20,14 +20,14 @@ In both NORMAL and ALTERNATE modes, an anti-skid capability is available. In the
 A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. Figure~\ref{fig:wbs_diagram} illustrates how the wheel braking system is modeled using Architecture Analysis and Design Language (AADL). The following section describes this nominal model from which the fault model was generated. 
 
 \subsection{Wheel Braking System (WBS)}
-The highest level component is the WBS. It consists of a digital control unit, the BSCU, and Normal and Alternate hydraulic pressure lines (supplied by Green Pump and Blue Pump/Accumulator respectively), a Selector which selects between normal and alternate modes of hydraulic pressure, and the Wheel system. The WBS takes inputs from the environment including PedalPos1, AutoBrake, DecRate, AC_Speed, and Skid. All of these inputs are forwarded to the BSCU to compute the brake commands.
+The highest level component is the WBS. It consists of a digital control unit, the BSCU, and Normal and Alternate hydraulic pressure lines (supplied by Green Pump and Blue Pump/Accumulator respectively), a Selector which selects between normal and alternate modes of hydraulic pressure, and the Wheel system. The WBS takes inputs from the environment including PedalPos1, AutoBrake, DecRate, AC\_Speed, and Skid. All of these inputs are forwarded to the BSCU to compute the brake commands.
 
 \subsection{Braking System Control Unit (BSCU)}
 The BSCU is the digital component in the system that receives inputs from the WBS. It also receives feedback from the Normal and Alternate lines and two power inputs from two separate power sources. The BSCU is composed of two Command and Monitor subsystems each powered independently from separate power sources. The pedal position maps into these units and when skidding occurs, the Command and Monitor units will decrease the pressure to the brakes. 
 
-The Command unit regulates the pressure to the brakes in the normal hydraulic line through the command cmd_nor. Computing this command requires both the brake requested power and the skid information. The Command unit also regulates the pressure in the alternate hydraulic line in order to prevent skidding which it does through the cmd_alt command. The Monitor unit monitors the validity of the Command unit output. 
+The Command unit regulates the pressure to the brakes in the normal hydraulic line through the command cmd\_nor. Computing this command requires both the brake requested power and the skid information. The Command unit also regulates the pressure in the alternate hydraulic line in order to prevent skidding which it does through the cmd\_alt command. The Monitor unit monitors the validity of the Command unit output. 
 
-The BSCU switches to the alternate hydraulic system (cmd_alt = true) under the following conditions:
+The BSCU switches to the alternate hydraulic system (cmd\_alt = true) under the following conditions:
 \begin{itemize}
 \item Output from both Command units are not valid
 \item The Green pump (normal) is below threshold
@@ -47,7 +47,7 @@ The Shutoff valve is a meter valve situated between the Green pump and the Selec
 The selector receives inputs from the pumps regarding pressure output and the BSCU regarding which mode the system is in. It will output the appropriate pressure from Green, Blue, or Accumulator pump. An added requirement of the Selector system is that it will only output pressure from one of these sources. Thus, the case of having pressure supplied to the wheels from more than one pump is avoided. The Selector takes the two pipe pressures (Green and Blue) as input, selects the system with adequate pressure and blocks the system with inadequate pressure. It is unclear how the Selector valve operates if both incoming pipes have pressure greater than the threshold. The AADL model assumes that the default in this case is Normal mode. 
 
 \subsection{Skid Valves}
-The Blue_Skid and Green_Skid valves receive input from the Selector as pressure coming through the respective pipes as well as input from the BSCU that commands Normal or Alternate mode. The Skid valves will use these inputs to choose between the Green or the Blue pressure to send off to the wheel. 
+The Blue\_Skid and Green\_Skid valves receive input from the Selector as pressure coming through the respective pipes as well as input from the BSCU that commands Normal or Alternate mode. The Skid valves will use these inputs to choose between the Green or the Blue pressure to send off to the wheel. 
 
 
 
