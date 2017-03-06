@@ -40,9 +40,29 @@ The following is a short summary of the failures defined in the fault model.
 
 Given our understanding of the AADL system, the assumption was that transient faults could be introduced into the system and we would still be able to prove our top level property. Upon connecting the faults into the WBS, it was shown that this top level property could not be proven using these transient faults. Upon further reflection, it was clear why that was the case. 
 
-In the AADL model, the Selector is situated between the 
+In the AADL model, the Selector is situated between the pumps and the blue\_skid and green\_skid components. It's function is as follows: inputs are pump pressures (for Blue, Green, and Accumulator) and information from the BSCU regarding normal or alternate pressure. It selects between the Blue and the Green pump in this way. The output of the Selector is pressure of the Blue and Green pumps to the blue\_skid and green\_skid components respectively. The blue\_skid and green\_skid components also get a flag from BSCU. Blue\_skid receives a flag with cmd\_alt while green\_skid gets the command cmd\_nor. This will cause those components to either output pressure (if their respective BSCU command is true) or output zero pressure (if the BSCU command is false). The pressure output from here goes directly to the wheel. For a clear picture of this organization, see Figure~REFERENCEME. 
 
+When the fault is \textit{fail\_to} and it is a failure of the green\_skid component. Previously in the system, the Selector received a command from BSCU to output normal pressure (Green pump). This command was passed on to the green\_skid component along with positive green pressure. If the green\_skid component fault is to get stuck at a value of zero for pressure, the output to the wheel is no pressure. The blue\_skid component gets zero pressure from the Selector (it has already selected green pressure) and thus outputs no pressure to the wheel. 
 
+Despite one transient failure, the tail end of the system is not designed to recover from this failure. 
+
+\subsection{Strengthening the Nominal Model}
+
+To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc}. This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the blue\_skid component and is either the blue or the accumulator pressure. 
+
+An additional piece we added was a flag at the wheel. The pressure at the wheel is sent to the BSCU to readjust if need be. For instance, if the pressure at the wheel is zero from both blue and green skid components, then the BSCU has a chance to send a \textit{select\_alternate} flag over to the Accumulator\_Valve and turn on the accumulator pressure. We assume at this point that we will only use accumulator pressure and not switch back over to normal mode. 
+
+In order for this to solve the problem, the original top level contract needed to be revisited: 
+
+\begin{tt}
+If pedals are pressed and no skid occurs, then the brakes will receive pressure. 
+\end{tt}
+
+As it is stated, the added components will not solve the problem. There must be stateful information encoded into this contract. Thus it is changed to: 
+
+\begin{tt}
+If pedals are pressed in the previous state and in the current state and no skid occurs, then the brakes will receive pressure. 
+\end{tt}
 
 
 
