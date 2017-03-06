@@ -1,98 +1,53 @@
-\section{Fault Modeling}
+\section{ARP4761: Wheel Brake System}
 
-In order to start from the error model notions of error types and look more closely at the state machines that describe transitions from the nominal state to the error state, we focus on the types of errors that can be present in the components of the system. 
+As a preliminary case study, we utilized the Wheel Brake System described in ARP 4761 - Appendix L \cite{AIR6110}. The informal wheel brake system diagram is shown in Figure ~\ref{fig:Wbs_ima} and is the AADL simple model of the WBS system. The Wheel Brake System is installed on the two main landing gears and is used during taxi, landing, and rejected take off. Braking is either commanded manually using brake pedals or automatically with no need for the pedals (autobrake). When the wheels have traction, the autobrake function will provide a constant smooth deceleration. \\
 
-To begin with, we proved a top level property of the WBS using AGREE. This property states: \\
 
-\begin{tt}
-If pedals are pressed and no skid occurs, then the brakes will receive pressure. \\
-\end{tt}
-
-Using the AADL nominal model, this property proves. From this point, we focus our attention on component failures and how this will affect the top level property of the system. 
-
-We would like to specify different component failure modes. These failure modes can be triggered by some internal error or propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our simple fault model contains two types of faults:
-
-\begin{itemize}
-\item \textit{fail\_to} fault: This type of failure accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be modeled in such a way as to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure mode for the Command subsystems in the BSCU component. This causes the Command units to become stuck at a previous value. An example of a mechanical error that is captured by this fault is a valve stuck open (or closed). The definition in AGREE of this fault is shown in Figure~\ref{fig:fail_to_node}.\\
-
-\begin{figure}[t]
-  \centering
- \includegraphics[width=0.75\textwidth]{images/fail_to.png}
-  \vspace{-0.1in}
-  \caption{AGREE Definition of a \textit{fail\_to} Fault}
-  \label{fig:fail_to_node}
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=.5]{images/Wbs-ima}
+\caption{AADL Simple Model of the Wheel Brake System }\label{fig:wbs_ima}
+\end{center}
 \end{figure}
 
-%%%%%%% DANIELLE
-%                     CHECK INTO MECHANICAL FAILURES
+Each wheel has a brake assembly that is operated by two sets of hydraulic pistons which operate independently. One set is operated by the Green hydraulic line which is used in NORMAL braking mode. The second system (Alternate) is operated by the Blue hydraulic line which is used when the Normal system fails. The Alternate system is also supplied by an Accumulator which is a device with built up pressure that can be released if both of the two primary pumps (Blue and Green) fail. The accumulator supplies the Alternate system in case of EMERGENCY braking mode. 
 
-\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An examples of this is the Selector. See Figure~\ref{fig:inverted_fail_node}
+Switching between the hydraulic pistons and sources can be done automatically or manually. If the normal pressure (Green) is below a certain threshold, there is an automatic switchover to the Blue supply. If the Blue pump fails, then the Accumulator is used for hydraulic pressure. 
 
-\end{itemize}
+In both NORMAL and ALTERNATE modes, an anti-skid capability is available. In the Normal mode, the brake pedal position is electronically fed to a braking computer called the Braking System Control Unit (BSCU). The BSCU monitors signals that denote critical aircraft and system states to provide correct braking function, detect anomalies, broadcast warnings, and sent maintenance information to other systems. 
 
-\begin{figure}[htbp]
-  \centering
- \includegraphics[width=0.75\textwidth]{images/inverted_fail.png}
-  \vspace{-0.1in}
-  \caption{AGREE Definition of a \textit{inverted\_fail} Fault}
-  \label{fig:inverted_fail_node}
-\end{figure}
+\subsection{Nominal System Modeling}
+A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. Figure~\ref{fig:wbs_diagram} illustrates how the wheel braking system is modeled using Architecture Analysis and Design Language (AADL). The following section describes this nominal model from which the fault model was generated. 
 
-While modeling these errors, the duration of the fault must also be taken into account. There are both permanent faults and transient faults. We defined an AGREE node called 
-\begin{tt}
-historically
-\end{tt}
-which will model the permanent faults based on whether transient faults are historically true. 
+\subsubsection{Wheel Braking System (WBS)}
+The highest level component is the WBS. It consists of a digital control unit, the BSCU, and Normal and Alternate hydraulic pressure lines (supplied by Green Pump and Blue Pump/Accumulator respectively), a Selector which selects between normal and alternate modes of hydraulic pressure, and the Wheel system. The WBS takes inputs from the environment including PedalPos1, AutoBrake, DecRate, AC\_Speed, and Skid. All of these inputs are forwarded to the BSCU to compute the brake commands.
 
-The following is a short summary of the failures defined in the fault model. 
+\subsubsection{Braking System Control Unit (BSCU)}
+The BSCU is the digital component in the system that receives inputs from the WBS. It also receives feedback from the Normal and Alternate lines and two power inputs from two separate power sources. The BSCU is composed of two Command and Monitor subsystems each powered independently from separate power sources. The pedal position maps into these units and when skidding occurs, the Command and Monitor units will decrease the pressure to the brakes. 
 
-\subsection{AADL Faults}
+The Command unit regulates the pressure to the brakes in the normal hydraulic line through the command cmd\_nor. Computing this command requires both the brake requested power and the skid information. The Command unit also regulates the pressure in the alternate hydraulic line in order to prevent skidding which it does through the cmd\_alt command. The Monitor unit monitors the validity of the Command unit output. 
+
+The BSCU switches to the alternate hydraulic system (cmd\_alt = true) under the following conditions:
 \begin{itemize}
-
-\item Valves and Pumps: All valves and pumps have the possibility of a \textit{fail\_to} fault. This includes Green pump, Blue pump, Accumulator, and the Shutoff valves. 
-
-\item  The Selector can also have a digital \textit{fail\_to} fault regarding the inputs from BSCU commanding to use normal or alternate means of pressure along with an \textit{inverted\_fail} fault which would change the boolean value that commands antiskid to activate. 
-
+\item Output from both Command units are not valid
+\item The Green pump (normal) is below threshold
 \end{itemize}
 
-Given our understanding of the AADL system, the assumption was that transient faults could be introduced into the system and we would still be able to prove our top level property. Upon connecting the faults into the WBS, it was shown that this top level property could not be proven using these transient faults. Upon further reflection, it was clear why that was the case. 
+Once the system has switched into alternate mode, it will not switch into normal mode again. 
 
-In the AADL model, the Selector is situated between the pumps and the blue\_skid and green\_skid components. It's function is as follows: inputs are pump pressures (for Blue, Green, and Accumulator) and information from the BSCU regarding normal or alternate pressure. It selects between the Blue and the Green pump in this way. The output of the Selector is pressure of the Blue and Green pumps to the blue\_skid and green\_skid components respectively. The blue\_skid and green\_skid components also get a flag from BSCU. Blue\_skid receives a flag with cmd\_alt while green\_skid gets the command cmd\_nor. This will cause those components to either output pressure (if their respective BSCU command is true) or output zero pressure (if the BSCU command is false). The pressure output from here goes directly to the wheel. For a clear picture of this organization, see Figure~REFERENCEME. \danielle{FInd non-blurry figure for the aadl simple model diagram}.
+\subsubsection{Hydraulic Pumps}
+There are three hydraulic pumps in the system, Green pump (Normal mode), Blue pump (Alternate mode), and Accumulator pump (Emergency mode). Each pump provides pressure to the system and is modeled in AADL as a floating point value. 
 
-When the fault is \textit{fail\_to} and it is a failure of the green\_skid component. Previously in the system, the Selector received a command from BSCU to output normal pressure (Green pump). This command was passed on to the green\_skid component along with positive green pressure. If the green\_skid component fault is to get stuck at a value of zero for pressure, the output to the wheel is no pressure. The blue\_skid component gets zero pressure from the Selector (it has already selected green pressure) and thus outputs no pressure to the wheel. 
+\subsubsection{Shutoff Valve}
+%%%%%%%%%%%%%%%%%% Look at this more closely in wbs.aadl %%%%%%%%%%
 
-Despite one transient failure, the tail end of the system is not designed to recover from this failure. A similar single point of failure is the blue\_skid component and the Selector. These faults cause system failure for the same reason. 
+The Shutoff valve is a meter valve situated between the Green pump and the Selector. It receives an input from the BSCU regarding valve position and regulates the pressure coming through the Green pipe accordingly.  
 
-\subsection{Strengthening the Nominal Model}
+\subsubsection{Selector Valve}
+The selector receives inputs from the pumps regarding pressure output and the BSCU regarding which mode the system is in. It will output the appropriate pressure from Green, Blue, or Accumulator pump. An added requirement of the Selector system is that it will only output pressure from one of these sources. Thus, the case of having pressure supplied to the wheels from more than one pump is avoided. The Selector takes the two pipe pressures (Green and Blue) as input, selects the system with adequate pressure and blocks the system with inadequate pressure. It is unclear how the Selector valve operates if both incoming pipes have pressure greater than the threshold. The AADL model assumes that the default in this case is Normal mode. 
 
-To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc}. This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the blue\_skid component and is either the blue or the accumulator pressure. 
-
-An additional piece we added was output to the BSCU from the wheel. The pressure at the wheel is sent to the BSCU to readjust system mode if needed. For instance, if the pressure at the wheel is zero from both blue and green skid components, then the BSCU has a chance to send a \textit{select\_alternate} command over to the Accumulator\_Valve and turn on the accumulator pressure. We assume at this point that we will only use accumulator pressure and not switch back over to normal mode. 
-
-In order for this to solve the problem, the original top level contract needed to be revisited: 
-
-\begin{tt}
-If pedals are pressed and no skid occurs, then the brakes will receive pressure. 
-\end{tt}
-
-As it is stated, the added components will not solve the problem. There must be stateful information encoded into this contract. Thus it is changed to: 
-
-\begin{tt}
-If pedals are pressed in the previous state and in the current state and no skid occurs, then the brakes will receive pressure. 
-\end{tt}
-
-
-
-
-
-
-
-
-
-
-
-
-
+\subsubsection{Skid Valves}
+The Blue\_Skid and Green\_Skid valves receive input from the Selector as pressure coming through the respective pipes as well as input from the BSCU that commands Normal or Alternate mode. The Skid valves will use these inputs to choose between the Green or the Blue pressure to send off to the wheel. 
 
 
 
