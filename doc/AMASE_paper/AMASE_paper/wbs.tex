@@ -1,11 +1,11 @@
 \section{ARP4761: Wheel Brake System}
 
-As a preliminary case study, we utilized the Wheel Brake System described in ARP 4761 - Appendix L \cite{AIR6110}. The informal wheel brake system diagram is shown in Figure ~\ref{fig:Wbs_ima} and is the AADL simple model of the WBS system. The Wheel Brake System is installed on the two main landing gears and is used during taxi, landing, and rejected take off. Braking is either commanded manually using brake pedals or automatically with no need for the pedals (autobrake). When the wheels have traction, the autobrake function will provide a constant smooth deceleration. \\
+As a preliminary case study, we utilized the Wheel Brake System described in ARP 4761 - Appendix L \cite{AIR6110}. The informal wheel brake system diagram is shown in Figure~\ref{fig:wbs_ima} and is the AADL simple model of the WBS system. The Wheel Brake System is installed on the two main landing gears and is used during taxi, landing, and rejected take off. Braking is either commanded manually using brake pedals or automatically with no need for the pedals (autobrake). When the wheels have traction, the autobrake function will provide a constant smooth deceleration. \\
 
 
-\begin{figure}[htb]
+\begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=.5]{images/Wbs-ima}
+\includegraphics[scale=.5]{images/Wbs-ima.png}
 \caption{AADL Simple Model of the Wheel Brake System }\label{fig:wbs_ima}
 \end{center}
 \end{figure}
@@ -17,7 +17,7 @@ Switching between the hydraulic pistons and sources can be done automatically or
 In both NORMAL and ALTERNATE modes, an anti-skid capability is available. In the Normal mode, the brake pedal position is electronically fed to a braking computer called the Braking System Control Unit (BSCU). The BSCU monitors signals that denote critical aircraft and system states to provide correct braking function, detect anomalies, broadcast warnings, and sent maintenance information to other systems. 
 
 \subsection{Nominal System Modeling}
-A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. Figure~\ref{fig:wbs_diagram} illustrates how the wheel braking system is modeled using Architecture Analysis and Design Language (AADL). The following section describes this nominal model from which the fault model was generated. 
+A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. Figure~\ref{fig:wbs_ima} illustrates how the wheel braking system is modeled using Architecture Analysis and Design Language (AADL). The following section describes this nominal model from which the fault model was generated. 
 
 \subsubsection{Wheel Braking System (WBS)}
 The highest level component is the WBS. It consists of a digital control unit, the BSCU, and Normal and Alternate hydraulic pressure lines (supplied by Green Pump and Blue Pump/Accumulator respectively), a Selector which selects between normal and alternate modes of hydraulic pressure, and the Wheel system. The WBS takes inputs from the environment including PedalPos1, AutoBrake, DecRate, AC\_Speed, and Skid. All of these inputs are forwarded to the BSCU to compute the brake commands.
