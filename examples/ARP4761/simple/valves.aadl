@@ -300,7 +300,7 @@ features
 	accumulator_input : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	blue_skid_output : out data port common::pressure.i;
-	stuck_at_occurred : out data port Base_Types::Boolean;
+	stuck_at_occurred		: out data port Base_Types::Boolean;
 annex AGREE{**
 		
 		-- faults
@@ -316,12 +316,15 @@ annex AGREE{**
 	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
 	-- else emit accumulator pressure
 	guarantee "If select_alternate true and blue > threshold, then emit blue pressure, else emit accum pressure" :
-	   if (select_alternate) or blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
+	   if (select_alternate) and blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
 	        else blue_skid_nominal_output = accumulator_input;
+	
+	   
 	    
 	-- Fault binding
 	guarantee "Output failure binding for blue_skid_output (fail_to)" : 
 	    blue_skid_output.val = faults.fail_to(blue_skid_nominal_output.val, alt_val.val, stuck_at_occurred);
+	
 	    
 **}	;
 end accumulator_valve;
