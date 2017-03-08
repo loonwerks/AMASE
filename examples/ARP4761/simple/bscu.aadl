@@ -283,7 +283,7 @@ annex AGREE{**
 	
 	-- If input is zero, select_alternate_accumulator is true
 	guarantee "if input is zero (pressure found at the wheel), output select_alternate to accumulator as true" :
-	      (wheel_pressure.val = 0.0) => select_alt_accumulator = true;
+	      (wheel_pressure.val <= 0.0) => select_alt_accumulator = true;
 	
 **};
 end select_accumulator_valve;
@@ -296,9 +296,8 @@ features
 	pwr2              : requires bus access common::power.generic;
 	pedal1            : in data port common::command.pedal;
 	pedal2            : in data port common::command.pedal;
-	wheel_pressure_sensor: in data port common::sensor.i; 
+	wheel_pressure    : in data port common::pressure.i;  
 	Select_Alternate  : out data port Base_Types::Boolean;
-	Select_Alt_Accum  : out data port Base_Types::Boolean;
 	cmd_nor           : out data port common::command.skid; 
 	cmd_alt           : out data port common::command.skid;
 	
@@ -331,20 +330,35 @@ annex AGREE {**
 	eq pedals_pressed: bool = (pedal1.val > 0.0) and (pedal2.val > 0.0);
 	
 	eq skid_active: bool = (cmd_nor.activate_antiskid) or (cmd_alt.activate_antiskid);
-	eq pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
+	eq commanded_pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
 	
-	--guarantee "If cmd_alt then nominal_Select_Alternate" :
-	  --  cmd_alt.val <= 0.0 => nominal_Select_Alternate;
+	
+	
+	     
+	--guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
+	--	if pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) 
+	--		then wheel_pressure.val = cmd_nor.val
+	--		else wheel_pressure.val = cmd_alt.val;
+	
+	--guarantee "Select_alternate is false only when cmd_nor.val > 0.0" :
+	--  cmd_nor.val > 0.0 => nominal_Select_Alternate = false;
+	
+	--guarantee "Select_alternate is true only when cmd_alt.val > 0.0" :
+	--  cmd_alt.val > 0.0 => nominal_Select_Alternate;
+	
+	guarantee "If pedals pressed, no skid, and wheel pressure is nonexistant, then
+	           select alternate should be true" :
+	    nominal_Select_Alternate =  
+	      (nominal_Select_Alternate = 
+	      faults.historically(false -> pre(pedals_pressed and not(skid_active)) and wheel_pressure.val <= 0.0)); 
 	
 	guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
-		pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) =>
-			pressure; 
-	
-	guarantee "Pedals pressed and no skid and alternate implies pressure commanded" : 
-		pedals_pressed and (not skid_active) and (nominal_Select_Alternate) =>
-			pressure;
+		pedals_pressed and (not skid_active)  =>
+			commanded_pressure; 
+			
 	
 	-- Alternate pressure, normal pressure, or neither, never both. 
+	
 	-- I am assuming there can be no pressure (brakes not pressed, antiskid on, etc.)	
 	guarantee "Alternate pressure and normal pressure don't occur simultaneously." : 
 	          not(cmd_alt.val > 0.0 and cmd_nor.val > 0.0); 
@@ -466,8 +480,6 @@ connections
 	sub1skid       : port sub1.cmd_skid -> cmd_nor;
 	sub2skid       : port sub2.cmd_skid -> cmd_alt;
 	
-	-- Connect subcomponent select_accumulator_valve to an output in bscu called Select_Alt_Accum
-	selectAccumInput : port select_accumulator.select_alt_accumulator -> Select_Alt_Accum; 
 	
 	 
 properties
@@ -556,6 +568,7 @@ annex EMV2 {**
 		])
 		applies to pwr1, pwr2;
 **};
+
 end bscu.ima;
 
 
