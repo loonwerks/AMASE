@@ -65,9 +65,9 @@ Despite one transient failure, the tail end of the system is not designed to rec
 
 \subsection{Strengthening the Nominal Model}
 
-To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc}. This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_Alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the Blue\_Skid component and is either the blue or the accumulator pressure. 
+To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc}. This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the Blue\_Skid component and is either the blue or the accumulator pressure. 
 
-An additional piece we added was output to the BSCU from the wheel. The pressure at the wheel is sent to the BSCU to readjust system mode if needed. For instance, if the pressure at the wheel is zero from both blue and green skid components, then the BSCU has a chance to send a \textit{select\_Alternate} command over to the Accumulator\_Valve and turn on the accumulator pressure. We assume at this point that we will only use accumulator pressure and not switch back over to Normal mode. 
+An additional piece we added was output to the BSCU from the wheel. The pressure at the wheel is sent to the BSCU to readjust system mode if needed. For instance, if the pressure at the wheel is zero from both blue and green skid components, then the BSCU has a chance to send a \textit{select\_alternate} command over to the Accumulator\_Valve and turn on the accumulator pressure. We assume at this point that we will only use accumulator pressure and not switch back over to Normal mode. 
 
 In order for this to solve the problem, the original top level contract needed to be revisited: 
 
@@ -78,8 +78,12 @@ If pedals are pressed and no skid occurs, then the brakes will receive pressure.
 As it is stated, the added components will not solve the problem. There must be stateful information encoded into this contract. Thus it is changed to: 
 
 \begin{tt}
-If pedals are pressed in the previous state and in the current state and no skid occurs, then the brakes will receive pressure. 
+If pedals are pressed in the previous state and pressed in the current state and no skid occurs, then the brakes will receive pressure. 
 \end{tt}
+
+It was also necessary to guarantee that \textit{select\_alternate} is false until an error occurs in the system. This was written as an AGREE guarantee stating that the initialization of \textit{select\_alternate} is false. It remains false until the system commands brake pressure (i.e. brake pedals are pressed), there is no skid occurring, and there is no realized pressure at the wheel. At this point, the system will enter Alternate mode and command pressure from the blue (or accumulator) pump. It will not return to Normal mode. 
+
+At this point, the top level contract proves in the presence of one permanent fault in the system. 
 
 
 
