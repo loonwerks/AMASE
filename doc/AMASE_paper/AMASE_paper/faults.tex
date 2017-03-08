@@ -83,7 +83,6 @@ If pedals are pressed in the previous state and pressed in the current state and
 
 It was also necessary to guarantee that \textit{select\_alternate} is false until an error occurs in the system. This was written as an AGREE guarantee stating that the initialization of \textit{select\_alternate} is false. It remains false until the system commands brake pressure (i.e. brake pedals are pressed), there is no skid occurring, and there is no realized pressure at the wheel. At this point, the system will enter Alternate mode and command pressure from the blue (or accumulator) pump. It will not return to Normal mode. 
 
-At this point, the top level contract proves in the presence of one permanent fault in the system. 
 
 
 
