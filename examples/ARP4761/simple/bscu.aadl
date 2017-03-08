@@ -318,48 +318,33 @@ annex EMV2 {**
 **};
 
 annex AGREE {**
+		
+    -- The fault connecton to Select_Alternate
 	eq nominal_Select_Alternate : bool;	
 	
-	-- Need contracts for the selectors in terms of the pedals and alternate selections.
-	-- However, there are currently missing many inputs necessary to put together a BSCU in the 
-	-- Style of the Simulink model.  See comments in the ARP Model explanation document.
-	-- assuming no failures for the moment
-	
-	-- Question: Do both pedals need to be pressed or just one? 
-	-- (i.e. should this be an "and" statement or an "or" statement?)
+	-- Both pedals pressed
 	eq pedals_pressed: bool = (pedal1.val > 0.0) and (pedal2.val > 0.0);
-	
+	-- Skid is on
 	eq skid_active: bool = (cmd_nor.activate_antiskid) or (cmd_alt.activate_antiskid);
+	-- Pressure is commanded (either through normal or alternate)
 	eq commanded_pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
 	
-	
-	
-	     
-	--guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
-	--	if pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) 
-	--		then wheel_pressure.val = cmd_nor.val
-	--		else wheel_pressure.val = cmd_alt.val;
-	
-	--guarantee "Select_alternate is false only when cmd_nor.val > 0.0" :
-	--  cmd_nor.val > 0.0 => nominal_Select_Alternate = false;
-	
-	--guarantee "Select_alternate is true only when cmd_alt.val > 0.0" :
-	--  cmd_alt.val > 0.0 => nominal_Select_Alternate;
-	
+	-- This will enforce selecting alternate only when there is no pressure at the wheel.
+	-- It begins as false and is only true when there is a problem in the system.
 	guarantee "If pedals pressed, no skid, and wheel pressure is nonexistant, then
 	           select alternate should be true" :
 	    nominal_Select_Alternate =  
 	      (nominal_Select_Alternate = 
 	      faults.historically(false -> pre(pedals_pressed and not(skid_active)) and wheel_pressure.val <= 0.0)); 
 	
+	-- This will make sure that if brakes are pressed and there is no skid, we
+	-- have commanded pressure to the system (cmd_nor/cmd_alt positive)
 	guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
 		pedals_pressed and (not skid_active)  =>
 			commanded_pressure; 
 			
 	
 	-- Alternate pressure, normal pressure, or neither, never both. 
-	
-	-- I am assuming there can be no pressure (brakes not pressed, antiskid on, etc.)	
 	guarantee "Alternate pressure and normal pressure don't occur simultaneously." : 
 	          not(cmd_alt.val > 0.0 and cmd_nor.val > 0.0); 
 	
@@ -369,7 +354,6 @@ annex AGREE {**
 	    Select_Alternate = faults.inverted_fail(nominal_Select_Alternate, inverted_occurred);
 	
 	
-	-- If realized_wheel_pressure = 0, then select_alternate needs to be true...? 
 **};
 
 

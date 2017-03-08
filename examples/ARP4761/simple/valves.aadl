@@ -87,11 +87,6 @@ annex AGREE {**
 	-- Used to show nondeterministic or stuck_at failure
 	eq alt_val : common::pressure.i;
 	
-	-- QUESTION: 
-	-- In this case, we are setting the output value. Should this contract change
-	-- to show the fault modeling? 
-	-- As it is, it seems like the fault will not affect cmd_shutoff at all. 
-	
 	-- Depending on cmd_input (skidding), the output can either be the same as the cmd_input 
 	-- (this occurs when cmd_input < input) or the output is equal to the input
 	-- (cmd_input does nothing to change output when cmd_input <= input).
@@ -100,10 +95,11 @@ annex AGREE {**
 			nominal_output.val = cmd_input.val 
 		else nominal_output.val = input.val ; 
 	
-	-- Do we even need this one? Not sure. 
+	-- Pretty straightforward contract. 
 	guarantee "Output is never greater than input." :
 	    not(nominal_output.val > input.val);	
-	    
+	 
+	-- Add failure binding to cmd_shutoff   
 	guarantee "Output failure binding for cmd_shutoff" : 
 	    output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
 **}	;
