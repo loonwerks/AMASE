@@ -227,7 +227,8 @@ connections
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
 	-- Connect the output from wheel to the bscu here
-	wheel_to_bscu		: port wheel.output_realized_pressure -> bscu.wheel_pressure;
+	wheel_to_bscu		: port wheel.output_realized_pressure -> bscu.wheel_pressure 
+	   {Communication_Properties::Timing => delayed; };
 	
 	
 	annex agree {**
@@ -320,7 +321,7 @@ connections
 			faults.bool_to_int(accumulator_valve_stuck_at_permanent) +  
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
-		assert(fail_count <= 9);
+		assert(fail_count <= 2);
 	**};
 	
 end wbs.federated;

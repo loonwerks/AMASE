@@ -333,9 +333,9 @@ annex AGREE {**
 	-- It begins as false and is only true when there is a problem in the system.
 	guarantee "If pedals pressed, no skid, and wheel pressure is nonexistant, then
 	           select alternate should be true" :
-	    nominal_Select_Alternate =  
 	      (nominal_Select_Alternate = 
-	      faults.historically(false -> pre(pedals_pressed and not(skid_active)) and wheel_pressure.val <= 0.0)); 
+	      faults.historically(false -> not (pre(pedals_pressed and not(skid_active)) 
+	      	    => wheel_pressure.val > 0.0))); 
 	
 	-- This will make sure that if brakes are pressed and there is no skid, we
 	-- have commanded pressure to the system (cmd_nor/cmd_alt positive)
