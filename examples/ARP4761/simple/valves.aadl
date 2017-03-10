@@ -87,11 +87,6 @@ annex AGREE {**
 	-- Used to show nondeterministic or stuck_at failure
 	eq alt_val : common::pressure.i;
 	
-	-- QUESTION: 
-	-- In this case, we are setting the output value. Should this contract change
-	-- to show the fault modeling? 
-	-- As it is, it seems like the fault will not affect cmd_shutoff at all. 
-	
 	-- Depending on cmd_input (skidding), the output can either be the same as the cmd_input 
 	-- (this occurs when cmd_input < input) or the output is equal to the input
 	-- (cmd_input does nothing to change output when cmd_input <= input).
@@ -100,10 +95,11 @@ annex AGREE {**
 			nominal_output.val = cmd_input.val 
 		else nominal_output.val = input.val ; 
 	
-	-- Do we even need this one? Not sure. 
+	-- Pretty straightforward contract. 
 	guarantee "Output is never greater than input." :
 	    not(nominal_output.val > input.val);	
-	    
+	 
+	-- Add failure binding to cmd_shutoff   
 	guarantee "Output failure binding for cmd_shutoff" : 
 	    output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
 **}	;
@@ -300,7 +296,7 @@ features
 	accumulator_input : in data port common::pressure.i;
 	select_alternate : in data port Base_Types::Boolean;
 	blue_skid_output : out data port common::pressure.i;
-	stuck_at_occurred : out data port Base_Types::Boolean;
+	stuck_at_occurred		: out data port Base_Types::Boolean;
 annex AGREE{**
 		
 		-- faults
@@ -316,12 +312,15 @@ annex AGREE{**
 	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
 	-- else emit accumulator pressure
 	guarantee "If select_alternate true and blue > threshold, then emit blue pressure, else emit accum pressure" :
-	   if (select_alternate) or blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
+	   if (select_alternate) and blue_input.val > 0.0 then blue_skid_nominal_output.val = blue_input.val
 	        else blue_skid_nominal_output = accumulator_input;
+	
+	   
 	    
 	-- Fault binding
 	guarantee "Output failure binding for blue_skid_output (fail_to)" : 
 	    blue_skid_output.val = faults.fail_to(blue_skid_nominal_output.val, alt_val.val, stuck_at_occurred);
+	
 	    
 **}	;
 end accumulator_valve;

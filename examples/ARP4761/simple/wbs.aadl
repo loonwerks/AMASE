@@ -201,7 +201,7 @@ connections
 	
 	
 	-- Added bscu to accumulator_valve (new)
-	bscu_to_accumulator_valve : port bscu.Select_Alt_Accum -> accumulator_valve.select_alternate;
+	bscu_to_accumulator_valve : port bscu.Select_Alternate -> accumulator_valve.select_alternate;
 	-- Add accumulator_valve.blue_skid _output to blue_skid input (new)
 	accum_valve_to_blue_skid : port accumulator_valve.blue_skid_output -> blue_skid.input;
 	 
@@ -227,7 +227,8 @@ connections
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
 	
 	-- Connect the output from wheel to the bscu here
-	wheel_to_bscu		: port wheel.output_realized_pressure -> bscu.wheel_pressure;
+	wheel_to_bscu		: port wheel.output_realized_pressure -> bscu.wheel_pressure 
+	   {Communication_Properties::Timing => delayed; };
 	
 	
 	annex agree {**
@@ -245,10 +246,9 @@ connections
 		-- values sent along a bus, and I don't know how to do this in AADL.
 		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
 		
+		-- Top level contract
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
 			pre(pedals_pressed) and pedals_pressed and no_skid => brake_pressure;
-			
-		
 		
 		-- PedP_NoSkid := (IsPressed(PedalPos1) & !Skid) ;
 		-- SomeP := ((Normal_Pressure > threshold) | (Alternate_Pressure > threshold)) ;
@@ -299,29 +299,15 @@ connections
 		eq bscu_accumSelect_inverted_occurred_permanent : bool = faults.historically(bscu_accumSelect_inverted_occurred_transient);
         
 
-		-- cmd_shutoff faults (valves.aadl)
+		-- Setting up permanent faults at each component
 		assert green_skid.stuck_at_occurred = green_skid_stuck_at_permanent;
 		assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
-		--assert blue_skid.stuck_at_occurred = false;
-		
-		-- boolean_shutoff (valves.aadl)
 		assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
-		
-		-- selector_detailed (valves)
 		assert selector.stuck_at_occurred = selector_stuck_at_permanent;
-		
-		-- system blue pump (pump.aadl)
 		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
-		
-		-- system green pump
 		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
-		
-		-- system accumulation pump
 		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
-		
 		assert accumulator_valve.stuck_at_occurred = accumulator_valve_stuck_at_permanent;
-		--assert accumulator_valve.stuck_at_occurred = false;
-		
 		assert bscu.inverted_occurred = bscu_accumSelect_inverted_occurred_permanent;	 	
 		
 		eq fail_count : int = 
@@ -335,7 +321,7 @@ connections
 			faults.bool_to_int(accumulator_valve_stuck_at_permanent) +  
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
-		assert(fail_count = 1);
+		assert(fail_count <= 2);
 	**};
 	
 end wbs.federated;
@@ -407,7 +393,7 @@ connections
 		-- SPEC AG(PedP_NoSkid -> SomeP) ; 
 		
 		-- Select_Alternate (bscu.aadl)
-		assert bscu.inverted_occurred = false;                                                 
+		--assert bscu.inverted_occurred = false;                                                 
 		 	
 	**};
 	

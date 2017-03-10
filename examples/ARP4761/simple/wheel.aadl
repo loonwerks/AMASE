@@ -89,6 +89,7 @@ annex agree {**
     guarantee "Output 'pressure' is equal to incoming pressure. " :
               if green_input.val > 0.0 then output_realized_pressure.val = green_input.val
                  else output_realized_pressure.val = blue_input.val;
+              
 		
 **};
 

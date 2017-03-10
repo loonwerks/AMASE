@@ -296,9 +296,8 @@ features
 	pwr2              : requires bus access common::power.generic;
 	pedal1            : in data port common::command.pedal;
 	pedal2            : in data port common::command.pedal;
-	wheel_pressure: in data port common::pressure.i;  
+	wheel_pressure    : in data port common::pressure.i;  
 	Select_Alternate  : out data port Base_Types::Boolean;
-	Select_Alt_Accum  : out data port Base_Types::Boolean;
 	cmd_nor           : out data port common::command.skid; 
 	cmd_alt           : out data port common::command.skid;
 	
@@ -319,34 +318,33 @@ annex EMV2 {**
 **};
 
 annex AGREE {**
+		
+    -- The fault connecton to Select_Alternate
 	eq nominal_Select_Alternate : bool;	
 	
-	-- Need contracts for the selectors in terms of the pedals and alternate selections.
-	-- However, there are currently missing many inputs necessary to put together a BSCU in the 
-	-- Style of the Simulink model.  See comments in the ARP Model explanation document.
-	-- assuming no failures for the moment
-	
-	-- Question: Do both pedals need to be pressed or just one? 
-	-- (i.e. should this be an "and" statement or an "or" statement?)
+	-- Both pedals pressed
 	eq pedals_pressed: bool = (pedal1.val > 0.0) and (pedal2.val > 0.0);
-	
+	-- Skid is on
 	eq skid_active: bool = (cmd_nor.activate_antiskid) or (cmd_alt.activate_antiskid);
-	eq pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
+	-- Pressure is commanded (either through normal or alternate)
+	eq commanded_pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
 	
-	-- If wheel pressure sensor shows 0 or less pressure, then select_Alt_Accum is true.
-	guarantee "If wheel pressure sensor shows 0 or less pressure, then Select_Alt_Accum is true" :
-	    wheel_pressure.val <= 0.0 => Select_Alt_Accum = true;
+	-- This will enforce selecting alternate only when there is no pressure at the wheel.
+	-- It begins as false and is only true when there is a problem in the system.
+	guarantee "If pedals pressed, no skid, and wheel pressure is nonexistant, then
+	           select alternate should be true" :
+	      (nominal_Select_Alternate = 
+	      faults.historically(false -> not (pre(pedals_pressed and not(skid_active)) 
+	      	    => wheel_pressure.val > 0.0))); 
 	
+	-- This will make sure that if brakes are pressed and there is no skid, we
+	-- have commanded pressure to the system (cmd_nor/cmd_alt positive)
 	guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
-		pedals_pressed and (not skid_active) and (not nominal_Select_Alternate) =>
-			pressure; 
-	
-	guarantee "Pedals pressed and no skid and alternate implies pressure commanded" : 
-		pedals_pressed and (not skid_active) and (nominal_Select_Alternate) =>
-			pressure;
+		pedals_pressed and (not skid_active)  =>
+			commanded_pressure; 
+			
 	
 	-- Alternate pressure, normal pressure, or neither, never both. 
-	-- I am assuming there can be no pressure (brakes not pressed, antiskid on, etc.)	
 	guarantee "Alternate pressure and normal pressure don't occur simultaneously." : 
 	          not(cmd_alt.val > 0.0 and cmd_nor.val > 0.0); 
 	
@@ -356,7 +354,6 @@ annex AGREE {**
 	    Select_Alternate = faults.inverted_fail(nominal_Select_Alternate, inverted_occurred);
 	
 	
-	-- If realized_wheel_pressure = 0, then select_alternate needs to be true...? 
 **};
 
 
@@ -467,8 +464,6 @@ connections
 	sub1skid       : port sub1.cmd_skid -> cmd_nor;
 	sub2skid       : port sub2.cmd_skid -> cmd_alt;
 	
-	-- Connect subcomponent select_accumulator_valve to an output in bscu called Select_Alt_Accum
-	selectAccumInput : port select_accumulator.select_alt_accumulator -> Select_Alt_Accum; 
 	
 	 
 properties
@@ -557,6 +552,7 @@ annex EMV2 {**
 		])
 		applies to pwr1, pwr2;
 **};
+
 end bscu.ima;
 
 
