@@ -60,6 +60,10 @@
 \newcommand{\rbb}{]\!]}
 \newcommand{\expr}{\phi}
 \newcommand{\exprS}{\Phi}
+\newcommand{\mike}[1]{\textcolor{red}{#1}}
+\newcommand{\mats}[1]{\textcolor{blue}{#1}}
+\newcommand{\darren}[1]{\textcolor{green}{#1}}
+\newcommand{\danielle}[1]{\textcolor{purple}{#1}}
 
 \sloppypar
 
@@ -69,12 +73,6 @@
 
 \definecolor{gold}{rgb}{0.90,.66,0}
 \definecolor{dgreen}{rgb}{0,0.6,0}
-\newcommand{\mike}[1]{\textcolor{red}{#1}}
-\newcommand{\mats}[1]{\textcolor{blue}{#1}}
-\newcommand{\darren}[1]{\textcolor{green}{#1}}
-\newcommand{\fixed}[1]{\textcolor{purple}{#1}}
-\newcommand{\andrew}[1]{\textcolor{green}{#1}}
-\newcommand{\ela}[1]{\textcolor{blue}{#1}}
 \newcommand{\stateequiv}{\equiv_{s}}
 \newcommand{\traceequiv}{\equiv_{\sigma}}
 \newcommand{\ta}{\text{TA}}
@@ -86,6 +84,7 @@
 
 \title{Architectural Modeling and Analysis for Safety Engineering}
 %
+<<<<<<< HEAD
 \author{Danielle Stewart\inst{1}
 \and Michael W. Whalen\inst{1}
 \and Darren Cofer\inst{2}
@@ -94,7 +93,7 @@
 Science and Engineering\\
 200 Union Street\\
 Minneapolis, MN, 55455, USA\\
-\email{dkstewar, whalen@cs.umn.edu}
+\email{whalen, dkstewar, heimdahl@cs.umn.edu}
 \and
 Rockwell Collins\\
 Advanced Technology Center\\400 Collins Rd. NE\\
@@ -103,7 +102,7 @@ Cedar Rapids, IA, 52498, USA\\ \email{ darren.cofer@rockwellcollins.com}
 \maketitle
 
 \begin{abstract}
-Architecture description languages such as AADL allow systems engineers to specify the structure of system architectures and perform several analyses over them, including schedulability, resource analysis, and information flow.  In addition, they 
+Architecture description languages such as AADL allow systems engineers to specify the structure of system architectures and perform several analyses over them, including schedulability, resource analysis, and information flow.  In addition, they
 permit system-level requirements to be specified and analyzed early in the development process of airborne and ground-based systems. These tools can also be used to perform safety analysis based on the system architecture and initial functional decomposition.
 
 %Previously, Rockwell Collins and the University of Minnesota developed and demonstrated an approach to behavioral model-based safety analysis using Simulink. New MBSE tools that incorporate assume-guarantee compositional analysis techniques provide the basis for greatly improving earlier approaches to safety analysis and can be used to ensure model consistency, correctness of assumptions, and better scalability.
@@ -123,7 +122,7 @@ Using AADL-based system architecture modeling and analysis tools as an exemplar,
 
 \input{wbs}
 
-%\input{impl}
+\input{faults}
 %
 %\input{experiments}
 %
