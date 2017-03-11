@@ -11,30 +11,24 @@ Using the AADL nominal model and the AGREE contract specification language, this
 We would like to specify different component failure modes. These failure modes can be triggered by some internal error or a propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our simple fault model consists of two types:
 
 \begin{itemize}
-\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be modeled in such a way as to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure for the Command subsystems in the BSCU component. This causes the Command units to become stuck at a previous value. An example of a mechanical error that is captured by this fault is a valve stuck open (or closed). To model this type of fault, the value \textit{alt\_val} can be set to some maximum pressure value for stuck open or zero for stuck closed. This value will then propagate through the system. The definition in AGREE of this fault is shown in Figure~\ref{fig:fail_to_node}.\\
+\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be modeled in such a way as to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure for the Command subsystems in the BSCU component. This causes the Command units to become stuck at a previous value. An example of a mechanical error that is captured by this fault is a valve stuck open (or closed). To model this type of fault, the value \textit{alt\_val} can be set to some maximum pressure value for stuck open or zero for stuck closed. This value will then propagate through the system. The definition in AGREE of this fault is shown in Figure~\ref{fig:failureNodes}.\\
 
 \begin{figure}[h!]
   \centering
- \includegraphics[width=1\textwidth]{images/fail_to.png}
+ \includegraphics[width=1\textwidth]{images/failureNodes.png}
   \vspace{-0.1in}
-  \caption{AGREE Definition of a \textit{fail\_to} Fault}
-  \label{fig:fail_to_node}
+  \caption{AGREE Definition of a \textit{fail\_to} and \textit{inverted\_failure} Faults}
+  \label{fig:failureNodes}
 \end{figure}
 
 %%%%%%% DANIELLE
 %                     CHECK INTO MECHANICAL FAILURES
 
-\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the Selector. In the nominal model, input to the Selector consists of a boolean value \textit{select\_alternate} value from the BSCU. This value determines the switch of the system from Normal pressure to Alternate pressure. If this value is inverted, the pressure will not be selected according to the requirement description.  See Figure~\ref{fig:inverted_fail_node}
+\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the Selector. In the nominal model, input to the Selector consists of a boolean value \textit{select\_alternate} value from the BSCU. This value determines the switch of the system from Normal pressure to Alternate pressure. If this value is inverted, the pressure will not be selected according to the requirement description.  See Figure~\ref{fig:failureNodes}
 
 \end{itemize}
 
-\begin{figure}[h!]
-  \centering
- \includegraphics[width=1\textwidth]{images/inverted_fail.png}
-  \vspace{-0.1in}
-  \caption{AGREE Definition of a \textit{inverted\_fail} Fault}
-  \label{fig:inverted_fail_node}
-\end{figure}
+
 
 While modeling these faults, the duration of the fault must also be taken into account. There are both permanent faults and transient faults. We defined an AGREE node called 
 \begin{tt}
