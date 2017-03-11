@@ -22,13 +22,7 @@ To accomplish this, we use AADL and the error model annex to describe faults, an
 
 An example is shown in Figure~\ref{fig:error_annex}. Errors are described by the red rectangles labeled with error types: 1-BadData, 2-NoData, 3-NoSvc. Error events that can cause a component to fail are labeled with the corresponding error number. The error behavior of components is described by their state machines. Note that while all state machines in Figure~\ref{fig:error_annex} have two states, they can be much more complex. The red dashed arrows indicate propagations describing how failures in one component can cause other components to fail. For example, failures in the physical layer propagate to failures in the associated logical components.
 
-\begin{figure}
-  \centering
- \includegraphics[width=0.75\textwidth]{images/error_annex.png}
-  \vspace{-0.1in}
-  \caption{Example of Error Model Information and Propagation}
-  \label{fig:error_annex}
-\end{figure}
+
 
 
 %\subsection{Fault and Behavioral Modeling}
