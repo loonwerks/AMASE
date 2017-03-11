@@ -12,29 +12,25 @@ A model-based approach for safety analysis was first proposed by Joshi et. al in
   \label{fig:sasm}
 \end{figure}
 
-The contents and structure of the SASM differ significantly across different conceptions of MBSA.  We can draw broad outlines between two different approaches: one in which {\em faults} are propagated between components explicitly and the analysis proceeds by determining the likelihood of faults to system boundaries, and another in which faults propagate by changing the system dynamics, which may cause the system behavior to visibly change.  We call the first style the {\em explicit fault propagation} and the second style {\em implicit fault propagation} or {\em behavioral} propagation.
+The contents and structure of the SASM differ significantly across different conceptions of MBSA.  We can draw distinctions between approaches along several different axes.  The first is whether models and notations are purpose-built for safety analysis (such as AltaRica~\cite{PROSVIRNOVA2013127}, smartIflow~\cite{info8010007} and xSAP~\cite{DBLP:conf/tacas/BittnerBCCGGMMZ16}) vs. those that extend existing system models (ESM) (HiP-HOPS~\cite{CHEN201391}, the AADL error annex\cite{SAEAS}).  A second dimension involves the richness of the modeling languages used to represent failures.  Most existing safety analysis languages only support model variables types drawn from small discrete domains (which we call {\em discrete}); the xSAP platform is a notable exception that allows {\em rich types}.  Another dimension whether {\em causal } or {\em non-causal} models are allowed.  Non-causal models allow simultaneous (in time) bi-directional failure propagations; currently only AltaRica 3.0~\cite{PROSVIRNOVA2013127} and smartIflow~\cite{info8010007} allow this.  Yet another dimension involves whether analysis is {\em compositional} across layers of hierarchically-composed systems or {\em whole-system}.
 
-We contrast these two styles below...
+In this section, we will focus on we will focus on the dimension of failure propagation, and contrast failure logic modeling (FLM) vs. failure effect modeling (FEM)~\cite{5979344}.  In FLM, {\em failures} are propagated between components explicitly and the analysis proceeds by determining the likelihood of failures reaching system boundaries.  In FEM, failures propagate by changing the system dynamics, which may cause the system behavior to visibly change.  For reference, the approach we propose with AADL is an ESM, richly-typed, causal, compositional, mixed FLM/FEM approach.
 
-\mike{Regurgitate content from "Model-Based Safety Analysis with smartIflow"}
-\danielle{I added the citation from this paper to the bib file: cite\{info17:HaLuHo\} in case we want to use it.} \cite{info17:HaLuHo}.
-
-\mike{Some contrasting points: richness of dynamics.  Most tools use formalisms that can only represent discrete quantities; we can do real-valued or large-domain integer dynamics}
-
-
-\mike{Also we are explicitly integrated with an architecture language}
+%We contrast these two styles below...
+%\mike{Regurgitate content from "Model-Based Safety Analysis with smartIflow"}
+%\danielle{I added the citation from this paper to the bib file: cite\{info17:HaLuHo\} in case we want to use it.} \cite{info17:HaLuHo}.
+%\mike{Some contrasting points: richness of dynamics.  Most tools use formalisms that can only represent discrete quantities; we can do real-valued or large-domain integer dynamics}
+%\mike{Also we are explicitly integrated with an architecture language}
 
 
-\subsection{Explicit Fault Propagation Approaches}
+\subsection{Failure Logic Modeling (FLM) Approaches}
 
 
 
-\mike{What is being done in AltaRica, HiPHOPS, AADL Error Annex...more here about primacy of faults as the mechanism of propagation between components.  Steal from proposal.}
-\danielle{I added a few things from the proposal regarding fault propagation between components. There is a note below where that begins. I am not sure which papers you are referring to here so I can't really dig into those...}
+%\mike{What is being done in AltaRica, HiPHOPS, AADL Error Annex...more here about primacy of faults as the mechanism of propagation between components.  Steal from proposal.}
+%\danielle{I added a few things from the proposal regarding fault propagation between components. There is a note below where that begins. I am not sure which papers you are referring to here so I can't really dig into those...}
 
-The explicit propagation approach focuses on faults rather than constructing a model of system dynamics.
-
-We illustrate this approach with the AADL error model annex~\cite{SAEAS} that can be used to describe system behaviors in the presence of faults. This annex has facilities for defining error types which can be used to describe error events that indicate errors in the system. The behavior of system components in the presence of errors is determined by state machines that are attached to system components; these state machines can determine error propagations and error composition for systems created from various subcomponents.
+The FEM approach focuses on faults rather than constructing a model of system dynamics. We illustrate this approach with the AADL error model annex~\cite{SAEAS} that can be used to describe system behaviors in the presence of faults. This annex has facilities for defining error types which can be used to describe error events that indicate errors in the system. The behavior of system components in the presence of errors is determined by state machines that are attached to system components; these state machines can determine error propagations and error composition for systems created from various subcomponents.
 
 Error types in this framework are a set of enumeration values such as NoData, BadData, LateDelivery, EarlyDelivery, TimingError, and NoService. These errors can be arranged in a hierarchy. For example, LateDelivery and EarlyDelivery are subtypes of TimingError. The errors do not have any information (other than their type) associated with them. AADL includes information on the bindings of logical components (processes, threads, systems) and their communication mechanisms onto physical resources (memories, processors, busses), and the error annex uses this information to describe how physical failures can manifest in logical components.
 
@@ -52,16 +48,17 @@ Errors are described by the red rectangles labeled with error types: 1-BadData, 
 
 Although the error model annex is very capable, it is not closely tied to the behavioral model of components or their requirements. For example, in the wheel braking system (WBS) example \cite{SAE:ARP4761}, it is possible that hydraulic system valves can fail open or fail closed. In fail closed, downstream components receive no flow and upstream pipes may become highly pressurized as a natural consequence of the failure. Physical models of these behavioral relationships often exist that can propagate failures in terms of the behavioral relationships between components. However, with the AADL error model annex, the propagations must be (re)specified and defined for each component. The user must therefore model the system twice, specifying propagations in the models of the physical phenomena, and again using enumerations and propagation rules in state machines in the error model annex. This re-specification can lead to inconsistencies between physical models and error annex models. In addition, the physical relationships between failures can be complex and may not be describable using enumeration values, leading to additional inconsistencies between the behavior of the physical phenomenon and the behavior of the error model.
 
+\iffalse
 \danielle{Added from proposal. I believe this describes what you mentioned above, Mike.}
 This research attempts to bridge the descriptions of errors in the error model annex with behavioral descriptions of components. We start from the error model notions of error types and state machines that describe transitions from nominal to error states. However, we then tie these nominal and error states to behavioral models of the components in question that describe how the faults manifest themselves in terms of the signals or quantities produced by the components. Now the behavioral models can provide implicit propagation of the faulty behaviors and the natural consequences of failures on component behavior will be manifested in the propagation of other component faults through the behavioral model.
 
 To accomplish this, we use AADL and the error model annex to describe faults and to use the AGREE contract specification language to describe behavioral models. This will require extensions to AGREE to define fault models that describe how different faults manifest themselves in changes to output signals. It will also require changes to the error annex. The conditions under which faults occur will become richer such that they describe not just propagation of enumerations from other components, but also valuations of input signals. For example, very high pressure in a pipe in the WBS model may lead to a \textit{pipe burst} failure.
-
+\fi
 
 \subsection{Implicit Fault Propagation Approaches (Behavioral MBSA)}
 
-\mike{Unfortunately, this is what is done, and done well in xSAP; they have a CAV paper on it; need to account for this}.
-\danielle{I have been trying to find this paper... not sure what it is. I will move on for now and perhaps you have the paper title so that I can add a citation and some accounting for their research.}
+%\mike{Unfortunately, this is what is done, and done well in xSAP; they have a CAV paper on it; need to account for this}.
+%\danielle{I have been trying to find this paper... not sure what it is. I will move on for now and perhaps you have the paper title so that I can add a citation and some accounting for their research.}
 
 The analysis starts from a {\em nominal} model of the system that describes the system behavior when no faults are present.  To perform safety analysis, we then also formalize the fault model. The fault model, in addition to common failure modes like \emph{non-deterministic}, \emph{inverted}, \emph{stuck\_at} etc, could encode information
 regarding fault propagation, simultaneous dependent faults and fault hierarchies, etc.
