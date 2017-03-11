@@ -20,10 +20,20 @@ annex agree {**
 	
 	-- Both non-deterministic and stuck_at failures will occur at all meter valves
 	-- and pumps.
+	
+	
 	node fail_to(val_in: real, alt_val: real, fail_occurred: bool) returns (val_out: real); 
 	let
 	   val_out = if (fail_occurred) then alt_val else val_in;
 	tel;
+
+
+    node inverted_fail(val_in: bool, fail_occurred: bool) returns (val_out:bool);
+	let
+	  val_out = if fail_occurred then not(val_in) else val_in;
+	tel;
+	
+
 
 
 	-- 
@@ -32,20 +42,10 @@ annex agree {**
  	  val_out = val_in -> if (fail_occurred) then min(val_max, pre(val_out + delt)) else val_in; 
 	tel;	
 
+
 	-- Seems that we need a boolean failure as well.
 	-- The inverted failure is the negation of the input when triggered.
-	
-	
-	
-	
-	
-	
-	
-	node inverted_fail(val_in: bool, fail_occurred: bool) returns (val_out:bool);
-	let
-	  val_out = if fail_occurred then not(val_in) else val_in;
-	tel;
-	
+
 	
 	
 	-- Failure Nodes (based on Simulink model)

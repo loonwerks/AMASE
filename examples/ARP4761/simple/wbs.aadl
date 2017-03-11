@@ -184,8 +184,7 @@ system implementation wbs.federated
 	Select_Accum_Valve : system bscu::select_accumulator_valve;
 	 
 connections
-    --accu_to_sel: port accumulator.pressure_output -> selector.accumulator_input;
-	power1     : bus access bscu.pwr1 <-> power.line1;
+    power1	   : bus access power.line1 <-> bscu.pwr1;
 	power2     : bus access power.line2 <-> bscu.pwr2;
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
 	pedal2     : port pedals.signal2 -> bscu.pedal2;
