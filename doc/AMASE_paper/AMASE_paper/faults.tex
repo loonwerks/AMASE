@@ -8,10 +8,10 @@ If pedals are pressed and no skid occurs, then the brakes will receive pressure.
 
 Using the AADL nominal model and the AGREE contract specification language, this property proves. From this point, we focus our attention on component failures and how this will affect the top level property of the system. 
 
-We would like to specify different component failure modes. These failure modes can be triggered by some internal error or propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our simple fault model contains two types of faults:
+We would like to specify different component failure modes. These failure modes can be triggered by some internal error or a propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our simple fault model consists of two types:
 
 \begin{itemize}
-\item \textit{fail\_to} fault: This type of failure accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be modeled in such a way as to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure mode for the Command subsystems in the BSCU component. This causes the Command units to become stuck at a previous value. An example of a mechanical error that is captured by this fault is a valve stuck open (or closed). To model this type of fault, the value \textit{alt\_val} can be set to some maximum pressure value for stuck open or zero for stuck closed. This value will then propagate through the system. The definition in AGREE of this fault is shown in Figure~\ref{fig:fail_to_node}.\\
+\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be modeled in such a way as to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure for the Command subsystems in the BSCU component. This causes the Command units to become stuck at a previous value. An example of a mechanical error that is captured by this fault is a valve stuck open (or closed). To model this type of fault, the value \textit{alt\_val} can be set to some maximum pressure value for stuck open or zero for stuck closed. This value will then propagate through the system. The definition in AGREE of this fault is shown in Figure~\ref{fig:fail_to_node}.\\
 
 \begin{figure}[h!]
   \centering
@@ -24,7 +24,7 @@ We would like to specify different component failure modes. These failure modes 
 %%%%%%% DANIELLE
 %                     CHECK INTO MECHANICAL FAILURES
 
-\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An examples of this is the Selector. In the nominal model, input to the Selector consists of a boolean value \textit{select\_alternate} value from the BSCU. This value determines the switch of the system from Normal pressure to Alternate pressure. If this value is inverted, the pressure will not be selected according to the requirement description.  See Figure~\ref{fig:inverted_fail_node}
+\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the Selector. In the nominal model, input to the Selector consists of a boolean value \textit{select\_alternate} value from the BSCU. This value determines the switch of the system from Normal pressure to Alternate pressure. If this value is inverted, the pressure will not be selected according to the requirement description.  See Figure~\ref{fig:inverted_fail_node}
 
 \end{itemize}
 
@@ -36,7 +36,7 @@ We would like to specify different component failure modes. These failure modes 
   \label{fig:inverted_fail_node}
 \end{figure}
 
-While modeling these errors, the duration of the fault must also be taken into account. There are both permanent faults and transient faults. We defined an AGREE node called 
+While modeling these faults, the duration of the fault must also be taken into account. There are both permanent faults and transient faults. We defined an AGREE node called 
 \begin{tt}
 historically
 \end{tt}
@@ -53,17 +53,25 @@ The following is a short summary of the failures defined in the fault model.
 
 \end{itemize}
 
-Given our understanding of the AADL system, the assumption was that permanent faults could be introduced into the system and we would still be able to prove our top level property. Upon connecting the faults into the WBS, it was shown that this top level property could not be proven using these permanent faults. Upon further reflection, it was clear why that was the case. 
+Given our understanding of the AADL system, the assumption was that permanent faults could be introduced into the system and we would still be able to prove our top level property. Upon activation of these faults in the WBS, it was shown that this top level property could not be proven. Upon further reflection, it was clear why that was the case. 
 
 In the AADL model, the Selector is situated between the pumps and the Blue\_Skid and Green\_Skid components. It's function is as follows: inputs are pump pressures (for Blue, Green, and Accumulator) and information from the BSCU regarding Normal or Alternate pressure. It selects between the Blue and the Green pump in this way. The output of the Selector is pressure of the Blue and Green pumps to the Blue\_Skid and Green\_Skid components respectively. The Blue\_Skid and Green\_Skid components also get a flag from BSCU. Blue\_Skid receives a flag with cmd\_alt while Green\_Skid gets the command cmd\_nor. This will cause those components to either output pressure (if their respective BSCU command is true) or output zero pressure (if the BSCU command is false). The pressure output from here goes directly to the wheel. For a clear picture of this organization, see Figure~\ref{fig:wbs_ima}.
 
-Here is a case when the fault is \textit{fail\_to} and it is a failure of the Green\_Skid component. Previously in the system, the Selector received a command from BSCU to output Normal pressure (Green pump). This command was passed on to the Green\_Skid component along with positive green pressure. If the Green\_Skid component gets stuck at a value of zero for pressure, the output to the wheel is zero. The Blue\_Skid component gets no pressure from the Selector (it has already selected green pressure) and thus outputs no pressure to the wheel. 
+Here is a case when the activated fault is \textit{fail\_to} and it is a failure of the Green\_Skid component. Previously in the system, the Selector received a command from BSCU to output Normal pressure (Green pump). This command was passed on to the Green\_Skid component along with positive green pressure. If the Green\_Skid component gets stuck at a value of zero for pressure, the output to the wheel is zero. The Blue\_Skid component gets no pressure from the Selector (it has already selected green pressure) and thus outputs no pressure to the wheel. 
 
-Despite one transient failure, the tail end of the system is not designed to recover from this failure. A similar single point of failure is the Blue\_Skid component and the Selector. These faults cause system failure for the same reason. 
+Despite one permanent fault, the tail end of the system is not designed to recover from this failure. A similar single point of failure is the Blue\_Skid component and the Selector. These activated permanent faults cause system failure for the same reason. 
 
 \subsection{Strengthening the Nominal Model}
 \danielle{Making a figure to put in here showing the additional component of the system.}
-To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc}. This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the Blue\_Skid component and is either the blue or the accumulator pressure. 
+To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc} and shown in Figure~\ref{fig:new_components}. (Note: In this figure, many details of the nominal model are removed for simplicity. For a full picture of the model, combine Figure~\ref{fig:new_components} and Figure~\ref{fig:wbs_ima}.) This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the Blue\_Skid component and is either the blue or the accumulator pressure. 
+
+\begin{figure}[h!]
+  \centering
+ \includegraphics[width=1\textwidth]{images/wbs2.png}
+  \vspace{-0.1in}
+  \caption{Strengthened Nominal Model}
+  \label{fig:new_components}
+\end{figure}
 
 An additional piece we added was output to the BSCU from the wheel. The pressure at the wheel is sent to the BSCU to readjust system mode if needed. For instance, if the pressure at the wheel is zero from both blue and green skid components, then the BSCU has a chance to send a \textit{select\_alternate} command over to the Accumulator\_Valve and turn on the accumulator pressure. We assume at this point that we will only use accumulator pressure and not switch back over to Normal mode. 
 
