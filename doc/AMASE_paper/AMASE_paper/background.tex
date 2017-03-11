@@ -65,8 +65,15 @@ In this work, a behavior fault modeling language was constructed as an extension
 %In previous work, component-level modeling tools such as Simulink \cite{MathWorks} and SCADE \cite{SCADE} were extended. In this work, we adapt this process to target system architecture models \cite{AADL, SysML} for safety analysis.
 
 %\subsection{Safety Analysis Approach}
+\begin{figure}
+  \centering
+ \includegraphics[width=1\textwidth]{images/SASM.png}
+  \vspace{-0.1in}
+  \caption{Safety Analysis System Model}
+  \label{fig:sasm}
+\end{figure}
 
-A safety analysis system model can be used for a variety of simulations and analyses as shown in Figure~\mike{include figure?}. Modeling allows trivial exploration of \textit{what-if} scenarios involving combinations of faults through simulations. For more rigorous analyses, static analysis tools, such as model checkers and theorem provers, can be used to automatically prove (or disprove) whether the system meets specific safety requirements.
+A safety analysis system model can be used for a variety of simulations and analyses as shown in Figure~\ref{fig:sasm} \mike{include figure?} \danielle{Do you mean a figure like this one? If not, I can change it (I got it from the proposal) If so, perhaps Darren has a nonblurry copy of the figure? I can't get this one to be more clear...}. Modeling allows trivial exploration of \textit{what-if} scenarios involving combinations of faults through simulations. For more rigorous analyses, static analysis tools, such as model checkers and theorem provers, can be used to automatically prove (or disprove) whether the system meets specific safety requirements.
 The primary approach used for analysis in previous work was model checking. After creating the system model, a model checker was used to verify that safety properties hold on the nominal system, an idealized model of the digital controller and the mechanical system containing no faults. Once the nominal model is shown to satisfy the safety property, the behavior of the fault-extended model can be examined. In the approach described by Joshi et al. in \cite{Joshi05:Dasc, Joshi05:SafeComp, Joshi07:Hase}, this analysis was performed by determining whether the property held for a given fault threshold: the maximum number of component faults to which the system is expected to be resilient.
 
 This fault threshold is, in some sense, an approximation of the likelihood of component faults. It maps from the probabilistic \textit{real world} potential for component failure into a non-probabilistic verification problem. Recent work \cite{CAV2015:BoCiGrMa} uses a more sophisticated approach involving minimum cut sets to describe the set of potential component failures that must be considered. Both approaches provide separation between the probabilistic aspects of the real world and the computational demands of formal analysis. This approach currently scales far better than direct use of probabilistic model checking tools such as PRISM \cite{CAV2011:KwNoPa}, and will likely continue to do so in the future.
