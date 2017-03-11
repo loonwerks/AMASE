@@ -62,7 +62,6 @@ Here is a case when the activated fault is \textit{fail\_to} and it is a failure
 Despite one permanent fault, the tail end of the system is not designed to recover from this failure. A similar single point of failure is the Blue\_Skid component and the Selector. These activated permanent faults cause system failure for the same reason. 
 
 \subsection{Strengthening the Nominal Model}
-\danielle{Making a figure to put in here showing the additional component of the system.}
 To solve this issue, we added a component based on the Simulink model in \cite{Joshi05:Dasc} and shown in Figure~\ref{fig:new_components}. (Note: In this figure, many details of the nominal model are removed for simplicity. For a full picture of the model, combine Figure~\ref{fig:new_components} and Figure~\ref{fig:wbs_ima}.) This component, the Accumulator\_Valve, takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the Blue\_Skid component and is either the blue or the accumulator pressure. 
 
 \begin{figure}[h!]
@@ -87,7 +86,7 @@ As it is stated, the added components will not solve the problem. There must be 
 If pedals are pressed in the previous state and pressed in the current state and no skid occurs, then the brakes will receive pressure. 
 \end{tt}
 
-It was also necessary to guarantee that \textit{select\_alternate} is false until an error occurs in the system. This was written as an AGREE guarantee stating that the initialization of \textit{select\_alternate} is false. It remains false until the system commands brake pressure (i.e. brake pedals are pressed), there is no skid occurring, and there is no realized pressure at the wheel. At this point, the system will enter Alternate mode and command pressure from the blue (or accumulator) pump. It will not return to Normal mode. 
+It was also necessary to guarantee that \textit{select\_alternate} is false until a failure occurs in the system. This was written as an AGREE guarantee stating that the initialization of \textit{select\_alternate} is false. It remains false until the system commands brake pressure (i.e. brake pedals are pressed), there is no skid occurring, and there is no realized pressure at the wheel. At this point, the system will enter Alternate mode and command pressure from the blue (or accumulator) pump. It will not return to Normal mode. 
 
 
 
