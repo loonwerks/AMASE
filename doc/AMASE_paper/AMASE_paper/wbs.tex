@@ -57,9 +57,16 @@ The Blue\_Skid and Green\_Skid valves receive input from the Selector as pressur
 In order to reason about behaviors of complex system architectures, we have developed compositional verification tools.  These tools \cite{NFM2012:CoGaMiWhLaLu} allow scaling of formal verification to large systems by splitting the analysis of a complex system architecture into a collection of verification tasks that correspond to the structure of the architecture.
 Our tool, the {\em Assume-Guarantee Reasoning Environment} (AGREE) is based on {\em assume-guarantee} contracts that can be added to AADL components.  The language used for contract specification is based on the LUSTRE dataflow language~\cite{Halbwachs91:IEEE}.
 
-We use AGREE to specify behavioral contracts corresponding to the behaviors expected of each of the WBS components.
+We use AGREE to specify behavioral contracts corresponding to the behaviors expected of each of the WBS components. An example of a contract is shown in Figure~\ref{fig:agreeContract}.
 %
-\mike{An example of a contract is shown...}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/agreeContract.png}
+\caption{AGREE Contract for BSCU }
+\label{fig:agreeContract}
+\end{center}
+\end{figure}
 
 \iffalse
 
