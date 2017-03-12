@@ -1,7 +1,7 @@
 \section{Conclusions \& Future Work}
 In this paper, we describe methods of system safety analysis techniques and some issues in capturing system safety information. We describe our initial work in extending modeling notations to better describe and analyze failure conditions in order to meet the specific needs of system safety analysis. 
 
-We begin with architectural models based on the Wheel Braking System model in SAE ARP 4761 \cite{SAE:ARP4761} and use this in the evaluation of our approach. Using assume-guarantee compositional reasoning techniques, we prove a top level property of the wheel brake system that states when the brake pedals are pressed in the absence of skidding, there will be hydraulic pressure supplied to the brakes. This is the nominal model. We then focus our attention on fault generation. 
+We begin with architectural models based on the Wheel Braking System model in AIR6110 \cite{AIR6110} and use this in the evaluation of our approach. Using assume-guarantee compositional reasoning techniques, we prove a top level property of the wheel brake system that states when the brake pedals are pressed in the absence of skidding, there will be hydraulic pressure supplied to the brakes. This is the nominal model. We then focus our attention on fault generation. 
 
 Starting from the error model notions of error types, two main faults were defined: \textit{fail\_to} which will describe failures of valves and pressure regulators and \textit{inverted\_fail} which describes the failures occurring to components that output boolean values. Using the AADL behavioral model of the WBS, these permanent faults were tied into the nominal model in order to reason about how this model behaves in the presence of specific kinds of faults. 
 
@@ -11,6 +11,6 @@ What was seen is that the model does fulfill the top level contract even when a 
 
 Future research work involves the continuation of development of the methods and tools needed to perform model-based safety analysis at the system architecture level. By introducing a common set of models for both nominal system design and safety analysis, this will not only reduce the cost of development but also improve safety by integration of these processes. Our hope is to demonstrate the practicality of formal analysis for early detection of safety issues that would be prohibitively expensive to find through testing and inspection. We will base this research on industry standard notations that are being used in airborne and ground-based avionics in order to ensure transition of this technology. 
 
-
+\subsection*{Acknowledgements} This research was supported by NASA AMASE NNL16AB07T. 
 
 

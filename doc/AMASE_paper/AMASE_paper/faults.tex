@@ -16,8 +16,6 @@ We would like to specify different component failure modes. These failure modes 
 \begin{itemize}
 \item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be used to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure for the Command subsystem in the BSCU component, which causes the Command unit to become stuck at a previous value. An example of a mechanical error would be a valve stuck open (or closed). 
 
-%%%%%%% DANIELLE
-%                     CHECK INTO MECHANICAL FAILURES
 
 \item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the Selector. In the nominal model, input to the Selector consists of a boolean value \textit{select\_alternate} value from the BSCU. This value determines the switch of the system from Normal pressure to Alternate pressure. If this value is inverted, the pressure will not be selected according to the requirement description.  
 
