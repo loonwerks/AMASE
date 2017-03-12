@@ -315,7 +315,7 @@ connections
 			faults.bool_to_int(accumulator_valve_stuck_at_permanent) +  
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
-		assert(fail_count <= 2);
+		assert(fail_count <= 1);
 	**};
 	
 end wbs.federated;
