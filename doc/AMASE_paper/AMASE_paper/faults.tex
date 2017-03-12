@@ -1,13 +1,19 @@
-\section{Architectural FEM Modeling for the WBS}
+\section{Architectural Failure Effect Modeling for the WBS}
 
-We illustrate our approach to 
-To determine how different faults manifest themselves in the nominal system with regard to output signals, we first proved a top level property of the nominal WBS using AGREE. This property states: \\
+We illustrate our FEM approach on the Wheel Braking System.  Starting from the nominal model described in Section~\ref{sec:nominal}, we first determine whether a given safety property of interest holds on a fault-free instance of the model.  We then extend the model with faults and determine whether the property continues to hold under reasonable fault scenarios.
+
+The initial safety property to be proven determines whether the system will apply pressure to the wheels when commanded to do so: 
 
 \begin{tt}
 If pedals are pressed and no skid occurs, then the brakes will receive pressure. \\
 \end{tt}
 
-Using the AADL nominal model and the AGREE contract specification language, this property proves. From this point, we focus our attention on component failures and how this will affect the top level property of the system.
+Starting from the reference AADL model constructed by the SEI~\cite{SEI:AADL} extended with behavioral 
+
+, we added behavioral contracts to the model.
+
+
+and the AGREE contract specification language, this property proves. From this point, we focus our attention on component failures and how this will affect the top level property of the system.
 
 We would like to specify different component failure modes. These failure modes can be triggered by some internal error or a propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our simple fault model consists of two types:
 

@@ -21,6 +21,7 @@ Switching between the hydraulic pistons and sources can be done automatically or
 In both Normal and Alternate modes, an anti-skid capability is available. In the Normal mode, the brake pedal position is electronically fed to a braking computer called the Braking System Control Unit (BSCU). The BSCU monitors signals that denote critical aircraft and system states to provide correct braking function, detect anomalies, broadcast warnings, and sent maintenance information to other systems.
 
 \subsection{Nominal System Modeling}
+\label{sec:nominal}
 A formal specification of the nominal system model consists of mechanical and digital components and their interconnections. Figure~\ref{fig:wbs_ima} illustrates how the wheel braking system is modeled using AADL. The following section describes this nominal model from which the fault model was generated.
 
 \paragraph{Wheel Braking System (WBS)}
@@ -52,6 +53,13 @@ The selector receives inputs from the pumps regarding pressure output and the BS
 \paragraph{Skid Valves}
 The Blue\_Skid and Green\_Skid valves receive input from the Selector as pressure coming through the respective pipes as well as input from the BSCU that commands Normal or Alternate mode. The Skid valves will use these inputs to choose between the Green or the Blue pressure to send off to the wheel.
 
+\subsubsection{Modeling Nominal System Behavior}
+In order to reason about behaviors of complex system architectures, we have developed compositional verification tools.  These tools \cite{NFM2012:CoGaMiWhLaLu} allow scaling of formal verification to large systems by splitting the analysis of a complex system architecture into a collection of verification tasks that correspond to the structure of the architecture.
+Our tool, the {\em Assume-Guarantee Reasoning Environment} (AGREE) is based on {\em assume-guarantee} contracts that can be added to AADL components.  The language used for contract specification is based on the LUSTRE dataflow language~\cite{Halbwachs91:IEEE}.
+
+We use AGREE to specify behavioral contracts corresponding to the behaviors expected of each of the WBS components.
+%
+\mike{An example of a contract is shown...}
 
 \iffalse
 
