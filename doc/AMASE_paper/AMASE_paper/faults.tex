@@ -11,13 +11,13 @@ If pedals are pressed and no skid occurs, then the brakes will receive pressure.
 
 \noindent Using the reference AADL model constructed by the SEI~\cite{SEI:AADL} extended with AGREE contracts describing system behaviors, this property proves immediately.  From this point, we focus our attention on component failures and how this will affect the top level property of the system.
 
-We would like to specify different component failure modes. These failure modes can be triggered by some internal error or a propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. Our initial fault model consists of two fault types:
+We would like to specify different component failure modes. These failure modes can be triggered by some internal or propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. This consists of two types: 
 
 \begin{itemize}
-\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be used to describe both digital and mechanical errors. Examples of digital errors include a \textit{stuck\_at} failure for the Command subsystem in the BSCU component, which causes the Command unit to become stuck at a previous value. An example of a mechanical error would be a valve stuck open (or closed). 
+\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be used to describe both digital and mechanical errors. Examples of digital failures include a \textit{stuck\_at} failure for the command subsystem in the BSCU component, which causes the command unit to become stuck at a previous value. An example of a mechanical failure would be a valve stuck open (or closed). 
 
 
-\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the Selector. In the nominal model, input to the Selector consists of a boolean value \textit{select\_alternate} value from the BSCU. This value determines the switch of the system from Normal pressure to Alternate pressure. If this value is inverted, the pressure will not be selected according to the requirement description.  
+\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the selector. In the nominal model, input to the selector consists of a boolean value \textit{select\_alternate} value from the BSCU. 
 
 \end{itemize}
 
@@ -40,9 +40,9 @@ The following is a short summary of the failures defined in the fault model.
 
 \begin{itemize}
 
-\item Valves and Pumps: All valves and pumps have the possibility of a \textit{fail\_to} fault. This includes Green pump, Blue pump, Accumulator, and the Shutoff valves.
+\item Valves and Pumps: All valves and pumps have the possibility of a \textit{fail\_to} fault. This includes green pump, blue pump, accumulator, and the shutoff valves.
 
-\item  The Selector can also have a digital \textit{fail\_to} fault regarding the inputs from BSCU commanding to use Normal or Alternate means of pressure along with an \textit{inverted\_fail} fault which would change the boolean value that commands antiskid to activate.
+\item  The selector can also have a digital \textit{fail\_to} fault regarding the inputs from BSCU commanding to use normal or alternate means of pressure along with an \textit{inverted\_fail} fault which would change the boolean value that commands antiskid to activate.
 
 \end{itemize}
 
@@ -52,10 +52,10 @@ Given our understanding of the WBS, our assumption was that any single permanent
 The first issue that was discovered involved {\em feedback}; the reference model did not have a sensor to determine pressure after the selector valve.  This means that a single failure of (for example) the blue or green antiskid valve cannot be detected by the BSCU (see Figure~\ref{fig:wbs_ima}), and so it cannot route around the failure.  In order to fix this, we added a pressure sensor to the wheel that communicates with the BSCU to detect lack of pressure at the wheel.
 
 
-After adding a sensing apparatus to the wheel, the analysis generated another counterexample due to a single failure of the selector valve.  In the reference model, there is a single selector component that takes as inputs the Green Pump, the Blue Pump, and the Accumulator.  A single failure in this component can lead to no pressure along either of the two outgoing pressure lines.
-To solve this issue, we removed the accumulator from the selector and added an accumulator valve.   This component takes in the Blue pressure from the Selector and the Accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the Accumulator\_Valve goes directly to the Blue\_Skid component and is either the blue or the accumulator pressure.
+After adding a sensing apparatus to the wheel, the analysis generated another counterexample due to a single failure of the selector valve.  In the reference model, there is a single selector component that takes as inputs the green pump, the blue pump, and the accumulator.  A single failure in this component can lead to no pressure along either of the two outgoing pressure lines.
+To solve this issue, we removed the accumulator from the selector and added an accumulator valve.   This component takes in the blue pressure from the selector and the accumulator pressure. It also takes in a \textit{select\_alternate} flag from the BSCU. The output of the accumulator\_Valve goes directly to the blue\_Skid component and is either the blue or the accumulator pressure.
 
-Finally, our BSCU is currently structured to always fail-over from the Green system to the Blue system but never the reverse.  Because of this choice (which matches the ARP document), it is also necessary to guarantee that \textit{select\_alternate} is false until a failure occurs in the system; otherwise, a single failure in the blue anti-skid valve can cause the system to fail to provide pressure.  This assymetry is something that could be revisited in future work.
+Finally, our BSCU is currently structured to always fail-over from the green system to the blue system but never the reverse.  Because of this choice (which matches the ARP document), it is also necessary to guarantee that \textit{select\_alternate} is false until a failure occurs in the system; otherwise, a single failure in the blue anti-skid valve can cause the system to fail to provide pressure.  This assymetry is something that could be revisited in future work.
 
 
 Even after making these three fixes to the model, the original property still does not prove.  At issue is that the sensing of a no-pressure situation is not instantaneous; there is a delay for this information to reach the BSCU and be acted upon to switch to the alternate braking system.  In our current timing model for the system, the feedback to the BSCU involves a cycle delay, but the BSCU and valves can react instantaneously.  Thus, we weaken our top-level property to state that if the brakes are pressed for two consecutive time instants, then pressure will be provided to the wheels:
