@@ -30,11 +30,7 @@ The highest level model component is the WBS. It consists of the BSCU, Green and
 The BSCU is the digital component in the system that receives inputs from the WBS. It also receives feedback from the Green and Blue hydraulic lines and two power inputs from two separate power sources. The BSCU is composed of two Command and Monitor subsystems each powered independently from separate power sources. The pedal position is provided to these units and when skidding occurs, the Command and Monitor units will decrease the pressure to the brakes.
 The Command unit regulates the pressure to the brakes in the Green hydraulic line through the command cmd\_nor. Computing this command requires both the brake requested power and the skid information. The Command unit also regulates the pressure in the Blue hydraulic line in order to prevent skidding which it does through the cmd\_alt command. The Monitor unit checks the validity of the Command unit output.
 
-The BSCU switches to the Blue hydraulic system under the following conditions:
-\begin{itemize}
-\item Output from both Command units are not valid, or
-\item The Green pump (Normal) is below its pressure threshold
-\end{itemize}
+The BSCU switches from Normal to Alternate mode (Blue hydraulic system) when the output from either one of its Command units is not valid or the Green hydraulic pump is below its pressure threshold.  Once the system has switched into Alternate mode, it will not switch back into Normal mode again.
 
 \noindent Once the system has switched into Alternate mode, it will not switch into Normal mode again.
 
