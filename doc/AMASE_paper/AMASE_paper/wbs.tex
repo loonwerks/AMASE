@@ -48,7 +48,7 @@ The selector receives inputs from the pumps regarding pressure output and the BS
 The blue\_skid and green\_skid valves receive input from the selector as pressure coming through the respective pipes as well as input from the BSCU that commands normal or alternate mode. The skid valves will use these inputs to choose between the green or the blue pressure to send to the wheel.
 
 \subsection{Modeling Nominal System Behavior}
-In order to reason about behaviors of complex system architectures, we have developed a compositional verification tool for AADL models.  
+In order to reason about behaviors of complex system architectures, we have developed a compositional verification tool for AADL models.
 Our tool, the {\em Assume-Guarantee Reasoning Environment} (AGREE) \cite{NFM2012:CoGaMiWhLaLu}  is based on {\em assume-guarantee} contracts that can be added to AADL components.  The language used for contract specification is based on the LUSTRE dataflow language~\cite{Halbwachs91:IEEE}. The tool allows scaling of formal verification to large systems by splitting the analysis of a complex system architecture into a collection of verification tasks that correspond to the structure of the architecture.
 
 We use AGREE to specify behavioral contracts corresponding to the behaviors expected of each of the WBS components. An example of a contract is shown in Figure~\ref{fig:agreeContract}.
@@ -56,7 +56,7 @@ We use AGREE to specify behavioral contracts corresponding to the behaviors expe
 
 \begin{figure}
 \begin{center}
-\includegraphics[ width=\textwidth]{images/bscu.pdf}
+\includegraphics[trim=60 480 50 60,clip,width=\textwidth]{images/bscu.pdf}
 \caption{AGREE Contract for BSCU }
 \label{fig:agreeContract}
 \end{center}

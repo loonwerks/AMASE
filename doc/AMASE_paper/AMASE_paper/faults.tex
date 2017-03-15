@@ -2,35 +2,35 @@
 
 We illustrate our FEM approach on the Wheel Braking System.  Starting from the nominal model described in Section~\ref{sec:nominal}, we first determine whether a given safety property of interest holds on a fault-free instance of the model.  We then extend the model with faults and determine whether the property continues to hold under reasonable fault scenarios.
 
-The initial safety property to be proven determines whether the system will apply pressure to the wheels when commanded to do so: 
+The initial safety property to be proven determines whether the system will apply pressure to the wheels when commanded to do so:
 
-\begin{tt} 
-\  \\ 
+\begin{tt}
+\  \\
 If pedals are pressed and no skid occurs, then the brakes will receive pressure. \\
 \end{tt}
 
 \noindent Using the reference AADL model constructed by the SEI~\cite{SEI:AADL} extended with AGREE contracts describing system behaviors, this property proves immediately.  From this point, we focus our attention on component failures and how this will affect the top level property of the system.
 
-We would like to specify different component failure modes. These failure modes can be triggered by some internal or propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. This consists of two types: 
+We would like to specify different component failure modes. These failure modes can be triggered by some internal or propagated fault. In order to trigger these faults, additional input was added to the AADL model for each fault that can occur within a nominal model component. This consists of two types:
 
 \begin{itemize}
-\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be used to describe both digital and mechanical errors. Examples of digital failures include a \textit{stuck\_at} failure for the command subsystem in the BSCU component, which causes the command unit to become stuck at a previous value. An example of a mechanical failure would be a valve stuck open (or closed). 
+\item \textit{fail\_to} fault: This type of fault accounts for both nondeterministic failures and stuck-at failures. The components that are affected by this fault include meter valves and pumps. This fault can be used to describe both digital and mechanical errors. Examples of digital failures include a \textit{stuck\_at} failure for the command subsystem in the BSCU component, which causes the command unit to become stuck at a previous value. An example of a mechanical failure would be a valve stuck open (or closed).
 
 
-\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the selector. In the nominal model, input to the selector consists of a boolean value \textit{select\_alternate} value from the BSCU. 
+\item \textit{inverted\_fail} fault: This type of fault will be used on components which contain boolean output. It will simply take boolean input, negate it, and output the negated value. An example of this is the selector. In the nominal model, input to the selector consists of a boolean value \textit{select\_alternate} value from the BSCU.
 
 \end{itemize}
 
 \begin{figure}[h!]
   \centering
- \includegraphics[width=1\textwidth]{images/failureNodes.png}
+ \includegraphics[trim=60 630 30 20,clip,width=1\textwidth]{images/failureNodes.pdf}
   \vspace{-0.1in}
   \caption{AGREE Definition of a \textit{fail\_to} and \textit{inverted\_failure} Faults}
   \label{fig:failureNodes}
 \end{figure}
 
 These faults can be easily encoded in AGREE as shown in Figure~\ref{fig:failureNodes}.  The failures simply return an alternate value (for {\em fail\_to}) or invert the input value (for {\em inverted\_failure}) when a failure occurs.
- 
+
 
 While modeling faults, the duration of the fault must also be taken into account.  The AGREE tools allow a great deal of flexibility in terms of how faults are defined and their duration.  For the purposes of this model, we currently consider only {\em transient} and {\em permanent} faults, where transient faults occur for an instant in time (e.g., a single-event upset) and a permanent fault persists for the remainder of the system execution.
 
@@ -46,7 +46,7 @@ The following is a short summary of the failures defined in the fault model.
 
 \end{itemize}
 
-Given our understanding of the WBS, our assumption was that any single permanent fault could be introduced into the system and the pilot would still be able to command brake pressure.  However, our analysis tools returned a counterexample to the property, and upon examination, the structure of the reference model was insufficient to guarantee the property.  
+Given our understanding of the WBS, our assumption was that any single permanent fault could be introduced into the system and the pilot would still be able to command brake pressure.  However, our analysis tools returned a counterexample to the property, and upon examination, the structure of the reference model was insufficient to guarantee the property.
 
 %\subsection{Strengthening the Nominal Model}
 The first issue was {\em feedback}; the reference model did not have a sensor to determine pressure after the selector valve.  This means that a single failure of (for example) the blue or green antiskid valve cannot be detected by the BSCU (see Figure~\ref{fig:wbs_ima}), and it cannot route around the failure.  In order to address this, we added a pressure sensor to the wheel that communicates with the BSCU to detect lack of pressure at the wheel.
@@ -61,8 +61,8 @@ Finally, our BSCU is currently structured to always fail-over from the green sys
 Even after making these three changes to the model, the original property still does not prove.  At issue is that the sensing of a no-pressure situation is not instantaneous; there is a delay for this information to reach the BSCU and be acted upon to switch to the alternate braking system.  In our current timing model for the system, the feedback to the BSCU involves a delay, but the BSCU and valves can react.  Thus, we weaken our top-level property to state that if the brakes are pressed for two consecutive time instants, then pressure will be provided to the wheels:
 
 \begin{tt}
-\ \\ 
-If pedals are pressed in the previous state and pressed in the current state and no skid occurs, then the brakes will receive pressure. \\ 
+\ \\
+If pedals are pressed in the previous state and pressed in the current state and no skid occurs, then the brakes will receive pressure. \\
 \end{tt}
 
 
