@@ -54,6 +54,8 @@ annex agree {**
 	-- Faults to add:
 	
 	-- Frozen: val_out = val_in
+	-- or possibly val_out = pre(val_out) ? Need init if that's the case
+	--
 	node frozen(val_in: real, fail_occurred: bool) returns (val_out: real);
 	let
 	  val_out = val_in;
