@@ -1,0 +1,329 @@
+grammar org.xtext.example.safety.Safety with org.eclipse.xtext.common.Terminals
+//grammar org.xtext.example.mydsl.Faults1 with org.osate.xtext.aadl2.properties.Properties
+
+generate faults1 "http://www.xtext.org/example/mydsl/Faults1"
+
+import "http://aadl.info/AADL/2.0" as aadl2
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+NamedElement returns aadl2::NamedElement:
+	Arg
+	| FnDefExpr
+	| PropertyStatement
+	| ConstStatement
+	| EnumStatement
+	| NodeDefExpr
+	| LinearizationDefExpr
+	| LibraryFnDefExpr
+	| RecordDefExpr
+	| NamedID;
+
+Element returns aadl2::Element:
+	Expr
+	| LinearizationInterval
+	| Type
+	| SafetyContract
+	| SpecStatement
+	| NodeStmt
+	| NodeBodyExpr
+	| EqStatement
+	| InputStatement;
+
+AnnexLibrary returns aadl2::AnnexLibrary:
+	SafetyLibrary;
+
+AnnexSubclause returns aadl2::AnnexSubclause:
+	SafetySubclause;
+
+SafetyLibrary:
+	{SafetyContractLibrary} contract=SafetyContract;
+
+SafetySubclause:
+	{SafetyContractSubclause} contract=SafetyContract;
+
+SafetyContract returns Contract:
+	{SafetyContract} (specs+=SpecStatement)*;
+
+SpecStatement:
+	{FaultStatement} 'fault' ':' faultname=ID ';'
+	| {InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
+	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
+	| {DurationStatement} 'duration' ':' TemporalConstraint interv=TimeInterval ';'
+	| {TriggerStatement} 'trigger' ':' TriggerCondition expr_list=ExprList '['probability=Arg ']'
+	
+	| {InitialStatement} 'initially' ':' expr=Expr  ';'
+	| {ParamStatement} 'parameter' expr=Expr ':' type=Type ';'
+	| {LiftStatement} 'lift' subcomp=NestedDotID ';'
+	| {ConnectionStatement} 'connection' conn=[aadl2::NamedElement] ':' expr=Expr ';'
+	| SynchStatement
+	| OrderStatement
+	| PropertyStatement
+	| ConstStatement
+	| EnumStatement
+	| EqStatement
+	| AssignStatement
+	| LinearizationDefExpr
+	| FnDefExpr
+	| LibraryFnDefExpr
+	| NodeDefExpr
+	| RecordDefExpr
+	| InputStatement;
+
+
+
+// Currently, these are represented as keywords. 
+TemporalConstraint:
+	'permanent' | 'transient'
+;
+
+// Something like this? 
+//
+// 'must' ':' 'if' expr=Expr 'then' fault=ID 'occurred';'
+// 
+// 'enabler' ':' 'if' expr=Expr 'then' fault=ID 'possible' ';' 
+TriggerCondition:
+	'must' | 'enabler'
+;
+	
+	
+
+
+//The following are patterns from the CESAR RSL
+PatternStatement returns PatternStatement:
+	WheneverStatement
+|	{AlwaysStatement} 'always' expr=Expr ';'
+|   WhenStatement
+|   RealTimeStatement
+;
+
+WhenStatement:
+	=> ({WhenHoldsStatement} 'when' condition=Expr 'holds') 'during' 
+        conditionInterval=TimeInterval event=Expr (excl='exclusively')? 'occurs' ('during' eventInterval=TimeInterval)? 
+|   => ({WhenOccursStatment} 'when' condition=Expr 'occurs')
+        times=Expr 'times' 'during' interval=TimeInterval (excl='exclusively')? 'raises' event=Expr 
+;
+
+WheneverStatement:
+	=> ({WheneverOccursStatement} 'whenever' cause=Expr 'occurs'
+	    effect=Expr (excl='exclusively')? ('occur' | 'occurs')) ('during' interval=TimeInterval)? 
+|   => ({WheneverBecomesTrueStatement} 'whenever' cause=Expr 'becomes' 'true'
+	    effect=Expr (excl='exclusively')? ('occur' | 'occurs')) ('during' interval=TimeInterval)? 
+|	=> ({WheneverHoldsStatement} 'whenever' cause=Expr 'occurs'
+	    effect=Expr (excl='exclusively')? ('holds')) ('during' interval=TimeInterval)? 
+|   => ({WheneverImpliesStatement} 'whenever' cause=Expr 'occurs'
+	    lhs=Expr 'implies') rhs=Expr (excl='exclusively')? ('during' interval=TimeInterval)? 	    
+;
+
+RealTimeStatement:
+	=> ({PeriodicStatement} 'condition' event=Expr 'occurs' 'each') period=Expr ('with' 'jitter' jitter=Expr)? 
+|	=> ({SporadicStatement} 'condition' event=Expr 'occurs' 'sporadic') 'with' 'IAT' iat=Expr ('with' 'jitter' jitter=Expr)?
+;
+ 
+TimeInterval returns TimeInterval:
+	=>({ClosedTimeInterval} '[' low=Expr ',' high=Expr ']')
+|   =>({OpenLeftTimeInterval} '(' low=Expr ',' high=Expr']')
+|   =>({OpenRightTimeInterval} '[' low=Expr ',' high=Expr ')')
+|   =>({OpenTimeInterval} '(' low=Expr ',' high=Expr ')') 
+;
+
+SynchStatement:
+	{SynchStatement} 'synchrony' ':' val = INTEGER_LIT (',' val2=INTEGER_LIT)? (sim=('simult'|'no_simult'))? ';'
+|	{MNSynchStatement} 'synchrony' ':' (comp1+=[aadl2::NamedElement] ',' comp2+=[aadl2::NamedElement] ':' max+=INTEGER_LIT ',' min+=INTEGER_LIT)+ ';'
+|   {CalenStatement} 'calendar' ':' els+=([aadl2::NamedElement]) ("," els+=[aadl2::NamedElement])*  ';'
+|   {AsynchStatement} 'synchrony' ':' 'asynchronous' ';'
+|   {LatchedStatement} 'synchrony' ':' 'latched' ';'
+;
+
+OrderStatement:
+	'ordering' ':' comps += [aadl2::NamedElement] ("," comps+=[aadl2::NamedElement])* ';'
+;
+
+NamedCallDef returns aadl2::NamedElement:
+	CallDef;
+
+CallDef returns CallDef:
+	LinearizationDefExpr
+	| LibraryFnDefExpr
+	| FnDefExpr
+	| NodeDefExpr;
+
+PropertyStatement:
+	'property' name=ID '=' expr=Expr ';';
+
+ConstStatement:
+	'const' name=ID ':' type=Type '=' expr=Expr ';'; //this should really be an "Arg"
+	
+EnumStatement:
+	'enum' name=ID '=' '{' enums+=NamedID (',' enums+=NamedID)* '}' ';';
+
+EqStatement:
+	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';';
+	
+InputStatement:
+	'agree_input' (lhs+=Arg (',' lhs+=Arg)*) ';';
+
+AssignStatement:
+	'assign' id=NestedDotID '=' expr=Expr ';';
+
+FnDefExpr:
+	'fun' name=ID '(' args+=Arg (',' args+=Arg)* ')' ':' type=Type '=' expr=Expr ';';
+
+LibraryFnDefExpr:
+	'external' name=ID '(' args+=Arg (',' args+=Arg)* ')' ':' type=Type ';';
+
+LinearizationDefExpr:
+	'linearization' name=ID '(' args+=Arg (',' args+=Arg)* ')'
+	'over' '[' intervals+=LinearizationInterval (',' intervals+=LinearizationInterval)* ']'
+	('within' precision=Expr)? ':' exprBody=Expr ';'
+	;
+
+LinearizationInterval:
+	start=Expr '..' end=Expr;
+
+NodeDefExpr:
+	'node' name=ID '(' (args+=Arg (',' args+=Arg)*)? ')' 'returns'
+	'(' (rets+=Arg (',' rets+=Arg)*)? ')' ';'
+	nodeBody=NodeBodyExpr;
+
+NodeBodyExpr:
+	('var' (locs+=Arg ';')+)?
+	'let'
+	(stmts+=NodeStmt)+
+	'tel' ';';
+
+NodeStmt:
+	{NodeEq} lhs+=[Arg] (',' lhs+=[Arg])* '=' expr=Expr ';'
+	| {NodeLemma} 'lemma' str=STRING ':' expr=Expr ';';
+
+Arg returns Arg:
+	name=ID ':' type=Type;
+
+Type returns Type:
+	{PrimType} string=primTypes ('[' (lowNeg='-')? rangeLow=(INTEGER_LIT|REAL_LIT) ',' (highNeg='-')? rangeHigh=(INTEGER_LIT|REAL_LIT) ']')?
+|	{RecordType} record=NestedDotID
+;
+
+primTypes:
+  'real' | 'bool' | 'int';
+
+RecordDefExpr:
+	'type' name=ID '=' 'struct' '{' (args+=Arg (',' args+=Arg)*) '}' ';'
+;
+
+Expr returns Expr:
+	ArrowExpr;
+
+ArrowExpr returns Expr:
+	ImpliesExpr (=> ({BinaryExpr.left=current} op='->') right=ArrowExpr)?;
+
+ImpliesExpr returns Expr:
+	EquivExpr (=> ({BinaryExpr.left=current} op='=>') right=ImpliesExpr)?;
+
+EquivExpr returns Expr:
+	OrExpr (=> ({BinaryExpr.left=current} op='<=>') right=OrExpr)?;
+
+OrExpr returns Expr:
+	AndExpr (=> ({BinaryExpr.left=current} op='or') right=AndExpr)*;
+
+AndExpr returns Expr:
+	RelateExpr (=> ({BinaryExpr.left=current} op='and') right=RelateExpr)*;
+
+RelateOp:
+	'<' | '<=' | '>' | '>=' | '=' | '<>' | '!='; //todo remove `<>'
+
+RelateExpr returns Expr:
+	AddSubExpr (=> ({BinaryExpr.left=current} op=RelateOp) right=AddSubExpr)?;
+
+AddSubExpr returns Expr:
+	MultDivExpr (=> ({BinaryExpr.left=current} op=('+' | '-')) right=MultDivExpr)*;
+
+MultDivExpr returns Expr:
+	PowerExpr (=> ({BinaryExpr.left=current} op=('*' | '/' | 'div' | 'mod')) right=PowerExpr)*;//todo remove div
+
+PowerExpr returns Expr:
+	UnaryExpr (=> ({BinaryExpr.left=current} op=('^')) right=UnaryExpr)*;
+
+UnaryExpr returns Expr:
+	{UnaryExpr} op=('-' | 'not') expr=UnaryExpr
+	| IfThenElseExpr;
+
+IfThenElseExpr returns Expr:
+	{IfThenElseExpr} 'if' a=Expr 'then' b=Expr 'else' c=Expr
+	| PreDefFnExpr;
+
+PreDefFnExpr returns Expr:
+	{PrevExpr} 'prev' '(' delay=Expr ',' init=Expr ')'
+	| {GetPropertyExpr} 'Get_Property' '(' component=Expr ',' prop=[aadl2::NamedElement|QCLREF] ')'
+	| RecordUpdateExpr;
+
+RecordUpdateExpr returns Expr:
+	TermExpr (=> ({RecordUpdateExpr.record=current} ('{' args+=[aadl2::NamedElement|ID] ':=' argExpr+=Expr '}')+))?
+;
+
+TermExpr returns Expr:
+	{TimeExpr} 'time'
+	| ComplexExpr
+	| {IntLitExpr} val=INTEGER_LIT
+	| {PreExpr} 'pre' '(' expr=Expr ')'
+	| {EventExpr} 'event' '(' id = NestedDotID ')'
+	| {LatchedExpr} 'latched' '(' expr = Expr ')'
+	| {TimeOfExpr} 'timeof' '(' id = NestedDotID ')'
+	| {TimeRiseExpr} 'timerise' '(' id = NestedDotID ')'
+	| {TimeFallExpr} 'timefall' '(' id = NestedDotID ')'
+	| {RealLitExpr} val=REAL_LIT
+	| {BoolLitExpr} val=BooleanLiteral
+	| {ThisExpr} 'this' ('.' subThis=NestedDotID)?
+	| {FloorCast} 'floor' '(' expr=Expr ')'
+	| {RealCast}  'real' '(' expr=Expr ')'
+	| '(' Expr ')';
+	
+
+ComplexExpr:
+	NestedDotID 
+		(=> ({FnCallExpr.fn=current} '(') (args+=Expr (',' args+=Expr)*)? ')' 
+		|=> ({RecordExpr.record=current} '{' args+=[aadl2::NamedElement|ID] '=') argExpr+=Expr (';' args+=[aadl2::NamedElement|ID] '=' argExpr+=Expr)* '}'
+		)?
+;
+
+// Used for TriggerStatements
+ExprList returns ExprList:
+	Expr
+	| Expr ',' list=ExprList
+;
+
+// Used to extend grammar in order to capture nondeterminism (range)
+IntervalExpr returns Expr:
+    =>({ClosedIntervalExpr} '[' low=Expr ',' high=Expr ']')
+   | =>({OpenLeftIntervalExpr} '(' low=Expr ',' high=Expr']')
+   | =>({OpenRightIntervalExpr} '[' low=Expr ',' high=Expr ')')
+   | =>({OpenIntervalExpr} '(' low=Expr ',' high=Expr ')') 	
+;
+
+// Also used for nondeterminism (discrete set of values)
+SetExpr returns ExprList:
+	'{'ExprList'}'
+;
+
+// Still need to represent empty set somehow
+
+
+ 
+NestedDotID:
+	base=[aadl2::NamedElement|QCPREF] (=> ('.' (( tag=ReservedVarTag) | sub=NestedDotID)))?;
+
+QCPREF:
+	=>(ID '::') ID =>('.' ID)?
+|	ID;
+	
+ReservedVarTag:
+	'_REMOVE'
+|	'_INSERT'
+|	'_COUNT'
+|   '_CLK';
+
+NamedID:
+	name=ID
+;
+
+JavaQualifiedName:
+	ID ('.' ID)*;
