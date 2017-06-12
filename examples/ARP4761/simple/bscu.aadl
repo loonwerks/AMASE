@@ -319,7 +319,6 @@ annex EMV2 {**
 
 annex AGREE {**
 		
-    -- The fault connecton to Select_Alternate
 	eq nominal_Select_Alternate : bool;	
 	
 	-- Both pedals pressed
