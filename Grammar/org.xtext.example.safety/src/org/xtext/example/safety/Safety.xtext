@@ -1,5 +1,9 @@
+
 //grammar org.xtext.example.safety.Safety with org.eclipse.xtext.common.Terminals
 grammar org.xtext.example.safety.Safety with org.osate.xtext.aadl2.properties.Properties
+
+//grammar org.xtext.example.safety.Safety with org.osate.xtext.aadl2.properties.Properties
+
 
 generate safety "http://www.xtext.org/example/safety/Safety"
 
