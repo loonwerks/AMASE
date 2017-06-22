@@ -34,7 +34,7 @@ FaultSubcomponent:
 // 		trigger: transient [0,1]
 // will stand for time steps 0 and 1?
 	| {DurationStatement} 'duration' ':' TemporalConstraint interv=[agree::TimeInterval] ';'
-	| {TriggerStatement} 'trigger' ':' TriggerCondition expr_list=ExprList '['probability=[agree::Arg] ']'
+	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=[agree::Arg] ']' ';'
 	| EqStatement ;
 	
 // Currently, these are represented as keywords. 
@@ -42,13 +42,10 @@ TemporalConstraint:
 	'permanent' | 'transient'
 ;
 
-// Something like this? 
-//
-// 'must' ':' 'if' expr=Expr 'then' fault=ID 'occurred';'
-// 
-// 'enabler' ':' 'if' expr=Expr 'then' fault=ID 'possible' ';' 
+// ' 
 TriggerCondition:
-	'must' | 'enabler'
+	'must' '{' expr=ExprList '}' 
+  | 'enabler' '{' expr=ExprList '}'  
 ;
 	
 
