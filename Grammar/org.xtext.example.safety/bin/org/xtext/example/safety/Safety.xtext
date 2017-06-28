@@ -47,8 +47,8 @@ TemporalConstraint:
 
 // ' 
 TriggerCondition:
-	'must' '{' expr=ExprList '}' 
-  | 'enabler' '{' expr=ExprList '}'  
+	'must' '{' exprList+=([agree::Expr])* '}' 
+  | 'enabler' '{' exprList+=([agree::Expr])* '}'  
 ;
 	
 
@@ -58,22 +58,10 @@ TriggerCondition:
 EqStatement:
 	'eq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*) ('=' expr=[agree::Expr])? ';'
    | 'intervaleq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*)('=' expr=[agree::TimeInterval])
-   | 'seteq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*)('=' '{'exprList=ExprList '}')
+   | 'seteq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*)('=' '{'exprList+=([agree::Expr])* '}')
 	
 	;
 
 
-// Used for TriggerStatements and nondeterminism
-ExprList returns ExprList:
-	Expr=[agree::Expr]
-	| Expr=[agree::Expr] ',' list=ExprList
-;
 
-// Used to extend grammar in order to capture nondeterminism (range)
-IntervalExpr returns Expr:
-    =>({ClosedIntervalExpr} '[' low=[agree::Expr] ',' high=[agree::Expr] ']')
-   | =>({OpenLeftIntervalExpr} '(' low=[agree::Expr] ',' high=[agree::Expr]']')
-   | =>({OpenRightIntervalExpr} '[' low=[agree::Expr] ',' high=[agree::Expr] ')')
-   | =>({OpenIntervalExpr} '(' low=[agree::Expr] ',' high=[agree::Expr] ')') 	
-;
 
