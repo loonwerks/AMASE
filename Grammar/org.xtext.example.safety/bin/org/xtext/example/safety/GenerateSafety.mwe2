@@ -2,10 +2,33 @@ module org.xtext.example.safety.GenerateSafety
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
+import org.osate.xtext.aadl2
+import org.eclipse.emf.mwe.utils.*
+import org.eclipse.xtext.generator.*
+import org.eclipse.xtext.ui.generator.*
+
 
 var rootPath = ".."
 
 Workflow {
+   bean = StandaloneSetup {
+    platformUri = "${rootPath}"
+    scanClassPath = true
+      registerGeneratedEPackage = "org.eclipse.emf.ecore.EcorePackage"
+      registerGeneratedEPackage = "org.eclipse.uml2.types.TypesPackage"
+      registerGeneratedEPackage = "org.eclipse.uml2.uml.UMLPackage"
+      registerGeneratedEPackage = "org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage"
+      registerGeneratedEPackage = "org.eclipse.uml2.codegen.ecore.genmodel.GenModelPackage"
+      registerGenModelFile = "platform:/resource/org.eclipse.emf.ecore/model/Ecore.genmodel"
+      registerGenModelFile = "platform:/resource/org.eclipse.emf.codegen.ecore/model/GenModel.genmodel"
+      registerGenModelFile = "platform:/resource/org.eclipse.uml2.types/model/Types.genmodel"
+      registerGenModelFile = "platform:/resource/org.eclipse.uml2.uml/model/UML.genmodel"
+      registerGenModelFile = "platform:/resource/org.eclipse.uml2.codegen.ecore/model/GenModel.genmodel"
+      registerGeneratedEPackage = "org.osate.aadl2.Aadl2Package"
+      registerGenModelFile = "platform:/resource/org.osate.aadl2/model/aadl2.genmodel"
+      registerGeneratedEPackage = "com.rockwellcollins.atc.agree.agree.AgreePackage"
+      registerGenModelFile = "platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.genmodel"
+   }
 	
 	component = XtextGenerator {
 		configuration = {
@@ -32,7 +55,6 @@ Workflow {
 		language = StandardLanguage {
 			name = "org.xtext.example.safety.Safety"
 			fileExtensions = "safety"
-
 			serializer = {
 				generateStub = false
 			}

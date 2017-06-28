@@ -1,8 +1,4 @@
-//grammar org.xtext.example.safety.Safety with org.eclipse.xtext.common.Terminals
 grammar org.xtext.example.safety.Safety with org.osate.xtext.aadl2.properties.Properties
-
-//grammar org.xtext.example.safety.Safety with org.osate.xtext.aadl2.properties.Properties
-
 
 generate safety "http://www.xtext.org/example/safety/Safety"
 
@@ -24,14 +20,13 @@ SafetySubclause:
 SafetyContract returns Contract:
 	{SafetyContract} (specs+=SpecStatement)*;
 
-SpecStatement:
-	{FaultStatement} 'fault' str=STRING ':'  faultDefName=ID  
+SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=ID  
 			faultDefinitions+=(FaultSubcomponent)* ;
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
-	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
+	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' ;
+/*	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 // For duration, will a time interval cover the case when we are dealing with time steps?
 // For instance: 
 // 		trigger: transient [0,1]
@@ -77,3 +72,4 @@ IntervalExpr returns Expr:
    | =>({OpenIntervalExpr} '(' low=[agree::Expr] ',' high=[agree::Expr] ')') 	
 ;
 
+*/
