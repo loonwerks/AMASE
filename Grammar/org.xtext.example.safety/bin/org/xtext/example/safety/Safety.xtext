@@ -1,13 +1,19 @@
-grammar org.xtext.example.safety.Safety with org.osate.xtext.aadl2.properties.Properties
+grammar org.xtext.example.safety.Safety with com.rockwellcollins.atc.agree.Agree
 
 generate safety "http://www.xtext.org/example/safety/Safety"
 
 import "http://aadl.info/AADL/2.0" as aadl2
 import "http://www.rockwellcollins.com/atc/agree/Agree" as agree
 
+
+Foo : 'expr' expr=Expr;
+
+/* 
+@Override
 AnnexLibrary returns aadl2::AnnexLibrary:
 	SafetyLibrary;
 
+@Override
 AnnexSubclause returns aadl2::AnnexSubclause:
 	SafetySubclause;
 
@@ -25,21 +31,22 @@ SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=ID
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' ;
-/*	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
+	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';' 
+	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' ; 
 // For duration, will a time interval cover the case when we are dealing with time steps?
 // For instance: 
 // 		trigger: transient [0,1]
 // will stand for time steps 0 and 1?
-	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=[agree::TimeInterval] ';'
-	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=[agree::Arg] ']' ';'
+ 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=[agree::TimeInterval] ';' ; 
+ 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=[agree::Arg] ']' ';'
 	| EqStatement ;
+*/
 	
 // Currently, these are represented as keywords. 
 TemporalConstraint:
 	'permanent' | 'transient'
 ;
-
+/* 
 // ' 
 TriggerCondition:
 	'must' '{' expr=ExprList '}' 
