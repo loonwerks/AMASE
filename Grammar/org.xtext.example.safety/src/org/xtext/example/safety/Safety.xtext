@@ -8,7 +8,7 @@ import "http://www.rockwellcollins.com/atc/agree/Agree" as agree
 
 Foo : 'expr' expr=Expr;
 
-/* 
+ 
 @Override
 AnnexLibrary returns aadl2::AnnexLibrary:
 	SafetyLibrary;
@@ -26,57 +26,45 @@ SafetySubclause:
 SafetyContract returns Contract:
 	{SafetyContract} (specs+=SpecStatement)*;
 
+@Override 
 SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=ID  
 			faultDefinitions+=(FaultSubcomponent)* ;
 	
 
 FaultSubcomponent: 
 	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';' 
-	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' ; 
+	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' 
 // For duration, will a time interval cover the case when we are dealing with time steps?
 // For instance: 
 // 		trigger: transient [0,1]
 // will stand for time steps 0 and 1?
- 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=[agree::TimeInterval] ';' ; 
- 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=[agree::Arg] ']' ';'
+ 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
+ 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=Arg ']' ';'
 	| EqStatement ;
-*/
+
 	
 // Currently, these are represented as keywords. 
 TemporalConstraint:
 	'permanent' | 'transient'
 ;
-/* 
+
 // ' 
 TriggerCondition:
-	'must' '{' expr=ExprList '}' 
-  | 'enabler' '{' expr=ExprList '}'  
+	'must' '{' exprList+=(Expr)* '}' 
+  | 'enabler' '{' exprList+=(Expr)* '}'  
 ;
 	
 
 // An eq statement can be an agree eq statement ('eq'...) or 
 // an interval or a set of discrete values/expressions.
 // 			Question: do we want expressions to be allowed in the set eq statement?
+@Override 
 EqStatement:
-	'eq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*) ('=' expr=[agree::Expr])? ';'
-   | 'intervaleq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*)('=' expr=[agree::TimeInterval])
-   | 'seteq' (lhs+=[agree::Arg] (',' lhs+=[agree::Arg])*)('=' '{'exprList=ExprList '}')
+	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+   | 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*)('=' interv=TimeInterval)
+   | 'seteq' (lhs+=Arg (',' lhs+=Arg)*)('=' '{'exprList+=(Expr)* '}')
 	
 	;
 
 
-// Used for TriggerStatements and nondeterminism
-ExprList returns ExprList:
-	Expr=[agree::Expr]
-	| Expr=[agree::Expr] ',' list=ExprList
-;
 
-// Used to extend grammar in order to capture nondeterminism (range)
-IntervalExpr returns Expr:
-    =>({ClosedIntervalExpr} '[' low=[agree::Expr] ',' high=[agree::Expr] ']')
-   | =>({OpenLeftIntervalExpr} '(' low=[agree::Expr] ',' high=[agree::Expr]']')
-   | =>({OpenRightIntervalExpr} '[' low=[agree::Expr] ',' high=[agree::Expr] ')')
-   | =>({OpenIntervalExpr} '(' low=[agree::Expr] ',' high=[agree::Expr] ')') 	
-;
-
-*/

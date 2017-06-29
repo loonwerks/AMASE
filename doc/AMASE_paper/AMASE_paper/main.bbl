@@ -1,0 +1,159 @@
+\begin{thebibliography}{10}
+
+\bibitem{AADL}
+{AADL}.
+\newblock {Predictable Model-Based Engineering}.
+
+\bibitem{AIR6110}
+{AIR 6110}.
+\newblock {Contiguous Aircraft/System Development Process Example}, Dec. 2011.
+
+\bibitem{QFCS15:backes}
+J.~Backes, D.~Cofer, S.~Miller, and M.~W. Whalen.
+\newblock {Requirements Analysis of a Quad-Redundant Flight Control System}.
+\newblock In K.~Havelund, G.~Holzmann, and R.~Joshi, editors, {\em {NASA Formal
+  Methods}}, volume 9058 of {\em Lecture Notes in Computer Science}, pages
+  82--96. Springer International Publishing, 2015.
+
+\bibitem{DBLP:conf/tacas/BittnerBCCGGMMZ16}
+B.~Bittner, M.~Bozzano, R.~Cavada, A.~Cimatti, M.~Gario, A.~Griggio,
+  C.~Mattarei, A.~Micheli, and G.~Zampedri.
+\newblock {The x{SAP} Safety Analysis Platform}.
+\newblock In {\em Tools and Algorithms for the Construction and Analysis of
+  Systems - 22nd International Conference, {TACAS} 2016, Held as Part of the
+  European Joint Conferences on Theory and Practice of Software, {ETAPS} 2016,
+  Eindhoven, The Netherlands, April 2-8, 2016, Proceedings}, pages 533--539,
+  2016.
+
+\bibitem{DBLP:conf/cav/BozzanoCPJKPRT15}
+M.~Bozzano, A.~Cimatti, A.~F. Pires, D.~Jones, G.~Kimberly, T.~Petri,
+  R.~Robinson, and S.~Tonetta.
+\newblock {Formal Design and Safety Analysis of {AIR6110} Wheel Brake System}.
+\newblock In {\em Computer Aided Verification - 27th International Conference,
+  {CAV} 2015, San Francisco, CA, USA, July 18-24, 2015, Proceedings, Part {I}},
+  pages 518--535, 2015.
+
+\bibitem{CHEN201391}
+D.~Chen, N.~Mahmud, M.~Walker, L.~Feng, H.~LÃ¶nn, and Y.~Papadopoulos.
+\newblock {Systems Modeling with {EAST-ADL} for Fault Tree Analysis through
+  {HiP-HOPS}*}.
+\newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
+
+\bibitem{DBLP:journals/scp/CimattiT15}
+A.~Cimatti and S.~Tonetta.
+\newblock {Contracts-Refinement Proof System for Component-Based Embedded
+  System}, journal = {Sci. Comput. Program.}, volume = {97}, pages =
+  {333--348}, year = {2015}, url =
+  {http://dx.doi.org/10.1016/j.scico.2014.06.011}, doi =
+  {10.1016/j.scico.2014.06.011}, timestamp = {Fri, 30 Jan 2015 18:56:15 +0100},
+  biburl = {http://dblp.uni-trier.de/rec/bib/journals/scp/CimattiT15},
+  bibsource = {dblp computer science bibliography, http://dblp.org}.
+
+\bibitem{NFM2012:CoGaMiWhLaLu}
+D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
+\newblock {Compositional Verification of Architectural Models}.
+\newblock In A.~E. Goodloe and S.~Person, editors, {\em Proceedings of the 4th
+  NASA Formal Methods Symposium (NFM 2012)}, volume 7226, pages 126--140,
+  Berlin, Heidelberg, April 2012. Springer-Verlag.
+
+\bibitem{SEI:AADL}
+J.~Delange, P.~Feiler, D.~P. Gluch, and J.~Hudak.
+\newblock {{AADL} Fault Modeling and Analysis Within an {ARP4761} Safety
+  Assessment}.
+\newblock Technical Report CMU/SEI-2014-TR-020, Software Engineering Institute:
+  Carnegie Mellon University, October 2014.
+
+\bibitem{SysML}
+S.~Friedenthal, A.~Moore, and R.~Steiner.
+\newblock {\em {A Practical Guide to {S}ys{ML}}}.
+\newblock Morgan Kaufman Pub, 2008.
+
+\bibitem{Halbwachs91:IEEE}
+N.~Halbwachs, P.~Caspi, P.~Raymond, and D.~Pilaud.
+\newblock {The Synchronous Dataflow Programming Language Lustre}.
+\newblock In {\em {In Proceedings of the IEEE}}, volume 79(9), pages
+  1305--1320, 1991.
+
+\bibitem{info8010007}
+P.~Hönig, R.~Lunde, and F.~Holzapfel.
+\newblock {Model Based Safety Analysis with smartIflow }†.
+\newblock {\em Information}, 8(1), 2017.
+
+\bibitem{Joshi05:SafeComp}
+A.~Joshi and M.~P. Heimdahl.
+\newblock {Model-Based Safety Analysis of Simulink Models Using SCADE Design
+  Verifier}.
+\newblock In {\em SAFECOMP}, volume 3688 of {\em LNCS}, page 122, 2005.
+
+\bibitem{Joshi07:Hase}
+A.~Joshi and M.~P. Heimdahl.
+\newblock {Behavioral Fault Modeling for Model-based Safety Analysis}.
+\newblock In {\em {Proceedings of the 10th IEEE High Assurance Systems
+  Engineering Symposium (HASE)}}, 2007.
+
+\bibitem{Joshi05:Dasc}
+A.~Joshi, S.~P. Miller, M.~Whalen, and M.~P. Heimdahl.
+\newblock {A Proposal for Model-Based Safety Analysis}.
+\newblock In {\em {In Proceedings of 24th Digital Avionics Systems Conference
+  (Awarded Best Paper of Track)}}, 2005.
+
+\bibitem{NasaRep:MBSA-Aug05}
+A.~Joshi, M.~Whalen, and M.~P. Heimdahl.
+\newblock {Automated Safety Analysis Draft Final Report}.
+\newblock Report for NASA Contract NCC-01001, August 2005.
+
+\bibitem{Larson:2013:IAE:2527269.2527271}
+B.~Larson, J.~Hatcliff, K.~Fowler, and J.~Delange.
+\newblock {Illustrating the {AADL} Error Modeling Annex (V.2) Using a Simple
+  Safety-critical Medical Device}.
+\newblock In {\em Proceedings of the 2013 ACM SIGAda Annual Conference on High
+  Integrity Language Technology}, HILT '13, pages 65--84, New York, NY, USA,
+  2013. ACM.
+
+\bibitem{5979344}
+O.~Lisagor, T.~Kelly, and R.~Niu.
+\newblock {Model-based safety assessment: Review of the discipline and its
+  challenges}.
+\newblock In {\em The Proceedings of 2011 9th International Conference on
+  Reliability, Maintainability and Safety}, pages 625--632, June 2011.
+
+\bibitem{MathWorks}
+Math{W}orks.
+\newblock {The {M}ath{W}orks {I}nc. {S}imulink Product Web Site}.
+\newblock http://www.mathworks.com/products/simulink, 2004.
+
+\bibitem{hilt2013}
+A.~Murugesan, M.~W. Whalen, S.~Rayadurgam, and M.~P. Heimdahl.
+\newblock {Compositional Verification of a Medical Device System}.
+\newblock In {\em ACM Int'l Conf. on High Integrity Language Technology (HILT)
+  2013}. ACM, November 2013.
+
+\bibitem{Pajic2012}
+M.~Pajic, R.~Mangharam, O.~Sokolsky, D.~Arney, J.~Goldman, and I.~Lee.
+\newblock {Model-Driven Safety Analysis of Closed-Loop Medical Systems}.
+\newblock {\em Industrial Informatics, IEEE Transactions on}, PP:1--12, 2012.
+\newblock In early online access.
+
+\bibitem{PROSVIRNOVA2013127}
+T.~Prosvirnova, M.~Batteux, P.-A. Brameret, A.~Cherfi, T.~Friedlhuber, J.-M.
+  Roussel, and A.~Rauzy.
+\newblock {The {A}lta{R}ica 3.0 Project for Model-Based Safety Assessment}.
+\newblock {\em IFAC Proceedings Volumes}, 46(22):127 -- 132, 2013.
+
+\bibitem{SAE:ARP4761}
+{SAE ARP 4761}.
+\newblock {Guidelines and Methods for Conducting the Safety Assessment Process
+  on Civil Airborne Systems and Equipment}, December 1996.
+
+\bibitem{SAEAS}
+{SAE AS 5506B-3}.
+\newblock Aadl annex volume 1, Sept. 2015.
+
+\bibitem{DBLP:conf/adaEurope/SokolskyLC09}
+O.~Sokolsky, I.~Lee, and D.~Clarke.
+\newblock {Process-Algebraic Interpretation of {AADL} Models}.
+\newblock In {\em Reliable Software Technologies - Ada-Europe 2009, 14th
+  Ada-Europe International Conference, Brest, France, June 8-12, 2009.
+  Proceedings}, pages 222--236, 2009.
+
+\end{thebibliography}
