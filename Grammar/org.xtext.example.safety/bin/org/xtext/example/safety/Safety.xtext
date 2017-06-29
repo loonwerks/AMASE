@@ -5,9 +5,6 @@ generate safety "http://www.xtext.org/example/safety/Safety"
 import "http://aadl.info/AADL/2.0" as aadl2
 import "http://www.rockwellcollins.com/atc/agree/Agree" as agree
 
-
-Foo : 'expr' expr=Expr;
-
  
 @Override
 AnnexLibrary returns aadl2::AnnexLibrary:
