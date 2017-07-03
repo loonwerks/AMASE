@@ -15,13 +15,13 @@ public class FaultNode implements FaultASTElement{
 //    };
 
     public final String id;
-    public final List<FaultInput> inputs;
-    public final List<FaultOutput> outputs;
+    public final List<FaultVar> inputs;
+    public final List<FaultVar> outputs;
     public final List<FaultDuration> duration;
     public final List<FaultTrigger> triggers;
     
 
-    public FaultNode(String id, List<FaultInput> inputs, List<FaultOutput> outputs, 
+    public FaultNode(String id, List<FaultVar> inputs, List<FaultVar> outputs, 
     				List<FaultDuration> duration, List<FaultTrigger> triggers) {
         this.id = id;
         //this.inputs = jkind.util.Util.safeList(inputs);
