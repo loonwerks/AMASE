@@ -29,7 +29,7 @@ SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=ID
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';' 
+	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' 
 	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' 
 // For duration, will a time interval cover the case when we are dealing with time steps?
 // For instance: 
