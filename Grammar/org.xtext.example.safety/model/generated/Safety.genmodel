@@ -7,9 +7,6 @@
     editorPluginID="org.xtext.example.safety.editor" runtimeVersion="2.11" usedGenPackages="platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.genmodel#//agree platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore platform:/resource/org.osate.aadl2/model/aadl2.genmodel#//aadl2">
   <genPackages prefix="Safety" basePackage="org.xtext.example.safety" disposableProviderFactory="true"
       ecorePackage="Safety.ecore#/">
-    <genClasses ecoreClass="Safety.ecore#//Foo">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Foo/expr"/>
-    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SafetyLibrary"/>
     <genClasses ecoreClass="Safety.ecore#//SafetySubclause"/>
     <genClasses ecoreClass="Safety.ecore#//Contract"/>
@@ -52,6 +49,9 @@
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/probability"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//Foo">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Foo/expr"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -25,7 +25,7 @@ public class SafetyParser extends org.eclipse.xtext.parser.antlr.AbstractAntlrPa
 	
 	@Override 
 	protected String getDefaultRuleName() {
-		return "Foo";
+		return "AnnexLibrary";
 	}
 	
 	public SafetyGrammarAccess getGrammarAccess() {

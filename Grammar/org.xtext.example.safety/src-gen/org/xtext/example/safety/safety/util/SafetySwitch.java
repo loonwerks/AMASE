@@ -78,13 +78,6 @@ public class SafetySwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
-      case SafetyPackage.FOO:
-      {
-        Foo foo = (Foo)theEObject;
-        T result = caseFoo(foo);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SafetyPackage.SAFETY_LIBRARY:
       {
         SafetyLibrary safetyLibrary = (SafetyLibrary)theEObject;
@@ -222,22 +215,6 @@ public class SafetySwitch<T> extends Switch<T>
       }
       default: return defaultCase(theEObject);
     }
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Foo</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Foo</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseFoo(Foo object)
-  {
-    return null;
   }
 
   /**

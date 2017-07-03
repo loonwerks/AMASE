@@ -99,7 +99,6 @@ import org.osate.aadl2.StringLiteral;
 import org.xtext.example.safety.safety.DurationStatement;
 import org.xtext.example.safety.safety.EqStatement;
 import org.xtext.example.safety.safety.FaultStatement;
-import org.xtext.example.safety.safety.Foo;
 import org.xtext.example.safety.safety.OutputStatement;
 import org.xtext.example.safety.safety.SafetyContract;
 import org.xtext.example.safety.safety.SafetyContractLibrary;
@@ -418,9 +417,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
 				return; 
-			case SafetyPackage.FOO:
-				sequence_Foo(context, (Foo) semanticObject); 
-				return; 
 			case SafetyPackage.INPUT_STATEMENT:
 				sequence_FaultSubcomponent(context, (org.xtext.example.safety.safety.InputStatement) semanticObject); 
 				return; 
@@ -532,24 +528,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_3_3_0(), semanticObject.getCond());
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getProbabilityArgParserRuleCall_3_5_0(), semanticObject.getProbability());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     Foo returns Foo
-	 *
-	 * Constraint:
-	 *     expr=Expr
-	 */
-	protected void sequence_Foo(ISerializationContext context, Foo semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FOO__EXPR) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FOO__EXPR));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFooAccess().getExprExprParserRuleCall_1_0(), semanticObject.getExpr());
 		feeder.finish();
 	}
 	

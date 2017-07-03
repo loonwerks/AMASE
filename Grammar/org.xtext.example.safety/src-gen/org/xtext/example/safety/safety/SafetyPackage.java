@@ -61,34 +61,6 @@ public interface SafetyPackage extends EPackage
   SafetyPackage eINSTANCE = org.xtext.example.safety.safety.impl.SafetyPackageImpl.init();
 
   /**
-   * The meta object id for the '{@link org.xtext.example.safety.safety.impl.FooImpl <em>Foo</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.xtext.example.safety.safety.impl.FooImpl
-   * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getFoo()
-   * @generated
-   */
-  int FOO = 0;
-
-  /**
-   * The feature id for the '<em><b>Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FOO__EXPR = 0;
-
-  /**
-   * The number of structural features of the '<em>Foo</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FOO_FEATURE_COUNT = 1;
-
-  /**
    * The meta object id for the '{@link org.xtext.example.safety.safety.impl.SafetyLibraryImpl <em>Library</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -96,7 +68,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getSafetyLibrary()
    * @generated
    */
-  int SAFETY_LIBRARY = 1;
+  int SAFETY_LIBRARY = 0;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -160,7 +132,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getSafetySubclause()
    * @generated
    */
-  int SAFETY_SUBCLAUSE = 2;
+  int SAFETY_SUBCLAUSE = 1;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -233,7 +205,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getContract()
    * @generated
    */
-  int CONTRACT = 3;
+  int CONTRACT = 2;
 
   /**
    * The number of structural features of the '<em>Contract</em>' class.
@@ -252,7 +224,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getSpecStatement()
    * @generated
    */
-  int SPEC_STATEMENT = 4;
+  int SPEC_STATEMENT = 3;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -289,7 +261,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getFaultSubcomponent()
    * @generated
    */
-  int FAULT_SUBCOMPONENT = 5;
+  int FAULT_SUBCOMPONENT = 4;
 
   /**
    * The number of structural features of the '<em>Fault Subcomponent</em>' class.
@@ -308,7 +280,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getTriggerCondition()
    * @generated
    */
-  int TRIGGER_CONDITION = 6;
+  int TRIGGER_CONDITION = 5;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -336,7 +308,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getEqStatement()
    * @generated
    */
-  int EQ_STATEMENT = 7;
+  int EQ_STATEMENT = 6;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -409,7 +381,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getSafetyContractLibrary()
    * @generated
    */
-  int SAFETY_CONTRACT_LIBRARY = 8;
+  int SAFETY_CONTRACT_LIBRARY = 7;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -482,7 +454,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getSafetyContractSubclause()
    * @generated
    */
-  int SAFETY_CONTRACT_SUBCLAUSE = 9;
+  int SAFETY_CONTRACT_SUBCLAUSE = 8;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -564,7 +536,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getSafetyContract()
    * @generated
    */
-  int SAFETY_CONTRACT = 10;
+  int SAFETY_CONTRACT = 9;
 
   /**
    * The feature id for the '<em><b>Specs</b></em>' containment reference list.
@@ -592,7 +564,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getFaultStatement()
    * @generated
    */
-  int FAULT_STATEMENT = 11;
+  int FAULT_STATEMENT = 10;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -656,7 +628,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 12;
+  int INPUT_STATEMENT = 11;
 
   /**
    * The feature id for the '<em><b>In conn</b></em>' reference.
@@ -702,7 +674,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 13;
+  int OUTPUT_STATEMENT = 12;
 
   /**
    * The feature id for the '<em><b>Out conn</b></em>' attribute.
@@ -739,7 +711,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 14;
+  int DURATION_STATEMENT = 13;
 
   /**
    * The feature id for the '<em><b>Tc</b></em>' attribute.
@@ -776,7 +748,7 @@ public interface SafetyPackage extends EPackage
    * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 15;
+  int TRIGGER_STATEMENT = 14;
 
   /**
    * The feature id for the '<em><b>Cond</b></em>' containment reference.
@@ -805,27 +777,6 @@ public interface SafetyPackage extends EPackage
    */
   int TRIGGER_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
 
-
-  /**
-   * Returns the meta object for class '{@link org.xtext.example.safety.safety.Foo <em>Foo</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Foo</em>'.
-   * @see org.xtext.example.safety.safety.Foo
-   * @generated
-   */
-  EClass getFoo();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.xtext.example.safety.safety.Foo#getExpr <em>Expr</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Expr</em>'.
-   * @see org.xtext.example.safety.safety.Foo#getExpr()
-   * @see #getFoo()
-   * @generated
-   */
-  EReference getFoo_Expr();
 
   /**
    * Returns the meta object for class '{@link org.xtext.example.safety.safety.SafetyLibrary <em>Library</em>}'.
@@ -1198,24 +1149,6 @@ public interface SafetyPackage extends EPackage
    */
   interface Literals
   {
-    /**
-     * The meta object literal for the '{@link org.xtext.example.safety.safety.impl.FooImpl <em>Foo</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.xtext.example.safety.safety.impl.FooImpl
-     * @see org.xtext.example.safety.safety.impl.SafetyPackageImpl#getFoo()
-     * @generated
-     */
-    EClass FOO = eINSTANCE.getFoo();
-
-    /**
-     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FOO__EXPR = eINSTANCE.getFoo_Expr();
-
     /**
      * The meta object literal for the '{@link org.xtext.example.safety.safety.impl.SafetyLibraryImpl <em>Library</em>}' class.
      * <!-- begin-user-doc -->

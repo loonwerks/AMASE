@@ -87,7 +87,6 @@ import org.xtext.example.safety.services.SafetyGrammarAccess;
 		tokenNameToValue.put("Each", "'each'");
 		tokenNameToValue.put("Else", "'else'");
 		tokenNameToValue.put("Enum", "'enum'");
-		tokenNameToValue.put("Expr", "'expr'");
 		tokenNameToValue.put("Must", "'must'");
 		tokenNameToValue.put("Node", "'node'");
 		tokenNameToValue.put("Over", "'over'");
@@ -174,33 +173,31 @@ import org.xtext.example.safety.services.SafetyGrammarAccess;
 
 
 
-// Entry rule entryRuleFoo
-entryRuleFoo 
+// Entry rule entryRuleAnnexLibrary
+entryRuleAnnexLibrary 
 :
-{ before(grammarAccess.getFooRule()); }
-	 ruleFoo
-{ after(grammarAccess.getFooRule()); } 
+{ before(grammarAccess.getAnnexLibraryRule()); }
+	 ruleAnnexLibrary
+{ after(grammarAccess.getAnnexLibraryRule()); } 
 	 EOF 
 ;
 
-// Rule Foo
-ruleFoo 
+// Rule AnnexLibrary
+ruleAnnexLibrary 
     @init {
 		int stackSize = keepStackSize();
     }
     :
 (
-{ before(grammarAccess.getFooAccess().getGroup()); }
-(rule__Foo__Group__0)
-{ after(grammarAccess.getFooAccess().getGroup()); }
+{ before(grammarAccess.getAnnexLibraryAccess().getSafetyLibraryParserRuleCall()); }
+	ruleSafetyLibrary
+{ after(grammarAccess.getAnnexLibraryAccess().getSafetyLibraryParserRuleCall()); }
 )
 
 ;
 finally {
 	restoreStackSize(stackSize);
 }
-
-
 
 
 
@@ -3626,69 +3623,6 @@ rule__NumAlt__Alternatives
 finally {
 	restoreStackSize(stackSize);
 }
-
-
-
-rule__Foo__Group__0
-    @init {
-		int stackSize = keepStackSize();
-    }
-:
-	rule__Foo__Group__0__Impl
-	rule__Foo__Group__1
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-rule__Foo__Group__0__Impl
-    @init {
-		int stackSize = keepStackSize();
-    }
-:
-(
-{ before(grammarAccess.getFooAccess().getExprKeyword_0()); }
-
-	Expr 
-
-{ after(grammarAccess.getFooAccess().getExprKeyword_0()); }
-)
-
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-
-rule__Foo__Group__1
-    @init {
-		int stackSize = keepStackSize();
-    }
-:
-	rule__Foo__Group__1__Impl
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-rule__Foo__Group__1__Impl
-    @init {
-		int stackSize = keepStackSize();
-    }
-:
-(
-{ before(grammarAccess.getFooAccess().getExprAssignment_1()); }
-(rule__Foo__ExprAssignment_1)
-{ after(grammarAccess.getFooAccess().getExprAssignment_1()); }
-)
-
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-
-
 
 
 
@@ -24489,21 +24423,6 @@ finally {
 
 
 
-
-rule__Foo__ExprAssignment_1
-    @init {
-		int stackSize = keepStackSize();
-    }
-:
-(
-{ before(grammarAccess.getFooAccess().getExprExprParserRuleCall_1_0()); }
-	ruleExpr{ after(grammarAccess.getFooAccess().getExprExprParserRuleCall_1_0()); }
-)
-
-;
-finally {
-	restoreStackSize(stackSize);
-}
 
 rule__SafetyLibrary__ContractAssignment_1
     @init {

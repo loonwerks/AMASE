@@ -19,30 +19,6 @@ import org.osate.xtext.aadl2.properties.services.PropertiesGrammarAccess;
 public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	
 	
-	public class FooElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.safety.Safety.Foo");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cExprKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cExprAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cExprExprParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
-		
-		//Foo:
-		//	'expr' expr=Expr;
-		@Override public ParserRule getRule() { return rule; }
-
-		//'expr' expr=Expr
-		public Group getGroup() { return cGroup; }
-
-		//'expr'
-		public Keyword getExprKeyword_0() { return cExprKeyword_0; }
-
-		//expr=Expr
-		public Assignment getExprAssignment_1() { return cExprAssignment_1; }
-
-		//Expr
-		public RuleCall getExprExprParserRuleCall_1_0() { return cExprExprParserRuleCall_1_0; }
-	}
-
 	public class AnnexLibraryElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.safety.Safety.AnnexLibrary");
 		private final RuleCall cSafetyLibraryParserRuleCall = (RuleCall)rule.eContents().get(1);
@@ -669,7 +645,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	
-	private final FooElements pFoo;
 	private final AnnexLibraryElements pAnnexLibrary;
 	private final AnnexSubclauseElements pAnnexSubclause;
 	private final SafetyLibraryElements pSafetyLibrary;
@@ -694,7 +669,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaAgree = gaAgree;
 		this.gaProperties = gaProperties;
-		this.pFoo = new FooElements();
 		this.pAnnexLibrary = new AnnexLibraryElements();
 		this.pAnnexSubclause = new AnnexSubclauseElements();
 		this.pSafetyLibrary = new SafetyLibraryElements();
@@ -738,16 +712,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	
-	//Foo:
-	//	'expr' expr=Expr;
-	public FooElements getFooAccess() {
-		return pFoo;
-	}
-	
-	public ParserRule getFooRule() {
-		return getFooAccess().getRule();
-	}
-
 	//@ Override AnnexLibrary aadl2::AnnexLibrary:
 	//	SafetyLibrary;
 	public AnnexLibraryElements getAnnexLibraryAccess() {

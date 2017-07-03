@@ -19,7 +19,6 @@ import org.xtext.example.safety.safety.DurationStatement;
 import org.xtext.example.safety.safety.EqStatement;
 import org.xtext.example.safety.safety.FaultStatement;
 import org.xtext.example.safety.safety.FaultSubcomponent;
-import org.xtext.example.safety.safety.Foo;
 import org.xtext.example.safety.safety.InputStatement;
 import org.xtext.example.safety.safety.OutputStatement;
 import org.xtext.example.safety.safety.SafetyContract;
@@ -41,13 +40,6 @@ import org.xtext.example.safety.safety.TriggerStatement;
  */
 public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 {
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass fooEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -217,26 +209,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(SafetyPackage.eNS_URI, theSafetyPackage);
     return theSafetyPackage;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getFoo()
-  {
-    return fooEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getFoo_Expr()
-  {
-    return (EReference)fooEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -599,9 +571,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     isCreated = true;
 
     // Create classes and their features
-    fooEClass = createEClass(FOO);
-    createEReference(fooEClass, FOO__EXPR);
-
     safetyLibraryEClass = createEClass(SAFETY_LIBRARY);
 
     safetySubclauseEClass = createEClass(SAFETY_SUBCLAUSE);
@@ -676,8 +645,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     setNsURI(eNS_URI);
 
     // Obtain other dependent packages
-    AgreePackage theAgreePackage = (AgreePackage)EPackage.Registry.INSTANCE.getEPackage(AgreePackage.eNS_URI);
     Aadl2Package theAadl2Package = (Aadl2Package)EPackage.Registry.INSTANCE.getEPackage(Aadl2Package.eNS_URI);
+    AgreePackage theAgreePackage = (AgreePackage)EPackage.Registry.INSTANCE.getEPackage(AgreePackage.eNS_URI);
     EcorePackage theEcorePackage = (EcorePackage)EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
 
     // Create type parameters
@@ -700,9 +669,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(fooEClass, Foo.class, "Foo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFoo_Expr(), theAgreePackage.getExpr(), null, "expr", null, 0, 1, Foo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     initEClass(safetyLibraryEClass, SafetyLibrary.class, "SafetyLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(safetySubclauseEClass, SafetySubclause.class, "SafetySubclause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

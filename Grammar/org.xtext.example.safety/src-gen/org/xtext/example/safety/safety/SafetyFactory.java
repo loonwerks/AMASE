@@ -23,15 +23,6 @@ public interface SafetyFactory extends EFactory
   SafetyFactory eINSTANCE = org.xtext.example.safety.safety.impl.SafetyFactoryImpl.init();
 
   /**
-   * Returns a new object of class '<em>Foo</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Foo</em>'.
-   * @generated
-   */
-  Foo createFoo();
-
-  /**
    * Returns a new object of class '<em>Library</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

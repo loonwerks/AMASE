@@ -78,7 +78,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSignedIntAccess().getAlternatives_0(), "rule__SignedInt__Alternatives_0");
 					put(grammarAccess.getSignedRealAccess().getAlternatives_0(), "rule__SignedReal__Alternatives_0");
 					put(grammarAccess.getNumAltAccess().getAlternatives(), "rule__NumAlt__Alternatives");
-					put(grammarAccess.getFooAccess().getGroup(), "rule__Foo__Group__0");
 					put(grammarAccess.getSafetyLibraryAccess().getGroup(), "rule__SafetyLibrary__Group__0");
 					put(grammarAccess.getSafetySubclauseAccess().getGroup(), "rule__SafetySubclause__Group__0");
 					put(grammarAccess.getSafetyContractAccess().getGroup(), "rule__SafetyContract__Group__0");
@@ -314,7 +313,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getQCREFAccess().getGroup(), "rule__QCREF__Group__0");
 					put(grammarAccess.getQCREFAccess().getGroup_0(), "rule__QCREF__Group_0__0");
 					put(grammarAccess.getQCREFAccess().getGroup_2(), "rule__QCREF__Group_2__0");
-					put(grammarAccess.getFooAccess().getExprAssignment_1(), "rule__Foo__ExprAssignment_1");
 					put(grammarAccess.getSafetyLibraryAccess().getContractAssignment_1(), "rule__SafetyLibrary__ContractAssignment_1");
 					put(grammarAccess.getSafetySubclauseAccess().getContractAssignment_1(), "rule__SafetySubclause__ContractAssignment_1");
 					put(grammarAccess.getSafetyContractAccess().getSpecsAssignment_1(), "rule__SafetyContract__SpecsAssignment_1");
@@ -563,7 +561,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 	protected Collection<FollowElement> getFollowElements(AbstractInternalContentAssistParser parser) {
 		try {
 			org.xtext.example.safety.ui.contentassist.antlr.internal.InternalSafetyParser typedParser = (org.xtext.example.safety.ui.contentassist.antlr.internal.InternalSafetyParser) parser;
-			typedParser.entryRuleFoo();
+			typedParser.entryRuleAnnexLibrary();
 			return typedParser.getFollowElements();
 		} catch(RecognitionException ex) {
 			throw new RuntimeException(ex);

@@ -38,7 +38,7 @@ import org.xtext.example.safety.services.SafetyGrammarAccess;
 	
 	@Override
 	protected String getFirstRuleName() {
-		return "Foo";	
+		return "AnnexLibrary";	
 	} 
 	   	   	
 	@Override
@@ -57,47 +57,31 @@ import org.xtext.example.safety.services.SafetyGrammarAccess;
 
 
 
-// Entry rule entryRuleFoo
-entryRuleFoo returns [EObject current=null]
+// Entry rule entryRuleAnnexLibrary
+entryRuleAnnexLibrary returns [EObject current=null]
 	:
-	{ newCompositeNode(grammarAccess.getFooRule()); }
-	 iv_ruleFoo=ruleFoo 
-	 { $current=$iv_ruleFoo.current; } 
+	{ newCompositeNode(grammarAccess.getAnnexLibraryRule()); }
+	 iv_ruleAnnexLibrary=ruleAnnexLibrary 
+	 { $current=$iv_ruleAnnexLibrary.current; } 
 	 EOF 
 ;
 
-// Rule Foo
-ruleFoo returns [EObject current=null] 
+// Rule AnnexLibrary
+ruleAnnexLibrary returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(
-	otherlv_0=Expr
-    {
-    	newLeafNode(otherlv_0, grammarAccess.getFooAccess().getExprKeyword_0());
+
+    { 
+        newCompositeNode(grammarAccess.getAnnexLibraryAccess().getSafetyLibraryParserRuleCall()); 
     }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getFooAccess().getExprExprParserRuleCall_1_0()); 
-	    }
-		lv_expr_1_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFooRule());
-	        }
-       		set(
-       			$current, 
-       			"expr",
-        		lv_expr_1_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
-	    }
+    this_SafetyLibrary_0=ruleSafetyLibrary
+    {
+        $current = $this_SafetyLibrary_0.current;
+        afterParserOrEnumRuleCall();
+    }
 
-)
-))
 ;
-
-
 
 
 

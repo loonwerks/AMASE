@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: org.xtext.example.safety.ui.tests
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
-Bundle-SymbolicName: org.xtext.example.safety.ui.tests; singleton:=true
+Bundle-SymbolicName: org.xtext.example.safety.ui.tests;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.xtext.example.safety.ui,
  org.junit;bundle-version="4.12.0",

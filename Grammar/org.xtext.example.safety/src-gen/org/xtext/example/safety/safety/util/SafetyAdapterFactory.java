@@ -81,11 +81,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
     new SafetySwitch<Adapter>()
     {
       @Override
-      public Adapter caseFoo(Foo object)
-      {
-        return createFooAdapter();
-      }
-      @Override
       public Adapter caseSafetyLibrary(SafetyLibrary object)
       {
         return createSafetyLibraryAdapter();
@@ -216,21 +211,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
     return modelSwitch.doSwitch((EObject)target);
   }
 
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.xtext.example.safety.safety.Foo <em>Foo</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.xtext.example.safety.safety.Foo
-   * @generated
-   */
-  public Adapter createFooAdapter()
-  {
-    return null;
-  }
 
   /**
    * Creates a new adapter for an object of class '{@link org.xtext.example.safety.safety.SafetyLibrary <em>Library</em>}'.
