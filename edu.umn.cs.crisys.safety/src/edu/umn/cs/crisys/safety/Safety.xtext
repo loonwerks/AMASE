@@ -47,8 +47,8 @@ TemporalConstraint:
 
 // ' 
 TriggerCondition:
-	'must' '{' exprList+=(Expr)* '}' 
-  | 'enabler' '{' exprList+=(Expr)* '}'  
+	{TriggerCondition}'must' '{' exprList+=(Expr)* '}' 
+  | {TriggerCondition} 'enabler' '{' exprList+=(Expr)* '}'  
 ;
 	
 

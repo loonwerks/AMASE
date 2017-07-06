@@ -8,14 +8,14 @@ public class FaultSubcomponent implements FaultASTElement{
 //    };
 
     public final String id;
-    public final List<FaultIO> inputs;
-    public final List<FaultIO> outputs;
+    public final List<FaultVar> inputs;
+    public final List<FaultVar> outputs;
     public final List<FaultDuration> duration;
     public final List<FaultTrigger> triggers;
     public final List<FaultEqStmt> eqStatement;
     
 
-    public FaultSubcomponent(String id, List<FaultIO> inputs, List<FaultIO> outputs, 
+    public FaultSubcomponent(String id, List<FaultVar> inputs, List<FaultVar> outputs, 
     				List<FaultDuration> duration, List<FaultTrigger> triggers, List<FaultEqStmt> eqStatement) {
         this.id = id;
         this.inputs = jkind.util.Util.safeList(inputs);
