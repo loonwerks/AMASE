@@ -37,5 +37,6 @@ Export-Package: edu.umn.cs.crisys.safety.services,
  edu.umn.cs.crisys.safety.generator,
  edu.umn.cs.crisys.safety,
  edu.umn.cs.crisyse.safety.parser.antlr.lexer,
- edu.umn.cs.crisys.safety.formatting
+ edu.umn.cs.crisys.safety.formatting,
+ edu.umn.cs.crisys.safety.parser.antlr.lexer
 

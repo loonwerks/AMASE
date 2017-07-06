@@ -29,14 +29,14 @@ SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=ID
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';' 
+	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' 
 	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' 
 // For duration, will a time interval cover the case when we are dealing with time steps?
 // For instance: 
 // 		trigger: transient [0,1]
 // will stand for time steps 0 and 1?
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
- 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=Arg ']' ';'
+ 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=Expr ']' ';'
 	| EqStatement ;
 
 	
@@ -47,14 +47,13 @@ TemporalConstraint:
 
 // ' 
 TriggerCondition:
-	'must' '{' exprList+=(Expr)* '}' 
-  | 'enabler' '{' exprList+=(Expr)* '}'  
+	{TriggerCondition}'must' '{' exprList+=(Expr)* '}' 
+  | {TriggerCondition} 'enabler' '{' exprList+=(Expr)* '}'  
 ;
 	
 
 // An eq statement can be an agree eq statement ('eq'...) or 
 // an interval or a set of discrete values/expressions.
-// 			Question: do we want expressions to be allowed in the set eq statement?
 @Override 
 EqStatement:
 	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
