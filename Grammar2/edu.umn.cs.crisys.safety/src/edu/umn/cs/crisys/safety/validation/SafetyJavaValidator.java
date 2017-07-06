@@ -114,9 +114,9 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	
 	
 	// Need to override checkEqStatements 
-	@Override
-	@Check
-	public void checkEqStatements()
+//	@Override
+//	@Check
+//	public void checkEqStatements()
 	
 	
 	
