@@ -177,11 +177,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
 		private final RuleCall cOut_connIDTerminalRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
-		private final Group cGroup_0_6 = (Group)cGroup_0.eContents().get(6);
-		private final Keyword cEqualsSignKeyword_0_6_0 = (Keyword)cGroup_0_6.eContents().get(0);
-		private final Assignment cExprAssignment_0_6_1 = (Assignment)cGroup_0_6.eContents().get(1);
-		private final RuleCall cExprExprParserRuleCall_0_6_1_0 = (RuleCall)cExprAssignment_0_6_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_0_7 = (Keyword)cGroup_0.eContents().get(7);
+		private final Keyword cSemicolonKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cOutputKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
@@ -208,35 +204,36 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cColonKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
 		private final Assignment cCondAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
 		private final RuleCall cCondTriggerConditionParserRuleCall_3_3_0 = (RuleCall)cCondAssignment_3_3.eContents().get(0);
-		private final Keyword cLeftSquareBracketKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
-		private final Assignment cProbabilityAssignment_3_5 = (Assignment)cGroup_3.eContents().get(5);
-		private final RuleCall cProbabilityArgParserRuleCall_3_5_0 = (RuleCall)cProbabilityAssignment_3_5.eContents().get(0);
-		private final Keyword cRightSquareBracketKeyword_3_6 = (Keyword)cGroup_3.eContents().get(6);
-		private final Keyword cSemicolonKeyword_3_7 = (Keyword)cGroup_3.eContents().get(7);
+		private final Group cGroup_3_4 = (Group)cGroup_3.eContents().get(4);
+		private final Keyword cLeftSquareBracketKeyword_3_4_0 = (Keyword)cGroup_3_4.eContents().get(0);
+		private final Assignment cProbabilityAssignment_3_4_1 = (Assignment)cGroup_3_4.eContents().get(1);
+		private final RuleCall cProbabilityExprParserRuleCall_3_4_1_0 = (RuleCall)cProbabilityAssignment_3_4_1.eContents().get(0);
+		private final Keyword cRightSquareBracketKeyword_3_4_2 = (Keyword)cGroup_3_4.eContents().get(2);
+		private final Keyword cSemicolonKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
 		private final RuleCall cEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';'
+		//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
 		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 		//	// For duration, will a time interval cover the case when we are dealing with time steps?
 		//	// For instance: 
 		//	// 		trigger: transient [0,1]
 		//	// will stand for time steps 0 and 1?
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
-		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition '[' probability=Arg ']' ';'
+		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=Expr ']')? ';'
 		//	| EqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';' | {OutputStatement}
-		//'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
+		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' | {OutputStatement} 'output' ':'
+		//out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
 		//// For instance: 
 		//// 		trigger: transient [0,1]
 		//// will stand for time steps 0 and 1?
 		//| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';' | {TriggerStatement} 'trigger' ':'
-		//cond=TriggerCondition '[' probability=Arg ']' ';' | EqStatement
+		//cond=TriggerCondition ('[' probability=Expr ']')? ';' | EqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';'
+		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -266,20 +263,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//ID
 		public RuleCall getOut_connIDTerminalRuleCall_0_5_0() { return cOut_connIDTerminalRuleCall_0_5_0; }
 
-		//('=' expr=Expr)?
-		public Group getGroup_0_6() { return cGroup_0_6; }
-
-		//'='
-		public Keyword getEqualsSignKeyword_0_6_0() { return cEqualsSignKeyword_0_6_0; }
-
-		//expr=Expr
-		public Assignment getExprAssignment_0_6_1() { return cExprAssignment_0_6_1; }
-
-		//Expr
-		public RuleCall getExprExprParserRuleCall_0_6_1_0() { return cExprExprParserRuleCall_0_6_1_0; }
-
 		//';'
-		public Keyword getSemicolonKeyword_0_7() { return cSemicolonKeyword_0_7; }
+		public Keyword getSemicolonKeyword_0_6() { return cSemicolonKeyword_0_6; }
 
 		//{OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 		public Group getGroup_1() { return cGroup_1; }
@@ -341,7 +326,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_2_5() { return cSemicolonKeyword_2_5; }
 
-		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition '[' probability=Arg ']' ';'
+		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=Expr ']')? ';'
 		public Group getGroup_3() { return cGroup_3; }
 
 		//{TriggerStatement}
@@ -359,20 +344,23 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//TriggerCondition
 		public RuleCall getCondTriggerConditionParserRuleCall_3_3_0() { return cCondTriggerConditionParserRuleCall_3_3_0; }
 
+		//('[' probability=Expr ']')?
+		public Group getGroup_3_4() { return cGroup_3_4; }
+
 		//'['
-		public Keyword getLeftSquareBracketKeyword_3_4() { return cLeftSquareBracketKeyword_3_4; }
+		public Keyword getLeftSquareBracketKeyword_3_4_0() { return cLeftSquareBracketKeyword_3_4_0; }
 
-		//probability=Arg
-		public Assignment getProbabilityAssignment_3_5() { return cProbabilityAssignment_3_5; }
+		//probability=Expr
+		public Assignment getProbabilityAssignment_3_4_1() { return cProbabilityAssignment_3_4_1; }
 
-		//Arg
-		public RuleCall getProbabilityArgParserRuleCall_3_5_0() { return cProbabilityArgParserRuleCall_3_5_0; }
+		//Expr
+		public RuleCall getProbabilityExprParserRuleCall_3_4_1_0() { return cProbabilityExprParserRuleCall_3_4_1_0; }
 
 		//']'
-		public Keyword getRightSquareBracketKeyword_3_6() { return cRightSquareBracketKeyword_3_6; }
+		public Keyword getRightSquareBracketKeyword_3_4_2() { return cRightSquareBracketKeyword_3_4_2; }
 
 		//';'
-		public Keyword getSemicolonKeyword_3_7() { return cSemicolonKeyword_3_7; }
+		public Keyword getSemicolonKeyword_3_5() { return cSemicolonKeyword_3_5; }
 
 		//EqStatement
 		public RuleCall getEqStatementParserRuleCall_4() { return cEqStatementParserRuleCall_4; }
@@ -403,62 +391,70 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.TriggerCondition");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Keyword cMustKeyword_0_0 = (Keyword)cGroup_0.eContents().get(0);
-		private final Keyword cLeftCurlyBracketKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final Assignment cExprListAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
-		private final RuleCall cExprListExprParserRuleCall_0_2_0 = (RuleCall)cExprListAssignment_0_2.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_0_3 = (Keyword)cGroup_0.eContents().get(3);
+		private final Action cTriggerConditionAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Keyword cMustKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
+		private final Assignment cExprListAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
+		private final RuleCall cExprListExprParserRuleCall_0_3_0 = (RuleCall)cExprListAssignment_0_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Keyword cEnablerKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final Keyword cLeftCurlyBracketKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final Assignment cExprListAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
-		private final RuleCall cExprListExprParserRuleCall_1_2_0 = (RuleCall)cExprListAssignment_1_2.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
+		private final Action cTriggerConditionAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Keyword cEnablerKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
+		private final Assignment cExprListAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
+		private final RuleCall cExprListExprParserRuleCall_1_3_0 = (RuleCall)cExprListAssignment_1_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		
 		//// ' 
 		//TriggerCondition:
-		//	'must' '{' exprList+=Expr* '}'
-		//	| 'enabler' '{' exprList+=Expr* '}';
+		//	{TriggerCondition} 'must' '{' exprList+=Expr+ '}'
+		//	| {TriggerCondition} 'enabler' '{' exprList+=Expr+ '}';
 		@Override public ParserRule getRule() { return rule; }
 
-		//'must' '{' exprList+=Expr* '}' | 'enabler' '{' exprList+=Expr* '}'
+		//{TriggerCondition} 'must' '{' exprList+=Expr+ '}' | {TriggerCondition} 'enabler' '{' exprList+=Expr+ '}'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//'must' '{' exprList+=Expr* '}'
+		//{TriggerCondition} 'must' '{' exprList+=Expr+ '}'
 		public Group getGroup_0() { return cGroup_0; }
 
+		//{TriggerCondition}
+		public Action getTriggerConditionAction_0_0() { return cTriggerConditionAction_0_0; }
+
 		//'must'
-		public Keyword getMustKeyword_0_0() { return cMustKeyword_0_0; }
+		public Keyword getMustKeyword_0_1() { return cMustKeyword_0_1; }
 
 		//'{'
-		public Keyword getLeftCurlyBracketKeyword_0_1() { return cLeftCurlyBracketKeyword_0_1; }
+		public Keyword getLeftCurlyBracketKeyword_0_2() { return cLeftCurlyBracketKeyword_0_2; }
 
-		//exprList+=Expr*
-		public Assignment getExprListAssignment_0_2() { return cExprListAssignment_0_2; }
+		//exprList+=Expr+
+		public Assignment getExprListAssignment_0_3() { return cExprListAssignment_0_3; }
 
 		//Expr
-		public RuleCall getExprListExprParserRuleCall_0_2_0() { return cExprListExprParserRuleCall_0_2_0; }
+		public RuleCall getExprListExprParserRuleCall_0_3_0() { return cExprListExprParserRuleCall_0_3_0; }
 
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_0_3() { return cRightCurlyBracketKeyword_0_3; }
+		public Keyword getRightCurlyBracketKeyword_0_4() { return cRightCurlyBracketKeyword_0_4; }
 
-		//'enabler' '{' exprList+=Expr* '}'
+		//{TriggerCondition} 'enabler' '{' exprList+=Expr+ '}'
 		public Group getGroup_1() { return cGroup_1; }
 
+		//{TriggerCondition}
+		public Action getTriggerConditionAction_1_0() { return cTriggerConditionAction_1_0; }
+
 		//'enabler'
-		public Keyword getEnablerKeyword_1_0() { return cEnablerKeyword_1_0; }
+		public Keyword getEnablerKeyword_1_1() { return cEnablerKeyword_1_1; }
 
 		//'{'
-		public Keyword getLeftCurlyBracketKeyword_1_1() { return cLeftCurlyBracketKeyword_1_1; }
+		public Keyword getLeftCurlyBracketKeyword_1_2() { return cLeftCurlyBracketKeyword_1_2; }
 
-		//exprList+=Expr*
-		public Assignment getExprListAssignment_1_2() { return cExprListAssignment_1_2; }
+		//exprList+=Expr+
+		public Assignment getExprListAssignment_1_3() { return cExprListAssignment_1_3; }
 
 		//Expr
-		public RuleCall getExprListExprParserRuleCall_1_2_0() { return cExprListExprParserRuleCall_1_2_0; }
+		public RuleCall getExprListExprParserRuleCall_1_3_0() { return cExprListExprParserRuleCall_1_3_0; }
 
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_1_3() { return cRightCurlyBracketKeyword_1_3; }
+		public Keyword getRightCurlyBracketKeyword_1_4() { return cRightCurlyBracketKeyword_1_4; }
 	}
 
 	public class EqStatementElements extends AbstractParserRuleElementFinder {
@@ -510,11 +506,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//@ Override EqStatement:
 		//	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 		//	| 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*) ('=' interv=TimeInterval) | 'seteq' (lhs+=Arg (',' lhs+=Arg)*) ('=' '{'
-		//	exprList+=Expr* '}');
+		//	exprList+=Expr+ '}');
 		@Override public ParserRule getRule() { return rule; }
 
 		//'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';' | 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*) ('=' interv=TimeInterval)
-		//| 'seteq' (lhs+=Arg (',' lhs+=Arg)*) ('=' '{' exprList+=Expr* '}')
+		//| 'seteq' (lhs+=Arg (',' lhs+=Arg)*) ('=' '{' exprList+=Expr+ '}')
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
@@ -598,7 +594,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//TimeInterval
 		public RuleCall getIntervTimeIntervalParserRuleCall_1_2_1_0() { return cIntervTimeIntervalParserRuleCall_1_2_1_0; }
 
-		//'seteq' (lhs+=Arg (',' lhs+=Arg)*) ('=' '{' exprList+=Expr* '}')
+		//'seteq' (lhs+=Arg (',' lhs+=Arg)*) ('=' '{' exprList+=Expr+ '}')
 		public Group getGroup_2() { return cGroup_2; }
 
 		//'seteq'
@@ -625,7 +621,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//Arg
 		public RuleCall getLhsArgParserRuleCall_2_1_1_1_0() { return cLhsArgParserRuleCall_2_1_1_1_0; }
 
-		//'=' '{' exprList+=Expr* '}'
+		//'=' '{' exprList+=Expr+ '}'
 		public Group getGroup_2_2() { return cGroup_2_2; }
 
 		//'='
@@ -634,7 +630,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'{'
 		public Keyword getLeftCurlyBracketKeyword_2_2_1() { return cLeftCurlyBracketKeyword_2_2_1; }
 
-		//exprList+=Expr*
+		//exprList+=Expr+
 		public Assignment getExprListAssignment_2_2_2() { return cExprListAssignment_2_2_2; }
 
 		//Expr
@@ -774,14 +770,14 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ('=' expr=Expr)? ';'
+	//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
 	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 	//	// For duration, will a time interval cover the case when we are dealing with time steps?
 	//	// For instance: 
 	//	// 		trigger: transient [0,1]
 	//	// will stand for time steps 0 and 1?
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
-	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition '[' probability=Arg ']' ';'
+	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=Expr ']')? ';'
 	//	| EqStatement;
 	public FaultSubcomponentElements getFaultSubcomponentAccess() {
 		return pFaultSubcomponent;
@@ -804,8 +800,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// ' 
 	//TriggerCondition:
-	//	'must' '{' exprList+=Expr* '}'
-	//	| 'enabler' '{' exprList+=Expr* '}';
+	//	{TriggerCondition} 'must' '{' exprList+=Expr+ '}'
+	//	| {TriggerCondition} 'enabler' '{' exprList+=Expr+ '}';
 	public TriggerConditionElements getTriggerConditionAccess() {
 		return pTriggerCondition;
 	}
@@ -817,7 +813,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//@ Override EqStatement:
 	//	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 	//	| 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*) ('=' interv=TimeInterval) | 'seteq' (lhs+=Arg (',' lhs+=Arg)*) ('=' '{'
-	//	exprList+=Expr* '}');
+	//	exprList+=Expr+ '}');
 	public EqStatementElements getEqStatementAccess() {
 		return pEqStatement;
 	}

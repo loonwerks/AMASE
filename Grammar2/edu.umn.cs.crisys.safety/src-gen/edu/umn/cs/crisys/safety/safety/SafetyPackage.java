@@ -649,22 +649,13 @@ public interface SafetyPackage extends EPackage
   int INPUT_STATEMENT__OUT_CONN = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INPUT_STATEMENT__EXPR = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
-
-  /**
    * The number of structural features of the '<em>Input Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INPUT_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 3;
+  int INPUT_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.OutputStatementImpl <em>Output Statement</em>}' class.
@@ -1020,17 +1011,6 @@ public interface SafetyPackage extends EPackage
   EAttribute getInputStatement_Out_conn();
 
   /**
-   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getExpr <em>Expr</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Expr</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.InputStatement#getExpr()
-   * @see #getInputStatement()
-   * @generated
-   */
-  EReference getInputStatement_Expr();
-
-  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.OutputStatement <em>Output Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1356,14 +1336,6 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EAttribute INPUT_STATEMENT__OUT_CONN = eINSTANCE.getInputStatement_Out_conn();
-
-    /**
-     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference INPUT_STATEMENT__EXPR = eINSTANCE.getInputStatement_Expr();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.OutputStatementImpl <em>Output Statement</em>}' class.

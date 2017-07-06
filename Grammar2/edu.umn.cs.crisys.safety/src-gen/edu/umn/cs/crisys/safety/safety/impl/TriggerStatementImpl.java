@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.Expr;
 
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
@@ -50,7 +50,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * @generated
    * @ordered
    */
-  protected Arg probability;
+  protected Expr probability;
 
   /**
    * <!-- begin-user-doc -->
@@ -126,7 +126,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
-  public Arg getProbability()
+  public Expr getProbability()
   {
     return probability;
   }
@@ -136,9 +136,9 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetProbability(Arg newProbability, NotificationChain msgs)
+  public NotificationChain basicSetProbability(Expr newProbability, NotificationChain msgs)
   {
-    Arg oldProbability = probability;
+    Expr oldProbability = probability;
     probability = newProbability;
     if (eNotificationRequired())
     {
@@ -153,7 +153,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setProbability(Arg newProbability)
+  public void setProbability(Expr newProbability)
   {
     if (newProbability != probability)
     {
@@ -219,7 +219,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
         setCond((TriggerCondition)newValue);
         return;
       case SafetyPackage.TRIGGER_STATEMENT__PROBABILITY:
-        setProbability((Arg)newValue);
+        setProbability((Expr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -239,7 +239,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
         setCond((TriggerCondition)null);
         return;
       case SafetyPackage.TRIGGER_STATEMENT__PROBABILITY:
-        setProbability((Arg)null);
+        setProbability((Expr)null);
         return;
     }
     super.eUnset(featureID);

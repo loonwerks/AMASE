@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.Expr;
 
 /**
  * <!-- begin-user-doc -->
@@ -58,12 +58,12 @@ public interface TriggerStatement extends FaultSubcomponent
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Probability</em>' containment reference.
-   * @see #setProbability(Arg)
+   * @see #setProbability(Expr)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getTriggerStatement_Probability()
    * @model containment="true"
    * @generated
    */
-  Arg getProbability();
+  Expr getProbability();
 
   /**
    * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}' containment reference.
@@ -73,6 +73,6 @@ public interface TriggerStatement extends FaultSubcomponent
    * @see #getProbability()
    * @generated
    */
-  void setProbability(Arg value);
+  void setProbability(Expr value);
 
 } // TriggerStatement

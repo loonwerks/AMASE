@@ -12,7 +12,6 @@ import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.AbstractElementAlias;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.AlternativeAlias;
-import org.eclipse.xtext.serializer.analysis.GrammarAlias.GroupAlias;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.TokenAlias;
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynNavigable;
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynTransition;
@@ -24,7 +23,6 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	protected SafetyGrammarAccess grammarAccess;
 	protected AbstractElementAlias match_TermExpr_LeftParenthesisKeyword_14_0_a;
 	protected AbstractElementAlias match_TermExpr_LeftParenthesisKeyword_14_0_p;
-	protected AbstractElementAlias match_TriggerCondition___EnablerKeyword_1_0_LeftCurlyBracketKeyword_1_1_RightCurlyBracketKeyword_1_3___or___MustKeyword_0_0_LeftCurlyBracketKeyword_0_1_RightCurlyBracketKeyword_0_3__;
 	protected AbstractElementAlias match_WheneverStatement_OccurKeyword_0_0_0_6_0_or_OccursKeyword_0_0_0_6_1;
 	protected AbstractElementAlias match_WheneverStatement_OccurKeyword_1_0_0_7_0_or_OccursKeyword_1_0_0_7_1;
 	
@@ -33,7 +31,6 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 		grammarAccess = (SafetyGrammarAccess) access;
 		match_TermExpr_LeftParenthesisKeyword_14_0_a = new TokenAlias(true, true, grammarAccess.getTermExprAccess().getLeftParenthesisKeyword_14_0());
 		match_TermExpr_LeftParenthesisKeyword_14_0_p = new TokenAlias(true, false, grammarAccess.getTermExprAccess().getLeftParenthesisKeyword_14_0());
-		match_TriggerCondition___EnablerKeyword_1_0_LeftCurlyBracketKeyword_1_1_RightCurlyBracketKeyword_1_3___or___MustKeyword_0_0_LeftCurlyBracketKeyword_0_1_RightCurlyBracketKeyword_0_3__ = new AlternativeAlias(false, false, new GroupAlias(false, false, new TokenAlias(false, false, grammarAccess.getTriggerConditionAccess().getEnablerKeyword_1_0()), new TokenAlias(false, false, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_1_1()), new TokenAlias(false, false, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_1_3())), new GroupAlias(false, false, new TokenAlias(false, false, grammarAccess.getTriggerConditionAccess().getMustKeyword_0_0()), new TokenAlias(false, false, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_0_1()), new TokenAlias(false, false, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_0_3())));
 		match_WheneverStatement_OccurKeyword_0_0_0_6_0_or_OccursKeyword_0_0_0_6_1 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getWheneverStatementAccess().getOccurKeyword_0_0_0_6_0()), new TokenAlias(false, false, grammarAccess.getWheneverStatementAccess().getOccursKeyword_0_0_0_6_1()));
 		match_WheneverStatement_OccurKeyword_1_0_0_7_0_or_OccursKeyword_1_0_0_7_1 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getWheneverStatementAccess().getOccurKeyword_1_0_0_7_0()), new TokenAlias(false, false, grammarAccess.getWheneverStatementAccess().getOccursKeyword_1_0_0_7_1()));
 	}
@@ -54,8 +51,6 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 				emit_TermExpr_LeftParenthesisKeyword_14_0_a(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_TermExpr_LeftParenthesisKeyword_14_0_p.equals(syntax))
 				emit_TermExpr_LeftParenthesisKeyword_14_0_p(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if (match_TriggerCondition___EnablerKeyword_1_0_LeftCurlyBracketKeyword_1_1_RightCurlyBracketKeyword_1_3___or___MustKeyword_0_0_LeftCurlyBracketKeyword_0_1_RightCurlyBracketKeyword_0_3__.equals(syntax))
-				emit_TriggerCondition___EnablerKeyword_1_0_LeftCurlyBracketKeyword_1_1_RightCurlyBracketKeyword_1_3___or___MustKeyword_0_0_LeftCurlyBracketKeyword_0_1_RightCurlyBracketKeyword_0_3__(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_WheneverStatement_OccurKeyword_0_0_0_6_0_or_OccursKeyword_0_0_0_6_1.equals(syntax))
 				emit_WheneverStatement_OccurKeyword_0_0_0_6_0_or_OccursKeyword_0_0_0_6_1(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_WheneverStatement_OccurKeyword_1_0_0_7_0_or_OccursKeyword_1_0_0_7_1.equals(syntax))
@@ -117,18 +112,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	
 	/**
 	 * Ambiguous syntax:
-	 *     ('must' '{' '}') | ('enabler' '{' '}')
-	 *
-	 * This ambiguous syntax occurs at:
-	 *     (rule start) (ambiguity) (rule start)
-	 */
-	protected void emit_TriggerCondition___EnablerKeyword_1_0_LeftCurlyBracketKeyword_1_1_RightCurlyBracketKeyword_1_3___or___MustKeyword_0_0_LeftCurlyBracketKeyword_0_1_RightCurlyBracketKeyword_0_3__(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
-		acceptNodes(transition, nodes);
-	}
-	
-	/**
-	 * Ambiguous syntax:
-	 *     'occurs' | 'occur'
+	 *     'occur' | 'occurs'
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     effect=Expr (ambiguity) 'during' interval=TimeInterval

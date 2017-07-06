@@ -381,33 +381,10 @@ ruleFaultSubcomponent returns [EObject current=null]
 	    }
 
 )
-)(
-	otherlv_6=EqualsSign
-    {
-    	newLeafNode(otherlv_6, grammarAccess.getFaultSubcomponentAccess().getEqualsSignKeyword_0_6_0());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getExprExprParserRuleCall_0_6_1_0()); 
-	    }
-		lv_expr_7_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
-	        }
-       		set(
-       			$current, 
-       			"expr",
-        		lv_expr_7_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
-	    }
-
 )
-))?
-	otherlv_8=Semicolon
+	otherlv_6=Semicolon
     {
-    	newLeafNode(otherlv_8, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_0_7());
+    	newLeafNode(otherlv_6, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_0_6());
     }
 )
     |((
@@ -417,20 +394,20 @@ ruleFaultSubcomponent returns [EObject current=null]
             $current);
     }
 )
-	otherlv_10=Output
+	otherlv_8=Output
     {
-    	newLeafNode(otherlv_10, grammarAccess.getFaultSubcomponentAccess().getOutputKeyword_1_1());
+    	newLeafNode(otherlv_8, grammarAccess.getFaultSubcomponentAccess().getOutputKeyword_1_1());
     }
 
-	otherlv_11=Colon
+	otherlv_9=Colon
     {
-    	newLeafNode(otherlv_11, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_1_2());
+    	newLeafNode(otherlv_9, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_1_2());
     }
 (
 (
-		lv_out_conn_12_0=RULE_ID
+		lv_out_conn_10_0=RULE_ID
 		{
-			newLeafNode(lv_out_conn_12_0, grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_1_3_0()); 
+			newLeafNode(lv_out_conn_10_0, grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_1_3_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -439,15 +416,15 @@ ruleFaultSubcomponent returns [EObject current=null]
        		setWithLastConsumed(
        			$current, 
        			"out_conn",
-        		lv_out_conn_12_0, 
+        		lv_out_conn_10_0, 
         		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )
 )
-	otherlv_13=HyphenMinusGreaterThanSign
+	otherlv_11=HyphenMinusGreaterThanSign
     {
-    	newLeafNode(otherlv_13, grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_1_4());
+    	newLeafNode(otherlv_11, grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_1_4());
     }
 (
 (
@@ -456,16 +433,16 @@ ruleFaultSubcomponent returns [EObject current=null]
 	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
         }
-	otherlv_14=RULE_ID
+	otherlv_12=RULE_ID
 	{
-		newLeafNode(otherlv_14, grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_1_5_0()); 
+		newLeafNode(otherlv_12, grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_1_5_0()); 
 	}
 
 )
 )
-	otherlv_15=Semicolon
+	otherlv_13=Semicolon
     {
-    	newLeafNode(otherlv_15, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_1_6());
+    	newLeafNode(otherlv_13, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_1_6());
     }
 )
     |((
@@ -475,28 +452,28 @@ ruleFaultSubcomponent returns [EObject current=null]
             $current);
     }
 )
-	otherlv_17=Duration
+	otherlv_15=Duration
     {
-    	newLeafNode(otherlv_17, grammarAccess.getFaultSubcomponentAccess().getDurationKeyword_2_1());
+    	newLeafNode(otherlv_15, grammarAccess.getFaultSubcomponentAccess().getDurationKeyword_2_1());
     }
 
-	otherlv_18=Colon
+	otherlv_16=Colon
     {
-    	newLeafNode(otherlv_18, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_2_2());
+    	newLeafNode(otherlv_16, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_2_2());
     }
 (
 (
 		{ 
 	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getTcTemporalConstraintParserRuleCall_2_3_0()); 
 	    }
-		lv_tc_19_0=ruleTemporalConstraint		{
+		lv_tc_17_0=ruleTemporalConstraint		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"tc",
-        		lv_tc_19_0, 
+        		lv_tc_17_0, 
         		"edu.umn.cs.crisys.safety.Safety.TemporalConstraint");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -507,23 +484,23 @@ ruleFaultSubcomponent returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIntervTimeIntervalParserRuleCall_2_4_0()); 
 	    }
-		lv_interv_20_0=ruleTimeInterval		{
+		lv_interv_18_0=ruleTimeInterval		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"interv",
-        		lv_interv_20_0, 
+        		lv_interv_18_0, 
         		"com.rockwellcollins.atc.agree.Agree.TimeInterval");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_21=Semicolon
+	otherlv_19=Semicolon
     {
-    	newLeafNode(otherlv_21, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_2_5());
+    	newLeafNode(otherlv_19, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_2_5());
     }
 )
     |((
@@ -533,74 +510,74 @@ ruleFaultSubcomponent returns [EObject current=null]
             $current);
     }
 )
-	otherlv_23=Trigger
+	otherlv_21=Trigger
     {
-    	newLeafNode(otherlv_23, grammarAccess.getFaultSubcomponentAccess().getTriggerKeyword_3_1());
+    	newLeafNode(otherlv_21, grammarAccess.getFaultSubcomponentAccess().getTriggerKeyword_3_1());
     }
 
-	otherlv_24=Colon
+	otherlv_22=Colon
     {
-    	newLeafNode(otherlv_24, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_3_2());
+    	newLeafNode(otherlv_22, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_3_2());
     }
 (
 (
 		{ 
 	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_3_3_0()); 
 	    }
-		lv_cond_25_0=ruleTriggerCondition		{
+		lv_cond_23_0=ruleTriggerCondition		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"cond",
-        		lv_cond_25_0, 
+        		lv_cond_23_0, 
         		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)
-	otherlv_26=LeftSquareBracket
+)(
+	otherlv_24=LeftSquareBracket
     {
-    	newLeafNode(otherlv_26, grammarAccess.getFaultSubcomponentAccess().getLeftSquareBracketKeyword_3_4());
+    	newLeafNode(otherlv_24, grammarAccess.getFaultSubcomponentAccess().getLeftSquareBracketKeyword_3_4_0());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getProbabilityArgParserRuleCall_3_5_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getProbabilityExprParserRuleCall_3_4_1_0()); 
 	    }
-		lv_probability_27_0=ruleArg		{
+		lv_probability_25_0=ruleExpr		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"probability",
-        		lv_probability_27_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Arg");
+        		lv_probability_25_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_28=RightSquareBracket
+	otherlv_26=RightSquareBracket
     {
-    	newLeafNode(otherlv_28, grammarAccess.getFaultSubcomponentAccess().getRightSquareBracketKeyword_3_6());
+    	newLeafNode(otherlv_26, grammarAccess.getFaultSubcomponentAccess().getRightSquareBracketKeyword_3_4_2());
     }
-
-	otherlv_29=Semicolon
+)?
+	otherlv_27=Semicolon
     {
-    	newLeafNode(otherlv_29, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_3_7());
+    	newLeafNode(otherlv_27, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_3_5());
     }
 )
     |
     { 
         newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getEqStatementParserRuleCall_4()); 
     }
-    this_EqStatement_30=ruleEqStatement
+    this_EqStatement_28=ruleEqStatement
     {
-        $current = $this_EqStatement_30.current;
+        $current = $this_EqStatement_28.current;
         afterParserOrEnumRuleCall();
     }
 )
@@ -659,72 +636,84 @@ ruleTriggerCondition returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-((
-	otherlv_0=Must
+(((
     {
-    	newLeafNode(otherlv_0, grammarAccess.getTriggerConditionAccess().getMustKeyword_0_0());
+        $current = forceCreateModelElement(
+            grammarAccess.getTriggerConditionAccess().getTriggerConditionAction_0_0(),
+            $current);
+    }
+)
+	otherlv_1=Must
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getTriggerConditionAccess().getMustKeyword_0_1());
     }
 
-	otherlv_1=LeftCurlyBracket
+	otherlv_2=LeftCurlyBracket
     {
-    	newLeafNode(otherlv_1, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_0_1());
+    	newLeafNode(otherlv_2, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_0_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_0_2_0()); 
+	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_0_3_0()); 
 	    }
-		lv_exprList_2_0=ruleExpr		{
+		lv_exprList_3_0=ruleExpr		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTriggerConditionRule());
 	        }
        		add(
        			$current, 
        			"exprList",
-        		lv_exprList_2_0, 
+        		lv_exprList_3_0, 
         		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)*
-	otherlv_3=RightCurlyBracket
+)+
+	otherlv_4=RightCurlyBracket
     {
-    	newLeafNode(otherlv_3, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_0_3());
+    	newLeafNode(otherlv_4, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_0_4());
     }
 )
-    |(
-	otherlv_4=Enabler
+    |((
     {
-    	newLeafNode(otherlv_4, grammarAccess.getTriggerConditionAccess().getEnablerKeyword_1_0());
+        $current = forceCreateModelElement(
+            grammarAccess.getTriggerConditionAccess().getTriggerConditionAction_1_0(),
+            $current);
+    }
+)
+	otherlv_6=Enabler
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getTriggerConditionAccess().getEnablerKeyword_1_1());
     }
 
-	otherlv_5=LeftCurlyBracket
+	otherlv_7=LeftCurlyBracket
     {
-    	newLeafNode(otherlv_5, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_1_1());
+    	newLeafNode(otherlv_7, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_1_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_1_2_0()); 
+	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_1_3_0()); 
 	    }
-		lv_exprList_6_0=ruleExpr		{
+		lv_exprList_8_0=ruleExpr		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTriggerConditionRule());
 	        }
        		add(
        			$current, 
        			"exprList",
-        		lv_exprList_6_0, 
+        		lv_exprList_8_0, 
         		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)*
-	otherlv_7=RightCurlyBracket
+)+
+	otherlv_9=RightCurlyBracket
     {
-    	newLeafNode(otherlv_7, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_1_3());
+    	newLeafNode(otherlv_9, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_1_4());
     }
 ))
 ;
@@ -966,7 +955,7 @@ ruleEqStatement returns [EObject current=null]
 	    }
 
 )
-)*
+)+
 	otherlv_20=RightCurlyBracket
     {
     	newLeafNode(otherlv_20, grammarAccess.getEqStatementAccess().getRightCurlyBracketKeyword_2_2_3());

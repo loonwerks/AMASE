@@ -446,16 +446,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getInputStatement_Expr()
-  {
-    return (EReference)inputStatementEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getOutputStatement()
   {
     return outputStatementEClass;
@@ -605,7 +595,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     inputStatementEClass = createEClass(INPUT_STATEMENT);
     createEReference(inputStatementEClass, INPUT_STATEMENT__IN_CONN);
     createEAttribute(inputStatementEClass, INPUT_STATEMENT__OUT_CONN);
-    createEReference(inputStatementEClass, INPUT_STATEMENT__EXPR);
 
     outputStatementEClass = createEClass(OUTPUT_STATEMENT);
     createEAttribute(outputStatementEClass, OUTPUT_STATEMENT__OUT_CONN);
@@ -703,7 +692,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEClass(inputStatementEClass, InputStatement.class, "InputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInputStatement_In_conn(), theAadl2Package.getNamedElement(), null, "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getInputStatement_Expr(), theAgreePackage.getExpr(), null, "expr", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(outputStatementEClass, OutputStatement.class, "OutputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getOutputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, OutputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -715,7 +703,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(triggerStatementEClass, TriggerStatement.class, "TriggerStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerStatement_Cond(), this.getTriggerCondition(), null, "cond", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTriggerStatement_Probability(), theAgreePackage.getArg(), null, "probability", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTriggerStatement_Probability(), theAgreePackage.getExpr(), null, "probability", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

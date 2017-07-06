@@ -8,10 +8,14 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.NamedElement;
+
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
 
+import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 /**
@@ -28,11 +32,50 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	}
 
 	
-	// Test
+	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
+		NamedElement inConn = inputStmt.getIn_conn();
+		String outConn = inputStmt.getOut_conn();
 		
+		if(inConn==null){
+			error(inConn, "Input connection cannot be null");
+		}
+		if(outConn.isEmpty()){
+			error(inputStmt, "Output connection name cannot be empty");
+		}
 	}
+	
+	// Output Statements
+	@Check
+	public void checkOutput(OutputStatement outputStmt){
+		String outConn = outputStmt.getOut_conn();
+		NamedElement nominalConn = outputStmt.getNom_conn();
+			
+		if(nominalConn==null){
+			error(nominalConn, "Nominal connection cannot be null");
+		}
+		if(outConn.isEmpty()){
+			error(outputStmt, "Output connection name cannot be empty");
+		}
+	}
+	
+	// Duration statements
+	@Check
+	public void checkDuration(DurationStatement durationStmt){
+		if(!(durationStmt.getTc().equals("PERMANANT") || durationStmt.getTc().equals("TRANSIENT"))){
+			error(durationStmt, "Temporal constraint must be TRANSIENT or PERMANANT");
+		}
+		checkTimeInterval(durationStmt.getInterv());
+	}
+	
+	
+	// 
+	
+	
+	
+	
+	
 	
 //	@Check
 //	public void checkGreetingStartsWithCapital(Greeting greeting) {
