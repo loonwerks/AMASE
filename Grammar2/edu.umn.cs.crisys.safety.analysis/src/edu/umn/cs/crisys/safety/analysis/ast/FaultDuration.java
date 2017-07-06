@@ -1,11 +1,13 @@
 package edu.umn.cs.crisys.safety.analysis.ast;
 
+import com.rockwellcollins.atc.agree.agree.TimeInterval;
+
 public class FaultDuration implements FaultASTElement{
 	
 	public final TemporalConstraint tempConstraint;
-	public final FaultInterval interval;
+	public final TimeInterval interval;
 	
-	public FaultDuration(TemporalConstraint temporalConstraint, FaultInterval interv){
+	public FaultDuration(TemporalConstraint temporalConstraint, TimeInterval interv){
 		
 		this.tempConstraint = temporalConstraint;
 		this.interval = interv;

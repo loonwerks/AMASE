@@ -3,13 +3,14 @@ package edu.umn.cs.crisys.safety.analysis.ast;
 import java.util.List;
 import org.osate.aadl2.NamedElement;
 import jkind.lustre.Expr;
+import com.rockwellcollins.atc.agree.agree.TimeInterval;
 
 public class FaultEqStmt implements FaultASTElement{
 	
 	public final List<NamedElement> arg;
 	public Expr expr;
 	public List<Expr> exprList;
-	public FaultInterval interval;
+	public TimeInterval interval;
 	
 	// This constructor is for the case when we have complete nondeterminism
 	public FaultEqStmt(List<NamedElement> arg){
@@ -33,7 +34,7 @@ public class FaultEqStmt implements FaultASTElement{
 	}
 	
 	// And this is the case of an INTERVALEQ
-	public FaultEqStmt(List<NamedElement> arg, FaultInterval interval){
+	public FaultEqStmt(List<NamedElement> arg, TimeInterval interval){
 		
 		this.arg = arg;
 		this.interval = interval;

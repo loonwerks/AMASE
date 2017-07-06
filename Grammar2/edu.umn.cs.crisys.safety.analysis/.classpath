@@ -23,5 +23,6 @@
 			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
 		</accessrules>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.rockwellcollins.atc.agree"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
