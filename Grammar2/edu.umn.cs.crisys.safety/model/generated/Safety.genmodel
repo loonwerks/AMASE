@@ -48,7 +48,14 @@
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/probability"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//Eq"/>
+    <genClasses ecoreClass="Safety.ecore#//IntervalEq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/interv"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//SetEq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/exprList"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

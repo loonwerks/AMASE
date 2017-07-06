@@ -2,8 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.Expr;
-
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
@@ -43,14 +41,24 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
   protected TriggerCondition cond;
 
   /**
-   * The cached value of the '{@link #getProbability() <em>Probability</em>}' containment reference.
+   * The default value of the '{@link #getProbability() <em>Probability</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getProbability()
    * @generated
    * @ordered
    */
-  protected Expr probability;
+  protected static final String PROBABILITY_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProbability() <em>Probability</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProbability()
+   * @generated
+   * @ordered
+   */
+  protected String probability = PROBABILITY_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -126,7 +134,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expr getProbability()
+  public String getProbability()
   {
     return probability;
   }
@@ -136,37 +144,12 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetProbability(Expr newProbability, NotificationChain msgs)
+  public void setProbability(String newProbability)
   {
-    Expr oldProbability = probability;
+    String oldProbability = probability;
     probability = newProbability;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.TRIGGER_STATEMENT__PROBABILITY, oldProbability, newProbability);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setProbability(Expr newProbability)
-  {
-    if (newProbability != probability)
-    {
-      NotificationChain msgs = null;
-      if (probability != null)
-        msgs = ((InternalEObject)probability).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.TRIGGER_STATEMENT__PROBABILITY, null, msgs);
-      if (newProbability != null)
-        msgs = ((InternalEObject)newProbability).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.TRIGGER_STATEMENT__PROBABILITY, null, msgs);
-      msgs = basicSetProbability(newProbability, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.TRIGGER_STATEMENT__PROBABILITY, newProbability, newProbability));
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.TRIGGER_STATEMENT__PROBABILITY, oldProbability, probability));
   }
 
   /**
@@ -181,8 +164,6 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
     {
       case SafetyPackage.TRIGGER_STATEMENT__COND:
         return basicSetCond(null, msgs);
-      case SafetyPackage.TRIGGER_STATEMENT__PROBABILITY:
-        return basicSetProbability(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -219,7 +200,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
         setCond((TriggerCondition)newValue);
         return;
       case SafetyPackage.TRIGGER_STATEMENT__PROBABILITY:
-        setProbability((Expr)newValue);
+        setProbability((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -239,7 +220,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
         setCond((TriggerCondition)null);
         return;
       case SafetyPackage.TRIGGER_STATEMENT__PROBABILITY:
-        setProbability((Expr)null);
+        setProbability(PROBABILITY_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -258,9 +239,26 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
       case SafetyPackage.TRIGGER_STATEMENT__COND:
         return cond != null;
       case SafetyPackage.TRIGGER_STATEMENT__PROBABILITY:
-        return probability != null;
+        return PROBABILITY_EDEFAULT == null ? probability != null : !PROBABILITY_EDEFAULT.equals(probability);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (probability: ");
+    result.append(probability);
+    result.append(')');
+    return result.toString();
   }
 
 } //TriggerStatementImpl

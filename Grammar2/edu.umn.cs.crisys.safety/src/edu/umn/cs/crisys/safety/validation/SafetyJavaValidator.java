@@ -17,6 +17,8 @@ import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
+import edu.umn.cs.crisys.safety.safety.TriggerCondition;
+import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 
 /**
  * This class contains custom validation rules. 
@@ -70,9 +72,51 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	}
 	
 	
-	// 
+	// Trigger Statements
+	@Check
+	public void checkTriggerStatement(TriggerStatement triggerStmt){
+		// First check the trigger condition
+		checkTriggerCondition(triggerStmt.getCond());
+		
+		// Check the optional probability expression
+		if(triggerStmt.getProbability() != null ){
+			
+			// Try casting string to double, catch exceptions to print out error
+			double result = 0;
+			try{
+				result = Double.parseDouble(triggerStmt.getProbability());
+			} catch(NullPointerException npe){
+				error(triggerStmt, "Valid real number required");
+			} catch(NumberFormatException nfe){
+				error(triggerStmt, "Valid real number required");
+			}
+			
+			// Now check to make sure it's a valid probability (btwn 0 and 1 inclusive)
+			if((result < 0) || (result > 1)){
+				error(triggerStmt, "Probability must be between 0 and 1 inclusive");
+			}
+			
+			
+		}
+	}
+	
+	// This will need to be changed in order to deal with an
+	// expression list. Not sure how to do that right now... 
+	@Check
+	public void checkTriggerCondition(TriggerCondition tc){
+		if(tc != null){
+			
+			// Figure out how to check expressions through agree validation
+			
+			//checkExpr(tc.getExprList());
+		}
+	}
 	
 	
+	// Need to override checkEqStatements 
+	@Override
+	@Check
+	public void checkEqStatements()
 	
 	
 	

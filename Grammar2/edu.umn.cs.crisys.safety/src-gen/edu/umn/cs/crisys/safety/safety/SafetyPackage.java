@@ -751,7 +751,7 @@ public interface SafetyPackage extends EPackage
   int TRIGGER_STATEMENT__COND = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Probability</b></em>' containment reference.
+   * The feature id for the '<em><b>Probability</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1096,15 +1096,15 @@ public interface SafetyPackage extends EPackage
   EReference getTriggerStatement_Cond();
 
   /**
-   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}'.
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Probability</em>'.
+   * @return the meta object for the attribute '<em>Probability</em>'.
    * @see edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability()
    * @see #getTriggerStatement()
    * @generated
    */
-  EReference getTriggerStatement_Probability();
+  EAttribute getTriggerStatement_Probability();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -1408,12 +1408,12 @@ public interface SafetyPackage extends EPackage
     EReference TRIGGER_STATEMENT__COND = eINSTANCE.getTriggerStatement_Cond();
 
     /**
-     * The meta object literal for the '<em><b>Probability</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Probability</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference TRIGGER_STATEMENT__PROBABILITY = eINSTANCE.getTriggerStatement_Probability();
+    EAttribute TRIGGER_STATEMENT__PROBABILITY = eINSTANCE.getTriggerStatement_Probability();
 
   }
 

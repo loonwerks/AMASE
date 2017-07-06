@@ -2,7 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.Expr;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,29 +49,29 @@ public interface TriggerStatement extends FaultSubcomponent
   void setCond(TriggerCondition value);
 
   /**
-   * Returns the value of the '<em><b>Probability</b></em>' containment reference.
+   * Returns the value of the '<em><b>Probability</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Probability</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Probability</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Probability</em>' containment reference.
-   * @see #setProbability(Expr)
+   * @return the value of the '<em>Probability</em>' attribute.
+   * @see #setProbability(String)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getTriggerStatement_Probability()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  Expr getProbability();
+  String getProbability();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Probability</em>' containment reference.
+   * @param value the new value of the '<em>Probability</em>' attribute.
    * @see #getProbability()
    * @generated
    */
-  void setProbability(Expr value);
+  void setProbability(String value);
 
 } // TriggerStatement

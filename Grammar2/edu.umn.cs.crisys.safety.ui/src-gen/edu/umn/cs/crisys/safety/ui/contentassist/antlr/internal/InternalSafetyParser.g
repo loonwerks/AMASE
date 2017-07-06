@@ -5658,6 +5658,7 @@ rule__EqStatement__Group_1__2
     }
 :
 	rule__EqStatement__Group_1__2__Impl
+	rule__EqStatement__Group_1__3
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -5678,6 +5679,38 @@ rule__EqStatement__Group_1__2__Impl
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+rule__EqStatement__Group_1__3
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__EqStatement__Group_1__3__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EqStatement__Group_1__3__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getEqStatementAccess().getSemicolonKeyword_1_3()); }
+
+	Semicolon 
+
+{ after(grammarAccess.getEqStatementAccess().getSemicolonKeyword_1_3()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
 
 
 
@@ -5939,6 +5972,7 @@ rule__EqStatement__Group_2__2
     }
 :
 	rule__EqStatement__Group_2__2__Impl
+	rule__EqStatement__Group_2__3
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -5959,6 +5993,38 @@ rule__EqStatement__Group_2__2__Impl
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+rule__EqStatement__Group_2__3
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__EqStatement__Group_2__3__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EqStatement__Group_2__3__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getEqStatementAccess().getSemicolonKeyword_2_3()); }
+
+	Semicolon 
+
+{ after(grammarAccess.getEqStatementAccess().getSemicolonKeyword_2_3()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
 
 
 
@@ -24656,8 +24722,8 @@ rule__FaultSubcomponent__ProbabilityAssignment_3_4_1
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getProbabilityExprParserRuleCall_3_4_1_0()); }
-	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getProbabilityExprParserRuleCall_3_4_1_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_3_4_1_0()); }
+	RULE_REAL_LIT{ after(grammarAccess.getFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_3_4_1_0()); }
 )
 
 ;

@@ -525,7 +525,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns TriggerStatement
 	 *
 	 * Constraint:
-	 *     (cond=TriggerCondition probability=Expr?)
+	 *     (cond=TriggerCondition probability=REAL_LIT?)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, TriggerStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

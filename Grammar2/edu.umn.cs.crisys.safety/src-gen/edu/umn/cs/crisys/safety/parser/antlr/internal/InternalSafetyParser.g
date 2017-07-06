@@ -544,19 +544,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getProbabilityExprParserRuleCall_3_4_1_0()); 
-	    }
-		lv_probability_25_0=ruleExpr		{
+		lv_probability_25_0=RULE_REAL_LIT
+		{
+			newLeafNode(lv_probability_25_0, grammarAccess.getFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_3_4_1_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		set(
+       		setWithLastConsumed(
        			$current, 
        			"probability",
         		lv_probability_25_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.REAL_LIT");
 	    }
 
 )
@@ -880,87 +880,97 @@ ruleEqStatement returns [EObject current=null]
 	    }
 
 )
-)))
-    |(
-	otherlv_13=Seteq
+))
+	otherlv_13=Semicolon
     {
-    	newLeafNode(otherlv_13, grammarAccess.getEqStatementAccess().getSeteqKeyword_2_0());
+    	newLeafNode(otherlv_13, grammarAccess.getEqStatementAccess().getSemicolonKeyword_1_3());
+    }
+)
+    |(
+	otherlv_14=Seteq
+    {
+    	newLeafNode(otherlv_14, grammarAccess.getEqStatementAccess().getSeteqKeyword_2_0());
     }
 ((
 (
 		{ 
 	        newCompositeNode(grammarAccess.getEqStatementAccess().getLhsArgParserRuleCall_2_1_0_0()); 
 	    }
-		lv_lhs_14_0=ruleArg		{
+		lv_lhs_15_0=ruleArg		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getEqStatementRule());
 	        }
        		add(
        			$current, 
        			"lhs",
-        		lv_lhs_14_0, 
+        		lv_lhs_15_0, 
         		"com.rockwellcollins.atc.agree.Agree.Arg");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )(
-	otherlv_15=Comma
+	otherlv_16=Comma
     {
-    	newLeafNode(otherlv_15, grammarAccess.getEqStatementAccess().getCommaKeyword_2_1_1_0());
+    	newLeafNode(otherlv_16, grammarAccess.getEqStatementAccess().getCommaKeyword_2_1_1_0());
     }
 (
 (
 		{ 
 	        newCompositeNode(grammarAccess.getEqStatementAccess().getLhsArgParserRuleCall_2_1_1_1_0()); 
 	    }
-		lv_lhs_16_0=ruleArg		{
+		lv_lhs_17_0=ruleArg		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getEqStatementRule());
 	        }
        		add(
        			$current, 
        			"lhs",
-        		lv_lhs_16_0, 
+        		lv_lhs_17_0, 
         		"com.rockwellcollins.atc.agree.Agree.Arg");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 ))*)(
-	otherlv_17=EqualsSign
+	otherlv_18=EqualsSign
     {
-    	newLeafNode(otherlv_17, grammarAccess.getEqStatementAccess().getEqualsSignKeyword_2_2_0());
+    	newLeafNode(otherlv_18, grammarAccess.getEqStatementAccess().getEqualsSignKeyword_2_2_0());
     }
 
-	otherlv_18=LeftCurlyBracket
+	otherlv_19=LeftCurlyBracket
     {
-    	newLeafNode(otherlv_18, grammarAccess.getEqStatementAccess().getLeftCurlyBracketKeyword_2_2_1());
+    	newLeafNode(otherlv_19, grammarAccess.getEqStatementAccess().getLeftCurlyBracketKeyword_2_2_1());
     }
 (
 (
 		{ 
 	        newCompositeNode(grammarAccess.getEqStatementAccess().getExprListExprParserRuleCall_2_2_2_0()); 
 	    }
-		lv_exprList_19_0=ruleExpr		{
+		lv_exprList_20_0=ruleExpr		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getEqStatementRule());
 	        }
        		add(
        			$current, 
        			"exprList",
-        		lv_exprList_19_0, 
+        		lv_exprList_20_0, 
         		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )+
-	otherlv_20=RightCurlyBracket
+	otherlv_21=RightCurlyBracket
     {
-    	newLeafNode(otherlv_20, grammarAccess.getEqStatementAccess().getRightCurlyBracketKeyword_2_2_3());
+    	newLeafNode(otherlv_21, grammarAccess.getEqStatementAccess().getRightCurlyBracketKeyword_2_2_3());
     }
-)))
+)
+	otherlv_22=Semicolon
+    {
+    	newLeafNode(otherlv_22, grammarAccess.getEqStatementAccess().getSemicolonKeyword_2_3());
+    }
+))
 ;
 
 

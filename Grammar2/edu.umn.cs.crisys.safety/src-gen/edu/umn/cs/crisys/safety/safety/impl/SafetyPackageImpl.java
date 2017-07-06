@@ -526,9 +526,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getTriggerStatement_Probability()
+  public EAttribute getTriggerStatement_Probability()
   {
-    return (EReference)triggerStatementEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)triggerStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -606,7 +606,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     triggerStatementEClass = createEClass(TRIGGER_STATEMENT);
     createEReference(triggerStatementEClass, TRIGGER_STATEMENT__COND);
-    createEReference(triggerStatementEClass, TRIGGER_STATEMENT__PROBABILITY);
+    createEAttribute(triggerStatementEClass, TRIGGER_STATEMENT__PROBABILITY);
   }
 
   /**
@@ -703,7 +703,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(triggerStatementEClass, TriggerStatement.class, "TriggerStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerStatement_Cond(), this.getTriggerCondition(), null, "cond", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTriggerStatement_Probability(), theAgreePackage.getExpr(), null, "probability", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTriggerStatement_Probability(), theEcorePackage.getEString(), "probability", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

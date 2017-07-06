@@ -36,7 +36,7 @@ FaultSubcomponent:
 // 		trigger: transient [0,1]
 // will stand for time steps 0 and 1?
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
- 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=Expr ']')? ';'
+ 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| EqStatement ;
 
 	
@@ -57,10 +57,9 @@ TriggerCondition:
 @Override 
 EqStatement:
 	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-   | 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*)('=' interv=TimeInterval)
-   | 'seteq' (lhs+=Arg (',' lhs+=Arg)*)('=' '{'exprList+=(Expr)+ '}')
-	
-	;
+	| 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*)('=' interv=TimeInterval) ';'
+	| 'seteq' (lhs+=Arg (',' lhs+=Arg)*)('=' '{'exprList+=(Expr)+ '}') ';' 
+;
 
 
 

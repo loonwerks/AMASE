@@ -52,7 +52,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="TriggerStatement" eSuperTypes="#//FaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cond" eType="#//TriggerCondition"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="probability" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>
