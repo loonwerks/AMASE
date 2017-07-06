@@ -6,9 +6,12 @@ package edu.umn.cs.crisys.safety.validation;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
+
+import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 /**
@@ -18,12 +21,19 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
  */
 public class SafetyJavaValidator extends AgreeJavaValidator {
 	
-	
+	// Change package to SafetyPackage instead of AgreePackage.
 	@Override
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 
+	
+	// Test
+	@Check
+	public void checkInput(InputStatement inputStmt){
+		
+	}
+	
 //	@Check
 //	public void checkGreetingStartsWithCapital(Greeting greeting) {
 //		if (!Character.isUpperCase(greeting.getName().charAt(0))) {

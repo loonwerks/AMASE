@@ -36,7 +36,7 @@ FaultSubcomponent:
 // 		trigger: transient [0,1]
 // will stand for time steps 0 and 1?
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
- 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  '['probability=Expr ']' ';'
+ 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=Expr ']')* ';'
 	| EqStatement ;
 
 	
