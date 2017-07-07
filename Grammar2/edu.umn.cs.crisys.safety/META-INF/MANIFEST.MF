@@ -25,18 +25,17 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  com.rockwellcollins.atc.agree;bundle-version="2.1.3"
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: edu.umn.cs.crisys.safety.services,
+Export-Package: edu.umn.cs.crisys.safety,
+ edu.umn.cs.crisys.safety.formatting,
+ edu.umn.cs.crisys.safety.parser.antlr,
+ edu.umn.cs.crisys.safety.parser.antlr.internal,
+ edu.umn.cs.crisys.safety.parser.antlr.lexer,
+ edu.umn.cs.crisys.safety.safety,
  edu.umn.cs.crisys.safety.safety.impl,
  edu.umn.cs.crisys.safety.safety.util,
- edu.umn.cs.crisys.safety.validation,
- edu.umn.cs.crisys.safety.parser.antlr,
- edu.umn.cs.crisys.safety.serializer,
  edu.umn.cs.crisys.safety.scoping,
- edu.umn.cs.crisys.safety.safety,
- edu.umn.cs.crisys.safety.parser.antlr.internal,
+ edu.umn.cs.crisys.safety.serializer,
+ edu.umn.cs.crisys.safety.services,
  edu.umn.cs.crisys.safety.generator,
- edu.umn.cs.crisys.safety,
- edu.umn.cs.crisyse.safety.parser.antlr.lexer,
- edu.umn.cs.crisys.safety.formatting,
- edu.umn.cs.crisys.safety.parser.antlr.lexer
+ edu.umn.cs.crisys.safety.validation
 
