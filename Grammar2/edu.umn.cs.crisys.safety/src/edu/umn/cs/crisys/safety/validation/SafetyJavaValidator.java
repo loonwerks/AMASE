@@ -124,7 +124,7 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	}
 	
 	
-	// Check EqStatements: This includes Eq, SetEq, and IntervalEq
+	// Check EqStatements: This includes Eq: Equivalent to Agree's EqStatement
 	@Check
 	public void checkEqStatement(Eq eqStmt){
 		
@@ -184,7 +184,7 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 		
 	}
 	
-	// Check for cyclic assignments
+	// Check for cyclic assignments in Eq statement
 	@Check
 	public void checkMultiAssignEq(Eq eqStmt, EList<Arg> argList, Expr expr){
 		
@@ -193,10 +193,5 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 		
 	}
 	
-//	@Check
-//	public void checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.getName().charAt(0))) {
-//			warning("Name should start with a capital", MyDslPackage.Literals.GREETING__NAME);
-//		}
-//	}
+
 }

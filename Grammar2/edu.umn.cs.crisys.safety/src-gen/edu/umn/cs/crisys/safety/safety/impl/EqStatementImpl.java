@@ -26,8 +26,12 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.osate.aadl2.Aadl2Package;
+import org.osate.aadl2.Classifier;
 import org.osate.aadl2.Comment;
+import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
+import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.parsesupport.LocationReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -384,5 +388,59 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
     }
     return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
   }
+
+@Override
+public Comment createOwnedComment() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public NamedElement getElementRoot() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public EList<Element> getChildren() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public Classifier getContainingClassifier() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ComponentImplementation getContainingComponentImpl() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public LocationReference getLocationReference() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public void setLocationReference(String fn, int ln) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void setLocationReference(LocationReference lr) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public <T> T getAdapter(Class<T> adapter) {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 } //EqStatementImpl
