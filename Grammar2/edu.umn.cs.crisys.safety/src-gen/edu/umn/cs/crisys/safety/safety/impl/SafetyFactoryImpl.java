@@ -79,6 +79,9 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
+      case SafetyPackage.EQ: return createEq();
+      case SafetyPackage.INTERVAL_EQ: return createIntervalEq();
+      case SafetyPackage.SET_EQ: return createSetEq();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -247,6 +250,39 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     TriggerStatementImpl triggerStatement = new TriggerStatementImpl();
     return triggerStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Eq createEq()
+  {
+    EqImpl eq = new EqImpl();
+    return eq;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntervalEq createIntervalEq()
+  {
+    IntervalEqImpl intervalEq = new IntervalEqImpl();
+    return intervalEq;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SetEq createSetEq()
+  {
+    SetEqImpl setEq = new SetEqImpl();
+    return setEq;
   }
 
   /**

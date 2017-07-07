@@ -53,12 +53,13 @@ TriggerCondition:
 	
 
 // An eq statement can be an agree eq statement ('eq'...) or 
-// an interval or a set of discrete values/expressions.
+// an interval or a set of discrete values.
 @Override 
 EqStatement:
-	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	| 'intervaleq' (lhs+=Arg (',' lhs+=Arg)*)('=' interv=TimeInterval) ';'
-	| 'seteq' (lhs+=Arg (',' lhs+=Arg)*)('=' '{'exprList+=(Expr)+ '}') ';' 
+	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
+//	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
+    | {SetEq} 'seteq' lhs_set=Arg '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
 ;
 
 

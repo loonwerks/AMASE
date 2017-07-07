@@ -213,6 +213,42 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.EQ:
+      {
+        Eq eq = (Eq)theEObject;
+        T result = caseEq(eq);
+        if (result == null) result = caseEqStatement(eq);
+        if (result == null) result = caseFaultSubcomponent(eq);
+        if (result == null) result = caseAgree_EqStatement(eq);
+        if (result == null) result = caseAgree_SpecStatement(eq);
+        if (result == null) result = caseElement(eq);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.INTERVAL_EQ:
+      {
+        IntervalEq intervalEq = (IntervalEq)theEObject;
+        T result = caseIntervalEq(intervalEq);
+        if (result == null) result = caseEqStatement(intervalEq);
+        if (result == null) result = caseFaultSubcomponent(intervalEq);
+        if (result == null) result = caseAgree_EqStatement(intervalEq);
+        if (result == null) result = caseAgree_SpecStatement(intervalEq);
+        if (result == null) result = caseElement(intervalEq);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.SET_EQ:
+      {
+        SetEq setEq = (SetEq)theEObject;
+        T result = caseSetEq(setEq);
+        if (result == null) result = caseEqStatement(setEq);
+        if (result == null) result = caseFaultSubcomponent(setEq);
+        if (result == null) result = caseAgree_EqStatement(setEq);
+        if (result == null) result = caseAgree_SpecStatement(setEq);
+        if (result == null) result = caseElement(setEq);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       default: return defaultCase(theEObject);
     }
   }
@@ -453,6 +489,54 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTriggerStatement(TriggerStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Eq</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Eq</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseEq(Eq object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Interval Eq</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Interval Eq</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntervalEq(IntervalEq object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Set Eq</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Set Eq</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSetEq(SetEq object)
   {
     return null;
   }

@@ -3,20 +3,31 @@
  */
 package edu.umn.cs.crisys.safety.validation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.NamedElement;
 
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
+import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
+import edu.umn.cs.crisys.safety.safety.Eq;
+import edu.umn.cs.crisys.safety.safety.EqStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
+import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 
@@ -113,13 +124,74 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	}
 	
 	
-	// Need to override checkEqStatements 
-//	@Override
-//	@Check
-//	public void checkEqStatements()
+	// Check EqStatements: This includes Eq, SetEq, and IntervalEq
+	@Check
+	public void checkEqStatement(Eq eqStmt){
+		
+		// check for empty lhs list
+		if(eqStmt.getLhs().isEmpty()){
+			error(eqStmt, "Cannot have an empty list on lhs.");
+		}
+		
+		// Check to make sure we are within the safety annex
+		AnnexLibrary library = EcoreUtil2.getContainerOfType(eqStmt, AnnexLibrary.class);
+		if (library != null) {
+			error(eqStmt, "Equation statments are only allowed in safety annexes");
+		}
+		
+		// Check for cyclic assignments
+		checkMultiAssignEq(eqStmt, eqStmt.getLhs(), eqStmt.getExpr());
+		
+	}
 	
+	// Check the time interval passed in using Agree's method
+	@Check
+	public void checkIntervalEqStatement(IntervalEq intervalEq){
+		checkTimeInterval(intervalEq.getInterv());
+	}
 	
+	// Check the set eq statements
+	// Most of this is making sure integers are valid in set. 
+	@Check
+	public void checkSetEqStatement(SetEq setEq){
+		
+		// Pass Arg to Agree's validation class
+		checkArg(setEq.getLhs_set());
+		
+		// Try casting string to integer, catch exceptions to print out error
+		Integer result = 0;
+		try{
+			result = Integer.parseInt(setEq.getL1());
+		} catch(NullPointerException npe){
+			error(setEq, "Valid integer required in set");
+		} catch(NumberFormatException nfe){
+			error(setEq, "Valid integer required in set");
+		}
+		
+		// Now iterate through list making sure all integers are valid
+		for(String item: setEq.getList()){
+			try{
+				result = Integer.parseInt(item);
+			} catch(NullPointerException npe){
+				error(setEq, "Valid integer required in set");
+			} catch(NumberFormatException nfe){
+				error(setEq, "Valid integer required in set");
+			}
+		}
+
+
+		
+		
+	}
 	
+	// Check for cyclic assignments
+	@Check
+	public void checkMultiAssignEq(Eq eqStmt, EList<Arg> argList, Expr expr){
+		
+		
+		// Make sure to take into account nondeterminism here! Expr may be null.
+		
+	}
 	
 //	@Check
 //	public void checkGreetingStartsWithCapital(Greeting greeting) {

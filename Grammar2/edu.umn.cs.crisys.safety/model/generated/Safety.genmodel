@@ -52,9 +52,14 @@
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//Eq"/>
     <genClasses ecoreClass="Safety.ecore#//IntervalEq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/lhs_int"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/interv"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SetEq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/lhs_set"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/discreteList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/exprList"/>
     </genClasses>
   </genPackages>

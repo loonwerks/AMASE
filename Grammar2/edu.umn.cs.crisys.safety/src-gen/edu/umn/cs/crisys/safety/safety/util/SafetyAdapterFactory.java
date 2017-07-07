@@ -156,6 +156,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createTriggerStatementAdapter();
       }
       @Override
+      public Adapter caseEq(Eq object)
+      {
+        return createEqAdapter();
+      }
+      @Override
+      public Adapter caseIntervalEq(IntervalEq object)
+      {
+        return createIntervalEqAdapter();
+      }
+      @Override
+      public Adapter caseSetEq(SetEq object)
+      {
+        return createSetEqAdapter();
+      }
+      @Override
       public Adapter caseElement(Element object)
       {
         return createElementAdapter();
@@ -433,6 +448,51 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTriggerStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.Eq <em>Eq</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.Eq
+   * @generated
+   */
+  public Adapter createEqAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.IntervalEq <em>Interval Eq</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.IntervalEq
+   * @generated
+   */
+  public Adapter createIntervalEqAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.SetEq <em>Set Eq</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.SetEq
+   * @generated
+   */
+  public Adapter createSetEqAdapter()
   {
     return null;
   }

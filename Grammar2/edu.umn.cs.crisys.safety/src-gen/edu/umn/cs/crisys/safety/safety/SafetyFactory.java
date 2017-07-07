@@ -158,6 +158,33 @@ public interface SafetyFactory extends EFactory
   TriggerStatement createTriggerStatement();
 
   /**
+   * Returns a new object of class '<em>Eq</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Eq</em>'.
+   * @generated
+   */
+  Eq createEq();
+
+  /**
+   * Returns a new object of class '<em>Interval Eq</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Interval Eq</em>'.
+   * @generated
+   */
+  IntervalEq createIntervalEq();
+
+  /**
+   * Returns a new object of class '<em>Set Eq</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Set Eq</em>'.
+   * @generated
+   */
+  SetEq createSetEq();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

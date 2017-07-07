@@ -6,7 +6,6 @@ import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.SpecStatement;
-import com.rockwellcollins.atc.agree.agree.TimeInterval;
 
 import edu.umn.cs.crisys.safety.safety.EqStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -42,8 +41,6 @@ import org.osate.aadl2.Element;
  *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl#getOwnedComments <em>Owned Comment</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl#getLhs <em>Lhs</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl#getExpr <em>Expr</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl#getInterv <em>Interv</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl#getExprList <em>Expr List</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,26 +76,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
    * @ordered
    */
   protected Expr expr;
-
-  /**
-   * The cached value of the '{@link #getInterv() <em>Interv</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getInterv()
-   * @generated
-   * @ordered
-   */
-  protected TimeInterval interv;
-
-  /**
-   * The cached value of the '{@link #getExprList() <em>Expr List</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getExprList()
-   * @generated
-   * @ordered
-   */
-  protected EList<Expr> exprList;
 
   /**
    * <!-- begin-user-doc -->
@@ -216,68 +193,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public TimeInterval getInterv()
-  {
-    return interv;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetInterv(TimeInterval newInterv, NotificationChain msgs)
-  {
-    TimeInterval oldInterv = interv;
-    interv = newInterv;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.EQ_STATEMENT__INTERV, oldInterv, newInterv);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setInterv(TimeInterval newInterv)
-  {
-    if (newInterv != interv)
-    {
-      NotificationChain msgs = null;
-      if (interv != null)
-        msgs = ((InternalEObject)interv).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.EQ_STATEMENT__INTERV, null, msgs);
-      if (newInterv != null)
-        msgs = ((InternalEObject)newInterv).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.EQ_STATEMENT__INTERV, null, msgs);
-      msgs = basicSetInterv(newInterv, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.EQ_STATEMENT__INTERV, newInterv, newInterv));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<Expr> getExprList()
-  {
-    if (exprList == null)
-    {
-      exprList = new EObjectContainmentEList<Expr>(Expr.class, this, SafetyPackage.EQ_STATEMENT__EXPR_LIST);
-    }
-    return exprList;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public Element getOwner()
   {
     // TODO: implement this method
@@ -301,10 +216,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
         return ((InternalEList<?>)getLhs()).basicRemove(otherEnd, msgs);
       case SafetyPackage.EQ_STATEMENT__EXPR:
         return basicSetExpr(null, msgs);
-      case SafetyPackage.EQ_STATEMENT__INTERV:
-        return basicSetInterv(null, msgs);
-      case SafetyPackage.EQ_STATEMENT__EXPR_LIST:
-        return ((InternalEList<?>)getExprList()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -327,10 +238,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
         return getLhs();
       case SafetyPackage.EQ_STATEMENT__EXPR:
         return getExpr();
-      case SafetyPackage.EQ_STATEMENT__INTERV:
-        return getInterv();
-      case SafetyPackage.EQ_STATEMENT__EXPR_LIST:
-        return getExprList();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -357,13 +264,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
       case SafetyPackage.EQ_STATEMENT__EXPR:
         setExpr((Expr)newValue);
         return;
-      case SafetyPackage.EQ_STATEMENT__INTERV:
-        setInterv((TimeInterval)newValue);
-        return;
-      case SafetyPackage.EQ_STATEMENT__EXPR_LIST:
-        getExprList().clear();
-        getExprList().addAll((Collection<? extends Expr>)newValue);
-        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -387,12 +287,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
       case SafetyPackage.EQ_STATEMENT__EXPR:
         setExpr((Expr)null);
         return;
-      case SafetyPackage.EQ_STATEMENT__INTERV:
-        setInterv((TimeInterval)null);
-        return;
-      case SafetyPackage.EQ_STATEMENT__EXPR_LIST:
-        getExprList().clear();
-        return;
     }
     super.eUnset(featureID);
   }
@@ -415,10 +309,6 @@ public class EqStatementImpl extends FaultSubcomponentImpl implements EqStatemen
         return lhs != null && !lhs.isEmpty();
       case SafetyPackage.EQ_STATEMENT__EXPR:
         return expr != null;
-      case SafetyPackage.EQ_STATEMENT__INTERV:
-        return interv != null;
-      case SafetyPackage.EQ_STATEMENT__EXPR_LIST:
-        return exprList != null && !exprList.isEmpty();
     }
     return super.eIsSet(featureID);
   }
