@@ -13,7 +13,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
  * See https://www.eclipse.org/Xtext/documentation/304_ide_concepts.html#content-assist
  * on how to customize the content assistant.
  */
-public class SafetyProposalProvider extends edu.umn.cs.crisys.safety.ui.contentassist.AbstractSafetyProposalProvider{
+public class SafetyProposalProvider extends com.rockwellcollins.atc.agree.ui.contentassist.AbstractAgreeProposalProvider{
 
 
 //edu.umn.cs.crisys.safety.ui.contentassist.AbstractSafetyProposalProvider {
