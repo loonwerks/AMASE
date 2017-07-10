@@ -47,7 +47,7 @@ TemporalConstraint:
 
 // ' 
 TriggerCondition:
-	{TriggerCondition}'must' '{' exprList+=(Expr)+ '}' 
+	{TriggerCondition}'must' '{' exprList+=(Expr)+ '}'  
   | {TriggerCondition} 'enabler' '{' exprList+=(Expr)+ '}'  
 ;
 	
@@ -59,7 +59,7 @@ EqStatement:
 	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
 //	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
-    | {SetEq} 'seteq' lhs_set=Arg '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
+    | {SetEq} 'seteq' lhs_set =Arg '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
 ;
 
 
