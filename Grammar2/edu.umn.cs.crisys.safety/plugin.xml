@@ -3,12 +3,12 @@
 
 <plugin>
 
-  <extension point="org.eclipse.emf.ecore.generated_package">
-    <package 
-       uri = "http://www.xtext.org/example/safety/Safety" 
+  <extension point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
+    <agreeautomater  
        class = "edu.umn.cs.crisys.safety.safety.SafetyPackage"
-       genModel = "model/generated/Safety.genmodel" /> 
-	
+       id = "agreeautomater"
+       pluginName = "agreeautomater"> 
+	</agreeautomater>
   </extension>
 
 
