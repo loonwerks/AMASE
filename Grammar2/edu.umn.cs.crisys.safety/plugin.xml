@@ -5,7 +5,7 @@
 
   <extension point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
     <agreeautomater  
-       class = "edu.umn.cs.crisys.safety.safety.SafetyPackage"
+       class = "edu.umn.cs.crisys.safety.TransformAgreeProgram"
        id = "agreeautomater"
        pluginName = "agreeautomater"> 
 	</agreeautomater>
