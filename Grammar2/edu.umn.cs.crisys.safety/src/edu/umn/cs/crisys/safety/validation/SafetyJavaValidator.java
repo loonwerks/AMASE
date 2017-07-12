@@ -60,8 +60,9 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	}
 	
 	// Output Statements
+	// Need input here in order to make sure output names match
 	@Check
-	public void checkOutput(OutputStatement outputStmt){
+	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
 		String outConn = outputStmt.getOut_conn();
 		NamedElement nominalConn = outputStmt.getNom_conn();
 			
@@ -71,6 +72,10 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 		if(outConn.isEmpty()){
 			error(outputStmt, "Output connection name cannot be empty");
 		}
+		if(!(outConn.equals(inputStmt.getOut_conn()))){
+			error(outputStmt, "Output connection name must be equal to the input's output feild.");
+		}
+		
 	}
 	
 	// Duration statements
@@ -139,7 +144,9 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 			error(eqStmt, "Equation statments are only allowed in safety annexes");
 		}
 		
-		// Check for cyclic assignments
+		// Check for cyclic assignments 
+		// I would like to use Agree's validation here, but the method
+		// is private. 
 		checkMultiAssignEq(eqStmt, eqStmt.getLhs(), eqStmt.getExpr());
 		
 	}
@@ -186,10 +193,13 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	
 	// Check for cyclic assignments in Eq statement
 	@Check
-	public void checkMultiAssignEq(Eq eqStmt, EList<Arg> argList, Expr expr){
+	public void checkMultiAssignEq(Eq eqStmt, EList<Arg> lhsArgs, Expr rhsExpr){
 		
 		
 		// Make sure to take into account nondeterminism here! Expr may be null.
+		if (rhsExpr == null) {
+			return;
+		}
 		
 	}
 	
