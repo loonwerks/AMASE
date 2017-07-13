@@ -1,12 +1,9 @@
 package edu.umn.cs.crisys.safety;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 
 import jkind.lustre.Node;
@@ -22,10 +19,18 @@ public class TransformAgreeProgram implements AgreeAutomater{
 	@Override
 	public AgreeProgram transform(AgreeProgram program) {
 		
+		topNode = program.topNode;
+		agreeNodes = program.agreeNodes;
 		
+		// for each node in program: 
+		//   connect to safety annex info?
 		
 		
 		return program;
 	}
+	
+	
+	
+	
 
 }
