@@ -25,7 +25,7 @@ public class TransformAgreeProgram implements AgreeAutomater{
 		
 		
 		
-		return null;
+		return program;
 	}
 
 }
