@@ -10,27 +10,19 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 
 import jkind.lustre.Node;
+import jkind.lustre.Type;
 
 public class TransformAgreeProgram implements AgreeAutomater{
 
 	AgreeNode topNode;
-	List<AgreeVar> ast_inputs = new ArrayList<>();
-	List<AgreeStatement> ast_assertions = new ArrayList<>();
+	List<AgreeNode> agreeNodes;
+	List<Type> globalTypes;
+	List<Node> lustreNodes;
 	
 	@Override
 	public AgreeProgram transform(AgreeProgram program) {
 		
-		// Reset any leftovers from previous runs
-		ast_inputs.clear();
-		ast_assertions.clear();
-
-		// Make local copies of the final structures that we need to modify
-		topNode = program.topNode;
-		ast_inputs.addAll(topNode.inputs);
-		ast_assertions.addAll(topNode.assertions);
-				
-		List<Node> lustreNodes = new ArrayList<>();
-		lustreNodes.addAll(program.globalLustreNodes);
+		
 		
 		
 		return null;
