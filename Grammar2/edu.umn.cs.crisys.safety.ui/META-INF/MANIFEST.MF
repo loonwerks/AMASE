@@ -18,7 +18,10 @@ Require-Bundle: edu.umn.cs.crisys.safety,
  com.rockwellcollins.atc.agree.ui,
  org.eclipse.jface,
  org.osate.xtext.aadl2.properties.ui
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.osate.aadl2,
+ org.osate.aadl2.modelsupport.errorreporting,
+ org.osate.annexsupport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: edu.umn.cs.crisys.safety.ui.quickfix,
  edu.umn.cs.crisys.safety.ui.contentassist
