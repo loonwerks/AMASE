@@ -3,15 +3,26 @@
 
 <plugin>
 
-  <extension point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
-    <agreeautomater  
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.crisys.cs.umn.edu/safety/Safety"
        class = "edu.umn.cs.crisys.safety.TransformAgreeProgram"
-       id = "agreeautomater"
-       pluginName = "agreeautomater"> 
-	</agreeautomater>
+       genModel = "edu/umn.cs.crisys/safety/Safety.genmodel" > 
+	</package>
+  </extension>
+ 
+ 
+ <?This needs to be changed...?>
+  <extension
+        point="org.osate.pluginsupport.aadlcontribution">
+     <aadlcontribution
+           file="resources/Linearizer.aadl"
+           id="com.rockwellcollins.atc.agree.aadlcontribution2">
+     </aadlcontribution>
   </extension>
 
 
 
 
 </plugin>
+
