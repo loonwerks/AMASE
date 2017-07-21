@@ -14,9 +14,7 @@ features
 	pressure_output : out data port common::pressure.i;
 	stuck_at_occurred: in data port Base_Types::Boolean;
 
---annex safety {**
---	eq val = 9;
---**};	
+	
 annex AGREE {**
 	
 	-- 
@@ -33,7 +31,9 @@ annex AGREE {**
 	    pressure_output.val = faults.fail_to(nominal_pressure_output.val, alt_val.val, stuck_at_occurred);	
 **}	;
 
-
+annex safety {**
+	eq val = 9;
+**};
 
 annex EMV2 {**
 	use types error_library;
@@ -70,6 +70,8 @@ annex EMV2 {**
 		EMV2::OccurrenceDistribution => [ ProbabilityValue => 2.5e-5 ; Distribution => Poisson;] applies to HydraulicError, pressure_output.NoService;
 		
 **};
+
+
 end pump;
 
 

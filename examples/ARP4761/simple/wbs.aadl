@@ -282,9 +282,9 @@ connections
 		assert blue_skid.stuck_at_occurred = blue_skid_stuck_at_permanent;
 		assert shutoff.stuck_at_occurred = shutoff_stuck_at_permanent;
 		assert selector.stuck_at_occurred = selector_stuck_at_permanent;
-		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
-		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
-		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
+--		assert blue_pump.stuck_at_occurred = blue_pump_stuck_at_permanent;
+--		assert green_pump.stuck_at_occurred = green_pump_stuck_at_permanent;
+--		assert accumulator.stuck_at_occurred = accumulator_stuck_at_permanent;
 		assert accumulator_valve.stuck_at_occurred = accumulator_valve_stuck_at_permanent;
 		assert bscu.inverted_occurred = bscu_accumSelect_inverted_occurred_permanent;	 	
 		
