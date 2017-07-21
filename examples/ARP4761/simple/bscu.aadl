@@ -220,6 +220,11 @@ annex AGREE {**
 	    result = faults.inverted_fail(inverted_result, inverted_occurred);
 **}	;
 
+--annex safety {**
+--	eq f1 = 5;
+--	
+--**};
+
 annex EMV2 {**
 	use types error_library;
 	use behavior error_library::simple;
