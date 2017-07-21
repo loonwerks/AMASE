@@ -12,7 +12,6 @@ import org.osate.annexsupport.AnnexLinkingService;
 
 import com.google.inject.Injector;
 import com.rockwellcollins.atc.agree.linking.AgreeLinkingService;
-import com.rockwellcollins.atc.agree.ui.internal.AgreeActivator;
 
 import edu.umn.cs.crisys.safety.ui.internal.SafetyActivator;
 
