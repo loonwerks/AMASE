@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jkind"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jkind-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osate.aadl2"/>
+	<classpathentry kind="lib" path="/home/user/.p2/pool/plugins/org.eclipse.emf.ecore_2.11.2.v20160208-0816.jar" sourcepath="/home/user/.p2/pool/plugins/org.eclipse.emf.ecore.source_2.11.2.v20160208-0816.jar">
+		<accessrules>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/impl/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/plugin/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/resource/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/resource/impl/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/util/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/namespace/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/namespace/impl/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/namespace/util/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/impl/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/internal/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/util/*"/>
+			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.rockwellcollins.atc.agree"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

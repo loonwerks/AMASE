@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.crisys.cs.umn.edu/safety/Safety"
+       class = "edu.umn.cs.crisys.safety.TransformAgreeProgram"
+       genModel = "edu/umn.cs.crisys/safety/Safety.genmodel" > 
+	</package>
+  </extension>
+ 
+ 
+ <?This needs to be changed...?>
+  <extension
+        point="org.osate.pluginsupport.aadlcontribution">
+     <aadlcontribution
+           file="resources/Linearizer.aadl"
+           id="com.rockwellcollins.atc.agree.aadlcontribution2">
+     </aadlcontribution>
+  </extension>
+
+  
+<extension
+        point="org.osate.annexsupport.linkingservice">
+     <linkingservice
+           annexName="safety"
+           class="edu.umn.cs.crisys.safety.parsing.SafetyAnnexLinkingService"
+           id="edu.umn.cs.crisys.safety.linkingservice">
+     </linkingservice>
+  </extension>
+  <extension
+        point="org.osate.annexsupport.parser">
+     <parser
+           annexName="safety"
+           class="edu.umn.cs.crisys.safety.parsing.SafetyAnnexParser"
+           id="edu.umn.cs.crisys.safety.parser">
+     </parser>
+  </extension>
+  <extension
+        point="org.osate.annexsupport.contentassist">
+     <contentassist
+           annexName="safety"
+           class="edu.umn.cs.crisys.safety.parsing.SafetyAnnexContentAssist"
+           id="edu.umn.cs.crisys.safety.ui.contentassist1">
+     </contentassist>
+  </extension>
+
+
+</plugin>
+
