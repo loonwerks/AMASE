@@ -21,6 +21,7 @@ import org.osate.aadl2.modelsupport.errorreporting.ParseErrorReporter;
 
 public class SafetyAnnexParser implements AnnexParser{
 
+	
 	private SafetyParser parser;
 
     protected SafetyParser getParser() {
@@ -39,15 +40,14 @@ public class SafetyAnnexParser implements AnnexParser{
 	@Override
 	public AnnexLibrary parseAnnexLibrary(String annexName, String source, String filename, int line, int column,
 			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
-		// TODO Auto-generated method stub
-		return null;
+		return (AnnexLibrary) AnnexParseUtil.parse(getParser(),source, getGrammarAccess().getAgreeLibraryRule(), filename, line,
+                column, errReporter);
 	}
 
 	@Override
 	public AnnexSubclause parseAnnexSubclause(String annexName, String source, String filename, int line, int column,
 			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
-		// TODO Auto-generated method stub
-		return null;
+		return (AnnexSubclause) AnnexParseUtil.parse(getParser(),source,getGrammarAccess().getAgreeSubclauseRule(),filename,line,column, errReporter);
 	}
 
 	
