@@ -4,7 +4,12 @@ import org.osate.aadl2.AnnexLibrary;
 import org.osate.annexsupport.AnnexParseUtil;
 import org.osate.annexsupport.AnnexParser;
 
+import org.antlr.v4.runtime.RecognitionException;
+
 import com.google.inject.Injector;
+import com.rockwellcollins.atc.agree.parser.antlr.AgreeParser;
+import com.rockwellcollins.atc.agree.services.AgreeGrammarAccess;
+import com.rockwellcollins.atc.agree.ui.internal.AgreeActivator;
 
 import edu.umn.cs.crisys.safety.parser.antlr.SafetyParser;
 import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess;
@@ -20,30 +25,31 @@ public class SafetyAnnexParser implements AnnexParser{
 
     protected SafetyParser getParser() {
         if (parser == null) {
-            Injector injector = SafetyActivator.getInstance().getInjector(
+            Injector injector = AgreeActivator.getInstance().getInjector(
                     SafetyActivator.EDU_UMN_CS_CRISYS_SAFETY_SAFETY);
             parser = injector.getInstance(SafetyParser.class);
         }
         return parser;
     }
-    
+
     protected SafetyGrammarAccess getGrammarAccess() {
         return getParser().getGrammarAccess();
     }
 	
 	@Override
 	public AnnexLibrary parseAnnexLibrary(String annexName, String source, String filename, int line, int column,
-			ParseErrorReporter errReporter) {
+			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
 		// TODO Auto-generated method stub
-		return (AnnexLibrary) AnnexParseUtil.parse(getParser(),source, getGrammarAccess().getAgreeLibraryRule(), filename, line,
-                column, errReporter);
+		return null;
 	}
 
 	@Override
 	public AnnexSubclause parseAnnexSubclause(String annexName, String source, String filename, int line, int column,
-			ParseErrorReporter errReporter) {
+			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
 		// TODO Auto-generated method stub
-		return (AnnexSubclause) AnnexParseUtil.parse(getParser(),source,getGrammarAccess().getAgreeSubclauseRule(),filename,line,column, errReporter);
+		return null;
 	}
+
+	
 
 }
