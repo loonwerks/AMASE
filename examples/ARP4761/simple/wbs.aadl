@@ -302,6 +302,11 @@ connections
 		assert(fail_count <= 1);
 	**};
 	
+--	annex safety {**
+--		
+--		
+--	**};
+	
 end wbs.federated;
  
 system implementation wbs.ima
