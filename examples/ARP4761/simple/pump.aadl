@@ -13,7 +13,10 @@ system pump
 features
 	pressure_output : out data port common::pressure.i;
 	stuck_at_occurred: in data port Base_Types::Boolean;
-	
+
+--annex safety {**
+--	eq val = 9;
+--**};	
 annex AGREE {**
 	
 	-- 
@@ -29,6 +32,8 @@ annex AGREE {**
 	 guarantee "Output failure binding for pump (fail_to)" : 
 	    pressure_output.val = faults.fail_to(nominal_pressure_output.val, alt_val.val, stuck_at_occurred);	
 **}	;
+
+
 
 annex EMV2 {**
 	use types error_library;

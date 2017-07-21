@@ -22,6 +22,10 @@ system wbs
 	annex agree {**
 		guarantee "silly" : true;
 	**};
+	
+--	annex safety {**
+--		
+--	**};
 end wbs;
 
 system implementation wbs.generic
