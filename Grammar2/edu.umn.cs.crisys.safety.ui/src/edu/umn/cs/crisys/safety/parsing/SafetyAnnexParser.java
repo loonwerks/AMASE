@@ -40,6 +40,7 @@ public class SafetyAnnexParser implements AnnexParser{
 	@Override
 	public AnnexLibrary parseAnnexLibrary(String annexName, String source, String filename, int line, int column,
 			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
+		
 		return (AnnexLibrary) AnnexParseUtil.parse(getParser(),source, getGrammarAccess().getAgreeLibraryRule(), filename, line,
                 column, errReporter);
 	}
