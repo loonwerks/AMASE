@@ -31,9 +31,9 @@ annex AGREE {**
 	    pressure_output.val = faults.fail_to(nominal_pressure_output.val, alt_val.val, stuck_at_occurred);	
 **}	;
 
-annex safety {**
-	eq val = 9;
-**};
+--annex safety {**
+--	eq val = 9;
+--**};
 
 annex EMV2 {**
 	use types error_library;
