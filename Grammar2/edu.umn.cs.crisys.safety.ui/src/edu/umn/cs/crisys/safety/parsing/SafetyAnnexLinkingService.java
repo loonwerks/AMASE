@@ -13,6 +13,7 @@ import org.osate.annexsupport.AnnexLinkingService;
 import com.google.inject.Injector;
 import com.rockwellcollins.atc.agree.linking.AgreeLinkingService;
 
+import edu.umn.cs.crisys.safety.linking.SafetyLinkingService;
 import edu.umn.cs.crisys.safety.ui.internal.SafetyActivator;
 
 public class SafetyAnnexLinkingService implements AnnexLinkingService {
@@ -26,7 +27,7 @@ public class SafetyAnnexLinkingService implements AnnexLinkingService {
 	
     protected ILinkingService getLinkingService() {
         if (linkingService == null) {
-            linkingService = injector.getInstance(AgreeLinkingService.class);
+            linkingService = (ILinkingService) injector.getInstance(SafetyLinkingService.class);
         }
         return linkingService;
     }

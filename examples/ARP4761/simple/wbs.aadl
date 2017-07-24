@@ -300,7 +300,7 @@ connections
 		assert(fail_count <= 1);
 	**};
 --	annex safety {**
---		eq val = 5;
+--		eq test : bool;
 --	**};
 
 	

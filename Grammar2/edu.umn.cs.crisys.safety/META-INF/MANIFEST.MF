@@ -30,6 +30,8 @@ Import-Package: com.rockwellcollins.atc.agree.analysis.ast,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: edu.umn.cs.crisys.safety,
  edu.umn.cs.crisys.safety.formatting,
+ edu.umn.cs.crisys.safety.generator,
+ edu.umn.cs.crisys.safety.linking,
  edu.umn.cs.crisys.safety.parser.antlr,
  edu.umn.cs.crisys.safety.parser.antlr.internal,
  edu.umn.cs.crisys.safety.parser.antlr.lexer,
@@ -39,6 +41,5 @@ Export-Package: edu.umn.cs.crisys.safety,
  edu.umn.cs.crisys.safety.scoping,
  edu.umn.cs.crisys.safety.serializer,
  edu.umn.cs.crisys.safety.services,
- edu.umn.cs.crisys.safety.generator,
  edu.umn.cs.crisys.safety.validation
 
