@@ -26,7 +26,7 @@ public class SafetyAnnexParser implements AnnexParser{
 
     protected SafetyParser getParser() {
         if (parser == null) {
-            Injector injector = AgreeActivator.getInstance().getInjector(
+            Injector injector = SafetyActivator.getInstance().getInjector(
                     SafetyActivator.EDU_UMN_CS_CRISYS_SAFETY_SAFETY);
             parser = injector.getInstance(SafetyParser.class);
         }
