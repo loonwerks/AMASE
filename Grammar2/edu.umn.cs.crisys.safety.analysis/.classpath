@@ -24,5 +24,23 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.rockwellcollins.atc.agree"/>
+	<classpathentry kind="src" path="/com.rockwellcollins.atc.agree.analysis"/>
+	<classpathentry kind="lib" path="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar" sourcepath="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.equinox.registry.source_3.6.0.v20150318-1503.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/user/Downloads/eclipse%20(2)/plugins/org.eclipse.platform.doc.isv_4.5.2.v20160203-1325.jar!/reference/api"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/adapter/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/registry/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/registry/osgi/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/registry/spi/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/runtime/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/runtime/dynamichelpers/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/runtime/spi/*"/>
+			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/user/Downloads/org.eclipse.core.runtime-3.7.0.jar"/>
+	<classpathentry kind="lib" path="/home/user/Downloads/common-3.6.200-v20130402-1505.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

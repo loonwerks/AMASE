@@ -302,8 +302,8 @@ connections
 	**};
 --	annex safety {**
 --	
---		guarantee "Hello" : true;
---		eq test : bool;
+--		
+--		eq var = 0;
 --		
 --	  
 --	**};
