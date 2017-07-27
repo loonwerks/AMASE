@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class IntervalEqImpl extends EqStatementImpl implements IntervalEq
+public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
 {
   /**
    * The cached value of the '{@link #getLhs_int() <em>Lhs int</em>}' containment reference.

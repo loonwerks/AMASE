@@ -9,10 +9,10 @@ package edu.umn.cs.crisys.safety.safety;
  * <!-- end-user-doc -->
  *
  *
- * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEqStatement()
+ * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getSafetyEqStatement()
  * @model
  * @generated
  */
-public interface EqStatement extends FaultSubcomponent, com.rockwellcollins.atc.agree.agree.EqStatement
+public interface SafetyEqStatement extends FaultSubcomponent
 {
-} // EqStatement
+} // SafetyEqStatement

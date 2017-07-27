@@ -298,9 +298,14 @@ connections
 			faults.bool_to_int(accumulator_stuck_at_permanent) ; 
 		
 		assert(fail_count <= 1);
+		
 	**};
 --	annex safety {**
+--	
+--		guarantee "Hello" : true;
 --		eq test : bool;
+--		
+--	  
 --	**};
 
 	

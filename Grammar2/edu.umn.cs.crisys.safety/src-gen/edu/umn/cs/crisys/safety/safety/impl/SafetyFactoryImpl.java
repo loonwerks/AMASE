@@ -70,7 +70,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.SPEC_STATEMENT: return createSpecStatement();
       case SafetyPackage.FAULT_SUBCOMPONENT: return createFaultSubcomponent();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
-      case SafetyPackage.EQ_STATEMENT: return createEqStatement();
+      case SafetyPackage.SAFETY_EQ_STATEMENT: return createSafetyEqStatement();
       case SafetyPackage.SAFETY_CONTRACT_LIBRARY: return createSafetyContractLibrary();
       case SafetyPackage.SAFETY_CONTRACT_SUBCLAUSE: return createSafetyContractSubclause();
       case SafetyPackage.SAFETY_CONTRACT: return createSafetyContract();
@@ -158,10 +158,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public EqStatement createEqStatement()
+  public SafetyEqStatement createSafetyEqStatement()
   {
-    EqStatementImpl eqStatement = new EqStatementImpl();
-    return eqStatement;
+    SafetyEqStatementImpl safetyEqStatement = new SafetyEqStatementImpl();
+    return safetyEqStatement;
   }
 
   /**

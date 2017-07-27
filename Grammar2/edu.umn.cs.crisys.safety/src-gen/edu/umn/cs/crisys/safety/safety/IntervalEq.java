@@ -22,7 +22,7 @@ import com.rockwellcollins.atc.agree.agree.TimeInterval;
  * @model
  * @generated
  */
-public interface IntervalEq extends EqStatement
+public interface IntervalEq extends SafetyEqStatement
 {
   /**
    * Returns the value of the '<em><b>Lhs int</b></em>' containment reference.

@@ -15,10 +15,7 @@
     <genClasses ecoreClass="Safety.ecore#//TriggerCondition">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerCondition/exprList"/>
     </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//EqStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EqStatement/interv"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EqStatement/exprList"/>
-    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//SafetyEqStatement"/>
     <genClasses ecoreClass="Safety.ecore#//SafetyContractLibrary">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SafetyContractLibrary/contract"/>
     </genClasses>
@@ -36,7 +33,6 @@
     <genClasses ecoreClass="Safety.ecore#//InputStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_conn"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//InputStatement/out_conn"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/expr"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//OutputStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//OutputStatement/out_conn"/>
@@ -48,9 +44,12 @@
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
     </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//Eq"/>
+    <genClasses ecoreClass="Safety.ecore#//Eq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/expr"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//IntervalEq">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/lhs_int"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/interv"/>
@@ -59,8 +58,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/lhs_set"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/discreteList"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/exprList"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//EqStatement"/>
   </genPackages>
 </genmodel:GenModel>

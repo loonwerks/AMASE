@@ -24,7 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface SetEq extends EqStatement
+public interface SetEq extends SafetyEqStatement
 {
   /**
    * Returns the value of the '<em><b>Lhs set</b></em>' containment reference.

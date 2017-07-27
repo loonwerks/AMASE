@@ -7,7 +7,6 @@ import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import edu.umn.cs.crisys.safety.safety.Contract;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.Eq;
-import edu.umn.cs.crisys.safety.safety.EqStatement;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
@@ -16,6 +15,7 @@ import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
+import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyFactory;
 import edu.umn.cs.crisys.safety.safety.SafetyLibrary;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -90,7 +90,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass eqStatementEClass = null;
+  private EClass safetyEqStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -310,9 +310,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getEqStatement()
+  public EClass getSafetyEqStatement()
   {
-    return eqStatementEClass;
+    return safetyEqStatementEClass;
   }
 
   /**
@@ -550,6 +550,26 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getEq_Lhs()
+  {
+    return (EReference)eqEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEq_Expr()
+  {
+    return (EReference)eqEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getIntervalEq()
   {
     return intervalEqEClass;
@@ -658,7 +678,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     triggerConditionEClass = createEClass(TRIGGER_CONDITION);
     createEReference(triggerConditionEClass, TRIGGER_CONDITION__EXPR_LIST);
 
-    eqStatementEClass = createEClass(EQ_STATEMENT);
+    safetyEqStatementEClass = createEClass(SAFETY_EQ_STATEMENT);
 
     safetyContractLibraryEClass = createEClass(SAFETY_CONTRACT_LIBRARY);
     createEReference(safetyContractLibraryEClass, SAFETY_CONTRACT_LIBRARY__CONTRACT);
@@ -691,6 +711,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEAttribute(triggerStatementEClass, TRIGGER_STATEMENT__PROBABILITY);
 
     eqEClass = createEClass(EQ);
+    createEReference(eqEClass, EQ__LHS);
+    createEReference(eqEClass, EQ__EXPR);
 
     intervalEqEClass = createEClass(INTERVAL_EQ);
     createEReference(intervalEqEClass, INTERVAL_EQ__LHS_INT);
@@ -727,20 +749,19 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     setNsURI(eNS_URI);
 
     // Obtain other dependent packages
-    Aadl2Package theAadl2Package = (Aadl2Package)EPackage.Registry.INSTANCE.getEPackage(Aadl2Package.eNS_URI);
     AgreePackage theAgreePackage = (AgreePackage)EPackage.Registry.INSTANCE.getEPackage(AgreePackage.eNS_URI);
     EcorePackage theEcorePackage = (EcorePackage)EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
+    Aadl2Package theAadl2Package = (Aadl2Package)EPackage.Registry.INSTANCE.getEPackage(Aadl2Package.eNS_URI);
 
     // Create type parameters
 
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    safetyLibraryEClass.getESuperTypes().add(theAadl2Package.getAnnexLibrary());
-    safetySubclauseEClass.getESuperTypes().add(theAadl2Package.getAnnexSubclause());
+    safetyLibraryEClass.getESuperTypes().add(theAgreePackage.getAgreeLibrary());
+    safetySubclauseEClass.getESuperTypes().add(theAgreePackage.getAgreeSubclause());
     specStatementEClass.getESuperTypes().add(theAgreePackage.getSpecStatement());
-    eqStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
-    eqStatementEClass.getESuperTypes().add(theAgreePackage.getEqStatement());
+    safetyEqStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     safetyContractLibraryEClass.getESuperTypes().add(this.getSafetyLibrary());
     safetyContractSubclauseEClass.getESuperTypes().add(this.getSafetySubclause());
     safetyContractEClass.getESuperTypes().add(this.getContract());
@@ -749,9 +770,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     outputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     durationStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
-    eqEClass.getESuperTypes().add(this.getEqStatement());
-    intervalEqEClass.getESuperTypes().add(this.getEqStatement());
-    setEqEClass.getESuperTypes().add(this.getEqStatement());
+    eqEClass.getESuperTypes().add(this.getSafetyEqStatement());
+    intervalEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
+    setEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(safetyLibraryEClass, SafetyLibrary.class, "SafetyLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -767,7 +788,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEClass(triggerConditionEClass, TriggerCondition.class, "TriggerCondition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerCondition_ExprList(), theAgreePackage.getExpr(), null, "exprList", null, 0, -1, TriggerCondition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(eqStatementEClass, EqStatement.class, "EqStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(safetyEqStatementEClass, SafetyEqStatement.class, "SafetyEqStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(safetyContractLibraryEClass, SafetyContractLibrary.class, "SafetyContractLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSafetyContractLibrary_Contract(), this.getContract(), null, "contract", null, 0, 1, SafetyContractLibrary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -800,6 +821,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEAttribute(getTriggerStatement_Probability(), theEcorePackage.getEString(), "probability", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eqEClass, Eq.class, "Eq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getEq_Lhs(), theAgreePackage.getArg(), null, "lhs", null, 0, -1, Eq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEq_Expr(), theAgreePackage.getExpr(), null, "expr", null, 0, 1, Eq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(intervalEqEClass, IntervalEq.class, "IntervalEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getIntervalEq_Lhs_int(), theAgreePackage.getArg(), null, "lhs_int", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -23,7 +23,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexLibrary");
 		private final RuleCall cSafetyLibraryParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@ Override AnnexLibrary aadl2::AnnexLibrary:
+		//@ Override //AnnexLibrary returns aadl2::AnnexLibrary:
+		//AnnexLibrary agree::AgreeLibrary:
 		//	SafetyLibrary;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -35,10 +36,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexSubclause");
 		private final RuleCall cSafetySubclauseParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@ Override AnnexSubclause aadl2::AnnexSubclause:
+		//@ Override AnnexSubclause agree::AgreeSubclause:
 		//	SafetySubclause;
 		@Override public ParserRule getRule() { return rule; }
 
+		////AnnexSubclause returns aadl2::AnnexSubclause:
 		//SafetySubclause
 		public RuleCall getSafetySubclauseParserRuleCall() { return cSafetySubclauseParserRuleCall; }
 	}
@@ -210,7 +212,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cProbabilityREAL_LITTerminalRuleCall_3_4_1_0 = (RuleCall)cProbabilityAssignment_3_4_1.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_3_4_2 = (Keyword)cGroup_3_4.eContents().get(2);
 		private final Keyword cSemicolonKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
-		private final RuleCall cEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
+		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
 		//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
@@ -221,7 +223,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	// will stand for time steps 0 and 1?
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
-		//	| EqStatement;
+		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
 		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' | {OutputStatement} 'output' ':'
@@ -230,7 +232,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//// 		trigger: transient [0,1]
 		//// will stand for time steps 0 and 1?
 		//| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';' | {TriggerStatement} 'trigger' ':'
-		//cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | EqStatement
+		//cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
@@ -362,8 +364,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_3_5() { return cSemicolonKeyword_3_5; }
 
-		//EqStatement
-		public RuleCall getEqStatementParserRuleCall_4() { return cEqStatementParserRuleCall_4; }
+		//SafetyEqStatement
+		public RuleCall getSafetyEqStatementParserRuleCall_4() { return cSafetyEqStatementParserRuleCall_4; }
 	}
 
 	public class TemporalConstraintElements extends AbstractParserRuleElementFinder {
@@ -457,8 +459,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		public Keyword getRightCurlyBracketKeyword_1_4() { return cRightCurlyBracketKeyword_1_4; }
 	}
 
-	public class EqStatementElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.EqStatement");
+	public class SafetyEqStatementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.SafetyEqStatement");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
 		private final Action cEqAction_0_0 = (Action)cGroup_0.eContents().get(0);
@@ -500,7 +502,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_2_7 = (Keyword)cGroup_2.eContents().get(7);
 		private final Keyword cSemicolonKeyword_2_8 = (Keyword)cGroup_2.eContents().get(8);
 		
-		//@ Override EqStatement:
+		//// An eq statement can be an agree eq statement ('eq'...) or 
+		//// an interval or a set of discrete values.
+		//SafetyEqStatement:
 		//	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 		//	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
 		//	//	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
@@ -640,7 +644,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	private final FaultSubcomponentElements pFaultSubcomponent;
 	private final TemporalConstraintElements pTemporalConstraint;
 	private final TriggerConditionElements pTriggerCondition;
-	private final EqStatementElements pEqStatement;
+	private final SafetyEqStatementElements pSafetyEqStatement;
 	
 	private final Grammar grammar;
 
@@ -664,7 +668,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		this.pFaultSubcomponent = new FaultSubcomponentElements();
 		this.pTemporalConstraint = new TemporalConstraintElements();
 		this.pTriggerCondition = new TriggerConditionElements();
-		this.pEqStatement = new EqStatementElements();
+		this.pSafetyEqStatement = new SafetyEqStatementElements();
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -698,7 +702,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	
-	//@ Override AnnexLibrary aadl2::AnnexLibrary:
+	//@ Override //AnnexLibrary returns aadl2::AnnexLibrary:
+	//AnnexLibrary agree::AgreeLibrary:
 	//	SafetyLibrary;
 	public AnnexLibraryElements getAnnexLibraryAccess() {
 		return pAnnexLibrary;
@@ -708,7 +713,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getAnnexLibraryAccess().getRule();
 	}
 
-	//@ Override AnnexSubclause aadl2::AnnexSubclause:
+	//@ Override AnnexSubclause agree::AgreeSubclause:
 	//	SafetySubclause;
 	public AnnexSubclauseElements getAnnexSubclauseAccess() {
 		return pAnnexSubclause;
@@ -768,7 +773,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	// will stand for time steps 0 and 1?
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
-	//	| EqStatement;
+	//	| SafetyEqStatement;
 	public FaultSubcomponentElements getFaultSubcomponentAccess() {
 		return pFaultSubcomponent;
 	}
@@ -800,17 +805,19 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getTriggerConditionAccess().getRule();
 	}
 
-	//@ Override EqStatement:
+	//// An eq statement can be an agree eq statement ('eq'...) or 
+	//// an interval or a set of discrete values.
+	//SafetyEqStatement:
 	//	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 	//	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
 	//	//	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
 	//	| {SetEq} 'seteq' lhs_set=Arg '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';';
-	public EqStatementElements getEqStatementAccess() {
-		return pEqStatement;
+	public SafetyEqStatementElements getSafetyEqStatementAccess() {
+		return pSafetyEqStatement;
 	}
 	
-	public ParserRule getEqStatementRule() {
-		return getEqStatementAccess().getRule();
+	public ParserRule getSafetyEqStatementRule() {
+		return getSafetyEqStatementAccess().getRule();
 	}
 
 	//NamedElement aadl2::NamedElement:
@@ -840,7 +847,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	| super::SpecStatement
 	//	| NodeStmt
 	//	| NodeBodyExpr
-	//	| super::EqStatement
+	//	| EqStatement
 	//	| InputStatement;
 	public AgreeGrammarAccess.ElementElements getElementAccess() {
 		return gaAgree.getElementAccess();
@@ -1025,6 +1032,16 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getEnumStatementRule() {
 		return getEnumStatementAccess().getRule();
+	}
+
+	//EqStatement:
+	//	'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';';
+	public AgreeGrammarAccess.EqStatementElements getEqStatementAccess() {
+		return gaAgree.getEqStatementAccess();
+	}
+	
+	public ParserRule getEqStatementRule() {
+		return getEqStatementAccess().getRule();
 	}
 
 	//InputStatement:

@@ -36,7 +36,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  *
  * @generated
  */
-public class SetEqImpl extends EqStatementImpl implements SetEq
+public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
 {
   /**
    * The cached value of the '{@link #getLhs_set() <em>Lhs set</em>}' containment reference.

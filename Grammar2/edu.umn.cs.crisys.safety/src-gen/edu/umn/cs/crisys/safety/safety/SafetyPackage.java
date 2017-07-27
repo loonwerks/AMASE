@@ -9,8 +9,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
-import org.osate.aadl2.Aadl2Package;
-
 /**
  * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
@@ -77,7 +75,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_ELEMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_ELEMENT;
+  int SAFETY_LIBRARY__OWNED_ELEMENT = AgreePackage.AGREE_LIBRARY__OWNED_ELEMENT;
 
   /**
    * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
@@ -86,7 +84,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_COMMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_COMMENT;
+  int SAFETY_LIBRARY__OWNED_COMMENT = AgreePackage.AGREE_LIBRARY__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -95,7 +93,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__NAME = Aadl2Package.ANNEX_LIBRARY__NAME;
+  int SAFETY_LIBRARY__NAME = AgreePackage.AGREE_LIBRARY__NAME;
 
   /**
    * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
@@ -104,7 +102,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__QUALIFIED_NAME = Aadl2Package.ANNEX_LIBRARY__QUALIFIED_NAME;
+  int SAFETY_LIBRARY__QUALIFIED_NAME = AgreePackage.AGREE_LIBRARY__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
@@ -113,7 +111,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
+  int SAFETY_LIBRARY__OWNED_PROPERTY_ASSOCIATION = AgreePackage.AGREE_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
 
   /**
    * The number of structural features of the '<em>Library</em>' class.
@@ -122,7 +120,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY_FEATURE_COUNT = Aadl2Package.ANNEX_LIBRARY_FEATURE_COUNT + 0;
+  int SAFETY_LIBRARY_FEATURE_COUNT = AgreePackage.AGREE_LIBRARY_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetySubclauseImpl <em>Subclause</em>}' class.
@@ -141,7 +139,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_ELEMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_ELEMENT;
+  int SAFETY_SUBCLAUSE__OWNED_ELEMENT = AgreePackage.AGREE_SUBCLAUSE__OWNED_ELEMENT;
 
   /**
    * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
@@ -150,7 +148,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_COMMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_COMMENT;
+  int SAFETY_SUBCLAUSE__OWNED_COMMENT = AgreePackage.AGREE_SUBCLAUSE__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -159,7 +157,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__NAME = Aadl2Package.ANNEX_SUBCLAUSE__NAME;
+  int SAFETY_SUBCLAUSE__NAME = AgreePackage.AGREE_SUBCLAUSE__NAME;
 
   /**
    * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
@@ -168,7 +166,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__QUALIFIED_NAME = Aadl2Package.ANNEX_SUBCLAUSE__QUALIFIED_NAME;
+  int SAFETY_SUBCLAUSE__QUALIFIED_NAME = AgreePackage.AGREE_SUBCLAUSE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
@@ -177,7 +175,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
+  int SAFETY_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = AgreePackage.AGREE_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
 
   /**
    * The feature id for the '<em><b>In Mode</b></em>' reference list.
@@ -186,7 +184,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__IN_MODE = Aadl2Package.ANNEX_SUBCLAUSE__IN_MODE;
+  int SAFETY_SUBCLAUSE__IN_MODE = AgreePackage.AGREE_SUBCLAUSE__IN_MODE;
 
   /**
    * The number of structural features of the '<em>Subclause</em>' class.
@@ -195,7 +193,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE_FEATURE_COUNT = Aadl2Package.ANNEX_SUBCLAUSE_FEATURE_COUNT + 0;
+  int SAFETY_SUBCLAUSE_FEATURE_COUNT = AgreePackage.AGREE_SUBCLAUSE_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.ContractImpl <em>Contract</em>}' class.
@@ -301,50 +299,14 @@ public interface SafetyPackage extends EPackage
   int TRIGGER_CONDITION_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl <em>Eq Statement</em>}' class.
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyEqStatementImpl <em>Eq Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl
-   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqStatement()
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyEqStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyEqStatement()
    * @generated
    */
-  int EQ_STATEMENT = 6;
-
-  /**
-   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EQ_STATEMENT__OWNED_ELEMENT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EQ_STATEMENT__OWNED_COMMENT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Lhs</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EQ_STATEMENT__LHS = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EQ_STATEMENT__EXPR = FAULT_SUBCOMPONENT_FEATURE_COUNT + 3;
+  int SAFETY_EQ_STATEMENT = 6;
 
   /**
    * The number of structural features of the '<em>Eq Statement</em>' class.
@@ -353,7 +315,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EQ_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 4;
+  int SAFETY_EQ_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyContractLibraryImpl <em>Contract Library</em>}' class.
@@ -761,31 +723,13 @@ public interface SafetyPackage extends EPackage
   int EQ = 15;
 
   /**
-   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EQ__OWNED_ELEMENT = EQ_STATEMENT__OWNED_ELEMENT;
-
-  /**
-   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EQ__OWNED_COMMENT = EQ_STATEMENT__OWNED_COMMENT;
-
-  /**
    * The feature id for the '<em><b>Lhs</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EQ__LHS = EQ_STATEMENT__LHS;
+  int EQ__LHS = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -794,7 +738,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EQ__EXPR = EQ_STATEMENT__EXPR;
+  int EQ__EXPR = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Eq</em>' class.
@@ -803,7 +747,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EQ_FEATURE_COUNT = EQ_STATEMENT_FEATURE_COUNT + 0;
+  int EQ_FEATURE_COUNT = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.IntervalEqImpl <em>Interval Eq</em>}' class.
@@ -816,49 +760,13 @@ public interface SafetyPackage extends EPackage
   int INTERVAL_EQ = 16;
 
   /**
-   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL_EQ__OWNED_ELEMENT = EQ_STATEMENT__OWNED_ELEMENT;
-
-  /**
-   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL_EQ__OWNED_COMMENT = EQ_STATEMENT__OWNED_COMMENT;
-
-  /**
-   * The feature id for the '<em><b>Lhs</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL_EQ__LHS = EQ_STATEMENT__LHS;
-
-  /**
-   * The feature id for the '<em><b>Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL_EQ__EXPR = EQ_STATEMENT__EXPR;
-
-  /**
    * The feature id for the '<em><b>Lhs int</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INTERVAL_EQ__LHS_INT = EQ_STATEMENT_FEATURE_COUNT + 0;
+  int INTERVAL_EQ__LHS_INT = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Interv</b></em>' containment reference.
@@ -867,7 +775,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INTERVAL_EQ__INTERV = EQ_STATEMENT_FEATURE_COUNT + 1;
+  int INTERVAL_EQ__INTERV = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Interval Eq</em>' class.
@@ -876,7 +784,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INTERVAL_EQ_FEATURE_COUNT = EQ_STATEMENT_FEATURE_COUNT + 2;
+  int INTERVAL_EQ_FEATURE_COUNT = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SetEqImpl <em>Set Eq</em>}' class.
@@ -889,49 +797,13 @@ public interface SafetyPackage extends EPackage
   int SET_EQ = 17;
 
   /**
-   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SET_EQ__OWNED_ELEMENT = EQ_STATEMENT__OWNED_ELEMENT;
-
-  /**
-   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SET_EQ__OWNED_COMMENT = EQ_STATEMENT__OWNED_COMMENT;
-
-  /**
-   * The feature id for the '<em><b>Lhs</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SET_EQ__LHS = EQ_STATEMENT__LHS;
-
-  /**
-   * The feature id for the '<em><b>Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SET_EQ__EXPR = EQ_STATEMENT__EXPR;
-
-  /**
    * The feature id for the '<em><b>Lhs set</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SET_EQ__LHS_SET = EQ_STATEMENT_FEATURE_COUNT + 0;
+  int SET_EQ__LHS_SET = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>L1</b></em>' attribute.
@@ -940,7 +812,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_EQ__L1 = EQ_STATEMENT_FEATURE_COUNT + 1;
+  int SET_EQ__L1 = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>List</b></em>' attribute list.
@@ -949,7 +821,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_EQ__LIST = EQ_STATEMENT_FEATURE_COUNT + 2;
+  int SET_EQ__LIST = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Set Eq</em>' class.
@@ -958,7 +830,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_EQ_FEATURE_COUNT = EQ_STATEMENT_FEATURE_COUNT + 3;
+  int SET_EQ_FEATURE_COUNT = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 3;
 
 
   /**
@@ -1033,14 +905,14 @@ public interface SafetyPackage extends EPackage
   EReference getTriggerCondition_ExprList();
 
   /**
-   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.EqStatement <em>Eq Statement</em>}'.
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.SafetyEqStatement <em>Eq Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>Eq Statement</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.EqStatement
+   * @see edu.umn.cs.crisys.safety.safety.SafetyEqStatement
    * @generated
    */
-  EClass getEqStatement();
+  EClass getSafetyEqStatement();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.SafetyContractLibrary <em>Contract Library</em>}'.
@@ -1287,6 +1159,28 @@ public interface SafetyPackage extends EPackage
   EClass getEq();
 
   /**
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.Eq#getLhs <em>Lhs</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Lhs</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.Eq#getLhs()
+   * @see #getEq()
+   * @generated
+   */
+  EReference getEq_Lhs();
+
+  /**
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.Eq#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.Eq#getExpr()
+   * @see #getEq()
+   * @generated
+   */
+  EReference getEq_Expr();
+
+  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.IntervalEq <em>Interval Eq</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1453,14 +1347,14 @@ public interface SafetyPackage extends EPackage
     EReference TRIGGER_CONDITION__EXPR_LIST = eINSTANCE.getTriggerCondition_ExprList();
 
     /**
-     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl <em>Eq Statement</em>}' class.
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyEqStatementImpl <em>Eq Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see edu.umn.cs.crisys.safety.safety.impl.EqStatementImpl
-     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqStatement()
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyEqStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyEqStatement()
      * @generated
      */
-    EClass EQ_STATEMENT = eINSTANCE.getEqStatement();
+    EClass SAFETY_EQ_STATEMENT = eINSTANCE.getSafetyEqStatement();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyContractLibraryImpl <em>Contract Library</em>}' class.
@@ -1663,6 +1557,22 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EClass EQ = eINSTANCE.getEq();
+
+    /**
+     * The meta object literal for the '<em><b>Lhs</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EQ__LHS = eINSTANCE.getEq_Lhs();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EQ__EXPR = eINSTANCE.getEq_Expr();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.IntervalEqImpl <em>Interval Eq</em>}' class.

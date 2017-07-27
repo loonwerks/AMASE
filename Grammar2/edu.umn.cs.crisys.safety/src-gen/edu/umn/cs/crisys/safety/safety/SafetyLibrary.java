@@ -2,9 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import org.eclipse.emf.ecore.EObject;
-
-import org.osate.aadl2.AnnexLibrary;
+import com.rockwellcollins.atc.agree.agree.AgreeLibrary;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +14,6 @@ import org.osate.aadl2.AnnexLibrary;
  * @model
  * @generated
  */
-public interface SafetyLibrary extends EObject, AnnexLibrary
+public interface SafetyLibrary extends AgreeLibrary
 {
 } // SafetyLibrary

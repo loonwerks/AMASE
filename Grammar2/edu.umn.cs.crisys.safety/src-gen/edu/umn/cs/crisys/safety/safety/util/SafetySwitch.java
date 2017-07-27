@@ -2,6 +2,9 @@
  */
 package edu.umn.cs.crisys.safety.safety.util;
 
+import com.rockwellcollins.atc.agree.agree.AgreeLibrary;
+import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
+
 import edu.umn.cs.crisys.safety.safety.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -82,6 +85,7 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SafetyLibrary safetyLibrary = (SafetyLibrary)theEObject;
         T result = caseSafetyLibrary(safetyLibrary);
+        if (result == null) result = caseAgreeLibrary(safetyLibrary);
         if (result == null) result = caseAnnexLibrary(safetyLibrary);
         if (result == null) result = caseNamedElement(safetyLibrary);
         if (result == null) result = caseElement(safetyLibrary);
@@ -92,6 +96,7 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SafetySubclause safetySubclause = (SafetySubclause)theEObject;
         T result = caseSafetySubclause(safetySubclause);
+        if (result == null) result = caseAgreeSubclause(safetySubclause);
         if (result == null) result = caseAnnexSubclause(safetySubclause);
         if (result == null) result = caseModalElement(safetySubclause);
         if (result == null) result = caseNamedElement(safetySubclause);
@@ -129,14 +134,11 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SafetyPackage.EQ_STATEMENT:
+      case SafetyPackage.SAFETY_EQ_STATEMENT:
       {
-        EqStatement eqStatement = (EqStatement)theEObject;
-        T result = caseEqStatement(eqStatement);
-        if (result == null) result = caseFaultSubcomponent(eqStatement);
-        if (result == null) result = caseAgree_EqStatement(eqStatement);
-        if (result == null) result = caseAgree_SpecStatement(eqStatement);
-        if (result == null) result = caseElement(eqStatement);
+        SafetyEqStatement safetyEqStatement = (SafetyEqStatement)theEObject;
+        T result = caseSafetyEqStatement(safetyEqStatement);
+        if (result == null) result = caseFaultSubcomponent(safetyEqStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -145,6 +147,7 @@ public class SafetySwitch<T> extends Switch<T>
         SafetyContractLibrary safetyContractLibrary = (SafetyContractLibrary)theEObject;
         T result = caseSafetyContractLibrary(safetyContractLibrary);
         if (result == null) result = caseSafetyLibrary(safetyContractLibrary);
+        if (result == null) result = caseAgreeLibrary(safetyContractLibrary);
         if (result == null) result = caseAnnexLibrary(safetyContractLibrary);
         if (result == null) result = caseNamedElement(safetyContractLibrary);
         if (result == null) result = caseElement(safetyContractLibrary);
@@ -156,6 +159,7 @@ public class SafetySwitch<T> extends Switch<T>
         SafetyContractSubclause safetyContractSubclause = (SafetyContractSubclause)theEObject;
         T result = caseSafetyContractSubclause(safetyContractSubclause);
         if (result == null) result = caseSafetySubclause(safetyContractSubclause);
+        if (result == null) result = caseAgreeSubclause(safetyContractSubclause);
         if (result == null) result = caseAnnexSubclause(safetyContractSubclause);
         if (result == null) result = caseModalElement(safetyContractSubclause);
         if (result == null) result = caseNamedElement(safetyContractSubclause);
@@ -217,11 +221,8 @@ public class SafetySwitch<T> extends Switch<T>
       {
         Eq eq = (Eq)theEObject;
         T result = caseEq(eq);
-        if (result == null) result = caseEqStatement(eq);
+        if (result == null) result = caseSafetyEqStatement(eq);
         if (result == null) result = caseFaultSubcomponent(eq);
-        if (result == null) result = caseAgree_EqStatement(eq);
-        if (result == null) result = caseAgree_SpecStatement(eq);
-        if (result == null) result = caseElement(eq);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -229,11 +230,8 @@ public class SafetySwitch<T> extends Switch<T>
       {
         IntervalEq intervalEq = (IntervalEq)theEObject;
         T result = caseIntervalEq(intervalEq);
-        if (result == null) result = caseEqStatement(intervalEq);
+        if (result == null) result = caseSafetyEqStatement(intervalEq);
         if (result == null) result = caseFaultSubcomponent(intervalEq);
-        if (result == null) result = caseAgree_EqStatement(intervalEq);
-        if (result == null) result = caseAgree_SpecStatement(intervalEq);
-        if (result == null) result = caseElement(intervalEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -241,11 +239,8 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SetEq setEq = (SetEq)theEObject;
         T result = caseSetEq(setEq);
-        if (result == null) result = caseEqStatement(setEq);
+        if (result == null) result = caseSafetyEqStatement(setEq);
         if (result == null) result = caseFaultSubcomponent(setEq);
-        if (result == null) result = caseAgree_EqStatement(setEq);
-        if (result == null) result = caseAgree_SpecStatement(setEq);
-        if (result == null) result = caseElement(setEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -360,7 +355,7 @@ public class SafetySwitch<T> extends Switch<T>
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEqStatement(EqStatement object)
+  public T caseSafetyEqStatement(SafetyEqStatement object)
   {
     return null;
   }
@@ -590,6 +585,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Library</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Library</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAgreeLibrary(AgreeLibrary object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Modal Element</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -622,6 +633,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Subclause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Subclause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAgreeSubclause(AgreeSubclause object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Spec Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -633,22 +660,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseAgree_SpecStatement(com.rockwellcollins.atc.agree.agree.SpecStatement object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Eq Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Eq Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseAgree_EqStatement(com.rockwellcollins.atc.agree.agree.EqStatement object)
   {
     return null;
   }

@@ -2,28 +2,26 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.impl.AgreeLibraryImpl;
-
-import edu.umn.cs.crisys.safety.safety.SafetyLibrary;
+import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Library</b></em>'.
+ * An implementation of the model object '<em><b>Eq Statement</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class SafetyLibraryImpl extends AgreeLibraryImpl implements SafetyLibrary
+public class SafetyEqStatementImpl extends FaultSubcomponentImpl implements SafetyEqStatement
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SafetyLibraryImpl()
+  protected SafetyEqStatementImpl()
   {
     super();
   }
@@ -36,7 +34,7 @@ public class SafetyLibraryImpl extends AgreeLibraryImpl implements SafetyLibrary
   @Override
   protected EClass eStaticClass()
   {
-    return SafetyPackage.Literals.SAFETY_LIBRARY;
+    return SafetyPackage.Literals.SAFETY_EQ_STATEMENT;
   }
 
-} //SafetyLibraryImpl
+} //SafetyEqStatementImpl

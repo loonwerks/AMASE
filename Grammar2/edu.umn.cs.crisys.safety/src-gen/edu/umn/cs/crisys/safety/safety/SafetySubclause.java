@@ -2,9 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import org.eclipse.emf.ecore.EObject;
-
-import org.osate.aadl2.AnnexSubclause;
+import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +14,6 @@ import org.osate.aadl2.AnnexSubclause;
  * @model
  * @generated
  */
-public interface SafetySubclause extends EObject, AnnexSubclause
+public interface SafetySubclause extends AgreeSubclause
 {
 } // SafetySubclause

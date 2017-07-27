@@ -48,7 +48,7 @@ public class SafetyAnnexParser implements AnnexParser{
 	@Override
 	public AnnexSubclause parseAnnexSubclause(String annexName, String source, String filename, int line, int column,
 			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
-		return (AnnexSubclause) AnnexParseUtil.parse(getParser(),source,getGrammarAccess().getAgreeSubclauseRule(),filename,line,column, errReporter);
+		return (AnnexSubclause) AnnexParseUtil.parse(getParser(),source,getGrammarAccess().getSafetySubclauseRule(),filename,line,column, errReporter);
 	}
 
 	

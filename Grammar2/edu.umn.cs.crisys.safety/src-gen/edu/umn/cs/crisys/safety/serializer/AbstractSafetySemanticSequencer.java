@@ -18,6 +18,7 @@ import com.rockwellcollins.atc.agree.agree.CalenStatement;
 import com.rockwellcollins.atc.agree.agree.ClosedTimeInterval;
 import com.rockwellcollins.atc.agree.agree.ConstStatement;
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
+import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.EventExpr;
 import com.rockwellcollins.atc.agree.agree.FloorCast;
 import com.rockwellcollins.atc.agree.agree.FnCallExpr;
@@ -260,6 +261,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.ENUM_STATEMENT:
 				sequence_EnumStatement(context, (EnumStatement) semanticObject); 
 				return; 
+			case AgreePackage.EQ_STATEMENT:
+				sequence_EqStatement(context, (EqStatement) semanticObject); 
+				return; 
 			case AgreePackage.EVENT_EXPR:
 				sequence_TermExpr(context, (EventExpr) semanticObject); 
 				return; 
@@ -414,7 +418,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_FaultSubcomponent(context, (DurationStatement) semanticObject); 
 				return; 
 			case SafetyPackage.EQ:
-				sequence_EqStatement(context, (Eq) semanticObject); 
+				sequence_SafetyEqStatement(context, (Eq) semanticObject); 
 				return; 
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
@@ -423,7 +427,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_FaultSubcomponent(context, (edu.umn.cs.crisys.safety.safety.InputStatement) semanticObject); 
 				return; 
 			case SafetyPackage.INTERVAL_EQ:
-				sequence_EqStatement(context, (IntervalEq) semanticObject); 
+				sequence_SafetyEqStatement(context, (IntervalEq) semanticObject); 
 				return; 
 			case SafetyPackage.OUTPUT_STATEMENT:
 				sequence_FaultSubcomponent(context, (OutputStatement) semanticObject); 
@@ -438,7 +442,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_SafetySubclause(context, (SafetyContractSubclause) semanticObject); 
 				return; 
 			case SafetyPackage.SET_EQ:
-				sequence_EqStatement(context, (SetEq) semanticObject); 
+				sequence_SafetyEqStatement(context, (SetEq) semanticObject); 
 				return; 
 			case SafetyPackage.TRIGGER_CONDITION:
 				sequence_TriggerCondition(context, (TriggerCondition) semanticObject); 
@@ -450,57 +454,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
-	
-	/**
-	 * Contexts:
-	 *     FaultSubcomponent returns Eq
-	 *     EqStatement returns Eq
-	 *     Element returns Eq
-	 *
-	 * Constraint:
-	 *     (lhs+=Arg lhs+=Arg* expr=Expr?)
-	 */
-	protected void sequence_EqStatement(ISerializationContext context, Eq semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     FaultSubcomponent returns IntervalEq
-	 *     EqStatement returns IntervalEq
-	 *     Element returns IntervalEq
-	 *
-	 * Constraint:
-	 *     (lhs_int=Arg interv=TimeInterval)
-	 */
-	protected void sequence_EqStatement(ISerializationContext context, IntervalEq semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__LHS_INT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__LHS_INT));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__INTERV) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__INTERV));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getEqStatementAccess().getLhs_intArgParserRuleCall_1_2_0(), semanticObject.getLhs_int());
-		feeder.accept(grammarAccess.getEqStatementAccess().getIntervTimeIntervalParserRuleCall_1_4_0(), semanticObject.getInterv());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     FaultSubcomponent returns SetEq
-	 *     EqStatement returns SetEq
-	 *     Element returns SetEq
-	 *
-	 * Constraint:
-	 *     (lhs_set=Arg l1=INTEGER_LIT list+=INTEGER_LIT*)
-	 */
-	protected void sequence_EqStatement(ISerializationContext context, SetEq semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
 	
 	/**
 	 * Contexts:
@@ -585,6 +538,54 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     specs+=SpecStatement*
 	 */
 	protected void sequence_SafetyContract(ISerializationContext context, SafetyContract semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     FaultSubcomponent returns Eq
+	 *     SafetyEqStatement returns Eq
+	 *
+	 * Constraint:
+	 *     (lhs+=Arg lhs+=Arg* expr=Expr?)
+	 */
+	protected void sequence_SafetyEqStatement(ISerializationContext context, Eq semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     FaultSubcomponent returns IntervalEq
+	 *     SafetyEqStatement returns IntervalEq
+	 *
+	 * Constraint:
+	 *     (lhs_int=Arg interv=TimeInterval)
+	 */
+	protected void sequence_SafetyEqStatement(ISerializationContext context, IntervalEq semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__LHS_INT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__LHS_INT));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__INTERV) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL_EQ__INTERV));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getLhs_intArgParserRuleCall_1_2_0(), semanticObject.getLhs_int());
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getIntervTimeIntervalParserRuleCall_1_4_0(), semanticObject.getInterv());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     FaultSubcomponent returns SetEq
+	 *     SafetyEqStatement returns SetEq
+	 *
+	 * Constraint:
+	 *     (lhs_set=Arg l1=INTEGER_LIT list+=INTEGER_LIT*)
+	 */
+	protected void sequence_SafetyEqStatement(ISerializationContext context, SetEq semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

@@ -83,7 +83,7 @@ public interface SafetyFactory extends EFactory
    * @return a new object of class '<em>Eq Statement</em>'.
    * @generated
    */
-  EqStatement createEqStatement();
+  SafetyEqStatement createSafetyEqStatement();
 
   /**
    * Returns a new object of class '<em>Contract Library</em>'.
