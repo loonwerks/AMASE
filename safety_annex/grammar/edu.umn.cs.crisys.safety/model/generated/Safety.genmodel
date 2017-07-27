@@ -59,6 +59,5 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
     </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//EqStatement"/>
   </genPackages>
 </genmodel:GenModel>

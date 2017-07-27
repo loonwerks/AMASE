@@ -112,7 +112,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	
 	/**
 	 * Ambiguous syntax:
-	 *     'occur' | 'occurs'
+	 *     'occurs' | 'occur'
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     effect=Expr (ambiguity) 'during' interval=TimeInterval
@@ -126,7 +126,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	
 	/**
 	 * Ambiguous syntax:
-	 *     'occurs' | 'occur'
+	 *     'occur' | 'occurs'
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     effect=Expr (ambiguity) 'during' interval=TimeInterval

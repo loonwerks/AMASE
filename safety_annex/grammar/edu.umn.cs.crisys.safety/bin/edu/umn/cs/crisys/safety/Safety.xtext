@@ -1,0 +1,69 @@
+grammar edu.umn.cs.crisys.safety.Safety with com.rockwellcollins.atc.agree.Agree
+
+generate safety "http://www.xtext.org/example/safety/Safety"
+
+import "http://aadl.info/AADL/2.0" as aadl2
+import "http://www.rockwellcollins.com/atc/agree/Agree" as agree
+
+ 
+@Override
+//AnnexLibrary returns aadl2::AnnexLibrary:
+AnnexLibrary returns agree::AgreeLibrary:
+	SafetyLibrary;
+
+@Override
+AnnexSubclause returns agree::AgreeSubclause:
+//AnnexSubclause returns aadl2::AnnexSubclause:
+	
+	SafetySubclause;
+
+SafetyLibrary:
+	{SafetyContractLibrary} contract=SafetyContract;
+
+SafetySubclause:
+	{SafetyContractSubclause} contract=SafetyContract;
+
+SafetyContract returns Contract:
+	{SafetyContract} (specs+=SpecStatement)*;
+
+@Override 
+SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=ID  
+			faultDefinitions+=(FaultSubcomponent)* ;
+	
+
+FaultSubcomponent: 
+	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' 
+	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' 
+// For duration, will a time interval cover the case when we are dealing with time steps?
+// For instance: 
+// 		trigger: transient [0,1]
+// will stand for time steps 0 and 1?
+ 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
+ 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
+	| SafetyEqStatement ;
+
+	
+// Currently, these are represented as keywords. 
+TemporalConstraint:
+	'permanent' | 'transient'
+;
+
+// ' 
+TriggerCondition:
+	{TriggerCondition}'must' '{' exprList+=(Expr)+ '}'  
+  | {TriggerCondition} 'enabler' '{' exprList+=(Expr)+ '}'  
+;
+	
+
+// An eq statement can be an agree eq statement ('eq'...) or 
+// an interval or a set of discrete values.
+ 
+SafetyEqStatement:
+	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
+//	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
+    | {SetEq} 'seteq' lhs_set =Arg '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
+;
+
+
+

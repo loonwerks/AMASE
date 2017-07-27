@@ -2,10 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jkind"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jkind-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.osate.aadl2"/>
-	<classpathentry kind="lib" path="/home/user/.p2/pool/plugins/org.eclipse.emf.ecore_2.11.2.v20160208-0816.jar" sourcepath="/home/user/.p2/pool/plugins/org.eclipse.emf.ecore.source_2.11.2.v20160208-0816.jar">
+	<classpathentry kind="src" path="/com.rockwellcollins.atc.agree"/>
+	<classpathentry kind="lib" path="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.emf.ecore_2.11.2.v20160208-0816.jar" sourcepath="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.emf.ecore.source_2.11.2.v20160208-0816.jar">
 		<accessrules>
 			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/*"/>
 			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/impl/*"/>
@@ -23,8 +21,8 @@
 			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.rockwellcollins.atc.agree"/>
 	<classpathentry kind="src" path="/com.rockwellcollins.atc.agree.analysis"/>
+	<classpathentry kind="src" path="/org.osate.aadl2"/>
 	<classpathentry kind="lib" path="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar" sourcepath="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.equinox.registry.source_3.6.0.v20150318-1503.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/home/user/Downloads/eclipse%20(2)/plugins/org.eclipse.platform.doc.isv_4.5.2.v20160203-1325.jar!/reference/api"/>
@@ -40,7 +38,6 @@
 			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/user/Downloads/org.eclipse.core.runtime-3.7.0.jar"/>
 	<classpathentry kind="lib" path="/home/user/Downloads/common-3.6.200-v20130402-1505.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
