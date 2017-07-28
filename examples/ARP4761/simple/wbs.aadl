@@ -300,13 +300,13 @@ connections
 		assert(fail_count <= 1);
 		
 	**};
---	annex safety {**
---	
---		
---		eq var = 0;
---		
---	  
---	**};
+annex safety {**
+	
+		fault "Accumulator valve stuck at permanent" : stuck_at
+		
+		--input: accumulator_valve.accumulator_input -> f_accum_value;
+	  
+**};
 
 	
 end wbs.federated;

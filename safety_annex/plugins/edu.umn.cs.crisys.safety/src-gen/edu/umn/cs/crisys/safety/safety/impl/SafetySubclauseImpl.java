@@ -2,12 +2,12 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.impl.AgreeSubclauseImpl;
-
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SafetySubclause;
 
 import org.eclipse.emf.ecore.EClass;
+
+import org.osate.aadl2.impl.AnnexSubclauseImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class SafetySubclauseImpl extends AgreeSubclauseImpl implements SafetySubclause
+public class SafetySubclauseImpl extends AnnexSubclauseImpl implements SafetySubclause
 {
   /**
    * <!-- begin-user-doc -->

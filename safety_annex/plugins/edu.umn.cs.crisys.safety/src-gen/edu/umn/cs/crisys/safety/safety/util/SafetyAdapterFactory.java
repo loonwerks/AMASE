@@ -2,9 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety.util;
 
-import com.rockwellcollins.atc.agree.agree.AgreeLibrary;
-import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
-
 import edu.umn.cs.crisys.safety.safety.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -189,11 +186,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createAnnexLibraryAdapter();
       }
       @Override
-      public Adapter caseAgreeLibrary(AgreeLibrary object)
-      {
-        return createAgreeLibraryAdapter();
-      }
-      @Override
       public Adapter caseModalElement(ModalElement object)
       {
         return createModalElementAdapter();
@@ -202,11 +194,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
       public Adapter caseAnnexSubclause(AnnexSubclause object)
       {
         return createAnnexSubclauseAdapter();
-      }
-      @Override
-      public Adapter caseAgreeSubclause(AgreeSubclause object)
-      {
-        return createAgreeSubclauseAdapter();
       }
       @Override
       public Adapter caseAgree_SpecStatement(com.rockwellcollins.atc.agree.agree.SpecStatement object)
@@ -551,21 +538,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.AgreeLibrary <em>Library</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.rockwellcollins.atc.agree.agree.AgreeLibrary
-   * @generated
-   */
-  public Adapter createAgreeLibraryAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.osate.aadl2.ModalElement <em>Modal Element</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -591,21 +563,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createAnnexSubclauseAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.AgreeSubclause <em>Subclause</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.rockwellcollins.atc.agree.agree.AgreeSubclause
-   * @generated
-   */
-  public Adapter createAgreeSubclauseAdapter()
   {
     return null;
   }

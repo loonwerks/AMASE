@@ -2,12 +2,12 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.impl.AgreeLibraryImpl;
-
 import edu.umn.cs.crisys.safety.safety.SafetyLibrary;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.ecore.EClass;
+
+import org.osate.aadl2.impl.AnnexLibraryImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class SafetyLibraryImpl extends AgreeLibraryImpl implements SafetyLibrary
+public class SafetyLibraryImpl extends AnnexLibraryImpl implements SafetyLibrary
 {
   /**
    * <!-- begin-user-doc -->

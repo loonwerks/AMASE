@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.osate.aadl2.Aadl2Package;
+
 /**
  * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
@@ -75,7 +77,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_ELEMENT = AgreePackage.AGREE_LIBRARY__OWNED_ELEMENT;
+  int SAFETY_LIBRARY__OWNED_ELEMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_ELEMENT;
 
   /**
    * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
@@ -84,7 +86,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_COMMENT = AgreePackage.AGREE_LIBRARY__OWNED_COMMENT;
+  int SAFETY_LIBRARY__OWNED_COMMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -93,7 +95,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__NAME = AgreePackage.AGREE_LIBRARY__NAME;
+  int SAFETY_LIBRARY__NAME = Aadl2Package.ANNEX_LIBRARY__NAME;
 
   /**
    * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
@@ -102,7 +104,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__QUALIFIED_NAME = AgreePackage.AGREE_LIBRARY__QUALIFIED_NAME;
+  int SAFETY_LIBRARY__QUALIFIED_NAME = Aadl2Package.ANNEX_LIBRARY__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
@@ -111,7 +113,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_PROPERTY_ASSOCIATION = AgreePackage.AGREE_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
+  int SAFETY_LIBRARY__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
 
   /**
    * The number of structural features of the '<em>Library</em>' class.
@@ -120,7 +122,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY_FEATURE_COUNT = AgreePackage.AGREE_LIBRARY_FEATURE_COUNT + 0;
+  int SAFETY_LIBRARY_FEATURE_COUNT = Aadl2Package.ANNEX_LIBRARY_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetySubclauseImpl <em>Subclause</em>}' class.
@@ -139,7 +141,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_ELEMENT = AgreePackage.AGREE_SUBCLAUSE__OWNED_ELEMENT;
+  int SAFETY_SUBCLAUSE__OWNED_ELEMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_ELEMENT;
 
   /**
    * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
@@ -148,7 +150,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_COMMENT = AgreePackage.AGREE_SUBCLAUSE__OWNED_COMMENT;
+  int SAFETY_SUBCLAUSE__OWNED_COMMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -157,7 +159,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__NAME = AgreePackage.AGREE_SUBCLAUSE__NAME;
+  int SAFETY_SUBCLAUSE__NAME = Aadl2Package.ANNEX_SUBCLAUSE__NAME;
 
   /**
    * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
@@ -166,7 +168,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__QUALIFIED_NAME = AgreePackage.AGREE_SUBCLAUSE__QUALIFIED_NAME;
+  int SAFETY_SUBCLAUSE__QUALIFIED_NAME = Aadl2Package.ANNEX_SUBCLAUSE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
@@ -175,7 +177,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = AgreePackage.AGREE_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
+  int SAFETY_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
 
   /**
    * The feature id for the '<em><b>In Mode</b></em>' reference list.
@@ -184,7 +186,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__IN_MODE = AgreePackage.AGREE_SUBCLAUSE__IN_MODE;
+  int SAFETY_SUBCLAUSE__IN_MODE = Aadl2Package.ANNEX_SUBCLAUSE__IN_MODE;
 
   /**
    * The number of structural features of the '<em>Subclause</em>' class.
@@ -193,7 +195,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE_FEATURE_COUNT = AgreePackage.AGREE_SUBCLAUSE_FEATURE_COUNT + 0;
+  int SAFETY_SUBCLAUSE_FEATURE_COUNT = Aadl2Package.ANNEX_SUBCLAUSE_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.ContractImpl <em>Contract</em>}' class.

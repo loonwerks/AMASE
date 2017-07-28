@@ -41,7 +41,7 @@ public class SafetyAnnexParser implements AnnexParser{
 	public AnnexLibrary parseAnnexLibrary(String annexName, String source, String filename, int line, int column,
 			ParseErrorReporter errReporter) throws org.antlr.v4.runtime.RecognitionException {
 		
-		return (AnnexLibrary) AnnexParseUtil.parse(getParser(),source, getGrammarAccess().getAgreeLibraryRule(), filename, line,
+		return (AnnexLibrary) AnnexParseUtil.parse(getParser(),source, getGrammarAccess().getSafetyLibraryRule(), filename, line,
                 column, errReporter);
 	}
 

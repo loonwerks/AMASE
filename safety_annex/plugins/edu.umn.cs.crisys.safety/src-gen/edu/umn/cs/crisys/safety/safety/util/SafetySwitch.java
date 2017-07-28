@@ -2,9 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety.util;
 
-import com.rockwellcollins.atc.agree.agree.AgreeLibrary;
-import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
-
 import edu.umn.cs.crisys.safety.safety.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -85,7 +82,6 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SafetyLibrary safetyLibrary = (SafetyLibrary)theEObject;
         T result = caseSafetyLibrary(safetyLibrary);
-        if (result == null) result = caseAgreeLibrary(safetyLibrary);
         if (result == null) result = caseAnnexLibrary(safetyLibrary);
         if (result == null) result = caseNamedElement(safetyLibrary);
         if (result == null) result = caseElement(safetyLibrary);
@@ -96,7 +92,6 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SafetySubclause safetySubclause = (SafetySubclause)theEObject;
         T result = caseSafetySubclause(safetySubclause);
-        if (result == null) result = caseAgreeSubclause(safetySubclause);
         if (result == null) result = caseAnnexSubclause(safetySubclause);
         if (result == null) result = caseModalElement(safetySubclause);
         if (result == null) result = caseNamedElement(safetySubclause);
@@ -147,7 +142,6 @@ public class SafetySwitch<T> extends Switch<T>
         SafetyContractLibrary safetyContractLibrary = (SafetyContractLibrary)theEObject;
         T result = caseSafetyContractLibrary(safetyContractLibrary);
         if (result == null) result = caseSafetyLibrary(safetyContractLibrary);
-        if (result == null) result = caseAgreeLibrary(safetyContractLibrary);
         if (result == null) result = caseAnnexLibrary(safetyContractLibrary);
         if (result == null) result = caseNamedElement(safetyContractLibrary);
         if (result == null) result = caseElement(safetyContractLibrary);
@@ -159,7 +153,6 @@ public class SafetySwitch<T> extends Switch<T>
         SafetyContractSubclause safetyContractSubclause = (SafetyContractSubclause)theEObject;
         T result = caseSafetyContractSubclause(safetyContractSubclause);
         if (result == null) result = caseSafetySubclause(safetyContractSubclause);
-        if (result == null) result = caseAgreeSubclause(safetyContractSubclause);
         if (result == null) result = caseAnnexSubclause(safetyContractSubclause);
         if (result == null) result = caseModalElement(safetyContractSubclause);
         if (result == null) result = caseNamedElement(safetyContractSubclause);
@@ -585,22 +578,6 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Library</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Library</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseAgreeLibrary(AgreeLibrary object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Modal Element</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -628,22 +605,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseAnnexSubclause(AnnexSubclause object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Subclause</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Subclause</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseAgreeSubclause(AgreeSubclause object)
   {
     return null;
   }

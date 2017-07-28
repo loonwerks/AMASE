@@ -749,17 +749,17 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     setNsURI(eNS_URI);
 
     // Obtain other dependent packages
+    Aadl2Package theAadl2Package = (Aadl2Package)EPackage.Registry.INSTANCE.getEPackage(Aadl2Package.eNS_URI);
     AgreePackage theAgreePackage = (AgreePackage)EPackage.Registry.INSTANCE.getEPackage(AgreePackage.eNS_URI);
     EcorePackage theEcorePackage = (EcorePackage)EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
-    Aadl2Package theAadl2Package = (Aadl2Package)EPackage.Registry.INSTANCE.getEPackage(Aadl2Package.eNS_URI);
 
     // Create type parameters
 
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    safetyLibraryEClass.getESuperTypes().add(theAgreePackage.getAgreeLibrary());
-    safetySubclauseEClass.getESuperTypes().add(theAgreePackage.getAgreeSubclause());
+    safetyLibraryEClass.getESuperTypes().add(theAadl2Package.getAnnexLibrary());
+    safetySubclauseEClass.getESuperTypes().add(theAadl2Package.getAnnexSubclause());
     specStatementEClass.getESuperTypes().add(theAgreePackage.getSpecStatement());
     safetyEqStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     safetyContractLibraryEClass.getESuperTypes().add(this.getSafetyLibrary());

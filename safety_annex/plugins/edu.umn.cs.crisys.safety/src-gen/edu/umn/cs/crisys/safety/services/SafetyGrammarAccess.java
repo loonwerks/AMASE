@@ -23,8 +23,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexLibrary");
 		private final RuleCall cSafetyLibraryParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@ Override //AnnexLibrary returns aadl2::AnnexLibrary:
-		//AnnexLibrary agree::AgreeLibrary:
+		//@ Override //AnnexLibrary returns agree::AgreeLibrary:
+		//AnnexLibrary aadl2::AnnexLibrary:
 		//	SafetyLibrary;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -36,11 +36,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexSubclause");
 		private final RuleCall cSafetySubclauseParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@ Override AnnexSubclause agree::AgreeSubclause:
+		//@ Override //AnnexSubclause returns agree::AgreeSubclause:
+		//AnnexSubclause aadl2::AnnexSubclause:
 		//	SafetySubclause;
 		@Override public ParserRule getRule() { return rule; }
 
-		////AnnexSubclause returns aadl2::AnnexSubclause:
 		//SafetySubclause
 		public RuleCall getSafetySubclauseParserRuleCall() { return cSafetySubclauseParserRuleCall; }
 	}
@@ -702,8 +702,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	
-	//@ Override //AnnexLibrary returns aadl2::AnnexLibrary:
-	//AnnexLibrary agree::AgreeLibrary:
+	//@ Override //AnnexLibrary returns agree::AgreeLibrary:
+	//AnnexLibrary aadl2::AnnexLibrary:
 	//	SafetyLibrary;
 	public AnnexLibraryElements getAnnexLibraryAccess() {
 		return pAnnexLibrary;
@@ -713,7 +713,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getAnnexLibraryAccess().getRule();
 	}
 
-	//@ Override AnnexSubclause agree::AgreeSubclause:
+	//@ Override //AnnexSubclause returns agree::AgreeSubclause:
+	//AnnexSubclause aadl2::AnnexSubclause:
 	//	SafetySubclause;
 	public AnnexSubclauseElements getAnnexSubclauseAccess() {
 		return pAnnexSubclause;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="safety" nsURI="http://www.xtext.org/example/safety/Safety" nsPrefix="safety">
-  <eClassifiers xsi:type="ecore:EClass" name="SafetyLibrary" eSuperTypes="platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//AgreeLibrary"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SafetySubclause" eSuperTypes="platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//AgreeSubclause"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SafetyLibrary" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//AnnexLibrary"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SafetySubclause" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//AnnexSubclause"/>
   <eClassifiers xsi:type="ecore:EClass" name="Contract"/>
   <eClassifiers xsi:type="ecore:EClass" name="SpecStatement" eSuperTypes="platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//SpecStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="FaultSubcomponent"/>
