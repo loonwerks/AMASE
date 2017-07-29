@@ -174,8 +174,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cInputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cIn_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final CrossReference cIn_connNamedElementCrossReference_0_3_0 = (CrossReference)cIn_connAssignment_0_3.eContents().get(0);
-		private final RuleCall cIn_connNamedElementIDTerminalRuleCall_0_3_0_1 = (RuleCall)cIn_connNamedElementCrossReference_0_3_0.eContents().get(1);
+		private final RuleCall cIn_connNestedDotIDParserRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
 		private final RuleCall cOut_connIDTerminalRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
@@ -215,7 +214,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
+		//	{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';'
 		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 		//	// For duration, will a time interval cover the case when we are dealing with time steps?
 		//	// For instance: 
@@ -226,8 +225,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' | {OutputStatement} 'output' ':'
-		//out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
+		//{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';' | {OutputStatement} 'output' ':' out_conn=ID '->'
+		//nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
 		//// For instance: 
 		//// 		trigger: transient [0,1]
 		//// will stand for time steps 0 and 1?
@@ -235,7 +234,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
+		//{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -247,14 +246,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//in_conn=[aadl2::NamedElement]
+		//in_conn=NestedDotID
 		public Assignment getIn_connAssignment_0_3() { return cIn_connAssignment_0_3; }
 
-		//[aadl2::NamedElement]
-		public CrossReference getIn_connNamedElementCrossReference_0_3_0() { return cIn_connNamedElementCrossReference_0_3_0; }
-
-		//ID
-		public RuleCall getIn_connNamedElementIDTerminalRuleCall_0_3_0_1() { return cIn_connNamedElementIDTerminalRuleCall_0_3_0_1; }
+		//NestedDotID
+		public RuleCall getIn_connNestedDotIDParserRuleCall_0_3_0() { return cIn_connNestedDotIDParserRuleCall_0_3_0; }
 
 		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_0_4() { return cHyphenMinusGreaterThanSignKeyword_0_4; }
@@ -766,7 +762,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
+	//	{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';'
 	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 	//	// For duration, will a time interval cover the case when we are dealing with time steps?
 	//	// For instance: 

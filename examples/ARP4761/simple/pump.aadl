@@ -14,10 +14,6 @@ features
 	pressure_output : out data port common::pressure.i;
 	stuck_at_occurred: in data port Base_Types::Boolean;
 
-	annex safety {**
-	   fault "hello" : stuck_at
-	     --input : 
-	 **};
 
 annex AGREE {**
 	
@@ -35,6 +31,12 @@ annex AGREE {**
 	    pressure_output.val = faults.fail_to(nominal_pressure_output.val, alt_val.val, stuck_at_occurred);	
 **}	;
 
+annex safety {**
+	   fault "" : stuck_at
+	     eq val: bool;
+	     input : val -> faultOutput;
+	     --output: val -> val; 
+**};
 
 annex EMV2 {**
 	use types error_library;

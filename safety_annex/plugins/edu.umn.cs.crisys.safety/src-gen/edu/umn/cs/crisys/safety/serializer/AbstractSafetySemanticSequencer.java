@@ -481,7 +481,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (in_conn=[NamedElement|ID] out_conn=ID)
+	 *     (in_conn=NestedDotID out_conn=ID)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		if (errorAcceptor != null) {
@@ -491,7 +491,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__OUT_CONN));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementIDTerminalRuleCall_0_3_0_1(), semanticObject.eGet(SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN, false));
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0(), semanticObject.getIn_conn());
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0(), semanticObject.getOut_conn());
 		feeder.finish();
 	}

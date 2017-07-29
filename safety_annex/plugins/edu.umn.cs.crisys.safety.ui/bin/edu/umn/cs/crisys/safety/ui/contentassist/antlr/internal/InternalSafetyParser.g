@@ -24829,12 +24829,8 @@ rule__FaultSubcomponent__In_connAssignment_0_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementCrossReference_0_3_0()); }
-(
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementIDTerminalRuleCall_0_3_0_1()); }
-	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementIDTerminalRuleCall_0_3_0_1()); }
-)
-{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementCrossReference_0_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0()); }
+	ruleNestedDotID{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0()); }
 )
 
 ;

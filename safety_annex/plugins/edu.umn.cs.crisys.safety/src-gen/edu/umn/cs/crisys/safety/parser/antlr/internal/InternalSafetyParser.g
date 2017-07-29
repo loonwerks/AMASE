@@ -347,15 +347,20 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0()); 
+	    }
+		lv_in_conn_3_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
-        }
-	otherlv_3=RULE_ID
-	{
-		newLeafNode(otherlv_3, grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementCrossReference_0_3_0()); 
-	}
+       		set(
+       			$current, 
+       			"in_conn",
+        		lv_in_conn_3_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
 
 )
 )

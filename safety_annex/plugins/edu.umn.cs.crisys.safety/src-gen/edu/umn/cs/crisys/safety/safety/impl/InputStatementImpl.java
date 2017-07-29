@@ -2,18 +2,18 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
+
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,14 +32,14 @@ import org.osate.aadl2.NamedElement;
 public class InputStatementImpl extends FaultSubcomponentImpl implements InputStatement
 {
   /**
-   * The cached value of the '{@link #getIn_conn() <em>In conn</em>}' reference.
+   * The cached value of the '{@link #getIn_conn() <em>In conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getIn_conn()
    * @generated
    * @ordered
    */
-  protected NamedElement in_conn;
+  protected NestedDotID in_conn;
 
   /**
    * The default value of the '{@link #getOut_conn() <em>Out conn</em>}' attribute.
@@ -87,27 +87,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public NamedElement getIn_conn()
-  {
-    if (in_conn != null && ((EObject)in_conn).eIsProxy())
-    {
-      InternalEObject oldIn_conn = (InternalEObject)in_conn;
-      in_conn = (NamedElement)eResolveProxy(oldIn_conn);
-      if (in_conn != oldIn_conn)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, in_conn));
-      }
-    }
-    return in_conn;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NamedElement basicGetIn_conn()
+  public NestedDotID getIn_conn()
   {
     return in_conn;
   }
@@ -117,12 +97,37 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setIn_conn(NamedElement newIn_conn)
+  public NotificationChain basicSetIn_conn(NestedDotID newIn_conn, NotificationChain msgs)
   {
-    NamedElement oldIn_conn = in_conn;
+    NestedDotID oldIn_conn = in_conn;
     in_conn = newIn_conn;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, in_conn));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, newIn_conn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIn_conn(NestedDotID newIn_conn)
+  {
+    if (newIn_conn != in_conn)
+    {
+      NotificationChain msgs = null;
+      if (in_conn != null)
+        msgs = ((InternalEObject)in_conn).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__IN_CONN, null, msgs);
+      if (newIn_conn != null)
+        msgs = ((InternalEObject)newIn_conn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__IN_CONN, null, msgs);
+      msgs = basicSetIn_conn(newIn_conn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, newIn_conn, newIn_conn));
   }
 
   /**
@@ -154,13 +159,28 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * @generated
    */
   @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.INPUT_STATEMENT__IN_CONN:
+        return basicSetIn_conn(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        if (resolve) return getIn_conn();
-        return basicGetIn_conn();
+        return getIn_conn();
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         return getOut_conn();
     }
@@ -178,7 +198,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        setIn_conn((NamedElement)newValue);
+        setIn_conn((NestedDotID)newValue);
         return;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         setOut_conn((String)newValue);
@@ -198,7 +218,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        setIn_conn((NamedElement)null);
+        setIn_conn((NestedDotID)null);
         return;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         setOut_conn(OUT_CONN_EDEFAULT);

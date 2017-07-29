@@ -15,15 +15,18 @@ import org.osate.aadl2.NamedElement;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.Eq;
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
+import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 
@@ -32,26 +35,37 @@ import edu.umn.cs.crisys.safety.safety.TriggerStatement;
  *
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
-public class SafetyJavaValidator extends AgreeJavaValidator {
+public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	
 	// Change package to SafetyPackage instead of AgreePackage.
-	@Override
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 
+	@Check
+	public void checkFaultSpecStmt(FaultStatement specStmt){
+		if(specStmt.getStr().isEmpty()) {
+			warning(specStmt, "Fault description should not be empty");
+		}
+	}
+	
 	
 	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		NamedElement inConn = inputStmt.getIn_conn();
+		NestedDotID inConn = inputStmt.getIn_conn();
 		String outConn = inputStmt.getOut_conn();
 		
 		if(inConn==null){
 			error(inConn, "Input connection cannot be null");
+			//error("Input connection cannot be null", SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN);
 		}
+		
+		// outConn is not a string, it's a RuleID. Change this. 
 		if(outConn.isEmpty()){
-			error(inputStmt, "Output connection name cannot be empty");
+			//error(inputStmt, "Output connection name cannot be empty");
+			error(SafetyPackage.Literals.OUTPUT_STATEMENT__NOM_CONN,"Output connection name cannot be empty");
+			
 		}
 	}
 	
@@ -69,7 +83,7 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 			error(outputStmt, "Output connection name cannot be empty");
 		}
 		if(!(outConn.equals(inputStmt.getOut_conn()))){
-			error(outputStmt, "Output connection name must be equal to the input's output feild.");
+			error(outputStmt, "Output connection name must be equal to the input's output field.");
 		}
 		
 	}
@@ -80,7 +94,7 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 		if(!(durationStmt.getTc().equals("PERMANANT") || durationStmt.getTc().equals("TRANSIENT"))){
 			error(durationStmt, "Temporal constraint must be TRANSIENT or PERMANANT");
 		}
-		checkTimeInterval(durationStmt.getInterv());
+//		checkTimeInterval(durationStmt.getInterv());
 	}
 	
 	
@@ -140,17 +154,13 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 			error(eqStmt, "Equation statments are only allowed in safety annexes");
 		}
 		
-		// Check for cyclic assignments 
-		// I would like to use Agree's validation here, but the method
-		// is private. 
-		checkMultiAssignEq(eqStmt, eqStmt.getLhs(), eqStmt.getExpr());
 		
 	}
 	
 	// Check the time interval passed in using Agree's method
 	@Check
 	public void checkIntervalEqStatement(IntervalEq intervalEq){
-		checkTimeInterval(intervalEq.getInterv());
+//		checkTimeInterval(intervalEq.getInterv());
 	}
 	
 	// Check the set eq statements
@@ -159,7 +169,7 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 	public void checkSetEqStatement(SetEq setEq){
 		
 		// Pass Arg to Agree's validation class
-		checkArg(setEq.getLhs_set());
+//		checkArg(setEq.getLhs_set());
 		
 		// Try casting string to integer, catch exceptions to print out error
 		Integer result = 0;
@@ -187,17 +197,7 @@ public class SafetyJavaValidator extends AgreeJavaValidator {
 		
 	}
 	
-	// Check for cyclic assignments in Eq statement
-	@Check
-	public void checkMultiAssignEq(Eq eqStmt, EList<Arg> lhsArgs, Expr rhsExpr){
-		
-		
-		// Make sure to take into account nondeterminism here! Expr may be null.
-		if (rhsExpr == null) {
-			return;
-		}
-		
-	}
+	
 	
 
 }
