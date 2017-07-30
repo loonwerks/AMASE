@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
+import com.rockwellcollins.atc.agree.agree.Expr;
 
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -11,9 +11,12 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import org.osate.aadl2.Element;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,34 +35,24 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class InputStatementImpl extends FaultSubcomponentImpl implements InputStatement
 {
   /**
-   * The cached value of the '{@link #getIn_conn() <em>In conn</em>}' containment reference.
+   * The cached value of the '{@link #getIn_conn() <em>In conn</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getIn_conn()
    * @generated
    * @ordered
    */
-  protected NestedDotID in_conn;
+  protected Element in_conn;
 
   /**
-   * The default value of the '{@link #getOut_conn() <em>Out conn</em>}' attribute.
+   * The cached value of the '{@link #getOut_conn() <em>Out conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getOut_conn()
    * @generated
    * @ordered
    */
-  protected static final String OUT_CONN_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getOut_conn() <em>Out conn</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOut_conn()
-   * @generated
-   * @ordered
-   */
-  protected String out_conn = OUT_CONN_EDEFAULT;
+  protected Expr out_conn;
 
   /**
    * <!-- begin-user-doc -->
@@ -87,7 +80,27 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public NestedDotID getIn_conn()
+  public Element getIn_conn()
+  {
+    if (in_conn != null && ((EObject)in_conn).eIsProxy())
+    {
+      InternalEObject oldIn_conn = (InternalEObject)in_conn;
+      in_conn = (Element)eResolveProxy(oldIn_conn);
+      if (in_conn != oldIn_conn)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, in_conn));
+      }
+    }
+    return in_conn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Element basicGetIn_conn()
   {
     return in_conn;
   }
@@ -97,13 +110,36 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetIn_conn(NestedDotID newIn_conn, NotificationChain msgs)
+  public void setIn_conn(Element newIn_conn)
   {
-    NestedDotID oldIn_conn = in_conn;
+    Element oldIn_conn = in_conn;
     in_conn = newIn_conn;
     if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, in_conn));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Expr getOut_conn()
+  {
+    return out_conn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetOut_conn(Expr newOut_conn, NotificationChain msgs)
+  {
+    Expr oldOut_conn = out_conn;
+    out_conn = newOut_conn;
+    if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, newIn_conn);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__OUT_CONN, oldOut_conn, newOut_conn);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -114,43 +150,20 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setIn_conn(NestedDotID newIn_conn)
+  public void setOut_conn(Expr newOut_conn)
   {
-    if (newIn_conn != in_conn)
+    if (newOut_conn != out_conn)
     {
       NotificationChain msgs = null;
-      if (in_conn != null)
-        msgs = ((InternalEObject)in_conn).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__IN_CONN, null, msgs);
-      if (newIn_conn != null)
-        msgs = ((InternalEObject)newIn_conn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__IN_CONN, null, msgs);
-      msgs = basicSetIn_conn(newIn_conn, msgs);
+      if (out_conn != null)
+        msgs = ((InternalEObject)out_conn).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__OUT_CONN, null, msgs);
+      if (newOut_conn != null)
+        msgs = ((InternalEObject)newOut_conn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__OUT_CONN, null, msgs);
+      msgs = basicSetOut_conn(newOut_conn, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, newIn_conn, newIn_conn));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getOut_conn()
-  {
-    return out_conn;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOut_conn(String newOut_conn)
-  {
-    String oldOut_conn = out_conn;
-    out_conn = newOut_conn;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__OUT_CONN, oldOut_conn, out_conn));
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__OUT_CONN, newOut_conn, newOut_conn));
   }
 
   /**
@@ -163,8 +176,8 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
   {
     switch (featureID)
     {
-      case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        return basicSetIn_conn(null, msgs);
+      case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
+        return basicSetOut_conn(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -180,7 +193,8 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        return getIn_conn();
+        if (resolve) return getIn_conn();
+        return basicGetIn_conn();
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         return getOut_conn();
     }
@@ -198,10 +212,10 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        setIn_conn((NestedDotID)newValue);
+        setIn_conn((Element)newValue);
         return;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
-        setOut_conn((String)newValue);
+        setOut_conn((Expr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -218,10 +232,10 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        setIn_conn((NestedDotID)null);
+        setIn_conn((Element)null);
         return;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
-        setOut_conn(OUT_CONN_EDEFAULT);
+        setOut_conn((Expr)null);
         return;
     }
     super.eUnset(featureID);
@@ -240,26 +254,9 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
         return in_conn != null;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
-        return OUT_CONN_EDEFAULT == null ? out_conn != null : !OUT_CONN_EDEFAULT.equals(out_conn);
+        return out_conn != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (out_conn: ");
-    result.append(out_conn);
-    result.append(')');
-    return result.toString();
   }
 
 } //InputStatementImpl

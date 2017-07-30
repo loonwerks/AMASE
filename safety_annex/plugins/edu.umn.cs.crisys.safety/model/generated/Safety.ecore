@@ -26,14 +26,15 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FaultStatement" eSuperTypes="#//SpecStatement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="str" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="faultDefName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefName" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefinitions" upperBound="-1"
         eType="#//FaultSubcomponent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputStatement" eSuperTypes="#//FaultSubcomponent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="in_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in_conn" eType="ecore:EClass platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="out_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="out_conn" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputStatement" eSuperTypes="#//FaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="out_conn" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>

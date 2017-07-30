@@ -32,9 +32,9 @@ annex AGREE {**
 **}	;
 
 annex safety {**
-	   fault "" : stuck_at
+	   fault "Hi" : stuck_at
 	     eq val: bool;
-	     input : val -> faultOutput;
+	    -- input : pressure_output -> faultOutput;
 	     --output: val -> val; 
 **};
 

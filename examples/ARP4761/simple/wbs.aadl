@@ -302,9 +302,9 @@ connections
 	**};
 annex safety {**
 	
-		fault "Accumulator valve stuck at permanent" : stuck_at
+		fault "Accumulator valve stuck at permanent" : faults.fail_to(1.0, 2.0, true)
 		
-		--input: accumulator_valve.accumulator_input -> f_accum_value;
+		--input:  -> f_accum_value;
 	  
 **};
 

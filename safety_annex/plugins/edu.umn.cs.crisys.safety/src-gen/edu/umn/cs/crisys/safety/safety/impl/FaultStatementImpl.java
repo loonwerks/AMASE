@@ -2,6 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -59,24 +61,14 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   protected String str = STR_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getFaultDefName() <em>Fault Def Name</em>}' attribute.
+   * The cached value of the '{@link #getFaultDefName() <em>Fault Def Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getFaultDefName()
    * @generated
    * @ordered
    */
-  protected static final String FAULT_DEF_NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getFaultDefName() <em>Fault Def Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getFaultDefName()
-   * @generated
-   * @ordered
-   */
-  protected String faultDefName = FAULT_DEF_NAME_EDEFAULT;
+  protected Expr faultDefName;
 
   /**
    * The cached value of the '{@link #getFaultDefinitions() <em>Fault Definitions</em>}' containment reference list.
@@ -137,7 +129,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getFaultDefName()
+  public Expr getFaultDefName()
   {
     return faultDefName;
   }
@@ -147,12 +139,37 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFaultDefName(String newFaultDefName)
+  public NotificationChain basicSetFaultDefName(Expr newFaultDefName, NotificationChain msgs)
   {
-    String oldFaultDefName = faultDefName;
+    Expr oldFaultDefName = faultDefName;
     faultDefName = newFaultDefName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, oldFaultDefName, faultDefName));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, oldFaultDefName, newFaultDefName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFaultDefName(Expr newFaultDefName)
+  {
+    if (newFaultDefName != faultDefName)
+    {
+      NotificationChain msgs = null;
+      if (faultDefName != null)
+        msgs = ((InternalEObject)faultDefName).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, null, msgs);
+      if (newFaultDefName != null)
+        msgs = ((InternalEObject)newFaultDefName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, null, msgs);
+      msgs = basicSetFaultDefName(newFaultDefName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, newFaultDefName, newFaultDefName));
   }
 
   /**
@@ -179,6 +196,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     switch (featureID)
     {
+      case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
+        return basicSetFaultDefName(null, msgs);
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         return ((InternalEList<?>)getFaultDefinitions()).basicRemove(otherEnd, msgs);
     }
@@ -220,7 +239,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr((String)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((String)newValue);
+        setFaultDefName((Expr)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
@@ -244,7 +263,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr(STR_EDEFAULT);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName(FAULT_DEF_NAME_EDEFAULT);
+        setFaultDefName((Expr)null);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
@@ -266,7 +285,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
       case SafetyPackage.FAULT_STATEMENT__STR:
         return STR_EDEFAULT == null ? str != null : !STR_EDEFAULT.equals(str);
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        return FAULT_DEF_NAME_EDEFAULT == null ? faultDefName != null : !FAULT_DEF_NAME_EDEFAULT.equals(faultDefName);
+        return faultDefName != null;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         return faultDefinitions != null && !faultDefinitions.isEmpty();
     }
@@ -286,8 +305,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (str: ");
     result.append(str);
-    result.append(", faultDefName: ");
-    result.append(faultDefName);
     result.append(')');
     return result.toString();
   }

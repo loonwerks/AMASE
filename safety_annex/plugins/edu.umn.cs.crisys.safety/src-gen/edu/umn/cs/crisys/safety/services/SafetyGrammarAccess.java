@@ -126,16 +126,16 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cStrSTRINGTerminalRuleCall_2_0 = (RuleCall)cStrAssignment_2.eContents().get(0);
 		private final Keyword cColonKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		private final Assignment cFaultDefNameAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cFaultDefNameIDTerminalRuleCall_4_0 = (RuleCall)cFaultDefNameAssignment_4.eContents().get(0);
+		private final RuleCall cFaultDefNameExprParserRuleCall_4_0 = (RuleCall)cFaultDefNameAssignment_4.eContents().get(0);
 		private final Assignment cFaultDefinitionsAssignment_5 = (Assignment)cGroup.eContents().get(5);
 		private final RuleCall cFaultDefinitionsFaultSubcomponentParserRuleCall_5_0 = (RuleCall)cFaultDefinitionsAssignment_5.eContents().get(0);
 		
 		//@ Override SpecStatement:
-		//	{FaultStatement} 'fault' str=STRING ':' faultDefName=ID
+		//	{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr
 		//	faultDefinitions+=FaultSubcomponent*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{FaultStatement} 'fault' str=STRING ':' faultDefName=ID faultDefinitions+=FaultSubcomponent*
+		//{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr faultDefinitions+=FaultSubcomponent*
 		public Group getGroup() { return cGroup; }
 
 		//{FaultStatement}
@@ -153,11 +153,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_3() { return cColonKeyword_3; }
 
-		//faultDefName=ID
+		//faultDefName=Expr
 		public Assignment getFaultDefNameAssignment_4() { return cFaultDefNameAssignment_4; }
 
-		//ID
-		public RuleCall getFaultDefNameIDTerminalRuleCall_4_0() { return cFaultDefNameIDTerminalRuleCall_4_0; }
+		//Expr
+		public RuleCall getFaultDefNameExprParserRuleCall_4_0() { return cFaultDefNameExprParserRuleCall_4_0; }
 
 		//faultDefinitions+=FaultSubcomponent*
 		public Assignment getFaultDefinitionsAssignment_5() { return cFaultDefinitionsAssignment_5; }
@@ -174,10 +174,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cInputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cIn_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final RuleCall cIn_connNestedDotIDParserRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
+		private final CrossReference cIn_connElementCrossReference_0_3_0 = (CrossReference)cIn_connAssignment_0_3.eContents().get(0);
+		private final RuleCall cIn_connElementIDTerminalRuleCall_0_3_0_1 = (RuleCall)cIn_connElementCrossReference_0_3_0.eContents().get(1);
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final RuleCall cOut_connIDTerminalRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
+		private final RuleCall cOut_connExprParserRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
@@ -214,7 +215,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';'
+		//	{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';'
+		//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 		//	// For duration, will a time interval cover the case when we are dealing with time steps?
 		//	// For instance: 
@@ -225,8 +227,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';' | {OutputStatement} 'output' ':' out_conn=ID '->'
-		//nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
+		//{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';' //{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
+		//| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
 		//// For instance: 
 		//// 		trigger: transient [0,1]
 		//// will stand for time steps 0 and 1?
@@ -234,7 +236,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';'
+		//{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -246,20 +248,23 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//in_conn=NestedDotID
+		//in_conn=[aadl2::Element]
 		public Assignment getIn_connAssignment_0_3() { return cIn_connAssignment_0_3; }
 
-		//NestedDotID
-		public RuleCall getIn_connNestedDotIDParserRuleCall_0_3_0() { return cIn_connNestedDotIDParserRuleCall_0_3_0; }
+		//[aadl2::Element]
+		public CrossReference getIn_connElementCrossReference_0_3_0() { return cIn_connElementCrossReference_0_3_0; }
+
+		//ID
+		public RuleCall getIn_connElementIDTerminalRuleCall_0_3_0_1() { return cIn_connElementIDTerminalRuleCall_0_3_0_1; }
 
 		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_0_4() { return cHyphenMinusGreaterThanSignKeyword_0_4; }
 
-		//out_conn=ID
+		//out_conn=Expr
 		public Assignment getOut_connAssignment_0_5() { return cOut_connAssignment_0_5; }
 
-		//ID
-		public RuleCall getOut_connIDTerminalRuleCall_0_5_0() { return cOut_connIDTerminalRuleCall_0_5_0; }
+		//Expr
+		public RuleCall getOut_connExprParserRuleCall_0_5_0() { return cOut_connExprParserRuleCall_0_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_0_6() { return cSemicolonKeyword_0_6; }
@@ -751,7 +756,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//@ Override SpecStatement:
-	//	{FaultStatement} 'fault' str=STRING ':' faultDefName=ID
+	//	{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr
 	//	faultDefinitions+=FaultSubcomponent*;
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
@@ -762,7 +767,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=NestedDotID '->' out_conn=ID ';'
+	//	{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';'
+	//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
 	//	// For duration, will a time interval cover the case when we are dealing with time steps?
 	//	// For instance: 

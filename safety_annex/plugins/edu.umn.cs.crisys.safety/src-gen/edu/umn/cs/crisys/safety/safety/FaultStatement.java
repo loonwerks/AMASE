@@ -2,6 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -51,30 +53,30 @@ public interface FaultStatement extends SpecStatement
   void setStr(String value);
 
   /**
-   * Returns the value of the '<em><b>Fault Def Name</b></em>' attribute.
+   * Returns the value of the '<em><b>Fault Def Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Fault Def Name</em>' attribute isn't clear,
+   * If the meaning of the '<em>Fault Def Name</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fault Def Name</em>' attribute.
-   * @see #setFaultDefName(String)
+   * @return the value of the '<em>Fault Def Name</em>' containment reference.
+   * @see #setFaultDefName(Expr)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getFaultStatement_FaultDefName()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getFaultDefName();
+  Expr getFaultDefName();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Fault Def Name</em>' attribute.
+   * @param value the new value of the '<em>Fault Def Name</em>' containment reference.
    * @see #getFaultDefName()
    * @generated
    */
-  void setFaultDefName(String value);
+  void setFaultDefName(Expr value);
 
   /**
    * Returns the value of the '<em><b>Fault Definitions</b></em>' containment reference list.

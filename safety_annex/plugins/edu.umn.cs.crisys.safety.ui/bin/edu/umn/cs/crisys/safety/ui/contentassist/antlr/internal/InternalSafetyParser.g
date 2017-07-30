@@ -24799,8 +24799,8 @@ rule__SpecStatement__FaultDefNameAssignment_4
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameIDTerminalRuleCall_4_0()); }
-	RULE_ID{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameIDTerminalRuleCall_4_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameExprParserRuleCall_4_0()); }
+	ruleExpr{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameExprParserRuleCall_4_0()); }
 )
 
 ;
@@ -24829,8 +24829,12 @@ rule__FaultSubcomponent__In_connAssignment_0_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0()); }
-	ruleNestedDotID{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connElementCrossReference_0_3_0()); }
+(
+{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connElementIDTerminalRuleCall_0_3_0_1()); }
+	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connElementIDTerminalRuleCall_0_3_0_1()); }
+)
+{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connElementCrossReference_0_3_0()); }
 )
 
 ;
@@ -24844,8 +24848,8 @@ rule__FaultSubcomponent__Out_connAssignment_0_5
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); }
-	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connExprParserRuleCall_0_5_0()); }
+	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connExprParserRuleCall_0_5_0()); }
 )
 
 ;

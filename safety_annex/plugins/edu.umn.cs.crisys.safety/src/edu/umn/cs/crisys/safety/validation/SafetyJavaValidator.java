@@ -11,6 +11,7 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
+import org.osate.aadl2.Element;
 import org.osate.aadl2.NamedElement;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
@@ -53,20 +54,14 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		NestedDotID inConn = inputStmt.getIn_conn();
-		String outConn = inputStmt.getOut_conn();
+		Element inConn = inputStmt.getIn_conn();
+		Expr outConn = inputStmt.getOut_conn();
 		
 		if(inConn==null){
 			error(inConn, "Input connection cannot be null");
 			//error("Input connection cannot be null", SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN);
 		}
 		
-		// outConn is not a string, it's a RuleID. Change this. 
-		if(outConn.isEmpty()){
-			//error(inputStmt, "Output connection name cannot be empty");
-			error(SafetyPackage.Literals.OUTPUT_STATEMENT__NOM_CONN,"Output connection name cannot be empty");
-			
-		}
 	}
 	
 	// Output Statements

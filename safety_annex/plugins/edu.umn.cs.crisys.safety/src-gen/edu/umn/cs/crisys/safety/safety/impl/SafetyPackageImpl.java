@@ -400,9 +400,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFaultStatement_FaultDefName()
+  public EReference getFaultStatement_FaultDefName()
   {
-    return (EAttribute)faultStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)faultStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -440,9 +440,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getInputStatement_Out_conn()
+  public EReference getInputStatement_Out_conn()
   {
-    return (EAttribute)inputStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)inputStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -691,12 +691,12 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     faultStatementEClass = createEClass(FAULT_STATEMENT);
     createEAttribute(faultStatementEClass, FAULT_STATEMENT__STR);
-    createEAttribute(faultStatementEClass, FAULT_STATEMENT__FAULT_DEF_NAME);
+    createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEF_NAME);
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEFINITIONS);
 
     inputStatementEClass = createEClass(INPUT_STATEMENT);
     createEReference(inputStatementEClass, INPUT_STATEMENT__IN_CONN);
-    createEAttribute(inputStatementEClass, INPUT_STATEMENT__OUT_CONN);
+    createEReference(inputStatementEClass, INPUT_STATEMENT__OUT_CONN);
 
     outputStatementEClass = createEClass(OUTPUT_STATEMENT);
     createEAttribute(outputStatementEClass, OUTPUT_STATEMENT__OUT_CONN);
@@ -801,12 +801,12 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(faultStatementEClass, FaultStatement.class, "FaultStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFaultStatement_Str(), theEcorePackage.getEString(), "str", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFaultStatement_FaultDefName(), theEcorePackage.getEString(), "faultDefName", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFaultStatement_FaultDefName(), theAgreePackage.getExpr(), null, "faultDefName", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFaultStatement_FaultDefinitions(), this.getFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inputStatementEClass, InputStatement.class, "InputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getInputStatement_In_conn(), theAgreePackage.getNestedDotID(), null, "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInputStatement_In_conn(), theAadl2Package.getElement(), null, "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInputStatement_Out_conn(), theAgreePackage.getExpr(), null, "out_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(outputStatementEClass, OutputStatement.class, "OutputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getOutputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, OutputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

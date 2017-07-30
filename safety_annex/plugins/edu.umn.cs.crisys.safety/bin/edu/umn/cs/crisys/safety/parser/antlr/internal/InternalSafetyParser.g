@@ -274,19 +274,19 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		lv_faultDefName_4_0=RULE_ID
-		{
-			newLeafNode(lv_faultDefName_4_0, grammarAccess.getSpecStatementAccess().getFaultDefNameIDTerminalRuleCall_4_0()); 
-		}
-		{
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameExprParserRuleCall_4_0()); 
+	    }
+		lv_faultDefName_4_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
        			"faultDefName",
         		lv_faultDefName_4_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )
@@ -347,20 +347,15 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIn_connNestedDotIDParserRuleCall_0_3_0()); 
-	    }
-		lv_in_conn_3_0=ruleNestedDotID		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+		{
+			if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		set(
-       			$current, 
-       			"in_conn",
-        		lv_in_conn_3_0, 
-        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
-	        afterParserOrEnumRuleCall();
-	    }
+        }
+	otherlv_3=RULE_ID
+	{
+		newLeafNode(otherlv_3, grammarAccess.getFaultSubcomponentAccess().getIn_connElementCrossReference_0_3_0()); 
+	}
 
 )
 )
@@ -370,19 +365,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		lv_out_conn_5_0=RULE_ID
-		{
-			newLeafNode(lv_out_conn_5_0, grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); 
-		}
-		{
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getOut_connExprParserRuleCall_0_5_0()); 
+	    }
+		lv_out_conn_5_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
        			"out_conn",
         		lv_out_conn_5_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )
