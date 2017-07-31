@@ -3,13 +3,13 @@ package edu.umn.cs.crisys.safety.analysis.ast;
 import java.util.List;
 import jkind.lustre.Expr;
 
-public class FaultTrigger implements FaultASTElement{
+public class SafetyTrigger implements FaultASTElement{
 
 	public final TriggerCondition tc;
 	public final List<Expr> expressions;
 	public Expr probability;
 	
-	public FaultTrigger(TriggerCondition tc, List<Expr> expr){
+	public SafetyTrigger(TriggerCondition tc, List<Expr> expr){
 		
 		this.tc = tc;
 		this.expressions = jkind.util.Util.safeList(expr);
@@ -17,7 +17,7 @@ public class FaultTrigger implements FaultASTElement{
 	}
 	
 	// Alternative constructor for probabilistic case
-	public FaultTrigger(TriggerCondition tc, List<Expr> expr, Expr probability){
+	public SafetyTrigger(TriggerCondition tc, List<Expr> expr, Expr probability){
 		
 		this.tc = tc;
 		this.expressions = jkind.util.Util.safeList(expr);

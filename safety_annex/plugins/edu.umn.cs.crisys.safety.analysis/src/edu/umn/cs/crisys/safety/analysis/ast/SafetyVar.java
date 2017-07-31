@@ -6,24 +6,24 @@ import org.osate.aadl2.instance.FeatureInstance;
 import jkind.lustre.Type;
 import jkind.lustre.VarDecl;
 
-public class FaultVar extends VarDecl implements FaultASTElement{
+public class SafetyVar extends VarDecl implements FaultASTElement{
 	
 	public final EObject reference;
 	public final ComponentInstance compInst;
     public final FeatureInstance featInst;
     
-    public FaultVar(String name, Type type, EObject reference, ComponentInstance compInst, FeatureInstance featInst) {
+    public SafetyVar(String name, Type type, EObject reference, ComponentInstance compInst, FeatureInstance featInst) {
 		super(name, type);
 		this.reference = reference;
 		this.compInst = compInst;
 		this.featInst = featInst;
 	}
 	
-	public FaultVar(String name, Type type, EObject reference, ComponentInstance compInst) {
+	public SafetyVar(String name, Type type, EObject reference, ComponentInstance compInst) {
 		this(name, type, reference, compInst, null);
 	}
 	
-	public FaultVar(String name, Type type, EObject reference) {
+	public SafetyVar(String name, Type type, EObject reference) {
 		this(name, type, reference, null, null);
 	}
 	
@@ -38,10 +38,10 @@ public class FaultVar extends VarDecl implements FaultASTElement{
 			return this.id.equals((String) obj);
 		}
 
-		if (!(obj instanceof FaultVar)) {
+		if (!(obj instanceof SafetyVar)) {
 			return false;
 		}
-		FaultVar otherVar = (FaultVar) obj;
+		SafetyVar otherVar = (SafetyVar) obj;
 		return otherVar.compInst == compInst && otherVar.id.equals(id);
 	}
 	

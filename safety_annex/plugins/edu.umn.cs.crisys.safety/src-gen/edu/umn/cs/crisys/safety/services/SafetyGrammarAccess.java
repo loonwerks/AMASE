@@ -23,8 +23,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexLibrary");
 		private final RuleCall cSafetyLibraryParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@ Override //AnnexLibrary returns agree::AgreeLibrary:
-		//AnnexLibrary:
+		//@ Override AnnexLibrary:
 		//	SafetyLibrary;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -36,8 +35,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexSubclause");
 		private final RuleCall cSafetySubclauseParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@ Override //AnnexSubclause returns agree::AgreeSubclause:
-		//AnnexSubclause:
+		//@ Override AnnexSubclause:
 		//	SafetySubclause;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -387,7 +385,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cTransientConstraintAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cTransientKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
-		//// Currently, these are represented as keywords. 
 		//TemporalConstraint:
 		//	{PermanentConstraint} 'permanent'
 		//	| {TransientConstraint} 'transient';
@@ -441,7 +438,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cExprListExprParserRuleCall_1_4_1_0 = (RuleCall)cExprListAssignment_1_4_1.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
 		
-		//// ' 
 		//TriggerCondition:
 		//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
 		//	| {EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}';
@@ -561,9 +557,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_2_7 = (Keyword)cGroup_2.eContents().get(7);
 		private final Keyword cSemicolonKeyword_2_8 = (Keyword)cGroup_2.eContents().get(8);
 		
-		//// An eq statement can be an agree eq statement ('eq'...) or 
-		//// an interval or a set of discrete values.
-		//// Add capability of integer range?
 		//SafetyEqStatement:
 		//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 		//	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=Interval ';'
@@ -736,7 +729,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cHighExprParserRuleCall_3_0_4_0 = (RuleCall)cHighAssignment_3_0_4.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3_0_5 = (Keyword)cGroup_3_0.eContents().get(5);
 		
-		//// Intervals: Real (Time) or Integer
 		//Interval:
 		//	=> ({ClosedInterval} '[' low=Expr ',' high=Expr ']') | => ({OpenLeftInterval} '(' low=Expr ',' high=Expr ']') | =>
 		//	({OpenRightInterval} '[' low=Expr ',' high=Expr ')') | => ({OpenInterval} '(' low=Expr ',' high=Expr ')');
@@ -939,8 +931,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	
-	//@ Override //AnnexLibrary returns agree::AgreeLibrary:
-	//AnnexLibrary:
+	//@ Override AnnexLibrary:
 	//	SafetyLibrary;
 	public AnnexLibraryElements getAnnexLibraryAccess() {
 		return pAnnexLibrary;
@@ -950,8 +941,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getAnnexLibraryAccess().getRule();
 	}
 
-	//@ Override //AnnexSubclause returns agree::AgreeSubclause:
-	//AnnexSubclause:
+	//@ Override AnnexSubclause:
 	//	SafetySubclause;
 	public AnnexSubclauseElements getAnnexSubclauseAccess() {
 		return pAnnexSubclause;
@@ -1027,7 +1017,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getFaultSubcomponentAccess().getRule();
 	}
 
-	//// Currently, these are represented as keywords. 
 	//TemporalConstraint:
 	//	{PermanentConstraint} 'permanent'
 	//	| {TransientConstraint} 'transient';
@@ -1039,7 +1028,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getTemporalConstraintAccess().getRule();
 	}
 
-	//// ' 
 	//TriggerCondition:
 	//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
 	//	| {EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}';
@@ -1051,9 +1039,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getTriggerConditionAccess().getRule();
 	}
 
-	//// An eq statement can be an agree eq statement ('eq'...) or 
-	//// an interval or a set of discrete values.
-	//// Add capability of integer range?
 	//SafetyEqStatement:
 	//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 	//	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=Interval ';'
@@ -1066,7 +1051,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getSafetyEqStatementAccess().getRule();
 	}
 
-	//// Intervals: Real (Time) or Integer
 	//Interval:
 	//	=> ({ClosedInterval} '[' low=Expr ',' high=Expr ']') | => ({OpenLeftInterval} '(' low=Expr ',' high=Expr ']') | =>
 	//	({OpenRightInterval} '[' low=Expr ',' high=Expr ')') | => ({OpenInterval} '(' low=Expr ',' high=Expr ')');
