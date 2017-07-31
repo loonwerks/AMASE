@@ -35,9 +35,9 @@ SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=Expr
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=Expr '->' out_conn=ID ';' 
+	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID';' 
 	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
-	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID';' 
+	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr';' 
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| SafetyEqStatement ;
@@ -51,8 +51,8 @@ TemporalConstraint:
 
 // ' 
 TriggerCondition:
-	{MustCondition}'must' '{' exprList+=(Expr)+ '}'  
-  | {EnablerCondition} 'enabler' '{' exprList+=(Expr)+ '}'  
+	{MustCondition}'must' '{' exprList+=(Expr) ("," exprList+=(Expr))* '}'  
+  | {EnablerCondition} 'enabler' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
 ;
 	
 

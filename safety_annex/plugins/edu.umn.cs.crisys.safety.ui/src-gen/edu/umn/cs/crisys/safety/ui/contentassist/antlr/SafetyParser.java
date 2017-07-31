@@ -89,7 +89,9 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getTemporalConstraintAccess().getGroup_0(), "rule__TemporalConstraint__Group_0__0");
 					put(grammarAccess.getTemporalConstraintAccess().getGroup_1(), "rule__TemporalConstraint__Group_1__0");
 					put(grammarAccess.getTriggerConditionAccess().getGroup_0(), "rule__TriggerCondition__Group_0__0");
+					put(grammarAccess.getTriggerConditionAccess().getGroup_0_4(), "rule__TriggerCondition__Group_0_4__0");
 					put(grammarAccess.getTriggerConditionAccess().getGroup_1(), "rule__TriggerCondition__Group_1__0");
+					put(grammarAccess.getTriggerConditionAccess().getGroup_1_4(), "rule__TriggerCondition__Group_1_4__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_0(), "rule__SafetyEqStatement__Group_0__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_0_2(), "rule__SafetyEqStatement__Group_0_2__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_0_2_1(), "rule__SafetyEqStatement__Group_0_2_1__0");
@@ -328,7 +330,9 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFaultSubcomponentAccess().getCondAssignment_3_3(), "rule__FaultSubcomponent__CondAssignment_3_3");
 					put(grammarAccess.getFaultSubcomponentAccess().getProbabilityAssignment_3_4_1(), "rule__FaultSubcomponent__ProbabilityAssignment_3_4_1");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_0_3(), "rule__TriggerCondition__ExprListAssignment_0_3");
+					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_0_4_1(), "rule__TriggerCondition__ExprListAssignment_0_4_1");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_1_3(), "rule__TriggerCondition__ExprListAssignment_1_3");
+					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_1_4_1(), "rule__TriggerCondition__ExprListAssignment_1_4_1");
 					put(grammarAccess.getSafetyEqStatementAccess().getLhsAssignment_0_2_0(), "rule__SafetyEqStatement__LhsAssignment_0_2_0");
 					put(grammarAccess.getSafetyEqStatementAccess().getLhsAssignment_0_2_1_1(), "rule__SafetyEqStatement__LhsAssignment_0_2_1_1");
 					put(grammarAccess.getSafetyEqStatementAccess().getExprAssignment_0_3_1(), "rule__SafetyEqStatement__ExprAssignment_0_3_1");

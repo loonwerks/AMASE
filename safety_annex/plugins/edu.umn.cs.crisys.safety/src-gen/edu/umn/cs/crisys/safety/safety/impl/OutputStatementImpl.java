@@ -2,12 +2,16 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -48,24 +52,14 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
   protected String out_conn = OUT_CONN_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getNom_conn() <em>Nom conn</em>}' attribute.
+   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getNom_conn()
    * @generated
    * @ordered
    */
-  protected static final String NOM_CONN_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getNom_conn()
-   * @generated
-   * @ordered
-   */
-  protected String nom_conn = NOM_CONN_EDEFAULT;
+  protected Expr nom_conn;
 
   /**
    * <!-- begin-user-doc -->
@@ -116,7 +110,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getNom_conn()
+  public Expr getNom_conn()
   {
     return nom_conn;
   }
@@ -126,12 +120,53 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setNom_conn(String newNom_conn)
+  public NotificationChain basicSetNom_conn(Expr newNom_conn, NotificationChain msgs)
   {
-    String oldNom_conn = nom_conn;
+    Expr oldNom_conn = nom_conn;
     nom_conn = newNom_conn;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, oldNom_conn, nom_conn));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, oldNom_conn, newNom_conn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNom_conn(Expr newNom_conn)
+  {
+    if (newNom_conn != nom_conn)
+    {
+      NotificationChain msgs = null;
+      if (nom_conn != null)
+        msgs = ((InternalEObject)nom_conn).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, null, msgs);
+      if (newNom_conn != null)
+        msgs = ((InternalEObject)newNom_conn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, null, msgs);
+      msgs = basicSetNom_conn(newNom_conn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, newNom_conn, newNom_conn));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
+        return basicSetNom_conn(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -166,7 +201,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
         setOut_conn((String)newValue);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        setNom_conn((String)newValue);
+        setNom_conn((Expr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -186,7 +221,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
         setOut_conn(OUT_CONN_EDEFAULT);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        setNom_conn(NOM_CONN_EDEFAULT);
+        setNom_conn((Expr)null);
         return;
     }
     super.eUnset(featureID);
@@ -205,7 +240,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
       case SafetyPackage.OUTPUT_STATEMENT__OUT_CONN:
         return OUT_CONN_EDEFAULT == null ? out_conn != null : !OUT_CONN_EDEFAULT.equals(out_conn);
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        return NOM_CONN_EDEFAULT == null ? nom_conn != null : !NOM_CONN_EDEFAULT.equals(nom_conn);
+        return nom_conn != null;
     }
     return super.eIsSet(featureID);
   }
@@ -223,8 +258,6 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (out_conn: ");
     result.append(out_conn);
-    result.append(", nom_conn: ");
-    result.append(nom_conn);
     result.append(')');
     return result.toString();
   }

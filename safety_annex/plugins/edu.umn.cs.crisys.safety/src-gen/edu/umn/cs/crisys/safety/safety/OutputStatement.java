@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
 
 /**
  * <!-- begin-user-doc -->
@@ -49,29 +50,29 @@ public interface OutputStatement extends FaultSubcomponent
   void setOut_conn(String value);
 
   /**
-   * Returns the value of the '<em><b>Nom conn</b></em>' attribute.
+   * Returns the value of the '<em><b>Nom conn</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Nom conn</em>' attribute isn't clear,
+   * If the meaning of the '<em>Nom conn</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Nom conn</em>' attribute.
-   * @see #setNom_conn(String)
+   * @return the value of the '<em>Nom conn</em>' containment reference.
+   * @see #setNom_conn(Expr)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Nom_conn()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getNom_conn();
+  Expr getNom_conn();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Nom conn</em>' attribute.
+   * @param value the new value of the '<em>Nom conn</em>' containment reference.
    * @see #getNom_conn()
    * @generated
    */
-  void setNom_conn(String value);
+  void setNom_conn(Expr value);
 
 } // OutputStatement

@@ -302,15 +302,15 @@ connections
 		
 	**};
 annex safety {**
-	
-		fault "Accumulator valve stuck at permanent" : faults.fail_to(1.0, 2.0, true)
+		
+	fault "Accumulator valve stuck at permanent" : faults.fail_to(1.0, 2.0, true)
 		eq testVal :bool =  true;
-		input:  faults.historically(true) -> testVal; 
-		--output: faultOut -> blue_to_selector;
+		input:  pedals.signal1 -> testVal; 
+		output: faultOut -> faults.historically(false);
 		
 		duration: permanent [0.0,2.0];
-		trigger: enabler {true true if true then false else true} [0.15]; 
-		--eq testVal :real =  9;
+		trigger: enabler {true, true, if true then false else true} [0.15]; 
+		eq testVal2 :real =  9;
 		intervaleq testInterval = [0.0,5.0];
 		seteq testSet = {1,2,3};
 	  

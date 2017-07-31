@@ -41,7 +41,7 @@
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//OutputStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//OutputStatement/out_conn"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute Safety.ecore#//OutputStatement/nom_conn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/nom_conn"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//DurationStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//DurationStatement/tc"/>

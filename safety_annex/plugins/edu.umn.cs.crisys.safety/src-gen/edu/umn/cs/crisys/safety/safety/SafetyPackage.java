@@ -751,7 +751,7 @@ public interface SafetyPackage extends EPackage
   int INPUT_STATEMENT = 14;
 
   /**
-   * The feature id for the '<em><b>In conn</b></em>' containment reference.
+   * The feature id for the '<em><b>In conn</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -797,7 +797,7 @@ public interface SafetyPackage extends EPackage
   int OUTPUT_STATEMENT__OUT_CONN = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Nom conn</b></em>' attribute.
+   * The feature id for the '<em><b>Nom conn</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1385,10 +1385,10 @@ public interface SafetyPackage extends EPackage
   EClass getInputStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn <em>In conn</em>}'.
+   * Returns the meta object for the reference '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn <em>In conn</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>In conn</em>'.
+   * @return the meta object for the reference '<em>In conn</em>'.
    * @see edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn()
    * @see #getInputStatement()
    * @generated
@@ -1428,15 +1428,15 @@ public interface SafetyPackage extends EPackage
   EAttribute getOutputStatement_Out_conn();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Nom conn</em>'.
+   * @return the meta object for the containment reference '<em>Nom conn</em>'.
    * @see edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn()
    * @see #getOutputStatement()
    * @generated
    */
-  EAttribute getOutputStatement_Nom_conn();
+  EReference getOutputStatement_Nom_conn();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.DurationStatement <em>Duration Statement</em>}'.
@@ -1879,7 +1879,7 @@ public interface SafetyPackage extends EPackage
     EClass INPUT_STATEMENT = eINSTANCE.getInputStatement();
 
     /**
-     * The meta object literal for the '<em><b>In conn</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>In conn</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -1913,12 +1913,12 @@ public interface SafetyPackage extends EPackage
     EAttribute OUTPUT_STATEMENT__OUT_CONN = eINSTANCE.getOutputStatement_Out_conn();
 
     /**
-     * The meta object literal for the '<em><b>Nom conn</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Nom conn</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute OUTPUT_STATEMENT__NOM_CONN = eINSTANCE.getOutputStatement_Nom_conn();
+    EReference OUTPUT_STATEMENT__NOM_CONN = eINSTANCE.getOutputStatement_Nom_conn();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.DurationStatementImpl <em>Duration Statement</em>}' class.

@@ -493,7 +493,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (in_conn=Expr out_conn=ID)
+	 *     (in_conn=[NamedElement|ID] out_conn=ID)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		if (errorAcceptor != null) {
@@ -503,7 +503,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__OUT_CONN));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0(), semanticObject.getIn_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementIDTerminalRuleCall_0_3_0_1(), semanticObject.eGet(SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN, false));
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0(), semanticObject.getOut_conn());
 		feeder.finish();
 	}
@@ -514,7 +514,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (out_conn=ID nom_conn=ID)
+	 *     (out_conn=ID nom_conn=Expr)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
 		if (errorAcceptor != null) {
@@ -525,7 +525,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_1_3_0(), semanticObject.getOut_conn());
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connIDTerminalRuleCall_1_5_0(), semanticObject.getNom_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_5_0(), semanticObject.getNom_conn());
 		feeder.finish();
 	}
 	
@@ -684,7 +684,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     TriggerCondition returns EnablerCondition
 	 *
 	 * Constraint:
-	 *     exprList+=Expr+
+	 *     (exprList+=Expr exprList+=Expr*)
 	 */
 	protected void sequence_TriggerCondition(ISerializationContext context, EnablerCondition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -696,7 +696,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     TriggerCondition returns MustCondition
 	 *
 	 * Constraint:
-	 *     exprList+=Expr+
+	 *     (exprList+=Expr exprList+=Expr*)
 	 */
 	protected void sequence_TriggerCondition(ISerializationContext context, MustCondition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

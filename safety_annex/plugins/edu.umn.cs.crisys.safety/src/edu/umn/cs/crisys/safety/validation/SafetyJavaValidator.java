@@ -10,7 +10,11 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
+import org.osate.aadl2.NamedElement;
+
 import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
+
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
@@ -45,7 +49,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		Expr inConn = inputStmt.getIn_conn();
+		NamedElement inConn = inputStmt.getIn_conn();
 		String outConn = inputStmt.getOut_conn();
 		
 		if(inConn==null){
@@ -60,7 +64,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
 		String outConn = outputStmt.getOut_conn();
-		String nominalConn = outputStmt.getNom_conn();
+		Expr nominalConn = outputStmt.getNom_conn();
 			
 		if(nominalConn==null){
 			//error(nominalConn, "Nominal connection cannot be null");
