@@ -76,12 +76,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(outputStmt, "Input statement fault output ID must be "
 					+ "equal to output statement fault ID");
 		}
-		
-		// Check to see if nominalConn is a component connection in AADL
-		
 	}
 	
-	// Duration statements
+	// Duration statements: Check interval for integer values
 	@Check
 	public void checkDuration(DurationStatement durationStmt){
 		
@@ -90,10 +87,12 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		Expr lower = interval.getLow();
 	    Expr higher = interval.getHigh();
 	    
+	    // Lower value is integer valued literal and not a const
 	    if(!(lower instanceof IntLitExpr || isConst(lower))){
 	        error(lower, "Lower interval must be an integer valued literal.");
 	    }
 	    
+	    // Higher value is integer valued literal
 	    if(!(higher instanceof IntLitExpr || isConst(higher))){
             error(higher, "Higher interval must be an integer valued literal.");
         }
@@ -111,6 +110,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// Check the optional probability expression
 		if(triggerStmt.getProbability() != null ){
 			
+			// Check for non-real valued probability
 			// Try casting string to double, catch exceptions to print out error
 			double result = 0;
 			try{
@@ -124,14 +124,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			// Now check to make sure it's a valid probability (btwn 0 and 1 inclusive)
 			if((result < 0) || (result > 1)){
 				error(triggerStmt, "Probability must be between 0 and 1 inclusive");
-			}
-			
-			
+			}	
 		}
 	}
 	
-	// This will need to be changed in order to deal with an
-	// expression list. Not sure how to do that right now... 
+	// Checks nonempty list and only boolean values in expression list
 	@Check
 	public void checkTriggerCondition(TriggerCondition tc){
 		if(tc != null){
@@ -142,6 +139,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(tc, "Trigger condition list cannot be empty.");
 			}
 			
+			// For each expression in the list, make sure they are all of type boolean
 			for(Expr expr : exprList){
 				if (expr != null) {
 		            AgreeType exprType = getAgreeType(expr);
@@ -164,8 +162,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if (library != null) {
 			error(eqStmt, "Equation statments are only allowed in fault statements.");
 		}
-		
-		
 	}
 	
 	// Check the time interval passed in using Agree's method
@@ -187,12 +183,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	    if(isConst(lower) || isConst(higher)){
 	    	error(intervalEq, "Lower and higher interval values must be real or integer valued literals.");
 	    }
-	    
-		
 	}
 	
-	// Check the set eq statements
-	// Most of this is making sure integers are valid in set. 
+	// Check the set eq statements for empty set or non-integer values
 	@Check
 	public void checkSetEqStatement(SetEq setEq){
 		
@@ -220,15 +213,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(setEq, "Valid integer required in set");
 			}
 		}
-
-
-		
-		
-	}
-	
-	@Check
-	public void checkInterval(Interval interval){
-		
 	}
 	
 
