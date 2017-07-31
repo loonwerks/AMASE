@@ -5,7 +5,7 @@ package edu.umn.cs.crisys.safety.safety.impl;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 
-import edu.umn.cs.crisys.safety.safety.Eq;
+import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import java.util.Collection;
@@ -25,19 +25,19 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Eq</b></em>'.
+ * An implementation of the model object '<em><b>Eq Value</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqImpl#getLhs <em>Lhs</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqImpl#getExpr <em>Expr</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqValueImpl#getLhs <em>Lhs</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.EqValueImpl#getExpr <em>Expr</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EqImpl extends SafetyEqStatementImpl implements Eq
+public class EqValueImpl extends SafetyEqStatementImpl implements EqValue
 {
   /**
    * The cached value of the '{@link #getLhs() <em>Lhs</em>}' containment reference list.
@@ -64,7 +64,7 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
    * <!-- end-user-doc -->
    * @generated
    */
-  protected EqImpl()
+  protected EqValueImpl()
   {
     super();
   }
@@ -77,7 +77,7 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   @Override
   protected EClass eStaticClass()
   {
-    return SafetyPackage.Literals.EQ;
+    return SafetyPackage.Literals.EQ_VALUE;
   }
 
   /**
@@ -89,7 +89,7 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   {
     if (lhs == null)
     {
-      lhs = new EObjectContainmentEList<Arg>(Arg.class, this, SafetyPackage.EQ__LHS);
+      lhs = new EObjectContainmentEList<Arg>(Arg.class, this, SafetyPackage.EQ_VALUE__LHS);
     }
     return lhs;
   }
@@ -115,7 +115,7 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
     expr = newExpr;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.EQ__EXPR, oldExpr, newExpr);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.EQ_VALUE__EXPR, oldExpr, newExpr);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -132,14 +132,14 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
     {
       NotificationChain msgs = null;
       if (expr != null)
-        msgs = ((InternalEObject)expr).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.EQ__EXPR, null, msgs);
+        msgs = ((InternalEObject)expr).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.EQ_VALUE__EXPR, null, msgs);
       if (newExpr != null)
-        msgs = ((InternalEObject)newExpr).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.EQ__EXPR, null, msgs);
+        msgs = ((InternalEObject)newExpr).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.EQ_VALUE__EXPR, null, msgs);
       msgs = basicSetExpr(newExpr, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.EQ__EXPR, newExpr, newExpr));
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.EQ_VALUE__EXPR, newExpr, newExpr));
   }
 
   /**
@@ -152,9 +152,9 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   {
     switch (featureID)
     {
-      case SafetyPackage.EQ__LHS:
+      case SafetyPackage.EQ_VALUE__LHS:
         return ((InternalEList<?>)getLhs()).basicRemove(otherEnd, msgs);
-      case SafetyPackage.EQ__EXPR:
+      case SafetyPackage.EQ_VALUE__EXPR:
         return basicSetExpr(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -170,9 +170,9 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   {
     switch (featureID)
     {
-      case SafetyPackage.EQ__LHS:
+      case SafetyPackage.EQ_VALUE__LHS:
         return getLhs();
-      case SafetyPackage.EQ__EXPR:
+      case SafetyPackage.EQ_VALUE__EXPR:
         return getExpr();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -189,11 +189,11 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   {
     switch (featureID)
     {
-      case SafetyPackage.EQ__LHS:
+      case SafetyPackage.EQ_VALUE__LHS:
         getLhs().clear();
         getLhs().addAll((Collection<? extends Arg>)newValue);
         return;
-      case SafetyPackage.EQ__EXPR:
+      case SafetyPackage.EQ_VALUE__EXPR:
         setExpr((Expr)newValue);
         return;
     }
@@ -210,10 +210,10 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   {
     switch (featureID)
     {
-      case SafetyPackage.EQ__LHS:
+      case SafetyPackage.EQ_VALUE__LHS:
         getLhs().clear();
         return;
-      case SafetyPackage.EQ__EXPR:
+      case SafetyPackage.EQ_VALUE__EXPR:
         setExpr((Expr)null);
         return;
     }
@@ -230,12 +230,12 @@ public class EqImpl extends SafetyEqStatementImpl implements Eq
   {
     switch (featureID)
     {
-      case SafetyPackage.EQ__LHS:
+      case SafetyPackage.EQ_VALUE__LHS:
         return lhs != null && !lhs.isEmpty();
-      case SafetyPackage.EQ__EXPR:
+      case SafetyPackage.EQ_VALUE__EXPR:
         return expr != null;
     }
     return super.eIsSet(featureID);
   }
 
-} //EqImpl
+} //EqValueImpl

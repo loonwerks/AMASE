@@ -69,6 +69,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.CONTRACT: return createContract();
       case SafetyPackage.SPEC_STATEMENT: return createSpecStatement();
       case SafetyPackage.FAULT_SUBCOMPONENT: return createFaultSubcomponent();
+      case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
       case SafetyPackage.SAFETY_EQ_STATEMENT: return createSafetyEqStatement();
       case SafetyPackage.SAFETY_CONTRACT_LIBRARY: return createSafetyContractLibrary();
@@ -79,7 +80,11 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
-      case SafetyPackage.EQ: return createEq();
+      case SafetyPackage.PERMANENT_CONSTRAINT: return createPermanentConstraint();
+      case SafetyPackage.TRANSIENT_CONSTRAINT: return createTransientConstraint();
+      case SafetyPackage.MUST_CONDITION: return createMustCondition();
+      case SafetyPackage.ENABLER_CONDITION: return createEnablerCondition();
+      case SafetyPackage.EQ_VALUE: return createEqValue();
       case SafetyPackage.INTERVAL_EQ: return createIntervalEq();
       case SafetyPackage.SET_EQ: return createSetEq();
       default:
@@ -140,6 +145,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     FaultSubcomponentImpl faultSubcomponent = new FaultSubcomponentImpl();
     return faultSubcomponent;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TemporalConstraint createTemporalConstraint()
+  {
+    TemporalConstraintImpl temporalConstraint = new TemporalConstraintImpl();
+    return temporalConstraint;
   }
 
   /**
@@ -257,10 +273,54 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Eq createEq()
+  public PermanentConstraint createPermanentConstraint()
   {
-    EqImpl eq = new EqImpl();
-    return eq;
+    PermanentConstraintImpl permanentConstraint = new PermanentConstraintImpl();
+    return permanentConstraint;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TransientConstraint createTransientConstraint()
+  {
+    TransientConstraintImpl transientConstraint = new TransientConstraintImpl();
+    return transientConstraint;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MustCondition createMustCondition()
+  {
+    MustConditionImpl mustCondition = new MustConditionImpl();
+    return mustCondition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EnablerCondition createEnablerCondition()
+  {
+    EnablerConditionImpl enablerCondition = new EnablerConditionImpl();
+    return enablerCondition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EqValue createEqValue()
+  {
+    EqValueImpl eqValue = new EqValueImpl();
+    return eqValue;
   }
 
   /**

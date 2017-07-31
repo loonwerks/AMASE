@@ -68,6 +68,15 @@ public interface SafetyFactory extends EFactory
   FaultSubcomponent createFaultSubcomponent();
 
   /**
+   * Returns a new object of class '<em>Temporal Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Temporal Constraint</em>'.
+   * @generated
+   */
+  TemporalConstraint createTemporalConstraint();
+
+  /**
    * Returns a new object of class '<em>Trigger Condition</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -158,13 +167,49 @@ public interface SafetyFactory extends EFactory
   TriggerStatement createTriggerStatement();
 
   /**
-   * Returns a new object of class '<em>Eq</em>'.
+   * Returns a new object of class '<em>Permanent Constraint</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Eq</em>'.
+   * @return a new object of class '<em>Permanent Constraint</em>'.
    * @generated
    */
-  Eq createEq();
+  PermanentConstraint createPermanentConstraint();
+
+  /**
+   * Returns a new object of class '<em>Transient Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Transient Constraint</em>'.
+   * @generated
+   */
+  TransientConstraint createTransientConstraint();
+
+  /**
+   * Returns a new object of class '<em>Must Condition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Must Condition</em>'.
+   * @generated
+   */
+  MustCondition createMustCondition();
+
+  /**
+   * Returns a new object of class '<em>Enabler Condition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Enabler Condition</em>'.
+   * @generated
+   */
+  EnablerCondition createEnablerCondition();
+
+  /**
+   * Returns a new object of class '<em>Eq Value</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Eq Value</em>'.
+   * @generated
+   */
+  EqValue createEqValue();
 
   /**
    * Returns a new object of class '<em>Interval Eq</em>'.

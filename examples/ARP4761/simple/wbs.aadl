@@ -299,12 +299,20 @@ connections
 		
 		assert(fail_count <= 1);
 		
+		
 	**};
 annex safety {**
 	
 		fault "Accumulator valve stuck at permanent" : faults.fail_to(1.0, 2.0, true)
 		
-		--input:  -> f_accum_value;
+		input:  faultIn -> faultOut; 
+		--output: faultOut -> blue_to_selector;
+		
+		--duration: permanent [0.0,2.0];
+		trigger: enabler {true true if true then false else true} [0.15]; 
+		eq testVal :real =  9;
+		intervaleq testInterval = [0.0,5.0];
+		seteq testSet = {1,2,3};
 	  
 **};
 

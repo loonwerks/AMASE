@@ -106,6 +106,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createFaultSubcomponentAdapter();
       }
       @Override
+      public Adapter caseTemporalConstraint(TemporalConstraint object)
+      {
+        return createTemporalConstraintAdapter();
+      }
+      @Override
       public Adapter caseTriggerCondition(TriggerCondition object)
       {
         return createTriggerConditionAdapter();
@@ -156,9 +161,29 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createTriggerStatementAdapter();
       }
       @Override
-      public Adapter caseEq(Eq object)
+      public Adapter casePermanentConstraint(PermanentConstraint object)
       {
-        return createEqAdapter();
+        return createPermanentConstraintAdapter();
+      }
+      @Override
+      public Adapter caseTransientConstraint(TransientConstraint object)
+      {
+        return createTransientConstraintAdapter();
+      }
+      @Override
+      public Adapter caseMustCondition(MustCondition object)
+      {
+        return createMustConditionAdapter();
+      }
+      @Override
+      public Adapter caseEnablerCondition(EnablerCondition object)
+      {
+        return createEnablerConditionAdapter();
+      }
+      @Override
+      public Adapter caseEqValue(EqValue object)
+      {
+        return createEqValueAdapter();
       }
       @Override
       public Adapter caseIntervalEq(IntervalEq object)
@@ -293,6 +318,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFaultSubcomponentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.TemporalConstraint <em>Temporal Constraint</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.TemporalConstraint
+   * @generated
+   */
+  public Adapter createTemporalConstraintAdapter()
   {
     return null;
   }
@@ -448,16 +488,76 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.Eq <em>Eq</em>}'.
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PermanentConstraint <em>Permanent Constraint</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.Eq
+   * @see edu.umn.cs.crisys.safety.safety.PermanentConstraint
    * @generated
    */
-  public Adapter createEqAdapter()
+  public Adapter createPermanentConstraintAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.TransientConstraint <em>Transient Constraint</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.TransientConstraint
+   * @generated
+   */
+  public Adapter createTransientConstraintAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.MustCondition <em>Must Condition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.MustCondition
+   * @generated
+   */
+  public Adapter createMustConditionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.EnablerCondition <em>Enabler Condition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.EnablerCondition
+   * @generated
+   */
+  public Adapter createEnablerConditionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.EqValue <em>Eq Value</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.EqValue
+   * @generated
+   */
+  public Adapter createEqValueAdapter()
   {
     return null;
   }

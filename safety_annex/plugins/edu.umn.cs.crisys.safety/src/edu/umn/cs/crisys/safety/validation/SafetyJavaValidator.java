@@ -20,7 +20,7 @@ import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
-import edu.umn.cs.crisys.safety.safety.Eq;
+import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
@@ -54,11 +54,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		Element inConn = inputStmt.getIn_conn();
-		Expr outConn = inputStmt.getOut_conn();
+		String inConn = inputStmt.getIn_conn();
+		String outConn = inputStmt.getOut_conn();
 		
 		if(inConn==null){
-			error(inConn, "Input connection cannot be null");
+			//error(inConn, "Input connection cannot be null");
 			//error("Input connection cannot be null", SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN);
 		}
 		
@@ -69,10 +69,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
 		String outConn = outputStmt.getOut_conn();
-		NamedElement nominalConn = outputStmt.getNom_conn();
+		String nominalConn = outputStmt.getNom_conn();
 			
 		if(nominalConn==null){
-			error(nominalConn, "Nominal connection cannot be null");
+			//error(nominalConn, "Nominal connection cannot be null");
 		}
 		if(outConn.isEmpty()){
 			error(outputStmt, "Output connection name cannot be empty");
@@ -134,9 +134,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 	
 	
-	// Check EqStatements: This includes Eq: Equivalent to Agree's EqStatement
+	// Check EqStatements: 
 	@Check
-	public void checkEqStatement(Eq eqStmt){
+	public void checkEqStatement(EqValue eqStmt){
 		
 		// check for empty lhs list
 		if(eqStmt.getLhs().isEmpty()){

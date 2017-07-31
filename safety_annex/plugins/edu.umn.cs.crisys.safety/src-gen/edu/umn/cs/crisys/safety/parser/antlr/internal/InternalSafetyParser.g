@@ -347,15 +347,20 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
+		lv_in_conn_3_0=RULE_ID
 		{
-			if ($current==null) {
+			newLeafNode(lv_in_conn_3_0, grammarAccess.getFaultSubcomponentAccess().getIn_connIDTerminalRuleCall_0_3_0()); 
+		}
+		{
+	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-        }
-	otherlv_3=RULE_ID
-	{
-		newLeafNode(otherlv_3, grammarAccess.getFaultSubcomponentAccess().getIn_connElementCrossReference_0_3_0()); 
-	}
+       		setWithLastConsumed(
+       			$current, 
+       			"in_conn",
+        		lv_in_conn_3_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
 
 )
 )
@@ -365,19 +370,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getOut_connExprParserRuleCall_0_5_0()); 
-	    }
-		lv_out_conn_5_0=ruleExpr		{
+		lv_out_conn_5_0=RULE_ID
+		{
+			newLeafNode(lv_out_conn_5_0, grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		set(
+       		setWithLastConsumed(
        			$current, 
        			"out_conn",
         		lv_out_conn_5_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )
@@ -428,15 +433,20 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
+		lv_nom_conn_12_0=RULE_ID
 		{
-			if ($current==null) {
+			newLeafNode(lv_nom_conn_12_0, grammarAccess.getFaultSubcomponentAccess().getNom_connIDTerminalRuleCall_1_5_0()); 
+		}
+		{
+	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-        }
-	otherlv_12=RULE_ID
-	{
-		newLeafNode(otherlv_12, grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_1_5_0()); 
-	}
+       		setWithLastConsumed(
+       			$current, 
+       			"nom_conn",
+        		lv_nom_conn_12_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
 
 )
 )
@@ -588,35 +598,44 @@ ruleFaultSubcomponent returns [EObject current=null]
 
 
 // Entry rule entryRuleTemporalConstraint
-entryRuleTemporalConstraint returns [String current=null] 
-:
-	{ newCompositeNode(grammarAccess.getTemporalConstraintRule()); } 
+entryRuleTemporalConstraint returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getTemporalConstraintRule()); }
 	 iv_ruleTemporalConstraint=ruleTemporalConstraint 
-	 { $current=$iv_ruleTemporalConstraint.current.getText(); }  
+	 { $current=$iv_ruleTemporalConstraint.current; } 
 	 EOF 
 ;
 
 // Rule TemporalConstraint
-ruleTemporalConstraint returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] 
+ruleTemporalConstraint returns [EObject current=null] 
     @init { enterRule(); 
     }
-    @after { leaveRule();
-    }:
-(
-	kw=Permanent 
+    @after { leaveRule(); }:
+(((
     {
-        $current.merge(kw);
-        newLeafNode(kw, grammarAccess.getTemporalConstraintAccess().getPermanentKeyword_0()); 
-    }
-
-    |
-	kw=Transient 
-    {
-        $current.merge(kw);
-        newLeafNode(kw, grammarAccess.getTemporalConstraintAccess().getTransientKeyword_1()); 
+        $current = forceCreateModelElement(
+            grammarAccess.getTemporalConstraintAccess().getPermanentConstraintAction_0_0(),
+            $current);
     }
 )
-    ;
+	otherlv_1=Permanent
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getTemporalConstraintAccess().getPermanentKeyword_0_1());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getTemporalConstraintAccess().getTransientConstraintAction_1_0(),
+            $current);
+    }
+)
+	otherlv_3=Transient
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getTemporalConstraintAccess().getTransientKeyword_1_1());
+    }
+))
+;
 
 
 
@@ -639,7 +658,7 @@ ruleTriggerCondition returns [EObject current=null]
 (((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getTriggerConditionAccess().getTriggerConditionAction_0_0(),
+            grammarAccess.getTriggerConditionAccess().getMustConditionAction_0_0(),
             $current);
     }
 )
@@ -679,7 +698,7 @@ ruleTriggerCondition returns [EObject current=null]
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getTriggerConditionAccess().getTriggerConditionAction_1_0(),
+            grammarAccess.getTriggerConditionAccess().getEnablerConditionAction_1_0(),
             $current);
     }
 )
@@ -739,7 +758,7 @@ ruleSafetyEqStatement returns [EObject current=null]
 (((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getSafetyEqStatementAccess().getEqAction_0_0(),
+            grammarAccess.getSafetyEqStatementAccess().getEqValueAction_0_0(),
             $current);
     }
 )
@@ -830,19 +849,19 @@ ruleSafetyEqStatement returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getLhs_intArgParserRuleCall_1_2_0()); 
-	    }
-		lv_lhs_int_10_0=ruleArg		{
+		lv_lhs_int_10_0=RULE_ID
+		{
+			newLeafNode(lv_lhs_int_10_0, grammarAccess.getSafetyEqStatementAccess().getLhs_intIDTerminalRuleCall_1_2_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getSafetyEqStatementRule());
+	            $current = createModelElement(grammarAccess.getSafetyEqStatementRule());
 	        }
-       		set(
+       		setWithLastConsumed(
        			$current, 
        			"lhs_int",
         		lv_lhs_int_10_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Arg");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )
@@ -888,19 +907,19 @@ ruleSafetyEqStatement returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getLhs_setArgParserRuleCall_2_2_0()); 
-	    }
-		lv_lhs_set_16_0=ruleArg		{
+		lv_lhs_set_16_0=RULE_ID
+		{
+			newLeafNode(lv_lhs_set_16_0, grammarAccess.getSafetyEqStatementAccess().getLhs_setIDTerminalRuleCall_2_2_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getSafetyEqStatementRule());
+	            $current = createModelElement(grammarAccess.getSafetyEqStatementRule());
 	        }
-       		set(
+       		setWithLastConsumed(
        			$current, 
        			"lhs_set",
         		lv_lhs_set_16_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Arg");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )

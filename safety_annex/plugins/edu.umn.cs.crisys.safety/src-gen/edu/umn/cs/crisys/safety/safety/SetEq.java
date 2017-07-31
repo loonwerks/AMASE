@@ -2,8 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.Arg;
-
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -27,30 +25,30 @@ import org.eclipse.emf.common.util.EList;
 public interface SetEq extends SafetyEqStatement
 {
   /**
-   * Returns the value of the '<em><b>Lhs set</b></em>' containment reference.
+   * Returns the value of the '<em><b>Lhs set</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Lhs set</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Lhs set</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Lhs set</em>' containment reference.
-   * @see #setLhs_set(Arg)
+   * @return the value of the '<em>Lhs set</em>' attribute.
+   * @see #setLhs_set(String)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getSetEq_Lhs_set()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  Arg getLhs_set();
+  String getLhs_set();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.SetEq#getLhs_set <em>Lhs set</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.SetEq#getLhs_set <em>Lhs set</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Lhs set</em>' containment reference.
+   * @param value the new value of the '<em>Lhs set</em>' attribute.
    * @see #getLhs_set()
    * @generated
    */
-  void setLhs_set(Arg value);
+  void setLhs_set(String value);
 
   /**
    * Returns the value of the '<em><b>L1</b></em>' attribute.

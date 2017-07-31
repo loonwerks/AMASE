@@ -87,6 +87,8 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_2(), "rule__FaultSubcomponent__Group_2__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_3(), "rule__FaultSubcomponent__Group_3__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_3_4(), "rule__FaultSubcomponent__Group_3_4__0");
+					put(grammarAccess.getTemporalConstraintAccess().getGroup_0(), "rule__TemporalConstraint__Group_0__0");
+					put(grammarAccess.getTemporalConstraintAccess().getGroup_1(), "rule__TemporalConstraint__Group_1__0");
 					put(grammarAccess.getTriggerConditionAccess().getGroup_0(), "rule__TriggerCondition__Group_0__0");
 					put(grammarAccess.getTriggerConditionAccess().getGroup_1(), "rule__TriggerCondition__Group_1__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_0(), "rule__SafetyEqStatement__Group_0__0");

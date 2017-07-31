@@ -2,7 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,29 +49,29 @@ public interface OutputStatement extends FaultSubcomponent
   void setOut_conn(String value);
 
   /**
-   * Returns the value of the '<em><b>Nom conn</b></em>' reference.
+   * Returns the value of the '<em><b>Nom conn</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Nom conn</em>' reference isn't clear,
+   * If the meaning of the '<em>Nom conn</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Nom conn</em>' reference.
-   * @see #setNom_conn(NamedElement)
+   * @return the value of the '<em>Nom conn</em>' attribute.
+   * @see #setNom_conn(String)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Nom_conn()
    * @model
    * @generated
    */
-  NamedElement getNom_conn();
+  String getNom_conn();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}' reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Nom conn</em>' reference.
+   * @param value the new value of the '<em>Nom conn</em>' attribute.
    * @see #getNom_conn()
    * @generated
    */
-  void setNom_conn(NamedElement value);
+  void setNom_conn(String value);
 
 } // OutputStatement

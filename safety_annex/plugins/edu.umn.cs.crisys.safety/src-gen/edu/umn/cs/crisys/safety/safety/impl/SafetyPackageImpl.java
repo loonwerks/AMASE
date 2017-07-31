@@ -6,12 +6,15 @@ import com.rockwellcollins.atc.agree.agree.AgreePackage;
 
 import edu.umn.cs.crisys.safety.safety.Contract;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
-import edu.umn.cs.crisys.safety.safety.Eq;
+import edu.umn.cs.crisys.safety.safety.EnablerCondition;
+import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
+import edu.umn.cs.crisys.safety.safety.MustCondition;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
@@ -22,6 +25,8 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SafetySubclause;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
+import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 
@@ -77,6 +82,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass faultSubcomponentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass temporalConstraintEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -153,7 +165,35 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass eqEClass = null;
+  private EClass permanentConstraintEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass transientConstraintEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass mustConditionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass enablerConditionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass eqValueEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -283,6 +323,16 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
   public EClass getFaultSubcomponent()
   {
     return faultSubcomponentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTemporalConstraint()
+  {
+    return temporalConstraintEClass;
   }
 
   /**
@@ -430,9 +480,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getInputStatement_In_conn()
+  public EAttribute getInputStatement_In_conn()
   {
-    return (EReference)inputStatementEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)inputStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -440,9 +490,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getInputStatement_Out_conn()
+  public EAttribute getInputStatement_Out_conn()
   {
-    return (EReference)inputStatementEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)inputStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -470,9 +520,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getOutputStatement_Nom_conn()
+  public EAttribute getOutputStatement_Nom_conn()
   {
-    return (EReference)outputStatementEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)outputStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -490,9 +540,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDurationStatement_Tc()
+  public EReference getDurationStatement_Tc()
   {
-    return (EAttribute)durationStatementEClass.getEStructuralFeatures().get(0);
+    return (EReference)durationStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -540,9 +590,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getEq()
+  public EClass getPermanentConstraint()
   {
-    return eqEClass;
+    return permanentConstraintEClass;
   }
 
   /**
@@ -550,9 +600,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEq_Lhs()
+  public EClass getTransientConstraint()
   {
-    return (EReference)eqEClass.getEStructuralFeatures().get(0);
+    return transientConstraintEClass;
   }
 
   /**
@@ -560,9 +610,49 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEq_Expr()
+  public EClass getMustCondition()
   {
-    return (EReference)eqEClass.getEStructuralFeatures().get(1);
+    return mustConditionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEnablerCondition()
+  {
+    return enablerConditionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEqValue()
+  {
+    return eqValueEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEqValue_Lhs()
+  {
+    return (EReference)eqValueEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEqValue_Expr()
+  {
+    return (EReference)eqValueEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -580,9 +670,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getIntervalEq_Lhs_int()
+  public EAttribute getIntervalEq_Lhs_int()
   {
-    return (EReference)intervalEqEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)intervalEqEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -610,9 +700,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSetEq_Lhs_set()
+  public EAttribute getSetEq_Lhs_set()
   {
-    return (EReference)setEqEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)setEqEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -675,6 +765,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     faultSubcomponentEClass = createEClass(FAULT_SUBCOMPONENT);
 
+    temporalConstraintEClass = createEClass(TEMPORAL_CONSTRAINT);
+
     triggerConditionEClass = createEClass(TRIGGER_CONDITION);
     createEReference(triggerConditionEClass, TRIGGER_CONDITION__EXPR_LIST);
 
@@ -695,31 +787,39 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEFINITIONS);
 
     inputStatementEClass = createEClass(INPUT_STATEMENT);
-    createEReference(inputStatementEClass, INPUT_STATEMENT__IN_CONN);
-    createEReference(inputStatementEClass, INPUT_STATEMENT__OUT_CONN);
+    createEAttribute(inputStatementEClass, INPUT_STATEMENT__IN_CONN);
+    createEAttribute(inputStatementEClass, INPUT_STATEMENT__OUT_CONN);
 
     outputStatementEClass = createEClass(OUTPUT_STATEMENT);
     createEAttribute(outputStatementEClass, OUTPUT_STATEMENT__OUT_CONN);
-    createEReference(outputStatementEClass, OUTPUT_STATEMENT__NOM_CONN);
+    createEAttribute(outputStatementEClass, OUTPUT_STATEMENT__NOM_CONN);
 
     durationStatementEClass = createEClass(DURATION_STATEMENT);
-    createEAttribute(durationStatementEClass, DURATION_STATEMENT__TC);
+    createEReference(durationStatementEClass, DURATION_STATEMENT__TC);
     createEReference(durationStatementEClass, DURATION_STATEMENT__INTERV);
 
     triggerStatementEClass = createEClass(TRIGGER_STATEMENT);
     createEReference(triggerStatementEClass, TRIGGER_STATEMENT__COND);
     createEAttribute(triggerStatementEClass, TRIGGER_STATEMENT__PROBABILITY);
 
-    eqEClass = createEClass(EQ);
-    createEReference(eqEClass, EQ__LHS);
-    createEReference(eqEClass, EQ__EXPR);
+    permanentConstraintEClass = createEClass(PERMANENT_CONSTRAINT);
+
+    transientConstraintEClass = createEClass(TRANSIENT_CONSTRAINT);
+
+    mustConditionEClass = createEClass(MUST_CONDITION);
+
+    enablerConditionEClass = createEClass(ENABLER_CONDITION);
+
+    eqValueEClass = createEClass(EQ_VALUE);
+    createEReference(eqValueEClass, EQ_VALUE__LHS);
+    createEReference(eqValueEClass, EQ_VALUE__EXPR);
 
     intervalEqEClass = createEClass(INTERVAL_EQ);
-    createEReference(intervalEqEClass, INTERVAL_EQ__LHS_INT);
+    createEAttribute(intervalEqEClass, INTERVAL_EQ__LHS_INT);
     createEReference(intervalEqEClass, INTERVAL_EQ__INTERV);
 
     setEqEClass = createEClass(SET_EQ);
-    createEReference(setEqEClass, SET_EQ__LHS_SET);
+    createEAttribute(setEqEClass, SET_EQ__LHS_SET);
     createEAttribute(setEqEClass, SET_EQ__L1);
     createEAttribute(setEqEClass, SET_EQ__LIST);
   }
@@ -770,7 +870,11 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     outputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     durationStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
-    eqEClass.getESuperTypes().add(this.getSafetyEqStatement());
+    permanentConstraintEClass.getESuperTypes().add(this.getTemporalConstraint());
+    transientConstraintEClass.getESuperTypes().add(this.getTemporalConstraint());
+    mustConditionEClass.getESuperTypes().add(this.getTriggerCondition());
+    enablerConditionEClass.getESuperTypes().add(this.getTriggerCondition());
+    eqValueEClass.getESuperTypes().add(this.getSafetyEqStatement());
     intervalEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
     setEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
 
@@ -784,6 +888,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEClass(specStatementEClass, SpecStatement.class, "SpecStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(faultSubcomponentEClass, FaultSubcomponent.class, "FaultSubcomponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(temporalConstraintEClass, TemporalConstraint.class, "TemporalConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(triggerConditionEClass, TriggerCondition.class, "TriggerCondition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerCondition_ExprList(), theAgreePackage.getExpr(), null, "exprList", null, 0, -1, TriggerCondition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -805,31 +911,39 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEReference(getFaultStatement_FaultDefinitions(), this.getFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inputStatementEClass, InputStatement.class, "InputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getInputStatement_In_conn(), theAadl2Package.getElement(), null, "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getInputStatement_Out_conn(), theAgreePackage.getExpr(), null, "out_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInputStatement_In_conn(), theEcorePackage.getEString(), "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(outputStatementEClass, OutputStatement.class, "OutputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getOutputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, OutputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getOutputStatement_Nom_conn(), theAadl2Package.getNamedElement(), null, "nom_conn", null, 0, 1, OutputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getOutputStatement_Nom_conn(), theEcorePackage.getEString(), "nom_conn", null, 0, 1, OutputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(durationStatementEClass, DurationStatement.class, "DurationStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDurationStatement_Tc(), theEcorePackage.getEString(), "tc", null, 0, 1, DurationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDurationStatement_Tc(), this.getTemporalConstraint(), null, "tc", null, 0, 1, DurationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDurationStatement_Interv(), theAgreePackage.getTimeInterval(), null, "interv", null, 0, 1, DurationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(triggerStatementEClass, TriggerStatement.class, "TriggerStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerStatement_Cond(), this.getTriggerCondition(), null, "cond", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTriggerStatement_Probability(), theEcorePackage.getEString(), "probability", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(eqEClass, Eq.class, "Eq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEq_Lhs(), theAgreePackage.getArg(), null, "lhs", null, 0, -1, Eq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEq_Expr(), theAgreePackage.getExpr(), null, "expr", null, 0, 1, Eq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(permanentConstraintEClass, PermanentConstraint.class, "PermanentConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(transientConstraintEClass, TransientConstraint.class, "TransientConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(mustConditionEClass, MustCondition.class, "MustCondition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(enablerConditionEClass, EnablerCondition.class, "EnablerCondition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(eqValueEClass, EqValue.class, "EqValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getEqValue_Lhs(), theAgreePackage.getArg(), null, "lhs", null, 0, -1, EqValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEqValue_Expr(), theAgreePackage.getExpr(), null, "expr", null, 0, 1, EqValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(intervalEqEClass, IntervalEq.class, "IntervalEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getIntervalEq_Lhs_int(), theAgreePackage.getArg(), null, "lhs_int", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntervalEq_Lhs_int(), theEcorePackage.getEString(), "lhs_int", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getIntervalEq_Interv(), theAgreePackage.getTimeInterval(), null, "interv", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(setEqEClass, SetEq.class, "SetEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSetEq_Lhs_set(), theAgreePackage.getArg(), null, "lhs_set", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSetEq_Lhs_set(), theEcorePackage.getEString(), "lhs_set", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetEq_L1(), theEcorePackage.getEString(), "l1", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetEq_List(), theEcorePackage.getEString(), "list", null, 0, -1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

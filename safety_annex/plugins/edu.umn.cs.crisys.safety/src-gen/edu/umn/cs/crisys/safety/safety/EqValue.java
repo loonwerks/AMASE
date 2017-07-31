@@ -9,22 +9,22 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Eq</b></em>'.
+ * A representation of the model object '<em><b>Eq Value</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.Eq#getLhs <em>Lhs</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.Eq#getExpr <em>Expr</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.EqValue#getLhs <em>Lhs</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.EqValue#getExpr <em>Expr</em>}</li>
  * </ul>
  *
- * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEq()
+ * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEqValue()
  * @model
  * @generated
  */
-public interface Eq extends SafetyEqStatement
+public interface EqValue extends SafetyEqStatement
 {
   /**
    * Returns the value of the '<em><b>Lhs</b></em>' containment reference list.
@@ -36,7 +36,7 @@ public interface Eq extends SafetyEqStatement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Lhs</em>' containment reference list.
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEq_Lhs()
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEqValue_Lhs()
    * @model containment="true"
    * @generated
    */
@@ -52,14 +52,14 @@ public interface Eq extends SafetyEqStatement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr</em>' containment reference.
    * @see #setExpr(Expr)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEq_Expr()
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEqValue_Expr()
    * @model containment="true"
    * @generated
    */
   Expr getExpr();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.Eq#getExpr <em>Expr</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.EqValue#getExpr <em>Expr</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Expr</em>' containment reference.
@@ -68,4 +68,4 @@ public interface Eq extends SafetyEqStatement
    */
   void setExpr(Expr value);
 
-} // Eq
+} // EqValue

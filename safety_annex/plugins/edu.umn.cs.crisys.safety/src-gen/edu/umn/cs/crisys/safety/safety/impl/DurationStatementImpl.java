@@ -6,6 +6,7 @@ import com.rockwellcollins.atc.agree.agree.TimeInterval;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
+import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -32,24 +33,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class DurationStatementImpl extends FaultSubcomponentImpl implements DurationStatement
 {
   /**
-   * The default value of the '{@link #getTc() <em>Tc</em>}' attribute.
+   * The cached value of the '{@link #getTc() <em>Tc</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getTc()
    * @generated
    * @ordered
    */
-  protected static final String TC_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getTc() <em>Tc</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getTc()
-   * @generated
-   * @ordered
-   */
-  protected String tc = TC_EDEFAULT;
+  protected TemporalConstraint tc;
 
   /**
    * The cached value of the '{@link #getInterv() <em>Interv</em>}' containment reference.
@@ -87,7 +78,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getTc()
+  public TemporalConstraint getTc()
   {
     return tc;
   }
@@ -97,12 +88,37 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTc(String newTc)
+  public NotificationChain basicSetTc(TemporalConstraint newTc, NotificationChain msgs)
   {
-    String oldTc = tc;
+    TemporalConstraint oldTc = tc;
     tc = newTc;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.DURATION_STATEMENT__TC, oldTc, tc));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.DURATION_STATEMENT__TC, oldTc, newTc);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTc(TemporalConstraint newTc)
+  {
+    if (newTc != tc)
+    {
+      NotificationChain msgs = null;
+      if (tc != null)
+        msgs = ((InternalEObject)tc).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.DURATION_STATEMENT__TC, null, msgs);
+      if (newTc != null)
+        msgs = ((InternalEObject)newTc).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.DURATION_STATEMENT__TC, null, msgs);
+      msgs = basicSetTc(newTc, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.DURATION_STATEMENT__TC, newTc, newTc));
   }
 
   /**
@@ -163,6 +179,8 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
   {
     switch (featureID)
     {
+      case SafetyPackage.DURATION_STATEMENT__TC:
+        return basicSetTc(null, msgs);
       case SafetyPackage.DURATION_STATEMENT__INTERV:
         return basicSetInterv(null, msgs);
     }
@@ -198,7 +216,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
     switch (featureID)
     {
       case SafetyPackage.DURATION_STATEMENT__TC:
-        setTc((String)newValue);
+        setTc((TemporalConstraint)newValue);
         return;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
         setInterv((TimeInterval)newValue);
@@ -218,7 +236,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
     switch (featureID)
     {
       case SafetyPackage.DURATION_STATEMENT__TC:
-        setTc(TC_EDEFAULT);
+        setTc((TemporalConstraint)null);
         return;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
         setInterv((TimeInterval)null);
@@ -238,28 +256,11 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
     switch (featureID)
     {
       case SafetyPackage.DURATION_STATEMENT__TC:
-        return TC_EDEFAULT == null ? tc != null : !TC_EDEFAULT.equals(tc);
+        return tc != null;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
         return interv != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (tc: ");
-    result.append(tc);
-    result.append(')');
-    return result.toString();
   }
 
 } //DurationStatementImpl

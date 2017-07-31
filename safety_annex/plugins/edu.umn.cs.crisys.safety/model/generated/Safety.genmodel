@@ -12,6 +12,7 @@
     <genClasses ecoreClass="Safety.ecore#//Contract"/>
     <genClasses ecoreClass="Safety.ecore#//SpecStatement"/>
     <genClasses ecoreClass="Safety.ecore#//FaultSubcomponent"/>
+    <genClasses ecoreClass="Safety.ecore#//TemporalConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TriggerCondition">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerCondition/exprList"/>
     </genClasses>
@@ -31,35 +32,43 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//InputStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_conn"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/out_conn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute Safety.ecore#//InputStatement/in_conn"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//InputStatement/out_conn"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connExpr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connPattern"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//OutputStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//OutputStatement/out_conn"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/nom_conn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute Safety.ecore#//OutputStatement/nom_conn"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//DurationStatement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//DurationStatement/tc"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//DurationStatement/tc"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//DurationStatement/interv"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
     </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//Eq">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/lhs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/expr"/>
+    <genClasses ecoreClass="Safety.ecore#//PermanentConstraint"/>
+    <genClasses ecoreClass="Safety.ecore#//TransientConstraint"/>
+    <genClasses ecoreClass="Safety.ecore#//MustCondition"/>
+    <genClasses ecoreClass="Safety.ecore#//EnablerCondition"/>
+    <genClasses ecoreClass="Safety.ecore#//EqValue">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EqValue/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EqValue/expr"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//IntervalEq">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/lhs_int"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//IntervalEq/lhs_int"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/interv"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SetEq">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/lhs_set"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/lhs_set"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//Eq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/expr"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

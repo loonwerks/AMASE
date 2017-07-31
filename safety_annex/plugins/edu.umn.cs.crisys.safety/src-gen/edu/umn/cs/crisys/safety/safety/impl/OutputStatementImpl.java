@@ -8,12 +8,8 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -52,14 +48,24 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
   protected String out_conn = OUT_CONN_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' reference.
+   * The default value of the '{@link #getNom_conn() <em>Nom conn</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getNom_conn()
    * @generated
    * @ordered
    */
-  protected NamedElement nom_conn;
+  protected static final String NOM_CONN_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNom_conn()
+   * @generated
+   * @ordered
+   */
+  protected String nom_conn = NOM_CONN_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -110,27 +116,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public NamedElement getNom_conn()
-  {
-    if (nom_conn != null && ((EObject)nom_conn).eIsProxy())
-    {
-      InternalEObject oldNom_conn = (InternalEObject)nom_conn;
-      nom_conn = (NamedElement)eResolveProxy(oldNom_conn);
-      if (nom_conn != oldNom_conn)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, oldNom_conn, nom_conn));
-      }
-    }
-    return nom_conn;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NamedElement basicGetNom_conn()
+  public String getNom_conn()
   {
     return nom_conn;
   }
@@ -140,9 +126,9 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setNom_conn(NamedElement newNom_conn)
+  public void setNom_conn(String newNom_conn)
   {
-    NamedElement oldNom_conn = nom_conn;
+    String oldNom_conn = nom_conn;
     nom_conn = newNom_conn;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN, oldNom_conn, nom_conn));
@@ -161,8 +147,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
       case SafetyPackage.OUTPUT_STATEMENT__OUT_CONN:
         return getOut_conn();
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        if (resolve) return getNom_conn();
-        return basicGetNom_conn();
+        return getNom_conn();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -181,7 +166,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
         setOut_conn((String)newValue);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        setNom_conn((NamedElement)newValue);
+        setNom_conn((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -201,7 +186,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
         setOut_conn(OUT_CONN_EDEFAULT);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        setNom_conn((NamedElement)null);
+        setNom_conn(NOM_CONN_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -220,7 +205,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
       case SafetyPackage.OUTPUT_STATEMENT__OUT_CONN:
         return OUT_CONN_EDEFAULT == null ? out_conn != null : !OUT_CONN_EDEFAULT.equals(out_conn);
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        return nom_conn != null;
+        return NOM_CONN_EDEFAULT == null ? nom_conn != null : !NOM_CONN_EDEFAULT.equals(nom_conn);
     }
     return super.eIsSet(featureID);
   }
@@ -238,6 +223,8 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (out_conn: ");
     result.append(out_conn);
+    result.append(", nom_conn: ");
+    result.append(nom_conn);
     result.append(')');
     return result.toString();
   }

@@ -174,11 +174,10 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cInputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cIn_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final CrossReference cIn_connElementCrossReference_0_3_0 = (CrossReference)cIn_connAssignment_0_3.eContents().get(0);
-		private final RuleCall cIn_connElementIDTerminalRuleCall_0_3_0_1 = (RuleCall)cIn_connElementCrossReference_0_3_0.eContents().get(1);
+		private final RuleCall cIn_connIDTerminalRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final RuleCall cOut_connExprParserRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
+		private final RuleCall cOut_connIDTerminalRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
@@ -188,8 +187,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cOut_connIDTerminalRuleCall_1_3_0 = (RuleCall)cOut_connAssignment_1_3.eContents().get(0);
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		private final Assignment cNom_connAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
-		private final CrossReference cNom_connNamedElementCrossReference_1_5_0 = (CrossReference)cNom_connAssignment_1_5.eContents().get(0);
-		private final RuleCall cNom_connNamedElementIDTerminalRuleCall_1_5_0_1 = (RuleCall)cNom_connNamedElementCrossReference_1_5_0.eContents().get(1);
+		private final RuleCall cNom_connIDTerminalRuleCall_1_5_0 = (RuleCall)cNom_connAssignment_1_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final Action cDurationStatementAction_2_0 = (Action)cGroup_2.eContents().get(0);
@@ -215,28 +213,21 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';'
+		//	{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';'
 		//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
-		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
-		//	// For duration, will a time interval cover the case when we are dealing with time steps?
-		//	// For instance: 
-		//	// 		trigger: transient [0,1]
-		//	// will stand for time steps 0 and 1?
+		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';' //{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
-		//| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';' // For duration, will a time interval cover the case when we are dealing with time steps?
-		//// For instance: 
-		//// 		trigger: transient [0,1]
-		//// will stand for time steps 0 and 1?
-		//| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';' | {TriggerStatement} 'trigger' ':'
-		//cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
+		//{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';' //{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
+		//| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';' | {DurationStatement} 'duration' ':'
+		//tc=TemporalConstraint interv=TimeInterval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('['
+		//probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';'
+		//{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -248,28 +239,25 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//in_conn=[aadl2::Element]
+		//in_conn=ID
 		public Assignment getIn_connAssignment_0_3() { return cIn_connAssignment_0_3; }
 
-		//[aadl2::Element]
-		public CrossReference getIn_connElementCrossReference_0_3_0() { return cIn_connElementCrossReference_0_3_0; }
-
 		//ID
-		public RuleCall getIn_connElementIDTerminalRuleCall_0_3_0_1() { return cIn_connElementIDTerminalRuleCall_0_3_0_1; }
+		public RuleCall getIn_connIDTerminalRuleCall_0_3_0() { return cIn_connIDTerminalRuleCall_0_3_0; }
 
 		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_0_4() { return cHyphenMinusGreaterThanSignKeyword_0_4; }
 
-		//out_conn=Expr
+		//out_conn=ID
 		public Assignment getOut_connAssignment_0_5() { return cOut_connAssignment_0_5; }
 
-		//Expr
-		public RuleCall getOut_connExprParserRuleCall_0_5_0() { return cOut_connExprParserRuleCall_0_5_0; }
+		//ID
+		public RuleCall getOut_connIDTerminalRuleCall_0_5_0() { return cOut_connIDTerminalRuleCall_0_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_0_6() { return cSemicolonKeyword_0_6; }
 
-		//{OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
+		//{OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';'
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OutputStatement}
@@ -290,14 +278,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_1_4() { return cHyphenMinusGreaterThanSignKeyword_1_4; }
 
-		//nom_conn=[aadl2::NamedElement]
+		//nom_conn=ID
 		public Assignment getNom_connAssignment_1_5() { return cNom_connAssignment_1_5; }
 
-		//[aadl2::NamedElement]
-		public CrossReference getNom_connNamedElementCrossReference_1_5_0() { return cNom_connNamedElementCrossReference_1_5_0; }
-
 		//ID
-		public RuleCall getNom_connNamedElementIDTerminalRuleCall_1_5_0_1() { return cNom_connNamedElementIDTerminalRuleCall_1_5_0_1; }
+		public RuleCall getNom_connIDTerminalRuleCall_1_5_0() { return cNom_connIDTerminalRuleCall_1_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_1_6() { return cSemicolonKeyword_1_6; }
@@ -372,36 +357,53 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	public class TemporalConstraintElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.TemporalConstraint");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Keyword cPermanentKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
-		private final Keyword cTransientKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final Action cPermanentConstraintAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Keyword cPermanentKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Action cTransientConstraintAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Keyword cTransientKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
 		//// Currently, these are represented as keywords. 
 		//TemporalConstraint:
-		//	'permanent' | 'transient';
+		//	{PermanentConstraint} 'permanent'
+		//	| {TransientConstraint} 'transient';
 		@Override public ParserRule getRule() { return rule; }
 
-		//'permanent' | 'transient'
+		//{PermanentConstraint} 'permanent' | {TransientConstraint} 'transient'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
+		//{PermanentConstraint} 'permanent'
+		public Group getGroup_0() { return cGroup_0; }
+
+		//{PermanentConstraint}
+		public Action getPermanentConstraintAction_0_0() { return cPermanentConstraintAction_0_0; }
+
 		//'permanent'
-		public Keyword getPermanentKeyword_0() { return cPermanentKeyword_0; }
+		public Keyword getPermanentKeyword_0_1() { return cPermanentKeyword_0_1; }
+
+		//{TransientConstraint} 'transient'
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{TransientConstraint}
+		public Action getTransientConstraintAction_1_0() { return cTransientConstraintAction_1_0; }
 
 		//'transient'
-		public Keyword getTransientKeyword_1() { return cTransientKeyword_1; }
+		public Keyword getTransientKeyword_1_1() { return cTransientKeyword_1_1; }
 	}
 
 	public class TriggerConditionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.TriggerCondition");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Action cTriggerConditionAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Action cMustConditionAction_0_0 = (Action)cGroup_0.eContents().get(0);
 		private final Keyword cMustKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cLeftCurlyBracketKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cExprListAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
 		private final RuleCall cExprListExprParserRuleCall_0_3_0 = (RuleCall)cExprListAssignment_0_3.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Action cTriggerConditionAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Action cEnablerConditionAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cEnablerKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Keyword cLeftCurlyBracketKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cExprListAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
@@ -410,18 +412,18 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//// ' 
 		//TriggerCondition:
-		//	{TriggerCondition} 'must' '{' exprList+=Expr+ '}'
-		//	| {TriggerCondition} 'enabler' '{' exprList+=Expr+ '}';
+		//	{MustCondition} 'must' '{' exprList+=Expr+ '}'
+		//	| {EnablerCondition} 'enabler' '{' exprList+=Expr+ '}';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{TriggerCondition} 'must' '{' exprList+=Expr+ '}' | {TriggerCondition} 'enabler' '{' exprList+=Expr+ '}'
+		//{MustCondition} 'must' '{' exprList+=Expr+ '}' | {EnablerCondition} 'enabler' '{' exprList+=Expr+ '}'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{TriggerCondition} 'must' '{' exprList+=Expr+ '}'
+		//{MustCondition} 'must' '{' exprList+=Expr+ '}'
 		public Group getGroup_0() { return cGroup_0; }
 
-		//{TriggerCondition}
-		public Action getTriggerConditionAction_0_0() { return cTriggerConditionAction_0_0; }
+		//{MustCondition}
+		public Action getMustConditionAction_0_0() { return cMustConditionAction_0_0; }
 
 		//'must'
 		public Keyword getMustKeyword_0_1() { return cMustKeyword_0_1; }
@@ -438,11 +440,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_0_4() { return cRightCurlyBracketKeyword_0_4; }
 
-		//{TriggerCondition} 'enabler' '{' exprList+=Expr+ '}'
+		//{EnablerCondition} 'enabler' '{' exprList+=Expr+ '}'
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{TriggerCondition}
-		public Action getTriggerConditionAction_1_0() { return cTriggerConditionAction_1_0; }
+		//{EnablerCondition}
+		public Action getEnablerConditionAction_1_0() { return cEnablerConditionAction_1_0; }
 
 		//'enabler'
 		public Keyword getEnablerKeyword_1_1() { return cEnablerKeyword_1_1; }
@@ -464,7 +466,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.SafetyEqStatement");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Action cEqAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Action cEqValueAction_0_0 = (Action)cGroup_0.eContents().get(0);
 		private final Keyword cEqKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Group cGroup_0_2 = (Group)cGroup_0.eContents().get(2);
 		private final Assignment cLhsAssignment_0_2_0 = (Assignment)cGroup_0_2.eContents().get(0);
@@ -482,7 +484,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cIntervalEqAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cIntervaleqKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Assignment cLhs_intAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
-		private final RuleCall cLhs_intArgParserRuleCall_1_2_0 = (RuleCall)cLhs_intAssignment_1_2.eContents().get(0);
+		private final RuleCall cLhs_intIDTerminalRuleCall_1_2_0 = (RuleCall)cLhs_intAssignment_1_2.eContents().get(0);
 		private final Keyword cEqualsSignKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
 		private final Assignment cIntervAssignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
 		private final RuleCall cIntervTimeIntervalParserRuleCall_1_4_0 = (RuleCall)cIntervAssignment_1_4.eContents().get(0);
@@ -491,7 +493,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cSetEqAction_2_0 = (Action)cGroup_2.eContents().get(0);
 		private final Keyword cSeteqKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
 		private final Assignment cLhs_setAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
-		private final RuleCall cLhs_setArgParserRuleCall_2_2_0 = (RuleCall)cLhs_setAssignment_2_2.eContents().get(0);
+		private final RuleCall cLhs_setIDTerminalRuleCall_2_2_0 = (RuleCall)cLhs_setAssignment_2_2.eContents().get(0);
 		private final Keyword cEqualsSignKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
 		private final Keyword cLeftCurlyBracketKeyword_2_4 = (Keyword)cGroup_2.eContents().get(4);
 		private final Assignment cL1Assignment_2_5 = (Assignment)cGroup_2.eContents().get(5);
@@ -505,23 +507,22 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//// An eq statement can be an agree eq statement ('eq'...) or 
 		//// an interval or a set of discrete values.
+		//// Add capability of integer range?
 		//SafetyEqStatement:
-		//	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-		//	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
-		//	//	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
-		//	| {SetEq} 'seteq' lhs_set=Arg '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';';
+		//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+		//	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=TimeInterval ';'
+		//	| {SetEq} 'seteq' lhs_set=ID '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';' | {IntervalEq} 'intervaleq' lhs_int=Arg '='
-		//interv=TimeInterval ';' //	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
-		//| {SetEq} 'seteq' lhs_set=Arg '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
+		//{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';' | {IntervalEq} 'intervaleq' lhs_int=ID '='
+		//interv=TimeInterval ';' | {SetEq} 'seteq' lhs_set=ID '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+		//{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 		public Group getGroup_0() { return cGroup_0; }
 
-		//{Eq}
-		public Action getEqAction_0_0() { return cEqAction_0_0; }
+		//{EqValue}
+		public Action getEqValueAction_0_0() { return cEqValueAction_0_0; }
 
 		//'eq'
 		public Keyword getEqKeyword_0_1() { return cEqKeyword_0_1; }
@@ -562,7 +563,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_0_4() { return cSemicolonKeyword_0_4; }
 
-		//{IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
+		//{IntervalEq} 'intervaleq' lhs_int=ID '=' interv=TimeInterval ';'
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{IntervalEq}
@@ -571,11 +572,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'intervaleq'
 		public Keyword getIntervaleqKeyword_1_1() { return cIntervaleqKeyword_1_1; }
 
-		//lhs_int=Arg
+		//lhs_int=ID
 		public Assignment getLhs_intAssignment_1_2() { return cLhs_intAssignment_1_2; }
 
-		//Arg
-		public RuleCall getLhs_intArgParserRuleCall_1_2_0() { return cLhs_intArgParserRuleCall_1_2_0; }
+		//ID
+		public RuleCall getLhs_intIDTerminalRuleCall_1_2_0() { return cLhs_intIDTerminalRuleCall_1_2_0; }
 
 		//'='
 		public Keyword getEqualsSignKeyword_1_3() { return cEqualsSignKeyword_1_3; }
@@ -589,7 +590,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_1_5() { return cSemicolonKeyword_1_5; }
 
-		//{SetEq} 'seteq' lhs_set=Arg '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
+		//{SetEq} 'seteq' lhs_set=ID '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
 		public Group getGroup_2() { return cGroup_2; }
 
 		//{SetEq}
@@ -598,11 +599,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'seteq'
 		public Keyword getSeteqKeyword_2_1() { return cSeteqKeyword_2_1; }
 
-		//lhs_set=Arg
+		//lhs_set=ID
 		public Assignment getLhs_setAssignment_2_2() { return cLhs_setAssignment_2_2; }
 
-		//Arg
-		public RuleCall getLhs_setArgParserRuleCall_2_2_0() { return cLhs_setArgParserRuleCall_2_2_0; }
+		//ID
+		public RuleCall getLhs_setIDTerminalRuleCall_2_2_0() { return cLhs_setIDTerminalRuleCall_2_2_0; }
 
 		//'='
 		public Keyword getEqualsSignKeyword_2_3() { return cEqualsSignKeyword_2_3; }
@@ -767,13 +768,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=[aadl2::Element] '->' out_conn=Expr ';'
+	//	{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';'
 	//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
-	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=[aadl2::NamedElement] ';'
-	//	// For duration, will a time interval cover the case when we are dealing with time steps?
-	//	// For instance: 
-	//	// 		trigger: transient [0,1]
-	//	// will stand for time steps 0 and 1?
+	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 	//	| SafetyEqStatement;
@@ -787,7 +784,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// Currently, these are represented as keywords. 
 	//TemporalConstraint:
-	//	'permanent' | 'transient';
+	//	{PermanentConstraint} 'permanent'
+	//	| {TransientConstraint} 'transient';
 	public TemporalConstraintElements getTemporalConstraintAccess() {
 		return pTemporalConstraint;
 	}
@@ -798,8 +796,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// ' 
 	//TriggerCondition:
-	//	{TriggerCondition} 'must' '{' exprList+=Expr+ '}'
-	//	| {TriggerCondition} 'enabler' '{' exprList+=Expr+ '}';
+	//	{MustCondition} 'must' '{' exprList+=Expr+ '}'
+	//	| {EnablerCondition} 'enabler' '{' exprList+=Expr+ '}';
 	public TriggerConditionElements getTriggerConditionAccess() {
 		return pTriggerCondition;
 	}
@@ -810,11 +808,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// An eq statement can be an agree eq statement ('eq'...) or 
 	//// an interval or a set of discrete values.
+	//// Add capability of integer range?
 	//SafetyEqStatement:
-	//	{Eq} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	//	| {IntervalEq} 'intervaleq' lhs_int=Arg '=' interv=TimeInterval ';'
-	//	//	| {SetEq} 'seteq' lhs+=Arg '=' '{'discreteList+=(INTEGER_LIT)+ '}' ';' 
-	//	| {SetEq} 'seteq' lhs_set=Arg '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';';
+	//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+	//	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=TimeInterval ';'
+	//	| {SetEq} 'seteq' lhs_set=ID '=' '{' l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';';
 	public SafetyEqStatementElements getSafetyEqStatementAccess() {
 		return pSafetyEqStatement;
 	}

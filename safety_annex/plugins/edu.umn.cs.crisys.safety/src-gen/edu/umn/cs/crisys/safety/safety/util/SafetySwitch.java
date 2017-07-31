@@ -122,6 +122,13 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.TEMPORAL_CONSTRAINT:
+      {
+        TemporalConstraint temporalConstraint = (TemporalConstraint)theEObject;
+        T result = caseTemporalConstraint(temporalConstraint);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.TRIGGER_CONDITION:
       {
         TriggerCondition triggerCondition = (TriggerCondition)theEObject;
@@ -210,12 +217,44 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SafetyPackage.EQ:
+      case SafetyPackage.PERMANENT_CONSTRAINT:
       {
-        Eq eq = (Eq)theEObject;
-        T result = caseEq(eq);
-        if (result == null) result = caseSafetyEqStatement(eq);
-        if (result == null) result = caseFaultSubcomponent(eq);
+        PermanentConstraint permanentConstraint = (PermanentConstraint)theEObject;
+        T result = casePermanentConstraint(permanentConstraint);
+        if (result == null) result = caseTemporalConstraint(permanentConstraint);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.TRANSIENT_CONSTRAINT:
+      {
+        TransientConstraint transientConstraint = (TransientConstraint)theEObject;
+        T result = caseTransientConstraint(transientConstraint);
+        if (result == null) result = caseTemporalConstraint(transientConstraint);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.MUST_CONDITION:
+      {
+        MustCondition mustCondition = (MustCondition)theEObject;
+        T result = caseMustCondition(mustCondition);
+        if (result == null) result = caseTriggerCondition(mustCondition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.ENABLER_CONDITION:
+      {
+        EnablerCondition enablerCondition = (EnablerCondition)theEObject;
+        T result = caseEnablerCondition(enablerCondition);
+        if (result == null) result = caseTriggerCondition(enablerCondition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.EQ_VALUE:
+      {
+        EqValue eqValue = (EqValue)theEObject;
+        T result = caseEqValue(eqValue);
+        if (result == null) result = caseSafetyEqStatement(eqValue);
+        if (result == null) result = caseFaultSubcomponent(eqValue);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -317,6 +356,22 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFaultSubcomponent(FaultSubcomponent object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Temporal Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Temporal Constraint</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTemporalConstraint(TemporalConstraint object)
   {
     return null;
   }
@@ -482,17 +537,81 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Eq</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Permanent Constraint</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Eq</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Permanent Constraint</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEq(Eq object)
+  public T casePermanentConstraint(PermanentConstraint object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Transient Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Transient Constraint</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTransientConstraint(TransientConstraint object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Must Condition</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Must Condition</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMustCondition(MustCondition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Enabler Condition</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Enabler Condition</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseEnablerCondition(EnablerCondition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Eq Value</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Eq Value</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseEqValue(EqValue object)
   {
     return null;
   }
