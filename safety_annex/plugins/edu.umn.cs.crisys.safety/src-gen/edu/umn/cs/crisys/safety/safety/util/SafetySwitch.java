@@ -9,8 +9,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
-import org.osate.aadl2.AnnexLibrary;
-import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.ModalElement;
 import org.osate.aadl2.NamedElement;
@@ -78,11 +76,33 @@ public class SafetySwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
+      case SafetyPackage.ANNEX_LIBRARY:
+      {
+        AnnexLibrary annexLibrary = (AnnexLibrary)theEObject;
+        T result = caseAnnexLibrary(annexLibrary);
+        if (result == null) result = caseAadl2_AnnexLibrary(annexLibrary);
+        if (result == null) result = caseNamedElement(annexLibrary);
+        if (result == null) result = caseElement(annexLibrary);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.ANNEX_SUBCLAUSE:
+      {
+        AnnexSubclause annexSubclause = (AnnexSubclause)theEObject;
+        T result = caseAnnexSubclause(annexSubclause);
+        if (result == null) result = caseAadl2_AnnexSubclause(annexSubclause);
+        if (result == null) result = caseModalElement(annexSubclause);
+        if (result == null) result = caseNamedElement(annexSubclause);
+        if (result == null) result = caseElement(annexSubclause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.SAFETY_LIBRARY:
       {
         SafetyLibrary safetyLibrary = (SafetyLibrary)theEObject;
         T result = caseSafetyLibrary(safetyLibrary);
         if (result == null) result = caseAnnexLibrary(safetyLibrary);
+        if (result == null) result = caseAadl2_AnnexLibrary(safetyLibrary);
         if (result == null) result = caseNamedElement(safetyLibrary);
         if (result == null) result = caseElement(safetyLibrary);
         if (result == null) result = defaultCase(theEObject);
@@ -93,6 +113,7 @@ public class SafetySwitch<T> extends Switch<T>
         SafetySubclause safetySubclause = (SafetySubclause)theEObject;
         T result = caseSafetySubclause(safetySubclause);
         if (result == null) result = caseAnnexSubclause(safetySubclause);
+        if (result == null) result = caseAadl2_AnnexSubclause(safetySubclause);
         if (result == null) result = caseModalElement(safetySubclause);
         if (result == null) result = caseNamedElement(safetySubclause);
         if (result == null) result = caseElement(safetySubclause);
@@ -140,6 +161,7 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SafetyEqStatement safetyEqStatement = (SafetyEqStatement)theEObject;
         T result = caseSafetyEqStatement(safetyEqStatement);
+        if (result == null) result = caseElement(safetyEqStatement);
         if (result == null) result = caseFaultSubcomponent(safetyEqStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -150,6 +172,7 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseSafetyContractLibrary(safetyContractLibrary);
         if (result == null) result = caseSafetyLibrary(safetyContractLibrary);
         if (result == null) result = caseAnnexLibrary(safetyContractLibrary);
+        if (result == null) result = caseAadl2_AnnexLibrary(safetyContractLibrary);
         if (result == null) result = caseNamedElement(safetyContractLibrary);
         if (result == null) result = caseElement(safetyContractLibrary);
         if (result == null) result = defaultCase(theEObject);
@@ -161,6 +184,7 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseSafetyContractSubclause(safetyContractSubclause);
         if (result == null) result = caseSafetySubclause(safetyContractSubclause);
         if (result == null) result = caseAnnexSubclause(safetyContractSubclause);
+        if (result == null) result = caseAadl2_AnnexSubclause(safetyContractSubclause);
         if (result == null) result = caseModalElement(safetyContractSubclause);
         if (result == null) result = caseNamedElement(safetyContractSubclause);
         if (result == null) result = caseElement(safetyContractSubclause);
@@ -254,6 +278,7 @@ public class SafetySwitch<T> extends Switch<T>
         EqValue eqValue = (EqValue)theEObject;
         T result = caseEqValue(eqValue);
         if (result == null) result = caseSafetyEqStatement(eqValue);
+        if (result == null) result = caseElement(eqValue);
         if (result == null) result = caseFaultSubcomponent(eqValue);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -263,6 +288,7 @@ public class SafetySwitch<T> extends Switch<T>
         IntervalEq intervalEq = (IntervalEq)theEObject;
         T result = caseIntervalEq(intervalEq);
         if (result == null) result = caseSafetyEqStatement(intervalEq);
+        if (result == null) result = caseElement(intervalEq);
         if (result == null) result = caseFaultSubcomponent(intervalEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -272,12 +298,45 @@ public class SafetySwitch<T> extends Switch<T>
         SetEq setEq = (SetEq)theEObject;
         T result = caseSetEq(setEq);
         if (result == null) result = caseSafetyEqStatement(setEq);
+        if (result == null) result = caseElement(setEq);
         if (result == null) result = caseFaultSubcomponent(setEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
       default: return defaultCase(theEObject);
     }
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Annex Library</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Annex Library</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnnexLibrary(AnnexLibrary object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Annex Subclause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Annex Subclause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnnexSubclause(AnnexSubclause object)
+  {
+    return null;
   }
 
   /**
@@ -691,7 +750,7 @@ public class SafetySwitch<T> extends Switch<T>
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseAnnexLibrary(AnnexLibrary object)
+  public T caseAadl2_AnnexLibrary(org.osate.aadl2.AnnexLibrary object)
   {
     return null;
   }
@@ -723,7 +782,7 @@ public class SafetySwitch<T> extends Switch<T>
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseAnnexSubclause(AnnexSubclause object)
+  public T caseAadl2_AnnexSubclause(org.osate.aadl2.AnnexSubclause object)
   {
     return null;
   }

@@ -7,8 +7,6 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.osate.aadl2.impl.AnnexLibraryImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Library</b></em>'.

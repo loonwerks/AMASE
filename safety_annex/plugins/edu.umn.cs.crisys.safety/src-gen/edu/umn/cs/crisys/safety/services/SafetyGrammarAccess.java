@@ -24,7 +24,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyLibraryParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
 		//@ Override //AnnexLibrary returns agree::AgreeLibrary:
-		//AnnexLibrary aadl2::AnnexLibrary:
+		//AnnexLibrary:
 		//	SafetyLibrary;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -37,7 +37,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetySubclauseParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
 		//@ Override //AnnexSubclause returns agree::AgreeSubclause:
-		//AnnexSubclause aadl2::AnnexSubclause:
+		//AnnexSubclause:
 		//	SafetySubclause;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -117,6 +117,18 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getSpecsSpecStatementParserRuleCall_1_0() { return cSpecsSpecStatementParserRuleCall_1_0; }
 	}
 
+	public class ElementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.Element");
+		private final RuleCall cSafetyEqStatementParserRuleCall = (RuleCall)rule.eContents().get(1);
+		
+		//@ Override Element aadl2::Element:
+		//	SafetyEqStatement;
+		@Override public ParserRule getRule() { return rule; }
+
+		//SafetyEqStatement
+		public RuleCall getSafetyEqStatementParserRuleCall() { return cSafetyEqStatementParserRuleCall; }
+	}
+
 	public class SpecStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.SpecStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -174,7 +186,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cInputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cIn_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final RuleCall cIn_connIDTerminalRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
+		private final RuleCall cIn_connExprParserRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
 		private final RuleCall cOut_connIDTerminalRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
@@ -213,7 +225,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';'
+		//	{InputStatement} 'input' ':' in_conn=Expr '->' out_conn=ID ';'
 		//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
@@ -221,13 +233,13 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';' //{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
+		//{InputStatement} 'input' ':' in_conn=Expr '->' out_conn=ID ';' //{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 		//| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';' | {DurationStatement} 'duration' ':'
 		//tc=TemporalConstraint interv=TimeInterval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('['
 		//probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';'
+		//{InputStatement} 'input' ':' in_conn=Expr '->' out_conn=ID ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -239,11 +251,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//in_conn=ID
+		//in_conn=Expr
 		public Assignment getIn_connAssignment_0_3() { return cIn_connAssignment_0_3; }
 
-		//ID
-		public RuleCall getIn_connIDTerminalRuleCall_0_3_0() { return cIn_connIDTerminalRuleCall_0_3_0; }
+		//Expr
+		public RuleCall getIn_connExprParserRuleCall_0_3_0() { return cIn_connExprParserRuleCall_0_3_0; }
 
 		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_0_4() { return cHyphenMinusGreaterThanSignKeyword_0_4; }
@@ -642,6 +654,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	private final SafetyLibraryElements pSafetyLibrary;
 	private final SafetySubclauseElements pSafetySubclause;
 	private final SafetyContractElements pSafetyContract;
+	private final ElementElements pElement;
 	private final SpecStatementElements pSpecStatement;
 	private final FaultSubcomponentElements pFaultSubcomponent;
 	private final TemporalConstraintElements pTemporalConstraint;
@@ -666,6 +679,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSafetyLibrary = new SafetyLibraryElements();
 		this.pSafetySubclause = new SafetySubclauseElements();
 		this.pSafetyContract = new SafetyContractElements();
+		this.pElement = new ElementElements();
 		this.pSpecStatement = new SpecStatementElements();
 		this.pFaultSubcomponent = new FaultSubcomponentElements();
 		this.pTemporalConstraint = new TemporalConstraintElements();
@@ -705,7 +719,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//@ Override //AnnexLibrary returns agree::AgreeLibrary:
-	//AnnexLibrary aadl2::AnnexLibrary:
+	//AnnexLibrary:
 	//	SafetyLibrary;
 	public AnnexLibraryElements getAnnexLibraryAccess() {
 		return pAnnexLibrary;
@@ -716,7 +730,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//@ Override //AnnexSubclause returns agree::AgreeSubclause:
-	//AnnexSubclause aadl2::AnnexSubclause:
+	//AnnexSubclause:
 	//	SafetySubclause;
 	public AnnexSubclauseElements getAnnexSubclauseAccess() {
 		return pAnnexSubclause;
@@ -756,6 +770,16 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getSafetyContractAccess().getRule();
 	}
 
+	//@ Override Element aadl2::Element:
+	//	SafetyEqStatement;
+	public ElementElements getElementAccess() {
+		return pElement;
+	}
+	
+	public ParserRule getElementRule() {
+		return getElementAccess().getRule();
+	}
+
 	//@ Override SpecStatement:
 	//	{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr
 	//	faultDefinitions+=FaultSubcomponent*;
@@ -768,7 +792,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';'
+	//	{InputStatement} 'input' ':' in_conn=Expr '->' out_conn=ID ';'
 	//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
@@ -838,24 +862,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getNamedElementRule() {
 		return getNamedElementAccess().getRule();
-	}
-
-	//Element aadl2::Element:
-	//	Expr
-	//	| LinearizationInterval
-	//	| Type
-	//	| AgreeContract
-	//	| super::SpecStatement
-	//	| NodeStmt
-	//	| NodeBodyExpr
-	//	| EqStatement
-	//	| InputStatement;
-	public AgreeGrammarAccess.ElementElements getElementAccess() {
-		return gaAgree.getElementAccess();
-	}
-	
-	public ParserRule getElementRule() {
-		return getElementAccess().getRule();
 	}
 
 	//AgreeLibrary:

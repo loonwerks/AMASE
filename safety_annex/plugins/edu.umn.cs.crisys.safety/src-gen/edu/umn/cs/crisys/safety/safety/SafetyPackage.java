@@ -61,14 +61,14 @@ public interface SafetyPackage extends EPackage
   SafetyPackage eINSTANCE = edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl.init();
 
   /**
-   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyLibraryImpl <em>Library</em>}' class.
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnnexLibraryImpl <em>Annex Library</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyLibraryImpl
-   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyLibrary()
+   * @see edu.umn.cs.crisys.safety.safety.impl.AnnexLibraryImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnnexLibrary()
    * @generated
    */
-  int SAFETY_LIBRARY = 0;
+  int ANNEX_LIBRARY = 0;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -77,7 +77,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_ELEMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_ELEMENT;
+  int ANNEX_LIBRARY__OWNED_ELEMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_ELEMENT;
 
   /**
    * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
@@ -86,7 +86,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_COMMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_COMMENT;
+  int ANNEX_LIBRARY__OWNED_COMMENT = Aadl2Package.ANNEX_LIBRARY__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -95,7 +95,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__NAME = Aadl2Package.ANNEX_LIBRARY__NAME;
+  int ANNEX_LIBRARY__NAME = Aadl2Package.ANNEX_LIBRARY__NAME;
 
   /**
    * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
@@ -104,7 +104,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__QUALIFIED_NAME = Aadl2Package.ANNEX_LIBRARY__QUALIFIED_NAME;
+  int ANNEX_LIBRARY__QUALIFIED_NAME = Aadl2Package.ANNEX_LIBRARY__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
@@ -113,7 +113,144 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
+  int ANNEX_LIBRARY__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
+
+  /**
+   * The number of structural features of the '<em>Annex Library</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_LIBRARY_FEATURE_COUNT = Aadl2Package.ANNEX_LIBRARY_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnnexSubclauseImpl <em>Annex Subclause</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.AnnexSubclauseImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnnexSubclause()
+   * @generated
+   */
+  int ANNEX_SUBCLAUSE = 1;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE__OWNED_ELEMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE__OWNED_COMMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE__NAME = Aadl2Package.ANNEX_SUBCLAUSE__NAME;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE__QUALIFIED_NAME = Aadl2Package.ANNEX_SUBCLAUSE__QUALIFIED_NAME;
+
+  /**
+   * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
+
+  /**
+   * The feature id for the '<em><b>In Mode</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE__IN_MODE = Aadl2Package.ANNEX_SUBCLAUSE__IN_MODE;
+
+  /**
+   * The number of structural features of the '<em>Annex Subclause</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNEX_SUBCLAUSE_FEATURE_COUNT = Aadl2Package.ANNEX_SUBCLAUSE_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyLibraryImpl <em>Library</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyLibraryImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyLibrary()
+   * @generated
+   */
+  int SAFETY_LIBRARY = 2;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_LIBRARY__OWNED_ELEMENT = ANNEX_LIBRARY__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_LIBRARY__OWNED_COMMENT = ANNEX_LIBRARY__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_LIBRARY__NAME = ANNEX_LIBRARY__NAME;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_LIBRARY__QUALIFIED_NAME = ANNEX_LIBRARY__QUALIFIED_NAME;
+
+  /**
+   * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_LIBRARY__OWNED_PROPERTY_ASSOCIATION = ANNEX_LIBRARY__OWNED_PROPERTY_ASSOCIATION;
 
   /**
    * The number of structural features of the '<em>Library</em>' class.
@@ -122,7 +259,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_LIBRARY_FEATURE_COUNT = Aadl2Package.ANNEX_LIBRARY_FEATURE_COUNT + 0;
+  int SAFETY_LIBRARY_FEATURE_COUNT = ANNEX_LIBRARY_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetySubclauseImpl <em>Subclause</em>}' class.
@@ -132,7 +269,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetySubclause()
    * @generated
    */
-  int SAFETY_SUBCLAUSE = 1;
+  int SAFETY_SUBCLAUSE = 3;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -141,7 +278,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_ELEMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_ELEMENT;
+  int SAFETY_SUBCLAUSE__OWNED_ELEMENT = ANNEX_SUBCLAUSE__OWNED_ELEMENT;
 
   /**
    * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
@@ -150,7 +287,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_COMMENT = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_COMMENT;
+  int SAFETY_SUBCLAUSE__OWNED_COMMENT = ANNEX_SUBCLAUSE__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -159,7 +296,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__NAME = Aadl2Package.ANNEX_SUBCLAUSE__NAME;
+  int SAFETY_SUBCLAUSE__NAME = ANNEX_SUBCLAUSE__NAME;
 
   /**
    * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
@@ -168,7 +305,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__QUALIFIED_NAME = Aadl2Package.ANNEX_SUBCLAUSE__QUALIFIED_NAME;
+  int SAFETY_SUBCLAUSE__QUALIFIED_NAME = ANNEX_SUBCLAUSE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Owned Property Association</b></em>' containment reference list.
@@ -177,7 +314,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = Aadl2Package.ANNEX_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
+  int SAFETY_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION = ANNEX_SUBCLAUSE__OWNED_PROPERTY_ASSOCIATION;
 
   /**
    * The feature id for the '<em><b>In Mode</b></em>' reference list.
@@ -186,7 +323,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE__IN_MODE = Aadl2Package.ANNEX_SUBCLAUSE__IN_MODE;
+  int SAFETY_SUBCLAUSE__IN_MODE = ANNEX_SUBCLAUSE__IN_MODE;
 
   /**
    * The number of structural features of the '<em>Subclause</em>' class.
@@ -195,7 +332,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_SUBCLAUSE_FEATURE_COUNT = Aadl2Package.ANNEX_SUBCLAUSE_FEATURE_COUNT + 0;
+  int SAFETY_SUBCLAUSE_FEATURE_COUNT = ANNEX_SUBCLAUSE_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.ContractImpl <em>Contract</em>}' class.
@@ -205,7 +342,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getContract()
    * @generated
    */
-  int CONTRACT = 2;
+  int CONTRACT = 4;
 
   /**
    * The number of structural features of the '<em>Contract</em>' class.
@@ -224,7 +361,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSpecStatement()
    * @generated
    */
-  int SPEC_STATEMENT = 3;
+  int SPEC_STATEMENT = 5;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -261,7 +398,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultSubcomponent()
    * @generated
    */
-  int FAULT_SUBCOMPONENT = 4;
+  int FAULT_SUBCOMPONENT = 6;
 
   /**
    * The number of structural features of the '<em>Fault Subcomponent</em>' class.
@@ -280,7 +417,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTemporalConstraint()
    * @generated
    */
-  int TEMPORAL_CONSTRAINT = 5;
+  int TEMPORAL_CONSTRAINT = 7;
 
   /**
    * The number of structural features of the '<em>Temporal Constraint</em>' class.
@@ -299,7 +436,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerCondition()
    * @generated
    */
-  int TRIGGER_CONDITION = 6;
+  int TRIGGER_CONDITION = 8;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -327,7 +464,25 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyEqStatement()
    * @generated
    */
-  int SAFETY_EQ_STATEMENT = 7;
+  int SAFETY_EQ_STATEMENT = 9;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_EQ_STATEMENT__OWNED_ELEMENT = Aadl2Package.ELEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAFETY_EQ_STATEMENT__OWNED_COMMENT = Aadl2Package.ELEMENT__OWNED_COMMENT;
 
   /**
    * The number of structural features of the '<em>Eq Statement</em>' class.
@@ -336,7 +491,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SAFETY_EQ_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
+  int SAFETY_EQ_STATEMENT_FEATURE_COUNT = Aadl2Package.ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyContractLibraryImpl <em>Contract Library</em>}' class.
@@ -346,7 +501,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractLibrary()
    * @generated
    */
-  int SAFETY_CONTRACT_LIBRARY = 8;
+  int SAFETY_CONTRACT_LIBRARY = 10;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -419,7 +574,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractSubclause()
    * @generated
    */
-  int SAFETY_CONTRACT_SUBCLAUSE = 9;
+  int SAFETY_CONTRACT_SUBCLAUSE = 11;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -501,7 +656,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContract()
    * @generated
    */
-  int SAFETY_CONTRACT = 10;
+  int SAFETY_CONTRACT = 12;
 
   /**
    * The feature id for the '<em><b>Specs</b></em>' containment reference list.
@@ -529,7 +684,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultStatement()
    * @generated
    */
-  int FAULT_STATEMENT = 11;
+  int FAULT_STATEMENT = 13;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -593,10 +748,10 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 12;
+  int INPUT_STATEMENT = 14;
 
   /**
-   * The feature id for the '<em><b>In conn</b></em>' attribute.
+   * The feature id for the '<em><b>In conn</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -630,7 +785,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 13;
+  int OUTPUT_STATEMENT = 15;
 
   /**
    * The feature id for the '<em><b>Out conn</b></em>' attribute.
@@ -667,7 +822,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 14;
+  int DURATION_STATEMENT = 16;
 
   /**
    * The feature id for the '<em><b>Tc</b></em>' containment reference.
@@ -704,7 +859,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 15;
+  int TRIGGER_STATEMENT = 17;
 
   /**
    * The feature id for the '<em><b>Cond</b></em>' containment reference.
@@ -741,7 +896,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPermanentConstraint()
    * @generated
    */
-  int PERMANENT_CONSTRAINT = 16;
+  int PERMANENT_CONSTRAINT = 18;
 
   /**
    * The number of structural features of the '<em>Permanent Constraint</em>' class.
@@ -760,7 +915,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTransientConstraint()
    * @generated
    */
-  int TRANSIENT_CONSTRAINT = 17;
+  int TRANSIENT_CONSTRAINT = 19;
 
   /**
    * The number of structural features of the '<em>Transient Constraint</em>' class.
@@ -779,7 +934,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getMustCondition()
    * @generated
    */
-  int MUST_CONDITION = 18;
+  int MUST_CONDITION = 20;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -807,7 +962,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEnablerCondition()
    * @generated
    */
-  int ENABLER_CONDITION = 19;
+  int ENABLER_CONDITION = 21;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -835,7 +990,25 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqValue()
    * @generated
    */
-  int EQ_VALUE = 20;
+  int EQ_VALUE = 22;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EQ_VALUE__OWNED_ELEMENT = SAFETY_EQ_STATEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EQ_VALUE__OWNED_COMMENT = SAFETY_EQ_STATEMENT__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Lhs</b></em>' containment reference list.
@@ -872,7 +1045,25 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getIntervalEq()
    * @generated
    */
-  int INTERVAL_EQ = 21;
+  int INTERVAL_EQ = 23;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL_EQ__OWNED_ELEMENT = SAFETY_EQ_STATEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL_EQ__OWNED_COMMENT = SAFETY_EQ_STATEMENT__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Lhs int</b></em>' attribute.
@@ -909,7 +1100,25 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSetEq()
    * @generated
    */
-  int SET_EQ = 22;
+  int SET_EQ = 24;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SET_EQ__OWNED_ELEMENT = SAFETY_EQ_STATEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SET_EQ__OWNED_COMMENT = SAFETY_EQ_STATEMENT__OWNED_COMMENT;
 
   /**
    * The feature id for the '<em><b>Lhs set</b></em>' attribute.
@@ -947,6 +1156,26 @@ public interface SafetyPackage extends EPackage
    */
   int SET_EQ_FEATURE_COUNT = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 3;
 
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.AnnexLibrary <em>Annex Library</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Annex Library</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.AnnexLibrary
+   * @generated
+   */
+  EClass getAnnexLibrary();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.AnnexSubclause <em>Annex Subclause</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Annex Subclause</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.AnnexSubclause
+   * @generated
+   */
+  EClass getAnnexSubclause();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.SafetyLibrary <em>Library</em>}'.
@@ -1156,15 +1385,15 @@ public interface SafetyPackage extends EPackage
   EClass getInputStatement();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn <em>In conn</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn <em>In conn</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>In conn</em>'.
+   * @return the meta object for the containment reference '<em>In conn</em>'.
    * @see edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn()
    * @see #getInputStatement()
    * @generated
    */
-  EAttribute getInputStatement_In_conn();
+  EReference getInputStatement_In_conn();
 
   /**
    * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getOut_conn <em>Out conn</em>}'.
@@ -1444,6 +1673,26 @@ public interface SafetyPackage extends EPackage
   interface Literals
   {
     /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnnexLibraryImpl <em>Annex Library</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.AnnexLibraryImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnnexLibrary()
+     * @generated
+     */
+    EClass ANNEX_LIBRARY = eINSTANCE.getAnnexLibrary();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnnexSubclauseImpl <em>Annex Subclause</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.AnnexSubclauseImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnnexSubclause()
+     * @generated
+     */
+    EClass ANNEX_SUBCLAUSE = eINSTANCE.getAnnexSubclause();
+
+    /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyLibraryImpl <em>Library</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1630,12 +1879,12 @@ public interface SafetyPackage extends EPackage
     EClass INPUT_STATEMENT = eINSTANCE.getInputStatement();
 
     /**
-     * The meta object literal for the '<em><b>In conn</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>In conn</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INPUT_STATEMENT__IN_CONN = eINSTANCE.getInputStatement_In_conn();
+    EReference INPUT_STATEMENT__IN_CONN = eINSTANCE.getInputStatement_In_conn();
 
     /**
      * The meta object literal for the '<em><b>Out conn</b></em>' attribute feature.

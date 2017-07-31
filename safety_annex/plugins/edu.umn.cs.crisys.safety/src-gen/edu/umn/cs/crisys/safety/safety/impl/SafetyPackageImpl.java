@@ -4,6 +4,8 @@ package edu.umn.cs.crisys.safety.safety.impl;
 
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 
+import edu.umn.cs.crisys.safety.safety.AnnexLibrary;
+import edu.umn.cs.crisys.safety.safety.AnnexSubclause;
 import edu.umn.cs.crisys.safety.safety.Contract;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
@@ -48,6 +50,20 @@ import org.osate.aadl2.Aadl2Package;
  */
 public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 {
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass annexLibraryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass annexSubclauseEClass = null;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -280,6 +296,26 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getAnnexLibrary()
+  {
+    return annexLibraryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAnnexSubclause()
+  {
+    return annexSubclauseEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getSafetyLibrary()
   {
     return safetyLibraryEClass;
@@ -480,9 +516,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getInputStatement_In_conn()
+  public EReference getInputStatement_In_conn()
   {
-    return (EAttribute)inputStatementEClass.getEStructuralFeatures().get(0);
+    return (EReference)inputStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -755,6 +791,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     isCreated = true;
 
     // Create classes and their features
+    annexLibraryEClass = createEClass(ANNEX_LIBRARY);
+
+    annexSubclauseEClass = createEClass(ANNEX_SUBCLAUSE);
+
     safetyLibraryEClass = createEClass(SAFETY_LIBRARY);
 
     safetySubclauseEClass = createEClass(SAFETY_SUBCLAUSE);
@@ -787,7 +827,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEFINITIONS);
 
     inputStatementEClass = createEClass(INPUT_STATEMENT);
-    createEAttribute(inputStatementEClass, INPUT_STATEMENT__IN_CONN);
+    createEReference(inputStatementEClass, INPUT_STATEMENT__IN_CONN);
     createEAttribute(inputStatementEClass, INPUT_STATEMENT__OUT_CONN);
 
     outputStatementEClass = createEClass(OUTPUT_STATEMENT);
@@ -858,9 +898,12 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    safetyLibraryEClass.getESuperTypes().add(theAadl2Package.getAnnexLibrary());
-    safetySubclauseEClass.getESuperTypes().add(theAadl2Package.getAnnexSubclause());
+    annexLibraryEClass.getESuperTypes().add(theAadl2Package.getAnnexLibrary());
+    annexSubclauseEClass.getESuperTypes().add(theAadl2Package.getAnnexSubclause());
+    safetyLibraryEClass.getESuperTypes().add(this.getAnnexLibrary());
+    safetySubclauseEClass.getESuperTypes().add(this.getAnnexSubclause());
     specStatementEClass.getESuperTypes().add(theAgreePackage.getSpecStatement());
+    safetyEqStatementEClass.getESuperTypes().add(theAadl2Package.getElement());
     safetyEqStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     safetyContractLibraryEClass.getESuperTypes().add(this.getSafetyLibrary());
     safetyContractSubclauseEClass.getESuperTypes().add(this.getSafetySubclause());
@@ -879,6 +922,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     setEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
 
     // Initialize classes and features; add operations and parameters
+    initEClass(annexLibraryEClass, AnnexLibrary.class, "AnnexLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(annexSubclauseEClass, AnnexSubclause.class, "AnnexSubclause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
     initEClass(safetyLibraryEClass, SafetyLibrary.class, "SafetyLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(safetySubclauseEClass, SafetySubclause.class, "SafetySubclause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -911,7 +958,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEReference(getFaultStatement_FaultDefinitions(), this.getFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inputStatementEClass, InputStatement.class, "InputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getInputStatement_In_conn(), theEcorePackage.getEString(), "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInputStatement_In_conn(), theAgreePackage.getExpr(), null, "in_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInputStatement_Out_conn(), theEcorePackage.getEString(), "out_conn", null, 0, 1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(outputStatementEClass, OutputStatement.class, "OutputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

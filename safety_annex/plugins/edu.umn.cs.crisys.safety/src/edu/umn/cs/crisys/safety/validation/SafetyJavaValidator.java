@@ -5,20 +5,12 @@ package edu.umn.cs.crisys.safety.validation;
 
 import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
-import org.osate.aadl2.Element;
-import org.osate.aadl2.NamedElement;
-
-import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
-
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
@@ -27,7 +19,6 @@ import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
-import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 
@@ -54,7 +45,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		String inConn = inputStmt.getIn_conn();
+		Expr inConn = inputStmt.getIn_conn();
 		String outConn = inputStmt.getOut_conn();
 		
 		if(inConn==null){
@@ -86,8 +77,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Duration statements
 	@Check
 	public void checkDuration(DurationStatement durationStmt){
-		if(!(durationStmt.getTc().equals("PERMANANT") || durationStmt.getTc().equals("TRANSIENT"))){
-			error(durationStmt, "Temporal constraint must be TRANSIENT or PERMANANT");
+		if(!(durationStmt.getTc().equals("permanent") || durationStmt.getTc().equals("transient"))){
+			//durationStmt.getTc().
+			//error(durationStmt, "Temporal constraint must be 'transient' or 'permanent'");
 		}
 //		checkTimeInterval(durationStmt.getInterv());
 	}

@@ -7,6 +7,8 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.osate.aadl2.impl.ElementImpl;
+
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Eq Statement</b></em>'.
@@ -14,7 +16,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class SafetyEqStatementImpl extends FaultSubcomponentImpl implements SafetyEqStatement
+public class SafetyEqStatementImpl extends ElementImpl implements SafetyEqStatement
 {
   /**
    * <!-- begin-user-doc -->

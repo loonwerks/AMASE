@@ -64,6 +64,8 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     switch (eClass.getClassifierID())
     {
+      case SafetyPackage.ANNEX_LIBRARY: return createAnnexLibrary();
+      case SafetyPackage.ANNEX_SUBCLAUSE: return createAnnexSubclause();
       case SafetyPackage.SAFETY_LIBRARY: return createSafetyLibrary();
       case SafetyPackage.SAFETY_SUBCLAUSE: return createSafetySubclause();
       case SafetyPackage.CONTRACT: return createContract();
@@ -90,6 +92,28 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnnexLibrary createAnnexLibrary()
+  {
+    AnnexLibraryImpl annexLibrary = new AnnexLibraryImpl();
+    return annexLibrary;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnnexSubclause createAnnexSubclause()
+  {
+    AnnexSubclauseImpl annexSubclause = new AnnexSubclauseImpl();
+    return annexSubclause;
   }
 
   /**

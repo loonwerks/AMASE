@@ -2,12 +2,16 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -28,24 +32,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class InputStatementImpl extends FaultSubcomponentImpl implements InputStatement
 {
   /**
-   * The default value of the '{@link #getIn_conn() <em>In conn</em>}' attribute.
+   * The cached value of the '{@link #getIn_conn() <em>In conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getIn_conn()
    * @generated
    * @ordered
    */
-  protected static final String IN_CONN_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getIn_conn() <em>In conn</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getIn_conn()
-   * @generated
-   * @ordered
-   */
-  protected String in_conn = IN_CONN_EDEFAULT;
+  protected Expr in_conn;
 
   /**
    * The default value of the '{@link #getOut_conn() <em>Out conn</em>}' attribute.
@@ -93,7 +87,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getIn_conn()
+  public Expr getIn_conn()
   {
     return in_conn;
   }
@@ -103,12 +97,37 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setIn_conn(String newIn_conn)
+  public NotificationChain basicSetIn_conn(Expr newIn_conn, NotificationChain msgs)
   {
-    String oldIn_conn = in_conn;
+    Expr oldIn_conn = in_conn;
     in_conn = newIn_conn;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, in_conn));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, oldIn_conn, newIn_conn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIn_conn(Expr newIn_conn)
+  {
+    if (newIn_conn != in_conn)
+    {
+      NotificationChain msgs = null;
+      if (in_conn != null)
+        msgs = ((InternalEObject)in_conn).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__IN_CONN, null, msgs);
+      if (newIn_conn != null)
+        msgs = ((InternalEObject)newIn_conn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INPUT_STATEMENT__IN_CONN, null, msgs);
+      msgs = basicSetIn_conn(newIn_conn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INPUT_STATEMENT__IN_CONN, newIn_conn, newIn_conn));
   }
 
   /**
@@ -140,6 +159,22 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * @generated
    */
   @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.INPUT_STATEMENT__IN_CONN:
+        return basicSetIn_conn(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -163,7 +198,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        setIn_conn((String)newValue);
+        setIn_conn((Expr)newValue);
         return;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         setOut_conn((String)newValue);
@@ -183,7 +218,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        setIn_conn(IN_CONN_EDEFAULT);
+        setIn_conn((Expr)null);
         return;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         setOut_conn(OUT_CONN_EDEFAULT);
@@ -203,7 +238,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     switch (featureID)
     {
       case SafetyPackage.INPUT_STATEMENT__IN_CONN:
-        return IN_CONN_EDEFAULT == null ? in_conn != null : !IN_CONN_EDEFAULT.equals(in_conn);
+        return in_conn != null;
       case SafetyPackage.INPUT_STATEMENT__OUT_CONN:
         return OUT_CONN_EDEFAULT == null ? out_conn != null : !OUT_CONN_EDEFAULT.equals(out_conn);
     }
@@ -221,9 +256,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (in_conn: ");
-    result.append(in_conn);
-    result.append(", out_conn: ");
+    result.append(" (out_conn: ");
     result.append(out_conn);
     result.append(')');
     return result.toString();

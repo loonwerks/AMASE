@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import org.osate.aadl2.Element;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,6 +14,6 @@ package edu.umn.cs.crisys.safety.safety;
  * @model
  * @generated
  */
-public interface SafetyEqStatement extends FaultSubcomponent
+public interface SafetyEqStatement extends Element, FaultSubcomponent
 {
 } // SafetyEqStatement

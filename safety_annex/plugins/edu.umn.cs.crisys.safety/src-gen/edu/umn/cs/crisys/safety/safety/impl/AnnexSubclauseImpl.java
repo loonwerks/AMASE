@@ -2,26 +2,26 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import edu.umn.cs.crisys.safety.safety.AnnexSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
-import edu.umn.cs.crisys.safety.safety.SafetySubclause;
 
 import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Subclause</b></em>'.
+ * An implementation of the model object '<em><b>Annex Subclause</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class SafetySubclauseImpl extends AnnexSubclauseImpl implements SafetySubclause
+public class AnnexSubclauseImpl extends org.osate.aadl2.impl.AnnexSubclauseImpl implements AnnexSubclause
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SafetySubclauseImpl()
+  protected AnnexSubclauseImpl()
   {
     super();
   }
@@ -34,7 +34,7 @@ public class SafetySubclauseImpl extends AnnexSubclauseImpl implements SafetySub
   @Override
   protected EClass eStaticClass()
   {
-    return SafetyPackage.Literals.SAFETY_SUBCLAUSE;
+    return SafetyPackage.Literals.ANNEX_SUBCLAUSE;
   }
 
-} //SafetySubclauseImpl
+} //AnnexSubclauseImpl

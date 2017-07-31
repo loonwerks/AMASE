@@ -42,7 +42,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getTriggerConditionAccess().getAlternatives(), "rule__TriggerCondition__Alternatives");
 					put(grammarAccess.getSafetyEqStatementAccess().getAlternatives(), "rule__SafetyEqStatement__Alternatives");
 					put(grammarAccess.getNamedElementAccess().getAlternatives(), "rule__NamedElement__Alternatives");
-					put(grammarAccess.getElementAccess().getAlternatives(), "rule__Element__Alternatives");
 					put(grammarAccess.getPatternStatementAccess().getAlternatives(), "rule__PatternStatement__Alternatives");
 					put(grammarAccess.getWhenStatementAccess().getAlternatives(), "rule__WhenStatement__Alternatives");
 					put(grammarAccess.getWheneverStatementAccess().getAlternatives(), "rule__WheneverStatement__Alternatives");

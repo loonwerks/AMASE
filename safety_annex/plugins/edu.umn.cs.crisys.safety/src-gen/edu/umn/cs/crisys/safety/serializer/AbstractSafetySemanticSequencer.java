@@ -493,7 +493,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (in_conn=ID out_conn=ID)
+	 *     (in_conn=Expr out_conn=ID)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		if (errorAcceptor != null) {
@@ -503,7 +503,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__OUT_CONN));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connIDTerminalRuleCall_0_3_0(), semanticObject.getIn_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0(), semanticObject.getIn_conn());
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0(), semanticObject.getOut_conn());
 		feeder.finish();
 	}
@@ -556,6 +556,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     Element returns EqValue
 	 *     FaultSubcomponent returns EqValue
 	 *     SafetyEqStatement returns EqValue
 	 *
@@ -569,6 +570,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     Element returns IntervalEq
 	 *     FaultSubcomponent returns IntervalEq
 	 *     SafetyEqStatement returns IntervalEq
 	 *
@@ -591,6 +593,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     Element returns SetEq
 	 *     FaultSubcomponent returns SetEq
 	 *     SafetyEqStatement returns SetEq
 	 *
@@ -643,7 +646,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	/**
 	 * Contexts:
 	 *     SpecStatement returns FaultStatement
-	 *     Element returns FaultStatement
 	 *
 	 * Constraint:
 	 *     (str=STRING faultDefName=Expr faultDefinitions+=FaultSubcomponent*)

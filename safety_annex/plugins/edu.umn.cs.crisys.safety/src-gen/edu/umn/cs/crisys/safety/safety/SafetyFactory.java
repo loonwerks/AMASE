@@ -23,6 +23,24 @@ public interface SafetyFactory extends EFactory
   SafetyFactory eINSTANCE = edu.umn.cs.crisys.safety.safety.impl.SafetyFactoryImpl.init();
 
   /**
+   * Returns a new object of class '<em>Annex Library</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Annex Library</em>'.
+   * @generated
+   */
+  AnnexLibrary createAnnexLibrary();
+
+  /**
+   * Returns a new object of class '<em>Annex Subclause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Annex Subclause</em>'.
+   * @generated
+   */
+  AnnexSubclause createAnnexSubclause();
+
+  /**
    * Returns a new object of class '<em>Library</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

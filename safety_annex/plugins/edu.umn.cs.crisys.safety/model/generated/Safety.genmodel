@@ -7,6 +7,8 @@
     editorPluginID="edu.umn.cs.crisys.safety.editor" runtimeVersion="2.11" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.genmodel#//agree platform:/resource/org.osate.aadl2/model/aadl2.genmodel#//aadl2">
   <genPackages prefix="Safety" basePackage="edu.umn.cs.crisys.safety" disposableProviderFactory="true"
       ecorePackage="Safety.ecore#/">
+    <genClasses ecoreClass="Safety.ecore#//AnnexLibrary"/>
+    <genClasses ecoreClass="Safety.ecore#//AnnexSubclause"/>
     <genClasses ecoreClass="Safety.ecore#//SafetyLibrary"/>
     <genClasses ecoreClass="Safety.ecore#//SafetySubclause"/>
     <genClasses ecoreClass="Safety.ecore#//Contract"/>
@@ -32,7 +34,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//InputStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute Safety.ecore#//InputStatement/in_conn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_conn"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//InputStatement/out_conn"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connExpr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connPattern"/>
@@ -66,6 +68,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//SafetySpecStatement"/>
+    <genClasses ecoreClass="Safety.ecore#//Element"/>
     <genClasses ecoreClass="Safety.ecore#//Eq">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Eq/expr"/>

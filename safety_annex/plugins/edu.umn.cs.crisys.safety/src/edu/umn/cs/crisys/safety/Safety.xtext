@@ -7,13 +7,12 @@ import "http://aadl.info/AADL/2.0" as aadl2
  
 @Override
 //AnnexLibrary returns agree::AgreeLibrary:
-AnnexLibrary returns aadl2::AnnexLibrary:
+AnnexLibrary returns AnnexLibrary:
 	SafetyLibrary;
 
 @Override
 //AnnexSubclause returns agree::AgreeSubclause:
-AnnexSubclause returns aadl2::AnnexSubclause:
-	
+AnnexSubclause returns AnnexSubclause:
 	SafetySubclause;
 
 SafetyLibrary:
@@ -25,13 +24,18 @@ SafetySubclause:
 SafetyContract returns Contract:
 	{SafetyContract} (specs+=SpecStatement)*;
 
+@Override
+Element returns aadl2::Element:
+	SafetyEqStatement
+;
+
 @Override 
 SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=Expr  
 			faultDefinitions+=(FaultSubcomponent)* ;
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=ID '->' out_conn=ID ';' 
+	{InputStatement} 'input' ':' in_conn=Expr '->' out_conn=ID ';' 
 	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=ID';' 
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  

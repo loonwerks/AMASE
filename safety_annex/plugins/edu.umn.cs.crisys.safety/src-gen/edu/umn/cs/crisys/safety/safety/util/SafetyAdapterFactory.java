@@ -11,8 +11,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.osate.aadl2.AnnexLibrary;
-import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.ModalElement;
 import org.osate.aadl2.NamedElement;
@@ -80,6 +78,16 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   protected SafetySwitch<Adapter> modelSwitch =
     new SafetySwitch<Adapter>()
     {
+      @Override
+      public Adapter caseAnnexLibrary(AnnexLibrary object)
+      {
+        return createAnnexLibraryAdapter();
+      }
+      @Override
+      public Adapter caseAnnexSubclause(AnnexSubclause object)
+      {
+        return createAnnexSubclauseAdapter();
+      }
       @Override
       public Adapter caseSafetyLibrary(SafetyLibrary object)
       {
@@ -206,9 +214,9 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createNamedElementAdapter();
       }
       @Override
-      public Adapter caseAnnexLibrary(AnnexLibrary object)
+      public Adapter caseAadl2_AnnexLibrary(org.osate.aadl2.AnnexLibrary object)
       {
-        return createAnnexLibraryAdapter();
+        return createAadl2_AnnexLibraryAdapter();
       }
       @Override
       public Adapter caseModalElement(ModalElement object)
@@ -216,9 +224,9 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createModalElementAdapter();
       }
       @Override
-      public Adapter caseAnnexSubclause(AnnexSubclause object)
+      public Adapter caseAadl2_AnnexSubclause(org.osate.aadl2.AnnexSubclause object)
       {
-        return createAnnexSubclauseAdapter();
+        return createAadl2_AnnexSubclauseAdapter();
       }
       @Override
       public Adapter caseAgree_SpecStatement(com.rockwellcollins.atc.agree.agree.SpecStatement object)
@@ -246,6 +254,36 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
     return modelSwitch.doSwitch((EObject)target);
   }
 
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.AnnexLibrary <em>Annex Library</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.AnnexLibrary
+   * @generated
+   */
+  public Adapter createAnnexLibraryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.AnnexSubclause <em>Annex Subclause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.AnnexSubclause
+   * @generated
+   */
+  public Adapter createAnnexSubclauseAdapter()
+  {
+    return null;
+  }
 
   /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.SafetyLibrary <em>Library</em>}'.
@@ -632,7 +670,7 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @see org.osate.aadl2.AnnexLibrary
    * @generated
    */
-  public Adapter createAnnexLibraryAdapter()
+  public Adapter createAadl2_AnnexLibraryAdapter()
   {
     return null;
   }
@@ -662,7 +700,7 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @see org.osate.aadl2.AnnexSubclause
    * @generated
    */
-  public Adapter createAnnexSubclauseAdapter()
+  public Adapter createAadl2_AnnexSubclauseAdapter()
   {
     return null;
   }
