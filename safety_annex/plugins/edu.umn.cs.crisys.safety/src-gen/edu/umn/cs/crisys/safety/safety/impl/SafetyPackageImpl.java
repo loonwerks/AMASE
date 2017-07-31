@@ -6,6 +6,7 @@ import com.rockwellcollins.atc.agree.agree.AgreePackage;
 
 import edu.umn.cs.crisys.safety.safety.AnnexLibrary;
 import edu.umn.cs.crisys.safety.safety.AnnexSubclause;
+import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.Contract;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
@@ -13,8 +14,12 @@ import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.MustCondition;
+import edu.umn.cs.crisys.safety.safety.OpenInterval;
+import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
+import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
@@ -125,6 +130,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass intervalEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass safetyContractLibraryEClass = null;
 
   /**
@@ -224,6 +236,34 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass setEqEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass closedIntervalEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass openLeftIntervalEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass openRightIntervalEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass openIntervalEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -399,6 +439,36 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
   public EClass getSafetyEqStatement()
   {
     return safetyEqStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getInterval()
+  {
+    return intervalEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInterval_Low()
+  {
+    return (EReference)intervalEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInterval_High()
+  {
+    return (EReference)intervalEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -766,6 +836,46 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getClosedInterval()
+  {
+    return closedIntervalEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOpenLeftInterval()
+  {
+    return openLeftIntervalEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOpenRightInterval()
+  {
+    return openRightIntervalEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOpenInterval()
+  {
+    return openIntervalEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public SafetyFactory getSafetyFactory()
   {
     return (SafetyFactory)getEFactoryInstance();
@@ -811,6 +921,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEReference(triggerConditionEClass, TRIGGER_CONDITION__EXPR_LIST);
 
     safetyEqStatementEClass = createEClass(SAFETY_EQ_STATEMENT);
+
+    intervalEClass = createEClass(INTERVAL);
+    createEReference(intervalEClass, INTERVAL__LOW);
+    createEReference(intervalEClass, INTERVAL__HIGH);
 
     safetyContractLibraryEClass = createEClass(SAFETY_CONTRACT_LIBRARY);
     createEReference(safetyContractLibraryEClass, SAFETY_CONTRACT_LIBRARY__CONTRACT);
@@ -862,6 +976,14 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEAttribute(setEqEClass, SET_EQ__LHS_SET);
     createEAttribute(setEqEClass, SET_EQ__L1);
     createEAttribute(setEqEClass, SET_EQ__LIST);
+
+    closedIntervalEClass = createEClass(CLOSED_INTERVAL);
+
+    openLeftIntervalEClass = createEClass(OPEN_LEFT_INTERVAL);
+
+    openRightIntervalEClass = createEClass(OPEN_RIGHT_INTERVAL);
+
+    openIntervalEClass = createEClass(OPEN_INTERVAL);
   }
 
   /**
@@ -920,6 +1042,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     eqValueEClass.getESuperTypes().add(this.getSafetyEqStatement());
     intervalEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
     setEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
+    closedIntervalEClass.getESuperTypes().add(this.getInterval());
+    openLeftIntervalEClass.getESuperTypes().add(this.getInterval());
+    openRightIntervalEClass.getESuperTypes().add(this.getInterval());
+    openIntervalEClass.getESuperTypes().add(this.getInterval());
 
     // Initialize classes and features; add operations and parameters
     initEClass(annexLibraryEClass, AnnexLibrary.class, "AnnexLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -942,6 +1068,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEReference(getTriggerCondition_ExprList(), theAgreePackage.getExpr(), null, "exprList", null, 0, -1, TriggerCondition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(safetyEqStatementEClass, SafetyEqStatement.class, "SafetyEqStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(intervalEClass, Interval.class, "Interval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getInterval_Low(), theAgreePackage.getExpr(), null, "low", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInterval_High(), theAgreePackage.getExpr(), null, "high", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(safetyContractLibraryEClass, SafetyContractLibrary.class, "SafetyContractLibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSafetyContractLibrary_Contract(), this.getContract(), null, "contract", null, 0, 1, SafetyContractLibrary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -967,7 +1097,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(durationStatementEClass, DurationStatement.class, "DurationStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDurationStatement_Tc(), this.getTemporalConstraint(), null, "tc", null, 0, 1, DurationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getDurationStatement_Interv(), theAgreePackage.getTimeInterval(), null, "interv", null, 0, 1, DurationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDurationStatement_Interv(), this.getInterval(), null, "interv", null, 0, 1, DurationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(triggerStatementEClass, TriggerStatement.class, "TriggerStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerStatement_Cond(), this.getTriggerCondition(), null, "cond", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -987,12 +1117,20 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(intervalEqEClass, IntervalEq.class, "IntervalEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIntervalEq_Lhs_int(), theEcorePackage.getEString(), "lhs_int", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIntervalEq_Interv(), theAgreePackage.getTimeInterval(), null, "interv", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIntervalEq_Interv(), this.getInterval(), null, "interv", null, 0, 1, IntervalEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(setEqEClass, SetEq.class, "SetEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSetEq_Lhs_set(), theEcorePackage.getEString(), "lhs_set", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetEq_L1(), theEcorePackage.getEString(), "l1", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetEq_List(), theEcorePackage.getEString(), "list", null, 0, -1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(closedIntervalEClass, ClosedInterval.class, "ClosedInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(openLeftIntervalEClass, OpenLeftInterval.class, "OpenLeftInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(openRightIntervalEClass, OpenRightInterval.class, "OpenRightInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(openIntervalEClass, OpenInterval.class, "OpenInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource(eNS_URI);

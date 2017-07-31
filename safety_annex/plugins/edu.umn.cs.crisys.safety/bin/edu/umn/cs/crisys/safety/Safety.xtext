@@ -39,7 +39,7 @@ SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=Expr
 FaultSubcomponent: 
 	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID';' 
 	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr';' 
- 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
+ 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| SafetyEqStatement ;
 
@@ -63,9 +63,15 @@ TriggerCondition:
  // Add capability of integer range?
 SafetyEqStatement:
 	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=TimeInterval ';'
+	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=Interval ';'
     | {SetEq} 'seteq' lhs_set=ID '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
 ;
 
-
+// Intervals: Real (Time) or Integer
+Interval:
+	=>({ClosedInterval} '[' low=Expr ',' high=Expr ']')
+|   =>({OpenLeftInterval} '(' low=Expr ',' high=Expr']')
+|   =>({OpenRightInterval} '[' low=Expr ',' high=Expr ')')
+|   =>({OpenInterval} '(' low=Expr ',' high=Expr ')') 	
+;
 

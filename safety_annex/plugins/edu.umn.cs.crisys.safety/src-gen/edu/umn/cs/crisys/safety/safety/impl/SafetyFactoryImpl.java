@@ -74,6 +74,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
       case SafetyPackage.SAFETY_EQ_STATEMENT: return createSafetyEqStatement();
+      case SafetyPackage.INTERVAL: return createInterval();
       case SafetyPackage.SAFETY_CONTRACT_LIBRARY: return createSafetyContractLibrary();
       case SafetyPackage.SAFETY_CONTRACT_SUBCLAUSE: return createSafetyContractSubclause();
       case SafetyPackage.SAFETY_CONTRACT: return createSafetyContract();
@@ -89,6 +90,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.EQ_VALUE: return createEqValue();
       case SafetyPackage.INTERVAL_EQ: return createIntervalEq();
       case SafetyPackage.SET_EQ: return createSetEq();
+      case SafetyPackage.CLOSED_INTERVAL: return createClosedInterval();
+      case SafetyPackage.OPEN_LEFT_INTERVAL: return createOpenLeftInterval();
+      case SafetyPackage.OPEN_RIGHT_INTERVAL: return createOpenRightInterval();
+      case SafetyPackage.OPEN_INTERVAL: return createOpenInterval();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -202,6 +207,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     SafetyEqStatementImpl safetyEqStatement = new SafetyEqStatementImpl();
     return safetyEqStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Interval createInterval()
+  {
+    IntervalImpl interval = new IntervalImpl();
+    return interval;
   }
 
   /**
@@ -367,6 +383,50 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     SetEqImpl setEq = new SetEqImpl();
     return setEq;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ClosedInterval createClosedInterval()
+  {
+    ClosedIntervalImpl closedInterval = new ClosedIntervalImpl();
+    return closedInterval;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpenLeftInterval createOpenLeftInterval()
+  {
+    OpenLeftIntervalImpl openLeftInterval = new OpenLeftIntervalImpl();
+    return openLeftInterval;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpenRightInterval createOpenRightInterval()
+  {
+    OpenRightIntervalImpl openRightInterval = new OpenRightIntervalImpl();
+    return openRightInterval;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpenInterval createOpenInterval()
+  {
+    OpenIntervalImpl openInterval = new OpenIntervalImpl();
+    return openInterval;
   }
 
   /**

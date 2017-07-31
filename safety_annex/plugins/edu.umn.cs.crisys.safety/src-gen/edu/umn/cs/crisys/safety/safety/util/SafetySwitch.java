@@ -166,6 +166,13 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.INTERVAL:
+      {
+        Interval interval = (Interval)theEObject;
+        T result = caseInterval(interval);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.SAFETY_CONTRACT_LIBRARY:
       {
         SafetyContractLibrary safetyContractLibrary = (SafetyContractLibrary)theEObject;
@@ -300,6 +307,38 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = caseSafetyEqStatement(setEq);
         if (result == null) result = caseElement(setEq);
         if (result == null) result = caseFaultSubcomponent(setEq);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.CLOSED_INTERVAL:
+      {
+        ClosedInterval closedInterval = (ClosedInterval)theEObject;
+        T result = caseClosedInterval(closedInterval);
+        if (result == null) result = caseInterval(closedInterval);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.OPEN_LEFT_INTERVAL:
+      {
+        OpenLeftInterval openLeftInterval = (OpenLeftInterval)theEObject;
+        T result = caseOpenLeftInterval(openLeftInterval);
+        if (result == null) result = caseInterval(openLeftInterval);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.OPEN_RIGHT_INTERVAL:
+      {
+        OpenRightInterval openRightInterval = (OpenRightInterval)theEObject;
+        T result = caseOpenRightInterval(openRightInterval);
+        if (result == null) result = caseInterval(openRightInterval);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.OPEN_INTERVAL:
+      {
+        OpenInterval openInterval = (OpenInterval)theEObject;
+        T result = caseOpenInterval(openInterval);
+        if (result == null) result = caseInterval(openInterval);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -463,6 +502,22 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSafetyEqStatement(SafetyEqStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Interval</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Interval</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseInterval(Interval object)
   {
     return null;
   }
@@ -703,6 +758,70 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSetEq(SetEq object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Closed Interval</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Closed Interval</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseClosedInterval(ClosedInterval object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Open Left Interval</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Open Left Interval</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOpenLeftInterval(OpenLeftInterval object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Open Right Interval</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Open Right Interval</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOpenRightInterval(OpenRightInterval object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Open Interval</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Open Interval</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOpenInterval(OpenInterval object)
   {
     return null;
   }

@@ -3,6 +3,8 @@
  */
 package edu.umn.cs.crisys.safety.validation;
 
+import static com.rockwellcollins.atc.agree.validation.AgreeType.BOOL;
+
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -11,27 +13,22 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
-import org.osate.aadl2.ComponentType;
-import org.osate.aadl2.NamedElement;
-
-import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.NamedID;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
+import com.rockwellcollins.atc.agree.agree.IntLitExpr;
+import com.rockwellcollins.atc.agree.agree.RealLitExpr;
+import com.rockwellcollins.atc.agree.validation.AgreeType;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
-import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
-import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess;
-import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess.TemporalConstraintElements;
 
 /**
  * This class contains custom validation rules. 
@@ -81,12 +78,25 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 		
 		// Check to see if nominalConn is a component connection in AADL
+		
 	}
 	
 	// Duration statements
 	@Check
 	public void checkDuration(DurationStatement durationStmt){
 		
+		// Check for valid integer interval
+		Interval interval = durationStmt.getInterv();
+		Expr lower = interval.getLow();
+	    Expr higher = interval.getHigh();
+	    
+	    if(!(lower instanceof IntLitExpr || isConst(lower))){
+	        error(lower, "Lower interval must be an integer valued literal.");
+	    }
+	    
+	    if(!(higher instanceof IntLitExpr || isConst(higher))){
+            error(higher, "Higher interval must be an integer valued literal.");
+        }
 		
 	}
 	
@@ -127,9 +137,19 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if(tc != null){
 			
 			// Make sure expression list for trigger conditions is nonempty
-			EList<Expr> list = tc.getExprList();
-			if(list.isEmpty()) {
+			EList<Expr> exprList = tc.getExprList();
+			if(exprList.isEmpty()) {
 				error(tc, "Trigger condition list cannot be empty.");
+			}
+			
+			for(Expr expr : exprList){
+				if (expr != null) {
+		            AgreeType exprType = getAgreeType(expr);
+		            if (!matches(BOOL, exprType)) {
+		                error(tc, "Expression for trigger condition is of type '" + exprType.toString()
+		                        + "' but must be of type 'bool'");
+		            }
+		        }
 			}
 		}
 	}
@@ -151,7 +171,24 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Check the time interval passed in using Agree's method
 	@Check
 	public void checkIntervalEqStatement(IntervalEq intervalEq){
-//		checkTimeInterval(intervalEq.getInterv());
+		
+		// Check valid real OR integer interval
+		
+		Interval interval = intervalEq.getInterv();
+		Expr lower = interval.getLow();
+	    Expr higher = interval.getHigh();
+	    
+	    // Both must be real or both must be integer
+	    if(!((lower instanceof IntLitExpr && higher instanceof IntLitExpr)|| (lower instanceof RealLitExpr && higher instanceof RealLitExpr))){
+	    	error(intervalEq, "Lower and higher interval values must be both real or both integer.");
+	    }
+	    
+	    // Neither can be constants
+	    if(isConst(lower) || isConst(higher)){
+	    	error(intervalEq, "Lower and higher interval values must be real or integer valued literals.");
+	    }
+	    
+		
 	}
 	
 	// Check the set eq statements
@@ -189,7 +226,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		
 	}
 	
-	
+	@Check
+	public void checkInterval(Interval interval){
+		
+	}
 	
 
 }

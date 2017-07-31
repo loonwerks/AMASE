@@ -311,9 +311,9 @@ annex safety {**
 		eq testVal :bool =  true;
 		eq testVal1 :int = 5;
 		input:  pedals.signal1-> faultOut; 
-		output: faultddOut -> faults.historically(false);
+		output: faultOut -> faults.historically(false);
 		
-		duration: permanent [0.0,2.0];
+		duration: permanent [0,2];
 		trigger: enabler {true, testVal, if true then false else true} [0.15]; 
 		eq testVal2 :real =  9;
 		intervaleq testInterval = [0.0,5.0];

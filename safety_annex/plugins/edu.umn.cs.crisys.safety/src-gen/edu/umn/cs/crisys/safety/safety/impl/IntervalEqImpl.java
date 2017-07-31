@@ -2,8 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.TimeInterval;
-
+import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
@@ -59,7 +58,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * @generated
    * @ordered
    */
-  protected TimeInterval interv;
+  protected Interval interv;
 
   /**
    * <!-- begin-user-doc -->
@@ -110,7 +109,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public TimeInterval getInterv()
+  public Interval getInterv()
   {
     return interv;
   }
@@ -120,9 +119,9 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetInterv(TimeInterval newInterv, NotificationChain msgs)
+  public NotificationChain basicSetInterv(Interval newInterv, NotificationChain msgs)
   {
-    TimeInterval oldInterv = interv;
+    Interval oldInterv = interv;
     interv = newInterv;
     if (eNotificationRequired())
     {
@@ -137,7 +136,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setInterv(TimeInterval newInterv)
+  public void setInterv(Interval newInterv)
   {
     if (newInterv != interv)
     {
@@ -201,7 +200,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
         setLhs_int((String)newValue);
         return;
       case SafetyPackage.INTERVAL_EQ__INTERV:
-        setInterv((TimeInterval)newValue);
+        setInterv((Interval)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -221,7 +220,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
         setLhs_int(LHS_INT_EDEFAULT);
         return;
       case SafetyPackage.INTERVAL_EQ__INTERV:
-        setInterv((TimeInterval)null);
+        setInterv((Interval)null);
         return;
     }
     super.eUnset(featureID);

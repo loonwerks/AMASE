@@ -42,6 +42,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getTemporalConstraintAccess().getAlternatives(), "rule__TemporalConstraint__Alternatives");
 					put(grammarAccess.getTriggerConditionAccess().getAlternatives(), "rule__TriggerCondition__Alternatives");
 					put(grammarAccess.getSafetyEqStatementAccess().getAlternatives(), "rule__SafetyEqStatement__Alternatives");
+					put(grammarAccess.getIntervalAccess().getAlternatives(), "rule__Interval__Alternatives");
 					put(grammarAccess.getNamedElementAccess().getAlternatives(), "rule__NamedElement__Alternatives");
 					put(grammarAccess.getPatternStatementAccess().getAlternatives(), "rule__PatternStatement__Alternatives");
 					put(grammarAccess.getWhenStatementAccess().getAlternatives(), "rule__WhenStatement__Alternatives");
@@ -100,6 +101,14 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_1(), "rule__SafetyEqStatement__Group_1__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_2(), "rule__SafetyEqStatement__Group_2__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_2_6(), "rule__SafetyEqStatement__Group_2_6__0");
+					put(grammarAccess.getIntervalAccess().getGroup_0(), "rule__Interval__Group_0__0");
+					put(grammarAccess.getIntervalAccess().getGroup_0_0(), "rule__Interval__Group_0_0__0");
+					put(grammarAccess.getIntervalAccess().getGroup_1(), "rule__Interval__Group_1__0");
+					put(grammarAccess.getIntervalAccess().getGroup_1_0(), "rule__Interval__Group_1_0__0");
+					put(grammarAccess.getIntervalAccess().getGroup_2(), "rule__Interval__Group_2__0");
+					put(grammarAccess.getIntervalAccess().getGroup_2_0(), "rule__Interval__Group_2_0__0");
+					put(grammarAccess.getIntervalAccess().getGroup_3(), "rule__Interval__Group_3__0");
+					put(grammarAccess.getIntervalAccess().getGroup_3_0(), "rule__Interval__Group_3_0__0");
 					put(grammarAccess.getAgreeLibraryAccess().getGroup(), "rule__AgreeLibrary__Group__0");
 					put(grammarAccess.getAgreeSubclauseAccess().getGroup(), "rule__AgreeSubclause__Group__0");
 					put(grammarAccess.getAgreeContractAccess().getGroup(), "rule__AgreeContract__Group__0");
@@ -342,6 +351,14 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyEqStatementAccess().getLhs_setAssignment_2_2(), "rule__SafetyEqStatement__Lhs_setAssignment_2_2");
 					put(grammarAccess.getSafetyEqStatementAccess().getL1Assignment_2_5(), "rule__SafetyEqStatement__L1Assignment_2_5");
 					put(grammarAccess.getSafetyEqStatementAccess().getListAssignment_2_6_1(), "rule__SafetyEqStatement__ListAssignment_2_6_1");
+					put(grammarAccess.getIntervalAccess().getLowAssignment_0_0_2(), "rule__Interval__LowAssignment_0_0_2");
+					put(grammarAccess.getIntervalAccess().getHighAssignment_0_0_4(), "rule__Interval__HighAssignment_0_0_4");
+					put(grammarAccess.getIntervalAccess().getLowAssignment_1_0_2(), "rule__Interval__LowAssignment_1_0_2");
+					put(grammarAccess.getIntervalAccess().getHighAssignment_1_0_4(), "rule__Interval__HighAssignment_1_0_4");
+					put(grammarAccess.getIntervalAccess().getLowAssignment_2_0_2(), "rule__Interval__LowAssignment_2_0_2");
+					put(grammarAccess.getIntervalAccess().getHighAssignment_2_0_4(), "rule__Interval__HighAssignment_2_0_4");
+					put(grammarAccess.getIntervalAccess().getLowAssignment_3_0_2(), "rule__Interval__LowAssignment_3_0_2");
+					put(grammarAccess.getIntervalAccess().getHighAssignment_3_0_4(), "rule__Interval__HighAssignment_3_0_4");
 					put(grammarAccess.getAgreeLibraryAccess().getContractAssignment_1(), "rule__AgreeLibrary__ContractAssignment_1");
 					put(grammarAccess.getAgreeSubclauseAccess().getContractAssignment_1(), "rule__AgreeSubclause__ContractAssignment_1");
 					put(grammarAccess.getAgreeContractAccess().getSpecsAssignment_1(), "rule__AgreeContract__SpecsAssignment_1");

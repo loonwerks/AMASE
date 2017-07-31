@@ -113,6 +113,15 @@ public interface SafetyFactory extends EFactory
   SafetyEqStatement createSafetyEqStatement();
 
   /**
+   * Returns a new object of class '<em>Interval</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Interval</em>'.
+   * @generated
+   */
+  Interval createInterval();
+
+  /**
    * Returns a new object of class '<em>Contract Library</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -246,6 +255,42 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   SetEq createSetEq();
+
+  /**
+   * Returns a new object of class '<em>Closed Interval</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Closed Interval</em>'.
+   * @generated
+   */
+  ClosedInterval createClosedInterval();
+
+  /**
+   * Returns a new object of class '<em>Open Left Interval</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Open Left Interval</em>'.
+   * @generated
+   */
+  OpenLeftInterval createOpenLeftInterval();
+
+  /**
+   * Returns a new object of class '<em>Open Right Interval</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Open Right Interval</em>'.
+   * @generated
+   */
+  OpenRightInterval createOpenRightInterval();
+
+  /**
+   * Returns a new object of class '<em>Open Interval</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Open Interval</em>'.
+   * @generated
+   */
+  OpenInterval createOpenInterval();
 
   /**
    * Returns the package supported by this factory.

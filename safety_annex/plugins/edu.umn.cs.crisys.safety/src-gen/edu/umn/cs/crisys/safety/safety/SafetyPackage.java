@@ -494,6 +494,43 @@ public interface SafetyPackage extends EPackage
   int SAFETY_EQ_STATEMENT_FEATURE_COUNT = Aadl2Package.ELEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.IntervalImpl <em>Interval</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.IntervalImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInterval()
+   * @generated
+   */
+  int INTERVAL = 10;
+
+  /**
+   * The feature id for the '<em><b>Low</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__LOW = 0;
+
+  /**
+   * The feature id for the '<em><b>High</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__HIGH = 1;
+
+  /**
+   * The number of structural features of the '<em>Interval</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyContractLibraryImpl <em>Contract Library</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -501,7 +538,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractLibrary()
    * @generated
    */
-  int SAFETY_CONTRACT_LIBRARY = 10;
+  int SAFETY_CONTRACT_LIBRARY = 11;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -574,7 +611,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractSubclause()
    * @generated
    */
-  int SAFETY_CONTRACT_SUBCLAUSE = 11;
+  int SAFETY_CONTRACT_SUBCLAUSE = 12;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -656,7 +693,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContract()
    * @generated
    */
-  int SAFETY_CONTRACT = 12;
+  int SAFETY_CONTRACT = 13;
 
   /**
    * The feature id for the '<em><b>Specs</b></em>' containment reference list.
@@ -684,7 +721,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultStatement()
    * @generated
    */
-  int FAULT_STATEMENT = 13;
+  int FAULT_STATEMENT = 14;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -748,7 +785,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 14;
+  int INPUT_STATEMENT = 15;
 
   /**
    * The feature id for the '<em><b>In conn</b></em>' reference.
@@ -785,7 +822,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 15;
+  int OUTPUT_STATEMENT = 16;
 
   /**
    * The feature id for the '<em><b>Out conn</b></em>' attribute.
@@ -822,7 +859,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 16;
+  int DURATION_STATEMENT = 17;
 
   /**
    * The feature id for the '<em><b>Tc</b></em>' containment reference.
@@ -859,7 +896,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 17;
+  int TRIGGER_STATEMENT = 18;
 
   /**
    * The feature id for the '<em><b>Cond</b></em>' containment reference.
@@ -896,7 +933,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPermanentConstraint()
    * @generated
    */
-  int PERMANENT_CONSTRAINT = 18;
+  int PERMANENT_CONSTRAINT = 19;
 
   /**
    * The number of structural features of the '<em>Permanent Constraint</em>' class.
@@ -915,7 +952,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTransientConstraint()
    * @generated
    */
-  int TRANSIENT_CONSTRAINT = 19;
+  int TRANSIENT_CONSTRAINT = 20;
 
   /**
    * The number of structural features of the '<em>Transient Constraint</em>' class.
@@ -934,7 +971,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getMustCondition()
    * @generated
    */
-  int MUST_CONDITION = 20;
+  int MUST_CONDITION = 21;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -962,7 +999,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEnablerCondition()
    * @generated
    */
-  int ENABLER_CONDITION = 21;
+  int ENABLER_CONDITION = 22;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -990,7 +1027,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqValue()
    * @generated
    */
-  int EQ_VALUE = 22;
+  int EQ_VALUE = 23;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1045,7 +1082,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getIntervalEq()
    * @generated
    */
-  int INTERVAL_EQ = 23;
+  int INTERVAL_EQ = 24;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1100,7 +1137,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSetEq()
    * @generated
    */
-  int SET_EQ = 24;
+  int SET_EQ = 25;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1155,6 +1192,154 @@ public interface SafetyPackage extends EPackage
    * @ordered
    */
   int SET_EQ_FEATURE_COUNT = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.ClosedIntervalImpl <em>Closed Interval</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.ClosedIntervalImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getClosedInterval()
+   * @generated
+   */
+  int CLOSED_INTERVAL = 26;
+
+  /**
+   * The feature id for the '<em><b>Low</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLOSED_INTERVAL__LOW = INTERVAL__LOW;
+
+  /**
+   * The feature id for the '<em><b>High</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLOSED_INTERVAL__HIGH = INTERVAL__HIGH;
+
+  /**
+   * The number of structural features of the '<em>Closed Interval</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLOSED_INTERVAL_FEATURE_COUNT = INTERVAL_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.OpenLeftIntervalImpl <em>Open Left Interval</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.OpenLeftIntervalImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenLeftInterval()
+   * @generated
+   */
+  int OPEN_LEFT_INTERVAL = 27;
+
+  /**
+   * The feature id for the '<em><b>Low</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_LEFT_INTERVAL__LOW = INTERVAL__LOW;
+
+  /**
+   * The feature id for the '<em><b>High</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_LEFT_INTERVAL__HIGH = INTERVAL__HIGH;
+
+  /**
+   * The number of structural features of the '<em>Open Left Interval</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_LEFT_INTERVAL_FEATURE_COUNT = INTERVAL_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.OpenRightIntervalImpl <em>Open Right Interval</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.OpenRightIntervalImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenRightInterval()
+   * @generated
+   */
+  int OPEN_RIGHT_INTERVAL = 28;
+
+  /**
+   * The feature id for the '<em><b>Low</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_RIGHT_INTERVAL__LOW = INTERVAL__LOW;
+
+  /**
+   * The feature id for the '<em><b>High</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_RIGHT_INTERVAL__HIGH = INTERVAL__HIGH;
+
+  /**
+   * The number of structural features of the '<em>Open Right Interval</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_RIGHT_INTERVAL_FEATURE_COUNT = INTERVAL_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.OpenIntervalImpl <em>Open Interval</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.OpenIntervalImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenInterval()
+   * @generated
+   */
+  int OPEN_INTERVAL = 29;
+
+  /**
+   * The feature id for the '<em><b>Low</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_INTERVAL__LOW = INTERVAL__LOW;
+
+  /**
+   * The feature id for the '<em><b>High</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_INTERVAL__HIGH = INTERVAL__HIGH;
+
+  /**
+   * The number of structural features of the '<em>Open Interval</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPEN_INTERVAL_FEATURE_COUNT = INTERVAL_FEATURE_COUNT + 0;
 
 
   /**
@@ -1267,6 +1452,38 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EClass getSafetyEqStatement();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.Interval <em>Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Interval</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.Interval
+   * @generated
+   */
+  EClass getInterval();
+
+  /**
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.Interval#getLow <em>Low</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Low</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.Interval#getLow()
+   * @see #getInterval()
+   * @generated
+   */
+  EReference getInterval_Low();
+
+  /**
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.Interval#getHigh <em>High</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>High</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.Interval#getHigh()
+   * @see #getInterval()
+   * @generated
+   */
+  EReference getInterval_High();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.SafetyContractLibrary <em>Contract Library</em>}'.
@@ -1650,6 +1867,46 @@ public interface SafetyPackage extends EPackage
   EAttribute getSetEq_List();
 
   /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.ClosedInterval <em>Closed Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Closed Interval</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.ClosedInterval
+   * @generated
+   */
+  EClass getClosedInterval();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.OpenLeftInterval <em>Open Left Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Open Left Interval</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.OpenLeftInterval
+   * @generated
+   */
+  EClass getOpenLeftInterval();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.OpenRightInterval <em>Open Right Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Open Right Interval</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.OpenRightInterval
+   * @generated
+   */
+  EClass getOpenRightInterval();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.OpenInterval <em>Open Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Open Interval</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.OpenInterval
+   * @generated
+   */
+  EClass getOpenInterval();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1779,6 +2036,32 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EClass SAFETY_EQ_STATEMENT = eINSTANCE.getSafetyEqStatement();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.IntervalImpl <em>Interval</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.IntervalImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInterval()
+     * @generated
+     */
+    EClass INTERVAL = eINSTANCE.getInterval();
+
+    /**
+     * The meta object literal for the '<em><b>Low</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTERVAL__LOW = eINSTANCE.getInterval_Low();
+
+    /**
+     * The meta object literal for the '<em><b>High</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTERVAL__HIGH = eINSTANCE.getInterval_High();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyContractLibraryImpl <em>Contract Library</em>}' class.
@@ -2097,6 +2380,46 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EAttribute SET_EQ__LIST = eINSTANCE.getSetEq_List();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.ClosedIntervalImpl <em>Closed Interval</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.ClosedIntervalImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getClosedInterval()
+     * @generated
+     */
+    EClass CLOSED_INTERVAL = eINSTANCE.getClosedInterval();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.OpenLeftIntervalImpl <em>Open Left Interval</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.OpenLeftIntervalImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenLeftInterval()
+     * @generated
+     */
+    EClass OPEN_LEFT_INTERVAL = eINSTANCE.getOpenLeftInterval();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.OpenRightIntervalImpl <em>Open Right Interval</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.OpenRightIntervalImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenRightInterval()
+     * @generated
+     */
+    EClass OPEN_RIGHT_INTERVAL = eINSTANCE.getOpenRightInterval();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.OpenIntervalImpl <em>Open Interval</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.OpenIntervalImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenInterval()
+     * @generated
+     */
+    EClass OPEN_INTERVAL = eINSTANCE.getOpenInterval();
 
   }
 

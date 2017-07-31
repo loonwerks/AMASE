@@ -19,6 +19,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerCondition/exprList"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SafetyEqStatement"/>
+    <genClasses ecoreClass="Safety.ecore#//Interval">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Interval/low"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Interval/high"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SafetyContractLibrary">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SafetyContractLibrary/contract"/>
     </genClasses>
@@ -68,6 +72,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ClosedInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenRightInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//IntegerInterval">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntegerInterval/low"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntegerInterval/high"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ClosedTimeInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenLeftTimeInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenRightTimeInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenTimeInterval"/>
     <genClasses ecoreClass="Safety.ecore#//SafetySpecStatement"/>
     <genClasses ecoreClass="Safety.ecore#//Element"/>
     <genClasses ecoreClass="Safety.ecore#//Eq">

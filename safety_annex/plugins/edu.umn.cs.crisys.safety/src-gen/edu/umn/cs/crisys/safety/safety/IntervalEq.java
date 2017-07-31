@@ -2,7 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.TimeInterval;
 
 /**
  * <!-- begin-user-doc -->
@@ -58,12 +57,12 @@ public interface IntervalEq extends SafetyEqStatement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interv</em>' containment reference.
-   * @see #setInterv(TimeInterval)
+   * @see #setInterv(Interval)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getIntervalEq_Interv()
    * @model containment="true"
    * @generated
    */
-  TimeInterval getInterv();
+  Interval getInterv();
 
   /**
    * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.IntervalEq#getInterv <em>Interv</em>}' containment reference.
@@ -73,6 +72,6 @@ public interface IntervalEq extends SafetyEqStatement
    * @see #getInterv()
    * @generated
    */
-  void setInterv(TimeInterval value);
+  void setInterv(Interval value);
 
 } // IntervalEq

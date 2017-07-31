@@ -2,9 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.TimeInterval;
-
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
+import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 
@@ -50,7 +49,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * @generated
    * @ordered
    */
-  protected TimeInterval interv;
+  protected Interval interv;
 
   /**
    * <!-- begin-user-doc -->
@@ -126,7 +125,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  public TimeInterval getInterv()
+  public Interval getInterv()
   {
     return interv;
   }
@@ -136,9 +135,9 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetInterv(TimeInterval newInterv, NotificationChain msgs)
+  public NotificationChain basicSetInterv(Interval newInterv, NotificationChain msgs)
   {
-    TimeInterval oldInterv = interv;
+    Interval oldInterv = interv;
     interv = newInterv;
     if (eNotificationRequired())
     {
@@ -153,7 +152,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setInterv(TimeInterval newInterv)
+  public void setInterv(Interval newInterv)
   {
     if (newInterv != interv)
     {
@@ -219,7 +218,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
         setTc((TemporalConstraint)newValue);
         return;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
-        setInterv((TimeInterval)newValue);
+        setInterv((Interval)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -239,7 +238,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
         setTc((TemporalConstraint)null);
         return;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
-        setInterv((TimeInterval)null);
+        setInterv((Interval)null);
         return;
     }
     super.eUnset(featureID);
