@@ -269,7 +269,7 @@ ruleSpecStatement returns [EObject current=null]
 	    }
 
 )
-)
+)?
 	otherlv_3=Colon
     {
     	newLeafNode(otherlv_3, grammarAccess.getSpecStatementAccess().getColonKeyword_3());

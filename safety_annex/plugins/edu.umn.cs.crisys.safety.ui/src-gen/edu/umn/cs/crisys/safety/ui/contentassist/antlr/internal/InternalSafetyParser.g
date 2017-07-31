@@ -2481,6 +2481,7 @@ finally {
 
 
 
+
 rule__FaultSubcomponent__Alternatives
     @init {
 		int stackSize = keepStackSize();
@@ -3866,7 +3867,7 @@ rule__SpecStatement__Group__2__Impl
 :
 (
 { before(grammarAccess.getSpecStatementAccess().getStrAssignment_2()); }
-(rule__SpecStatement__StrAssignment_2)
+(rule__SpecStatement__StrAssignment_2)?
 { after(grammarAccess.getSpecStatementAccess().getStrAssignment_2()); }
 )
 

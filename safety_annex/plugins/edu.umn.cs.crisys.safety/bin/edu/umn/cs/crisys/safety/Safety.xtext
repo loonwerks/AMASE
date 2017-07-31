@@ -3,6 +3,7 @@ grammar edu.umn.cs.crisys.safety.Safety with com.rockwellcollins.atc.agree.Agree
 generate safety "http://www.xtext.org/example/safety/Safety"
 
 import "http://aadl.info/AADL/2.0" as aadl2
+//import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
  
 @Override
@@ -27,16 +28,16 @@ SafetyContract returns Contract:
 @Override
 Element returns aadl2::Element:
 	SafetyEqStatement
+	| Expr
 ;
 
 @Override 
-SpecStatement: {FaultStatement} 'fault' str=STRING ':'  faultDefName=Expr  
+SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=Expr  
 			faultDefinitions+=(FaultSubcomponent)* ;
 	
 
 FaultSubcomponent: 
 	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID';' 
-	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr';' 
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'

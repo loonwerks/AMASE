@@ -37,6 +37,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
+					put(grammarAccess.getElementAccess().getAlternatives(), "rule__Element__Alternatives");
 					put(grammarAccess.getFaultSubcomponentAccess().getAlternatives(), "rule__FaultSubcomponent__Alternatives");
 					put(grammarAccess.getTemporalConstraintAccess().getAlternatives(), "rule__TemporalConstraint__Alternatives");
 					put(grammarAccess.getTriggerConditionAccess().getAlternatives(), "rule__TriggerCondition__Alternatives");

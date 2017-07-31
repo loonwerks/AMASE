@@ -648,7 +648,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     SpecStatement returns FaultStatement
 	 *
 	 * Constraint:
-	 *     (str=STRING faultDefName=Expr faultDefinitions+=FaultSubcomponent*)
+	 *     (str=STRING? faultDefName=Expr faultDefinitions+=FaultSubcomponent*)
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, FaultStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -119,14 +119,23 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class ElementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.Element");
-		private final RuleCall cSafetyEqStatementParserRuleCall = (RuleCall)rule.eContents().get(1);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cSafetyEqStatementParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cExprParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
 		//@ Override Element aadl2::Element:
-		//	SafetyEqStatement;
+		//	SafetyEqStatement
+		//	| Expr;
 		@Override public ParserRule getRule() { return rule; }
 
+		//SafetyEqStatement | Expr
+		public Alternatives getAlternatives() { return cAlternatives; }
+
 		//SafetyEqStatement
-		public RuleCall getSafetyEqStatementParserRuleCall() { return cSafetyEqStatementParserRuleCall; }
+		public RuleCall getSafetyEqStatementParserRuleCall_0() { return cSafetyEqStatementParserRuleCall_0; }
+
+		//Expr
+		public RuleCall getExprParserRuleCall_1() { return cExprParserRuleCall_1; }
 	}
 
 	public class SpecStatementElements extends AbstractParserRuleElementFinder {
@@ -143,11 +152,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFaultDefinitionsFaultSubcomponentParserRuleCall_5_0 = (RuleCall)cFaultDefinitionsAssignment_5.eContents().get(0);
 		
 		//@ Override SpecStatement:
-		//	{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr
+		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=Expr
 		//	faultDefinitions+=FaultSubcomponent*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr faultDefinitions+=FaultSubcomponent*
+		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=Expr faultDefinitions+=FaultSubcomponent*
 		public Group getGroup() { return cGroup; }
 
 		//{FaultStatement}
@@ -156,7 +165,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'fault'
 		public Keyword getFaultKeyword_1() { return cFaultKeyword_1; }
 
-		//str=STRING
+		//str=STRING?
 		public Assignment getStrAssignment_2() { return cStrAssignment_2; }
 
 		//STRING
@@ -227,17 +236,15 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//FaultSubcomponent:
 		//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
-		//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' //{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
-		//| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr ';' | {DurationStatement} 'duration' ':'
-		//tc=TemporalConstraint interv=TimeInterval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('['
-		//probability=REAL_LIT ']')? ';' | SafetyEqStatement
+		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' | {OutputStatement} 'output' ':'
+		//out_conn=ID '->' nom_conn=Expr ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';' |
+		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
@@ -808,7 +815,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//@ Override Element aadl2::Element:
-	//	SafetyEqStatement;
+	//	SafetyEqStatement
+	//	| Expr;
 	public ElementElements getElementAccess() {
 		return pElement;
 	}
@@ -818,7 +826,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//@ Override SpecStatement:
-	//	{FaultStatement} 'fault' str=STRING ':' faultDefName=Expr
+	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=Expr
 	//	faultDefinitions+=FaultSubcomponent*;
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
@@ -830,7 +838,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//FaultSubcomponent:
 	//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
-	//	//{InputStatement} 'input' ':' in_connExpr=Expr '->' out_conn=ID ';' 
 	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=TimeInterval ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'

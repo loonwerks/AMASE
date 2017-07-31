@@ -5,14 +5,18 @@ package edu.umn.cs.crisys.safety.validation;
 
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
+import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.NamedElement;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
@@ -23,8 +27,11 @@ import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
+import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
+import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess;
+import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess.TemporalConstraintElements;
 
 /**
  * This class contains custom validation rules. 
@@ -41,7 +48,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkFaultSpecStmt(FaultStatement specStmt){
 		if(specStmt.getStr().isEmpty()) {
-			warning(specStmt, "Fault description should not be empty");
+			warning(specStmt, "Fault description is optional, but should "
+					+ "not be an empty string.");
 		}
 	}
 	
@@ -49,13 +57,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Input Statements
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		NamedElement inConn = inputStmt.getIn_conn();
-		String outConn = inputStmt.getOut_conn();
+		//String inConn = inputStmt.getIn_conn();
+		//String outConn = inputStmt.getOut_conn();
 		
-		if(inConn==null){
+		//if(inConn==null){
 			//error(inConn, "Input connection cannot be null");
 			//error("Input connection cannot be null", SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN);
-		}
+		//}
 		
 	}
 	
@@ -65,33 +73,28 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
 		String outConn = outputStmt.getOut_conn();
 		Expr nominalConn = outputStmt.getNom_conn();
-			
-		if(nominalConn==null){
-			//error(nominalConn, "Nominal connection cannot be null");
-		}
-		if(outConn.isEmpty()){
-			error(outputStmt, "Output connection name cannot be empty");
-		}
-		if(!(outConn.equals(inputStmt.getOut_conn()))){
-			error(outputStmt, "Output connection name must be equal to the input's output field.");
+		String inFaultConn = inputStmt.getOut_conn();
+		
+		if(!(inFaultConn.equals(outConn))){
+			error(outputStmt, "Input statement fault output ID must be "
+					+ "equal to output statement fault ID");
 		}
 		
+		// Check to see if nominalConn is a component connection in AADL
 	}
 	
 	// Duration statements
 	@Check
 	public void checkDuration(DurationStatement durationStmt){
-		if(!(durationStmt.getTc().equals("permanent") || durationStmt.getTc().equals("transient"))){
-			//durationStmt.getTc().
-			//error(durationStmt, "Temporal constraint must be 'transient' or 'permanent'");
-		}
-//		checkTimeInterval(durationStmt.getInterv());
+		
+		
 	}
 	
 	
 	// Trigger Statements
 	@Check
 	public void checkTriggerStatement(TriggerStatement triggerStmt){
+		
 		// First check the trigger condition
 		checkTriggerCondition(triggerStmt.getCond());
 		
@@ -123,9 +126,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	public void checkTriggerCondition(TriggerCondition tc){
 		if(tc != null){
 			
-			// Figure out how to check expressions through agree validation
-			
-			//checkExpr(tc.getExprList());
+			// Make sure expression list for trigger conditions is nonempty
+			EList<Expr> list = tc.getExprList();
+			if(list.isEmpty()) {
+				error(tc, "Trigger condition list cannot be empty.");
+			}
 		}
 	}
 	
@@ -134,15 +139,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkEqStatement(EqValue eqStmt){
 		
-		// check for empty lhs list
-		if(eqStmt.getLhs().isEmpty()){
-			error(eqStmt, "Cannot have an empty list on lhs.");
-		}
-		
-		// Check to make sure we are within the safety annex
+		// Check to make sure we are within a fault statement
 		AnnexLibrary library = EcoreUtil2.getContainerOfType(eqStmt, AnnexLibrary.class);
 		if (library != null) {
-			error(eqStmt, "Equation statments are only allowed in safety annexes");
+			error(eqStmt, "Equation statments are only allowed in fault statements.");
 		}
 		
 		
@@ -159,8 +159,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkSetEqStatement(SetEq setEq){
 		
-		// Pass Arg to Agree's validation class
-//		checkArg(setEq.getLhs_set());
+		if(setEq.getList().isEmpty()){
+			error(setEq, "Set cannot be empty.");
+		}
 		
 		// Try casting string to integer, catch exceptions to print out error
 		Integer result = 0;
