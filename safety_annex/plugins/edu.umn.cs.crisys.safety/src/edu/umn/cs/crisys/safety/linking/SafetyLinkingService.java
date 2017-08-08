@@ -40,6 +40,9 @@ import com.rockwellcollins.atc.agree.agree.RecordType;
 import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
 
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.SpecStatement;
+
 public class SafetyLinkingService extends PropertiesLinkingService{
 
 	public SafetyLinkingService() {
@@ -66,7 +69,9 @@ public class SafetyLinkingService extends PropertiesLinkingService{
                 || context instanceof RecordUpdateExpr
                 || context instanceof EventExpr
                 || context instanceof OrderStatement
-                || context instanceof ConnectionStatement) {
+                || context instanceof ConnectionStatement
+                || context instanceof SpecStatement
+                || context instanceof FaultSubcomponent) {
 
             //EObject e = findClassifier(context, reference, name);
         	EObject e = getIndexedObject(context, reference, name);

@@ -4,6 +4,8 @@ package edu.umn.cs.crisys.safety.safety;
 
 import com.rockwellcollins.atc.agree.agree.Expr;
 
+import org.osate.aadl2.NamedElement;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Output Statement</b></em>'.
@@ -24,30 +26,30 @@ import com.rockwellcollins.atc.agree.agree.Expr;
 public interface OutputStatement extends FaultSubcomponent
 {
   /**
-   * Returns the value of the '<em><b>Out conn</b></em>' attribute.
+   * Returns the value of the '<em><b>Out conn</b></em>' reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Out conn</em>' attribute isn't clear,
+   * If the meaning of the '<em>Out conn</em>' reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Out conn</em>' attribute.
-   * @see #setOut_conn(String)
+   * @return the value of the '<em>Out conn</em>' reference.
+   * @see #setOut_conn(NamedElement)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Out_conn()
    * @model
    * @generated
    */
-  String getOut_conn();
+  NamedElement getOut_conn();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getOut_conn <em>Out conn</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getOut_conn <em>Out conn</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Out conn</em>' attribute.
+   * @param value the new value of the '<em>Out conn</em>' reference.
    * @see #getOut_conn()
    * @generated
    */
-  void setOut_conn(String value);
+  void setOut_conn(NamedElement value);
 
   /**
    * Returns the value of the '<em><b>Nom conn</b></em>' containment reference.

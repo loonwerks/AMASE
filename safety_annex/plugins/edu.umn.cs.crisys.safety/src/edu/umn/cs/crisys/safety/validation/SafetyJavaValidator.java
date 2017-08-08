@@ -13,8 +13,12 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
+import org.osate.aadl2.NamedElement;
+
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
+import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.validation.AgreeType;
 
@@ -68,9 +72,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	// Need input here in order to make sure output names match
 	@Check
 	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
-		String outConn = outputStmt.getOut_conn();
+		NamedElement outConn = outputStmt.getOut_conn();
 		Expr nominalConn = outputStmt.getNom_conn();
-		String inFaultConn = inputStmt.getOut_conn();
+		Arg inFaultConn = inputStmt.getOut_conn();
 		
 		if(!(inFaultConn.equals(outConn))){
 			error(outputStmt, "Input statement fault output ID must be "

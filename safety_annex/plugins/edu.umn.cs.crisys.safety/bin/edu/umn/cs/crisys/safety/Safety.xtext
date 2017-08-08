@@ -31,11 +31,12 @@ Element returns aadl2::Element:
 @Override 
 SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=Expr  
 			faultDefinitions+=(FaultSubcomponent)* ;
+
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID';' 
-	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr';' 
+	{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg';' 
+	| {OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| SafetyEqStatement ;

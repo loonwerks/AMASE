@@ -349,37 +349,42 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0()); 
+	    }
+		lv_in_conn_3_0=ruleExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
-        }
-	otherlv_3=RULE_ID
-	{
-		newLeafNode(otherlv_3, grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementCrossReference_0_3_0()); 
-	}
+       		set(
+       			$current, 
+       			"in_conn",
+        		lv_in_conn_3_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
+	        afterParserOrEnumRuleCall();
+	    }
 
 )
 )
-	otherlv_4=HyphenMinusGreaterThanSign
+	otherlv_4=Comma
     {
-    	newLeafNode(otherlv_4, grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_0_4());
+    	newLeafNode(otherlv_4, grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_0_4());
     }
 (
 (
-		lv_out_conn_5_0=RULE_ID
-		{
-			newLeafNode(lv_out_conn_5_0, grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); 
-		}
-		{
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0()); 
+	    }
+		lv_out_conn_5_0=ruleArg		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
        			"out_conn",
         		lv_out_conn_5_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
+        		"com.rockwellcollins.atc.agree.Agree.Arg");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )
@@ -407,26 +412,21 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		lv_out_conn_10_0=RULE_ID
 		{
-			newLeafNode(lv_out_conn_10_0, grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_1_3_0()); 
-		}
-		{
-	        if ($current==null) {
+			if ($current==null) {
 	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		setWithLastConsumed(
-       			$current, 
-       			"out_conn",
-        		lv_out_conn_10_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
-	    }
+        }
+	otherlv_10=RULE_ID
+	{
+		newLeafNode(otherlv_10, grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementCrossReference_1_3_0()); 
+	}
 
 )
 )
-	otherlv_11=HyphenMinusGreaterThanSign
+	otherlv_11=Comma
     {
-    	newLeafNode(otherlv_11, grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_1_4());
+    	newLeafNode(otherlv_11, grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_1_4());
     }
 (
 (

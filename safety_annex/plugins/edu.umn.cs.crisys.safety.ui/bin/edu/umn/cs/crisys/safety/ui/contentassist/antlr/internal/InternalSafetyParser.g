@@ -4179,11 +4179,11 @@ rule__FaultSubcomponent__Group_0__4__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_0_4()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_0_4()); }
 
-	HyphenMinusGreaterThanSign 
+	Comma 
 
-{ after(grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_0_4()); }
+{ after(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_0_4()); }
 )
 
 ;
@@ -4405,11 +4405,11 @@ rule__FaultSubcomponent__Group_1__4__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_1_4()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_1_4()); }
 
-	HyphenMinusGreaterThanSign 
+	Comma 
 
-{ after(grammarAccess.getFaultSubcomponentAccess().getHyphenMinusGreaterThanSignKeyword_1_4()); }
+{ after(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_1_4()); }
 )
 
 ;
@@ -25503,12 +25503,8 @@ rule__FaultSubcomponent__In_connAssignment_0_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementCrossReference_0_3_0()); }
-(
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementIDTerminalRuleCall_0_3_0_1()); }
-	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementIDTerminalRuleCall_0_3_0_1()); }
-)
-{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connNamedElementCrossReference_0_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0()); }
+	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0()); }
 )
 
 ;
@@ -25522,8 +25518,8 @@ rule__FaultSubcomponent__Out_connAssignment_0_5
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); }
-	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_0_5_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0()); }
+	ruleArg{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0()); }
 )
 
 ;
@@ -25537,8 +25533,12 @@ rule__FaultSubcomponent__Out_connAssignment_1_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_1_3_0()); }
-	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connIDTerminalRuleCall_1_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementCrossReference_1_3_0()); }
+(
+{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementIDTerminalRuleCall_1_3_0_1()); }
+	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementIDTerminalRuleCall_1_3_0_1()); }
+)
+{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementCrossReference_1_3_0()); }
 )
 
 ;

@@ -307,18 +307,20 @@ annex safety {**
 		
 	fault "Hi": faults.fail_to(1.0, 2.0, true)
 		
-		--eq test : common::command.pedal = pedals.signal1;
+		eq test : common::command.pedal = pedals.signal1;  
 		eq testVal :bool =  true;
 		eq testVal1 :int = 5;
-		input:  pedals.signal1-> faultOut; 
-		output: faultOut -> faults.historically(false);
+		input:  pedals.signal1, faultOut: common::command.pedal;   
+		output: faultOut, bscu.pedal1;
 		
 		duration: permanent [0,2];
 		trigger: enabler {true, testVal, if true then false else true} [0.15]; 
 		eq testVal2 :real =  9;
 		intervaleq testInterval = [0.0,5.0];
 		seteq testSet = {1,2,3};
-	  
+
+	
+	    
 **};
 
 	

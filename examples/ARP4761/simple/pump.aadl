@@ -31,12 +31,12 @@ annex AGREE {**
 	    pressure_output.val = faults.fail_to(nominal_pressure_output.val, alt_val.val, stuck_at_occurred);	
 **}	;
 
-annex safety {**
-	   fault "Hi" : stuck_at
-	     eq val: bool;
-	    -- input : pressure_output -> faultOutput;
-	     --output: val -> val; 
-**};
+--annex safety {**
+--	   fault "Hi" : stuck_at
+--	     eq val: bool;
+--	    -- input : pressure_output -> faultOutput;
+--	     --output: val -> val; 
+--**};
 
 annex EMV2 {**
 	use types error_library;
@@ -76,9 +76,7 @@ annex EMV2 {**
 
 
 	
-annex foobar {**
-	
-**};
+
 
 end pump;
 

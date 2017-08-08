@@ -193,19 +193,19 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cInputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cIn_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final CrossReference cIn_connNamedElementCrossReference_0_3_0 = (CrossReference)cIn_connAssignment_0_3.eContents().get(0);
-		private final RuleCall cIn_connNamedElementIDTerminalRuleCall_0_3_0_1 = (RuleCall)cIn_connNamedElementCrossReference_0_3_0.eContents().get(1);
-		private final Keyword cHyphenMinusGreaterThanSignKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
+		private final RuleCall cIn_connExprParserRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
+		private final Keyword cCommaKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final RuleCall cOut_connIDTerminalRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
+		private final RuleCall cOut_connArgParserRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cOutputKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Keyword cColonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cOut_connAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final RuleCall cOut_connIDTerminalRuleCall_1_3_0 = (RuleCall)cOut_connAssignment_1_3.eContents().get(0);
-		private final Keyword cHyphenMinusGreaterThanSignKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
+		private final CrossReference cOut_connNamedElementCrossReference_1_3_0 = (CrossReference)cOut_connAssignment_1_3.eContents().get(0);
+		private final RuleCall cOut_connNamedElementIDTerminalRuleCall_1_3_0_1 = (RuleCall)cOut_connNamedElementCrossReference_1_3_0.eContents().get(1);
+		private final Keyword cCommaKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		private final Assignment cNom_connAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
 		private final RuleCall cNom_connExprParserRuleCall_1_5_0 = (RuleCall)cNom_connAssignment_1_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
@@ -233,19 +233,20 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
-		//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr ';'
+		//	{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';'
+		//	| {OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';' | {OutputStatement} 'output' ':'
-		//out_conn=ID '->' nom_conn=Expr ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';' |
-		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
+		//{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';' | {OutputStatement} 'output' ':'
+		//out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint
+		//interv=Interval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' |
+		//SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
+		//{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -257,28 +258,25 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//in_conn=[aadl2::NamedElement]
+		//in_conn=Expr
 		public Assignment getIn_connAssignment_0_3() { return cIn_connAssignment_0_3; }
 
-		//[aadl2::NamedElement]
-		public CrossReference getIn_connNamedElementCrossReference_0_3_0() { return cIn_connNamedElementCrossReference_0_3_0; }
+		//Expr
+		public RuleCall getIn_connExprParserRuleCall_0_3_0() { return cIn_connExprParserRuleCall_0_3_0; }
 
-		//ID
-		public RuleCall getIn_connNamedElementIDTerminalRuleCall_0_3_0_1() { return cIn_connNamedElementIDTerminalRuleCall_0_3_0_1; }
+		//','
+		public Keyword getCommaKeyword_0_4() { return cCommaKeyword_0_4; }
 
-		//'->'
-		public Keyword getHyphenMinusGreaterThanSignKeyword_0_4() { return cHyphenMinusGreaterThanSignKeyword_0_4; }
-
-		//out_conn=ID
+		//out_conn=Arg
 		public Assignment getOut_connAssignment_0_5() { return cOut_connAssignment_0_5; }
 
-		//ID
-		public RuleCall getOut_connIDTerminalRuleCall_0_5_0() { return cOut_connIDTerminalRuleCall_0_5_0; }
+		//Arg
+		public RuleCall getOut_connArgParserRuleCall_0_5_0() { return cOut_connArgParserRuleCall_0_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_0_6() { return cSemicolonKeyword_0_6; }
 
-		//{OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr ';'
+		//{OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';'
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OutputStatement}
@@ -290,14 +288,17 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_1_2() { return cColonKeyword_1_2; }
 
-		//out_conn=ID
+		//out_conn=[aadl2::NamedElement]
 		public Assignment getOut_connAssignment_1_3() { return cOut_connAssignment_1_3; }
 
-		//ID
-		public RuleCall getOut_connIDTerminalRuleCall_1_3_0() { return cOut_connIDTerminalRuleCall_1_3_0; }
+		//[aadl2::NamedElement]
+		public CrossReference getOut_connNamedElementCrossReference_1_3_0() { return cOut_connNamedElementCrossReference_1_3_0; }
 
-		//'->'
-		public Keyword getHyphenMinusGreaterThanSignKeyword_1_4() { return cHyphenMinusGreaterThanSignKeyword_1_4; }
+		//ID
+		public RuleCall getOut_connNamedElementIDTerminalRuleCall_1_3_0_1() { return cOut_connNamedElementIDTerminalRuleCall_1_3_0_1; }
+
+		//','
+		public Keyword getCommaKeyword_1_4() { return cCommaKeyword_1_4; }
 
 		//nom_conn=Expr
 		public Assignment getNom_connAssignment_1_5() { return cNom_connAssignment_1_5; }
@@ -1004,8 +1005,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=[aadl2::NamedElement] '->' out_conn=ID ';'
-	//	| {OutputStatement} 'output' ':' out_conn=ID '->' nom_conn=Expr ';'
+	//	{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';'
+	//	| {OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 	//	| SafetyEqStatement;
