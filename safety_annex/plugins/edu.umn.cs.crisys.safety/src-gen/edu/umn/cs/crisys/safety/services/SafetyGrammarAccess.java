@@ -145,16 +145,16 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cStrSTRINGTerminalRuleCall_2_0 = (RuleCall)cStrAssignment_2.eContents().get(0);
 		private final Keyword cColonKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		private final Assignment cFaultDefNameAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cFaultDefNameExprParserRuleCall_4_0 = (RuleCall)cFaultDefNameAssignment_4.eContents().get(0);
+		private final RuleCall cFaultDefNameNestedDotIDParserRuleCall_4_0 = (RuleCall)cFaultDefNameAssignment_4.eContents().get(0);
 		private final Assignment cFaultDefinitionsAssignment_5 = (Assignment)cGroup.eContents().get(5);
 		private final RuleCall cFaultDefinitionsFaultSubcomponentParserRuleCall_5_0 = (RuleCall)cFaultDefinitionsAssignment_5.eContents().get(0);
 		
 		//@ Override SpecStatement:
-		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=Expr
+		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
 		//	faultDefinitions+=FaultSubcomponent*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=Expr faultDefinitions+=FaultSubcomponent*
+		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID faultDefinitions+=FaultSubcomponent*
 		public Group getGroup() { return cGroup; }
 
 		//{FaultStatement}
@@ -172,11 +172,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_3() { return cColonKeyword_3; }
 
-		//faultDefName=Expr
+		//faultDefName=NestedDotID
 		public Assignment getFaultDefNameAssignment_4() { return cFaultDefNameAssignment_4; }
 
-		//Expr
-		public RuleCall getFaultDefNameExprParserRuleCall_4_0() { return cFaultDefNameExprParserRuleCall_4_0; }
+		//NestedDotID
+		public RuleCall getFaultDefNameNestedDotIDParserRuleCall_4_0() { return cFaultDefNameNestedDotIDParserRuleCall_4_0; }
 
 		//faultDefinitions+=FaultSubcomponent*
 		public Assignment getFaultDefinitionsAssignment_5() { return cFaultDefinitionsAssignment_5; }
@@ -192,22 +192,21 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cInputStatementAction_0_0 = (Action)cGroup_0.eContents().get(0);
 		private final Keyword cInputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
-		private final Assignment cIn_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final RuleCall cIn_connExprParserRuleCall_0_3_0 = (RuleCall)cIn_connAssignment_0_3.eContents().get(0);
-		private final Keyword cCommaKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
-		private final Assignment cOut_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final RuleCall cOut_connArgParserRuleCall_0_5_0 = (RuleCall)cOut_connAssignment_0_5.eContents().get(0);
+		private final Assignment cFault_in_connAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
+		private final RuleCall cFault_in_connArgParserRuleCall_0_3_0 = (RuleCall)cFault_in_connAssignment_0_3.eContents().get(0);
+		private final Keyword cLessThanSignHyphenMinusKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
+		private final Assignment cNom_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
+		private final RuleCall cNom_connExprParserRuleCall_0_5_0 = (RuleCall)cNom_connAssignment_0_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cOutputKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Keyword cColonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final Assignment cOut_connAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final CrossReference cOut_connNamedElementCrossReference_1_3_0 = (CrossReference)cOut_connAssignment_1_3.eContents().get(0);
-		private final RuleCall cOut_connNamedElementIDTerminalRuleCall_1_3_0_1 = (RuleCall)cOut_connNamedElementCrossReference_1_3_0.eContents().get(1);
-		private final Keyword cCommaKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
-		private final Assignment cNom_connAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
-		private final RuleCall cNom_connExprParserRuleCall_1_5_0 = (RuleCall)cNom_connAssignment_1_5.eContents().get(0);
+		private final Assignment cNom_connAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
+		private final RuleCall cNom_connExprParserRuleCall_1_3_0 = (RuleCall)cNom_connAssignment_1_3.eContents().get(0);
+		private final Keyword cLessThanSignHyphenMinusKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
+		private final Assignment cFault_out_connAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
+		private final RuleCall cFault_out_connArgParserRuleCall_1_5_0 = (RuleCall)cFault_out_connAssignment_1_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final Action cDurationStatementAction_2_0 = (Action)cGroup_2.eContents().get(0);
@@ -233,20 +232,21 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';'
-		//	| {OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';'
+		//	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';'
+		//	//| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
+		//	| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';' | {OutputStatement} 'output' ':'
-		//out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint
-		//interv=Interval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' |
-		//SafetyEqStatement
+		//{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';' //| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
+		//| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';' | {DurationStatement} 'duration' ':'
+		//tc=TemporalConstraint interv=Interval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('['
+		//probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';'
+		//{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -258,25 +258,25 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//in_conn=Expr
-		public Assignment getIn_connAssignment_0_3() { return cIn_connAssignment_0_3; }
-
-		//Expr
-		public RuleCall getIn_connExprParserRuleCall_0_3_0() { return cIn_connExprParserRuleCall_0_3_0; }
-
-		//','
-		public Keyword getCommaKeyword_0_4() { return cCommaKeyword_0_4; }
-
-		//out_conn=Arg
-		public Assignment getOut_connAssignment_0_5() { return cOut_connAssignment_0_5; }
+		//fault_in_conn=Arg
+		public Assignment getFault_in_connAssignment_0_3() { return cFault_in_connAssignment_0_3; }
 
 		//Arg
-		public RuleCall getOut_connArgParserRuleCall_0_5_0() { return cOut_connArgParserRuleCall_0_5_0; }
+		public RuleCall getFault_in_connArgParserRuleCall_0_3_0() { return cFault_in_connArgParserRuleCall_0_3_0; }
+
+		//'<-'
+		public Keyword getLessThanSignHyphenMinusKeyword_0_4() { return cLessThanSignHyphenMinusKeyword_0_4; }
+
+		//nom_conn=Expr
+		public Assignment getNom_connAssignment_0_5() { return cNom_connAssignment_0_5; }
+
+		//Expr
+		public RuleCall getNom_connExprParserRuleCall_0_5_0() { return cNom_connExprParserRuleCall_0_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_0_6() { return cSemicolonKeyword_0_6; }
 
-		//{OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';'
+		//{OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OutputStatement}
@@ -288,23 +288,20 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_1_2() { return cColonKeyword_1_2; }
 
-		//out_conn=[aadl2::NamedElement]
-		public Assignment getOut_connAssignment_1_3() { return cOut_connAssignment_1_3; }
-
-		//[aadl2::NamedElement]
-		public CrossReference getOut_connNamedElementCrossReference_1_3_0() { return cOut_connNamedElementCrossReference_1_3_0; }
-
-		//ID
-		public RuleCall getOut_connNamedElementIDTerminalRuleCall_1_3_0_1() { return cOut_connNamedElementIDTerminalRuleCall_1_3_0_1; }
-
-		//','
-		public Keyword getCommaKeyword_1_4() { return cCommaKeyword_1_4; }
-
 		//nom_conn=Expr
-		public Assignment getNom_connAssignment_1_5() { return cNom_connAssignment_1_5; }
+		public Assignment getNom_connAssignment_1_3() { return cNom_connAssignment_1_3; }
 
 		//Expr
-		public RuleCall getNom_connExprParserRuleCall_1_5_0() { return cNom_connExprParserRuleCall_1_5_0; }
+		public RuleCall getNom_connExprParserRuleCall_1_3_0() { return cNom_connExprParserRuleCall_1_3_0; }
+
+		//'<-'
+		public Keyword getLessThanSignHyphenMinusKeyword_1_4() { return cLessThanSignHyphenMinusKeyword_1_4; }
+
+		//fault_out_conn=Arg
+		public Assignment getFault_out_connAssignment_1_5() { return cFault_out_connAssignment_1_5; }
+
+		//Arg
+		public RuleCall getFault_out_connArgParserRuleCall_1_5_0() { return cFault_out_connArgParserRuleCall_1_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_1_6() { return cSemicolonKeyword_1_6; }
@@ -386,6 +383,10 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cTransientConstraintAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cTransientKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
+		////	| OutputEqStatement;
+		////OutputEqStatement:
+		////	{FaultOutputEqStmt} fault_output_eq=[aadl2::NamedElement|ID] '=' eq_stmt=NamedID';'
+		////;
 		//TemporalConstraint:
 		//	{PermanentConstraint} 'permanent'
 		//	| {TransientConstraint} 'transient';
@@ -994,7 +995,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//@ Override SpecStatement:
-	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=Expr
+	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
 	//	faultDefinitions+=FaultSubcomponent*;
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
@@ -1005,8 +1006,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg ';'
-	//	| {OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement] ',' nom_conn=Expr ';'
+	//	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';'
+	//	//| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
+	//	| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 	//	| SafetyEqStatement;
@@ -1018,6 +1020,10 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getFaultSubcomponentAccess().getRule();
 	}
 
+	////	| OutputEqStatement;
+	////OutputEqStatement:
+	////	{FaultOutputEqStmt} fault_output_eq=[aadl2::NamedElement|ID] '=' eq_stmt=NamedID';'
+	////;
 	//TemporalConstraint:
 	//	{PermanentConstraint} 'permanent'
 	//	| {TransientConstraint} 'transient';

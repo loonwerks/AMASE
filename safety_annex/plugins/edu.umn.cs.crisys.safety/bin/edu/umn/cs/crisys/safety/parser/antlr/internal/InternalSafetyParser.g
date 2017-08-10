@@ -277,9 +277,9 @@ ruleSpecStatement returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameExprParserRuleCall_4_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameNestedDotIDParserRuleCall_4_0()); 
 	    }
-		lv_faultDefName_4_0=ruleExpr		{
+		lv_faultDefName_4_0=ruleNestedDotID		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
 	        }
@@ -287,7 +287,7 @@ ruleSpecStatement returns [EObject current=null]
        			$current, 
        			"faultDefName",
         		lv_faultDefName_4_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -350,40 +350,40 @@ ruleFaultSubcomponent returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getFault_in_connArgParserRuleCall_0_3_0()); 
 	    }
-		lv_in_conn_3_0=ruleExpr		{
+		lv_fault_in_conn_3_0=ruleArg		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
-       			"in_conn",
-        		lv_in_conn_3_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
+       			"fault_in_conn",
+        		lv_fault_in_conn_3_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Arg");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_4=Comma
+	otherlv_4=LessThanSignHyphenMinus
     {
-    	newLeafNode(otherlv_4, grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_0_4());
+    	newLeafNode(otherlv_4, grammarAccess.getFaultSubcomponentAccess().getLessThanSignHyphenMinusKeyword_0_4());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); 
 	    }
-		lv_out_conn_5_0=ruleArg		{
+		lv_nom_conn_5_0=ruleExpr		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
-       			"out_conn",
-        		lv_out_conn_5_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Arg");
+       			"nom_conn",
+        		lv_nom_conn_5_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -412,36 +412,41 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
-	        }
-        }
-	otherlv_10=RULE_ID
-	{
-		newLeafNode(otherlv_10, grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementCrossReference_1_3_0()); 
-	}
-
-)
-)
-	otherlv_11=Comma
-    {
-    	newLeafNode(otherlv_11, grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_1_4());
-    }
-(
-(
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_5_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_3_0()); 
 	    }
-		lv_nom_conn_12_0=ruleExpr		{
+		lv_nom_conn_10_0=ruleExpr		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"nom_conn",
-        		lv_nom_conn_12_0, 
+        		lv_nom_conn_10_0, 
         		"com.rockwellcollins.atc.agree.Agree.Expr");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_11=LessThanSignHyphenMinus
+    {
+    	newLeafNode(otherlv_11, grammarAccess.getFaultSubcomponentAccess().getLessThanSignHyphenMinusKeyword_1_4());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getFault_out_connArgParserRuleCall_1_5_0()); 
+	    }
+		lv_fault_out_conn_12_0=ruleArg		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"fault_out_conn",
+        		lv_fault_out_conn_12_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Arg");
 	        afterParserOrEnumRuleCall();
 	    }
 

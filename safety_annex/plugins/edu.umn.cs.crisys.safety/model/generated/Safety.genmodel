@@ -38,15 +38,17 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//InputStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/fault_in_conn"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/nom_conn"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_conn"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/out_conn"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/nom_conn"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connExpr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connPattern"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//OutputStatement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/out_conn"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/nom_conn"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/fault_out_conn"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/out_conn"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//DurationStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//DurationStatement/tc"/>
@@ -77,6 +79,12 @@
     <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenRightInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OutputEqStatement"/>
+    <genClasses ecoreClass="Safety.ecore#//FaultOutputEqStmt">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputEqStmt/fault_output_eq"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputEqStmt/eq_stmt"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//TestOutputEqStatement"/>
     <genClasses ecoreClass="Safety.ecore#//IntegerInterval">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntegerInterval/low"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntegerInterval/high"/>

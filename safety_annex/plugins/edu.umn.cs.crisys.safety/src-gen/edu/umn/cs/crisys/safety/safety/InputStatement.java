@@ -14,8 +14,8 @@ import com.rockwellcollins.atc.agree.agree.Expr;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn <em>In conn</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.InputStatement#getOut_conn <em>Out conn</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.InputStatement#getFault_in_conn <em>Fault in conn</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn <em>Nom conn</em>}</li>
  * </ul>
  *
  * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement()
@@ -25,55 +25,55 @@ import com.rockwellcollins.atc.agree.agree.Expr;
 public interface InputStatement extends FaultSubcomponent
 {
   /**
-   * Returns the value of the '<em><b>In conn</b></em>' containment reference.
+   * Returns the value of the '<em><b>Fault in conn</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>In conn</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Fault in conn</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>In conn</em>' containment reference.
-   * @see #setIn_conn(Expr)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement_In_conn()
+   * @return the value of the '<em>Fault in conn</em>' containment reference.
+   * @see #setFault_in_conn(Arg)
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement_Fault_in_conn()
    * @model containment="true"
    * @generated
    */
-  Expr getIn_conn();
+  Arg getFault_in_conn();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getIn_conn <em>In conn</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getFault_in_conn <em>Fault in conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>In conn</em>' containment reference.
-   * @see #getIn_conn()
+   * @param value the new value of the '<em>Fault in conn</em>' containment reference.
+   * @see #getFault_in_conn()
    * @generated
    */
-  void setIn_conn(Expr value);
+  void setFault_in_conn(Arg value);
 
   /**
-   * Returns the value of the '<em><b>Out conn</b></em>' containment reference.
+   * Returns the value of the '<em><b>Nom conn</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Out conn</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Nom conn</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Out conn</em>' containment reference.
-   * @see #setOut_conn(Arg)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement_Out_conn()
+   * @return the value of the '<em>Nom conn</em>' containment reference.
+   * @see #setNom_conn(Expr)
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement_Nom_conn()
    * @model containment="true"
    * @generated
    */
-  Arg getOut_conn();
+  Expr getNom_conn();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getOut_conn <em>Out conn</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn <em>Nom conn</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Out conn</em>' containment reference.
-   * @see #getOut_conn()
+   * @param value the new value of the '<em>Nom conn</em>' containment reference.
+   * @see #getNom_conn()
    * @generated
    */
-  void setOut_conn(Arg value);
+  void setNom_conn(Expr value);
 
 } // InputStatement

@@ -60,6 +60,7 @@ import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess;
 		tokenNameToValue.put("FullStopFullStop", "'..'");
 		tokenNameToValue.put("ColonColon", "'::'");
 		tokenNameToValue.put("ColonEqualsSign", "':='");
+		tokenNameToValue.put("LessThanSignHyphenMinus", "'<-'");
 		tokenNameToValue.put("LessThanSignEqualsSign", "'<='");
 		tokenNameToValue.put("LessThanSignGreaterThanSign", "'<>'");
 		tokenNameToValue.put("EqualsSignGreaterThanSign", "'=>'");
@@ -4150,9 +4151,9 @@ rule__FaultSubcomponent__Group_0__3__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connAssignment_0_3()); }
-(rule__FaultSubcomponent__In_connAssignment_0_3)
-{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connAssignment_0_3()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_in_connAssignment_0_3()); }
+(rule__FaultSubcomponent__Fault_in_connAssignment_0_3)
+{ after(grammarAccess.getFaultSubcomponentAccess().getFault_in_connAssignment_0_3()); }
 )
 
 ;
@@ -4179,11 +4180,11 @@ rule__FaultSubcomponent__Group_0__4__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_0_4()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getLessThanSignHyphenMinusKeyword_0_4()); }
 
-	Comma 
+	LessThanSignHyphenMinus 
 
-{ after(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_0_4()); }
+{ after(grammarAccess.getFaultSubcomponentAccess().getLessThanSignHyphenMinusKeyword_0_4()); }
 )
 
 ;
@@ -4210,9 +4211,9 @@ rule__FaultSubcomponent__Group_0__5__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connAssignment_0_5()); }
-(rule__FaultSubcomponent__Out_connAssignment_0_5)
-{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connAssignment_0_5()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_0_5()); }
+(rule__FaultSubcomponent__Nom_connAssignment_0_5)
+{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_0_5()); }
 )
 
 ;
@@ -4376,9 +4377,9 @@ rule__FaultSubcomponent__Group_1__3__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connAssignment_1_3()); }
-(rule__FaultSubcomponent__Out_connAssignment_1_3)
-{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connAssignment_1_3()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_3()); }
+(rule__FaultSubcomponent__Nom_connAssignment_1_3)
+{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_3()); }
 )
 
 ;
@@ -4405,11 +4406,11 @@ rule__FaultSubcomponent__Group_1__4__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_1_4()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getLessThanSignHyphenMinusKeyword_1_4()); }
 
-	Comma 
+	LessThanSignHyphenMinus 
 
-{ after(grammarAccess.getFaultSubcomponentAccess().getCommaKeyword_1_4()); }
+{ after(grammarAccess.getFaultSubcomponentAccess().getLessThanSignHyphenMinusKeyword_1_4()); }
 )
 
 ;
@@ -4436,9 +4437,9 @@ rule__FaultSubcomponent__Group_1__5__Impl
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_5()); }
-(rule__FaultSubcomponent__Nom_connAssignment_1_5)
-{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_5()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_out_connAssignment_1_5()); }
+(rule__FaultSubcomponent__Fault_out_connAssignment_1_5)
+{ after(grammarAccess.getFaultSubcomponentAccess().getFault_out_connAssignment_1_5()); }
 )
 
 ;
@@ -25473,8 +25474,8 @@ rule__SpecStatement__FaultDefNameAssignment_4
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameExprParserRuleCall_4_0()); }
-	ruleExpr{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameExprParserRuleCall_4_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameNestedDotIDParserRuleCall_4_0()); }
+	ruleNestedDotID{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameNestedDotIDParserRuleCall_4_0()); }
 )
 
 ;
@@ -25497,14 +25498,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__FaultSubcomponent__In_connAssignment_0_3
+rule__FaultSubcomponent__Fault_in_connAssignment_0_3
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0()); }
-	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_in_connArgParserRuleCall_0_3_0()); }
+	ruleArg{ after(grammarAccess.getFaultSubcomponentAccess().getFault_in_connArgParserRuleCall_0_3_0()); }
 )
 
 ;
@@ -25512,14 +25513,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__FaultSubcomponent__Out_connAssignment_0_5
+rule__FaultSubcomponent__Nom_connAssignment_0_5
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0()); }
-	ruleArg{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); }
+	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); }
 )
 
 ;
@@ -25527,18 +25528,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__FaultSubcomponent__Out_connAssignment_1_3
+rule__FaultSubcomponent__Nom_connAssignment_1_3
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementCrossReference_1_3_0()); }
-(
-{ before(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementIDTerminalRuleCall_1_3_0_1()); }
-	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementIDTerminalRuleCall_1_3_0_1()); }
-)
-{ after(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementCrossReference_1_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_3_0()); }
+	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_3_0()); }
 )
 
 ;
@@ -25546,14 +25543,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__FaultSubcomponent__Nom_connAssignment_1_5
+rule__FaultSubcomponent__Fault_out_connAssignment_1_5
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_5_0()); }
-	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_5_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_out_connArgParserRuleCall_1_5_0()); }
+	ruleArg{ after(grammarAccess.getFaultSubcomponentAccess().getFault_out_connArgParserRuleCall_1_5_0()); }
 )
 
 ;

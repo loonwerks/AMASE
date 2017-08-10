@@ -15,10 +15,10 @@ import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.NamedElement;
 
-import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
-import com.rockwellcollins.atc.agree.agree.NamedID;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
+import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.validation.AgreeType;
 
@@ -41,48 +41,84 @@ import edu.umn.cs.crisys.safety.safety.TriggerStatement;
  */
 public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	
-	// Change package to SafetyPackage instead of AgreePackage.
+	/*
+	 * (non-Javadoc)
+	 * @see com.rockwellcollins.atc.agree.validation.AgreeJavaValidator#isResponsible(java.util.Map, org.eclipse.emf.ecore.EObject)
+	 */
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 
 	@Check
+	/*
+	 * Puts out a warning if the fault description is an empty string. 
+	 * The description is optional, but shouldn't be ""
+	 * 
+	 * Checks that the nested dot id used as the fault name is a valid
+	 * node definition. 
+	 */
 	public void checkFaultSpecStmt(FaultStatement specStmt){
+		
+		NestedDotID nodeName = specStmt.getFaultDefName();
+		
+		// Check on fault description
 		if(specStmt.getStr().isEmpty()) {
 			warning(specStmt, "Fault description is optional, but should "
 					+ "not be an empty string.");
 		}
+		
+		// Check that the nested dot id (fault node name) is a valid node definition
+		NamedElement finalNodeName = getFinalNestId(nodeName);
+		if(!(finalNodeName instanceof NodeDefExpr)){
+			error(nodeName, "The fault name must be a valid node definition.");
+		}
+		
 	}
 	
 	
-	// Input Statements
+	/* Input Statements
+	 * 
+	 */
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		//String inConn = inputStmt.getIn_conn();
-		//String outConn = inputStmt.getOut_conn();
+		//Expr inConn = inputStmt.getIn_conn();
+		//Arg outConn = inputStmt.getOut_conn();
 		
-		//if(inConn==null){
-			//error(inConn, "Input connection cannot be null");
-			//error("Input connection cannot be null", SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN);
-		//}
+		// TODO: Check that input connection is a valid aadl name
+		
+//		if(inConn==null){
+//			error(inConn, "Input connection cannot be null");
+//		}
+		
+		//checkArg(outConn);
 		
 	}
 	
-	// Output Statements
-	// Need input here in order to make sure output names match
+	/* Output Statements
+	 * 
+	 */
 	@Check
 	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
-		NamedElement outConn = outputStmt.getOut_conn();
-		Expr nominalConn = outputStmt.getNom_conn();
-		Arg inFaultConn = inputStmt.getOut_conn();
+		/*
+		 * input: inputConnection (Expr), inFaultOutConn (Arg)
+		 * output: faultOutConn (NamedElement), nominalOutConn (Expr)
+		 */
+		//NamedElement faultOutConn = outputStmt.getOut_conn();
+		Expr nominalOutConn = outputStmt.getNom_conn();
+		//Arg inFaultOutConn = inputStmt.getOut_conn();
 		
-		if(!(inFaultConn.equals(outConn))){
-			error(outputStmt, "Input statement fault output ID must be "
-					+ "equal to output statement fault ID");
-		}
+//		if(!(faultOutConn.getName().equals(inFaultOutConn.getName()))){
+//			error(faultOutConn, "The fault output must refer to the fault output argument"
+//					+ " defined in input statement.");
+//		}
+		
 	}
 	
-	// Duration statements: Check interval for integer values
+	/*
+	 * Check Duration: 
+	 * Checks for valid integer interval, 
+	 * that the lower and upper integers in the interval are not constants.
+	 */
 	@Check
 	public void checkDuration(DurationStatement durationStmt){
 		
@@ -104,7 +140,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 	
 	
-	// Trigger Statements
+	/*
+	 *  Trigger Statements:
+	 *  Calls helper function to check trigger condition.
+	 *  
+	 *  Make sure probability statement is a valid probability 
+	 *  (real number between 0 and 1 inclusive)
+	 */
 	@Check
 	public void checkTriggerStatement(TriggerStatement triggerStmt){
 		
@@ -132,7 +174,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 	}
 	
-	// Checks nonempty list and only boolean values in expression list
+	/*
+	 * Trigger Condition: 
+	 * Checks nonempty list and only boolean values in expression list
+	 */
 	@Check
 	public void checkTriggerCondition(TriggerCondition tc){
 		if(tc != null){
@@ -157,7 +202,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 	
 	
-	// Check EqStatements: 
+	/*
+	 *  EqStatements: 
+	 *  Make sure you are within a fault statement. 
+	 */
 	@Check
 	public void checkEqStatement(EqValue eqStmt){
 		
@@ -168,7 +216,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 	}
 	
-	// Check the time interval passed in using Agree's method
+	/*
+	 * IntervalEqStatements:
+	 * Check the time interval consists of both integer or both real literal values. 
+	 * 
+	 */
 	@Check
 	public void checkIntervalEqStatement(IntervalEq intervalEq){
 		
@@ -189,7 +241,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	    }
 	}
 	
-	// Check the set eq statements for empty set or non-integer values
+	/*
+	 * SetEqStatements:
+	 * Check the set eq statements for empty set or non-integer values
+	 */
 	@Check
 	public void checkSetEqStatement(SetEq setEq){
 		

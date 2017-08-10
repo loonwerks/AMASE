@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -61,12 +61,12 @@ public interface FaultStatement extends SpecStatement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fault Def Name</em>' containment reference.
-   * @see #setFaultDefName(Expr)
+   * @see #setFaultDefName(NestedDotID)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getFaultStatement_FaultDefName()
    * @model containment="true"
    * @generated
    */
-  Expr getFaultDefName();
+  NestedDotID getFaultDefName();
 
   /**
    * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}' containment reference.
@@ -76,7 +76,7 @@ public interface FaultStatement extends SpecStatement
    * @see #getFaultDefName()
    * @generated
    */
-  void setFaultDefName(Expr value);
+  void setFaultDefName(NestedDotID value);
 
   /**
    * Returns the value of the '<em><b>Fault Definitions</b></em>' containment reference list.

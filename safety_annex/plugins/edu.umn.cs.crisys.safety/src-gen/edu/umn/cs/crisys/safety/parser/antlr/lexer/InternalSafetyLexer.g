@@ -204,6 +204,8 @@ ColonColon : ':'':';
 
 ColonEqualsSign : ':''=';
 
+LessThanSignHyphenMinus : '<''-';
+
 LessThanSignEqualsSign : '<''=';
 
 LessThanSignGreaterThanSign : '<''>';

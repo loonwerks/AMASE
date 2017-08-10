@@ -32,6 +32,7 @@ annex agree {**
 	let
 	   val_out = if (fail_occurred) then alt_val else val_in;
 	tel;
+	
 
 	 
 	-- Inverted: val_out = !input for the first step of failure, then after

@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
@@ -68,7 +68,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * @generated
    * @ordered
    */
-  protected Expr faultDefName;
+  protected NestedDotID faultDefName;
 
   /**
    * The cached value of the '{@link #getFaultDefinitions() <em>Fault Definitions</em>}' containment reference list.
@@ -129,7 +129,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expr getFaultDefName()
+  public NestedDotID getFaultDefName()
   {
     return faultDefName;
   }
@@ -139,9 +139,9 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFaultDefName(Expr newFaultDefName, NotificationChain msgs)
+  public NotificationChain basicSetFaultDefName(NestedDotID newFaultDefName, NotificationChain msgs)
   {
-    Expr oldFaultDefName = faultDefName;
+    NestedDotID oldFaultDefName = faultDefName;
     faultDefName = newFaultDefName;
     if (eNotificationRequired())
     {
@@ -156,7 +156,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFaultDefName(Expr newFaultDefName)
+  public void setFaultDefName(NestedDotID newFaultDefName)
   {
     if (newFaultDefName != faultDefName)
     {
@@ -239,7 +239,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr((String)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((Expr)newValue);
+        setFaultDefName((NestedDotID)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
@@ -263,7 +263,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr(STR_EDEFAULT);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((Expr)null);
+        setFaultDefName((NestedDotID)null);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();

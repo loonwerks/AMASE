@@ -331,10 +331,10 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getStrAssignment_2(), "rule__SpecStatement__StrAssignment_2");
 					put(grammarAccess.getSpecStatementAccess().getFaultDefNameAssignment_4(), "rule__SpecStatement__FaultDefNameAssignment_4");
 					put(grammarAccess.getSpecStatementAccess().getFaultDefinitionsAssignment_5(), "rule__SpecStatement__FaultDefinitionsAssignment_5");
-					put(grammarAccess.getFaultSubcomponentAccess().getIn_connAssignment_0_3(), "rule__FaultSubcomponent__In_connAssignment_0_3");
-					put(grammarAccess.getFaultSubcomponentAccess().getOut_connAssignment_0_5(), "rule__FaultSubcomponent__Out_connAssignment_0_5");
-					put(grammarAccess.getFaultSubcomponentAccess().getOut_connAssignment_1_3(), "rule__FaultSubcomponent__Out_connAssignment_1_3");
-					put(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_5(), "rule__FaultSubcomponent__Nom_connAssignment_1_5");
+					put(grammarAccess.getFaultSubcomponentAccess().getFault_in_connAssignment_0_3(), "rule__FaultSubcomponent__Fault_in_connAssignment_0_3");
+					put(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_0_5(), "rule__FaultSubcomponent__Nom_connAssignment_0_5");
+					put(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_3(), "rule__FaultSubcomponent__Nom_connAssignment_1_3");
+					put(grammarAccess.getFaultSubcomponentAccess().getFault_out_connAssignment_1_5(), "rule__FaultSubcomponent__Fault_out_connAssignment_1_5");
 					put(grammarAccess.getFaultSubcomponentAccess().getTcAssignment_2_3(), "rule__FaultSubcomponent__TcAssignment_2_3");
 					put(grammarAccess.getFaultSubcomponentAccess().getIntervAssignment_2_4(), "rule__FaultSubcomponent__IntervAssignment_2_4");
 					put(grammarAccess.getFaultSubcomponentAccess().getCondAssignment_3_3(), "rule__FaultSubcomponent__CondAssignment_3_3");

@@ -2,9 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
-
-import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,8 +14,8 @@ import org.osate.aadl2.NamedElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getOut_conn <em>Out conn</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out_conn <em>Fault out conn</em>}</li>
  * </ul>
  *
  * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement()
@@ -25,32 +24,6 @@ import org.osate.aadl2.NamedElement;
  */
 public interface OutputStatement extends FaultSubcomponent
 {
-  /**
-   * Returns the value of the '<em><b>Out conn</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Out conn</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Out conn</em>' reference.
-   * @see #setOut_conn(NamedElement)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Out_conn()
-   * @model
-   * @generated
-   */
-  NamedElement getOut_conn();
-
-  /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getOut_conn <em>Out conn</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Out conn</em>' reference.
-   * @see #getOut_conn()
-   * @generated
-   */
-  void setOut_conn(NamedElement value);
-
   /**
    * Returns the value of the '<em><b>Nom conn</b></em>' containment reference.
    * <!-- begin-user-doc -->
@@ -76,5 +49,31 @@ public interface OutputStatement extends FaultSubcomponent
    * @generated
    */
   void setNom_conn(Expr value);
+
+  /**
+   * Returns the value of the '<em><b>Fault out conn</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Fault out conn</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Fault out conn</em>' containment reference.
+   * @see #setFault_out_conn(Arg)
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Fault_out_conn()
+   * @model containment="true"
+   * @generated
+   */
+  Arg getFault_out_conn();
+
+  /**
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out_conn <em>Fault out conn</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Fault out conn</em>' containment reference.
+   * @see #getFault_out_conn()
+   * @generated
+   */
+  void setFault_out_conn(Arg value);
 
 } // OutputStatement

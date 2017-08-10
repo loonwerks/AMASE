@@ -177,8 +177,6 @@ system implementation wbs.federated
 	wheel      : system wheel::wheel_two_inputs.i ;
 	accumulator_valve : system valves::accumulator_valve;
 	
-	
-	
 	 
 connections
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
@@ -301,17 +299,18 @@ connections
 		
 		assert(fail_count <= 1);
 		
+		eq test2: real= faults.min(0.0, 1.1);
 		
 	**};
 annex safety {**
 		
-	fault "Hi": faults.fail_to(1.0, 2.0, true)
+	fault "Hi": faults.fail_to 
 		
 		eq test : common::command.pedal = pedals.signal1;  
 		eq testVal :bool =  true;
 		eq testVal1 :int = 5;
-		input:  pedals.signal1, faultOut: common::command.pedal;   
-		output: faultOut, bscu.pedal1;
+		input:  faultInput: common::command.pedal <- pedals.signal1 ;   
+		output: bscu.pedal1 <- faultOutput: common::command.pedal;
 		
 		duration: permanent [0,2];
 		trigger: enabler {true, testVal, if true then false else true} [0.15]; 
@@ -319,7 +318,21 @@ annex safety {**
 		intervaleq testInterval = [0.0,5.0];
 		seteq testSet = {1,2,3};
 
+	fault "Selector output stuck at nondeterministic value that is greater than threshold" : faults.fail_to
 	
+		input: faultGreenInput: common::pressure.i <- selector.green_output;
+		
+		output: selector.green_output <- faultGreenOutput:common::pressure.i;
+		
+		eq THRESHOLD:real = 100.0;
+		intervaleq failToValues = (100.0, 115.0];
+		seteq testSet = {1,2,3};
+		
+		
+		trigger: enabler {green_pump.pressure_output.val > THRESHOLD} [0.1];
+		
+		duration: transient [0,3];
+		
 	    
 **};
 

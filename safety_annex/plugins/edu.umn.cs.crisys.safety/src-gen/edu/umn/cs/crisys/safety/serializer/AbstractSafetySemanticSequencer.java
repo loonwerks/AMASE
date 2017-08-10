@@ -509,18 +509,18 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (in_conn=Expr out_conn=Arg)
+	 *     (fault_in_conn=Arg nom_conn=Expr)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__IN_CONN));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__OUT_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__OUT_CONN));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__FAULT_IN_CONN) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__FAULT_IN_CONN));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__NOM_CONN) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__NOM_CONN));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIn_connExprParserRuleCall_0_3_0(), semanticObject.getIn_conn());
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getOut_connArgParserRuleCall_0_5_0(), semanticObject.getOut_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getFault_in_connArgParserRuleCall_0_3_0(), semanticObject.getFault_in_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0(), semanticObject.getNom_conn());
 		feeder.finish();
 	}
 	
@@ -530,18 +530,18 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (out_conn=[NamedElement|ID] nom_conn=Expr)
+	 *     (nom_conn=Expr fault_out_conn=Arg)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__OUT_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__OUT_CONN));
 			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__NOM_CONN) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__NOM_CONN));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__FAULT_OUT_CONN) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__FAULT_OUT_CONN));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getOut_connNamedElementIDTerminalRuleCall_1_3_0_1(), semanticObject.eGet(SafetyPackage.Literals.OUTPUT_STATEMENT__OUT_CONN, false));
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_5_0(), semanticObject.getNom_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_3_0(), semanticObject.getNom_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getFault_out_connArgParserRuleCall_1_5_0(), semanticObject.getFault_out_conn());
 		feeder.finish();
 	}
 	
@@ -748,7 +748,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     SpecStatement returns FaultStatement
 	 *
 	 * Constraint:
-	 *     (str=STRING? faultDefName=Expr faultDefinitions+=FaultSubcomponent*)
+	 *     (str=STRING? faultDefName=NestedDotID faultDefinitions+=FaultSubcomponent*)
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, FaultStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

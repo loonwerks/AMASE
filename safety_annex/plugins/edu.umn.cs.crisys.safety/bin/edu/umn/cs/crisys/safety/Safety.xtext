@@ -29,17 +29,23 @@ Element returns aadl2::Element:
 ;
 
 @Override 
-SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=Expr  
+SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDotID  
 			faultDefinitions+=(FaultSubcomponent)* ;
 
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' in_conn=Expr ',' out_conn=Arg';' 
-	| {OutputStatement} 'output' ':' out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
+	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr';' 
+	//| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
+	| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| SafetyEqStatement ;
+//	| OutputEqStatement;
+
+//OutputEqStatement:
+//	{FaultOutputEqStmt} fault_output_eq=[aadl2::NamedElement|ID] '=' eq_stmt=NamedID';'
+//;
 
 	 
 TemporalConstraint:
