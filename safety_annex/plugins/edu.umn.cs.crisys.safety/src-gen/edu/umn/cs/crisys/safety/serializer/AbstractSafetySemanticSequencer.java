@@ -509,7 +509,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (fault_in_conn=Arg nom_conn=Expr)
+	 *     (fault_in_conn=Arg nom_conn=NestedDotID)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		if (errorAcceptor != null) {
@@ -520,7 +520,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getFault_in_connArgParserRuleCall_0_3_0(), semanticObject.getFault_in_conn());
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0(), semanticObject.getNom_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connNestedDotIDParserRuleCall_0_5_0(), semanticObject.getNom_conn());
 		feeder.finish();
 	}
 	
@@ -530,7 +530,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (nom_conn=Expr fault_out_conn=Arg)
+	 *     (nom_conn=NestedDotID fault_out_conn=Arg)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
 		if (errorAcceptor != null) {
@@ -540,7 +540,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__FAULT_OUT_CONN));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_3_0(), semanticObject.getNom_conn());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connNestedDotIDParserRuleCall_1_3_0(), semanticObject.getNom_conn());
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getFault_out_connArgParserRuleCall_1_5_0(), semanticObject.getFault_out_conn());
 		feeder.finish();
 	}

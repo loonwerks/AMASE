@@ -373,9 +373,9 @@ ruleFaultSubcomponent returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNestedDotIDParserRuleCall_0_5_0()); 
 	    }
-		lv_nom_conn_5_0=ruleExpr		{
+		lv_nom_conn_5_0=ruleNestedDotID		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
@@ -383,7 +383,7 @@ ruleFaultSubcomponent returns [EObject current=null]
        			$current, 
        			"nom_conn",
         		lv_nom_conn_5_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -413,9 +413,9 @@ ruleFaultSubcomponent returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_1_3_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNestedDotIDParserRuleCall_1_3_0()); 
 	    }
-		lv_nom_conn_10_0=ruleExpr		{
+		lv_nom_conn_10_0=ruleNestedDotID		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
@@ -423,7 +423,7 @@ ruleFaultSubcomponent returns [EObject current=null]
        			$current, 
        			"nom_conn",
         		lv_nom_conn_10_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
 	        afterParserOrEnumRuleCall();
 	    }
 

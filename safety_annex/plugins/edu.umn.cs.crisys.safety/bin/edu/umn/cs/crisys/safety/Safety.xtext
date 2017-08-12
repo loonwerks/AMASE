@@ -35,9 +35,9 @@ SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDo
 	
 
 FaultSubcomponent: 
-	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr';' 
+	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=NestedDotID';' 
 	//| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
-	| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
+	| {OutputStatement} 'output' ':' nom_conn=NestedDotID '<-' fault_out_conn=Arg ';'
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| SafetyEqStatement ;

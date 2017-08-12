@@ -3,7 +3,7 @@
 package edu.umn.cs.crisys.safety.safety.impl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
-import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -50,7 +50,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * @generated
    * @ordered
    */
-  protected Expr nom_conn;
+  protected NestedDotID nom_conn;
 
   /**
    * <!-- begin-user-doc -->
@@ -126,7 +126,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expr getNom_conn()
+  public NestedDotID getNom_conn()
   {
     return nom_conn;
   }
@@ -136,9 +136,9 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetNom_conn(Expr newNom_conn, NotificationChain msgs)
+  public NotificationChain basicSetNom_conn(NestedDotID newNom_conn, NotificationChain msgs)
   {
-    Expr oldNom_conn = nom_conn;
+    NestedDotID oldNom_conn = nom_conn;
     nom_conn = newNom_conn;
     if (eNotificationRequired())
     {
@@ -153,7 +153,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setNom_conn(Expr newNom_conn)
+  public void setNom_conn(NestedDotID newNom_conn)
   {
     if (newNom_conn != nom_conn)
     {
@@ -219,7 +219,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
         setFault_in_conn((Arg)newValue);
         return;
       case SafetyPackage.INPUT_STATEMENT__NOM_CONN:
-        setNom_conn((Expr)newValue);
+        setNom_conn((NestedDotID)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -239,7 +239,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
         setFault_in_conn((Arg)null);
         return;
       case SafetyPackage.INPUT_STATEMENT__NOM_CONN:
-        setNom_conn((Expr)null);
+        setNom_conn((NestedDotID)null);
         return;
     }
     super.eUnset(featureID);

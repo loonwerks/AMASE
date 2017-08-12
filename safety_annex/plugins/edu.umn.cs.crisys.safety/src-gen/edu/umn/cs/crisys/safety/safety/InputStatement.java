@@ -3,7 +3,7 @@
 package edu.umn.cs.crisys.safety.safety;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
-import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,12 +59,12 @@ public interface InputStatement extends FaultSubcomponent
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Nom conn</em>' containment reference.
-   * @see #setNom_conn(Expr)
+   * @see #setNom_conn(NestedDotID)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement_Nom_conn()
    * @model containment="true"
    * @generated
    */
-  Expr getNom_conn();
+  NestedDotID getNom_conn();
 
   /**
    * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn <em>Nom conn</em>}' containment reference.
@@ -74,6 +74,6 @@ public interface InputStatement extends FaultSubcomponent
    * @see #getNom_conn()
    * @generated
    */
-  void setNom_conn(Expr value);
+  void setNom_conn(NestedDotID value);
 
 } // InputStatement

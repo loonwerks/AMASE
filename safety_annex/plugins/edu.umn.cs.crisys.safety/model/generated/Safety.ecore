@@ -43,11 +43,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="InputStatement" eSuperTypes="#//FaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fault_in_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Arg"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nom_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nom_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputStatement" eSuperTypes="#//FaultSubcomponent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nom_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nom_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fault_out_conn" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Arg"
         containment="true"/>

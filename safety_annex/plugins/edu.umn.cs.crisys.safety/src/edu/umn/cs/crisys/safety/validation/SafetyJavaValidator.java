@@ -15,6 +15,7 @@ import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.NamedElement;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
@@ -81,16 +82,15 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check
 	public void checkInput(InputStatement inputStmt){
-		//Expr inConn = inputStmt.getIn_conn();
-		//Arg outConn = inputStmt.getOut_conn();
+		Arg faultInConn = inputStmt.getFault_in_conn();
+		NestedDotID nomConn = inputStmt.getNom_conn();
 		
 		// TODO: Check that input connection is a valid aadl name
 		
-//		if(inConn==null){
-//			error(inConn, "Input connection cannot be null");
-//		}
 		
-		//checkArg(outConn);
+		
+		// Use AGREEs checkArg method for the fault in connection
+		checkArg(faultInConn);
 		
 	}
 	
@@ -99,19 +99,12 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check
 	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
-		/*
-		 * input: inputConnection (Expr), inFaultOutConn (Arg)
-		 * output: faultOutConn (NamedElement), nominalOutConn (Expr)
-		 */
-		//NamedElement faultOutConn = outputStmt.getOut_conn();
-		Expr nominalOutConn = outputStmt.getNom_conn();
-		//Arg inFaultOutConn = inputStmt.getOut_conn();
 		
-//		if(!(faultOutConn.getName().equals(inFaultOutConn.getName()))){
-//			error(faultOutConn, "The fault output must refer to the fault output argument"
-//					+ " defined in input statement.");
-//		}
+		NestedDotID nominalOutConn = outputStmt.getNom_conn();
 		
+		if(!(nominalOutConn.equals(inputStmt.getNom_conn()))){
+			error(nominalOutConn, "Nominal connections in input and output statements must match");
+		}
 	}
 	
 	/*

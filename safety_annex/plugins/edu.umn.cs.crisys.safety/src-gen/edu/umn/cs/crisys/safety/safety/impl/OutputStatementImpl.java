@@ -3,7 +3,7 @@
 package edu.umn.cs.crisys.safety.safety.impl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
-import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -40,7 +40,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * @generated
    * @ordered
    */
-  protected Expr nom_conn;
+  protected NestedDotID nom_conn;
 
   /**
    * The cached value of the '{@link #getFault_out_conn() <em>Fault out conn</em>}' containment reference.
@@ -78,7 +78,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expr getNom_conn()
+  public NestedDotID getNom_conn()
   {
     return nom_conn;
   }
@@ -88,9 +88,9 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetNom_conn(Expr newNom_conn, NotificationChain msgs)
+  public NotificationChain basicSetNom_conn(NestedDotID newNom_conn, NotificationChain msgs)
   {
-    Expr oldNom_conn = nom_conn;
+    NestedDotID oldNom_conn = nom_conn;
     nom_conn = newNom_conn;
     if (eNotificationRequired())
     {
@@ -105,7 +105,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setNom_conn(Expr newNom_conn)
+  public void setNom_conn(NestedDotID newNom_conn)
   {
     if (newNom_conn != nom_conn)
     {
@@ -216,7 +216,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
     switch (featureID)
     {
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        setNom_conn((Expr)newValue);
+        setNom_conn((NestedDotID)newValue);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT_CONN:
         setFault_out_conn((Arg)newValue);
@@ -236,7 +236,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
     switch (featureID)
     {
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        setNom_conn((Expr)null);
+        setNom_conn((NestedDotID)null);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT_CONN:
         setFault_out_conn((Arg)null);

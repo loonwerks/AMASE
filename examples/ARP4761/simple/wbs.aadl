@@ -322,11 +322,11 @@ annex safety {**
 	
 		input: faultGreenInput: common::pressure.i <- selector.green_output;
 		
-		output: selector.green_output <- faultGreenOutput:common::pressure.i;
+		output: selector.green_input <- faultGreenOutput:common::pressure.i;
 		
 		eq THRESHOLD:real = 100.0;
 		intervaleq failToValues = (100.0, 115.0];
-		seteq testSet = {1,2,3};
+		seteq testSet = {1,2,3}; 
 		
 		
 		trigger: enabler {green_pump.pressure_output.val > THRESHOLD} [0.1];

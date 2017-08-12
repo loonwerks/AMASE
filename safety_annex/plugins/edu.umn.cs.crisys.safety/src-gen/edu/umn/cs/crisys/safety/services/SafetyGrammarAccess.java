@@ -196,14 +196,14 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFault_in_connArgParserRuleCall_0_3_0 = (RuleCall)cFault_in_connAssignment_0_3.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cNom_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final RuleCall cNom_connExprParserRuleCall_0_5_0 = (RuleCall)cNom_connAssignment_0_5.eContents().get(0);
+		private final RuleCall cNom_connNestedDotIDParserRuleCall_0_5_0 = (RuleCall)cNom_connAssignment_0_5.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cOutputKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Keyword cColonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cNom_connAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final RuleCall cNom_connExprParserRuleCall_1_3_0 = (RuleCall)cNom_connAssignment_1_3.eContents().get(0);
+		private final RuleCall cNom_connNestedDotIDParserRuleCall_1_3_0 = (RuleCall)cNom_connAssignment_1_3.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		private final Assignment cFault_out_connAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
 		private final RuleCall cFault_out_connArgParserRuleCall_1_5_0 = (RuleCall)cFault_out_connAssignment_1_5.eContents().get(0);
@@ -232,21 +232,21 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';'
+		//	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=NestedDotID ';'
 		//	//| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
-		//	| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
+		//	| {OutputStatement} 'output' ':' nom_conn=NestedDotID '<-' fault_out_conn=Arg ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';' //| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
-		//| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';' | {DurationStatement} 'duration' ':'
+		//{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=NestedDotID ';' //| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
+		//| {OutputStatement} 'output' ':' nom_conn=NestedDotID '<-' fault_out_conn=Arg ';' | {DurationStatement} 'duration' ':'
 		//tc=TemporalConstraint interv=Interval ';' | {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('['
 		//probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';'
+		//{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=NestedDotID ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -267,16 +267,16 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_0_4() { return cLessThanSignHyphenMinusKeyword_0_4; }
 
-		//nom_conn=Expr
+		//nom_conn=NestedDotID
 		public Assignment getNom_connAssignment_0_5() { return cNom_connAssignment_0_5; }
 
-		//Expr
-		public RuleCall getNom_connExprParserRuleCall_0_5_0() { return cNom_connExprParserRuleCall_0_5_0; }
+		//NestedDotID
+		public RuleCall getNom_connNestedDotIDParserRuleCall_0_5_0() { return cNom_connNestedDotIDParserRuleCall_0_5_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_0_6() { return cSemicolonKeyword_0_6; }
 
-		//{OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
+		//{OutputStatement} 'output' ':' nom_conn=NestedDotID '<-' fault_out_conn=Arg ';'
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OutputStatement}
@@ -288,11 +288,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_1_2() { return cColonKeyword_1_2; }
 
-		//nom_conn=Expr
+		//nom_conn=NestedDotID
 		public Assignment getNom_connAssignment_1_3() { return cNom_connAssignment_1_3; }
 
-		//Expr
-		public RuleCall getNom_connExprParserRuleCall_1_3_0() { return cNom_connExprParserRuleCall_1_3_0; }
+		//NestedDotID
+		public RuleCall getNom_connNestedDotIDParserRuleCall_1_3_0() { return cNom_connNestedDotIDParserRuleCall_1_3_0; }
 
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_1_4() { return cLessThanSignHyphenMinusKeyword_1_4; }
@@ -1006,9 +1006,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=Expr ';'
+	//	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=NestedDotID ';'
 	//	//| {OutputStatement} 'output' ':' fault_out_conn=[aadl2::NamedElement|ID] ',' nom_conn=Expr';' 
-	//	| {OutputStatement} 'output' ':' nom_conn=Expr '<-' fault_out_conn=Arg ';'
+	//	| {OutputStatement} 'output' ':' nom_conn=NestedDotID '<-' fault_out_conn=Arg ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 	//	| SafetyEqStatement;
