@@ -86,6 +86,15 @@ public interface SafetyFactory extends EFactory
   FaultSubcomponent createFaultSubcomponent();
 
   /**
+   * Returns a new object of class '<em>Output Assign Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Output Assign Statement</em>'.
+   * @generated
+   */
+  OutputAssignStatement createOutputAssignStatement();
+
+  /**
    * Returns a new object of class '<em>Temporal Constraint</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -192,6 +201,15 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   TriggerStatement createTriggerStatement();
+
+  /**
+   * Returns a new object of class '<em>Fault Output Assign Stmt</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Fault Output Assign Stmt</em>'.
+   * @generated
+   */
+  FaultOutputAssignStmt createFaultOutputAssignStmt();
 
   /**
    * Returns a new object of class '<em>Permanent Constraint</em>'.

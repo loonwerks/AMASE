@@ -88,6 +88,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_2(), "rule__FaultSubcomponent__Group_2__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_3(), "rule__FaultSubcomponent__Group_3__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_3_4(), "rule__FaultSubcomponent__Group_3_4__0");
+					put(grammarAccess.getOutputAssignStatementAccess().getGroup(), "rule__OutputAssignStatement__Group__0");
 					put(grammarAccess.getTemporalConstraintAccess().getGroup_0(), "rule__TemporalConstraint__Group_0__0");
 					put(grammarAccess.getTemporalConstraintAccess().getGroup_1(), "rule__TemporalConstraint__Group_1__0");
 					put(grammarAccess.getTriggerConditionAccess().getGroup_0(), "rule__TriggerCondition__Group_0__0");
@@ -330,7 +331,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyContractAccess().getSpecsAssignment_1(), "rule__SafetyContract__SpecsAssignment_1");
 					put(grammarAccess.getSpecStatementAccess().getStrAssignment_2(), "rule__SpecStatement__StrAssignment_2");
 					put(grammarAccess.getSpecStatementAccess().getFaultDefNameAssignment_4(), "rule__SpecStatement__FaultDefNameAssignment_4");
-					put(grammarAccess.getSpecStatementAccess().getFaultDefinitionsAssignment_5(), "rule__SpecStatement__FaultDefinitionsAssignment_5");
+					put(grammarAccess.getSpecStatementAccess().getFaultDefinitionsAssignment_6(), "rule__SpecStatement__FaultDefinitionsAssignment_6");
 					put(grammarAccess.getFaultSubcomponentAccess().getFault_in_connAssignment_0_3(), "rule__FaultSubcomponent__Fault_in_connAssignment_0_3");
 					put(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_0_5(), "rule__FaultSubcomponent__Nom_connAssignment_0_5");
 					put(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_1_3(), "rule__FaultSubcomponent__Nom_connAssignment_1_3");
@@ -339,6 +340,8 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFaultSubcomponentAccess().getIntervAssignment_2_4(), "rule__FaultSubcomponent__IntervAssignment_2_4");
 					put(grammarAccess.getFaultSubcomponentAccess().getCondAssignment_3_3(), "rule__FaultSubcomponent__CondAssignment_3_3");
 					put(grammarAccess.getFaultSubcomponentAccess().getProbabilityAssignment_3_4_1(), "rule__FaultSubcomponent__ProbabilityAssignment_3_4_1");
+					put(grammarAccess.getOutputAssignStatementAccess().getFault_output_eqAssignment_2(), "rule__OutputAssignStatement__Fault_output_eqAssignment_2");
+					put(grammarAccess.getOutputAssignStatementAccess().getEq_stmtAssignment_4(), "rule__OutputAssignStatement__Eq_stmtAssignment_4");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_0_3(), "rule__TriggerCondition__ExprListAssignment_0_3");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_0_4_1(), "rule__TriggerCondition__ExprListAssignment_0_4_1");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_1_3(), "rule__TriggerCondition__ExprListAssignment_1_3");

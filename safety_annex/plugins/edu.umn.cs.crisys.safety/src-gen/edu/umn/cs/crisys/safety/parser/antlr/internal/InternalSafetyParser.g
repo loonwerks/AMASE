@@ -292,25 +292,35 @@ ruleSpecStatement returns [EObject current=null]
 	    }
 
 )
-)(
+)
+	otherlv_5=LeftCurlyBracket
+    {
+    	newLeafNode(otherlv_5, grammarAccess.getSpecStatementAccess().getLeftCurlyBracketKeyword_5());
+    }
+(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefinitionsFaultSubcomponentParserRuleCall_5_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefinitionsFaultSubcomponentParserRuleCall_6_0()); 
 	    }
-		lv_faultDefinitions_5_0=ruleFaultSubcomponent		{
+		lv_faultDefinitions_6_0=ruleFaultSubcomponent		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
 	        }
        		add(
        			$current, 
        			"faultDefinitions",
-        		lv_faultDefinitions_5_0, 
+        		lv_faultDefinitions_6_0, 
         		"edu.umn.cs.crisys.safety.Safety.FaultSubcomponent");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)*)
+)*
+	otherlv_7=RightCurlyBracket
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_7());
+    }
+)
 ;
 
 
@@ -591,6 +601,89 @@ ruleFaultSubcomponent returns [EObject current=null]
     {
         $current = $this_SafetyEqStatement_28.current;
         afterParserOrEnumRuleCall();
+    }
+
+    |
+    { 
+        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getOutputAssignStatementParserRuleCall_5()); 
+    }
+    this_OutputAssignStatement_29=ruleOutputAssignStatement
+    {
+        $current = $this_OutputAssignStatement_29.current;
+        afterParserOrEnumRuleCall();
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleOutputAssignStatement
+entryRuleOutputAssignStatement returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getOutputAssignStatementRule()); }
+	 iv_ruleOutputAssignStatement=ruleOutputAssignStatement 
+	 { $current=$iv_ruleOutputAssignStatement.current; } 
+	 EOF 
+;
+
+// Rule OutputAssignStatement
+ruleOutputAssignStatement returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getOutputAssignStatementAccess().getFaultOutputAssignStmtAction_0(),
+            $current);
+    }
+)
+	otherlv_1=Assign
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getOutputAssignStatementAccess().getAssignKeyword_1());
+    }
+(
+(
+		{
+			if ($current==null) {
+	            $current = createModelElement(grammarAccess.getOutputAssignStatementRule());
+	        }
+        }
+	otherlv_2=RULE_ID
+	{
+		newLeafNode(otherlv_2, grammarAccess.getOutputAssignStatementAccess().getFault_output_eqNamedElementCrossReference_2_0()); 
+	}
+
+)
+)
+	otherlv_3=EqualsSign
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getOutputAssignStatementAccess().getEqualsSignKeyword_3());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOutputAssignStatementAccess().getEq_stmtNamedIDParserRuleCall_4_0()); 
+	    }
+		lv_eq_stmt_4_0=ruleNamedID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOutputAssignStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"eq_stmt",
+        		lv_eq_stmt_4_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NamedID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_5=Semicolon
+    {
+    	newLeafNode(otherlv_5, grammarAccess.getOutputAssignStatementAccess().getSemicolonKeyword_5());
     }
 )
 ;

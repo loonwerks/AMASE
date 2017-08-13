@@ -37,7 +37,7 @@ end generic_pwm_input.i;
 system boolean_shutoff 
 features
 	input : in data port common::pressure.i;
-	output : out data port common::pressure.i;
+	shutoff_output : out data port common::pressure.i;
 	boolean_input : in data port Base_Types::Boolean;
 	
 	-- failure-related information: we can have a stuck-at fault.
@@ -55,7 +55,7 @@ annex agree {**
 		
     -- If boolean_input is true, then the output should be zero.
 	guarantee "Pressure on boolean shutoff" : 
-	       if boolean_input then output.val = 0.0 
+	       if boolean_input then shutoff_output.val = 0.0 
 	       else nominal_output.val = input.val ;
 	
 	-- This seems super obvious... I don't even think it's physically possible
@@ -65,7 +65,7 @@ annex agree {**
 	       
 	 -- guarantee mapping output (fail_to)
 	 guarantee "Output failure binding for boolean_shutoff (fail_to)" : 
-	    output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
+	    shutoff_output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
 	    
 	              
 **};end boolean_shutoff;

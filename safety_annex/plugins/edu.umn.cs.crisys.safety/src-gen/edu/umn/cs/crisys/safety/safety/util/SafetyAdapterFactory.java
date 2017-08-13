@@ -114,6 +114,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createFaultSubcomponentAdapter();
       }
       @Override
+      public Adapter caseOutputAssignStatement(OutputAssignStatement object)
+      {
+        return createOutputAssignStatementAdapter();
+      }
+      @Override
       public Adapter caseTemporalConstraint(TemporalConstraint object)
       {
         return createTemporalConstraintAdapter();
@@ -172,6 +177,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
       public Adapter caseTriggerStatement(TriggerStatement object)
       {
         return createTriggerStatementAdapter();
+      }
+      @Override
+      public Adapter caseFaultOutputAssignStmt(FaultOutputAssignStmt object)
+      {
+        return createFaultOutputAssignStmtAdapter();
       }
       @Override
       public Adapter casePermanentConstraint(PermanentConstraint object)
@@ -386,6 +396,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OutputAssignStatement <em>Output Assign Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.OutputAssignStatement
+   * @generated
+   */
+  public Adapter createOutputAssignStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.TemporalConstraint <em>Temporal Constraint</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -561,6 +586,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTriggerStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt <em>Fault Output Assign Stmt</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt
+   * @generated
+   */
+  public Adapter createFaultOutputAssignStmtAdapter()
   {
     return null;
   }

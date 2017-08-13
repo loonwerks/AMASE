@@ -410,6 +410,25 @@ public interface SafetyPackage extends EPackage
   int FAULT_SUBCOMPONENT_FEATURE_COUNT = 0;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.OutputAssignStatementImpl <em>Output Assign Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.OutputAssignStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputAssignStatement()
+   * @generated
+   */
+  int OUTPUT_ASSIGN_STATEMENT = 7;
+
+  /**
+   * The number of structural features of the '<em>Output Assign Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OUTPUT_ASSIGN_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.TemporalConstraintImpl <em>Temporal Constraint</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -417,7 +436,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTemporalConstraint()
    * @generated
    */
-  int TEMPORAL_CONSTRAINT = 7;
+  int TEMPORAL_CONSTRAINT = 8;
 
   /**
    * The number of structural features of the '<em>Temporal Constraint</em>' class.
@@ -436,7 +455,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerCondition()
    * @generated
    */
-  int TRIGGER_CONDITION = 8;
+  int TRIGGER_CONDITION = 9;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -464,7 +483,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyEqStatement()
    * @generated
    */
-  int SAFETY_EQ_STATEMENT = 9;
+  int SAFETY_EQ_STATEMENT = 10;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -501,7 +520,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInterval()
    * @generated
    */
-  int INTERVAL = 10;
+  int INTERVAL = 11;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -538,7 +557,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractLibrary()
    * @generated
    */
-  int SAFETY_CONTRACT_LIBRARY = 11;
+  int SAFETY_CONTRACT_LIBRARY = 12;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -611,7 +630,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractSubclause()
    * @generated
    */
-  int SAFETY_CONTRACT_SUBCLAUSE = 12;
+  int SAFETY_CONTRACT_SUBCLAUSE = 13;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -693,7 +712,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContract()
    * @generated
    */
-  int SAFETY_CONTRACT = 13;
+  int SAFETY_CONTRACT = 14;
 
   /**
    * The feature id for the '<em><b>Specs</b></em>' containment reference list.
@@ -721,7 +740,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultStatement()
    * @generated
    */
-  int FAULT_STATEMENT = 14;
+  int FAULT_STATEMENT = 15;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -785,7 +804,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 15;
+  int INPUT_STATEMENT = 16;
 
   /**
    * The feature id for the '<em><b>Fault in conn</b></em>' containment reference.
@@ -822,7 +841,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 16;
+  int OUTPUT_STATEMENT = 17;
 
   /**
    * The feature id for the '<em><b>Nom conn</b></em>' containment reference.
@@ -859,7 +878,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 17;
+  int DURATION_STATEMENT = 18;
 
   /**
    * The feature id for the '<em><b>Tc</b></em>' containment reference.
@@ -896,7 +915,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 18;
+  int TRIGGER_STATEMENT = 19;
 
   /**
    * The feature id for the '<em><b>Cond</b></em>' containment reference.
@@ -926,6 +945,43 @@ public interface SafetyPackage extends EPackage
   int TRIGGER_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultOutputAssignStmtImpl <em>Fault Output Assign Stmt</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.FaultOutputAssignStmtImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultOutputAssignStmt()
+   * @generated
+   */
+  int FAULT_OUTPUT_ASSIGN_STMT = 20;
+
+  /**
+   * The feature id for the '<em><b>Fault output eq</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ = OUTPUT_ASSIGN_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Eq stmt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAULT_OUTPUT_ASSIGN_STMT__EQ_STMT = OUTPUT_ASSIGN_STATEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Fault Output Assign Stmt</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAULT_OUTPUT_ASSIGN_STMT_FEATURE_COUNT = OUTPUT_ASSIGN_STATEMENT_FEATURE_COUNT + 2;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PermanentConstraintImpl <em>Permanent Constraint</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -933,7 +989,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPermanentConstraint()
    * @generated
    */
-  int PERMANENT_CONSTRAINT = 19;
+  int PERMANENT_CONSTRAINT = 21;
 
   /**
    * The number of structural features of the '<em>Permanent Constraint</em>' class.
@@ -952,7 +1008,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTransientConstraint()
    * @generated
    */
-  int TRANSIENT_CONSTRAINT = 20;
+  int TRANSIENT_CONSTRAINT = 22;
 
   /**
    * The number of structural features of the '<em>Transient Constraint</em>' class.
@@ -971,7 +1027,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getMustCondition()
    * @generated
    */
-  int MUST_CONDITION = 21;
+  int MUST_CONDITION = 23;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -999,7 +1055,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEnablerCondition()
    * @generated
    */
-  int ENABLER_CONDITION = 22;
+  int ENABLER_CONDITION = 24;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -1027,7 +1083,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqValue()
    * @generated
    */
-  int EQ_VALUE = 23;
+  int EQ_VALUE = 25;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1082,7 +1138,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getIntervalEq()
    * @generated
    */
-  int INTERVAL_EQ = 24;
+  int INTERVAL_EQ = 26;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1137,7 +1193,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSetEq()
    * @generated
    */
-  int SET_EQ = 25;
+  int SET_EQ = 27;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1201,7 +1257,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getClosedInterval()
    * @generated
    */
-  int CLOSED_INTERVAL = 26;
+  int CLOSED_INTERVAL = 28;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1238,7 +1294,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenLeftInterval()
    * @generated
    */
-  int OPEN_LEFT_INTERVAL = 27;
+  int OPEN_LEFT_INTERVAL = 29;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1275,7 +1331,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenRightInterval()
    * @generated
    */
-  int OPEN_RIGHT_INTERVAL = 28;
+  int OPEN_RIGHT_INTERVAL = 30;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1312,7 +1368,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenInterval()
    * @generated
    */
-  int OPEN_INTERVAL = 29;
+  int OPEN_INTERVAL = 31;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1411,6 +1467,16 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EClass getFaultSubcomponent();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.OutputAssignStatement <em>Output Assign Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Output Assign Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.OutputAssignStatement
+   * @generated
+   */
+  EClass getOutputAssignStatement();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.TemporalConstraint <em>Temporal Constraint</em>}'.
@@ -1720,6 +1786,38 @@ public interface SafetyPackage extends EPackage
   EAttribute getTriggerStatement_Probability();
 
   /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt <em>Fault Output Assign Stmt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Fault Output Assign Stmt</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt
+   * @generated
+   */
+  EClass getFaultOutputAssignStmt();
+
+  /**
+   * Returns the meta object for the reference '{@link edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt#getFault_output_eq <em>Fault output eq</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Fault output eq</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt#getFault_output_eq()
+   * @see #getFaultOutputAssignStmt()
+   * @generated
+   */
+  EReference getFaultOutputAssignStmt_Fault_output_eq();
+
+  /**
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt#getEq_stmt <em>Eq stmt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Eq stmt</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt#getEq_stmt()
+   * @see #getFaultOutputAssignStmt()
+   * @generated
+   */
+  EReference getFaultOutputAssignStmt_Eq_stmt();
+
+  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PermanentConstraint <em>Permanent Constraint</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2000,6 +2098,16 @@ public interface SafetyPackage extends EPackage
     EClass FAULT_SUBCOMPONENT = eINSTANCE.getFaultSubcomponent();
 
     /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.OutputAssignStatementImpl <em>Output Assign Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.OutputAssignStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputAssignStatement()
+     * @generated
+     */
+    EClass OUTPUT_ASSIGN_STATEMENT = eINSTANCE.getOutputAssignStatement();
+
+    /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.TemporalConstraintImpl <em>Temporal Constraint</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2254,6 +2362,32 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EAttribute TRIGGER_STATEMENT__PROBABILITY = eINSTANCE.getTriggerStatement_Probability();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultOutputAssignStmtImpl <em>Fault Output Assign Stmt</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.FaultOutputAssignStmtImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultOutputAssignStmt()
+     * @generated
+     */
+    EClass FAULT_OUTPUT_ASSIGN_STMT = eINSTANCE.getFaultOutputAssignStmt();
+
+    /**
+     * The meta object literal for the '<em><b>Fault output eq</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ = eINSTANCE.getFaultOutputAssignStmt_Fault_output_eq();
+
+    /**
+     * The meta object literal for the '<em><b>Eq stmt</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FAULT_OUTPUT_ASSIGN_STMT__EQ_STMT = eINSTANCE.getFaultOutputAssignStmt_Eq_stmt();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PermanentConstraintImpl <em>Permanent Constraint</em>}' class.

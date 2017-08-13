@@ -73,6 +73,7 @@ import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
+import edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.MustCondition;
@@ -433,6 +434,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.EQ_VALUE:
 				sequence_SafetyEqStatement(context, (EqValue) semanticObject); 
 				return; 
+			case SafetyPackage.FAULT_OUTPUT_ASSIGN_STMT:
+				sequence_OutputAssignStatement(context, (FaultOutputAssignStmt) semanticObject); 
+				return; 
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
 				return; 
@@ -638,6 +642,28 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_2_0_2_0(), semanticObject.getLow());
 		feeder.accept(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_2_0_4_0(), semanticObject.getHigh());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     FaultSubcomponent returns FaultOutputAssignStmt
+	 *     OutputAssignStatement returns FaultOutputAssignStmt
+	 *
+	 * Constraint:
+	 *     (fault_output_eq=[NamedElement|ID] eq_stmt=NamedID)
+	 */
+	protected void sequence_OutputAssignStatement(ISerializationContext context, FaultOutputAssignStmt semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__EQ_STMT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__EQ_STMT));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getOutputAssignStatementAccess().getFault_output_eqNamedElementIDTerminalRuleCall_2_0_1(), semanticObject.eGet(SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ, false));
+		feeder.accept(grammarAccess.getOutputAssignStatementAccess().getEq_stmtNamedIDParserRuleCall_4_0(), semanticObject.getEq_stmt());
 		feeder.finish();
 	}
 	

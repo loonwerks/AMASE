@@ -143,6 +143,14 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.OUTPUT_ASSIGN_STATEMENT:
+      {
+        OutputAssignStatement outputAssignStatement = (OutputAssignStatement)theEObject;
+        T result = caseOutputAssignStatement(outputAssignStatement);
+        if (result == null) result = caseFaultSubcomponent(outputAssignStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.TEMPORAL_CONSTRAINT:
       {
         TemporalConstraint temporalConstraint = (TemporalConstraint)theEObject;
@@ -245,6 +253,15 @@ public class SafetySwitch<T> extends Switch<T>
         TriggerStatement triggerStatement = (TriggerStatement)theEObject;
         T result = caseTriggerStatement(triggerStatement);
         if (result == null) result = caseFaultSubcomponent(triggerStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.FAULT_OUTPUT_ASSIGN_STMT:
+      {
+        FaultOutputAssignStmt faultOutputAssignStmt = (FaultOutputAssignStmt)theEObject;
+        T result = caseFaultOutputAssignStmt(faultOutputAssignStmt);
+        if (result == null) result = caseOutputAssignStatement(faultOutputAssignStmt);
+        if (result == null) result = caseFaultSubcomponent(faultOutputAssignStmt);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -459,6 +476,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Output Assign Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Output Assign Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOutputAssignStatement(OutputAssignStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Temporal Constraint</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -646,6 +679,22 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTriggerStatement(TriggerStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Fault Output Assign Stmt</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Fault Output Assign Stmt</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFaultOutputAssignStmt(FaultOutputAssignStmt object)
   {
     return null;
   }

@@ -8,6 +8,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Contract"/>
   <eClassifiers xsi:type="ecore:EClass" name="SpecStatement" eSuperTypes="platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//SpecStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="FaultSubcomponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputAssignStatement" eSuperTypes="#//FaultSubcomponent"/>
   <eClassifiers xsi:type="ecore:EClass" name="TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerCondition">
     <eStructuralFeatures xsi:type="ecore:EReference" name="exprList" upperBound="-1"
@@ -62,6 +63,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cond" eType="#//TriggerCondition"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FaultOutputAssignStmt" eSuperTypes="#//OutputAssignStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fault_output_eq" eType="ecore:EClass platform:/resource/org.osate.aadl2/model/aadl2.ecore#//NamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eq_stmt" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NamedID"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PermanentConstraint" eSuperTypes="#//TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TransientConstraint" eSuperTypes="#//TemporalConstraint"/>
