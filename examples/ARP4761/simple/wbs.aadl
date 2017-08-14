@@ -309,7 +309,7 @@ annex safety{**
 		
 		inputs: val_in <- selector.green_output, alt_val <- threshold;
 		
-		outputs: power.line1 <- val_out;  
+		outputs: selector.green_output <- val_out;  
 		 
 		duration: transient [0,3];
 		

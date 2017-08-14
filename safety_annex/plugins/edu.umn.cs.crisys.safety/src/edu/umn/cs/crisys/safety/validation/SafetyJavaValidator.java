@@ -5,19 +5,14 @@ package edu.umn.cs.crisys.safety.validation;
 
 import static com.rockwellcollins.atc.agree.validation.AgreeType.BOOL;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.osate.aadl2.AadlPackage;
-import org.osate.aadl2.AnnexLibrary;
-import org.osate.aadl2.BusAccess;
-import org.osate.aadl2.DataPort;
 import org.osate.aadl2.Feature;
 import org.osate.aadl2.NamedElement;
 
@@ -86,7 +81,14 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	
 	
 	/* Input Statements
-	 * 
+	 * (1): Get container - check to see if it is a fault statement.
+	 * 		Then gather the deepest sub of the fault definition name
+	 * 		and get it's base. For instance: fault.fail_to
+	 * 		The base of that deepest sub should be "fail_to."
+	 * 		Make sure this is a valid NodeDefExpr and then collect the arguments.
+	 * 		These arguments must match all input fault values (by name). 
+	 * (2): Make sure the types of arguments match the types of expressions
+	 * 		passed in as fault inputs (connections or otherwise). 
 	 */
 	@Check(CheckType.FAST)
 	public void checkInput(InputStatement inputs){
@@ -251,12 +253,20 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				            +"Possible features are "
 							+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
 				}
+				break;
+			}else{
+				error(nom, "The connection "+nomSub.toString()+" is null.");
 			}
 		}
 		
 		// Check type matching between nominal connections and return values
-		
-		
+		for(NestedDotID nom : nomConns){
+			nomSub = nom.getSub();
+			if(nomSub != null){
+				baseSubNom = nomSub.getBase();
+				// ????????
+			}
+		}
 
 		
 	}
@@ -420,6 +430,4 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		}
 	}
-	
-
 }
