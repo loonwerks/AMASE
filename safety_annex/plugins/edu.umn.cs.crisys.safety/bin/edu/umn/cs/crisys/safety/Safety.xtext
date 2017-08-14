@@ -22,10 +22,10 @@ SafetySubclause:
 SafetyContract returns Contract:
 	{SafetyContract} (specs+=SpecStatement)*;
 
-@Override
-Element returns aadl2::Element:
+ElementSafety returns aadl2::Element:
 	SafetyEqStatement
 	| Expr
+	| FaultSubcomponent
 ;
 
 @Override 
@@ -34,17 +34,16 @@ SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDo
 
 	
 
-FaultSubcomponent: 
-	{InputStatement} 'input' ':' fault_in_conn=Arg '<-' nom_conn=NestedDotID';' 
-	| {OutputStatement} 'output' ':' nom_conn=NestedDotID '<-' fault_out_conn=Arg ';'
+FaultSubcomponent returns FaultSubcomponent: 
+	{InputStatement} 'inputs' ':' fault_in+=NamedID '<-' nom_conn+=Expr
+							(','fault_in+=NamedID '<-' nom_conn+=Expr)*';' 
+	
+	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID 
+							(','nom_conn+=NestedDotID '<-' fault_out+=NamedID)*';'
+	
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
-	| SafetyEqStatement 
-	| OutputAssignStatement;
-
-OutputAssignStatement:
-	{FaultOutputAssignStmt} 'assign' fault_output_eq=[aadl2::NamedElement|ID] '=' eq_stmt=NamedID';'
-;
+	| SafetyEqStatement ;
 
 	 
 TemporalConstraint:
@@ -59,8 +58,8 @@ TriggerCondition:
 	
 SafetyEqStatement:
 	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	| {IntervalEq} 'intervaleq' lhs_int=ID '=' interv=Interval ';'
-    | {SetEq} 'seteq' lhs_set=ID '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
+	| {IntervalEq} 'interval' lhs_int=ID '=' interv=Interval ';'
+    | {SetEq} 'set' lhs_set=ID '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
 ;
 
 Interval:

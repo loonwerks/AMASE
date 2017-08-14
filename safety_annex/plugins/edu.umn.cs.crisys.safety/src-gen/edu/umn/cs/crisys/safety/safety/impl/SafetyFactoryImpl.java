@@ -71,7 +71,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.CONTRACT: return createContract();
       case SafetyPackage.SPEC_STATEMENT: return createSpecStatement();
       case SafetyPackage.FAULT_SUBCOMPONENT: return createFaultSubcomponent();
-      case SafetyPackage.OUTPUT_ASSIGN_STATEMENT: return createOutputAssignStatement();
       case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
       case SafetyPackage.SAFETY_EQ_STATEMENT: return createSafetyEqStatement();
@@ -84,7 +83,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
-      case SafetyPackage.FAULT_OUTPUT_ASSIGN_STMT: return createFaultOutputAssignStmt();
       case SafetyPackage.PERMANENT_CONSTRAINT: return createPermanentConstraint();
       case SafetyPackage.TRANSIENT_CONSTRAINT: return createTransientConstraint();
       case SafetyPackage.MUST_CONDITION: return createMustCondition();
@@ -176,17 +174,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     FaultSubcomponentImpl faultSubcomponent = new FaultSubcomponentImpl();
     return faultSubcomponent;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public OutputAssignStatement createOutputAssignStatement()
-  {
-    OutputAssignStatementImpl outputAssignStatement = new OutputAssignStatementImpl();
-    return outputAssignStatement;
   }
 
   /**
@@ -319,17 +306,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     TriggerStatementImpl triggerStatement = new TriggerStatementImpl();
     return triggerStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public FaultOutputAssignStmt createFaultOutputAssignStmt()
-  {
-    FaultOutputAssignStmtImpl faultOutputAssignStmt = new FaultOutputAssignStmtImpl();
-    return faultOutputAssignStmt;
   }
 
   /**

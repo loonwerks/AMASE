@@ -73,7 +73,6 @@ import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
-import edu.umn.cs.crisys.safety.safety.FaultOutputAssignStmt;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.MustCondition;
@@ -434,9 +433,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.EQ_VALUE:
 				sequence_SafetyEqStatement(context, (EqValue) semanticObject); 
 				return; 
-			case SafetyPackage.FAULT_OUTPUT_ASSIGN_STMT:
-				sequence_OutputAssignStatement(context, (FaultOutputAssignStmt) semanticObject); 
-				return; 
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
 				return; 
@@ -489,6 +485,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns DurationStatement
 	 *     FaultSubcomponent returns DurationStatement
 	 *
 	 * Constraint:
@@ -510,48 +507,33 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns InputStatement
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (fault_in_conn=Arg nom_conn=NestedDotID)
+	 *     (fault_in+=NamedID nom_conn+=Expr (fault_in+=NamedID nom_conn+=Expr)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__FAULT_IN_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__FAULT_IN_CONN));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__NOM_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INPUT_STATEMENT__NOM_CONN));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getFault_in_connArgParserRuleCall_0_3_0(), semanticObject.getFault_in_conn());
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connNestedDotIDParserRuleCall_0_5_0(), semanticObject.getNom_conn());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns OutputStatement
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (nom_conn=NestedDotID fault_out_conn=Arg)
+	 *     (nom_conn+=NestedDotID fault_out+=NamedID (nom_conn+=NestedDotID fault_out+=NamedID)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__NOM_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__NOM_CONN));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__FAULT_OUT_CONN) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.OUTPUT_STATEMENT__FAULT_OUT_CONN));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getNom_connNestedDotIDParserRuleCall_1_3_0(), semanticObject.getNom_conn());
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getFault_out_connArgParserRuleCall_1_5_0(), semanticObject.getFault_out_conn());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns TriggerStatement
 	 *     FaultSubcomponent returns TriggerStatement
 	 *
 	 * Constraint:
@@ -648,28 +630,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
-	 *     FaultSubcomponent returns FaultOutputAssignStmt
-	 *     OutputAssignStatement returns FaultOutputAssignStmt
-	 *
-	 * Constraint:
-	 *     (fault_output_eq=[NamedElement|ID] eq_stmt=NamedID)
-	 */
-	protected void sequence_OutputAssignStatement(ISerializationContext context, FaultOutputAssignStmt semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__EQ_STMT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__EQ_STMT));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getOutputAssignStatementAccess().getFault_output_eqNamedElementIDTerminalRuleCall_2_0_1(), semanticObject.eGet(SafetyPackage.Literals.FAULT_OUTPUT_ASSIGN_STMT__FAULT_OUTPUT_EQ, false));
-		feeder.accept(grammarAccess.getOutputAssignStatementAccess().getEq_stmtNamedIDParserRuleCall_4_0(), semanticObject.getEq_stmt());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     SafetyContract returns SafetyContract
 	 *
 	 * Constraint:
@@ -682,7 +642,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
-	 *     Element returns EqValue
+	 *     ElementSafety returns EqValue
 	 *     FaultSubcomponent returns EqValue
 	 *     SafetyEqStatement returns EqValue
 	 *
@@ -696,7 +656,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
-	 *     Element returns IntervalEq
+	 *     ElementSafety returns IntervalEq
 	 *     FaultSubcomponent returns IntervalEq
 	 *     SafetyEqStatement returns IntervalEq
 	 *
@@ -719,7 +679,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
-	 *     Element returns SetEq
+	 *     ElementSafety returns SetEq
 	 *     FaultSubcomponent returns SetEq
 	 *     SafetyEqStatement returns SetEq
 	 *
@@ -772,6 +732,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	/**
 	 * Contexts:
 	 *     SpecStatement returns FaultStatement
+	 *     Element returns FaultStatement
 	 *
 	 * Constraint:
 	 *     (str=STRING? faultDefName=NestedDotID faultDefinitions+=FaultSubcomponent*)

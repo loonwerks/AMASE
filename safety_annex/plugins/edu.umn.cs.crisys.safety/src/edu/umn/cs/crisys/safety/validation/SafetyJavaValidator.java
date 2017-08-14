@@ -5,12 +5,15 @@ package edu.umn.cs.crisys.safety.validation;
 
 import static com.rockwellcollins.atc.agree.validation.AgreeType.BOOL;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.validation.CheckType;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.NamedElement;
@@ -18,6 +21,7 @@ import org.osate.aadl2.NamedElement;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
+import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
@@ -74,37 +78,154 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(nodeName, "The fault name must be a valid node definition.");
 		}
 		
+		// The check done on node arg list and input list is done in checkInput
 	}
 	
 	
 	/* Input Statements
 	 * 
 	 */
-	@Check
-	public void checkInput(InputStatement inputStmt){
-		Arg faultInConn = inputStmt.getFault_in_conn();
-		NestedDotID nomConn = inputStmt.getNom_conn();
+	@Check(CheckType.FAST)
+	public void checkInput(InputStatement inputs){
 		
-		// TODO: Check that input connection is a valid aadl name
+		// Get container of inputs (FaultSpecStmt)
+		EObject container = inputs.eContainer();
+		NamedElement defNameSub;
+		NestedDotID defName;
 		
-		
-		
-		// Use AGREEs checkArg method for the fault in connection
-		checkArg(faultInConn);
-		
+		// if the container is a fault statement:
+		// Grab the nested dot id (fault node name: faults.fail_to) and 
+		// get the base of the deepest sub (fail_to)
+		if (container instanceof FaultStatement) {
+			FaultStatement faultStatement = (FaultStatement) container;
+			defName = faultStatement.getFaultDefName();
+			
+			while(defName.getSub() != null){
+				defName = defName.getSub();
+			}
+			
+			// This should be fail_to (NodeDefExpr)
+			defNameSub = defName.getBase();
+			
+			// Make sure we have a NodeDefExpr
+			if(defNameSub instanceof NodeDefExpr){
+				
+				// Cast to NodeDefExpr
+				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
+				// Gather the arguments from node def
+				EList<Arg> args = nodeDef.getArgs();
+				EList<NamedID> inputList = inputs.getFault_in();
+				
+				// Make an easy string list to access that contains the argument names 
+				// from the node defintion
+				ArrayList<String> argNames = new ArrayList<String>();
+				
+				for(Arg arg : args){
+					argNames.add(arg.getFullName());
+				}
+				
+				// If the sizes are accurate, make sure names match
+				if(args.size()-1 == (inputList.size())){
+					
+					// Go through input list and make sure each name is in the arg list
+					for(NamedID input : inputList){
+			    	
+			    		String inputName = input.getFullName();
+			    		
+			    		//Check to see if the input name is in the arg list
+			    		if(!argNames.contains(inputName)){
+			    			error(inputs, "Input names must match fault node definition names. "
+			    					+"The input name "+inputName+" is not an input in the node definition. "
+			    					+"All possible input names are: "+argNames.toString());
+			    		}
+			    	}
+				}else{
+			    	// Wrong number of arguments/inputs
+					error(inputs, "With this fault definition, you must have "+(argNames.size()-1)+" inputs.");
+				}
+			}else{
+				// Not a node def expr
+				error(defName, "Fault definition name must be an instance of NodeDefExpr."
+						+" It is: "+defNameSub.getFullName()+".");
+			}
+		}else{
+			// Not in fault statement
+			error(inputs, "Fault inputs must be in a fault statement, not a "+container.toString()+".");
+		}
 	}
 	
 	/* Output Statements
 	 * 
 	 */
 	@Check
-	public void checkOutput(OutputStatement outputStmt, InputStatement inputStmt){
+	public void checkOutput(OutputStatement outputs){
+		 
+		// Get container of inputs (FaultSpecStmt)
+			EObject container = outputs.eContainer();
+			NamedElement defNameSub;
+			NestedDotID defName;
+				
+			// if the container is a fault statement:
+			// Grab the nested dot id (fault node name: faults.fail_to) and 
+			// get the base of the deepest sub (fail_to)
+			if (container instanceof FaultStatement) {
+				FaultStatement faultStatement = (FaultStatement) container;
+				defName = faultStatement.getFaultDefName();
+					
+				while(defName.getSub() != null){
+					defName = defName.getSub();
+				}
+					
+				// This should be fail_to (NodeDefExpr)
+				defNameSub = defName.getBase();
+					
+				// Make sure we have a NodeDefExpr
+				if(defNameSub instanceof NodeDefExpr){
+						
+					// Cast to NodeDefExpr
+					NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
+					// Gather the return values from node def
+					EList<Arg> args = nodeDef.getRets();
+					EList<NamedID> outputList = outputs.getFault_out();
+					
+					// Make an easy string list to access that contains the return names 
+					// from the node definition
+					ArrayList<String> retNames = new ArrayList<String>();
+					
+					for(Arg arg : args){
+						retNames.add(arg.getFullName());
+					}
+					
+					// If the sizes are accurate, make sure names match
+					if(args.size() == (outputList.size())){
+						
+						// Go through input list and make sure each name is in the arg list
+						for(NamedID output : outputList){
+				    	
+				    		String outputName = output.getFullName();
+				    		
+				    		//Check to see if the input name is in the arg list
+				    		if(!retNames.contains(outputName)){
+				    			error(outputs, "Output names must match fault node definition return value names. "
+				    					+"The output name "+outputName+" is not an return value in the node definition. "
+				    					+"All possible output names are: "+retNames.toString());
+				    		}
+				    	}
+					}else{
+				    	// Wrong number of arguments/inputs
+						error(outputs, "The number of outputs must match the number of return values in the node definition."
+								+" With the fault"+defNameSub.getName()+", this value must be "+retNames.size()+".");
+					}
+				} else{
+					// Not a node def expr
+					error(defName, "Fault definition name must be an instance of NodeDefExpr."
+							+" It is: "+defNameSub.getFullName()+".");
+				}
+			}else{
+				// Not a fault statement
+				error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
+			}
 		
-		NestedDotID nominalOutConn = outputStmt.getNom_conn();
-		
-		if(!(nominalOutConn.equals(inputStmt.getNom_conn()))){
-			error(nominalOutConn, "Nominal connections in input and output statements must match");
-		}
 	}
 	
 	/*
@@ -202,10 +323,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkEqStatement(EqValue eqStmt){
 		
-		// Check to make sure we are within a fault statement
-		AnnexLibrary library = EcoreUtil2.getContainerOfType(eqStmt, AnnexLibrary.class);
-		if (library != null) {
-			error(eqStmt, "Equation statments are only allowed in fault statements.");
+		// For each arg in the list, call agree 'checkArg' method for validation
+		EList<Arg> args = eqStmt.getLhs();
+		for(Arg arg : args){
+			checkArg(arg);
 		}
 	}
 	
@@ -241,7 +362,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkSetEqStatement(SetEq setEq){
 		
-		if(setEq.getList().isEmpty()){
+		if((setEq.getList().isEmpty()) && (setEq.getL1() == null)){
 			error(setEq, "Set cannot be empty.");
 		}
 		

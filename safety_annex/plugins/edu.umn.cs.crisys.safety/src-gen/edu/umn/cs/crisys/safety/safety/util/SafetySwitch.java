@@ -140,14 +140,7 @@ public class SafetySwitch<T> extends Switch<T>
       {
         FaultSubcomponent faultSubcomponent = (FaultSubcomponent)theEObject;
         T result = caseFaultSubcomponent(faultSubcomponent);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SafetyPackage.OUTPUT_ASSIGN_STATEMENT:
-      {
-        OutputAssignStatement outputAssignStatement = (OutputAssignStatement)theEObject;
-        T result = caseOutputAssignStatement(outputAssignStatement);
-        if (result == null) result = caseFaultSubcomponent(outputAssignStatement);
+        if (result == null) result = caseElement(faultSubcomponent);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -169,8 +162,8 @@ public class SafetySwitch<T> extends Switch<T>
       {
         SafetyEqStatement safetyEqStatement = (SafetyEqStatement)theEObject;
         T result = caseSafetyEqStatement(safetyEqStatement);
-        if (result == null) result = caseElement(safetyEqStatement);
         if (result == null) result = caseFaultSubcomponent(safetyEqStatement);
+        if (result == null) result = caseElement(safetyEqStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -229,6 +222,7 @@ public class SafetySwitch<T> extends Switch<T>
         InputStatement inputStatement = (InputStatement)theEObject;
         T result = caseInputStatement(inputStatement);
         if (result == null) result = caseFaultSubcomponent(inputStatement);
+        if (result == null) result = caseElement(inputStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -237,6 +231,7 @@ public class SafetySwitch<T> extends Switch<T>
         OutputStatement outputStatement = (OutputStatement)theEObject;
         T result = caseOutputStatement(outputStatement);
         if (result == null) result = caseFaultSubcomponent(outputStatement);
+        if (result == null) result = caseElement(outputStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -245,6 +240,7 @@ public class SafetySwitch<T> extends Switch<T>
         DurationStatement durationStatement = (DurationStatement)theEObject;
         T result = caseDurationStatement(durationStatement);
         if (result == null) result = caseFaultSubcomponent(durationStatement);
+        if (result == null) result = caseElement(durationStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -253,15 +249,7 @@ public class SafetySwitch<T> extends Switch<T>
         TriggerStatement triggerStatement = (TriggerStatement)theEObject;
         T result = caseTriggerStatement(triggerStatement);
         if (result == null) result = caseFaultSubcomponent(triggerStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SafetyPackage.FAULT_OUTPUT_ASSIGN_STMT:
-      {
-        FaultOutputAssignStmt faultOutputAssignStmt = (FaultOutputAssignStmt)theEObject;
-        T result = caseFaultOutputAssignStmt(faultOutputAssignStmt);
-        if (result == null) result = caseOutputAssignStatement(faultOutputAssignStmt);
-        if (result == null) result = caseFaultSubcomponent(faultOutputAssignStmt);
+        if (result == null) result = caseElement(triggerStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -302,8 +290,8 @@ public class SafetySwitch<T> extends Switch<T>
         EqValue eqValue = (EqValue)theEObject;
         T result = caseEqValue(eqValue);
         if (result == null) result = caseSafetyEqStatement(eqValue);
-        if (result == null) result = caseElement(eqValue);
         if (result == null) result = caseFaultSubcomponent(eqValue);
+        if (result == null) result = caseElement(eqValue);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -312,8 +300,8 @@ public class SafetySwitch<T> extends Switch<T>
         IntervalEq intervalEq = (IntervalEq)theEObject;
         T result = caseIntervalEq(intervalEq);
         if (result == null) result = caseSafetyEqStatement(intervalEq);
-        if (result == null) result = caseElement(intervalEq);
         if (result == null) result = caseFaultSubcomponent(intervalEq);
+        if (result == null) result = caseElement(intervalEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -322,8 +310,8 @@ public class SafetySwitch<T> extends Switch<T>
         SetEq setEq = (SetEq)theEObject;
         T result = caseSetEq(setEq);
         if (result == null) result = caseSafetyEqStatement(setEq);
-        if (result == null) result = caseElement(setEq);
         if (result == null) result = caseFaultSubcomponent(setEq);
+        if (result == null) result = caseElement(setEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -471,22 +459,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFaultSubcomponent(FaultSubcomponent object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Output Assign Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Output Assign Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseOutputAssignStatement(OutputAssignStatement object)
   {
     return null;
   }
@@ -679,22 +651,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTriggerStatement(TriggerStatement object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Fault Output Assign Stmt</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Fault Output Assign Stmt</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseFaultOutputAssignStmt(FaultOutputAssignStmt object)
   {
     return null;
   }

@@ -2,8 +2,10 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
+
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,7 +17,7 @@ import com.rockwellcollins.atc.agree.agree.NestedDotID;
  * </p>
  * <ul>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out_conn <em>Fault out conn</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out <em>Fault out</em>}</li>
  * </ul>
  *
  * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement()
@@ -25,55 +27,35 @@ import com.rockwellcollins.atc.agree.agree.NestedDotID;
 public interface OutputStatement extends FaultSubcomponent
 {
   /**
-   * Returns the value of the '<em><b>Nom conn</b></em>' containment reference.
+   * Returns the value of the '<em><b>Nom conn</b></em>' containment reference list.
+   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.NestedDotID}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Nom conn</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Nom conn</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Nom conn</em>' containment reference.
-   * @see #setNom_conn(NestedDotID)
+   * @return the value of the '<em>Nom conn</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Nom_conn()
    * @model containment="true"
    * @generated
    */
-  NestedDotID getNom_conn();
+  EList<NestedDotID> getNom_conn();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getNom_conn <em>Nom conn</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Nom conn</em>' containment reference.
-   * @see #getNom_conn()
-   * @generated
-   */
-  void setNom_conn(NestedDotID value);
-
-  /**
-   * Returns the value of the '<em><b>Fault out conn</b></em>' containment reference.
+   * Returns the value of the '<em><b>Fault out</b></em>' containment reference list.
+   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.NamedID}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Fault out conn</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Fault out</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fault out conn</em>' containment reference.
-   * @see #setFault_out_conn(Arg)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Fault_out_conn()
+   * @return the value of the '<em>Fault out</em>' containment reference list.
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Fault_out()
    * @model containment="true"
    * @generated
    */
-  Arg getFault_out_conn();
-
-  /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out_conn <em>Fault out conn</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Fault out conn</em>' containment reference.
-   * @see #getFault_out_conn()
-   * @generated
-   */
-  void setFault_out_conn(Arg value);
+  EList<NamedID> getFault_out();
 
 } // OutputStatement

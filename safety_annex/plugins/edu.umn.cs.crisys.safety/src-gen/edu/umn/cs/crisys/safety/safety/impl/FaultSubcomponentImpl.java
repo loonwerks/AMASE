@@ -7,7 +7,7 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.osate.aadl2.impl.ElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class FaultSubcomponentImpl extends MinimalEObjectImpl.Container implements FaultSubcomponent
+public class FaultSubcomponentImpl extends ElementImpl implements FaultSubcomponent
 {
   /**
    * <!-- begin-user-doc -->

@@ -14,7 +14,6 @@
     <genClasses ecoreClass="Safety.ecore#//Contract"/>
     <genClasses ecoreClass="Safety.ecore#//SpecStatement"/>
     <genClasses ecoreClass="Safety.ecore#//FaultSubcomponent"/>
-    <genClasses ecoreClass="Safety.ecore#//OutputAssignStatement"/>
     <genClasses ecoreClass="Safety.ecore#//TemporalConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TriggerCondition">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerCondition/exprList"/>
@@ -39,8 +38,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//InputStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/fault_in_conn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/fault_in"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/nom_conn"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/fault_in_conn"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_conn"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/out_conn"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//InputStatement/in_connExpr"/>
@@ -48,6 +48,7 @@
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//OutputStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/nom_conn"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/fault_out"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/fault_out_conn"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//OutputStatement/out_conn"/>
     </genClasses>
@@ -58,10 +59,6 @@
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
-    </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//FaultOutputAssignStmt">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputAssignStmt/fault_output_eq"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputAssignStmt/eq_stmt"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//PermanentConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TransientConstraint"/>
@@ -84,6 +81,11 @@
     <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenRightInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OutputAssignStatement"/>
+    <genClasses ecoreClass="Safety.ecore#//FaultOutputAssignStmt">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputAssignStmt/fault_output_eq"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputAssignStmt/eq_stmt"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//OutputEqStatement"/>
     <genClasses ecoreClass="Safety.ecore#//FaultOutputEqStmt">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputEqStmt/fault_output_eq"/>
