@@ -16,6 +16,9 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
+import org.osate.aadl2.BusAccess;
+import org.osate.aadl2.DataPort;
+import org.osate.aadl2.Feature;
 import org.osate.aadl2.NamedElement;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
@@ -155,76 +158,106 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 	
 	/* Output Statements
-	 * 
+	 * (1): Get container of the output in order to check the fault node for
+	 * 		list of return values. This is compared with the list of fault outputs.
+	 * 		If the sizes of the lists do not match, the names of the return values 
+	 * 		do not match, or the output statement is not in the fault spec, we
+	 * 		send out an error.
+	 * (2): Make sure the nominal connections are valid component values whose
+	 * 		types match those of the return values for the fault node.
 	 */
 	@Check
 	public void checkOutput(OutputStatement outputs){
-		 
+		// (1) 
 		// Get container of inputs (FaultSpecStmt)
-			EObject container = outputs.eContainer();
-			NamedElement defNameSub;
-			NestedDotID defName;
+		EObject container = outputs.eContainer();
+		NamedElement defNameSub;
+		NestedDotID defName;
 				
-			// if the container is a fault statement:
-			// Grab the nested dot id (fault node name: faults.fail_to) and 
-			// get the base of the deepest sub (fail_to)
-			if (container instanceof FaultStatement) {
-				FaultStatement faultStatement = (FaultStatement) container;
-				defName = faultStatement.getFaultDefName();
+		// if the container is a fault statement:
+		// Grab the nested dot id (fault node name: faults.fail_to) and 
+		// get the base of the deepest sub (fail_to)
+		if (container instanceof FaultStatement) {
+			FaultStatement faultStatement = (FaultStatement) container;
+			defName = faultStatement.getFaultDefName();
 					
-				while(defName.getSub() != null){
-					defName = defName.getSub();
-				}
-					
-				// This should be fail_to (NodeDefExpr)
-				defNameSub = defName.getBase();
-					
-				// Make sure we have a NodeDefExpr
-				if(defNameSub instanceof NodeDefExpr){
-						
-					// Cast to NodeDefExpr
-					NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
-					// Gather the return values from node def
-					EList<Arg> args = nodeDef.getRets();
-					EList<NamedID> outputList = outputs.getFault_out();
-					
-					// Make an easy string list to access that contains the return names 
-					// from the node definition
-					ArrayList<String> retNames = new ArrayList<String>();
-					
-					for(Arg arg : args){
-						retNames.add(arg.getFullName());
-					}
-					
-					// If the sizes are accurate, make sure names match
-					if(args.size() == (outputList.size())){
-						
-						// Go through input list and make sure each name is in the arg list
-						for(NamedID output : outputList){
-				    	
-				    		String outputName = output.getFullName();
-				    		
-				    		//Check to see if the input name is in the arg list
-				    		if(!retNames.contains(outputName)){
-				    			error(outputs, "Output names must match fault node definition return value names. "
-				    					+"The output name "+outputName+" is not an return value in the node definition. "
-				    					+"All possible output names are: "+retNames.toString());
-				    		}
-				    	}
-					}else{
-				    	// Wrong number of arguments/inputs
-						error(outputs, "The number of outputs must match the number of return values in the node definition."
-								+" With the fault"+defNameSub.getName()+", this value must be "+retNames.size()+".");
-					}
-				} else{
-					// Not a node def expr
-					error(defName, "Fault definition name must be an instance of NodeDefExpr."
-							+" It is: "+defNameSub.getFullName()+".");
-				}
-			}else{
-				// Not a fault statement
-				error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
+			while(defName.getSub() != null){
+				defName = defName.getSub();
 			}
+					
+			// This should be fail_to (NodeDefExpr)
+			defNameSub = defName.getBase();
+					
+			// Make sure we have a NodeDefExpr
+			if(defNameSub instanceof NodeDefExpr){
+						
+				// Cast to NodeDefExpr
+				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
+				// Gather the return values from node def
+				EList<Arg> args = nodeDef.getRets();
+				EList<NamedID> outputList = outputs.getFault_out();
+					
+				// Make an easy string list to access that contains the return names 
+				// from the node definition
+				ArrayList<String> retNames = new ArrayList<String>();
+				
+				for(Arg arg : args){
+					retNames.add(arg.getFullName());
+				}
+					
+				// If the sizes are accurate, make sure names match
+				if(args.size() == (outputList.size())){
+						
+					// Go through input list and make sure each name is in the arg list
+					for(NamedID output : outputList){
+			    	
+			    		String outputName = output.getFullName();
+				    		
+			    		//Check to see if the input name is in the arg list
+				   		if(!retNames.contains(outputName)){
+				   			error(outputs, "Output names must match fault node definition return value names. "
+				   					+"The output name "+outputName+" is not an return value in the node definition. "
+				   					+"All possible output names are: "+retNames.toString());
+				   		}
+				   	}
+				}else{
+				   	// Wrong number of arguments/inputs
+					error(outputs, "The number of outputs must match the number of return values in the node definition."
+							+" With the fault"+defNameSub.getName()+", this value must be "+retNames.size()+".");
+				}
+			} else{
+				// Not a node def expr
+				error(defName, "Fault definition name must be an instance of NodeDefExpr."
+						+" It is: "+defNameSub.getFullName()+".");
+			}
+		}else{
+			// Not a fault statement
+			error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
+		}
+			
+		// (2)
+		// List of nominal connections
+		EList<NestedDotID> nomConns = outputs.getNom_conn();
+		NestedDotID nomSub;
+		NamedElement baseSubNom;
+		
+		// Make sure that the connection is a valid component connection
+		for(NestedDotID nom : nomConns){
+			nomSub = nom.getSub();
+			if(nomSub != null){
+				baseSubNom = nomSub.getBase();
+				if(!(baseSubNom instanceof Feature)){
+					error(nom, "This connection must be a component connection (Feature). "
+				            +"Possible features are "
+							+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
+				}
+			}
+		}
+		
+		// Check type matching between nominal connections and return values
+		
+		
+
 		
 	}
 	
