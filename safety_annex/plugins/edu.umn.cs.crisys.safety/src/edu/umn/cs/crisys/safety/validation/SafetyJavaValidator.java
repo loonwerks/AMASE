@@ -165,20 +165,27 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * 		If the sizes of the lists do not match, the names of the return values 
 	 * 		do not match, or the output statement is not in the fault spec, we
 	 * 		send out an error.
-	 * (2): Make sure the nominal connections are valid component values whose
-	 * 		types match those of the return values for the fault node.
+	 * (2): Make sure we have valid nominal connections as our output connections.
+	 * (3): Make sure the nominal connection types match return value types. 
 	 */
 	@Check
 	public void checkOutput(OutputStatement outputs){
 		// (1) 
 		// Get container of inputs (FaultSpecStmt)
 		EObject container = outputs.eContainer();
-		NamedElement defNameSub;
+		// defName: faults.fail_to
 		NestedDotID defName;
+		// defNameSub: fail_to
+		NamedElement defNameSub;
+		// Make an easy string list to access that contains the return names 
+		// from the node definition
+		ArrayList<String> retNames = new ArrayList<String>();
+		// List of return values
+		EList<Arg> retvals = null;
 				
 		// if the container is a fault statement:
-		// Grab the nested dot id (fault node name: faults.fail_to) and 
-		// get the base of the deepest sub (fail_to)
+		// Grab the nested dot id (fault node name: defName: faults.fail_to) and 
+		// get the base of the deepest sub (defNameSub: fail_to)
 		if (container instanceof FaultStatement) {
 			FaultStatement faultStatement = (FaultStatement) container;
 			defName = faultStatement.getFaultDefName();
@@ -196,23 +203,19 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				// Cast to NodeDefExpr
 				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
 				// Gather the return values from node def
-				EList<Arg> args = nodeDef.getRets();
+				retvals = nodeDef.getRets();
 				EList<NamedID> outputList = outputs.getFault_out();
-					
-				// Make an easy string list to access that contains the return names 
-				// from the node definition
-				ArrayList<String> retNames = new ArrayList<String>();
 				
-				for(Arg arg : args){
+				for(Arg arg : retvals){
 					retNames.add(arg.getFullName());
+					
 				}
 					
 				// If the sizes are accurate, make sure names match
-				if(args.size() == (outputList.size())){
+				if(retvals.size() == (outputList.size())){
 						
-					// Go through input list and make sure each name is in the arg list
+					// Go through output list and make sure each name is in the arg list
 					for(NamedID output : outputList){
-			    	
 			    		String outputName = output.getFullName();
 				    		
 			    		//Check to see if the input name is in the arg list
@@ -240,8 +243,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// (2)
 		// List of nominal connections
 		EList<NestedDotID> nomConns = outputs.getNom_conn();
-		NestedDotID nomSub;
+		NestedDotID nomSub = null;
 		NamedElement baseSubNom;
+		NamedElement nomBase;
 		
 		// Make sure that the connection is a valid component connection
 		for(NestedDotID nom : nomConns){
@@ -260,15 +264,50 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 		
 		// Check type matching between nominal connections and return values
-		for(NestedDotID nom : nomConns){
-			nomSub = nom.getSub();
-			if(nomSub != null){
-				baseSubNom = nomSub.getBase();
-				// ????????
+		//for(NestedDotID nom : nomConns){
+		for(int i = 0; i < nomConns.size(); i++){
+			
+			// Get the nominal connection
+			NestedDotID nom = nomConns.get(i);
+			Arg returnArg = null; 
+			// There is no reason why retvals should still be null.
+			// If it is, there are other errors that would be shown to the user.
+			if(retvals != null){
+				returnArg = retvals.get(i);
+			}else{
+				error(outputs, "Return value list is empty.");
 			}
+			
+			AgreeType typeReturnArg = getAgreeType(returnArg);
+			NamedElement nestedNom = getFinalNestId(nom);
+			AgreeType typeNom = getAgreeType(nestedNom);
+			
+			if(!matches(typeNom, typeReturnArg)){
+				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
+				+" but right side (return value) is of type "+typeReturnArg.toString());
+			}
+			
+			System.out.println();
+			
+//			while(nom.getSub() != null){
+//				nom = nom.getSub();
+//			}
+//			nomBase = nom.getBase();
+//			@SuppressWarnings("unused")
+//			AgreeType test = getAgreeType(nomBase);
+			
+			
+			
+			
+			
+//			// Now nomBase holds the deepest part of the nested statement. 
+//			// selector.green_input <- nom=green_input
+//			String nameConn = nom.toString();
+//			if(retNames.contains(nameConn)){
+//				
+//			}
+			
 		}
-
-		
 	}
 	
 	/*
@@ -333,7 +372,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	
 	/*
 	 * Trigger Condition: 
-	 * Checks nonempty list and only boolean values in expression list
+	 * Checks nonempty list and only boolean values in expression list.
+	 * Expr validity is done primarily through agree
 	 */
 	@Check
 	public void checkTriggerCondition(TriggerCondition tc){
@@ -361,7 +401,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	
 	/*
 	 *  EqStatements: 
-	 *  Make sure you are within a fault statement. 
+	 *  Call agrees checkArg routine for each arg in the statement. 
+	 *  The expressions on the rhs are validated through agree.
 	 */
 	@Check
 	public void checkEqStatement(EqValue eqStmt){
