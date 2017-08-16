@@ -89,6 +89,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * 		These arguments must match all input fault values (by name). 
 	 * (2): Make sure the types of arguments match the types of expressions
 	 * 		passed in as fault inputs (connections or otherwise). 
+	 * (3) Type check Expr (right side) with arguments to node (left side)
 	 */
 	@Check(CheckType.FAST)
 	public void checkInput(InputStatement inputs){
@@ -98,7 +99,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		NamedElement defNameSub;
 		NestedDotID defName;
 		
-		// if the container is a fault statement:
+		// Gather expression list from rhs of '<-'
+		EList<Expr> exprList = inputs.getNom_conn();
+		
+		// (1) : if the container is a fault statement:
 		// Grab the nested dot id (fault node name: faults.fail_to) and 
 		// get the base of the deepest sub (fail_to)
 		if (container instanceof FaultStatement) {
@@ -129,7 +133,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					argNames.add(arg.getFullName());
 				}
 				
-				// If the sizes are accurate, make sure names match
+				// (2) : If the sizes are accurate, make sure names match
 				if(args.size()-1 == (inputList.size())){
 					
 					// Go through input list and make sure each name is in the arg list
@@ -156,6 +160,28 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					error(inputs, "With this fault definition, you must have "+(argNames.size()-1)+" inputs."
 							+ " These are called: "+noTrigger.toString());
 				}
+				
+				// (3) : Type check arguments to node with Expr on rhs
+				// Go through expression list
+				for(int i = 0; i < exprList.size(); i++){
+					
+					// Save expr and arg
+					Expr expr = exprList.get(i);
+					Arg arg = args.get(i);
+					
+					// Get agree types of each
+					AgreeType typeExpr = getAgreeType(expr);
+					AgreeType typeArg = getAgreeType(arg);
+					
+					// See if they match using agree "matches" method
+					if(!(matches(typeExpr, typeArg))){
+						error(expr, "Left side (argument name) type is "+typeArg.toString()
+						+" but right side (expression) is of type "+typeExpr.toString());
+					}
+					
+					
+				}
+				
 			}else{
 				// Not a node def expr
 				error(defName, "Fault definition name must be an instance of NodeDefExpr."
