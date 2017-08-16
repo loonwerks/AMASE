@@ -175,11 +175,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					
 					// See if they match using agree "matches" method
 					if(!(matches(typeExpr, typeArg))){
-						error(expr, "Left side (argument name) type is "+typeArg.toString()
-						+" but right side (expression) is of type "+typeExpr.toString());
+						error(expr, "Left side ("+arg.getName()+") is of type "+typeArg.toString()
+						+" but right side is of type "+typeExpr.toString());
 					}
-					
-					
 				}
 				
 			}else{
@@ -468,6 +466,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check
 	public void checkSetEqStatement(SetEq setEq){
 		
+		// Check for empty list
 		if((setEq.getList().isEmpty()) && (setEq.getL1() == null)){
 			error(setEq, "Set cannot be empty.");
 		}
