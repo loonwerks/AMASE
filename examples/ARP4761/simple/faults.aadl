@@ -28,27 +28,27 @@ annex agree {**
 	
 	-- Same as xSAP stuck_at: value passed in, gets stuck at this value
 	-- Different than frozen (unless user passes in old value of val_in as alt_val)
-	node fail_to(val_in: real, alt_val: real, fail_occurred: bool) returns (val_out: real); 
+	node fail_to(val_in: real, alt_val: real, trigger: bool) returns (val_out: real); 
 	let
-	   val_out = if (fail_occurred) then alt_val else val_in;
+	   val_out = if (trigger) then alt_val else val_in;
 	tel;
 	
 
 	 
 	-- Inverted: val_out = !input for the first step of failure, then after
 	-- that it remains as next(val_out) = val_out
-    node inverted_fail(val_in: bool, fail_occurred: bool) returns (val_out:bool);
+    node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
 	let
-	  val_out = if fail_occurred then not(val_in) else val_in;
+	  val_out = if trigger then not(val_in) else val_in;
 	tel;
 	
 
 
 	-- Seems like this is ramp up... 
 	-- Possible change to (val_out - delta) ?
-	node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real);
+	node ramp_down(val_in: real, delt: real, val_max: real, trigger: bool) returns (val_out: real);
 	let
- 	  val_out = val_in -> if (fail_occurred) then min(val_max, pre(val_out + delt)) else val_in; 
+ 	  val_out = val_in -> if (trigger) then min(val_max, pre(val_out + delt)) else val_in; 
 	tel;	
 
 
@@ -57,9 +57,9 @@ annex agree {**
 	-- Frozen: val_out = val_in
 	-- or possibly val_out = pre(val_out) ? Need init if that's the case
 	--
-	node frozen(val_in: real, fail_occurred: bool) returns (val_out: real);
+	node frozen(val_in: real,alt_val:real, trigger: bool) returns (val_out: real);
 	let
-	  val_out = val_in;
+	  val_out = if (trigger) then (alt_val) else (val_in);
 	tel;
 	
 	

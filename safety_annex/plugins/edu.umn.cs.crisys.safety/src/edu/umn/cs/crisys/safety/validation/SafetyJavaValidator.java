@@ -146,7 +146,15 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			    	}
 				}else{
 			    	// Wrong number of arguments/inputs
-					error(inputs, "With this fault definition, you must have "+(argNames.size()-1)+" inputs.");
+					// To print list of inputs, I need to remove "trigger" from the list
+					ArrayList<String> noTrigger = new ArrayList<String>();
+					for(String item : argNames){
+						if(!(item.equals("trigger"))){
+							noTrigger.add(item);
+						}
+					}
+					error(inputs, "With this fault definition, you must have "+(argNames.size()-1)+" inputs."
+							+ " These are called: "+noTrigger.toString());
 				}
 			}else{
 				// Not a node def expr
@@ -240,12 +248,15 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
 		}
 			
-		// (2)
+		// (2) Make sure connections are valid component connections in aadl
+		// Event ports, data ports, buses, etc. 
+		
 		// List of nominal connections
 		EList<NestedDotID> nomConns = outputs.getNom_conn();
+		// The sub of the nominal connection
 		NestedDotID nomSub = null;
+		// The base of the sub of the nominal connection
 		NamedElement baseSubNom;
-		NamedElement nomBase;
 		
 		// Make sure that the connection is a valid component connection
 		for(NestedDotID nom : nomConns){
@@ -263,12 +274,14 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		}
 		
-		// Check type matching between nominal connections and return values
-		//for(NestedDotID nom : nomConns){
+		// (3) Type check between nominal connections and return values
+		
+		// Iterate through the list of nominal connections (nomConns)
 		for(int i = 0; i < nomConns.size(); i++){
 			
 			// Get the nominal connection
 			NestedDotID nom = nomConns.get(i);
+			// Return value from the list of all return values
 			Arg returnArg = null; 
 			// There is no reason why retvals should still be null.
 			// If it is, there are other errors that would be shown to the user.
@@ -278,35 +291,18 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(outputs, "Return value list is empty.");
 			}
 			
+			// get agree type of return value
 			AgreeType typeReturnArg = getAgreeType(returnArg);
+			// Get the final nested id of the nominal connection
 			NamedElement nestedNom = getFinalNestId(nom);
+			// Get agree type of that nested id
 			AgreeType typeNom = getAgreeType(nestedNom);
 			
+			// Use agrees "matches" method to check types
 			if(!matches(typeNom, typeReturnArg)){
 				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
 				+" but right side (return value) is of type "+typeReturnArg.toString());
 			}
-			
-			System.out.println();
-			
-//			while(nom.getSub() != null){
-//				nom = nom.getSub();
-//			}
-//			nomBase = nom.getBase();
-//			@SuppressWarnings("unused")
-//			AgreeType test = getAgreeType(nomBase);
-			
-			
-			
-			
-			
-//			// Now nomBase holds the deepest part of the nested statement. 
-//			// selector.green_input <- nom=green_input
-//			String nameConn = nom.toString();
-//			if(retNames.contains(nameConn)){
-//				
-//			}
-			
 		}
 	}
 	
