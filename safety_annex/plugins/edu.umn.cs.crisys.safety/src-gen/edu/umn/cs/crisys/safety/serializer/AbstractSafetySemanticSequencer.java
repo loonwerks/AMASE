@@ -81,6 +81,7 @@ import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
 import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
+import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
@@ -460,6 +461,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.PERMANENT_CONSTRAINT:
 				sequence_TemporalConstraint(context, (PermanentConstraint) semanticObject); 
 				return; 
+			case SafetyPackage.RANGE_EQ:
+				sequence_SafetyEqStatement(context, (RangeEq) semanticObject); 
+				return; 
 			case SafetyPackage.SAFETY_CONTRACT:
 				sequence_SafetyContract(context, (SafetyContract) semanticObject); 
 				return; 
@@ -489,19 +493,10 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns DurationStatement
 	 *
 	 * Constraint:
-	 *     (tc=TemporalConstraint interv=Interval)
+	 *     (tc=TemporalConstraint interv=Interval?)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, DurationStatement semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.DURATION_STATEMENT__TC) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.DURATION_STATEMENT__TC));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.DURATION_STATEMENT__INTERV) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.DURATION_STATEMENT__INTERV));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getTcTemporalConstraintParserRuleCall_2_3_0(), semanticObject.getTc());
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getIntervIntervalParserRuleCall_2_4_0(), semanticObject.getInterv());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -673,6 +668,32 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getLhs_intIDTerminalRuleCall_1_2_0(), semanticObject.getLhs_int());
 		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getIntervIntervalParserRuleCall_1_4_0(), semanticObject.getInterv());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ElementSafety returns RangeEq
+	 *     FaultSubcomponent returns RangeEq
+	 *     SafetyEqStatement returns RangeEq
+	 *
+	 * Constraint:
+	 *     (lhs_range=ID l1=INTEGER_LIT l2=INTEGER_LIT)
+	 */
+	protected void sequence_SafetyEqStatement(ISerializationContext context, RangeEq semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.RANGE_EQ__LHS_RANGE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.RANGE_EQ__LHS_RANGE));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.RANGE_EQ__L1) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.RANGE_EQ__L1));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.RANGE_EQ__L2) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.RANGE_EQ__L2));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getLhs_rangeIDTerminalRuleCall_3_2_0(), semanticObject.getLhs_range());
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_3_5_0(), semanticObject.getL1());
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getL2INTEGER_LITTerminalRuleCall_3_7_0(), semanticObject.getL2());
 		feeder.finish();
 	}
 	

@@ -611,7 +611,7 @@ ruleFaultSubcomponent returns [EObject current=null]
 	    }
 
 )
-)
+)?
 	otherlv_27=Semicolon
     {
     	newLeafNode(otherlv_27, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_2_5());
@@ -1133,6 +1133,97 @@ ruleSafetyEqStatement returns [EObject current=null]
 	otherlv_23=Semicolon
     {
     	newLeafNode(otherlv_23, grammarAccess.getSafetyEqStatementAccess().getSemicolonKeyword_2_8());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getSafetyEqStatementAccess().getRangeEqAction_3_0(),
+            $current);
+    }
+)
+	otherlv_25=Range
+    {
+    	newLeafNode(otherlv_25, grammarAccess.getSafetyEqStatementAccess().getRangeKeyword_3_1());
+    }
+(
+(
+		lv_lhs_range_26_0=RULE_ID
+		{
+			newLeafNode(lv_lhs_range_26_0, grammarAccess.getSafetyEqStatementAccess().getLhs_rangeIDTerminalRuleCall_3_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSafetyEqStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"lhs_range",
+        		lv_lhs_range_26_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_27=EqualsSign
+    {
+    	newLeafNode(otherlv_27, grammarAccess.getSafetyEqStatementAccess().getEqualsSignKeyword_3_3());
+    }
+
+	otherlv_28=LeftCurlyBracket
+    {
+    	newLeafNode(otherlv_28, grammarAccess.getSafetyEqStatementAccess().getLeftCurlyBracketKeyword_3_4());
+    }
+(
+(
+		lv_l1_29_0=RULE_INTEGER_LIT
+		{
+			newLeafNode(lv_l1_29_0, grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_3_5_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSafetyEqStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"l1",
+        		lv_l1_29_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.INTEGER_LIT");
+	    }
+
+)
+)
+	otherlv_30=FullStopFullStop
+    {
+    	newLeafNode(otherlv_30, grammarAccess.getSafetyEqStatementAccess().getFullStopFullStopKeyword_3_6());
+    }
+(
+(
+		lv_l2_31_0=RULE_INTEGER_LIT
+		{
+			newLeafNode(lv_l2_31_0, grammarAccess.getSafetyEqStatementAccess().getL2INTEGER_LITTerminalRuleCall_3_7_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSafetyEqStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"l2",
+        		lv_l2_31_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.INTEGER_LIT");
+	    }
+
+)
+)
+	otherlv_32=RightCurlyBracket
+    {
+    	newLeafNode(otherlv_32, grammarAccess.getSafetyEqStatementAccess().getRightCurlyBracketKeyword_3_8());
+    }
+
+	otherlv_33=Semicolon
+    {
+    	newLeafNode(otherlv_33, grammarAccess.getSafetyEqStatementAccess().getSemicolonKeyword_3_9());
     }
 ))
 ;

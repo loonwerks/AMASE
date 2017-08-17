@@ -22,6 +22,7 @@ import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
 import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
+import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
@@ -236,6 +237,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass setEqEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass rangeEqEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -836,6 +844,46 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getRangeEq()
+  {
+    return rangeEqEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRangeEq_Lhs_range()
+  {
+    return (EAttribute)rangeEqEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRangeEq_L1()
+  {
+    return (EAttribute)rangeEqEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRangeEq_L2()
+  {
+    return (EAttribute)rangeEqEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getClosedInterval()
   {
     return closedIntervalEClass;
@@ -977,6 +1025,11 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEAttribute(setEqEClass, SET_EQ__L1);
     createEAttribute(setEqEClass, SET_EQ__LIST);
 
+    rangeEqEClass = createEClass(RANGE_EQ);
+    createEAttribute(rangeEqEClass, RANGE_EQ__LHS_RANGE);
+    createEAttribute(rangeEqEClass, RANGE_EQ__L1);
+    createEAttribute(rangeEqEClass, RANGE_EQ__L2);
+
     closedIntervalEClass = createEClass(CLOSED_INTERVAL);
 
     openLeftIntervalEClass = createEClass(OPEN_LEFT_INTERVAL);
@@ -1043,6 +1096,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     eqValueEClass.getESuperTypes().add(this.getSafetyEqStatement());
     intervalEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
     setEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
+    rangeEqEClass.getESuperTypes().add(this.getSafetyEqStatement());
     closedIntervalEClass.getESuperTypes().add(this.getInterval());
     openLeftIntervalEClass.getESuperTypes().add(this.getInterval());
     openRightIntervalEClass.getESuperTypes().add(this.getInterval());
@@ -1124,6 +1178,11 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEAttribute(getSetEq_Lhs_set(), theEcorePackage.getEString(), "lhs_set", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetEq_L1(), theEcorePackage.getEString(), "l1", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetEq_List(), theEcorePackage.getEString(), "list", null, 0, -1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(rangeEqEClass, RangeEq.class, "RangeEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getRangeEq_Lhs_range(), theEcorePackage.getEString(), "lhs_range", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRangeEq_L1(), theEcorePackage.getEString(), "l1", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRangeEq_L2(), theEcorePackage.getEString(), "l2", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(closedIntervalEClass, ClosedInterval.class, "ClosedInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

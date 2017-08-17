@@ -90,6 +90,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.EQ_VALUE: return createEqValue();
       case SafetyPackage.INTERVAL_EQ: return createIntervalEq();
       case SafetyPackage.SET_EQ: return createSetEq();
+      case SafetyPackage.RANGE_EQ: return createRangeEq();
       case SafetyPackage.CLOSED_INTERVAL: return createClosedInterval();
       case SafetyPackage.OPEN_LEFT_INTERVAL: return createOpenLeftInterval();
       case SafetyPackage.OPEN_RIGHT_INTERVAL: return createOpenRightInterval();
@@ -383,6 +384,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     SetEqImpl setEq = new SetEqImpl();
     return setEq;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RangeEq createRangeEq()
+  {
+    RangeEqImpl rangeEq = new RangeEqImpl();
+    return rangeEq;
   }
 
   /**

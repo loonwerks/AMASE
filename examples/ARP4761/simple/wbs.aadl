@@ -307,7 +307,7 @@ annex safety{**
 	
 	fault "gyu": faults.fail_to {
 		
-		inputs: val_in <- bscu.Select_Alternate, alt_val <- threshold;     
+		inputs: val_in <- 5.0, alt_val <- 0.5*(threshold);     
 		
 		outputs: selector.green_output.val <- val_out;    
 		 

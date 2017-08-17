@@ -41,7 +41,7 @@ FaultSubcomponent returns FaultSubcomponent:
 	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID 
 							(','nom_conn+=NestedDotID '<-' fault_out+=NamedID)*';'
 	
- 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval ';'  
+ 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
 	| SafetyEqStatement ;
 
@@ -60,6 +60,7 @@ SafetyEqStatement:
 	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
 	| {IntervalEq} 'interval' lhs_int=ID '=' interv=Interval ';'
     | {SetEq} 'set' lhs_set=ID '=' '{'l1=INTEGER_LIT (',' list+=INTEGER_LIT)* '}' ';'
+    | {RangeEq} 'range' lhs_range=ID '=' '{'l1=INTEGER_LIT '..' l2=INTEGER_LIT '}' ';'
 ;
 
 Interval:

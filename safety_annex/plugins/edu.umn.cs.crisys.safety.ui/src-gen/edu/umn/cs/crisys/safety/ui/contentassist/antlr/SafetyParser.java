@@ -104,6 +104,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_1(), "rule__SafetyEqStatement__Group_1__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_2(), "rule__SafetyEqStatement__Group_2__0");
 					put(grammarAccess.getSafetyEqStatementAccess().getGroup_2_6(), "rule__SafetyEqStatement__Group_2_6__0");
+					put(grammarAccess.getSafetyEqStatementAccess().getGroup_3(), "rule__SafetyEqStatement__Group_3__0");
 					put(grammarAccess.getIntervalAccess().getGroup_0(), "rule__Interval__Group_0__0");
 					put(grammarAccess.getIntervalAccess().getGroup_0_0(), "rule__Interval__Group_0_0__0");
 					put(grammarAccess.getIntervalAccess().getGroup_1(), "rule__Interval__Group_1__0");
@@ -358,6 +359,9 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyEqStatementAccess().getLhs_setAssignment_2_2(), "rule__SafetyEqStatement__Lhs_setAssignment_2_2");
 					put(grammarAccess.getSafetyEqStatementAccess().getL1Assignment_2_5(), "rule__SafetyEqStatement__L1Assignment_2_5");
 					put(grammarAccess.getSafetyEqStatementAccess().getListAssignment_2_6_1(), "rule__SafetyEqStatement__ListAssignment_2_6_1");
+					put(grammarAccess.getSafetyEqStatementAccess().getLhs_rangeAssignment_3_2(), "rule__SafetyEqStatement__Lhs_rangeAssignment_3_2");
+					put(grammarAccess.getSafetyEqStatementAccess().getL1Assignment_3_5(), "rule__SafetyEqStatement__L1Assignment_3_5");
+					put(grammarAccess.getSafetyEqStatementAccess().getL2Assignment_3_7(), "rule__SafetyEqStatement__L2Assignment_3_7");
 					put(grammarAccess.getIntervalAccess().getLowAssignment_0_0_2(), "rule__Interval__LowAssignment_0_0_2");
 					put(grammarAccess.getIntervalAccess().getHighAssignment_0_0_4(), "rule__Interval__HighAssignment_0_0_4");
 					put(grammarAccess.getIntervalAccess().getLowAssignment_1_0_2(), "rule__Interval__LowAssignment_1_0_2");

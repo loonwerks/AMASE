@@ -209,6 +209,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createSetEqAdapter();
       }
       @Override
+      public Adapter caseRangeEq(RangeEq object)
+      {
+        return createRangeEqAdapter();
+      }
+      @Override
       public Adapter caseClosedInterval(ClosedInterval object)
       {
         return createClosedIntervalAdapter();
@@ -666,6 +671,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSetEqAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.RangeEq <em>Range Eq</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.RangeEq
+   * @generated
+   */
+  public Adapter createRangeEqAdapter()
   {
     return null;
   }

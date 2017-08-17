@@ -257,6 +257,15 @@ public interface SafetyFactory extends EFactory
   SetEq createSetEq();
 
   /**
+   * Returns a new object of class '<em>Range Eq</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Range Eq</em>'.
+   * @generated
+   */
+  RangeEq createRangeEq();
+
+  /**
    * Returns a new object of class '<em>Closed Interval</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
