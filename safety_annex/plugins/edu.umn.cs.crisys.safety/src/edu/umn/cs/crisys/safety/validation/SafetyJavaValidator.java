@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
+import org.osate.aadl2.AadlInteger;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Feature;
 import org.osate.aadl2.NamedElement;
@@ -23,6 +24,7 @@ import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
+import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.validation.AgreeType;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
@@ -32,6 +34,7 @@ import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
@@ -163,6 +166,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 							+ " These are called: "+noTrigger.toString());
 				}
 				
+				
 				// (3) : Type check arguments to node with Expr on rhs
 				// Go through expression list
 				for(int i = 0; i < exprList.size(); i++){
@@ -273,7 +277,14 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			// Not a fault statement
 			error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
 		}
-			
+		
+
+		
+		// ============================HERE++++++++++++++++++++++++++++++++++++++++++
+		
+		
+		
+		
 		// (2) Make sure connections are valid component connections in aadl
 		// Event ports, data ports, buses, etc. 
 		
@@ -289,6 +300,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			nomSub = nom.getSub();
 			if(nomSub != null){
 				baseSubNom = nomSub.getBase();
+				
+				System.out.println();
+				
 				if(!(baseSubNom instanceof Feature)){
 					error(nom, "This connection must be a component connection (Feature). "
 				            +"Possible features are "
@@ -303,33 +317,35 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// (3) Type check between nominal connections and return values
 		
 		// Iterate through the list of nominal connections (nomConns)
-		for(int i = 0; i < nomConns.size(); i++){
-			
-			// Get the nominal connection
-			NestedDotID nom = nomConns.get(i);
-			// Return value from the list of all return values
-			Arg returnArg = null; 
-			// There is no reason why retvals should still be null.
-			// If it is, there are other errors that would be shown to the user.
-			if(retvals != null){
-				returnArg = retvals.get(i);
-			}else{
-				error(outputs, "Return value list is empty.");
-			}
-			
-			// get agree type of return value
-			AgreeType typeReturnArg = getAgreeType(returnArg);
-			// Get the final nested id of the nominal connection
-			NamedElement nestedNom = getFinalNestId(nom);
-			// Get agree type of that nested id
-			AgreeType typeNom = getAgreeType(nestedNom);
-			
-			// Use agrees "matches" method to check types
-			if(!matches(typeNom, typeReturnArg)){
-				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
-				+" but right side (return value) is of type "+typeReturnArg.toString());
-			}
-		}
+//		for(int i = 0; i < nomConns.size(); i++){
+//			
+//			// Get the nominal connection
+//			NestedDotID nom = nomConns.get(i);
+//			// Return value from the list of all return values
+//			Arg returnArg = null; 
+//			// There is no reason why retvals should still be null.
+//			// If it is, there are other errors that would be shown to the user.
+//			if(retvals != null){
+//				returnArg = retvals.get(i);
+//			}else{
+//				error(outputs, "Return value list is empty.");
+//			}
+//			
+//			// get agree type of return value
+//			AgreeType typeReturnArg = getAgreeType(returnArg);
+//			// Get the final nested id of the nominal connection
+//			NamedElement nestedNom = getFinalNestId(nom);
+//			// Get agree type of that nested id
+//			AgreeType typeNom = getAgreeType(nestedNom);
+//			
+//			System.out.println();
+//			
+//			// Use agrees "matches" method to check types
+//			if(!matches(typeNom, typeReturnArg)){
+//				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
+//				+" but right side (return value) is of type "+typeReturnArg.toString());
+//			}
+//		}
 	}
 	
 	/*
@@ -491,25 +507,198 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(setEq, "Set cannot be empty.");
 		}
 		
-		// Try casting string to integer, catch exceptions to print out error
-		Integer result = 0;
-		try{
-			result = Integer.parseInt(setEq.getL1());
-		} catch(NullPointerException npe){
-			error(setEq, "Valid integer required in set");
-		} catch(NumberFormatException nfe){
-			error(setEq, "Valid integer required in set");
+		// Get the expr and get Agree type from it
+		Expr lhsExpr = setEq.getL1();
+		AgreeType lhsType = getAgreeType(lhsExpr);
+		
+		// Make sure types match (int)
+		if(!matches(AgreeType.INT, lhsType)){
+			error(lhsExpr, "Valid integer required in set");
 		}
 		
-		// Now iterate through list making sure all integers are valid
-		for(String item: setEq.getList()){
-			try{
-				result = Integer.parseInt(item);
-			} catch(NullPointerException npe){
-				error(setEq, "Valid integer required in set");
-			} catch(NumberFormatException nfe){
-				error(setEq, "Valid integer required in set");
+		// Get the list and do the same to expressions in the list
+		EList<Expr> exprList = setEq.getList();
+		
+		if(!exprList.isEmpty()){
+			for(Expr exp : exprList){
+				AgreeType expType = getAgreeType(exp);
+				if(!matches(AgreeType.INT, expType)){
+					error(exp, "Valid integer required in set");
+				}
 			}
 		}
+	}
+	
+	/*
+	 * RangeEqStatments:
+	 * (1) Make sure expressions are constants
+	 * (2) Check for UnaryExpr (negative integers)
+	 * 	   If Unary:
+	 * 		cast to unary expr
+	 * 		call testNegativeInteger
+	 * 		
+	 * (3) Check for IntLitExpr
+	 * 	   If IntLit:
+	 * 		cast to IntLit
+	 * 		call testPositiveInteger
+	 * 
+	 * (4) Else error 
+	 * 
+	 * (5) If integer results are non-null:
+	 * 		check for strict inequality lhs < rhs
+	 */
+	@Check
+	public void checkRangeEqStatement(RangeEq range){
+		
+		Expr lhs = range.getL1();
+		Expr rhs = range.getL2();
+		
+		Integer intlhs = null;
+		Integer intrhs = null;
+
+		// (1) Check for constants
+		if(!exprIsConst(lhs)){
+			error(lhs, "Range values must be valid integer constants.");
+		}
+		if(!exprIsConst(rhs)){
+			error(rhs, "Range values must be valid integer constants.");
+		}
+		
+		// LHS TEST
+		// (2), (3): If lhs UnaryExpr: get op, get val, concat strings, parse int
+		if(lhs instanceof UnaryExpr){
+			
+			UnaryExpr lhsUnary = (UnaryExpr) lhs;
+			intlhs = testNegativeInteger(lhsUnary);
+			
+			// If return value is null, not a valid negative integer
+			if(intlhs == null){
+				error(lhs, "Must have valid negative or positive integer in range.");
+			}
+			
+		} else if(lhs instanceof IntLitExpr){
+			// Else check if lhs IntLitExpr: cast, get val, parse int
+			IntLitExpr lhsIntLit = (IntLitExpr) lhs;
+			
+			intlhs = testPositiveInteger(lhsIntLit);
+			
+			// If return value null, put out error message
+			if(intlhs == null){
+				error(lhs, "Must have valid positive integer in range.");
+			}
+			
+		} else{
+			// else throw validation error
+			error(lhs, "Range values must be valid integers");
+		}
+		
+		
+		
+		// RHS TEST:
+		// (2), (3): If rhs UnaryExpr: call testNegativeInteger on unary expr
+		if(rhs instanceof UnaryExpr){
+			
+			UnaryExpr rhsUnary = (UnaryExpr) rhs;
+			intrhs = testNegativeInteger(rhsUnary);
+			
+			// If null int returned, put out error message
+			if(intrhs == null){
+				error(rhs, "Must have valid negative or positive integer in range.");
+			}
+			
+		} else if(rhs instanceof IntLitExpr){
+			// Else check if rhs IntLitExpr: testPositiveInteger
+			IntLitExpr rhsIntLit = (IntLitExpr) rhs;
+			intrhs = testPositiveInteger(rhsIntLit);
+			
+			if(intrhs == null){
+				error(rhs, "Must have valid positive integer in range");
+			}
+			
+		} else{
+			// else throw validation error
+			error(rhs, "Range values must be valid integers");
+		}
+		
+		// Test for strict inequality lhs<rhs
+		if((intrhs != null) && (intlhs != null)){
+			if(intlhs >= intrhs){
+				error(range, "There must be strict inequality between lhs and rhs range values: lhs < rhs.");
+			}
+		}
+		
+	
+		
+	}
+	
+	
+	/*
+	 * testNegativeInteger:
+	 * parameter: UnaryExpr
+	 * returns: Integer
+	 * (1): Gets op : should be negative sign
+	 *		If op not '-', return null
+	 * (2): Get Expr which should be IntLitExpr
+	 * 		If not, return null
+	 * (3): Get value (string) from IntLitExpr
+	 * 		Concat '-' with string value
+	 * (4): Parse int: if exception, return null
+	 * (5): Return int
+	 */
+	private Integer testNegativeInteger(UnaryExpr unary){
+	
+		Integer intResult = null;
+		String op = unary.getOp();
+		
+		if(!op.equals("-")){
+			return null;
+		}
+		
+		Expr rhsDeepExpr = unary.getExpr();
+		
+		// This expression has to be an IntLit... else error
+		if(rhsDeepExpr instanceof IntLitExpr){
+			
+			IntLitExpr rhsDeepInt = (IntLitExpr) rhsDeepExpr;
+			String rhsDeepIntVal = rhsDeepInt.getVal();
+			String totalInt = op.concat(rhsDeepIntVal);
+			
+			// Parse int
+			try {
+				intResult = Integer.parseInt(totalInt);
+			      
+			} catch (NumberFormatException e) {
+			      return null;
+			}
+			
+		} else {
+			return null;
+		}
+		
+		return intResult;
+	}
+	
+	
+	/*
+	 * testPositiveInteger:
+	 * parameter: IntLitExpr
+	 * returns: Integer
+	 * (1): Gets val : string
+	 * (2): Parse int: if exception, return null
+	 * (5): Return int
+	 */
+	private Integer testPositiveInteger(IntLitExpr intLit){
+		String lhsIntVal = intLit.getVal();
+		Integer intResult = null;
+		
+		// Try to parse int
+		try {
+			intResult = Integer.parseInt(lhsIntVal);
+		      
+		} catch (NumberFormatException e) {
+		      return null;
+		}
+		
+		return intResult;
 	}
 }

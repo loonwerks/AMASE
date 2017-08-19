@@ -2,6 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -51,45 +53,45 @@ public interface SetEq extends SafetyEqStatement
   void setLhs_set(String value);
 
   /**
-   * Returns the value of the '<em><b>L1</b></em>' attribute.
+   * Returns the value of the '<em><b>L1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>L1</em>' attribute isn't clear,
+   * If the meaning of the '<em>L1</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>L1</em>' attribute.
-   * @see #setL1(String)
+   * @return the value of the '<em>L1</em>' containment reference.
+   * @see #setL1(Expr)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getSetEq_L1()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getL1();
+  Expr getL1();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.SetEq#getL1 <em>L1</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.SetEq#getL1 <em>L1</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>L1</em>' attribute.
+   * @param value the new value of the '<em>L1</em>' containment reference.
    * @see #getL1()
    * @generated
    */
-  void setL1(String value);
+  void setL1(Expr value);
 
   /**
-   * Returns the value of the '<em><b>List</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
+   * Returns the value of the '<em><b>List</b></em>' containment reference list.
+   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>List</em>' attribute list isn't clear,
+   * If the meaning of the '<em>List</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>List</em>' attribute list.
+   * @return the value of the '<em>List</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getSetEq_List()
-   * @model unique="false"
+   * @model containment="true"
    * @generated
    */
-  EList<String> getList();
+  EList<Expr> getList();
 
 } // SetEq

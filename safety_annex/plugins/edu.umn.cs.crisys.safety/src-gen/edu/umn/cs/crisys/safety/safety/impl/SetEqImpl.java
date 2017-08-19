@@ -2,20 +2,25 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -55,34 +60,24 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
   protected String lhs_set = LHS_SET_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getL1() <em>L1</em>}' attribute.
+   * The cached value of the '{@link #getL1() <em>L1</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getL1()
    * @generated
    * @ordered
    */
-  protected static final String L1_EDEFAULT = null;
+  protected Expr l1;
 
   /**
-   * The cached value of the '{@link #getL1() <em>L1</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getL1()
-   * @generated
-   * @ordered
-   */
-  protected String l1 = L1_EDEFAULT;
-
-  /**
-   * The cached value of the '{@link #getList() <em>List</em>}' attribute list.
+   * The cached value of the '{@link #getList() <em>List</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getList()
    * @generated
    * @ordered
    */
-  protected EList<String> list;
+  protected EList<Expr> list;
 
   /**
    * <!-- begin-user-doc -->
@@ -133,7 +128,7 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getL1()
+  public Expr getL1()
   {
     return l1;
   }
@@ -143,12 +138,16 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setL1(String newL1)
+  public NotificationChain basicSetL1(Expr newL1, NotificationChain msgs)
   {
-    String oldL1 = l1;
+    Expr oldL1 = l1;
     l1 = newL1;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.SET_EQ__L1, oldL1, l1));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.SET_EQ__L1, oldL1, newL1);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -156,13 +155,52 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getList()
+  public void setL1(Expr newL1)
+  {
+    if (newL1 != l1)
+    {
+      NotificationChain msgs = null;
+      if (l1 != null)
+        msgs = ((InternalEObject)l1).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.SET_EQ__L1, null, msgs);
+      if (newL1 != null)
+        msgs = ((InternalEObject)newL1).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.SET_EQ__L1, null, msgs);
+      msgs = basicSetL1(newL1, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.SET_EQ__L1, newL1, newL1));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<Expr> getList()
   {
     if (list == null)
     {
-      list = new EDataTypeEList<String>(String.class, this, SafetyPackage.SET_EQ__LIST);
+      list = new EObjectContainmentEList<Expr>(Expr.class, this, SafetyPackage.SET_EQ__LIST);
     }
     return list;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.SET_EQ__L1:
+        return basicSetL1(null, msgs);
+      case SafetyPackage.SET_EQ__LIST:
+        return ((InternalEList<?>)getList()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -200,11 +238,11 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
         setLhs_set((String)newValue);
         return;
       case SafetyPackage.SET_EQ__L1:
-        setL1((String)newValue);
+        setL1((Expr)newValue);
         return;
       case SafetyPackage.SET_EQ__LIST:
         getList().clear();
-        getList().addAll((Collection<? extends String>)newValue);
+        getList().addAll((Collection<? extends Expr>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -224,7 +262,7 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
         setLhs_set(LHS_SET_EDEFAULT);
         return;
       case SafetyPackage.SET_EQ__L1:
-        setL1(L1_EDEFAULT);
+        setL1((Expr)null);
         return;
       case SafetyPackage.SET_EQ__LIST:
         getList().clear();
@@ -246,7 +284,7 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
       case SafetyPackage.SET_EQ__LHS_SET:
         return LHS_SET_EDEFAULT == null ? lhs_set != null : !LHS_SET_EDEFAULT.equals(lhs_set);
       case SafetyPackage.SET_EQ__L1:
-        return L1_EDEFAULT == null ? l1 != null : !L1_EDEFAULT.equals(l1);
+        return l1 != null;
       case SafetyPackage.SET_EQ__LIST:
         return list != null && !list.isEmpty();
     }
@@ -266,10 +304,6 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (lhs_set: ");
     result.append(lhs_set);
-    result.append(", l1: ");
-    result.append(l1);
-    result.append(", list: ");
-    result.append(list);
     result.append(')');
     return result.toString();
   }

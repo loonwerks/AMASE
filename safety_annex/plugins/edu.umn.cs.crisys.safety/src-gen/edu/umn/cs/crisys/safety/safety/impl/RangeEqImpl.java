@@ -2,12 +2,16 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -49,44 +53,24 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
   protected String lhs_range = LHS_RANGE_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getL1() <em>L1</em>}' attribute.
+   * The cached value of the '{@link #getL1() <em>L1</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getL1()
    * @generated
    * @ordered
    */
-  protected static final String L1_EDEFAULT = null;
+  protected Expr l1;
 
   /**
-   * The cached value of the '{@link #getL1() <em>L1</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getL1()
-   * @generated
-   * @ordered
-   */
-  protected String l1 = L1_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getL2() <em>L2</em>}' attribute.
+   * The cached value of the '{@link #getL2() <em>L2</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getL2()
    * @generated
    * @ordered
    */
-  protected static final String L2_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getL2() <em>L2</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getL2()
-   * @generated
-   * @ordered
-   */
-  protected String l2 = L2_EDEFAULT;
+  protected Expr l2;
 
   /**
    * <!-- begin-user-doc -->
@@ -137,7 +121,7 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getL1()
+  public Expr getL1()
   {
     return l1;
   }
@@ -147,12 +131,16 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setL1(String newL1)
+  public NotificationChain basicSetL1(Expr newL1, NotificationChain msgs)
   {
-    String oldL1 = l1;
+    Expr oldL1 = l1;
     l1 = newL1;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__L1, oldL1, l1));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__L1, oldL1, newL1);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -160,7 +148,28 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getL2()
+  public void setL1(Expr newL1)
+  {
+    if (newL1 != l1)
+    {
+      NotificationChain msgs = null;
+      if (l1 != null)
+        msgs = ((InternalEObject)l1).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.RANGE_EQ__L1, null, msgs);
+      if (newL1 != null)
+        msgs = ((InternalEObject)newL1).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.RANGE_EQ__L1, null, msgs);
+      msgs = basicSetL1(newL1, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__L1, newL1, newL1));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Expr getL2()
   {
     return l2;
   }
@@ -170,12 +179,55 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setL2(String newL2)
+  public NotificationChain basicSetL2(Expr newL2, NotificationChain msgs)
   {
-    String oldL2 = l2;
+    Expr oldL2 = l2;
     l2 = newL2;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__L2, oldL2, l2));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__L2, oldL2, newL2);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setL2(Expr newL2)
+  {
+    if (newL2 != l2)
+    {
+      NotificationChain msgs = null;
+      if (l2 != null)
+        msgs = ((InternalEObject)l2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.RANGE_EQ__L2, null, msgs);
+      if (newL2 != null)
+        msgs = ((InternalEObject)newL2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.RANGE_EQ__L2, null, msgs);
+      msgs = basicSetL2(newL2, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__L2, newL2, newL2));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.RANGE_EQ__L1:
+        return basicSetL1(null, msgs);
+      case SafetyPackage.RANGE_EQ__L2:
+        return basicSetL2(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -212,10 +264,10 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
         setLhs_range((String)newValue);
         return;
       case SafetyPackage.RANGE_EQ__L1:
-        setL1((String)newValue);
+        setL1((Expr)newValue);
         return;
       case SafetyPackage.RANGE_EQ__L2:
-        setL2((String)newValue);
+        setL2((Expr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -235,10 +287,10 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
         setLhs_range(LHS_RANGE_EDEFAULT);
         return;
       case SafetyPackage.RANGE_EQ__L1:
-        setL1(L1_EDEFAULT);
+        setL1((Expr)null);
         return;
       case SafetyPackage.RANGE_EQ__L2:
-        setL2(L2_EDEFAULT);
+        setL2((Expr)null);
         return;
     }
     super.eUnset(featureID);
@@ -257,9 +309,9 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
       case SafetyPackage.RANGE_EQ__LHS_RANGE:
         return LHS_RANGE_EDEFAULT == null ? lhs_range != null : !LHS_RANGE_EDEFAULT.equals(lhs_range);
       case SafetyPackage.RANGE_EQ__L1:
-        return L1_EDEFAULT == null ? l1 != null : !L1_EDEFAULT.equals(l1);
+        return l1 != null;
       case SafetyPackage.RANGE_EQ__L2:
-        return L2_EDEFAULT == null ? l2 != null : !L2_EDEFAULT.equals(l2);
+        return l2 != null;
     }
     return super.eIsSet(featureID);
   }
@@ -277,10 +329,6 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (lhs_range: ");
     result.append(lhs_range);
-    result.append(", l1: ");
-    result.append(l1);
-    result.append(", l2: ");
-    result.append(l2);
     result.append(')');
     return result.toString();
   }

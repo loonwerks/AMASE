@@ -679,7 +679,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     SafetyEqStatement returns RangeEq
 	 *
 	 * Constraint:
-	 *     (lhs_range=ID l1=INTEGER_LIT l2=INTEGER_LIT)
+	 *     (lhs_range=ID l1=Expr l2=Expr)
 	 */
 	protected void sequence_SafetyEqStatement(ISerializationContext context, RangeEq semanticObject) {
 		if (errorAcceptor != null) {
@@ -692,8 +692,8 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getLhs_rangeIDTerminalRuleCall_3_2_0(), semanticObject.getLhs_range());
-		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_3_5_0(), semanticObject.getL1());
-		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getL2INTEGER_LITTerminalRuleCall_3_7_0(), semanticObject.getL2());
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getL1ExprParserRuleCall_3_5_0(), semanticObject.getL1());
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getL2ExprParserRuleCall_3_7_0(), semanticObject.getL2());
 		feeder.finish();
 	}
 	
@@ -705,7 +705,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     SafetyEqStatement returns SetEq
 	 *
 	 * Constraint:
-	 *     (lhs_set=ID l1=INTEGER_LIT list+=INTEGER_LIT*)
+	 *     (lhs_set=ID l1=Expr list+=Expr*)
 	 */
 	protected void sequence_SafetyEqStatement(ISerializationContext context, SetEq semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

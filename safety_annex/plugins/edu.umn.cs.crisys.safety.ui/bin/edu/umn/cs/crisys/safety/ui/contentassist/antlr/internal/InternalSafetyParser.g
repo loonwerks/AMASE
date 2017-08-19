@@ -7154,11 +7154,11 @@ rule__SafetyEqStatement__Group_3__6__Impl
     }
 :
 (
-{ before(grammarAccess.getSafetyEqStatementAccess().getFullStopFullStopKeyword_3_6()); }
+{ before(grammarAccess.getSafetyEqStatementAccess().getCommaKeyword_3_6()); }
 
-	FullStopFullStop 
+	Comma 
 
-{ after(grammarAccess.getSafetyEqStatementAccess().getFullStopFullStopKeyword_3_6()); }
+{ after(grammarAccess.getSafetyEqStatementAccess().getCommaKeyword_3_6()); }
 )
 
 ;
@@ -27129,8 +27129,8 @@ rule__SafetyEqStatement__L1Assignment_2_5
     }
 :
 (
-{ before(grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_2_5_0()); }
-	RULE_INTEGER_LIT{ after(grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_2_5_0()); }
+{ before(grammarAccess.getSafetyEqStatementAccess().getL1ExprParserRuleCall_2_5_0()); }
+	ruleExpr{ after(grammarAccess.getSafetyEqStatementAccess().getL1ExprParserRuleCall_2_5_0()); }
 )
 
 ;
@@ -27144,8 +27144,8 @@ rule__SafetyEqStatement__ListAssignment_2_6_1
     }
 :
 (
-{ before(grammarAccess.getSafetyEqStatementAccess().getListINTEGER_LITTerminalRuleCall_2_6_1_0()); }
-	RULE_INTEGER_LIT{ after(grammarAccess.getSafetyEqStatementAccess().getListINTEGER_LITTerminalRuleCall_2_6_1_0()); }
+{ before(grammarAccess.getSafetyEqStatementAccess().getListExprParserRuleCall_2_6_1_0()); }
+	ruleExpr{ after(grammarAccess.getSafetyEqStatementAccess().getListExprParserRuleCall_2_6_1_0()); }
 )
 
 ;
@@ -27174,8 +27174,8 @@ rule__SafetyEqStatement__L1Assignment_3_5
     }
 :
 (
-{ before(grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_3_5_0()); }
-	RULE_INTEGER_LIT{ after(grammarAccess.getSafetyEqStatementAccess().getL1INTEGER_LITTerminalRuleCall_3_5_0()); }
+{ before(grammarAccess.getSafetyEqStatementAccess().getL1ExprParserRuleCall_3_5_0()); }
+	ruleExpr{ after(grammarAccess.getSafetyEqStatementAccess().getL1ExprParserRuleCall_3_5_0()); }
 )
 
 ;
@@ -27189,8 +27189,8 @@ rule__SafetyEqStatement__L2Assignment_3_7
     }
 :
 (
-{ before(grammarAccess.getSafetyEqStatementAccess().getL2INTEGER_LITTerminalRuleCall_3_7_0()); }
-	RULE_INTEGER_LIT{ after(grammarAccess.getSafetyEqStatementAccess().getL2INTEGER_LITTerminalRuleCall_3_7_0()); }
+{ before(grammarAccess.getSafetyEqStatementAccess().getL2ExprParserRuleCall_3_7_0()); }
+	ruleExpr{ after(grammarAccess.getSafetyEqStatementAccess().getL2ExprParserRuleCall_3_7_0()); }
 )
 
 ;

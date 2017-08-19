@@ -74,13 +74,13 @@
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SetEq">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/lhs_set"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/l1"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//SetEq/list"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/l1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/list"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//RangeEq">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//RangeEq/lhs_range"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//RangeEq/l1"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//RangeEq/l2"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//RangeEq/l1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//RangeEq/l2"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//ClosedInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>

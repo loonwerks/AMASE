@@ -1257,7 +1257,7 @@ public interface SafetyPackage extends EPackage
   int SET_EQ__LHS_SET = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>L1</b></em>' attribute.
+   * The feature id for the '<em><b>L1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1266,7 +1266,7 @@ public interface SafetyPackage extends EPackage
   int SET_EQ__L1 = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>List</b></em>' attribute list.
+   * The feature id for the '<em><b>List</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1321,7 +1321,7 @@ public interface SafetyPackage extends EPackage
   int RANGE_EQ__LHS_RANGE = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>L1</b></em>' attribute.
+   * The feature id for the '<em><b>L1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1330,7 +1330,7 @@ public interface SafetyPackage extends EPackage
   int RANGE_EQ__L1 = SAFETY_EQ_STATEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>L2</b></em>' attribute.
+   * The feature id for the '<em><b>L2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1999,26 +1999,26 @@ public interface SafetyPackage extends EPackage
   EAttribute getSetEq_Lhs_set();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.SetEq#getL1 <em>L1</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.SetEq#getL1 <em>L1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>L1</em>'.
+   * @return the meta object for the containment reference '<em>L1</em>'.
    * @see edu.umn.cs.crisys.safety.safety.SetEq#getL1()
    * @see #getSetEq()
    * @generated
    */
-  EAttribute getSetEq_L1();
+  EReference getSetEq_L1();
 
   /**
-   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.SetEq#getList <em>List</em>}'.
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.SetEq#getList <em>List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>List</em>'.
+   * @return the meta object for the containment reference list '<em>List</em>'.
    * @see edu.umn.cs.crisys.safety.safety.SetEq#getList()
    * @see #getSetEq()
    * @generated
    */
-  EAttribute getSetEq_List();
+  EReference getSetEq_List();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.RangeEq <em>Range Eq</em>}'.
@@ -2042,26 +2042,26 @@ public interface SafetyPackage extends EPackage
   EAttribute getRangeEq_Lhs_range();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL1 <em>L1</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL1 <em>L1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>L1</em>'.
+   * @return the meta object for the containment reference '<em>L1</em>'.
    * @see edu.umn.cs.crisys.safety.safety.RangeEq#getL1()
    * @see #getRangeEq()
    * @generated
    */
-  EAttribute getRangeEq_L1();
+  EReference getRangeEq_L1();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL2 <em>L2</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL2 <em>L2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>L2</em>'.
+   * @return the meta object for the containment reference '<em>L2</em>'.
    * @see edu.umn.cs.crisys.safety.safety.RangeEq#getL2()
    * @see #getRangeEq()
    * @generated
    */
-  EAttribute getRangeEq_L2();
+  EReference getRangeEq_L2();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.ClosedInterval <em>Closed Interval</em>}'.
@@ -2563,20 +2563,20 @@ public interface SafetyPackage extends EPackage
     EAttribute SET_EQ__LHS_SET = eINSTANCE.getSetEq_Lhs_set();
 
     /**
-     * The meta object literal for the '<em><b>L1</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>L1</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute SET_EQ__L1 = eINSTANCE.getSetEq_L1();
+    EReference SET_EQ__L1 = eINSTANCE.getSetEq_L1();
 
     /**
-     * The meta object literal for the '<em><b>List</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>List</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute SET_EQ__LIST = eINSTANCE.getSetEq_List();
+    EReference SET_EQ__LIST = eINSTANCE.getSetEq_List();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.RangeEqImpl <em>Range Eq</em>}' class.
@@ -2597,20 +2597,20 @@ public interface SafetyPackage extends EPackage
     EAttribute RANGE_EQ__LHS_RANGE = eINSTANCE.getRangeEq_Lhs_range();
 
     /**
-     * The meta object literal for the '<em><b>L1</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>L1</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute RANGE_EQ__L1 = eINSTANCE.getRangeEq_L1();
+    EReference RANGE_EQ__L1 = eINSTANCE.getRangeEq_L1();
 
     /**
-     * The meta object literal for the '<em><b>L2</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>L2</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute RANGE_EQ__L2 = eINSTANCE.getRangeEq_L2();
+    EReference RANGE_EQ__L2 = eINSTANCE.getRangeEq_L2();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.ClosedIntervalImpl <em>Closed Interval</em>}' class.

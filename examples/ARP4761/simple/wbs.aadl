@@ -320,7 +320,9 @@ annex safety{**
 		
 		interval pressure_options = [9.0,19.0];
 			
-		set testset = {0};
+		set testset = {0, -8};
+		
+		range rangeTest = {-9, 100};
 		
 		
 	}

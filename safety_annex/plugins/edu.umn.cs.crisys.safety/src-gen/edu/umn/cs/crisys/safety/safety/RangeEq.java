@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,55 +51,55 @@ public interface RangeEq extends SafetyEqStatement
   void setLhs_range(String value);
 
   /**
-   * Returns the value of the '<em><b>L1</b></em>' attribute.
+   * Returns the value of the '<em><b>L1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>L1</em>' attribute isn't clear,
+   * If the meaning of the '<em>L1</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>L1</em>' attribute.
-   * @see #setL1(String)
+   * @return the value of the '<em>L1</em>' containment reference.
+   * @see #setL1(Expr)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getRangeEq_L1()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getL1();
+  Expr getL1();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL1 <em>L1</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL1 <em>L1</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>L1</em>' attribute.
+   * @param value the new value of the '<em>L1</em>' containment reference.
    * @see #getL1()
    * @generated
    */
-  void setL1(String value);
+  void setL1(Expr value);
 
   /**
-   * Returns the value of the '<em><b>L2</b></em>' attribute.
+   * Returns the value of the '<em><b>L2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>L2</em>' attribute isn't clear,
+   * If the meaning of the '<em>L2</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>L2</em>' attribute.
-   * @see #setL2(String)
+   * @return the value of the '<em>L2</em>' containment reference.
+   * @see #setL2(Expr)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getRangeEq_L2()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getL2();
+  Expr getL2();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL2 <em>L2</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL2 <em>L2</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>L2</em>' attribute.
+   * @param value the new value of the '<em>L2</em>' containment reference.
    * @see #getL2()
    * @generated
    */
-  void setL2(String value);
+  void setL2(Expr value);
 
 } // RangeEq

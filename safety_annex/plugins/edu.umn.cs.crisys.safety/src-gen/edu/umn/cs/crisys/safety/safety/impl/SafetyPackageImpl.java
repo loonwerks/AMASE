@@ -824,9 +824,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSetEq_L1()
+  public EReference getSetEq_L1()
   {
-    return (EAttribute)setEqEClass.getEStructuralFeatures().get(1);
+    return (EReference)setEqEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -834,9 +834,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSetEq_List()
+  public EReference getSetEq_List()
   {
-    return (EAttribute)setEqEClass.getEStructuralFeatures().get(2);
+    return (EReference)setEqEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -864,9 +864,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRangeEq_L1()
+  public EReference getRangeEq_L1()
   {
-    return (EAttribute)rangeEqEClass.getEStructuralFeatures().get(1);
+    return (EReference)rangeEqEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -874,9 +874,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRangeEq_L2()
+  public EReference getRangeEq_L2()
   {
-    return (EAttribute)rangeEqEClass.getEStructuralFeatures().get(2);
+    return (EReference)rangeEqEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1022,13 +1022,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     setEqEClass = createEClass(SET_EQ);
     createEAttribute(setEqEClass, SET_EQ__LHS_SET);
-    createEAttribute(setEqEClass, SET_EQ__L1);
-    createEAttribute(setEqEClass, SET_EQ__LIST);
+    createEReference(setEqEClass, SET_EQ__L1);
+    createEReference(setEqEClass, SET_EQ__LIST);
 
     rangeEqEClass = createEClass(RANGE_EQ);
     createEAttribute(rangeEqEClass, RANGE_EQ__LHS_RANGE);
-    createEAttribute(rangeEqEClass, RANGE_EQ__L1);
-    createEAttribute(rangeEqEClass, RANGE_EQ__L2);
+    createEReference(rangeEqEClass, RANGE_EQ__L1);
+    createEReference(rangeEqEClass, RANGE_EQ__L2);
 
     closedIntervalEClass = createEClass(CLOSED_INTERVAL);
 
@@ -1176,13 +1176,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(setEqEClass, SetEq.class, "SetEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSetEq_Lhs_set(), theEcorePackage.getEString(), "lhs_set", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetEq_L1(), theEcorePackage.getEString(), "l1", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetEq_List(), theEcorePackage.getEString(), "list", null, 0, -1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSetEq_L1(), theAgreePackage.getExpr(), null, "l1", null, 0, 1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSetEq_List(), theAgreePackage.getExpr(), null, "list", null, 0, -1, SetEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(rangeEqEClass, RangeEq.class, "RangeEq", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getRangeEq_Lhs_range(), theEcorePackage.getEString(), "lhs_range", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRangeEq_L1(), theEcorePackage.getEString(), "l1", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRangeEq_L2(), theEcorePackage.getEString(), "l2", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRangeEq_L1(), theAgreePackage.getExpr(), null, "l1", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRangeEq_L2(), theAgreePackage.getExpr(), null, "l2", null, 0, 1, RangeEq.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(closedIntervalEClass, ClosedInterval.class, "ClosedInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
