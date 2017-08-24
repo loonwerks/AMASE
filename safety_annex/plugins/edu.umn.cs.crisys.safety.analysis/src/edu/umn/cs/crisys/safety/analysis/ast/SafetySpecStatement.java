@@ -3,7 +3,7 @@ package edu.umn.cs.crisys.safety.analysis.ast;
 import java.util.List;
 import jkind.lustre.IdExpr;
 
-public class SafetySpecStatement implements FaultASTElement{
+public class SafetySpecStatement implements SafetyASTElement{
 	
 	public final String description;
 	public final IdExpr id;

@@ -4,7 +4,7 @@ import java.util.List;
 import org.osate.aadl2.NamedElement;
 import jkind.lustre.Expr;
 
-public class SafetyEqStatement implements FaultASTElement{
+public class SafetyEqStatement implements SafetyASTElement{
 	public final List<NamedElement> arg;
 	public Expr expr;
 	public List<Expr> exprList;

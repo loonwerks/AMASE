@@ -6,7 +6,7 @@ import org.osate.aadl2.instance.FeatureInstance;
 import jkind.lustre.Type;
 import jkind.lustre.VarDecl;
 
-public class SafetyVar extends VarDecl implements FaultASTElement{
+public class SafetyVar extends VarDecl implements SafetyASTElement{
 	
 	public final EObject reference;
 	public final ComponentInstance compInst;

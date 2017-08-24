@@ -1,43 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="src" path="/com.rockwellcollins.atc.agree"/>
-	<classpathentry kind="lib" path="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.emf.ecore_2.11.2.v20160208-0816.jar" sourcepath="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.emf.ecore.source_2.11.2.v20160208-0816.jar">
-		<accessrules>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/impl/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/plugin/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/resource/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/resource/impl/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/util/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/namespace/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/namespace/impl/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/namespace/util/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/impl/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/internal/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/emf/ecore/xml/type/util/*"/>
-			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry kind="src" path="/com.rockwellcollins.atc.agree.analysis"/>
-	<classpathentry kind="src" path="/org.osate.aadl2"/>
-	<classpathentry kind="lib" path="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar" sourcepath="/home/user/Downloads/eclipse (2)/plugins/org.eclipse.equinox.registry.source_3.6.0.v20150318-1503.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/user/Downloads/eclipse%20(2)/plugins/org.eclipse.platform.doc.isv_4.5.2.v20160203-1325.jar!/reference/api"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/adapter/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/registry/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/registry/osgi/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/registry/spi/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/core/runtime/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/core/runtime/dynamichelpers/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/core/runtime/spi/*"/>
-			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/user/Downloads/common-3.6.200-v20130402-1505.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="xtend-gen"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jkind-api"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

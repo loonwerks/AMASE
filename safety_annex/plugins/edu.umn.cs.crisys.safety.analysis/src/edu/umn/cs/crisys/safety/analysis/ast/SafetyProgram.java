@@ -1,6 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.ast;
-// For now, I just have this equivalent to AgreeProgram
-// Will change later
+
+//For now, I just have this equivalent to AgreeProgram
+//Will change later
 import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -8,7 +9,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import jkind.lustre.Node;
 import jkind.lustre.Type;
 
-public class SafetyProgram implements FaultASTElement{
+public class SafetyProgram implements SafetyASTElement{
 
 	public final List<AgreeNode> agreeNodes;
 	public final List<Node> globalLustreNodes;
