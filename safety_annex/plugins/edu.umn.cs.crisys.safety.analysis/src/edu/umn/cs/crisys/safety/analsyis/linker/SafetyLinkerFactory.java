@@ -30,6 +30,7 @@ import com.rockwellcollins.atc.agree.analysis.lustre.visitors.RenamingVisitor;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import jkind.api.results.AnalysisResult;
 import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
@@ -64,9 +65,16 @@ public class SafetyLinkerFactory {
                 AgreePackage.eINSTANCE.getAgreeContractSubclause());
 
         if (annexSubClauses.size() == 0) {
-            throw new AgreeException(
-                    "There is not an AGREE annex in the '" + sysType.getName() + "' system type.");
+            throw new SafetyException(
+                    "There is no AGREE annex or Safety annex in the '" + sysType.getName() + "' system type.");
         }
+        
+        if(annexSubClauses.size() == 1){
+        	throw new SafetyException(
+        			"There must be both an AGREE annex and a Safety annex in the '" + sysType.getName() + "' system type.");
+        }
+        
+        
 
         CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
 

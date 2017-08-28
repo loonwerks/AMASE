@@ -20,12 +20,24 @@ public class TransformAgree implements AgreeAutomater {
 	@Override
 	public AgreeProgram transform(AgreeProgram program) {
 		
+		
+		// Visit program: 
+		// For now, it prints out each node in the program
+		// (input, guarantees, etc.)
 		jkind.lustre.visitors.TypeMapVisitor lustreTypeMapVisitor = new TypeMapVisitor();
 		SafetyASTVisitor visitor = new SafetyASTVisitor(lustreTypeMapVisitor);
 		
 		visitor.visit(program);
-
+		
 		System.out.println("Visited program");
+		
+		// For each component/subcomponent, make sure that if there is a 
+		// safety annex, there is also an agree annex. 
+		// If not, output error and exit analysis. 
+		// This should probably be done in by the visitor since it has
+		// access to all the nodes. 
+		
+		
 		
 		Boolean analysis = AadlHandler.getAnalysisFlag();
 		
