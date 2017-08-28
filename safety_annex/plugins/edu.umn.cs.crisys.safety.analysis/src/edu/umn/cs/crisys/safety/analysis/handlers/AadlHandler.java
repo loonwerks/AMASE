@@ -1,5 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
+import javax.swing.JOptionPane;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -24,6 +26,8 @@ import org.eclipse.xtext.ui.editor.utils.EditorUtils;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.osate.aadl2.Element;
 
+import com.rockwellcollins.atc.agree.analysis.Activator;
+
 public abstract class AadlHandler extends AbstractHandler {
 
 	protected static final String TERMINATE_ID = "tcg.commands.terminate";
@@ -37,6 +41,11 @@ public abstract class AadlHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) {
 		EObjectNode node = getEObjectNode(HandlerUtil.getCurrentSelection(event));
 		if (node == null) {
+			
+			JOptionPane.showMessageDialog(null, "You must choose an AADL component implementation.",
+					"Safety Analysis Error",
+				    JOptionPane.ERROR_MESSAGE);
+			
 			return null;
 		}
 		final URI uri = node.getEObjectURI();
