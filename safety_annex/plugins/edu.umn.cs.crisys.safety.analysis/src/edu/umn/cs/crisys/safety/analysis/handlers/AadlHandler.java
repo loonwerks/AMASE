@@ -4,7 +4,6 @@ import javax.swing.JOptionPane;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,20 +25,37 @@ import org.eclipse.xtext.ui.editor.utils.EditorUtils;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.osate.aadl2.Element;
 
-import com.rockwellcollins.atc.agree.analysis.Activator;
-
 public abstract class AadlHandler extends AbstractHandler {
+	
+	private static Boolean analysis = false;
 
-	protected static final String TERMINATE_ID = "tcg.commands.terminate";
+	protected static final String TERMINATE_ID = "safetyanalysis.commands.terminate";
+	
 	private IWorkbenchWindow window;
 
 	abstract protected IStatus runJob(Element sel, IProgressMonitor monitor);
 
 	abstract protected String getJobName();
 
+	/*
+	 * execute:
+	 * @param ExecutionEvent: this is the SafetyAnalysis command that was pressed in the menu
+	 * @return Object: URI execution
+	 * 
+	 * This method gets the node associated with the event (menu item pressed). 
+	 * If that node is null, then no component was selected for analysis - will output
+	 * dialog box showing error. 
+	 * Else it will execute URI.
+	 */
 	@Override
 	public Object execute(ExecutionEvent event) {
+		
+		// Get the eclipse context of the selection.
+		// If no component is selected for analysis, this will return null. 
 		EObjectNode node = getEObjectNode(HandlerUtil.getCurrentSelection(event));
+		
+		// If node is null, that means no aadl component was selected to perform analysis on. 
+		// Output dialog box showing that error and return null. 
 		if (node == null) {
 			
 			JOptionPane.showMessageDialog(null, "You must choose an AADL component implementation.",
@@ -48,13 +64,21 @@ public abstract class AadlHandler extends AbstractHandler {
 			
 			return null;
 		}
+		
+		// Get node uri
 		final URI uri = node.getEObjectURI();
 
+		// Check for active workbench window
 		window = HandlerUtil.getActiveWorkbenchWindow(event);
 		if (window == null) {
 			return null;
 		}
 
+		// Since there was no issues with the node or the window, 
+		// we change the boolean variable to true and continue with analysis
+		analysis = true;
+		
+		// Execute URI (where the magic happens)
 		return executeURI(uri);
 	}
 
@@ -118,6 +142,20 @@ public abstract class AadlHandler extends AbstractHandler {
 
 	protected IWorkbenchWindow getWindow() {
 		return window;
+	}
+	
+	/*
+	 * getAnalysisFlag:
+	 * @param: none
+	 * @return: returns analysis value
+	 * 
+	 * If the execute method is called, a component is selected, and the window
+	 * is non-null, then analysis is set to true. 
+	 * This is used in TransformAgree to check whether we should return the original program
+	 * or if a transformation will be made. 
+	 */
+	public static Boolean getAnalysisFlag(){
+		return analysis;
 	}
 
 }
