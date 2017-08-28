@@ -58,5 +58,14 @@
          </toolbar>
       </menuContribution>
    </extension>
+   
+      <extension
+         point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
+      <agreeautomater
+            class="edu.umn.cs.crisys.safety.analysis.transform.TransformAgree"
+            id="agreeautomater"
+            pluginName="TransformAgree">
+      </agreeautomater>
+   </extension>
 
 </plugin>
