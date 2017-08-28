@@ -68,7 +68,15 @@ annex agree {**
 	    shutoff_output.val = faults.fail_to(nominal_output.val, alt_val.val, stuck_at_occurred);
 	    
 	              
-**};end boolean_shutoff;
+**};
+
+annex safety{**
+	
+	
+	
+**};
+
+end boolean_shutoff;
 
 system cmd_shutoff 
 features

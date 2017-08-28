@@ -127,9 +127,9 @@ public class SafetyLinkerFactory {
         linker.setRenaming(result, renaming);
 
         // Print the jkind result 
-        System.out.println(result);
-        System.out.println(agreeProgram);
-        System.out.println(lustreProgram);
+        //System.out.println(result);
+        //System.out.println(agreeProgram);
+        //System.out.println(lustreProgram);
         return result;
 
     }
