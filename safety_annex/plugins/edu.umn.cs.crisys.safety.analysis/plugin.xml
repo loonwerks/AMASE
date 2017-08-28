@@ -63,7 +63,7 @@
          point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
       <agreeautomater
             class="edu.umn.cs.crisys.safety.analysis.transform.TransformAgree"
-            id="agreeautomater"
+            id="TransformAgree"
             pluginName="TransformAgree">
       </agreeautomater>
    </extension>
