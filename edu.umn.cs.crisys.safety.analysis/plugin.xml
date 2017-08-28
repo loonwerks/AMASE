@@ -5,26 +5,26 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="Safety Analysis"
+            name="Sample Category"
             id="edu.umn.cs.crisys.safety.analysis.commands.category">
       </category>
       <command
-            name="Safety Analysis Command"
+            name="Sample Command"
             categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
-            id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
+            id="edu.umn.cs.crisys.safety.analysis.commands.sampleCommand">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.sampleCommand"
+            class="edu.umn.cs.crisys.safety.analysis.handlers.SampleHandler">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.sampleCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
@@ -35,13 +35,13 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               label="Safety Analysis"
+               label="Sample Menu"
                mnemonic="M"
                id="edu.umn.cs.crisys.safety.analysis.menus.sampleMenu">
             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.sampleCommand"
                   mnemonic="S"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand">
+                  id="edu.umn.cs.crisys.safety.analysis.menus.sampleCommand">
             </command>
          </menu>
       </menuContribution>
@@ -50,10 +50,10 @@
          <toolbar
                id="edu.umn.cs.crisys.safety.analysis.toolbars.sampleToolbar">
             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.sampleCommand"
                   icon="icons/sample.gif"
-                  tooltip="Safety analysis results will someday show up."
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyAnalysisCommand">
+                  tooltip="Say hello world"
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.sampleCommand">
             </command>
          </toolbar>
       </menuContribution>

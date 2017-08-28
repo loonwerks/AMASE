@@ -1,12 +1,12 @@
 package edu.umn.cs.crisys.safety.analsyis.linker;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
 import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
@@ -29,6 +29,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.lustre.visitors.RenamingVisitor;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
+import com.rockwellcollins.atc.tcg.obligations.ufc.TcgRenaming;
 
 import jkind.api.results.AnalysisResult;
 import jkind.api.results.CompositeAnalysisResult;
@@ -41,8 +42,8 @@ public class SafetyLinkerFactory {
 	private SystemInstance si;
 	private boolean monolithicAnalysis;
 	private AnalysisResult result;
-	private AnalysisProgramLinker linker = new AnalysisProgramLinker();
-	private Queue<JKindResult> queue = new ArrayDeque<>();;
+	private AgreeResultsLinker linker;
+	private Queue<JKindResult> queue;
 
 	public SystemInstance getSysInstance(ComponentImplementation ci) {
 		try {
@@ -70,7 +71,6 @@ public class SafetyLinkerFactory {
 
         CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
 
-        // check if we are analyzing all layers
 		if (allLayers) {
             result = buildAnalysisResult(ci.getName(), si);
             wrapper.addChild(result);
@@ -81,7 +81,6 @@ public class SafetyLinkerFactory {
 		}
 	}
 	
-	// Get analysis results, agree linker, and jkind queue
 	public AnalysisResult getAnalysisResult() { return result; }
 	public AgreeResultsLinker getLinker() { return linker; }
 	public Queue<JKindResult> getWorkQueue() { return queue; }
@@ -98,13 +97,11 @@ public class SafetyLinkerFactory {
 
     protected AnalysisResult createVerification(String resultName, ComponentInstance compInst, Program lustreProgram, AgreeProgram agreeProgram) {
 
-    	// Renaming: organizes things between jkind and agree results? 
 		AgreeRenaming agreeRenaming = new AgreeRenaming(); 
 		AgreeLayout layout = new AgreeLayout();
 		RenamingVisitor.addRenamings(lustreProgram, agreeRenaming, layout);
-		SafetyRenaming renaming = new SafetyRenaming(agreeRenaming, agreeRenaming.getRefMap());
+		TcgRenaming renaming = new TcgRenaming(agreeRenaming, agreeRenaming.getRefMap());
         Node mainNode = lustreProgram.getMainNode();
-        
         if (mainNode == null) {
             throw new AgreeException("Could not find main lustre node after translation");
         }
@@ -115,26 +112,21 @@ public class SafetyLinkerFactory {
         result = new JKindResult(resultName, properties, renaming);
         queue.add(result);
 
-        // Set the program, component, contract, layout, log, and renaming
         ComponentImplementation compImpl = AgreeUtils.getInstanceImplementation(compInst);
-        linker.setAgreeProgram(result, agreeProgram);
+      //  linker.setAgreeProgram(result, agreeProgram);
         linker.setProgram(result, lustreProgram);
         linker.setComponent(result, compImpl);
         linker.setContract(result, getContract(compImpl));
         linker.setLayout(result, layout);
-        linker.setReferenceMap(result, renaming.getRefMap());
+        // linker.setReferenceMap(result, renaming.getRefMap());
         linker.setLog(result, AgreeLogger.getLog());
-        linker.setRenaming(result, renaming);
+       // linker.setRenaming(result, renaming);
 
-        // Print the jkind result 
         System.out.println(result);
-        System.out.println(agreeProgram);
-        System.out.println(lustreProgram);
         return result;
 
     }
 
-    // Get agree subclause from the component implementation
     private AgreeSubclause getContract(ComponentImplementation ci) {
         ComponentType ct = ci.getOwnedRealization().getImplemented();
         for (AnnexSubclause annex : ct.getOwnedAnnexSubclauses()) {
@@ -145,7 +137,7 @@ public class SafetyLinkerFactory {
         return null;
     }
 
-    // Build jkind analysis
+    
     private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
         CompositeAnalysisResult result = new CompositeAnalysisResult("Safety analysis for " + name);
 
@@ -169,7 +161,6 @@ public class SafetyLinkerFactory {
         return null;
     }
 
-    // Check to see if the component instance contains an agree annex
     private boolean containsAGREEAnnex(ComponentInstance ci) {
         ComponentClassifier compClass = ci.getComponentClassifier();
         if (compClass instanceof ComponentImplementation) {
