@@ -3,6 +3,17 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.ComponentClassifier;
+import org.osate.aadl2.ComponentImplementation;
+import org.osate.aadl2.ComponentType;
+import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.annexsupport.AnnexUtil;
+
+import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
+import com.rockwellcollins.atc.agree.agree.AgreePackage;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeConnection;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -22,7 +33,21 @@ public class SafetyASTVisitor extends AgreeASTMapVisitor {
 	@Override
 	public AgreeNode visit(AgreeNode e){
 		
-		String id = e.id;
+		printNode(e);
+		
+		
+		
+		return e;
+	}
+
+	
+	/*
+	 * printNode:
+	 * @param AgreeNode
+	 * Prints the parts of the agree node to the console (input, output, etc.)
+	 * 
+	 */
+	private void printNode(AgreeNode e){
 
 		// Print out of inputs
 		List<AgreeVar> inputs = new ArrayList<>();
@@ -53,6 +78,7 @@ public class SafetyASTVisitor extends AgreeASTMapVisitor {
 		// we may visit the sub-nodes first, and then use the result of that
 		// in visiting the connections.
 		//
+		// These are the names of the subcomponents (toString gives names)
 		List<AgreeNode> subNodes = new ArrayList<>();
 		for (AgreeNode subnode : e.subNodes) {
 			subNodes.add(this.visit(subnode));
@@ -109,7 +135,26 @@ public class SafetyASTVisitor extends AgreeASTMapVisitor {
 			System.out.println(eq.toString());
 		}
 		
-		return e;
+		
 	}
-
+	
+	private AgreeContractSubclause getAgreeAnnex(ComponentClassifier comp) {
+		for (AnnexSubclause annex : AnnexUtil.getAllAnnexSubclauses(comp,
+				AgreePackage.eINSTANCE.getAgreeContractSubclause())) {
+			if (annex instanceof AgreeContractSubclause) {
+				// in newer versions of osate the annex this returns annexes in
+				// the type
+				// as well as the implementation. We want the annex in the
+				// specific component
+				EObject container = annex.eContainer();
+				while (!(container instanceof ComponentClassifier)) {
+					container = container.eContainer();
+				}
+				if (container == comp) {
+					return (AgreeContractSubclause) annex;
+				}
+			}
+		}
+		return null;
+	}
 }
