@@ -9,7 +9,7 @@
             id="edu.umn.cs.crisys.safety.analysis.commands.category">
       </category>
       <command
-            name="Safety Analysis Command"
+            name="Run Safety Analysis"
             categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
             id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
       </command>

@@ -3,12 +3,6 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osate.aadl2.ComponentImplementation;
-import org.osate.aadl2.NamedElement;
-import org.osate.aadl2.Subcomponent;
-import org.osate.aadl2.instance.ComponentInstance;
-
-import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeConnection;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -16,7 +10,6 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
-import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import jkind.lustre.visitors.TypeMapVisitor;
 
 public class SafetyASTVisitor extends AgreeASTMapVisitor {

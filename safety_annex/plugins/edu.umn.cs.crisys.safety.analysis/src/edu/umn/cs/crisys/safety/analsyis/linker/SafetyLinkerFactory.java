@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Queue;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
@@ -31,6 +33,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import jkind.api.results.AnalysisResult;
 import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
@@ -63,13 +66,30 @@ public class SafetyLinkerFactory {
         ComponentType sysType = AgreeUtils.getInstanceType(si);
         EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(sysType,
                 AgreePackage.eINSTANCE.getAgreeContractSubclause());
+        
+        annexSubClauses.addAll(AnnexUtil.getAllAnnexSubclauses(sysType,
+                SafetyPackage.eINSTANCE.getSafetyContractSubclause()));
+        
+        EList agreeSubclauses = AnnexUtil.getAllAnnexSubclauses(sysType, AgreePackage.eINSTANCE.getAgreeContractSubclause());
+        System.out.println();
+        EList safetySubclauses = AnnexUtil.getAllAnnexSubclauses(sysType, SafetyPackage.eINSTANCE.getSafetyContractSubclause());
+        EClass agreetest = AgreePackage.eINSTANCE.getAgreeContractSubclause();
+        EClass test = SafetyPackage.eINSTANCE.getSafetyContractSubclause();
+        
+        
+//        EList<AnnexSubclause> safetySubclause = AnnexUtil.getAllAnnexSubclauses(sysType,
+//                SafetyPackage.eINSTANCE.getSafetyContractSubclause());
+        
+        
+        int size = annexSubClauses.size();
+        System.out.println();
 
         if (annexSubClauses.size() == 0) {
             throw new SafetyException(
                     "There is no AGREE annex or Safety annex in the '" + sysType.getName() + "' system type.");
         }
         
-        if(annexSubClauses.size() == 1){
+        if(annexSubClauses.size() == 3){
         	throw new SafetyException(
         			"There must be both an AGREE annex and a Safety annex in the '" + sysType.getName() + "' system type.");
         }
