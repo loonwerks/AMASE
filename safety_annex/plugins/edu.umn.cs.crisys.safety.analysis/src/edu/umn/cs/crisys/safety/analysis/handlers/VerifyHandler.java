@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
+import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
 import org.osate.aadl2.instantiation.InstantiateModel;
 import org.osate.annexsupport.AnnexUtil;
@@ -24,7 +25,7 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 public class VerifyHandler extends AadlHandler {
 
 	private static boolean transformFlag = false;
-	private static SafetyPackage safetyPackage = null;
+	private static ComponentImplementation componentImpl = null;
 	
     /*
      * (non-Javadoc)
@@ -43,29 +44,29 @@ public class VerifyHandler extends AadlHandler {
 
 		// Check for annexes here
 		ComponentImplementation ci = (ComponentImplementation) root;
-		 EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(ci,
+		EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(ci,
 	                AgreePackage.eINSTANCE.getAgreeContractSubclause());
 	        
-	     annexSubClauses.addAll(AnnexUtil.getAllAnnexSubclauses(ci,
+	    annexSubClauses.addAll(AnnexUtil.getAllAnnexSubclauses(ci,
 	                SafetyPackage.eINSTANCE.getSafetyContractSubclause()));
 	     
-	     // If no annexes found, output error. 
-	     if (annexSubClauses.size() == 0) {
-	         throw new SafetyException(
+	    // If no annexes found, output error. 
+	    if (annexSubClauses.size() == 0) {
+	        throw new SafetyException(
 	                    "There is no AGREE annex or Safety annex in the '" + ci.getName() + "' system type.");
-	     }
+	    }
 	     
-	     // If only one annex found, output error. 
-	     if(annexSubClauses.size() == 1){
-	    	 throw new SafetyException(
+	    // If only one annex found, output error. 
+	    if(annexSubClauses.size() == 1){
+	   	 throw new SafetyException(
 	        			"There must be both an AGREE annex and a Safety annex in the '" + ci.getName() + "' system type.");
-	     }
+	    }
 		
 		// Set transform flag to true
 	    // Set SafetyPackage to the current instance of the package
 		try {
 			TransformAgree.setTransformFlag(true);
-            return setSafetyPackage(SafetyPackage.eINSTANCE);
+            return setComponentImplementation(ci);
         
 		} catch (Throwable e) {
             String messages = getNestedMessages(e);
@@ -89,21 +90,6 @@ public class VerifyHandler extends AadlHandler {
 		return "Safety Analysis results";
 	}
 	
-	/*
-	 * getSysInstance
-	 * @param ComponentImplementation ci
-	 * @return SystemInstance the instantiated model
-	 * Builds the instance model file from the component implementation.
-	 */
-	public SystemInstance getSysInstance(ComponentImplementation ci) {
-		try {
-			return InstantiateModel.buildInstanceModelFile(ci);
-		} catch (Exception e) {
-			Dialog.showError("Model Instantiate", "Error while re-instantiating the model: " + e.getMessage());
-			throw new AgreeException("Error Instantiating model");
-		}
-	}
-	
 	
 	/*
 	 * setSafetyPackage
@@ -112,9 +98,9 @@ public class VerifyHandler extends AadlHandler {
 	 * If the safety package is not null, then we set the package and return OK
 	 * else return ERROR.
 	 */
-	private IStatus setSafetyPackage(SafetyPackage sp){
-		if(sp != null){
-			safetyPackage = sp;
+	private IStatus setComponentImplementation(ComponentImplementation ci){
+		if(ci != null){
+			componentImpl = ci;
 			return Status.OK_STATUS;
 		} else{
 			return Status.CANCEL_STATUS;
@@ -127,8 +113,8 @@ public class VerifyHandler extends AadlHandler {
 	 * @return SafetyPackage
 	 * Returns the current instance of the safety package. 
 	 */
-	public static SafetyPackage getSafetyPackage(){
-		return safetyPackage;
+	public static ComponentImplementation getComponentImplementation(){
+		return componentImpl;
 	}
 	
 	/*

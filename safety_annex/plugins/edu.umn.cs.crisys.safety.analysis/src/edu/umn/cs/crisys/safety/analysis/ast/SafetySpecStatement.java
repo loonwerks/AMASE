@@ -7,13 +7,13 @@ public class SafetySpecStatement implements SafetyASTElement{
 	
 	public final String description;
 	public final IdExpr id;
-	public final List<FaultSubcomponent> faultDefinitions;
+	public final List<FaultSubcomponent> faultSubcomponents;
 	
-	public SafetySpecStatement(String description, IdExpr id, List<FaultSubcomponent> faultDefinitions) {
+	public SafetySpecStatement(String description, IdExpr id, List<FaultSubcomponent> faultSubcomponents) {
 		
 		this.description = description;
 		this.id = id;
-		this.faultDefinitions = jkind.util.Util.safeList(faultDefinitions);
+		this.faultSubcomponents = jkind.util.Util.safeList(faultSubcomponents);
 		
 	}
 	
