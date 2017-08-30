@@ -3,33 +3,32 @@ package edu.umn.cs.crisys.safety.analysis.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
-import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.Element;
 import org.osate.annexsupport.AnnexUtil;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
-import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTVisitor;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
-
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SafetyASTVisitor;
-import edu.umn.cs.crisys.safety.analysis.handlers.AadlHandler;
+import edu.umn.cs.crisys.safety.analysis.ast.SafetyInterval;
+import edu.umn.cs.crisys.safety.analysis.ast.SafetySpecStatement;
 import edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler;
-import edu.umn.cs.crisys.safety.safety.Contract;
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import jkind.lustre.Expr;
 import jkind.lustre.visitors.TypeMapVisitor;
 
 public class TransformAgree implements AgreeAutomater {
@@ -53,7 +52,11 @@ public class TransformAgree implements AgreeAutomater {
 		List<AgreeNode> nodes = new ArrayList<>();
 		SafetyContract safetyContract = null;
 		List<SpecStatement> safetySpecs = new ArrayList<>();
-		List<OutputStatement> safetyOutputs = new ArrayList<>();
+		List<SafetyInterval> safetyIntervals = new ArrayList<>();
+		FaultStatement fs = null;
+		List<FaultSubcomponent> faultDefs = new ArrayList<>();
+		AnnexSubclause safetyannex = null;
+		Element root = null;
 		
 		// First get the analysis flag to see if we just return original agree program.
 		Boolean analysis = VerifyHandler.getAnalysisFlag();
@@ -74,20 +77,47 @@ public class TransformAgree implements AgreeAutomater {
 				
 				AgreeProgram ap = visitor.visit(program);
 				ComponentImplementation ci = VerifyHandler.getComponentImplementation();
+				root = VerifyHandler.getRoot();
+				
+				Classifier classifier = root.getContainingClassifier();
+				ComponentClassifier compClass = null;
+				if(classifier instanceof ComponentClassifier){
+					compClass = (ComponentClassifier) classifier;
+				}
+				
+				SafetyContractSubclause sannex = getSafetyAnnex(compClass);
+				System.out.println();
+				
+				SafetyContract contract = (SafetyContract) sannex.getContract();
+				System.out.println();
+				
+				EList<SpecStatement> specs = contract.getSpecs();
+				fs = getFaultStatement(specs);
+				faultDefs = fs.getFaultDefinitions();
+				
+				//safetyIntervals.addAll(getIntervalStatements(specs));
+				System.out.println();
+
+				
+				
+				
 				
 				// Get the Safety annex from the component impl
-				AnnexSubclause safetyannex = null;
 				
 				List<AnnexSubclause> ownedAnnexes = ci.getOwnedAnnexSubclauses();
+				
 				if(ownedAnnexes.size() == 2){
 					for(AnnexSubclause annex : ownedAnnexes){
 						if(annex.getName().equals("safety")){
 							safetyannex = annex;
+							System.out.println();
 						}
 					}
 				}else{
 					new SafetyException("During transforming AGREE program: cannot locate safety annex.");
 				}
+				
+				//safetyannex.
 				
 				
 				// Get the top node, inputs, and outputs from agree
@@ -133,13 +163,13 @@ public class TransformAgree implements AgreeAutomater {
 //						safetyOutputs.add(safetyOutput);
 //					}
 //				}
-				
-				System.out.println("TRANSFORM PROGRAM: Safety OUTPUTS __________________");
-				System.out.println(safetyOutputs.size());
-				for(OutputStatement output : safetyOutputs){
-					System.out.println(safetyOutputs.size());
-					System.out.println(output.getNom_conn().toString());
-				}
+//				
+//				System.out.println("TRANSFORM PROGRAM: Safety OUTPUTS __________________");
+//				System.out.println(safetyOutputs.size());
+//				for(OutputStatement output : safetyOutputs){
+//					System.out.println(safetyOutputs.size());
+//					System.out.println(output.getNom_conn().toString());
+//				}
 				
 				
 				
@@ -205,6 +235,35 @@ public class TransformAgree implements AgreeAutomater {
 		}
 		return null;
 	}
+	
+
+	private FaultStatement getFaultStatement(EList<SpecStatement> specs){
+		
+		FaultStatement fs = null;
+		for(SpecStatement spec : specs){
+			if(spec instanceof FaultStatement){
+				fs = (FaultStatement) spec;
+			}
+		}
+		return fs;
+	}
+	
+//	private List<AgreeStatement> getGuaranteeStatements(EList<SpecStatement> specs) {
+//		List<AgreeStatement> guarantees = new ArrayList<>();
+//		for (SpecStatement spec : specs) {
+//			if (spec instanceof GuaranteeStatement) {
+//				GuaranteeStatement guarantee = (GuaranteeStatement) spec;
+//				String str = guarantee.getStr();
+//				if (guarantee.getExpr() != null) {
+//					guarantees.add(new AgreeStatement(str, doSwitch(guarantee.getExpr()), guarantee));
+//				} else {
+//					PatternStatement pattern = guarantee.getPattern();
+//					guarantees.add(new AgreePatternBuilder(str, guarantee, this).doSwitch(pattern));
+//				}
+//			}
+//		}
+//		return guarantees;
+//	}
 
 
 }

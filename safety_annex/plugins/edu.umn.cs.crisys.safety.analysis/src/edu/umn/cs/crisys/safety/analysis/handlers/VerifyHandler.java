@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
@@ -26,6 +27,7 @@ public class VerifyHandler extends AadlHandler {
 
 	private static boolean transformFlag = false;
 	private static ComponentImplementation componentImpl = null;
+	private static Element root = null;
 	
     /*
      * (non-Javadoc)
@@ -42,6 +44,9 @@ public class VerifyHandler extends AadlHandler {
 			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Must select an AADL Component Implementation");
 		}
 
+		// Set root
+		setRoot(root);
+		
 		// Check for annexes here
 		ComponentImplementation ci = (ComponentImplementation) root;
 		EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(ci,
@@ -62,6 +67,12 @@ public class VerifyHandler extends AadlHandler {
 	        			"There must be both an AGREE annex and a Safety annex in the '" + ci.getName() + "' system type.");
 	    }
 		
+//	    EList<AnnexSubclause> safetyannex = AnnexUtil.getAllAnnexSubclauses(ci,  SafetyPackage.eINSTANCE.getSafetyContractSubclause());
+//	    for(AnnexSubclause annex : safetyannex){
+//	    	EClass annexChildren = annex.eClass();
+//	    	System.out.println(annexChildren.toString());
+//	    }
+	    
 		// Set transform flag to true
 	    // Set SafetyPackage to the current instance of the package
 		try {
@@ -135,4 +146,12 @@ public class VerifyHandler extends AadlHandler {
         return sw.toString();
     }
 
+    
+    public static void setRoot(Element root){
+    	VerifyHandler.root = root;
+    }
+    
+    public static Element getRoot(){
+    	return VerifyHandler.root;
+    }
 }
