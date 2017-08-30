@@ -317,35 +317,35 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// (3) Type check between nominal connections and return values
 		
 		// Iterate through the list of nominal connections (nomConns)
-//		for(int i = 0; i < nomConns.size(); i++){
-//			
-//			// Get the nominal connection
-//			NestedDotID nom = nomConns.get(i);
-//			// Return value from the list of all return values
-//			Arg returnArg = null; 
-//			// There is no reason why retvals should still be null.
-//			// If it is, there are other errors that would be shown to the user.
-//			if(retvals != null){
-//				returnArg = retvals.get(i);
-//			}else{
-//				error(outputs, "Return value list is empty.");
-//			}
-//			
-//			// get agree type of return value
-//			AgreeType typeReturnArg = getAgreeType(returnArg);
-//			// Get the final nested id of the nominal connection
-//			NamedElement nestedNom = getFinalNestId(nom);
-//			// Get agree type of that nested id
-//			AgreeType typeNom = getAgreeType(nestedNom);
-//			
-//			System.out.println();
-//			
-//			// Use agrees "matches" method to check types
-//			if(!matches(typeNom, typeReturnArg)){
-//				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
-//				+" but right side (return value) is of type "+typeReturnArg.toString());
-//			}
-//		}
+		for(int i = 0; i < nomConns.size(); i++){
+			
+			// Get the nominal connection
+			NestedDotID nom = nomConns.get(i);
+			// Return value from the list of all return values
+			Arg returnArg = null; 
+			// There is no reason why retvals should still be null.
+			// If it is, there are other errors that would be shown to the user.
+			if(retvals != null){
+				returnArg = retvals.get(i);
+			}else{
+				error(outputs, "Return value list is empty.");
+			}
+			
+			// get agree type of return value
+			AgreeType typeReturnArg = getAgreeType(returnArg);
+			// Get the final nested id of the nominal connection
+			NamedElement nestedNom = getFinalNestId(nom);
+			// Get agree type of that nested id
+			AgreeType typeNom = getAgreeType(nestedNom);
+			
+			System.out.println();
+			
+			// Use agrees "matches" method to check types
+			if(!matches(typeNom, typeReturnArg)){
+				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
+				+" but right side (return value) is of type "+typeReturnArg.toString());
+			}
+		}
 	}
 	
 	/*

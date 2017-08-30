@@ -12,6 +12,7 @@ import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
@@ -46,17 +47,22 @@ public class TransformAgree implements AgreeAutomater {
 	public AgreeProgram transform(AgreeProgram program) {
 		
 		// Local copies of the program components we will need to change and access
-		AgreeNode topNode;
-		List<AgreeVar> inputs = new ArrayList<>();
-		List<AgreeVar> outputs = new ArrayList<>();
-		List<AgreeNode> nodes = new ArrayList<>();
-		SafetyContract safetyContract = null;
-		List<SpecStatement> safetySpecs = new ArrayList<>();
-		List<SafetyInterval> safetyIntervals = new ArrayList<>();
-		FaultStatement fs = null;
-		List<FaultSubcomponent> faultDefs = new ArrayList<>();
-		AnnexSubclause safetyannex = null;
 		Element root = null;
+		AgreeNode topNode;
+		List<AgreeVar> agreeinputs = new ArrayList<>();
+		List<AgreeVar> agreeoutputs = new ArrayList<>();
+		List<AgreeNode> agreenodes = new ArrayList<>();
+		// This is the FaultStatement that holds all fault definitions
+		FaultStatement fs = null;
+		// Here are the fault defitions within the fault statement
+		List<FaultSubcomponent> faultDefs = new ArrayList<>();
+		//String of the fault statement description
+		String faultDesc = "";
+		// Fault output statement
+		OutputStatement fout = null;
+		// Nominal connections from fault output statement
+		List<NestedDotID> foutNomConn = new ArrayList<>();
+		
 		
 		// First get the analysis flag to see if we just return original agree program.
 		Boolean analysis = VerifyHandler.getAnalysisFlag();
@@ -69,78 +75,83 @@ public class TransformAgree implements AgreeAutomater {
 				System.out.println("Analysis is true, transforming original agree program");
 				
 				
-				// Visit program: 
-				// For now, it prints out each node in the program
-				// (input, guarantees, etc.)
+				// Visit program
 				jkind.lustre.visitors.TypeMapVisitor lustreTypeMapVisitor = new TypeMapVisitor();
 				AgreeASTMapVisitor visitor = new AgreeASTMapVisitor(lustreTypeMapVisitor);
 				
 				AgreeProgram ap = visitor.visit(program);
-				ComponentImplementation ci = VerifyHandler.getComponentImplementation();
+				
+				// Get Element root: This will hold the containing classifier which is
+				// how we can access the safety annex
 				root = VerifyHandler.getRoot();
 				
+				// Get the classifier
 				Classifier classifier = root.getContainingClassifier();
 				ComponentClassifier compClass = null;
+				
+				// Cast to ComponentClassifier
 				if(classifier instanceof ComponentClassifier){
 					compClass = (ComponentClassifier) classifier;
 				}
 				
-				SafetyContractSubclause sannex = getSafetyAnnex(compClass);
-				System.out.println();
+				// Grab the safety annex
+				SafetyContractSubclause safetyannex = getSafetyAnnex(compClass);
 				
-				SafetyContract contract = (SafetyContract) sannex.getContract();
-				System.out.println();
+				// and the safety annex's contract
+				SafetyContract contract = (SafetyContract) safetyannex.getContract();
 				
+				// The specs from the contract is where we can access the fault defintions
 				EList<SpecStatement> specs = contract.getSpecs();
 				fs = getFaultStatement(specs);
-				faultDefs = fs.getFaultDefinitions();
 				
-				//safetyIntervals.addAll(getIntervalStatements(specs));
-				System.out.println();
-
-				
-				
-				
-				
-				// Get the Safety annex from the component impl
-				
-				List<AnnexSubclause> ownedAnnexes = ci.getOwnedAnnexSubclauses();
-				
-				if(ownedAnnexes.size() == 2){
-					for(AnnexSubclause annex : ownedAnnexes){
-						if(annex.getName().equals("safety")){
-							safetyannex = annex;
-							System.out.println();
-						}
-					}
-				}else{
-					new SafetyException("During transforming AGREE program: cannot locate safety annex.");
+				// Test for null fault statement
+				if(fs == null){
+					new SafetyException("Fault statement is null during transform agree program.");
 				}
 				
-				//safetyannex.
+				// Get the definitions of the fault
+				faultDefs = fs.getFaultDefinitions();
+				// And the string description
+				faultDesc  = fs.getStr();
 				
+				// Get the output statement
+				fout = getOutputStatement(faultDefs);
+				
+				if(fout == null){
+					new SafetyException("Output statement is null during transform agree program.");
+				}
+				
+				// Nominal connections from fault output stmt
+				foutNomConn = fout.getNom_conn();
+				
+				for(NestedDotID nomConn : foutNomConn){
+					System.out.println(nomConn.toString());
+				}
+				
+				System.out.println(foutNomConn.toString());				
+				System.out.println();
+				
+			
 				
 				// Get the top node, inputs, and outputs from agree
 				topNode = ap.topNode;
 				
 				// Reset from any previous runs
-				inputs.clear();
-				outputs.clear();
+				agreeinputs.clear();
+				agreeoutputs.clear();
 				
 				// Populate inputs and outputs from topNode
-				inputs.addAll(topNode.inputs);
-				outputs.addAll(topNode.outputs);
+				agreeinputs.addAll(topNode.inputs);
+				agreeoutputs.addAll(topNode.outputs);
 				
 				// Populate from all the other nodes
-				nodes = ap.agreeNodes;
+				agreenodes = ap.agreeNodes;
 				
-				for(AgreeNode node : nodes){
-//					ComponentInstance ct = node.compInst;
-//					System.out.println("\nComponent Instance:\n");
-//					System.out.println(ct.toString());
+				// Add each node's input to our list
+				for(AgreeNode node : agreenodes){
 					
-					inputs.addAll(node.inputs);
-					outputs.addAll(node.outputs);
+					agreeinputs.addAll(node.inputs);
+					agreeoutputs.addAll(node.outputs);
 				}
 
 //				System.out.println("TRANSFORM PROGRAM: INPUTS __________________");				
@@ -181,15 +192,6 @@ public class TransformAgree implements AgreeAutomater {
 		finally{
 			setTransformFlag(false);
 		}
-			
-		
-		
-
-		
-		
-		
-
-		
 		// And return program
 		return program;
 	}
@@ -216,14 +218,24 @@ public class TransformAgree implements AgreeAutomater {
 		return transformFlag;
 	}
 	
+	/*
+	 * getSafetyAnnex 
+	 * @param ComponentClassifier comp : The component classifier in question will contain
+	 * the safety annex. 
+	 * @return SafetyContractSubclause : This is the safety annex. 
+	 */
 	private SafetyContractSubclause getSafetyAnnex(ComponentClassifier comp) {
+		
+		// Grab the annex subclause using the safety package instance
 		for (AnnexSubclause annex : AnnexUtil.getAllAnnexSubclauses(comp,
 				SafetyPackage.eINSTANCE.getSafetyContractSubclause())) {
+			
+			// If we do have the safety contract subclause (and not the agree one)
+			// Then get the component classifier from that and return the annex
 			if (annex instanceof SafetyContractSubclause) {
-				// in newer versions of osate the annex this returns annexes in
-				// the type
-				// as well as the implementation. We want the annex in the
-				// specific component
+				// In newer versions of osate the annex this returns annexes in
+				// the type as well as the implementation. We want the annex in the
+				// specific component.
 				EObject container = annex.eContainer();
 				while (!(container instanceof ComponentClassifier)) {
 					container = container.eContainer();
@@ -236,34 +248,42 @@ public class TransformAgree implements AgreeAutomater {
 		return null;
 	}
 	
-
+	/*
+	 * getFaultStatement
+	 * @param EList<SpecStatement> specs : The spec statements from the contract.
+	 * @return FaultStatement : The fault statement associated with the spec statement.
+	 * This is how all annex statements will be accessed (inputs, outputs, etc). 
+	 */
 	private FaultStatement getFaultStatement(EList<SpecStatement> specs){
 		
 		FaultStatement fs = null;
+		
+		// For each of the spec stmts in the list, check
+		// to see if it is a fault statement. 
+		// If there is one, cast it and return that.
+		// Else return null. 
 		for(SpecStatement spec : specs){
 			if(spec instanceof FaultStatement){
 				fs = (FaultStatement) spec;
+				break;
 			}
 		}
 		return fs;
 	}
 	
-//	private List<AgreeStatement> getGuaranteeStatements(EList<SpecStatement> specs) {
-//		List<AgreeStatement> guarantees = new ArrayList<>();
-//		for (SpecStatement spec : specs) {
-//			if (spec instanceof GuaranteeStatement) {
-//				GuaranteeStatement guarantee = (GuaranteeStatement) spec;
-//				String str = guarantee.getStr();
-//				if (guarantee.getExpr() != null) {
-//					guarantees.add(new AgreeStatement(str, doSwitch(guarantee.getExpr()), guarantee));
-//				} else {
-//					PatternStatement pattern = guarantee.getPattern();
-//					guarantees.add(new AgreePatternBuilder(str, guarantee, this).doSwitch(pattern));
-//				}
-//			}
-//		}
-//		return guarantees;
-//	}
+
+	private OutputStatement getOutputStatement(List<FaultSubcomponent> faultDefs){
+		
+		OutputStatement out = null;
+		
+		for(FaultSubcomponent fsub : faultDefs){
+			if(fsub instanceof OutputStatement){
+				out = (OutputStatement) fsub;
+				break;
+			}
+		}
+		return out;
+	}
 
 
 }
