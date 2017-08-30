@@ -2,6 +2,7 @@ package edu.umn.cs.crisys.safety.analysis.transform;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -20,6 +21,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.SafetyPair;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyInterval;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetySpecStatement;
 import edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler;
@@ -65,7 +67,7 @@ public class TransformAgree implements AgreeAutomater {
 		List<NestedDotID> foutNomConn = new ArrayList<>();
 		// List of nominal connection names
 		List<String> nomConnNames = new ArrayList<>();
-		
+		List<SafetyPair<NestedDotID, String>> nomConnWithName = new ArrayList<>();;
 		
 		// First get the analysis flag to see if we just return original agree program.
 		Boolean analysis = VerifyHandler.getAnalysisFlag();
@@ -137,12 +139,15 @@ public class TransformAgree implements AgreeAutomater {
 							name = name.concat("."+base.getFullName());
 						}
 					}
-					nomConnNames.add(name);
-					
+					nomConnWithName.add(new SafetyPair<NestedDotID, String>(nomConn, name));
 				}
 				
-				//System.out.println(foutNomConn.toString());				
-				System.out.println("OUTPUT FAULT NAMES: " + nomConnNames);
+//				System.out.println(foutNomConn.toString());				
+//				System.out.println("OUTPUT FAULT NAMES: ");
+//				for(SafetyPair<NestedDotID, String> pair : nomConnWithName){
+//					System.out.println(pair.getLeft() + ", "+pair.getRight());
+//				}
+				
 				
 				// Get the top node, inputs, and outputs from agree
 				topNode = ap.topNode;
