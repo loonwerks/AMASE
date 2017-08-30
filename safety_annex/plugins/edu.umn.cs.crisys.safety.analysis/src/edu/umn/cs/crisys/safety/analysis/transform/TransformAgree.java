@@ -142,9 +142,7 @@ public class TransformAgree implements AgreeAutomater {
 				}
 				
 				//System.out.println(foutNomConn.toString());				
-				System.out.println("NAME: " + nomConnNames);
-				
-			
+				System.out.println("OUTPUT FAULT NAMES: " + nomConnNames);
 				
 				// Get the top node, inputs, and outputs from agree
 				topNode = ap.topNode;
@@ -178,22 +176,7 @@ public class TransformAgree implements AgreeAutomater {
 //					System.out.println(output.toString());
 //				}
 				
-//				safetyContract = (SafetyContract) safetyannex.getContract();
-//				safetySpecs = safetyContract.getSpecs();
-//				
-//				for(SpecStatement spec : safetySpecs){
-//					if(spec instanceof OutputStatement){
-//						OutputStatement safetyOutput = (OutputStatement) spec;
-//						safetyOutputs.add(safetyOutput);
-//					}
-//				}
-//				
-//				System.out.println("TRANSFORM PROGRAM: Safety OUTPUTS __________________");
-//				System.out.println(safetyOutputs.size());
-//				for(OutputStatement output : safetyOutputs){
-//					System.out.println(safetyOutputs.size());
-//					System.out.println(output.getNom_conn().toString());
-//				}
+				
 				
 				
 				
@@ -284,11 +267,16 @@ public class TransformAgree implements AgreeAutomater {
 		return fs;
 	}
 	
-
+	/*
+	 * getOutputStatement
+	 * @param List<FaultSubcomponent> faultDefs : List of the fault definitions from the annex
+	 * @return OutputStatement : The output statement found in the annex.
+	 */
 	private OutputStatement getOutputStatement(List<FaultSubcomponent> faultDefs){
 		
 		OutputStatement out = null;
 		
+		// Go through the fault definitions and find the output statement
 		for(FaultSubcomponent fsub : faultDefs){
 			if(fsub instanceof OutputStatement){
 				out = (OutputStatement) fsub;
@@ -296,6 +284,21 @@ public class TransformAgree implements AgreeAutomater {
 			}
 		}
 		return out;
+	}
+	
+	/*
+	 * getMatchingAgreeOutput
+	 * @param List<AgreeVar> agreeOutput : All agree vars that make up the agree outputs
+	 * 		  String faultOutNames : All safety output nominal connection names
+	 * @return AgreeVar : The agree var that matches output name
+	 */
+	private AgreeVar getMatchingAgreeOutput(List<AgreeVar> agreeOutput, String faultOutNames){
+		
+		AgreeVar matchingOutput = null;
+		
+		
+		
+		return matchingOutput;
 	}
 
 
