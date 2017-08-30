@@ -10,6 +10,7 @@ import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
+import org.osate.aadl2.NamedElement;
 import org.osate.annexsupport.AnnexUtil;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
@@ -62,6 +63,8 @@ public class TransformAgree implements AgreeAutomater {
 		OutputStatement fout = null;
 		// Nominal connections from fault output statement
 		List<NestedDotID> foutNomConn = new ArrayList<>();
+		// List of nominal connection names
+		List<String> nomConnNames = new ArrayList<>();
 		
 		
 		// First get the analysis flag to see if we just return original agree program.
@@ -123,13 +126,23 @@ public class TransformAgree implements AgreeAutomater {
 				
 				// Nominal connections from fault output stmt
 				foutNomConn = fout.getNom_conn();
-				
+				String name = "";
+				NamedElement base = null;
 				for(NestedDotID nomConn : foutNomConn){
-					System.out.println(nomConn.toString());
+					name = nomConn.getBase().getFullName();
+					while(nomConn.getSub() != null){
+						nomConn = nomConn.getSub();
+						base = nomConn.getBase();
+						if(base != null){
+							name = name.concat("."+base.getFullName());
+						}
+					}
+					nomConnNames.add(name);
+					
 				}
 				
-				System.out.println(foutNomConn.toString());				
-				System.out.println();
+				//System.out.println(foutNomConn.toString());				
+				System.out.println("NAME: " + nomConnNames);
 				
 			
 				
@@ -161,7 +174,7 @@ public class TransformAgree implements AgreeAutomater {
 //				
 //
 //				System.out.println("TRANSFORM PROGRAM: OUTPUTS __________________");				
-//				for(AgreeVar output : outputs){
+//				for(AgreeVar output : agreeoutputs){
 //					System.out.println(output.toString());
 //				}
 				
