@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SafetyASTVisitor;
 import jkind.lustre.Node;
 import jkind.lustre.Type;
 

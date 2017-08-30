@@ -1,33 +1,43 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeConnection;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
+import org.eclipse.emf.ecore.EObject;
+
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTElement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
+import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTVisitor;
 
 import jkind.lustre.visitors.TypeMapVisitor;
 
-public class SafetyASTVisitor extends AgreeASTMapVisitor {
+public class SafetyASTMapVisitor extends AgreeASTMapVisitor
+	         implements AgreeASTVisitor<AgreeASTElement>{
 
-	public SafetyASTVisitor(TypeMapVisitor lustreTypeMapVisitor) {
+	public SafetyASTMapVisitor(TypeMapVisitor lustreTypeMapVisitor) {
 		super(lustreTypeMapVisitor);
 		// TODO Auto-generated constructor stub
 	}
+	
+	private static Map<String, EObject> mapVar = new HashMap<>();
 
-//
-//	@Override
+
+	@Override
+	public AgreeVar visit(AgreeVar e){
+		
+		mapVar.put(e.id, e.reference);
+		System.out.println("Visiting node:" + e.id +" with reference: "+e.reference);
+		
+		return e;
+	}
+
+//	@Override 
 //	public AgreeNode visit(AgreeNode e){
-//		
 //		//printNode(e);
-//		
 //		return e;
 //	}
-
 	
 //	/*
 //	 * printNode:
@@ -125,4 +135,8 @@ public class SafetyASTVisitor extends AgreeASTMapVisitor {
 //		
 //		
 //	}
+	
+	public static Map<String, EObject> getMap(){
+		return mapVar;
+	}
 }
