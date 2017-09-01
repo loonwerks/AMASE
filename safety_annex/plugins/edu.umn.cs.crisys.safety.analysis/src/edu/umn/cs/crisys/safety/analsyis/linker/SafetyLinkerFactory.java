@@ -71,7 +71,7 @@ public class SafetyLinkerFactory {
                 SafetyPackage.eINSTANCE.getSafetyContractSubclause()));
         
         EList agreeSubclauses = AnnexUtil.getAllAnnexSubclauses(sysType, AgreePackage.eINSTANCE.getAgreeContractSubclause());
-        System.out.println();
+       
         EList safetySubclauses = AnnexUtil.getAllAnnexSubclauses(sysType, SafetyPackage.eINSTANCE.getSafetyContractSubclause());
         EClass agreetest = AgreePackage.eINSTANCE.getAgreeContractSubclause();
         EClass test = SafetyPackage.eINSTANCE.getSafetyContractSubclause();
@@ -82,7 +82,7 @@ public class SafetyLinkerFactory {
         
         
         int size = annexSubClauses.size();
-        System.out.println();
+      
 
         if (annexSubClauses.size() == 0) {
             throw new SafetyException(

@@ -301,8 +301,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			if(nomSub != null){
 				baseSubNom = nomSub.getBase();
 				
-				System.out.println();
-				
 				if(!(baseSubNom instanceof Feature)){
 					error(nom, "This connection must be a component connection (Feature). "
 				            +"Possible features are "
@@ -337,8 +335,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			NamedElement nestedNom = getFinalNestId(nom);
 			// Get agree type of that nested id
 			AgreeType typeNom = getAgreeType(nestedNom);
-			
-			System.out.println();
 			
 			// Use agrees "matches" method to check types
 			if(!matches(typeNom, typeReturnArg)){

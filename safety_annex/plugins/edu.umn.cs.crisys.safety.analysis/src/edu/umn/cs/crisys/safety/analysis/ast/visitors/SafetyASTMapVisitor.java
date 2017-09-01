@@ -8,8 +8,12 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.osate.aadl2.NamedElement;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.IfThenElseExpr;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTElement;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTVisitor;
@@ -18,6 +22,7 @@ import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import jkind.lustre.IdExpr;
 import jkind.lustre.visitors.TypeMapVisitor;
 
 public class SafetyASTMapVisitor extends AgreeASTMapVisitor
@@ -48,6 +53,7 @@ public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 		OutputStatement fout = null;
 		// Nominal connections from fault output statement
 		List<NestedDotID> foutNomConn = new ArrayList<>();
+		// Output connections from safety annex
 		HashMap<NestedDotID, String> nomConnWithName = new HashMap<>();
 		// Nominal output list for renaming
 		List<String> nominalOutputs = new ArrayList<>();
@@ -80,16 +86,11 @@ public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 			nomConnWithName.put(nomConn, name);
 		}
 		
-		
-		
 		mapVar.put(e.id, e.reference);
 //		System.out.println("\nComponent instance name: "+e.compInst.getFullName());
 //		
-//		
 //		System.out.println("Visiting node:" + e.id +" with reference: "+e.reference);
-//		
 		
-	
 		// Concatanate the component instance name with the id 
 		// so that it matches the exact output name
 		String fullNodeName = e.compInst.getFullName() +"."+ e.id;
@@ -110,7 +111,7 @@ public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 				// Create list of nominal_outputName
 				String nomName = "nominal_" + e.id;
 				nominalOutputs.add(nomName);
-				
+			
 				// Create new node with new name
 				newnode = new AgreeVar(nomName, e.type, id, e.compInst, e.featInst);
 				
@@ -121,30 +122,66 @@ public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 		}
 		
 		if(changedNode){
-			System.out.println("New node:" + newnode.id +" with reference: "+newnode.reference);
+			//System.out.println("New node:" + newnode.id +" with reference: "+newnode.reference);
 			return newnode;
 		}else{
 			return e;
 		}
-		
-		
-		
 	}
 
-//	@Override 
-//	public AgreeNode visit(AgreeNode e){
-//		//printNode(e);
-//		return e;
-//	}
+	@Override 
+	public AgreeNode visit(AgreeNode e){
+		//printNode(e);
+		
+		
+		List<AgreeStatement> guarantees = new ArrayList<>();
+		for(AgreeStatement guar : e.guarantees){
+			guarantees.add(guar);
+			//System.out.println(guar);
+			
+			 jkind.lustre.Expr guarEx = guar.expr;
+			 
+			 //System.out.println("Lustre expression: "+guarEx.toString());
+			 
+			 
+			 
+			 jkind.lustre.Expr newGuarExpr = visitExpr(guarEx);
+		}
+		
+		
+		return e;
+		
+	}
 	
-//	/*
-//	 * printNode:
-//	 * @param AgreeNode
-//	 * Prints the parts of the agree node to the console (input, output, etc.)
-//	 * 
-//	 */
-//	private void printNode(AgreeNode e){
-//
+	
+	public jkind.lustre.Expr visitExpr(jkind.lustre.Expr expr){
+		
+		if(expr instanceof jkind.lustre.IfThenElseExpr){
+			System.out.println("We have an if then else expression: "+expr.toString());
+			
+			jkind.lustre.IfThenElseExpr ifthen = (jkind.lustre.IfThenElseExpr) expr;
+			
+			jkind.lustre.Expr condition = ifthen.cond;
+			jkind.lustre.Expr elseExpr = ifthen.elseExpr;
+			jkind.lustre.Expr thenExpr = ifthen.thenExpr;
+			
+	
+		}
+		
+		return expr;
+		
+	}
+	
+	/*
+	 * printNode:
+	 * @param AgreeNode
+	 * Prints the parts of the agree node to the console (input, output, etc.)
+	 * 
+	 */
+//	public void printNode(AgreeNode e){
+		
+		
+		//
 //		// Print out of inputs
 //		List<AgreeVar> inputs = new ArrayList<>();
 //		for (AgreeVar input : e.inputs) {

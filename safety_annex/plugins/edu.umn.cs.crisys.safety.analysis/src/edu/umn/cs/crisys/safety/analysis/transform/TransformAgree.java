@@ -221,53 +221,7 @@ public class TransformAgree implements AgreeAutomater {
 		}
 		return fs;
 	}
-	
 
-	
-	/*
-	 * getMatchingAgreeOutput
-	 * @param List<AgreeVar> agreeOutput : All agree vars that make up the agree outputs
-	 * 		  String faultOutName : Safety output nominal connection name
-	 * @return AgreeVar : The agree var that matches output name
-	 */
-	private AgreeVar getMatchingAgreeOutput(List<AgreeVar> agreeOutput, String faultOutName){
-		
-		AgreeVar matchingOutput = null;
-		boolean noMatch = false;
-		
-		// Go through each var (agreeOutput)
-		// Split at the '.' (so selector.green_output would now be selector, green_output)
-		// Check each split word and see if it is part of our faultOutName
-		// If there is a complete match with all the split words, we found our var
-		// if not, return null. 
-		for(AgreeVar var : agreeOutput){
-			
-			String varname = var.toString();
-			String[] splitname = varname.split("\\.");
-			
-			for(int i = 1; i < splitname.length; i++){
-				
-				if(!faultOutName.contains(splitname[i])){
-					noMatch = true;
-					break;
-				} else{
-					noMatch = false;
-				}
-				
-				if((i == (splitname.length-1))&&(!noMatch)){
-					matchingOutput = var;
-				}
-			}
-			// If matchingOutput isn't null AND noMatch is false 
-			// then we have set matchingOutput to var and been overall successful. 
-			if((matchingOutput != null)&&(!noMatch)){
-				break;
-			}
-		}
-		
-		
-		return matchingOutput;
-	}
 
 
 	
