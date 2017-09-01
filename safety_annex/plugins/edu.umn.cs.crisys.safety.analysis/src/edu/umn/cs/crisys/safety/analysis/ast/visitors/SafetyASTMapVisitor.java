@@ -1,25 +1,40 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
+import org.osate.aadl2.NamedElement;
 
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTElement;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTVisitor;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import jkind.lustre.visitors.TypeMapVisitor;
 
 public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 	         implements AgreeASTVisitor<AgreeASTElement>{
+	
+	// This is the FaultStatement that holds all fault definitions
+	private FaultStatement fs;
 
-	public SafetyASTMapVisitor(TypeMapVisitor lustreTypeMapVisitor) {
+
+
+	public SafetyASTMapVisitor(TypeMapVisitor lustreTypeMapVisitor, FaultStatement fs) {
 		super(lustreTypeMapVisitor);
-		// TODO Auto-generated constructor stub
+		this.fs = fs;
+
+		
 	}
+		
 	
 	private static Map<String, EObject> mapVar = new HashMap<>();
 
@@ -27,10 +42,93 @@ public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 	@Override
 	public AgreeVar visit(AgreeVar e){
 		
-		mapVar.put(e.id, e.reference);
-		System.out.println("Visiting node:" + e.id +" with reference: "+e.reference);
+		// Here are the fault definitions within the fault statement
+	    List<FaultSubcomponent> faultDefs = new ArrayList<>();
+		// Fault output statement
+		OutputStatement fout = null;
+		// Nominal connections from fault output statement
+		List<NestedDotID> foutNomConn = new ArrayList<>();
+		HashMap<NestedDotID, String> nomConnWithName = new HashMap<>();
+		// Nominal output list for renaming
+		List<String> nominalOutputs = new ArrayList<>();
+		// New node if changes required
+		AgreeVar newnode = null;
 		
-		return e;
+		// Get the definitions of the fault
+		faultDefs = fs.getFaultDefinitions();
+		
+		// Get the output statement
+		fout = getOutputStatement(faultDefs);
+		
+		if(fout == null){
+			new SafetyException("Output statement is null during transform agree program.");
+		}
+		
+		// Nominal connections from fault output stmt
+		foutNomConn = fout.getNom_conn();
+		String name = "";
+		NamedElement base = null;
+		for(NestedDotID nomConn : foutNomConn){
+			name = nomConn.getBase().getFullName();
+			while(nomConn.getSub() != null){
+				nomConn = nomConn.getSub();
+				base = nomConn.getBase();
+				if(base != null){
+					name = name.concat("."+base.getFullName());
+				}
+			}
+			nomConnWithName.put(nomConn, name);
+		}
+		
+		
+		
+		mapVar.put(e.id, e.reference);
+//		System.out.println("\nComponent instance name: "+e.compInst.getFullName());
+//		
+//		
+//		System.out.println("Visiting node:" + e.id +" with reference: "+e.reference);
+//		
+		
+	
+		// Concatanate the component instance name with the id 
+		// so that it matches the exact output name
+		String fullNodeName = e.compInst.getFullName() +"."+ e.id;
+		
+		boolean changedNode = false;
+		
+		// Test to see if we have a match with any of the outputs
+		for(NestedDotID id : nomConnWithName.keySet()){
+			
+			String value = nomConnWithName.get(id);
+			
+//			System.out.println("NomConnWithName : "+ value);
+//			System.out.println("fullNodeName : "+ fullNodeName);
+//			
+			// If we have a match, change the node accordingly
+			if(value.contains(fullNodeName)){
+				
+				// Create list of nominal_outputName
+				String nomName = "nominal_" + e.id;
+				nominalOutputs.add(nomName);
+				
+				// Create new node with new name
+				newnode = new AgreeVar(nomName, e.type, id, e.compInst, e.featInst);
+				
+				changedNode = true;
+				break;
+				
+			}
+		}
+		
+		if(changedNode){
+			System.out.println("New node:" + newnode.id +" with reference: "+newnode.reference);
+			return newnode;
+		}else{
+			return e;
+		}
+		
+		
+		
 	}
 
 //	@Override 
@@ -138,5 +236,25 @@ public class SafetyASTMapVisitor extends AgreeASTMapVisitor
 	
 	public static Map<String, EObject> getMap(){
 		return mapVar;
+	}
+	
+	
+	/*
+	 * getOutputStatement
+	 * @param List<FaultSubcomponent> faultDefs : List of the fault definitions from the annex
+	 * @return OutputStatement : The output statement found in the annex.
+	 */
+	private OutputStatement getOutputStatement(List<FaultSubcomponent> faultDefs){
+		
+		OutputStatement out = null;
+		
+		// Go through the fault definitions and find the output statement
+		for(FaultSubcomponent fsub : faultDefs){
+			if(fsub instanceof OutputStatement){
+				out = (OutputStatement) fsub;
+				break;
+			}
+		}
+		return out;
 	}
 }

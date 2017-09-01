@@ -26,8 +26,9 @@ annex agree {**
 	
 	
 	
-	-- Same as xSAP stuck_at: value passed in, gets stuck at this value
-	-- Different than frozen (unless user passes in old value of val_in as alt_val)
+	
+	
+	
 	node fail_to(val_in: real, alt_val: real, trigger: bool) returns (val_out: real); 
 	let
 	   val_out = if (trigger) then alt_val else val_in;
@@ -35,13 +36,15 @@ annex agree {**
 	
 
 	 
-	-- Inverted: val_out = !input for the first step of failure, then after
-	-- that it remains as next(val_out) = val_out
     node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
 	let
 	  val_out = if trigger then not(val_in) else val_in;
 	tel;
 	
+
+
+
+
 
 
 	-- Seems like this is ramp up... 

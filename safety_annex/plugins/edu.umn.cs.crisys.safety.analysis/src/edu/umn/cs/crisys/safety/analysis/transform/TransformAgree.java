@@ -8,21 +8,16 @@ import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.Element;
-import org.osate.aadl2.NamedElement;
 import org.osate.annexsupport.AnnexUtil;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.SafetyPair;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SafetyASTMapVisitor;
 import edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
-import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
-import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -32,6 +27,7 @@ import jkind.lustre.visitors.TypeMapVisitor;
 public class TransformAgree implements AgreeAutomater {
 
 	private static boolean transformFlag = false;
+	
 	
 	/*
 	 * transform:
@@ -51,19 +47,10 @@ public class TransformAgree implements AgreeAutomater {
 		List<AgreeNode> agreenodes = new ArrayList<>();
 		// This is the FaultStatement that holds all fault definitions
 		FaultStatement fs = null;
-		// Here are the fault definitions within the fault statement
-		List<FaultSubcomponent> faultDefs = new ArrayList<>();
-		// Fault output statement
-		OutputStatement fout = null;
-		// Nominal connections from fault output statement
-		List<NestedDotID> foutNomConn = new ArrayList<>();
-		new ArrayList<>();
-		// List paired with the string name
-		List<SafetyPair<NestedDotID, String>> nomConnWithName = new ArrayList<>();
+		
 		// New SafetyASTVisitor
-		// Visit program
 		jkind.lustre.visitors.TypeMapVisitor lustreTypeMapVisitor = new TypeMapVisitor();
-		SafetyASTMapVisitor safetyvisitor = new SafetyASTMapVisitor(lustreTypeMapVisitor);
+		SafetyASTMapVisitor safetyvisitor;
 		
 		// First get the analysis flag to see if we just return original agree program.
 		Boolean analysis = VerifyHandler.getAnalysisFlag();
@@ -75,9 +62,6 @@ public class TransformAgree implements AgreeAutomater {
 			} else {
 				//System.out.println("Analysis is true, transforming original agree program");
 				
-				
-				// Visit program
-				AgreeProgram ap = safetyvisitor.visit(program);
 				
 				// Get Element root: This will hold the containing classifier which is
 				// how we can access the safety annex
@@ -107,34 +91,13 @@ public class TransformAgree implements AgreeAutomater {
 					new SafetyException("Fault statement is null during transform agree program.");
 				}
 				
-				// Get the definitions of the fault
-				faultDefs = fs.getFaultDefinitions();
-				fs.getStr();
+				// Construct safety ast visitor
+				safetyvisitor = new SafetyASTMapVisitor(lustreTypeMapVisitor, fs);
 				
-				// Get the output statement
-				fout = getOutputStatement(faultDefs);
+
 				
-				if(fout == null){
-					new SafetyException("Output statement is null during transform agree program.");
-				}
-				
-				// Nominal connections from fault output stmt
-				foutNomConn = fout.getNom_conn();
-				String name = "";
-				NamedElement base = null;
-				for(NestedDotID nomConn : foutNomConn){
-					name = nomConn.getBase().getFullName();
-					while(nomConn.getSub() != null){
-						nomConn = nomConn.getSub();
-						base = nomConn.getBase();
-						if(base != null){
-							name = name.concat("."+base.getFullName());
-						}
-					}
-					nomConnWithName.add(new SafetyPair<NestedDotID, String>(nomConn, name));
-				}
-				
-				
+				// Visit program
+				AgreeProgram ap = safetyvisitor.visit(program);
 				
 				
 				// Get the top node, inputs, and outputs from agree
@@ -169,16 +132,7 @@ public class TransformAgree implements AgreeAutomater {
 //					System.out.println(output.toString());
 //				}
 				
-				// For every nominal connection, find the matching agree output var
-				for(SafetyPair<NestedDotID, String> nomConn : nomConnWithName){
-					
-					AgreeVar matchingVar = getMatchingAgreeOutput(agreeoutputs, nomConn.getRight());
-					if(matchingVar != null){
-						//System.out.println("Found matching agree var: " + matchingVar.toString());
-					}else{
-						new SafetyException("No matching agree variable for output in transform.");
-					}
-				}
+
 				
 				
 			
@@ -268,24 +222,7 @@ public class TransformAgree implements AgreeAutomater {
 		return fs;
 	}
 	
-	/*
-	 * getOutputStatement
-	 * @param List<FaultSubcomponent> faultDefs : List of the fault definitions from the annex
-	 * @return OutputStatement : The output statement found in the annex.
-	 */
-	private OutputStatement getOutputStatement(List<FaultSubcomponent> faultDefs){
-		
-		OutputStatement out = null;
-		
-		// Go through the fault definitions and find the output statement
-		for(FaultSubcomponent fsub : faultDefs){
-			if(fsub instanceof OutputStatement){
-				out = (OutputStatement) fsub;
-				break;
-			}
-		}
-		return out;
-	}
+
 	
 	/*
 	 * getMatchingAgreeOutput
@@ -333,4 +270,5 @@ public class TransformAgree implements AgreeAutomater {
 	}
 
 
+	
 }

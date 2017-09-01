@@ -303,31 +303,36 @@ connections
 		
 	**};
 
+
+
+
+
 annex safety{**
 	
-	fault "gyu": faults.fail_to {
+	fault "Selector output stuck above threshold.": faults.fail_to {
 		
-		inputs: val_in <- 5.0, alt_val <- 0.5*(threshold);     
+		inputs: val_in <- selector.green_input.val, 
+			    alt_val <- stuck_at_value;     
 		
 		outputs: selector.green_output.val <- val_out;    
 		 
 		duration: transient [0,3];
 		
 		eq threshold:real = 3000.0;
-		eq boolTest:bool = true;
 		
-		trigger: enabler{shutoff.shutoff_output.val > threshold, true and true } [0.1];
+		eq stuck_at_value: real = 3100.0;
 		
-		interval pressure_options = [9.0,19.0];
-			
-		set testset = {0, -8};
-		
-		range rangeTest = {-9, 100};
-		
+		trigger: enabler{shutoff.shutoff_output.val > threshold} [0.001];
 		
 	}
 	
 **};
+
+
+
+
+
+
 
 	
 end wbs.federated;
