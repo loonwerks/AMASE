@@ -322,7 +322,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     isInited = true;
 
     // Initialize simple dependencies
+    EcorePackage.eINSTANCE.eClass();
     AgreePackage.eINSTANCE.eClass();
+    Aadl2Package.eINSTANCE.eClass();
 
     // Create package meta-data objects
     theSafetyPackage.createPackageContents();

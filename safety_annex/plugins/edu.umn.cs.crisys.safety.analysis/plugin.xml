@@ -9,7 +9,7 @@
             id="edu.umn.cs.crisys.safety.analysis.commands.category">
       </category>
       <command
-            name="Run Safety Analysis"
+            name="Perform Safety Analysis during AGREE Verification"
             categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
             id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
       </command>
@@ -35,13 +35,18 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               label="Safety Analysis"
-               mnemonic="M"
-               id="edu.umn.cs.crisys.safety.analysis.menus.sampleMenu">
+               label="AGREE"
+               mnemonic="g"
+               id="com.rockwellcollins.atc.agree.analysis.menus.main">
+           <separator
+                 name="com.rockwellcollins.atc.safety.separator1"
+              visible="true">
+           </separator>
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
                   mnemonic="S"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand">
+                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
+                  style="toggle">
             </command>
          </menu>
       </menuContribution>
@@ -59,7 +64,7 @@
       </menuContribution>
    </extension>
    
-      <extension
+   <extension
          point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
       <agreeautomater
             class="edu.umn.cs.crisys.safety.analysis.transform.TransformAgree"
