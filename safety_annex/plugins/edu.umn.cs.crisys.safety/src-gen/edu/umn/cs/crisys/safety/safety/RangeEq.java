@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 
 /**
@@ -25,30 +26,30 @@ import com.rockwellcollins.atc.agree.agree.Expr;
 public interface RangeEq extends SafetyEqStatement
 {
   /**
-   * Returns the value of the '<em><b>Lhs range</b></em>' attribute.
+   * Returns the value of the '<em><b>Lhs range</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Lhs range</em>' attribute isn't clear,
+   * If the meaning of the '<em>Lhs range</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Lhs range</em>' attribute.
-   * @see #setLhs_range(String)
+   * @return the value of the '<em>Lhs range</em>' containment reference.
+   * @see #setLhs_range(Arg)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getRangeEq_Lhs_range()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getLhs_range();
+  Arg getLhs_range();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getLhs_range <em>Lhs range</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getLhs_range <em>Lhs range</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Lhs range</em>' attribute.
+   * @param value the new value of the '<em>Lhs range</em>' containment reference.
    * @see #getLhs_range()
    * @generated
    */
-  void setLhs_range(String value);
+  void setLhs_range(Arg value);
 
   /**
    * Returns the value of the '<em><b>L1</b></em>' containment reference.

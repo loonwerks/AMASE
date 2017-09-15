@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -40,24 +41,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
 {
   /**
-   * The default value of the '{@link #getLhs_set() <em>Lhs set</em>}' attribute.
+   * The cached value of the '{@link #getLhs_set() <em>Lhs set</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getLhs_set()
    * @generated
    * @ordered
    */
-  protected static final String LHS_SET_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getLhs_set() <em>Lhs set</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getLhs_set()
-   * @generated
-   * @ordered
-   */
-  protected String lhs_set = LHS_SET_EDEFAULT;
+  protected Arg lhs_set;
 
   /**
    * The cached value of the '{@link #getL1() <em>L1</em>}' containment reference.
@@ -105,7 +96,7 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getLhs_set()
+  public Arg getLhs_set()
   {
     return lhs_set;
   }
@@ -115,12 +106,37 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLhs_set(String newLhs_set)
+  public NotificationChain basicSetLhs_set(Arg newLhs_set, NotificationChain msgs)
   {
-    String oldLhs_set = lhs_set;
+    Arg oldLhs_set = lhs_set;
     lhs_set = newLhs_set;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.SET_EQ__LHS_SET, oldLhs_set, lhs_set));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.SET_EQ__LHS_SET, oldLhs_set, newLhs_set);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLhs_set(Arg newLhs_set)
+  {
+    if (newLhs_set != lhs_set)
+    {
+      NotificationChain msgs = null;
+      if (lhs_set != null)
+        msgs = ((InternalEObject)lhs_set).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.SET_EQ__LHS_SET, null, msgs);
+      if (newLhs_set != null)
+        msgs = ((InternalEObject)newLhs_set).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.SET_EQ__LHS_SET, null, msgs);
+      msgs = basicSetLhs_set(newLhs_set, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.SET_EQ__LHS_SET, newLhs_set, newLhs_set));
   }
 
   /**
@@ -195,6 +211,8 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
   {
     switch (featureID)
     {
+      case SafetyPackage.SET_EQ__LHS_SET:
+        return basicSetLhs_set(null, msgs);
       case SafetyPackage.SET_EQ__L1:
         return basicSetL1(null, msgs);
       case SafetyPackage.SET_EQ__LIST:
@@ -235,7 +253,7 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
     switch (featureID)
     {
       case SafetyPackage.SET_EQ__LHS_SET:
-        setLhs_set((String)newValue);
+        setLhs_set((Arg)newValue);
         return;
       case SafetyPackage.SET_EQ__L1:
         setL1((Expr)newValue);
@@ -259,7 +277,7 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
     switch (featureID)
     {
       case SafetyPackage.SET_EQ__LHS_SET:
-        setLhs_set(LHS_SET_EDEFAULT);
+        setLhs_set((Arg)null);
         return;
       case SafetyPackage.SET_EQ__L1:
         setL1((Expr)null);
@@ -282,30 +300,13 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
     switch (featureID)
     {
       case SafetyPackage.SET_EQ__LHS_SET:
-        return LHS_SET_EDEFAULT == null ? lhs_set != null : !LHS_SET_EDEFAULT.equals(lhs_set);
+        return lhs_set != null;
       case SafetyPackage.SET_EQ__L1:
         return l1 != null;
       case SafetyPackage.SET_EQ__LIST:
         return list != null && !list.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (lhs_set: ");
-    result.append(lhs_set);
-    result.append(')');
-    return result.toString();
   }
 
 } //SetEqImpl

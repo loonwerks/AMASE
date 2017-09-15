@@ -1193,7 +1193,7 @@ public interface SafetyPackage extends EPackage
   int INTERVAL_EQ__OWNED_COMMENT = SAFETY_EQ_STATEMENT__OWNED_COMMENT;
 
   /**
-   * The feature id for the '<em><b>Lhs int</b></em>' attribute.
+   * The feature id for the '<em><b>Lhs int</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1248,7 +1248,7 @@ public interface SafetyPackage extends EPackage
   int SET_EQ__OWNED_COMMENT = SAFETY_EQ_STATEMENT__OWNED_COMMENT;
 
   /**
-   * The feature id for the '<em><b>Lhs set</b></em>' attribute.
+   * The feature id for the '<em><b>Lhs set</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1312,7 +1312,7 @@ public interface SafetyPackage extends EPackage
   int RANGE_EQ__OWNED_COMMENT = SAFETY_EQ_STATEMENT__OWNED_COMMENT;
 
   /**
-   * The feature id for the '<em><b>Lhs range</b></em>' attribute.
+   * The feature id for the '<em><b>Lhs range</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1956,15 +1956,15 @@ public interface SafetyPackage extends EPackage
   EClass getIntervalEq();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.IntervalEq#getLhs_int <em>Lhs int</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.IntervalEq#getLhs_int <em>Lhs int</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Lhs int</em>'.
+   * @return the meta object for the containment reference '<em>Lhs int</em>'.
    * @see edu.umn.cs.crisys.safety.safety.IntervalEq#getLhs_int()
    * @see #getIntervalEq()
    * @generated
    */
-  EAttribute getIntervalEq_Lhs_int();
+  EReference getIntervalEq_Lhs_int();
 
   /**
    * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.IntervalEq#getInterv <em>Interv</em>}'.
@@ -1988,15 +1988,15 @@ public interface SafetyPackage extends EPackage
   EClass getSetEq();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.SetEq#getLhs_set <em>Lhs set</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.SetEq#getLhs_set <em>Lhs set</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Lhs set</em>'.
+   * @return the meta object for the containment reference '<em>Lhs set</em>'.
    * @see edu.umn.cs.crisys.safety.safety.SetEq#getLhs_set()
    * @see #getSetEq()
    * @generated
    */
-  EAttribute getSetEq_Lhs_set();
+  EReference getSetEq_Lhs_set();
 
   /**
    * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.SetEq#getL1 <em>L1</em>}'.
@@ -2031,15 +2031,15 @@ public interface SafetyPackage extends EPackage
   EClass getRangeEq();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getLhs_range <em>Lhs range</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getLhs_range <em>Lhs range</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Lhs range</em>'.
+   * @return the meta object for the containment reference '<em>Lhs range</em>'.
    * @see edu.umn.cs.crisys.safety.safety.RangeEq#getLhs_range()
    * @see #getRangeEq()
    * @generated
    */
-  EAttribute getRangeEq_Lhs_range();
+  EReference getRangeEq_Lhs_range();
 
   /**
    * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.RangeEq#getL1 <em>L1</em>}'.
@@ -2529,12 +2529,12 @@ public interface SafetyPackage extends EPackage
     EClass INTERVAL_EQ = eINSTANCE.getIntervalEq();
 
     /**
-     * The meta object literal for the '<em><b>Lhs int</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Lhs int</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INTERVAL_EQ__LHS_INT = eINSTANCE.getIntervalEq_Lhs_int();
+    EReference INTERVAL_EQ__LHS_INT = eINSTANCE.getIntervalEq_Lhs_int();
 
     /**
      * The meta object literal for the '<em><b>Interv</b></em>' containment reference feature.
@@ -2555,12 +2555,12 @@ public interface SafetyPackage extends EPackage
     EClass SET_EQ = eINSTANCE.getSetEq();
 
     /**
-     * The meta object literal for the '<em><b>Lhs set</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Lhs set</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute SET_EQ__LHS_SET = eINSTANCE.getSetEq_Lhs_set();
+    EReference SET_EQ__LHS_SET = eINSTANCE.getSetEq_Lhs_set();
 
     /**
      * The meta object literal for the '<em><b>L1</b></em>' containment reference feature.
@@ -2589,12 +2589,12 @@ public interface SafetyPackage extends EPackage
     EClass RANGE_EQ = eINSTANCE.getRangeEq();
 
     /**
-     * The meta object literal for the '<em><b>Lhs range</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Lhs range</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute RANGE_EQ__LHS_RANGE = eINSTANCE.getRangeEq_Lhs_range();
+    EReference RANGE_EQ__LHS_RANGE = eINSTANCE.getRangeEq_Lhs_range();
 
     /**
      * The meta object literal for the '<em><b>L1</b></em>' containment reference feature.

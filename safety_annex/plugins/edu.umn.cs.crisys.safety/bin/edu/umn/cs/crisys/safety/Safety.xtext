@@ -58,9 +58,9 @@ TriggerCondition:
 	
 SafetyEqStatement:
 	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	| {IntervalEq} 'interval' lhs_int=ID '=' interv=Interval ';'
-    | {SetEq} 'set' lhs_set=ID '=' '{'l1=Expr (',' list+=Expr)* '}' ';'
-    | {RangeEq} 'range' lhs_range=ID '=' '{'l1=Expr ',' l2=Expr '}' ';'
+	| {IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval ';'
+    | {SetEq} 'set' lhs_set=Arg '=' '{'l1=Expr (',' list+=Expr)* '}' ';'
+    | {RangeEq} 'range' lhs_range=Arg '=' '{'l1=Expr ',' l2=Expr '}' ';'
 ;
 
 Interval:

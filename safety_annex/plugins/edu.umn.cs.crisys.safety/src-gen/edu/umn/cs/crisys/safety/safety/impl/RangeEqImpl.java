@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 
 import edu.umn.cs.crisys.safety.safety.RangeEq;
@@ -33,24 +34,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
 {
   /**
-   * The default value of the '{@link #getLhs_range() <em>Lhs range</em>}' attribute.
+   * The cached value of the '{@link #getLhs_range() <em>Lhs range</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getLhs_range()
    * @generated
    * @ordered
    */
-  protected static final String LHS_RANGE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getLhs_range() <em>Lhs range</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getLhs_range()
-   * @generated
-   * @ordered
-   */
-  protected String lhs_range = LHS_RANGE_EDEFAULT;
+  protected Arg lhs_range;
 
   /**
    * The cached value of the '{@link #getL1() <em>L1</em>}' containment reference.
@@ -98,7 +89,7 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getLhs_range()
+  public Arg getLhs_range()
   {
     return lhs_range;
   }
@@ -108,12 +99,37 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLhs_range(String newLhs_range)
+  public NotificationChain basicSetLhs_range(Arg newLhs_range, NotificationChain msgs)
   {
-    String oldLhs_range = lhs_range;
+    Arg oldLhs_range = lhs_range;
     lhs_range = newLhs_range;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__LHS_RANGE, oldLhs_range, lhs_range));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__LHS_RANGE, oldLhs_range, newLhs_range);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLhs_range(Arg newLhs_range)
+  {
+    if (newLhs_range != lhs_range)
+    {
+      NotificationChain msgs = null;
+      if (lhs_range != null)
+        msgs = ((InternalEObject)lhs_range).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.RANGE_EQ__LHS_RANGE, null, msgs);
+      if (newLhs_range != null)
+        msgs = ((InternalEObject)newLhs_range).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.RANGE_EQ__LHS_RANGE, null, msgs);
+      msgs = basicSetLhs_range(newLhs_range, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.RANGE_EQ__LHS_RANGE, newLhs_range, newLhs_range));
   }
 
   /**
@@ -222,6 +238,8 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
   {
     switch (featureID)
     {
+      case SafetyPackage.RANGE_EQ__LHS_RANGE:
+        return basicSetLhs_range(null, msgs);
       case SafetyPackage.RANGE_EQ__L1:
         return basicSetL1(null, msgs);
       case SafetyPackage.RANGE_EQ__L2:
@@ -261,7 +279,7 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
     switch (featureID)
     {
       case SafetyPackage.RANGE_EQ__LHS_RANGE:
-        setLhs_range((String)newValue);
+        setLhs_range((Arg)newValue);
         return;
       case SafetyPackage.RANGE_EQ__L1:
         setL1((Expr)newValue);
@@ -284,7 +302,7 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
     switch (featureID)
     {
       case SafetyPackage.RANGE_EQ__LHS_RANGE:
-        setLhs_range(LHS_RANGE_EDEFAULT);
+        setLhs_range((Arg)null);
         return;
       case SafetyPackage.RANGE_EQ__L1:
         setL1((Expr)null);
@@ -307,30 +325,13 @@ public class RangeEqImpl extends SafetyEqStatementImpl implements RangeEq
     switch (featureID)
     {
       case SafetyPackage.RANGE_EQ__LHS_RANGE:
-        return LHS_RANGE_EDEFAULT == null ? lhs_range != null : !LHS_RANGE_EDEFAULT.equals(lhs_range);
+        return lhs_range != null;
       case SafetyPackage.RANGE_EQ__L1:
         return l1 != null;
       case SafetyPackage.RANGE_EQ__L2:
         return l2 != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (lhs_range: ");
-    result.append(lhs_range);
-    result.append(')');
-    return result.toString();
   }
 
 } //RangeEqImpl

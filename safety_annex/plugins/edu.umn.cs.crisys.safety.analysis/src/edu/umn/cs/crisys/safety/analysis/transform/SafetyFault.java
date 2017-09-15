@@ -9,6 +9,7 @@ import java.util.Map;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
@@ -30,7 +31,8 @@ public class SafetyFault {
 	
 	// Some information about the fault
 	public DurationStatement duration = null;
-	public List<AgreeEquation> safetyEqs = new ArrayList<>();
+	public List<AgreeVar> safetyEqVars = new ArrayList<>();
+	public List<AgreeStatement> safetyEqAsserts = new ArrayList<>();
 	public List<TriggerStatement> triggers = new ArrayList<>();
 	
 	// initial data: 
@@ -40,10 +42,12 @@ public class SafetyFault {
 
 	public SafetyFault(FaultStatement fstmt, 
 			AgreeProgram program, 
-			AgreeNode node) {
+			AgreeNode node,
+			String id) {
 		this.faultStatement = fstmt;
 		this.agreeNode = node;
 		this.agreeProgram = program;
+		this.id = id;
 	}
 
 }

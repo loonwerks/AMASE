@@ -2,6 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,30 +24,30 @@ package edu.umn.cs.crisys.safety.safety;
 public interface IntervalEq extends SafetyEqStatement
 {
   /**
-   * Returns the value of the '<em><b>Lhs int</b></em>' attribute.
+   * Returns the value of the '<em><b>Lhs int</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Lhs int</em>' attribute isn't clear,
+   * If the meaning of the '<em>Lhs int</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Lhs int</em>' attribute.
-   * @see #setLhs_int(String)
+   * @return the value of the '<em>Lhs int</em>' containment reference.
+   * @see #setLhs_int(Arg)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getIntervalEq_Lhs_int()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getLhs_int();
+  Arg getLhs_int();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.IntervalEq#getLhs_int <em>Lhs int</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.IntervalEq#getLhs_int <em>Lhs int</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Lhs int</em>' attribute.
+   * @param value the new value of the '<em>Lhs int</em>' containment reference.
    * @see #getLhs_int()
    * @generated
    */
-  void setLhs_int(String value);
+  void setLhs_int(Arg value);
 
   /**
    * Returns the value of the '<em><b>Interv</b></em>' containment reference.

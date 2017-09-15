@@ -477,12 +477,19 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		Expr lower = interval.getLow();
 	    Expr higher = interval.getHigh();
 	    
-	    // Both must be real or both must be integer
-	    if(!((lower instanceof IntLitExpr && higher instanceof IntLitExpr)|| (lower instanceof RealLitExpr && higher instanceof RealLitExpr))){
-	    	error(intervalEq, "Lower and higher interval values must be both real or both integer.");
-	    }
+	    AgreeType t = getAgreeType(intervalEq.getLhs_int().getType()); 
 	    
-	    // Neither can be constants
+	    // Both must be real or both must be integer
+	    if((!(lower instanceof IntLitExpr && 
+	    	  higher instanceof IntLitExpr && 
+	    	  t == AgreeType.INT) || 
+	        !(lower instanceof RealLitExpr && 
+	          higher instanceof RealLitExpr && 
+	          t == AgreeType.REAL))) {
+	    	error(intervalEq, "Lower and higher interval values must be both real or both integer and match the argument type.");
+	    }
+
+	    // Neither can be named constants (MWW: why?)
 	    if(isConst(lower) || isConst(higher)){
 	    	error(intervalEq, "Lower and higher interval values must be real or integer valued literals.");
 	    }

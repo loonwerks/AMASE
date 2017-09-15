@@ -2398,7 +2398,7 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSafetyEqStatement"
-    // InternalSafetyParser.g:904:1: ruleSafetyEqStatement returns [EObject current=null] : ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) ) ;
+    // InternalSafetyParser.g:904:1: ruleSafetyEqStatement returns [EObject current=null] : ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) ) ;
     public final EObject ruleSafetyEqStatement() throws RecognitionException {
         EObject current = null;
 
@@ -2407,18 +2407,15 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
         Token otherlv_5=null;
         Token otherlv_7=null;
         Token otherlv_9=null;
-        Token lv_lhs_int_10_0=null;
         Token otherlv_11=null;
         Token otherlv_13=null;
         Token otherlv_15=null;
-        Token lv_lhs_set_16_0=null;
         Token otherlv_17=null;
         Token otherlv_18=null;
         Token otherlv_20=null;
         Token otherlv_22=null;
         Token otherlv_23=null;
         Token otherlv_25=null;
-        Token lv_lhs_range_26_0=null;
         Token otherlv_27=null;
         Token otherlv_28=null;
         Token otherlv_30=null;
@@ -2430,11 +2427,17 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
 
         EObject lv_expr_6_0 = null;
 
+        EObject lv_lhs_int_10_0 = null;
+
         EObject lv_interv_12_0 = null;
+
+        EObject lv_lhs_set_16_0 = null;
 
         EObject lv_l1_19_0 = null;
 
         EObject lv_list_21_0 = null;
+
+        EObject lv_lhs_range_26_0 = null;
 
         EObject lv_l1_29_0 = null;
 
@@ -2444,10 +2447,10 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // InternalSafetyParser.g:907:28: ( ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) ) )
-            // InternalSafetyParser.g:908:1: ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) )
+            // InternalSafetyParser.g:907:28: ( ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) ) )
+            // InternalSafetyParser.g:908:1: ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) )
             {
-            // InternalSafetyParser.g:908:1: ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) )
+            // InternalSafetyParser.g:908:1: ( ( () otherlv_1= Eq ( ( (lv_lhs_2_0= ruleArg ) ) (otherlv_3= Comma ( (lv_lhs_4_0= ruleArg ) ) )* ) (otherlv_5= EqualsSign ( (lv_expr_6_0= ruleExpr ) ) )? otherlv_7= Semicolon ) | ( () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon ) | ( () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon ) | ( () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon ) )
             int alt16=4;
             switch ( input.LA(1) ) {
             case Eq:
@@ -2681,10 +2684,10 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSafetyParser.g:989:6: ( () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon )
+                    // InternalSafetyParser.g:989:6: ( () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon )
                     {
-                    // InternalSafetyParser.g:989:6: ( () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon )
-                    // InternalSafetyParser.g:989:7: () otherlv_9= Interval ( (lv_lhs_int_10_0= RULE_ID ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon
+                    // InternalSafetyParser.g:989:6: ( () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon )
+                    // InternalSafetyParser.g:989:7: () otherlv_9= Interval ( (lv_lhs_int_10_0= ruleArg ) ) otherlv_11= EqualsSign ( (lv_interv_12_0= ruleInterval ) ) otherlv_13= Semicolon
                     {
                     // InternalSafetyParser.g:989:7: ()
                     // InternalSafetyParser.g:990:5: 
@@ -2705,28 +2708,33 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_9, grammarAccess.getSafetyEqStatementAccess().getIntervalKeyword_1_1());
                           
                     }
-                    // InternalSafetyParser.g:1000:1: ( (lv_lhs_int_10_0= RULE_ID ) )
-                    // InternalSafetyParser.g:1001:1: (lv_lhs_int_10_0= RULE_ID )
+                    // InternalSafetyParser.g:1000:1: ( (lv_lhs_int_10_0= ruleArg ) )
+                    // InternalSafetyParser.g:1001:1: (lv_lhs_int_10_0= ruleArg )
                     {
-                    // InternalSafetyParser.g:1001:1: (lv_lhs_int_10_0= RULE_ID )
-                    // InternalSafetyParser.g:1002:3: lv_lhs_int_10_0= RULE_ID
+                    // InternalSafetyParser.g:1001:1: (lv_lhs_int_10_0= ruleArg )
+                    // InternalSafetyParser.g:1002:3: lv_lhs_int_10_0= ruleArg
                     {
-                    lv_lhs_int_10_0=(Token)match(input,RULE_ID,FollowSets000.FOLLOW_21); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
-
-                      			newLeafNode(lv_lhs_int_10_0, grammarAccess.getSafetyEqStatementAccess().getLhs_intIDTerminalRuleCall_1_2_0()); 
-                      		
+                       
+                      	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getLhs_intArgParserRuleCall_1_2_0()); 
+                      	    
                     }
+                    pushFollow(FollowSets000.FOLLOW_21);
+                    lv_lhs_int_10_0=ruleArg();
+
+                    state._fsp--;
+                    if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       	        if (current==null) {
-                      	            current = createModelElement(grammarAccess.getSafetyEqStatementRule());
+                      	            current = createModelElementForParent(grammarAccess.getSafetyEqStatementRule());
                       	        }
-                             		setWithLastConsumed(
+                             		set(
                              			current, 
                              			"lhs_int",
                               		lv_lhs_int_10_0, 
-                              		"org.osate.xtext.aadl2.properties.Properties.ID");
+                              		"com.rockwellcollins.atc.agree.Agree.Arg");
+                      	        afterParserOrEnumRuleCall();
                       	    
                     }
 
@@ -2789,10 +2797,10 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSafetyParser.g:1047:6: ( () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon )
+                    // InternalSafetyParser.g:1047:6: ( () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon )
                     {
-                    // InternalSafetyParser.g:1047:6: ( () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon )
-                    // InternalSafetyParser.g:1047:7: () otherlv_15= Set ( (lv_lhs_set_16_0= RULE_ID ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon
+                    // InternalSafetyParser.g:1047:6: ( () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon )
+                    // InternalSafetyParser.g:1047:7: () otherlv_15= Set ( (lv_lhs_set_16_0= ruleArg ) ) otherlv_17= EqualsSign otherlv_18= LeftCurlyBracket ( (lv_l1_19_0= ruleExpr ) ) (otherlv_20= Comma ( (lv_list_21_0= ruleExpr ) ) )* otherlv_22= RightCurlyBracket otherlv_23= Semicolon
                     {
                     // InternalSafetyParser.g:1047:7: ()
                     // InternalSafetyParser.g:1048:5: 
@@ -2813,28 +2821,33 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_15, grammarAccess.getSafetyEqStatementAccess().getSetKeyword_2_1());
                           
                     }
-                    // InternalSafetyParser.g:1058:1: ( (lv_lhs_set_16_0= RULE_ID ) )
-                    // InternalSafetyParser.g:1059:1: (lv_lhs_set_16_0= RULE_ID )
+                    // InternalSafetyParser.g:1058:1: ( (lv_lhs_set_16_0= ruleArg ) )
+                    // InternalSafetyParser.g:1059:1: (lv_lhs_set_16_0= ruleArg )
                     {
-                    // InternalSafetyParser.g:1059:1: (lv_lhs_set_16_0= RULE_ID )
-                    // InternalSafetyParser.g:1060:3: lv_lhs_set_16_0= RULE_ID
+                    // InternalSafetyParser.g:1059:1: (lv_lhs_set_16_0= ruleArg )
+                    // InternalSafetyParser.g:1060:3: lv_lhs_set_16_0= ruleArg
                     {
-                    lv_lhs_set_16_0=(Token)match(input,RULE_ID,FollowSets000.FOLLOW_21); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
-
-                      			newLeafNode(lv_lhs_set_16_0, grammarAccess.getSafetyEqStatementAccess().getLhs_setIDTerminalRuleCall_2_2_0()); 
-                      		
+                       
+                      	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getLhs_setArgParserRuleCall_2_2_0()); 
+                      	    
                     }
+                    pushFollow(FollowSets000.FOLLOW_21);
+                    lv_lhs_set_16_0=ruleArg();
+
+                    state._fsp--;
+                    if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       	        if (current==null) {
-                      	            current = createModelElement(grammarAccess.getSafetyEqStatementRule());
+                      	            current = createModelElementForParent(grammarAccess.getSafetyEqStatementRule());
                       	        }
-                             		setWithLastConsumed(
+                             		set(
                              			current, 
                              			"lhs_set",
                               		lv_lhs_set_16_0, 
-                              		"org.osate.xtext.aadl2.properties.Properties.ID");
+                              		"com.rockwellcollins.atc.agree.Agree.Arg");
+                      	        afterParserOrEnumRuleCall();
                       	    
                     }
 
@@ -2974,10 +2987,10 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSafetyParser.g:1138:6: ( () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon )
+                    // InternalSafetyParser.g:1138:6: ( () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon )
                     {
-                    // InternalSafetyParser.g:1138:6: ( () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon )
-                    // InternalSafetyParser.g:1138:7: () otherlv_25= Range ( (lv_lhs_range_26_0= RULE_ID ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon
+                    // InternalSafetyParser.g:1138:6: ( () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon )
+                    // InternalSafetyParser.g:1138:7: () otherlv_25= Range ( (lv_lhs_range_26_0= ruleArg ) ) otherlv_27= EqualsSign otherlv_28= LeftCurlyBracket ( (lv_l1_29_0= ruleExpr ) ) otherlv_30= Comma ( (lv_l2_31_0= ruleExpr ) ) otherlv_32= RightCurlyBracket otherlv_33= Semicolon
                     {
                     // InternalSafetyParser.g:1138:7: ()
                     // InternalSafetyParser.g:1139:5: 
@@ -2998,28 +3011,33 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_25, grammarAccess.getSafetyEqStatementAccess().getRangeKeyword_3_1());
                           
                     }
-                    // InternalSafetyParser.g:1149:1: ( (lv_lhs_range_26_0= RULE_ID ) )
-                    // InternalSafetyParser.g:1150:1: (lv_lhs_range_26_0= RULE_ID )
+                    // InternalSafetyParser.g:1149:1: ( (lv_lhs_range_26_0= ruleArg ) )
+                    // InternalSafetyParser.g:1150:1: (lv_lhs_range_26_0= ruleArg )
                     {
-                    // InternalSafetyParser.g:1150:1: (lv_lhs_range_26_0= RULE_ID )
-                    // InternalSafetyParser.g:1151:3: lv_lhs_range_26_0= RULE_ID
+                    // InternalSafetyParser.g:1150:1: (lv_lhs_range_26_0= ruleArg )
+                    // InternalSafetyParser.g:1151:3: lv_lhs_range_26_0= ruleArg
                     {
-                    lv_lhs_range_26_0=(Token)match(input,RULE_ID,FollowSets000.FOLLOW_21); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
-
-                      			newLeafNode(lv_lhs_range_26_0, grammarAccess.getSafetyEqStatementAccess().getLhs_rangeIDTerminalRuleCall_3_2_0()); 
-                      		
+                       
+                      	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getLhs_rangeArgParserRuleCall_3_2_0()); 
+                      	    
                     }
+                    pushFollow(FollowSets000.FOLLOW_21);
+                    lv_lhs_range_26_0=ruleArg();
+
+                    state._fsp--;
+                    if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       	        if (current==null) {
-                      	            current = createModelElement(grammarAccess.getSafetyEqStatementRule());
+                      	            current = createModelElementForParent(grammarAccess.getSafetyEqStatementRule());
                       	        }
-                             		setWithLastConsumed(
+                             		set(
                              			current, 
                              			"lhs_range",
                               		lv_lhs_range_26_0, 
-                              		"org.osate.xtext.aadl2.properties.Properties.ID");
+                              		"com.rockwellcollins.atc.agree.Agree.Arg");
+                      	        afterParserOrEnumRuleCall();
                       	    
                     }
 
@@ -16991,11 +17009,11 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
             if ( (LA92_0==RULE_ID) ) {
                 int LA92_1 = input.LA(2);
 
-                if ( (LA92_1==ColonColon) && (synpred30_InternalSafetyParser())) {
-                    alt92=1;
-                }
-                else if ( (LA92_1==EOF||LA92_1==Exclusively||LA92_1==Becomes||LA92_1==Implies||LA92_1==During||LA92_1==Occurs||LA92_1==Holds||LA92_1==Occur||LA92_1==Times||LA92_1==Else||LA92_1==Then||LA92_1==With||LA92_1==LessThanSignEqualsSignGreaterThanSign||(LA92_1>=And && LA92_1<=Div)||LA92_1==Mod||(LA92_1>=ExclamationMarkEqualsSign && LA92_1<=FullStopFullStop)||(LA92_1>=LessThanSignHyphenMinus && LA92_1<=GreaterThanSignEqualsSign)||LA92_1==Or||(LA92_1>=LeftParenthesis && LA92_1<=GreaterThanSign)||(LA92_1>=RightSquareBracket && LA92_1<=RightCurlyBracket)) ) {
+                if ( (LA92_1==EOF||LA92_1==Exclusively||LA92_1==Becomes||LA92_1==Implies||LA92_1==During||LA92_1==Occurs||LA92_1==Holds||LA92_1==Occur||LA92_1==Times||LA92_1==Else||LA92_1==Then||LA92_1==With||LA92_1==LessThanSignEqualsSignGreaterThanSign||(LA92_1>=And && LA92_1<=Div)||LA92_1==Mod||(LA92_1>=ExclamationMarkEqualsSign && LA92_1<=FullStopFullStop)||(LA92_1>=LessThanSignHyphenMinus && LA92_1<=GreaterThanSignEqualsSign)||LA92_1==Or||(LA92_1>=LeftParenthesis && LA92_1<=GreaterThanSign)||(LA92_1>=RightSquareBracket && LA92_1<=RightCurlyBracket)) ) {
                     alt92=2;
+                }
+                else if ( (LA92_1==ColonColon) && (synpred30_InternalSafetyParser())) {
+                    alt92=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
@@ -21805,6 +21823,11 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
             case PlusSign:
                 {
                 switch ( input.LA(2) ) {
+                case RULE_ID:
+                    {
+                    alt116=3;
+                    }
+                    break;
                 case RULE_REAL_LIT:
                     {
                     alt116=1;
@@ -21813,11 +21836,6 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                 case RULE_INTEGER_LIT:
                     {
                     alt116=2;
-                    }
-                    break;
-                case RULE_ID:
-                    {
-                    alt116=3;
                     }
                     break;
                 default:
@@ -21833,11 +21851,6 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
             case HyphenMinus:
                 {
                 switch ( input.LA(2) ) {
-                case RULE_ID:
-                    {
-                    alt116=3;
-                    }
-                    break;
                 case RULE_REAL_LIT:
                     {
                     alt116=1;
@@ -21846,6 +21859,11 @@ public class InternalSafetyParser extends AbstractInternalAntlrParser {
                 case RULE_INTEGER_LIT:
                     {
                     alt116=2;
+                    }
+                    break;
+                case RULE_ID:
+                    {
+                    alt116=3;
                     }
                     break;
                 default:

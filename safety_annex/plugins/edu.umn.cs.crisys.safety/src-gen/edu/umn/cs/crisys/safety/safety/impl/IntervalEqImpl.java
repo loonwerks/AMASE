@@ -2,6 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
+
 import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -31,24 +33,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
 {
   /**
-   * The default value of the '{@link #getLhs_int() <em>Lhs int</em>}' attribute.
+   * The cached value of the '{@link #getLhs_int() <em>Lhs int</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getLhs_int()
    * @generated
    * @ordered
    */
-  protected static final String LHS_INT_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getLhs_int() <em>Lhs int</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getLhs_int()
-   * @generated
-   * @ordered
-   */
-  protected String lhs_int = LHS_INT_EDEFAULT;
+  protected Arg lhs_int;
 
   /**
    * The cached value of the '{@link #getInterv() <em>Interv</em>}' containment reference.
@@ -86,7 +78,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getLhs_int()
+  public Arg getLhs_int()
   {
     return lhs_int;
   }
@@ -96,12 +88,37 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLhs_int(String newLhs_int)
+  public NotificationChain basicSetLhs_int(Arg newLhs_int, NotificationChain msgs)
   {
-    String oldLhs_int = lhs_int;
+    Arg oldLhs_int = lhs_int;
     lhs_int = newLhs_int;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INTERVAL_EQ__LHS_INT, oldLhs_int, lhs_int));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.INTERVAL_EQ__LHS_INT, oldLhs_int, newLhs_int);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLhs_int(Arg newLhs_int)
+  {
+    if (newLhs_int != lhs_int)
+    {
+      NotificationChain msgs = null;
+      if (lhs_int != null)
+        msgs = ((InternalEObject)lhs_int).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INTERVAL_EQ__LHS_INT, null, msgs);
+      if (newLhs_int != null)
+        msgs = ((InternalEObject)newLhs_int).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.INTERVAL_EQ__LHS_INT, null, msgs);
+      msgs = basicSetLhs_int(newLhs_int, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.INTERVAL_EQ__LHS_INT, newLhs_int, newLhs_int));
   }
 
   /**
@@ -162,6 +179,8 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
   {
     switch (featureID)
     {
+      case SafetyPackage.INTERVAL_EQ__LHS_INT:
+        return basicSetLhs_int(null, msgs);
       case SafetyPackage.INTERVAL_EQ__INTERV:
         return basicSetInterv(null, msgs);
     }
@@ -197,7 +216,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
     switch (featureID)
     {
       case SafetyPackage.INTERVAL_EQ__LHS_INT:
-        setLhs_int((String)newValue);
+        setLhs_int((Arg)newValue);
         return;
       case SafetyPackage.INTERVAL_EQ__INTERV:
         setInterv((Interval)newValue);
@@ -217,7 +236,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
     switch (featureID)
     {
       case SafetyPackage.INTERVAL_EQ__LHS_INT:
-        setLhs_int(LHS_INT_EDEFAULT);
+        setLhs_int((Arg)null);
         return;
       case SafetyPackage.INTERVAL_EQ__INTERV:
         setInterv((Interval)null);
@@ -237,28 +256,11 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
     switch (featureID)
     {
       case SafetyPackage.INTERVAL_EQ__LHS_INT:
-        return LHS_INT_EDEFAULT == null ? lhs_int != null : !LHS_INT_EDEFAULT.equals(lhs_int);
+        return lhs_int != null;
       case SafetyPackage.INTERVAL_EQ__INTERV:
         return interv != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (lhs_int: ");
-    result.append(lhs_int);
-    result.append(')');
-    return result.toString();
   }
 
 } //IntervalEqImpl
