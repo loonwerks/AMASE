@@ -824,7 +824,7 @@ public interface SafetyPackage extends EPackage
   int INPUT_STATEMENT__OWNED_COMMENT = FAULT_SUBCOMPONENT__OWNED_COMMENT;
 
   /**
-   * The feature id for the '<em><b>Fault in</b></em>' containment reference list.
+   * The feature id for the '<em><b>Fault in</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -888,7 +888,7 @@ public interface SafetyPackage extends EPackage
   int OUTPUT_STATEMENT__NOM_CONN = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Fault out</b></em>' containment reference list.
+   * The feature id for the '<em><b>Fault out</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1756,15 +1756,15 @@ public interface SafetyPackage extends EPackage
   EClass getInputStatement();
 
   /**
-   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getFault_in <em>Fault in</em>}'.
+   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getFault_in <em>Fault in</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Fault in</em>'.
+   * @return the meta object for the attribute list '<em>Fault in</em>'.
    * @see edu.umn.cs.crisys.safety.safety.InputStatement#getFault_in()
    * @see #getInputStatement()
    * @generated
    */
-  EReference getInputStatement_Fault_in();
+  EAttribute getInputStatement_Fault_in();
 
   /**
    * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn <em>Nom conn</em>}'.
@@ -1799,15 +1799,15 @@ public interface SafetyPackage extends EPackage
   EReference getOutputStatement_Nom_conn();
 
   /**
-   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out <em>Fault out</em>}'.
+   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out <em>Fault out</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Fault out</em>'.
+   * @return the meta object for the attribute list '<em>Fault out</em>'.
    * @see edu.umn.cs.crisys.safety.safety.OutputStatement#getFault_out()
    * @see #getOutputStatement()
    * @generated
    */
-  EReference getOutputStatement_Fault_out();
+  EAttribute getOutputStatement_Fault_out();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.DurationStatement <em>Duration Statement</em>}'.
@@ -2359,12 +2359,12 @@ public interface SafetyPackage extends EPackage
     EClass INPUT_STATEMENT = eINSTANCE.getInputStatement();
 
     /**
-     * The meta object literal for the '<em><b>Fault in</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Fault in</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference INPUT_STATEMENT__FAULT_IN = eINSTANCE.getInputStatement_Fault_in();
+    EAttribute INPUT_STATEMENT__FAULT_IN = eINSTANCE.getInputStatement_Fault_in();
 
     /**
      * The meta object literal for the '<em><b>Nom conn</b></em>' containment reference list feature.
@@ -2393,12 +2393,12 @@ public interface SafetyPackage extends EPackage
     EReference OUTPUT_STATEMENT__NOM_CONN = eINSTANCE.getOutputStatement_Nom_conn();
 
     /**
-     * The meta object literal for the '<em><b>Fault out</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Fault out</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference OUTPUT_STATEMENT__FAULT_OUT = eINSTANCE.getOutputStatement_Fault_out();
+    EAttribute OUTPUT_STATEMENT__FAULT_OUT = eINSTANCE.getOutputStatement_Fault_out();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.DurationStatementImpl <em>Duration Statement</em>}' class.

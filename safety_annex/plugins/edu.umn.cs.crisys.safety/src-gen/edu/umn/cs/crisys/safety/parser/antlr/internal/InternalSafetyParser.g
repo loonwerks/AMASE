@@ -359,19 +359,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_3_0()); 
-	    }
-		lv_fault_in_3_0=ruleNamedID		{
+		lv_fault_in_3_0=RULE_ID
+		{
+			newLeafNode(lv_fault_in_3_0, grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_3_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		add(
+       		addWithLastConsumed(
        			$current, 
        			"fault_in",
         		lv_fault_in_3_0, 
-        		"com.rockwellcollins.atc.agree.Agree.NamedID");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )
@@ -405,19 +405,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_6_1_0()); 
-	    }
-		lv_fault_in_7_0=ruleNamedID		{
+		lv_fault_in_7_0=RULE_ID
+		{
+			newLeafNode(lv_fault_in_7_0, grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_6_1_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		add(
+       		addWithLastConsumed(
        			$current, 
        			"fault_in",
         		lv_fault_in_7_0, 
-        		"com.rockwellcollins.atc.agree.Agree.NamedID");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )
@@ -491,19 +491,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_5_0()); 
-	    }
-		lv_fault_out_16_0=ruleNamedID		{
+		lv_fault_out_16_0=RULE_ID
+		{
+			newLeafNode(lv_fault_out_16_0, grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_5_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		add(
+       		addWithLastConsumed(
        			$current, 
        			"fault_out",
         		lv_fault_out_16_0, 
-        		"com.rockwellcollins.atc.agree.Agree.NamedID");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )
@@ -537,19 +537,19 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_6_3_0()); 
-	    }
-		lv_fault_out_20_0=ruleNamedID		{
+		lv_fault_out_20_0=RULE_ID
+		{
+			newLeafNode(lv_fault_out_20_0, grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_6_3_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		add(
+       		addWithLastConsumed(
        			$current, 
        			"fault_out",
         		lv_fault_out_20_0, 
-        		"com.rockwellcollins.atc.agree.Agree.NamedID");
-	        afterParserOrEnumRuleCall();
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
 	    }
 
 )

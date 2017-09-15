@@ -41,5 +41,6 @@ Export-Package: edu.umn.cs.crisys.safety,
  edu.umn.cs.crisys.safety.scoping,
  edu.umn.cs.crisys.safety.serializer,
  edu.umn.cs.crisys.safety.services,
+ edu.umn.cs.crisys.safety.util,
  edu.umn.cs.crisys.safety.validation
 

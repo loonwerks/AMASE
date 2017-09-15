@@ -206,14 +206,14 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cInputsKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Assignment cFault_inAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final RuleCall cFault_inNamedIDParserRuleCall_0_3_0 = (RuleCall)cFault_inAssignment_0_3.eContents().get(0);
+		private final RuleCall cFault_inIDTerminalRuleCall_0_3_0 = (RuleCall)cFault_inAssignment_0_3.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cNom_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
 		private final RuleCall cNom_connExprParserRuleCall_0_5_0 = (RuleCall)cNom_connAssignment_0_5.eContents().get(0);
 		private final Group cGroup_0_6 = (Group)cGroup_0.eContents().get(6);
 		private final Keyword cCommaKeyword_0_6_0 = (Keyword)cGroup_0_6.eContents().get(0);
 		private final Assignment cFault_inAssignment_0_6_1 = (Assignment)cGroup_0_6.eContents().get(1);
-		private final RuleCall cFault_inNamedIDParserRuleCall_0_6_1_0 = (RuleCall)cFault_inAssignment_0_6_1.eContents().get(0);
+		private final RuleCall cFault_inIDTerminalRuleCall_0_6_1_0 = (RuleCall)cFault_inAssignment_0_6_1.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_0_6_2 = (Keyword)cGroup_0_6.eContents().get(2);
 		private final Assignment cNom_connAssignment_0_6_3 = (Assignment)cGroup_0_6.eContents().get(3);
 		private final RuleCall cNom_connExprParserRuleCall_0_6_3_0 = (RuleCall)cNom_connAssignment_0_6_3.eContents().get(0);
@@ -226,14 +226,14 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNom_connNestedDotIDParserRuleCall_1_3_0 = (RuleCall)cNom_connAssignment_1_3.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		private final Assignment cFault_outAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
-		private final RuleCall cFault_outNamedIDParserRuleCall_1_5_0 = (RuleCall)cFault_outAssignment_1_5.eContents().get(0);
+		private final RuleCall cFault_outIDTerminalRuleCall_1_5_0 = (RuleCall)cFault_outAssignment_1_5.eContents().get(0);
 		private final Group cGroup_1_6 = (Group)cGroup_1.eContents().get(6);
 		private final Keyword cCommaKeyword_1_6_0 = (Keyword)cGroup_1_6.eContents().get(0);
 		private final Assignment cNom_connAssignment_1_6_1 = (Assignment)cGroup_1_6.eContents().get(1);
 		private final RuleCall cNom_connNestedDotIDParserRuleCall_1_6_1_0 = (RuleCall)cNom_connAssignment_1_6_1.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_1_6_2 = (Keyword)cGroup_1_6.eContents().get(2);
 		private final Assignment cFault_outAssignment_1_6_3 = (Assignment)cGroup_1_6.eContents().get(3);
-		private final RuleCall cFault_outNamedIDParserRuleCall_1_6_3_0 = (RuleCall)cFault_outAssignment_1_6_3.eContents().get(0);
+		private final RuleCall cFault_outIDTerminalRuleCall_1_6_3_0 = (RuleCall)cFault_outAssignment_1_6_3.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_7 = (Keyword)cGroup_1.eContents().get(7);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final Action cDurationStatementAction_2_0 = (Action)cGroup_2.eContents().get(0);
@@ -259,21 +259,21 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'inputs' ':' fault_in+=NamedID '<-' nom_conn+=Expr (',' fault_in+=NamedID '<-' nom_conn+=Expr)* ';'
-		//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID (',' nom_conn+=NestedDotID '<-'
-		//	fault_out+=NamedID)* ';'
+		//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
+		//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
+		//	fault_out+=ID)* ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
 		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'inputs' ':' fault_in+=NamedID '<-' nom_conn+=Expr (',' fault_in+=NamedID '<-' nom_conn+=Expr)* ';' |
-		//{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID (',' nom_conn+=NestedDotID '<-'
-		//fault_out+=NamedID)* ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' |
+		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';' |
+		//{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
+		//fault_out+=ID)* ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' |
 		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'inputs' ':' fault_in+=NamedID '<-' nom_conn+=Expr (',' fault_in+=NamedID '<-' nom_conn+=Expr)* ';'
+		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -285,11 +285,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
 
-		//fault_in+=NamedID
+		//fault_in+=ID
 		public Assignment getFault_inAssignment_0_3() { return cFault_inAssignment_0_3; }
 
-		//NamedID
-		public RuleCall getFault_inNamedIDParserRuleCall_0_3_0() { return cFault_inNamedIDParserRuleCall_0_3_0; }
+		//ID
+		public RuleCall getFault_inIDTerminalRuleCall_0_3_0() { return cFault_inIDTerminalRuleCall_0_3_0; }
 
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_0_4() { return cLessThanSignHyphenMinusKeyword_0_4; }
@@ -300,17 +300,17 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//Expr
 		public RuleCall getNom_connExprParserRuleCall_0_5_0() { return cNom_connExprParserRuleCall_0_5_0; }
 
-		//(',' fault_in+=NamedID '<-' nom_conn+=Expr)*
+		//(',' fault_in+=ID '<-' nom_conn+=Expr)*
 		public Group getGroup_0_6() { return cGroup_0_6; }
 
 		//','
 		public Keyword getCommaKeyword_0_6_0() { return cCommaKeyword_0_6_0; }
 
-		//fault_in+=NamedID
+		//fault_in+=ID
 		public Assignment getFault_inAssignment_0_6_1() { return cFault_inAssignment_0_6_1; }
 
-		//NamedID
-		public RuleCall getFault_inNamedIDParserRuleCall_0_6_1_0() { return cFault_inNamedIDParserRuleCall_0_6_1_0; }
+		//ID
+		public RuleCall getFault_inIDTerminalRuleCall_0_6_1_0() { return cFault_inIDTerminalRuleCall_0_6_1_0; }
 
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_0_6_2() { return cLessThanSignHyphenMinusKeyword_0_6_2; }
@@ -324,8 +324,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_0_7() { return cSemicolonKeyword_0_7; }
 
-		//{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID (',' nom_conn+=NestedDotID '<-'
-		//fault_out+=NamedID)* ';'
+		//{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-' fault_out+=ID)*
+		//';'
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OutputStatement}
@@ -346,13 +346,13 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_1_4() { return cLessThanSignHyphenMinusKeyword_1_4; }
 
-		//fault_out+=NamedID
+		//fault_out+=ID
 		public Assignment getFault_outAssignment_1_5() { return cFault_outAssignment_1_5; }
 
-		//NamedID
-		public RuleCall getFault_outNamedIDParserRuleCall_1_5_0() { return cFault_outNamedIDParserRuleCall_1_5_0; }
+		//ID
+		public RuleCall getFault_outIDTerminalRuleCall_1_5_0() { return cFault_outIDTerminalRuleCall_1_5_0; }
 
-		//(',' nom_conn+=NestedDotID '<-' fault_out+=NamedID)*
+		//(',' nom_conn+=NestedDotID '<-' fault_out+=ID)*
 		public Group getGroup_1_6() { return cGroup_1_6; }
 
 		//','
@@ -367,11 +367,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_1_6_2() { return cLessThanSignHyphenMinusKeyword_1_6_2; }
 
-		//fault_out+=NamedID
+		//fault_out+=ID
 		public Assignment getFault_outAssignment_1_6_3() { return cFault_outAssignment_1_6_3; }
 
-		//NamedID
-		public RuleCall getFault_outNamedIDParserRuleCall_1_6_3_0() { return cFault_outNamedIDParserRuleCall_1_6_3_0; }
+		//ID
+		public RuleCall getFault_outIDTerminalRuleCall_1_6_3_0() { return cFault_outIDTerminalRuleCall_1_6_3_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_1_7() { return cSemicolonKeyword_1_7; }
@@ -1131,9 +1131,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'inputs' ':' fault_in+=NamedID '<-' nom_conn+=Expr (',' fault_in+=NamedID '<-' nom_conn+=Expr)* ';'
-	//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID (',' nom_conn+=NestedDotID '<-'
-	//	fault_out+=NamedID)* ';'
+	//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
+	//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
+	//	fault_out+=ID)* ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
 	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
 	//	| SafetyEqStatement;

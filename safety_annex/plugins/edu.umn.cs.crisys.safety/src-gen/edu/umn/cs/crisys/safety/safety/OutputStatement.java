@@ -2,7 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import org.eclipse.emf.common.util.EList;
@@ -43,19 +42,19 @@ public interface OutputStatement extends FaultSubcomponent
   EList<NestedDotID> getNom_conn();
 
   /**
-   * Returns the value of the '<em><b>Fault out</b></em>' containment reference list.
-   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.NamedID}.
+   * Returns the value of the '<em><b>Fault out</b></em>' attribute list.
+   * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Fault out</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Fault out</em>' attribute list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fault out</em>' containment reference list.
+   * @return the value of the '<em>Fault out</em>' attribute list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Fault_out()
-   * @model containment="true"
+   * @model unique="false"
    * @generated
    */
-  EList<NamedID> getFault_out();
+  EList<String> getFault_out();
 
 } // OutputStatement

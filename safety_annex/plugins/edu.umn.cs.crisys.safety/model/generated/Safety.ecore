@@ -41,9 +41,8 @@
         eType="#//FaultSubcomponent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputStatement" eSuperTypes="#//FaultSubcomponent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fault_in" upperBound="-1"
-        eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NamedID"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fault_in" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nom_conn" upperBound="-1"
         eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
         containment="true"/>
@@ -52,9 +51,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="nom_conn" upperBound="-1"
         eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fault_out" upperBound="-1"
-        eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NamedID"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fault_out" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DurationStatement" eSuperTypes="#//FaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tc" eType="#//TemporalConstraint"

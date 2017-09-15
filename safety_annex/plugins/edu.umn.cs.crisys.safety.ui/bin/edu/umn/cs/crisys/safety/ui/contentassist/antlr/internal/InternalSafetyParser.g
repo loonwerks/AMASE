@@ -26973,8 +26973,8 @@ rule__FaultSubcomponent__Fault_inAssignment_0_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_3_0()); }
-	ruleNamedID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_3_0()); }
+	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_3_0()); }
 )
 
 ;
@@ -27003,8 +27003,8 @@ rule__FaultSubcomponent__Fault_inAssignment_0_6_1
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_6_1_0()); }
-	ruleNamedID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_6_1_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_6_1_0()); }
+	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_6_1_0()); }
 )
 
 ;
@@ -27048,8 +27048,8 @@ rule__FaultSubcomponent__Fault_outAssignment_1_5
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_5_0()); }
-	ruleNamedID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_5_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_5_0()); }
+	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_5_0()); }
 )
 
 ;
@@ -27078,8 +27078,8 @@ rule__FaultSubcomponent__Fault_outAssignment_1_6_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_6_3_0()); }
-	ruleNamedID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_6_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_6_3_0()); }
+	RULE_ID{ after(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_6_3_0()); }
 )
 
 ;

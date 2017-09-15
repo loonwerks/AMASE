@@ -35,11 +35,11 @@ SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDo
 	
 
 FaultSubcomponent returns FaultSubcomponent: 
-	{InputStatement} 'inputs' ':' fault_in+=NamedID '<-' nom_conn+=Expr
-							(','fault_in+=NamedID '<-' nom_conn+=Expr)*';' 
+	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
+							(','fault_in+=ID '<-' nom_conn+=Expr)*';' 
 	
-	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=NamedID 
-							(','nom_conn+=NestedDotID '<-' fault_out+=NamedID)*';'
+	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID 
+							(','nom_conn+=NestedDotID '<-' fault_out+=ID)*';'
 	
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
  	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'

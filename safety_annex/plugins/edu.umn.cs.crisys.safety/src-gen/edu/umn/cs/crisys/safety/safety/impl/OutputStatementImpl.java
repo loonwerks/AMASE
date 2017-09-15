@@ -2,7 +2,6 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
@@ -17,6 +16,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -47,14 +47,14 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
   protected EList<NestedDotID> nom_conn;
 
   /**
-   * The cached value of the '{@link #getFault_out() <em>Fault out</em>}' containment reference list.
+   * The cached value of the '{@link #getFault_out() <em>Fault out</em>}' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getFault_out()
    * @generated
    * @ordered
    */
-  protected EList<NamedID> fault_out;
+  protected EList<String> fault_out;
 
   /**
    * <!-- begin-user-doc -->
@@ -96,11 +96,11 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<NamedID> getFault_out()
+  public EList<String> getFault_out()
   {
     if (fault_out == null)
     {
-      fault_out = new EObjectContainmentEList<NamedID>(NamedID.class, this, SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT);
+      fault_out = new EDataTypeEList<String>(String.class, this, SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT);
     }
     return fault_out;
   }
@@ -117,8 +117,6 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
     {
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
         return ((InternalEList<?>)getNom_conn()).basicRemove(otherEnd, msgs);
-      case SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT:
-        return ((InternalEList<?>)getFault_out()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -158,7 +156,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
         return;
       case SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT:
         getFault_out().clear();
-        getFault_out().addAll((Collection<? extends NamedID>)newValue);
+        getFault_out().addAll((Collection<? extends String>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -200,6 +198,23 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
         return fault_out != null && !fault_out.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (fault_out: ");
+    result.append(fault_out);
+    result.append(')');
+    return result.toString();
   }
 
 } //OutputStatementImpl

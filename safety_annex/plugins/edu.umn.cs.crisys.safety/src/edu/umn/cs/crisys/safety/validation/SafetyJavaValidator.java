@@ -12,7 +12,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
-import org.osate.aadl2.AadlInteger;
+//import org.osate.aadl2.AadlInteger;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Feature;
 import org.osate.aadl2.NamedElement;
@@ -20,7 +20,7 @@ import org.osate.aadl2.NamedElement;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
-import com.rockwellcollins.atc.agree.agree.NamedID;
+//import com.rockwellcollins.atc.agree.agree.NamedID;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
@@ -41,6 +41,7 @@ import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 /**
  * This class contains custom validation rules. 
@@ -128,7 +129,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
 				// Gather the arguments from node def
 				EList<Arg> args = nodeDef.getArgs();
-				EList<NamedID> inputList = inputs.getFault_in();
+				EList<String> inputList = inputs.getFault_in();
 				
 				// Make an easy string list to access that contains the argument names 
 				// from the node defintion
@@ -142,9 +143,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				if(args.size()-1 == (inputList.size())){
 					
 					// Go through input list and make sure each name is in the arg list
-					for(NamedID input : inputList){
+					for(String inputName : inputList){
 			    	
-			    		String inputName = input.getFullName();
+			    		// String inputName = input.getFullName();
 			    		
 			    		//Check to see if the input name is in the arg list
 			    		if(!argNames.contains(inputName)){
@@ -226,52 +227,40 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// get the base of the deepest sub (defNameSub: fail_to)
 		if (container instanceof FaultStatement) {
 			FaultStatement faultStatement = (FaultStatement) container;
-			defName = faultStatement.getFaultDefName();
-					
-			while(defName.getSub() != null){
-				defName = defName.getSub();
+			NodeDefExpr nodeDef;
+			try {
+				nodeDef = SafetyUtil.getFaultNode(faultStatement);
+			} catch (IllegalArgumentException e) {
+				error(faultStatement.getFaultDefName(), e.getMessage());
+				return;
+			}
+			
+			// Gather the return values from node def
+			retvals = nodeDef.getRets();
+			EList<String> outputList = outputs.getFault_out();
+			
+			for(Arg arg : retvals){
+				retNames.add(arg.getFullName());
 			}
 					
-			// This should be fail_to (NodeDefExpr)
-			defNameSub = defName.getBase();
+			// If the sizes are accurate, make sure names match
+			if(retvals.size() == (outputList.size())){
 					
-			// Make sure we have a NodeDefExpr
-			if(defNameSub instanceof NodeDefExpr){
-						
-				// Cast to NodeDefExpr
-				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
-				// Gather the return values from node def
-				retvals = nodeDef.getRets();
-				EList<NamedID> outputList = outputs.getFault_out();
-				
-				for(Arg arg : retvals){
-					retNames.add(arg.getFullName());
-					
-				}
-					
-				// If the sizes are accurate, make sure names match
-				if(retvals.size() == (outputList.size())){
-						
-					// Go through output list and make sure each name is in the arg list
-					for(NamedID output : outputList){
-			    		String outputName = output.getFullName();
-				    		
-			    		//Check to see if the input name is in the arg list
-				   		if(!retNames.contains(outputName)){
-				   			error(outputs, "Output names must match fault node definition return value names. "
-				   					+"The output name "+outputName+" is not an return value in the node definition. "
-				   					+"All possible output names are: "+retNames.toString());
-				   		}
-				   	}
-				}else{
-				   	// Wrong number of arguments/inputs
-					error(outputs, "The number of outputs must match the number of return values in the node definition."
-							+" With the fault"+defNameSub.getName()+", this value must be "+retNames.size()+".");
-				}
-			} else{
-				// Not a node def expr
-				error(defName, "Fault definition name must be an instance of NodeDefExpr."
-						+" It is: "+defNameSub.getFullName()+".");
+				// Go through output list and make sure each name is in the arg list
+				for(String outputName : outputList){
+		    		// String outputName = output.getFullName();
+			    		
+		    		//Check to see if the input name is in the arg list
+			   		if(!retNames.contains(outputName)){
+			   			error(outputs, "Output names must match fault node definition return value names. "
+			   					+"The output name "+outputName+" is not an return value in the node definition. "
+			   					+"All possible output names are: "+retNames.toString());
+			   		}
+			   	}
+			}else{
+			   	// Wrong number of arguments/inputs
+				error(outputs, "The number of outputs must match the number of return values in the node definition."
+						+" With the fault"+faultStatement.getFaultDefName()+", this value must be "+retNames.size()+".");
 			}
 		}else{
 			// Not a fault statement
@@ -279,22 +268,29 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 		
 
-		
+		// MWW: what is this?
 		// ============================HERE++++++++++++++++++++++++++++++++++++++++++
-		
-		
-		
 		
 		// (2) Make sure connections are valid component connections in aadl
 		// Event ports, data ports, buses, etc. 
 		
 		// List of nominal connections
 		EList<NestedDotID> nomConns = outputs.getNom_conn();
+		for(NestedDotID nom : nomConns) {
+			if (! (nom.getBase() instanceof Feature)) {
+				error(nom, "This connection must be a component connection (Feature). "
+			            +"Possible features are "
+						+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
+			}
+		}		
+
+		/* MWW This is wrong if you are not assigning outputs of a subcomponent!
+		 * 
 		// The sub of the nominal connection
 		NestedDotID nomSub = null;
 		// The base of the sub of the nominal connection
 		NamedElement baseSubNom;
-		
+
 		// Make sure that the connection is a valid component connection
 		for(NestedDotID nom : nomConns){
 			nomSub = nom.getSub();
@@ -308,9 +304,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				}
 				break;
 			}else{
-				error(nom, "The connection "+nomSub.toString()+" is null.");
+				error(nom, "The connection is null.");
 			}
 		}
+*/
 		
 		// (3) Type check between nominal connections and return values
 		

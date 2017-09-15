@@ -506,7 +506,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (fault_in+=NamedID nom_conn+=Expr (fault_in+=NamedID nom_conn+=Expr)*)
+	 *     (fault_in+=ID nom_conn+=Expr (fault_in+=ID nom_conn+=Expr)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -519,7 +519,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (nom_conn+=NestedDotID fault_out+=NamedID (nom_conn+=NestedDotID fault_out+=NamedID)*)
+	 *     (nom_conn+=NestedDotID fault_out+=ID (nom_conn+=NestedDotID fault_out+=ID)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

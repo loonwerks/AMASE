@@ -3,7 +3,6 @@
 package edu.umn.cs.crisys.safety.safety.impl;
 
 import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.NamedID;
 
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -17,6 +16,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -37,14 +37,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class InputStatementImpl extends FaultSubcomponentImpl implements InputStatement
 {
   /**
-   * The cached value of the '{@link #getFault_in() <em>Fault in</em>}' containment reference list.
+   * The cached value of the '{@link #getFault_in() <em>Fault in</em>}' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getFault_in()
    * @generated
    * @ordered
    */
-  protected EList<NamedID> fault_in;
+  protected EList<String> fault_in;
 
   /**
    * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' containment reference list.
@@ -82,11 +82,11 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<NamedID> getFault_in()
+  public EList<String> getFault_in()
   {
     if (fault_in == null)
     {
-      fault_in = new EObjectContainmentEList<NamedID>(NamedID.class, this, SafetyPackage.INPUT_STATEMENT__FAULT_IN);
+      fault_in = new EDataTypeEList<String>(String.class, this, SafetyPackage.INPUT_STATEMENT__FAULT_IN);
     }
     return fault_in;
   }
@@ -115,8 +115,6 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
   {
     switch (featureID)
     {
-      case SafetyPackage.INPUT_STATEMENT__FAULT_IN:
-        return ((InternalEList<?>)getFault_in()).basicRemove(otherEnd, msgs);
       case SafetyPackage.INPUT_STATEMENT__NOM_CONN:
         return ((InternalEList<?>)getNom_conn()).basicRemove(otherEnd, msgs);
     }
@@ -154,7 +152,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
     {
       case SafetyPackage.INPUT_STATEMENT__FAULT_IN:
         getFault_in().clear();
-        getFault_in().addAll((Collection<? extends NamedID>)newValue);
+        getFault_in().addAll((Collection<? extends String>)newValue);
         return;
       case SafetyPackage.INPUT_STATEMENT__NOM_CONN:
         getNom_conn().clear();
@@ -200,6 +198,23 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
         return nom_conn != null && !nom_conn.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (fault_in: ");
+    result.append(fault_in);
+    result.append(')');
+    return result.toString();
   }
 
 } //InputStatementImpl

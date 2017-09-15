@@ -12315,6 +12315,11 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
             case PlusSign:
                 {
                 switch ( input.LA(2) ) {
+                case RULE_ID:
+                    {
+                    alt36=3;
+                    }
+                    break;
                 case RULE_INTEGER_LIT:
                     {
                     alt36=2;
@@ -12323,11 +12328,6 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
                 case RULE_REAL_LIT:
                     {
                     alt36=1;
-                    }
-                    break;
-                case RULE_ID:
-                    {
-                    alt36=3;
                     }
                     break;
                 default:
@@ -12343,11 +12343,6 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
             case HyphenMinus:
                 {
                 switch ( input.LA(2) ) {
-                case RULE_ID:
-                    {
-                    alt36=3;
-                    }
-                    break;
                 case RULE_INTEGER_LIT:
                     {
                     alt36=2;
@@ -12356,6 +12351,11 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
                 case RULE_REAL_LIT:
                     {
                     alt36=1;
+                    }
+                    break;
+                case RULE_ID:
+                    {
+                    alt36=3;
                     }
                     break;
                 default:
@@ -74028,28 +74028,24 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FaultSubcomponent__Fault_inAssignment_0_3"
-    // InternalSafetyParser.g:26970:1: rule__FaultSubcomponent__Fault_inAssignment_0_3 : ( ruleNamedID ) ;
+    // InternalSafetyParser.g:26970:1: rule__FaultSubcomponent__Fault_inAssignment_0_3 : ( RULE_ID ) ;
     public final void rule__FaultSubcomponent__Fault_inAssignment_0_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalSafetyParser.g:26974:1: ( ( ruleNamedID ) )
-            // InternalSafetyParser.g:26975:1: ( ruleNamedID )
+            // InternalSafetyParser.g:26974:1: ( ( RULE_ID ) )
+            // InternalSafetyParser.g:26975:1: ( RULE_ID )
             {
-            // InternalSafetyParser.g:26975:1: ( ruleNamedID )
-            // InternalSafetyParser.g:26976:1: ruleNamedID
+            // InternalSafetyParser.g:26975:1: ( RULE_ID )
+            // InternalSafetyParser.g:26976:1: RULE_ID
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_3_0()); 
+               before(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_3_0()); 
             }
-            pushFollow(FollowSets000.FOLLOW_2);
-            ruleNamedID();
-
-            state._fsp--;
-            if (state.failed) return ;
+            match(input,RULE_ID,FollowSets000.FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_3_0()); 
+               after(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_3_0()); 
             }
 
             }
@@ -74118,28 +74114,24 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FaultSubcomponent__Fault_inAssignment_0_6_1"
-    // InternalSafetyParser.g:27000:1: rule__FaultSubcomponent__Fault_inAssignment_0_6_1 : ( ruleNamedID ) ;
+    // InternalSafetyParser.g:27000:1: rule__FaultSubcomponent__Fault_inAssignment_0_6_1 : ( RULE_ID ) ;
     public final void rule__FaultSubcomponent__Fault_inAssignment_0_6_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalSafetyParser.g:27004:1: ( ( ruleNamedID ) )
-            // InternalSafetyParser.g:27005:1: ( ruleNamedID )
+            // InternalSafetyParser.g:27004:1: ( ( RULE_ID ) )
+            // InternalSafetyParser.g:27005:1: ( RULE_ID )
             {
-            // InternalSafetyParser.g:27005:1: ( ruleNamedID )
-            // InternalSafetyParser.g:27006:1: ruleNamedID
+            // InternalSafetyParser.g:27005:1: ( RULE_ID )
+            // InternalSafetyParser.g:27006:1: RULE_ID
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_6_1_0()); 
+               before(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_6_1_0()); 
             }
-            pushFollow(FollowSets000.FOLLOW_2);
-            ruleNamedID();
-
-            state._fsp--;
-            if (state.failed) return ;
+            match(input,RULE_ID,FollowSets000.FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getFaultSubcomponentAccess().getFault_inNamedIDParserRuleCall_0_6_1_0()); 
+               after(grammarAccess.getFaultSubcomponentAccess().getFault_inIDTerminalRuleCall_0_6_1_0()); 
             }
 
             }
@@ -74253,28 +74245,24 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FaultSubcomponent__Fault_outAssignment_1_5"
-    // InternalSafetyParser.g:27045:1: rule__FaultSubcomponent__Fault_outAssignment_1_5 : ( ruleNamedID ) ;
+    // InternalSafetyParser.g:27045:1: rule__FaultSubcomponent__Fault_outAssignment_1_5 : ( RULE_ID ) ;
     public final void rule__FaultSubcomponent__Fault_outAssignment_1_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalSafetyParser.g:27049:1: ( ( ruleNamedID ) )
-            // InternalSafetyParser.g:27050:1: ( ruleNamedID )
+            // InternalSafetyParser.g:27049:1: ( ( RULE_ID ) )
+            // InternalSafetyParser.g:27050:1: ( RULE_ID )
             {
-            // InternalSafetyParser.g:27050:1: ( ruleNamedID )
-            // InternalSafetyParser.g:27051:1: ruleNamedID
+            // InternalSafetyParser.g:27050:1: ( RULE_ID )
+            // InternalSafetyParser.g:27051:1: RULE_ID
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_5_0()); 
+               before(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_5_0()); 
             }
-            pushFollow(FollowSets000.FOLLOW_2);
-            ruleNamedID();
-
-            state._fsp--;
-            if (state.failed) return ;
+            match(input,RULE_ID,FollowSets000.FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_5_0()); 
+               after(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_5_0()); 
             }
 
             }
@@ -74343,28 +74331,24 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FaultSubcomponent__Fault_outAssignment_1_6_3"
-    // InternalSafetyParser.g:27075:1: rule__FaultSubcomponent__Fault_outAssignment_1_6_3 : ( ruleNamedID ) ;
+    // InternalSafetyParser.g:27075:1: rule__FaultSubcomponent__Fault_outAssignment_1_6_3 : ( RULE_ID ) ;
     public final void rule__FaultSubcomponent__Fault_outAssignment_1_6_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalSafetyParser.g:27079:1: ( ( ruleNamedID ) )
-            // InternalSafetyParser.g:27080:1: ( ruleNamedID )
+            // InternalSafetyParser.g:27079:1: ( ( RULE_ID ) )
+            // InternalSafetyParser.g:27080:1: ( RULE_ID )
             {
-            // InternalSafetyParser.g:27080:1: ( ruleNamedID )
-            // InternalSafetyParser.g:27081:1: ruleNamedID
+            // InternalSafetyParser.g:27080:1: ( RULE_ID )
+            // InternalSafetyParser.g:27081:1: RULE_ID
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_6_3_0()); 
+               before(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_6_3_0()); 
             }
-            pushFollow(FollowSets000.FOLLOW_2);
-            ruleNamedID();
-
-            state._fsp--;
-            if (state.failed) return ;
+            match(input,RULE_ID,FollowSets000.FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getFaultSubcomponentAccess().getFault_outNamedIDParserRuleCall_1_6_3_0()); 
+               after(grammarAccess.getFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_1_6_3_0()); 
             }
 
             }
@@ -85122,7 +85106,7 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
     static final String dfa_10s = "\1\10\7\0\2\uffff";
     static final String dfa_11s = "\1\176\7\0\2\uffff";
     static final String dfa_12s = "\10\uffff\1\2\1\1";
-    static final String dfa_13s = "\1\uffff\1\2\1\5\1\0\1\1\1\3\1\6\1\4\2\uffff}>";
+    static final String dfa_13s = "\1\uffff\1\0\1\3\1\5\1\6\1\1\1\4\1\2\2\uffff}>";
     static final String[] dfa_14s = {
             "\1\10\25\uffff\1\10\3\uffff\1\10\7\uffff\1\10\2\uffff\1\10\13\uffff\1\10\2\uffff\1\10\1\uffff\1\10\3\uffff\1\10\6\uffff\1\10\5\uffff\1\10\1\uffff\1\10\1\uffff\2\10\3\uffff\1\10\5\uffff\1\7\2\10\3\uffff\1\2\1\6\1\10\1\4\3\uffff\1\10\2\uffff\5\10\1\uffff\3\10\1\1\1\5\1\3\1\uffff\2\10\1\uffff\1\10",
             "\1\uffff",
@@ -85165,36 +85149,6 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA89_3 = input.LA(1);
-
-                         
-                        int index89_3 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred137_InternalSafetyParser()) ) {s = 9;}
-
-                        else if ( (true) ) {s = 8;}
-
-                         
-                        input.seek(index89_3);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
-                        int LA89_4 = input.LA(1);
-
-                         
-                        int index89_4 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred137_InternalSafetyParser()) ) {s = 9;}
-
-                        else if ( (true) ) {s = 8;}
-
-                         
-                        input.seek(index89_4);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 2 : 
                         int LA89_1 = input.LA(1);
 
                          
@@ -85209,7 +85163,7 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
                         input.seek(index89_1);
                         if ( s>=0 ) return s;
                         break;
-                    case 3 : 
+                    case 1 : 
                         int LA89_5 = input.LA(1);
 
                          
@@ -85224,7 +85178,7 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
                         input.seek(index89_5);
                         if ( s>=0 ) return s;
                         break;
-                    case 4 : 
+                    case 2 : 
                         int LA89_7 = input.LA(1);
 
                          
@@ -85239,7 +85193,7 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
                         input.seek(index89_7);
                         if ( s>=0 ) return s;
                         break;
-                    case 5 : 
+                    case 3 : 
                         int LA89_2 = input.LA(1);
 
                          
@@ -85254,7 +85208,7 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
                         input.seek(index89_2);
                         if ( s>=0 ) return s;
                         break;
-                    case 6 : 
+                    case 4 : 
                         int LA89_6 = input.LA(1);
 
                          
@@ -85267,6 +85221,36 @@ public class InternalSafetyParser extends AbstractInternalContentAssistParser {
 
                          
                         input.seek(index89_6);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 5 : 
+                        int LA89_3 = input.LA(1);
+
+                         
+                        int index89_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred137_InternalSafetyParser()) ) {s = 9;}
+
+                        else if ( (true) ) {s = 8;}
+
+                         
+                        input.seek(index89_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 6 : 
+                        int LA89_4 = input.LA(1);
+
+                         
+                        int index89_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred137_InternalSafetyParser()) ) {s = 9;}
+
+                        else if ( (true) ) {s = 8;}
+
+                         
+                        input.seek(index89_4);
                         if ( s>=0 ) return s;
                         break;
             }
