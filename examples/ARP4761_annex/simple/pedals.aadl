@@ -1,0 +1,34 @@
+package pedals
+
+public
+
+with common;
+--
+--  This is a stub component for the pedal
+-- 
+system pedals
+features
+	signal1 : out data port common::command.pedal;
+	signal2 : out data port common::command.pedal;
+	
+	annex AGREE {**
+			
+		-- I'm assuming there must be some range of values for the pedals. 
+		-- I will just say it's nonnegative for now. We can change it
+		-- if there is an upper bound.
+		guarantee "Range for pedal1" : 
+		    signal1.val >= 0.0;
+		guarantee "Range for pedal2" : 
+		    signal2.val >= 0.0;
+		    
+		-- Do both need to be pressed at the same time? Is only one pressed at once? 
+		-- Are there contracts needed for this?
+		    
+	**}	;
+
+end pedals;
+
+system implementation pedals.generic
+end pedals.generic;
+
+end pedals;

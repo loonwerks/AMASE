@@ -1,0 +1,101 @@
+package wheel
+
+public
+
+with common, Base_Types;
+
+
+system wheel
+end wheel;
+
+
+--
+--  This is an example of one wheel with one
+--  input. We do not represent the two channels,
+--  we rather abstract the two channels into a
+--  single one.
+--
+
+system wheel_one_input extends wheel
+features
+	input : in data port common::pressure.i;
+	-- Note: the sensed pressure is *not* pressure, but only a sensor value.
+	-- In the future  
+	output_sensed: out data port common::sensor.i;  
+annex EMV2 {**
+	use types error_library;
+	use behavior error_library::simple;
+	
+	error propagations
+		input : in propagation{NoService};
+--	flows
+--		ns1 : error sink input{NoService};
+	end propagations;
+	
+	component error behavior
+	transitions
+		t1 : Operational -[input{NoService}]-> Failed;
+	end component;
+**};
+end wheel_one_input;
+
+system implementation wheel_one_input.i
+end wheel_one_input.i;
+
+
+--
+--  This is an example of a wheel with two
+--  input, one from each pump. The other model
+--  abstracts the two pumps in a single bus.
+--  This model explicitly represents the two channels.
+--
+
+system wheel_two_inputs 
+features
+	green_input : in data port common::pressure.i;	
+	blue_input : in data port common::pressure.i;
+	
+	-- Added output to bscu that shows how much pressure
+	-- is coming into the wheel
+	output_realized_pressure : out data port common::pressure.i;
+	
+annex EMV2 {**
+	use types error_library;
+	use behavior error_library::simple;
+	error propagations
+		green_input : in propagation{NoService};
+		blue_input : in propagation{NoService};
+--	flows
+--		ns1 :error sink green_input{NoService};
+--		ns2 : error sink blue_input{NoService};
+	end propagations;
+	
+	component error behavior
+	transitions
+		t1 : Operational -[ green_input{NoService}]-> Failed;
+		t2 : Operational -[ blue_input{NoService}]-> Failed;
+	end component;
+**};
+
+annex agree {**
+	
+	-- Shouldn't get pressure from both inputs at the same time.'	
+	guarantee "Either green or blue or neither has positive pressure." : 
+               not(green_input.val > 0.0 and blue_input.val > 0.0);
+               
+    -- The pressure that we output to the bscu is not actually pressure, but
+    -- just a value that shows how much pressure is coming into the wheel.
+    -- This should always equal incoming pressure value. 
+    guarantee "Output 'pressure' is equal to incoming pressure. " :
+              if green_input.val > 0.0 then output_realized_pressure.val = green_input.val
+                 else output_realized_pressure.val = blue_input.val;
+              
+		
+**};
+
+end wheel_two_inputs;
+
+system implementation wheel_two_inputs.i
+end wheel_two_inputs.i;
+
+end wheel;

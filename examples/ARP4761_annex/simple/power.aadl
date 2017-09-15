@@ -1,0 +1,34 @@
+package power
+
+public
+with common;
+-- with ARP4761;
+-- with EMV2;
+
+device battery
+features
+	socket : provides bus access common::power.generic;
+
+end battery;
+
+
+device implementation battery.generic
+end battery.generic;
+
+system power
+features
+	line1 : provides bus access common::power.generic;
+	line2 : provides bus access common::power.generic;
+end power;
+
+system implementation power.generic
+subcomponents
+    --  Power buses
+	battery1 : device battery.generic;
+	battery2 : device battery.generic;
+connections
+	pwr1 : bus access  battery1.socket <-> line1;
+	pwr2 : bus access  battery2.socket <-> line2;
+end power.generic;
+
+end power;

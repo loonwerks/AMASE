@@ -1,0 +1,33 @@
+package communication
+
+public
+
+with common;
+
+
+--
+--  The annunciation device is introduced to capture the
+--  fact that we may have a communication error and lose
+--  the annunciation capability in the system.
+--
+--  This would likely be replaced by something more
+--  sophisticated. However, this level of abstraction
+--  is sufficient for our needs and show an error source
+--  that propagates to the main system.
+--  See. ARP4761 document page 199, figure L3 for more
+--  details about how this error is introduced into the FTA.
+--
+
+device annunciation
+features
+	--  We add a data port that abstracts communication
+	--  within the system.
+	information : out data port common::command.announce;
+
+end annunciation;
+
+device implementation annunciation.i
+end annunciation.i;
+
+
+end communication;

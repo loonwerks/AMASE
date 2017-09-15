@@ -1,0 +1,234 @@
+package valves
+
+public
+
+with base_types;
+with common; 
+with faults;
+
+system generic
+features
+	input : in data port common::pressure.i;
+	output : out data port common::pressure.i;
+annex EMV2 {**
+	use types     error_library;
+	use behavior  error_library::simple;
+	error propagations
+		input  : in propagation {NoService};
+		output : out propagation {NoService};
+	flows
+		f1 : error path input{NoService} -> output; 
+	end propagations;
+**};
+end generic;
+
+system implementation generic.i
+end generic.i;
+
+system generic_pwm_input extends generic
+features
+	input_pwm : requires bus access common::pwm.generic;
+end generic_pwm_input;
+
+system implementation generic_pwm_input.i
+end generic_pwm_input.i;
+
+
+system boolean_shutoff 
+features
+	input : in data port common::pressure.i;
+	shutoff_output : out data port common::pressure.i;
+	boolean_input : in data port Base_Types::Boolean;
+	 
+	
+	annex agree {**
+	    -- If boolean_input is true, then the output should be zero.
+		guarantee "Pressure on boolean shutoff" : 
+		       if boolean_input then shutoff_output.val = 0.0 
+		       else shutoff_output.val = input.val ;
+		
+		-- This seems super obvious... I don't even think it's physically possible
+		-- to break this contract...       
+		guarantee "Output is never greater than input" :
+		       not(shutoff_output.val > input.val);
+		       	              
+	**};
+
+	annex safety {**
+		fault "Output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+			-- non-deterministic "failed" value.
+			-- Note: system cannot handle 
+			eq alt_value :real;
+			inputs: val_in <- shutoff_output,
+					alt_val <- alt_value; 
+			outputs: shutoff_output <- val_out ;    
+			duration: permanent;
+		}
+	**};
+
+end boolean_shutoff;
+
+system cmd_shutoff 
+features
+	input : in data port common::pressure.i;
+	output : out data port common::pressure.i;
+	cmd_input : in data port common::command.skid;
+	
+	annex AGREE {**
+		-- Depending on cmd_input (skidding), the output can either be the same as the cmd_input 
+		-- (this occurs when cmd_input < input) or the output is equal to the input
+		-- (cmd_input does nothing to change output when cmd_input <= input).
+		guarantee "Valve pressure limits by cmd_input." : 
+			if (cmd_input.activate_antiskid and cmd_input.val < input.val) then 
+				output.val = cmd_input.val 
+			else output.val = input.val ; 
+		
+		-- Pretty straightforward contract. 
+		guarantee "Output is never greater than input." :
+		    not(output.val > input.val);	
+		 
+	**}	;
+
+	annex safety {**
+		fault "Output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+			-- non-deterministic "failed" value.
+			-- Note: system cannot handle 
+			eq alt_value :real;
+			inputs: val_in <- output,
+					alt_val <- alt_value; 
+			outputs: output <- val_out ;    
+			duration: permanent;
+		}
+	**};
+end cmd_shutoff;
+
+
+
+
+system selector
+features
+	--accumulator_input: in data port common::pressure.i;
+	green_input      : in data port common::pressure.i;
+	blue_input       : in data port common::pressure.i;
+	select_alternate : in data port Base_Types::Boolean;
+	cmd_nor          : in data port common::command.skid;
+	cmd_alt          : in data port common::command.skid;
+
+end selector;
+
+
+system implementation selector.i
+end selector.i;
+
+
+system selector_basic extends selector
+features
+	output           : out data port common::pressure.i;
+end selector_basic;
+
+
+system selector_detailed 
+features
+	--accumulator_input: in data port common::pressure.i;
+	green_input      : in data port common::pressure.i;
+	blue_input       : in data port common::pressure.i;
+	select_alternate : in data port Base_Types::Boolean;
+	cmd_nor          : in data port common::command.skid;
+	cmd_alt          : in data port common::command.skid;
+	green_output : out data port common::pressure.i;
+	blue_output  : out data port common::pressure.i;
+	--stuck_at_occurred : in data port Base_Types::Boolean;
+
+	annex AGREE {** 
+		
+		-- We have blue input, green input, or neither. Not both. 
+		guarantee "Pressure selector: either green or blue output. " : 
+			if (green_input.val > 0.0) then 
+				(blue_output.val = 0.0 and green_output = green_input)
+			else (blue_output = blue_input and green_output.val = 0.0);
+	
+	  
+	    -- If select_alternate is not selected (normal pressure) 
+	    -- then green pressure is positive. 
+	    guarantee "If select_alternate is selected, then blue input is positive, else green
+	               is positive." :
+	        if select_alternate then blue_input.val > 0.0
+	        else green_input.val > 0.0;
+	        
+	    -- cmd_nor and cmd_alt cannot both be positive.
+	    guarantee "cmd_nor and cmd_alt cannot both be positive." :
+	        not(cmd_nor.val > 0.0 and cmd_alt.val > 0.0);
+	        
+	    -- If select_alt is true, then cmd_alt should be positive.
+	    guarantee "If select_alternate is true, then cmd_alt > 0.0, else cmd_nor > 0.0." :
+	        if select_alternate then cmd_alt.val > 0.0 
+	        else cmd_nor.val > 0.0;
+	        
+	    -- If green pressure below threshold then select_alternate
+	    guarantee "If green pressure below threshold, then select_alternate" :
+	       green_input.val <= 0.0 => select_alternate;
+	        
+	    -- The output is never greater than the input for either green or blue.
+	    guarantee "Output is never greater than input." :
+	        (green_output.val <= green_input.val) and (blue_output.val <= blue_input.val);
+	**};
+
+	annex safety {**
+		fault "Green output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+			-- non-deterministic "failed" value.
+			-- Note: system cannot handle 
+			eq alt_value1 :real;
+			inputs: val_in <- green_output,
+					alt_val <- alt_value1; 
+			outputs: green_output <- val_out ;    
+			duration: permanent;
+		}
+
+		fault "Blue output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+			-- non-deterministic "failed" value.
+			-- Note: system cannot handle 
+			eq alt_value :real;
+			inputs: val_in <- blue_output,
+					alt_val <- alt_value; 
+			outputs: blue_output <- val_out ;    
+			duration: permanent;
+		}
+	**};
+
+end selector_detailed;
+
+system accumulator_valve
+features
+	blue_input : in data port common::pressure.i;
+	accumulator_input : in data port common::pressure.i;
+	select_alternate : in data port Base_Types::Boolean;
+	blue_skid_output : out data port common::pressure.i;
+
+   annex AGREE{**
+   	-- Contract: Accumulator valve will emit no pressure unless select_alternate
+   	-- is true
+   	guarantee "No pressure emitted unless select_alternate is true" :
+   	  (select_alternate) => blue_skid_output.val = accumulator_input.val;
+   	  
+   	-- If select_alternate is true and blue_input > Threshold then emit blue pressure, 
+   	-- else emit accumulator pressure
+   	guarantee "If select_alternate true and blue > threshold, then emit blue pressure, else emit accum pressure" :
+   	   if (select_alternate) and blue_input.val > 0.0 then blue_skid_output.val = blue_input.val
+   	        else blue_skid_output = accumulator_input;
+   	    
+   **}	;
+
+   annex safety {**
+      fault "Blue skid output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+         -- non-deterministic "failed" value.
+         -- Note: system cannot handle 
+         eq alt_value :real;
+         inputs: val_in <- blue_skid_output,
+               alt_val <- alt_value; 
+         outputs: blue_skid_output <- val_out ;    
+         duration: permanent;
+      }
+   **};
+end accumulator_valve;
+
+end valves;

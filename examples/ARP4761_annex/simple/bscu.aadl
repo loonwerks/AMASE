@@ -1,0 +1,267 @@
+package bscu
+
+public
+
+with common;
+with platform;
+with Base_Types;
+
+-- This is the implementation of the BSCU of the system
+-- The BSCU contains two subsystems.
+-- Each BSCU subsystem has the following interfaces:
+--    1. Power
+--    2. Pedal
+-- Then, each BSCU subsystem has the following subcomponents:
+--    1. A Command function that produces data from the pedal values.
+--    2. A monitor function that indicates if the values are valid
+--       or not.
+-- The main BSCU receives data and power and forwards it
+-- to each subsystem.
+-- Also, the BSCU contains a Select_Alternate output data
+-- that indicates whether we should use the first subsystem
+-- (Select_Alternate == false) or if the second (backup)
+-- subsystem would be used (Select_Alternate == true).
+
+
+
+-- The command system if part of each bscu subsystem.
+-- It produces data from the brake pedal value.
+-- This component is an error sink for the error side
+-- and may fail from power-related error
+-- and service-related error (no pedal).
+process command
+features
+	brake : out data port common::command.brake;
+	skid  : out data port common::command.skid;
+	pedalvalue : in data port common::command.pedal;
+end command;
+ 
+process implementation command.i
+
+end command.i;
+
+
+--  The monitor component receive the values
+--  (brake and skid values) from the command system
+--  and check if the system is valid or not. We have
+--  one monitor for each BSCU.
+--  The monitor may fail if he has no power.
+process monitor
+features
+	brake : in data port common::command.brake;
+	skid  : in data port common::command.skid;
+	valid : out data port Base_Types::Boolean;
+end monitor;
+
+process implementation monitor.i
+end monitor.i;
+
+
+system bscu_subsystem
+features
+	pwr      : requires bus access common::power.generic;
+	pedal    : in data port common::command.pedal;
+	cmd_skid : out data port common::command.skid;
+	cmd_brk  : out data port common::command.brake;
+	valid    : out data port Base_Types::Boolean; 
+end bscu_subsystem;
+
+system implementation bscu_subsystem.generic
+subcomponents
+	mon   		: process monitor.i;
+	cmd   		: process command.i;
+connections
+	pedaltocmd    : port pedal     -> cmd.pedalvalue;
+	brakecmd      : port cmd.brake -> mon.brake;
+	brakecmd_ext  : port cmd.brake -> cmd_brk;
+	skidcmd_ext   : port cmd.skid  -> cmd_skid;
+	skidcmd       : port cmd.skid  -> mon.skid;
+	isvalid       : port mon.valid -> valid;
+
+end bscu_subsystem.generic;
+
+
+
+
+--  The select alternate is a binary operator that produces
+--  an output from two input. If the first input is true
+--  the result is false. Otherwise, the result is true. 
+system select_alternate
+features
+	input1 : in data port Base_Types::Boolean;
+	input2 : in data port Base_Types::Boolean;
+	result : out data port Base_Types::Boolean;
+		
+	annex AGREE {**
+		-- If first input is true, output is false
+		-- otherwise output is true.  
+		-- Not sure if I can do this without using some
+		-- notion of prestate... if pre(input1)=true then result = false...  
+		guarantee "If input1 is true, result is false. Else result is true" : true ->
+		     (pre(input1) = true => result = false) or (pre(input1) = false => 
+		     	    result = true
+		     ) ;	
+	**}	;
+
+	annex safety {**
+		fault "Output inverted.": faults.inverted_fail {
+			inputs: val_in <- result;     
+			outputs: result <- val_out;    
+			duration: permanent;
+		}
+		
+	**};
+
+end select_alternate;
+
+-- Added new subcomponent to gather input from wheel regarding
+-- the pressure received there and turn on accumulator valve if needed.
+system select_accumulator_valve
+features
+	-- Added input from wheel (new)
+	wheel_pressure : in data port common::pressure.i;
+	select_alt_accumulator : out data port Base_Types::Boolean;
+	
+annex AGREE{**
+	
+	-- If input is zero, select_alternate_accumulator is true
+	guarantee "if input is zero (pressure found at the wheel), output select_alternate to accumulator as true" :
+	      (wheel_pressure.val <= 0.0) => select_alt_accumulator = true;
+	
+**};
+end select_accumulator_valve;
+
+
+system bscu
+features
+	pwr1              : requires bus access common::power.generic;
+	pwr2              : requires bus access common::power.generic;
+	pedal1            : in data port common::command.pedal;
+	pedal2            : in data port common::command.pedal;
+	wheel_pressure    : in data port common::pressure.i;  
+	Select_Alternate  : out data port Base_Types::Boolean;
+	cmd_nor           : out data port common::command.skid; 
+	cmd_alt           : out data port common::command.skid;
+	
+	annex AGREE {**
+			
+		eq pedals_pressed: bool = (pedal1.val > 0.0) and (pedal2.val > 0.0);
+		eq skid_active: bool = (cmd_nor.activate_antiskid) or (cmd_alt.activate_antiskid);
+		eq commanded_pressure: bool = (cmd_nor.val > 0.0) or (cmd_alt.val > 0.0);
+	
+		guarantee "If pedals pressed, no skid, and wheel pressure is nonexistant, then
+		           select alternate should be true" :
+		      (Select_Alternate = 
+		      faults.historically(false -> not (pre(pedals_pressed and not(skid_active)) 
+		      	    => wheel_pressure.val > 0.0))); 
+		
+		guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
+			pedals_pressed and (not skid_active)  =>
+				commanded_pressure; 
+				 
+		guarantee "Alternate pressure and normal pressure don't occur simultaneously." : 
+		          not(cmd_alt.val > 0.0 and cmd_nor.val > 0.0); 
+	**};
+
+
+	annex safety {**
+		fault "Output inverted.": faults.inverted_fail {
+			inputs: val_in <- Select_Alternate;     
+			outputs: Select_Alternate <- val_out;    
+			duration: permanent;
+		}
+		
+	**};
+
+
+
+
+
+end bscu;
+
+system implementation bscu.basic
+
+end bscu.basic;
+
+
+system implementation bscu.generic
+subcomponents
+	sub1    : system bscu_subsystem.generic;
+	sub2    : system bscu_subsystem.generic;
+	select  : system select_alternate;
+
+connections
+	sub1pwr        : bus access pwr1 <-> sub1.pwr;
+	sub2pwr        : bus access pwr2 <-> sub2.pwr;
+	sub1pedal      : port pedal1 -> sub1.pedal;
+	sub2pedal      : port pedal2 -> sub2.pedal;
+	selectvalid1   : port sub1.valid -> select.input1;
+	selectvalid2   : port sub2.valid -> select.input2;
+	selectvalidout : port select.result -> Select_Alternate;
+	sub1skid       : port sub1.cmd_skid -> cmd_nor;
+	sub2skid       : port sub2.cmd_skid -> cmd_alt;
+
+end bscu.generic;
+
+
+
+system implementation bscu.federated 
+subcomponents
+	sub1    : system bscu_subsystem.generic;
+	sub2    : system bscu_subsystem.generic;
+	select  : system select_alternate;
+	platform : system platform::platform.federated;
+	
+	-- NEW select_accumulator subcomponet will flag accumulator
+	-- valve if no pressure at wheel
+	select_accumulator : system select_accumulator_valve;
+	
+connections
+	sub1pwr        : bus access pwr1 <-> sub1.pwr;
+	sub2pwr        : bus access pwr2 <-> sub2.pwr;
+	sub1pedal      : port pedal1 <-> sub1.pedal;
+	sub2pedal      : port pedal2 <-> sub2.pedal;
+	selectvalid1   : port sub1.valid -> select.input1;
+	selectvalid2   : port sub2.valid -> select.input2;
+	selectvalidout : port select.result -> Select_Alternate;
+	sub1skid       : port sub1.cmd_skid -> cmd_nor;
+	sub2skid       : port sub2.cmd_skid -> cmd_alt;
+	
+	
+	 
+properties
+	Actual_Processor_Binding => (reference (platform.cpu1)) applies to sub1.cmd;
+	Actual_Processor_Binding => (reference (platform.cpu1)) applies to sub1.mon;
+	Actual_Processor_Binding => (reference (platform.cpu2)) applies to sub2.cmd;
+	Actual_Processor_Binding => (reference (platform.cpu2)) applies to sub2.mon;	
+
+end bscu.federated;
+
+system implementation bscu.ima 
+subcomponents
+	sub1    : system bscu_subsystem.generic;
+	sub2    : system bscu_subsystem.generic;
+	select  : system select_alternate;
+	platform : system platform::platform.ima;
+connections
+	sub1pwr        : bus access pwr1 <-> sub1.pwr;
+	sub2pwr        : bus access pwr2 <-> sub2.pwr;
+	sub1pedal      : port pedal1 <-> sub1.pedal;
+	sub2pedal      : port pedal2 <-> sub2.pedal;
+	selectvalid1   : port sub1.valid -> select.input1;
+	selectvalid2   : port sub2.valid -> select.input2;
+	selectvalidout : port select.result -> Select_Alternate;
+	sub1skid       : port sub1.cmd_skid -> cmd_nor;
+	sub2skid       : port sub2.cmd_skid -> cmd_alt;
+	
+	
+properties
+	Actual_Processor_Binding => (reference (platform.cpu.partition1)) applies to sub1.cmd;
+	Actual_Processor_Binding => (reference (platform.cpu.partition2)) applies to sub1.mon;
+	Actual_Processor_Binding => (reference (platform.cpu.partition3)) applies to sub2.cmd;
+	Actual_Processor_Binding => (reference (platform.cpu.partition4)) applies to sub2.mon;	
+
+end bscu.ima;
+
+
+end bscu;

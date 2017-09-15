@@ -1,0 +1,37 @@
+package pump
+
+
+public
+
+with common;
+with faults;
+
+system pump
+features
+	pressure_output : out data port common::pressure.i;
+
+	annex AGREE {**
+		guarantee "Pump always outputs something" : pressure_output.val > 0.0 ;
+	**}	;
+
+	annex safety {**
+		fault "Output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+			-- non-deterministic "failed" value.
+			-- Note: system cannot handle 
+			eq alt_value :real;
+			inputs: val_in <- pressure_output,
+					alt_val <- alt_value; 
+			outputs: pressure_output <- val_out ;    
+			duration: permanent;
+		}
+		
+	**};
+	
+
+end pump;
+
+
+system implementation pump.i
+
+end pump.i;
+end pump;
