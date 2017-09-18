@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
 Import-Package: com.rockwellcollins.atc.agree.analysis.ast,
  com.rockwellcollins.atc.agree.analysis.extentions,
  jkind.lustre,
- org.apache.log4j
+ org.apache.log4j,
+ org.osate.annexsupport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: edu.umn.cs.crisys.safety,
  edu.umn.cs.crisys.safety.formatting,

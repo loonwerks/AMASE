@@ -67,7 +67,7 @@
    <extension
          point="com.rockwellcollins.atc.agree.analysis.agreeautomater">
       <agreeautomater
-            class="edu.umn.cs.crisys.safety.analysis.transform.TransformAgree"
+            class="edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree"
             id="TransformAgree"
             pluginName="TransformAgree">
       </agreeautomater>

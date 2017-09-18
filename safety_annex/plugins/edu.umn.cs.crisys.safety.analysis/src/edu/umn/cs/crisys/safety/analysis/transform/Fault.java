@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
@@ -19,11 +16,10 @@ import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
 
-public class SafetyFault {
-
+public class Fault {
 	// Map from fault node output names to the assigned vars
-	public Map<String, IdExpr> faultNodeOutputMap = new HashMap<>();
-	public Map<String, Expr> inputParameterMap = new HashMap<>();
+	public Map<String, Expr> faultInputMap = new HashMap<>();
+	public Map<String, IdExpr> faultOutputMap = new HashMap<>();
 	
 	public Node faultNode; 
 	public String id;
@@ -37,16 +33,10 @@ public class SafetyFault {
 	
 	// initial data: 
 	public FaultStatement faultStatement; 
-	public AgreeProgram agreeProgram;
-	public AgreeNode agreeNode;
 
-	public SafetyFault(FaultStatement fstmt, 
-			AgreeProgram program, 
-			AgreeNode node,
+	public Fault(FaultStatement fstmt, 
 			String id) {
 		this.faultStatement = fstmt;
-		this.agreeNode = node;
-		this.agreeProgram = program;
 		this.id = id;
 	}
 

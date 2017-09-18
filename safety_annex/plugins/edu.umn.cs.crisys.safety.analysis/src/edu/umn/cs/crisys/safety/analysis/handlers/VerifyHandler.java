@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
 import org.osate.aadl2.Element;
 
-import edu.umn.cs.crisys.safety.analysis.transform.TransformAgree;
+import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 
 public class VerifyHandler extends AadlHandler {
 
@@ -34,7 +34,7 @@ public class VerifyHandler extends AadlHandler {
 	public Object execute(ExecutionEvent event) {
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
-		TransformAgree.setTransformFlag(true);
+		AddFaultsToAgree.setTransformFlag(true);
 
 		return null;
 	}

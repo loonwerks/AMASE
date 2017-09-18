@@ -11,7 +11,6 @@ import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.analysis.AgreeTypeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
@@ -42,27 +41,23 @@ import jkind.lustre.VarDecl;
 
 public class FaultASTBuilder {
 
-	// initial data: will be updated occasionally (and inefficiently!).
+	private static int faultCounter = 0; 
 	
-	// public FaultStatement faultStatement; 
-	private AgreeProgram agreeProgram;
+	// globalLustreNodes will be updated occasionally as faults are added
+	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
+	private List<Node> globalLustreNodes;
+
+
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
 	
-	public FaultASTBuilder(AgreeProgram agreeProgram, AgreeNode agreeNode) {
-		this.agreeProgram = agreeProgram;
+	public FaultASTBuilder(List<Node> globalLustreNodes, AgreeNode agreeNode) {
+		this.globalLustreNodes = globalLustreNodes;
 		this.agreeNode = agreeNode;
 	}
 	
 	public void addGlobalLustreNode(Node node) {
-		List<Node> globalLustreNodes = new ArrayList<>(agreeProgram.globalLustreNodes); 
 		globalLustreNodes.add(node);
-		AgreeProgram newProgram = 
-				new AgreeProgram(agreeProgram.agreeNodes, 
-						globalLustreNodes, 
-						agreeProgram.globalTypes, 
-						agreeProgram.topNode);
-		agreeProgram = newProgram;
 	}
 
 	private Node getLustreNode(String fnName, List<Node> nodes) {
@@ -75,13 +70,13 @@ public class FaultASTBuilder {
 		
 	}
 
-	private void setFaultNode(FaultStatement faultStatement, SafetyFault fault) {
+	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
 		NodeDefExpr defExpr = SafetyUtil.getFaultNode(faultStatement);
 
 		// to keep consistent with AGREE, we will use the AGREE functions
 		// to construct names
 		String fnName = AgreeTypeUtils.getNodeName(defExpr);
-		fault.faultNode = this.getLustreNode(fnName, agreeProgram.globalLustreNodes);
+		fault.faultNode = this.getLustreNode(fnName, globalLustreNodes);
 		if (fault.faultNode == null) {
 			// This is a pretty random experiment...if we can get AgreeASTBuilder to 
 			// build us a node, we will add it to our list and return it.
@@ -105,18 +100,18 @@ public class FaultASTBuilder {
 		return -1;
 	}
 	
-	private void setInput(SafetyFault fault, InputStatement input) {
+	private void setInput(Fault fault, InputStatement input) {
 		for (int i = 0; i < input.getFault_in().size(); i++) {
 			String param = input.getFault_in().get(i); 
 			
 			// translating expression HERE.
 			Expr result = builder.doSwitch(input.getNom_conn().get(i));
-			fault.inputParameterMap.put(param, result);
+			fault.faultInputMap.put(param, result);
 			System.out.println("Fault node input: " + param + " is assigned " + result.toString());
 		}
 	}
 
-	private void setOutput(SafetyFault fault, OutputStatement output) {
+	private void setOutput(Fault fault, OutputStatement output) {
 		for (int i = 0; i < output.getFault_out().size(); i++) {
 			String param = output.getFault_out().get(i);
 			NestedDotID compOut = output.getNom_conn().get(i);
@@ -125,14 +120,14 @@ public class FaultASTBuilder {
 					!(result instanceof IdExpr)) {
 				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
 			}
-			fault.faultNodeOutputMap.put(param, (IdExpr)result);
+			fault.faultOutputMap.put(param, (IdExpr)result);
 			System.out.println("Fault node output: " + result + "is assigned to node output: " + param);
 			// translating NestedDotId to AgreeVars...how?
 		}
 	}
 	
 	
-	private void setDuration(SafetyFault fault, DurationStatement duration) {
+	private void setDuration(Fault fault, DurationStatement duration) {
 		fault.duration = duration;
 	}
 	
@@ -149,7 +144,7 @@ public class FaultASTBuilder {
 		}
 	}
 	
-	private void addSafetyEqVal(SafetyFault fault, EqValue stmt) {
+	private void addSafetyEqVal(Fault fault, EqValue stmt) {
 		if (stmt.getExpr() != null) {
 			Expr lhsExpr = constructEqLhsExpr(stmt);
 			Expr rhsExpr = builder.doSwitch(stmt.getExpr());
@@ -157,15 +152,15 @@ public class FaultASTBuilder {
 			fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
 		}
 		List<VarDecl> vars = 
-			builder.agreeVarsFromArgs(stmt.getLhs(), fault.agreeNode.compInst);
+			builder.agreeVarsFromArgs(stmt.getLhs(), agreeNode.compInst);
 		for (VarDecl var : vars) {
 			fault.safetyEqVars.add((AgreeVar) var);
 		}
 	}
 	
 	
-	private void addSafetyEqInterval(SafetyFault fault, IntervalEq stmt) {
-		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName());
+	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
+		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
 		Interval iv =stmt.getInterv(); 
 		BinaryOp leftOp = 
 				((iv instanceof ClosedInterval) || 
@@ -189,15 +184,15 @@ public class FaultASTBuilder {
 				stmt.getLhs_int(), this.agreeNode.compInst));
 	}
 	
-	private void addSafetyRangeEq(SafetyFault fault, RangeEq stmt) {
+	private void addSafetyRangeEq(Fault fault, RangeEq stmt) {
 		throw new SafetyException("Error: range equations are not yet implemented in translator!");
 	}
 	
-	private void addSafetySetEq(SafetyFault fault, SetEq stmt) {
+	private void addSafetySetEq(Fault fault, SetEq stmt) {
 		throw new SafetyException("Error: set equations are not yet implemented in translator!");
 	}
 	
-	public void addSafetyEq(SafetyFault fault, SafetyEqStatement stmt) {
+	public void addSafetyEq(Fault fault, SafetyEqStatement stmt) {
 		if (stmt instanceof EqValue) {
 			addSafetyEqVal(fault, (EqValue)stmt);
 		} else if (stmt instanceof IntervalEq) {
@@ -209,11 +204,11 @@ public class FaultASTBuilder {
 		}
 	}
 	
-	public void addTrigger(SafetyFault fault, TriggerStatement stmt) {
+	public void addTrigger(Fault fault, TriggerStatement stmt) {
 		throw new SafetyException("Error: set equations are not yet implemented in translator!");
 	}
 
-	public void processFaultSubcomponents(SafetyFault fault) {
+	public void processFaultSubcomponents(Fault fault) {
 		for (FaultSubcomponent fs : fault.faultStatement.getFaultDefinitions()) {
 			if (fs instanceof DurationStatement) {
 				setDuration(fault, (DurationStatement)fs); 
@@ -229,19 +224,18 @@ public class FaultASTBuilder {
 		}
 	}
 
-	private int faultCounter = 0; 
-	
 	public String mkUniqueFaultId(FaultStatement fstmt) {
 		faultCounter++; 
 		return this.agreeNode.id + "__" + "fault_" + faultCounter;
 	}
 	
-	public SafetyFault buildFault(FaultStatement fstmt) {
+	public Fault buildFault(FaultStatement fstmt) {
 		String faultId = mkUniqueFaultId(fstmt); 
-		SafetyFault fault = new SafetyFault(fstmt, this.agreeProgram, this.agreeNode, faultId);
+		Fault fault = new Fault(fstmt, faultId);
 		setFaultNode(fstmt, fault);
 		processFaultSubcomponents(fault);
 		
 		return fault;
 	}
+
 }
