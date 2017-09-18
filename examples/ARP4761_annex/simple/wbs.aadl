@@ -178,7 +178,7 @@ system implementation wbs.federated
 	accumulator_valve : system valves::accumulator_valve;
 	
 	 
-connections
+connections 
 	pedal1     : port pedals.signal1 -> bscu.pedal1;
 	pedal2     : port pedals.signal2 -> bscu.pedal2;
     --  We connect the blue pump directly to the selector valve.
@@ -190,7 +190,7 @@ connections
 	bscu_to_shutoff     : port bscu.Select_Alternate -> shutoff.boolean_input;
 	
 	bscu_to_selector    : port bscu.Select_Alternate -> selector.select_alternate;
-	
+	 
 	
 	-- Added bscu to accumulator_valve (new)
 	bscu_to_accumulator_valve : port bscu.Select_Alternate -> accumulator_valve.select_alternate;
@@ -217,7 +217,7 @@ connections
 	--  We see that as a physical model, not a logical one.
 	bskid_to_wheel      : port blue_skid.output -> wheel.blue_input;
 	gskid_to_wheel      : port green_skid.output -> wheel.green_input;
-	
+	 
 	-- Connect the output from wheel to the bscu here
 	wheel_to_bscu		: port wheel.output_realized_pressure -> bscu.wheel_pressure 
 	   {Communication_Properties::Timing => delayed; };
@@ -228,32 +228,25 @@ connections
 	
 	
 	annex agree {**
-		
+		 
 		eq test : common::command.pedal = pedals.signal1;	
 		fun pedal_pressed(pedal: common::command.pedal): bool = pedal.val > 0.0;
-		
+		 
 		eq pedals_pressed : bool = 
 			pedal_pressed(pedals.signal1) and pedal_pressed(pedals.signal2); 
-		
+		 
 		eq no_skid : bool = not bscu.cmd_nor.activate_antiskid and
 						    not bscu.cmd_alt.activate_antiskid;
 		
 		-- To represent brake pressure applied, we would need a notion of 
 		-- values sent along a bus, and I don't know how to do this in AADL.
 		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
-		
+	 	  
 		-- Top level contract
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
-			pre(pedals_pressed) and pedals_pressed and no_skid => brake_pressure;
+			true -> (pre(pedals_pressed) and pedals_pressed and no_skid => brake_pressure);
 
-      ------------------------------------------------------------------------------------------
-      -- MWW: Apologies!
-      -- TEMPORARY HACKS to ensure that all failure nodes are included in program to be analyzed
-      ------------------------------------------------------------------------------------------
-      
-      -- eq dummy1 : common::pressure.i = faults.pressure_fail_to(common::pressure.i {val = 0.0}, 0.0, false);
-      -- eq dummy2 : real = faults.fail_to(0.0, 0.0, false);
-		
+ 		
 	**};
 
    annex safety{**

@@ -1,44 +1,17 @@
 package edu.umn.cs.crisys.safety.analysis.transform;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.eclipse.emf.ecore.EObject;
-import org.osate.aadl2.AnnexSubclause;
-import org.osate.aadl2.ComponentClassifier;
-import org.osate.aadl2.ComponentImplementation;
-import org.osate.annexsupport.AnnexUtil;
-
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNodeBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
-import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
-
-import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.DummyVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.ReplaceIdVisitor;
-import edu.umn.cs.crisys.safety.safety.FaultStatement;
-import edu.umn.cs.crisys.safety.safety.SafetyContract;
-import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
-import edu.umn.cs.crisys.safety.safety.SafetyPackage;
-import edu.umn.cs.crisys.safety.safety.SpecStatement;
-import jkind.lustre.IdExpr;
-import jkind.lustre.Node;
 
 public class AddFaultsToAgree implements AgreeAutomater {
 
 	private static boolean transformFlag = false;
 
 	
-	/*
+	/* For each AgreeNode:
 	 * ! 1. Find the set of "faulty" outputs. Ensure that only one fault occurs per output
 	 * (test: print them & verify)
 	 * 		We need to map "faulty" outputs as they are define in the error 
@@ -58,6 +31,25 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * ! 6. For each of the "faulty" outputs assign it to the appropriate "fault" name node output.
 	 * (test: print updated AST)
 	 *
+	 * For the top-level node:
+	 * 	
+	 * ! 1. For each subcomponent node
+		For each subcomponent fault (depth-first)
+			0. Perform a traversal to find all the node/fault pairs
+			1a. Define an unconstrained local eq. to represent each fault-event 
+			1b. Define a constrained local eq. to assign fault-active value depending on 
+				fault duration in node.
+			1c. Assign subcomponent fault input to fault-active eq with assertions (yay!) 
+	            (test: print updated AST)
+		! 2. Assign faults-active equation to sum of all fault-active values
+			(test: print updated AST)
+		3. Assert that this value is <= 1 (FOR NOW!)	
+			(test: print updated AST)
+		4. Use shiny new fault annex to perform safety analysis
+			(test: analysis results)
+	 
+
+
 	 */
 
 	/*
@@ -96,12 +88,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return program;
 	}
 
-	/*		{ 
-	AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
-	pp.visit(program);
-	System.out.println(pp.toString());
-}
-*/		
 	/*
 	 * setTransformFlag:
 	 * @param none
@@ -125,17 +111,4 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	}
 
 
-	/*
-	private AgreeNode setTopNodeFaultSpecification(AgreeNode node) {
-		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
-
-		List<SpecStatement> specs = collapseAnnexes(getSafetyAnnexes(node, true));
-		System.out.println("For TOP LEVEL node: " + node.id + " safety annex specifications are: ");
-		for (SpecStatement s : specs) {
-			System.out.println(s);
-		}
-
-		return nb.build();
-	}
-	*/
 }

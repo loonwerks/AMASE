@@ -30,7 +30,7 @@ features
 
 end pump;
 
-
+-- Note: need to fix this!
 system implementation pump.i
 
 end pump.i;

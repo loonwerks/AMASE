@@ -80,8 +80,8 @@ annex EMV2 {**
 annex agree {**
 	
 	-- Shouldn't get pressure from both inputs at the same time.'	
-	guarantee "Either green or blue or neither has positive pressure." : 
-               not(green_input.val > 0.0 and blue_input.val > 0.0);
+	-- assume "Either green or blue or neither has positive pressure." : 
+   --            not(green_input.val > 0.0 and blue_input.val > 0.0);
                
     -- The pressure that we output to the bscu is not actually pressure, but
     -- just a value that shows how much pressure is coming into the wheel.

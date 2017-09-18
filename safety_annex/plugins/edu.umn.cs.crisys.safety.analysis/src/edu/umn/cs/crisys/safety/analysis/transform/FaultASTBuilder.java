@@ -60,35 +60,25 @@ public class FaultASTBuilder {
 		globalLustreNodes.add(node);
 	}
 
-	private Node getLustreNode(String fnName, List<Node> nodes) {
-		for (Node node : nodes) {
-			if (node.id.equals(fnName)) {
-				return node;
-			}
-		}
-		return null;
-		
-	}
-
 	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
 		NodeDefExpr defExpr = SafetyUtil.getFaultNode(faultStatement);
 
 		// to keep consistent with AGREE, we will use the AGREE functions
 		// to construct names
 		String fnName = AgreeTypeUtils.getNodeName(defExpr);
-		fault.faultNode = this.getLustreNode(fnName, globalLustreNodes);
+		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
 		if (fault.faultNode == null) {
 			// This is a pretty random experiment...if we can get AgreeASTBuilder to 
 			// build us a node, we will add it to our list and return it.
 			builder.caseNodeDefExpr(defExpr);
-			fault.faultNode = this.getLustreNode(fnName, AgreeASTBuilder.globalNodes);
+			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
 			if (fault.faultNode != null) {
 				this.addGlobalLustreNode(fault.faultNode);
 			} else {
 				throw new SafetyException("for fault node: " + defExpr.getFullName() + " unable to find it in AgreeProgram.  As a temporary hack, please add a call to this node somewhere in your AGREE annex.");
 			}
 		}
-		System.out.println("For Agree Node: " + agreeNode.id + " we have found fault node: " + fault.faultNode.id);
+		// System.out.println("For Agree Node: " + agreeNode.id + " we have found fault node: " + fault.faultNode.id);
 	}
 
 	public static int findParam(String param, List<jkind.lustre.VarDecl> theList) {
@@ -107,7 +97,7 @@ public class FaultASTBuilder {
 			// translating expression HERE.
 			Expr result = builder.doSwitch(input.getNom_conn().get(i));
 			fault.faultInputMap.put(param, result);
-			System.out.println("Fault node input: " + param + " is assigned " + result.toString());
+			// System.out.println("Fault node input: " + param + " is assigned " + result.toString());
 		}
 	}
 
@@ -121,7 +111,7 @@ public class FaultASTBuilder {
 				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
 			}
 			fault.faultOutputMap.put(param, (IdExpr)result);
-			System.out.println("Fault node output: " + result + "is assigned to node output: " + param);
+			// System.out.println("Fault node output: " + result + "is assigned to node output: " + param);
 			// translating NestedDotId to AgreeVars...how?
 		}
 	}
@@ -226,7 +216,9 @@ public class FaultASTBuilder {
 
 	public String mkUniqueFaultId(FaultStatement fstmt) {
 		faultCounter++; 
-		return this.agreeNode.id + "__" + "fault_" + faultCounter;
+		String elem = this.agreeNode.id + "__" + "fault_" + faultCounter;
+		System.out.println("Constructed fault: " + elem);
+		return elem;
 	}
 	
 	public Fault buildFault(FaultStatement fstmt) {

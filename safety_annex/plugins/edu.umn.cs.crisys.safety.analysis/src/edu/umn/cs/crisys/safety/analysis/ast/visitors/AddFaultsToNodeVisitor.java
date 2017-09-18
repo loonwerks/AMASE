@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+
+import org.osate.aadl2.instance.ComponentInstance;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -22,17 +21,24 @@ import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
+import edu.umn.cs.crisys.safety.safety.TransientConstraint;
+import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
+import jkind.lustre.BoolExpr;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
+import jkind.lustre.IfThenElseExpr;
+import jkind.lustre.IntExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
+import jkind.lustre.UnaryExpr;
+import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
-import jkind.lustre.visitors.ExprMapVisitor;
 
 
 // If agreeNode is non-null, then we scope the replacement to only occur in one node.
@@ -40,9 +46,20 @@ import jkind.lustre.visitors.ExprMapVisitor;
 
 public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
-	List<Node> globalLustreNodes;
-	AgreeNode topNode; 
-	Set<String> faultyVars = new HashSet<>();
+	private List<Node> globalLustreNodes;
+	private AgreeNode topNode; 
+	private Set<String> faultyVars = new HashSet<>();
+	
+	// Fault map: stores the faults associated with a node.
+	// Keying off component instance rather than AgreeNode, just so we don't
+	// have problems with "stale" AgreeNode references during transformations.
+
+	// It is used to properly set up the top-level node for triggering faults. 
+	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>(); 
+	
+	public Map<ComponentInstance, List<Fault>> getFaultMap() {
+		return faultMap;
+	}
 	
 	public AddFaultsToNodeVisitor() {
 		super(new jkind.lustre.visitors.TypeMapVisitor());
@@ -52,8 +69,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public AgreeProgram visit(AgreeProgram program) {
 		globalLustreNodes = new ArrayList<>(program.globalLustreNodes);
 		this.topNode = program.topNode;  
-		program = super.visit(program);
-		program = new AgreeProgram(program.agreeNodes, globalLustreNodes, program.globalTypes, program.topNode, program.containsRealTimePatterns);
+		
+		// do not call back to 'super'.  This is BROKEN!
+		AgreeNode topNode = this.visit(program.topNode);
+
+		program = new AgreeProgram(program.agreeNodes, globalLustreNodes, program.globalTypes, topNode, program.containsRealTimePatterns);
 		return program;
 	}
 	
@@ -67,8 +87,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		boolean isTop = (node == this.topNode);
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop); 
 		faults = renameFaultEqs(faults);
-		faultyVars = gatherFaultyOutputs(faults, node);
 		
+		if (faultMap.containsKey(node.compInst)) {
+			System.out.println("Node: " + node.id + " has already been visited!");
+			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
+		}
+		faultMap.put(node.compInst, faults);
+
+		faultyVars = gatherFaultyOutputs(faults, node);
 		node = super.visit(node);
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
@@ -76,8 +102,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		addFaultInputs(faults, nb);
 		addFaultLocalEqsAndAsserts(faults, nb); 
 		addFaultNodeEqs(faults, nb); 
+
+		if (isTop) {
+			topNode = node;
+			addTopLevelFaultDeclarations(node, new ArrayList<>(), nb);
+			addTopLevelFaultOccurrenceConstraints(node, nb);
+		}
 		
 		node = nb.build();		
+		
 		faultyVars = oldFaultyVars;
 		return node;
 	}
@@ -91,7 +124,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	public void addFaultInputs(List<Fault> faults, AgreeNodeBuilder nb) {
 		for (Fault f: faults) {
-			nb.addInput(new AgreeVar(createFaultId(f.id), NamedType.BOOL, f.faultStatement));
+			nb.addInput(new AgreeVar(createFaultNodeInputId(f.id), NamedType.BOOL, f.faultStatement));
 		}
 	}
 	
@@ -111,9 +144,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if (f.faultInputMap.containsKey(vd.id)) {
 					throw new SafetyException("Trigger input for fault node should not be explicitly assigned by user.");
 				}
-				actual = new IdExpr(createFaultId(f.id));
+				actual = new IdExpr(createFaultNodeInputId(f.id));
 			} else {
 				actual = f.faultInputMap.get(vd.id);
+				
+				// do any name conversions on the stored expression.
+				actual = actual.accept(this);
+				
 				if (actual == null) {
 					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");					
 				}
@@ -134,8 +171,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			
 			AgreeEquation eq = new AgreeEquation(lhs, 
 					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)), f.faultStatement);
-			System.out.println("Attempting to print node call: " + f.faultNode.id);
-			System.out.println(eq.toString());
 			nb.addLocalEquation(eq);
 			
 			for(Map.Entry<String, IdExpr> outMap: f.faultOutputMap.entrySet()) {
@@ -234,7 +269,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return outputSet;
 	}
 	
-	public String createFaultId(String base) {
+	public String createFaultEventId(String base) {
+		return "__fault__event__" + base;		
+	}
+	
+	public String createFaultActiveId(String base) {
+		return "__fault__active__" + base;		
+	}
+	
+	public String createFaultNodeInputId(String base) {
 		return "__fault__trigger__" + base;		
 	}
 	
@@ -267,4 +310,157 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return faults;
 	}
 
+	/*
+	 * 1. For each subcomponent node
+		For each subcomponent fault (depth-first)
+			0. Perform a traversal to find all the node/fault pairs
+			1a. Define an unconstrained local eq. to represent each fault-event 
+			1b. Define a constrained local eq. to assign fault-active value depending on 
+				fault duration in node.
+			1c. Assign subcomponent fault input to fault-active eq with assertions (yay!) 
+	(test: print updated AST)
+		2. Assign faults-active equation to sum of all fault-active values
+			(test: print updated AST)
+		3. Assert that this value is <= 1 (FOR NOW!)	
+			(test: print updated AST)
+		4. Use shiny new fault annex to perform safety analysis
+			(test: analysis results)
+	 */
+
+	
+	public String addPathDelimiters(List<String> path, String var) {
+		String id = ""; 
+		for (String p: path) {
+			id = id + p + "__";
+		}
+		return id + var;
+	}
+
+	public Expr createPermanentExpr(Expr varId, Expr expr) {
+		Expr latch = 
+			new BinaryExpr(expr, BinaryOp.ARROW, 
+				new BinaryExpr(expr, BinaryOp.OR, 
+					new UnaryExpr(UnaryOp.PRE, varId)));
+		Expr equate = 
+			new BinaryExpr(varId, BinaryOp.EQUAL, latch);
+		
+		return equate;
+	}
+	
+	public Expr createTransientExpr(Expr varId, Expr expr) {
+		Expr equate = 
+				new BinaryExpr(varId, BinaryOp.EQUAL, expr);
+		return equate;
+	}
+	
+	public void constrainFaultActive(Fault f, String nameBase, AgreeNodeBuilder builder) {
+		IdExpr eventExpr = new IdExpr(this.createFaultEventId(nameBase));
+		IdExpr activeExpr = new IdExpr(this.createFaultActiveId(nameBase));
+		Expr assertExpr;
+		
+		TemporalConstraint tc = f.duration.getTc();
+		if (tc instanceof PermanentConstraint) {
+			assertExpr = createPermanentExpr(activeExpr, eventExpr); 
+		} else if (tc instanceof TransientConstraint){
+			System.out.println("WARNING: ignoring duration on transient faults");
+			assertExpr = createTransientExpr(activeExpr, eventExpr);
+		} else {
+			throw new SafetyException("Unknown constraint type during translation of fault "+ f.id);
+		}
+		builder.addAssertion(new AgreeStatement("", assertExpr, f.faultStatement));
+	}
+
+	public void mapFaultActiveToNodeInterface(Fault f, List<String> path, String base, AgreeNodeBuilder builder) {
+		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
+		String activeVarId = this.createFaultActiveId(base);
+		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, new IdExpr(activeVarId));
+		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
+	}
+	
+	
+	public void addTopLevelFaultDeclarations(
+			AgreeNode currentNode, 
+			List<String> path, 
+			AgreeNodeBuilder nb) {
+		
+		List<Fault> faults = this.faultMap.get(currentNode.compInst) ; 
+		
+		// Add unconstrained input and constrained local to represent fault event and 
+		// whether or not fault is currently active.
+		for (Fault f: faults) {
+			String base = addPathDelimiters(path, f.id);
+			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
+			nb.addInput(new AgreeVar(this.createFaultActiveId(base), NamedType.BOOL, f.faultStatement));
+
+			// constrain fault-active depending on transient / permanent & map it to a 
+			// fault in the node interface
+			constrainFaultActive(f, base, nb);
+			mapFaultActiveToNodeInterface(f, path, base, nb);
+		}
+		
+		for (AgreeNode n: currentNode.subNodes) {
+			List<String> ext = new ArrayList<>(path);
+			ext.add(n.id);
+			addTopLevelFaultDeclarations(n, ext, nb);
+		}
+	}
+
+	public Expr createSumExpr(Expr cond) {
+		return new IfThenElseExpr(cond, new IntExpr(1), new IntExpr(0));
+	}
+	
+	public void getFaultCountExprList(
+			AgreeNode currentNode, 
+			List<String> path, 
+			List<Expr> sumExprs) {
+
+		List<Fault> faults = this.faultMap.get(currentNode.compInst) ; 
+		for (Fault f: faults) {
+			String base = addPathDelimiters(path, f.id);
+			sumExprs.add(
+				createSumExpr(new IdExpr(this.createFaultActiveId(base))));
+		}
+		
+		for (AgreeNode n: currentNode.subNodes) {
+			List<String> ext = new ArrayList<>(path);
+			ext.add(n.id);
+			getFaultCountExprList(n, ext, sumExprs);
+		}
+	}
+	
+	public Expr buildFaultCountExpr(List<Expr> exprList, int index) {
+		if (index > exprList.size() - 1) {
+			return new IntExpr(0);
+		}
+		else if (index == exprList.size() - 1) {
+			return exprList.get(index);
+		} else {
+			return new BinaryExpr(exprList.get(index), BinaryOp.PLUS, 
+					buildFaultCountExpr(exprList, index+1));
+		}
+	}
+	
+	public void addTopLevelFaultOccurrenceConstraints(
+			AgreeNode topNode,
+			AgreeNodeBuilder builder) {
+		
+		// add a global fault count
+		String id = "__fault__global_count"; 
+		builder.addInput(new AgreeVar(id, NamedType.INT, topNode.reference));
+
+		// assign it.
+		List<Expr> sumExprs = new ArrayList<>(); 
+		getFaultCountExprList(topNode, new ArrayList<>(), sumExprs);
+		Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
+		Expr equate = 
+			new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
+		builder.addAssertion(new AgreeStatement("", equate, topNode.reference));
+
+		// assert that the value is <= 1
+		Expr lessEqual = 
+			new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(1));
+		builder.addAssertion(new AgreeStatement("", lessEqual, topNode.reference));
+		
+		// and Viola!
+	}
 }

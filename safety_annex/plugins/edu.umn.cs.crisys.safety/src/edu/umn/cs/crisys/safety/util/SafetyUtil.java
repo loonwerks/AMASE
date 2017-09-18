@@ -20,6 +20,7 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import jkind.lustre.Node;
 
 public class SafetyUtil {
 
@@ -115,4 +116,13 @@ public class SafetyUtil {
 		return null;
 	}
 	
+	public static Node findNode(String fnName, List<Node> nodes) {
+		for (Node node : nodes) {
+			if (node.id.equals(fnName)) {
+				return node;
+			}
+		}
+		return null;
+		
+	}
 }
