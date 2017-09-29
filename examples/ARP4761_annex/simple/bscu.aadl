@@ -5,6 +5,7 @@ public
 with common;
 with platform;
 with Base_Types;
+with faults;
 
 -- This is the implementation of the BSCU of the system
 -- The BSCU contains two subsystems.

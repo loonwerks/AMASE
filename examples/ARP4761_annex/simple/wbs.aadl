@@ -11,7 +11,6 @@ with power;
 with pedals;
 -- with ARP4761;
 -- with EMV2;
-with faults;
 
 
 
@@ -241,7 +240,7 @@ connections
 		-- To represent brake pressure applied, we would need a notion of 
 		-- values sent along a bus, and I don't know how to do this in AADL.
 		eq brake_pressure : bool = wheel.green_input.val > 0.0 or wheel.blue_input.val > 0.0;
-	 	  
+	 	   
 		-- Top level contract
 		lemma "Pedal pressed and no skid implies brake pressure applied" : 
 			true -> (pre(pedals_pressed) and pedals_pressed and no_skid => brake_pressure);
@@ -250,9 +249,8 @@ connections
 	**};
 
    annex safety{**
-      -- No faults, but top-level contract specification.  For the moment,
-      -- we have hard-coded a single fault assumption.  We will fix this 
-      -- shortly!
+      -- No faults, but top-level contract specification.  
+      analyze : max 1 fault
    **};
 	
 end wbs.federated;
