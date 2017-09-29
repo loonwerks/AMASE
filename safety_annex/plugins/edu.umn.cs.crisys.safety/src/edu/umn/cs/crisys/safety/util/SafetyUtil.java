@@ -8,6 +8,7 @@ import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 import org.osate.annexsupport.AnnexUtil;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
@@ -68,6 +69,8 @@ public class SafetyUtil {
 		comp = node.compInst.getClassifier();
 		if (!isTop && comp instanceof ComponentImplementation) {
 			comp = ((ComponentImplementation)comp).getType();
+		} else if (isTop && node.compInst instanceof SystemInstanceImpl) {
+			comp = ((SystemInstanceImpl)node.compInst).getComponentImplementation(); 
 		}
 
 

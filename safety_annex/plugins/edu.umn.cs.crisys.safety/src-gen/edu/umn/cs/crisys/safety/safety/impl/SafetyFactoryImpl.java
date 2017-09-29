@@ -79,6 +79,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.SAFETY_CONTRACT_SUBCLAUSE: return createSafetyContractSubclause();
       case SafetyPackage.SAFETY_CONTRACT: return createSafetyContract();
       case SafetyPackage.FAULT_STATEMENT: return createFaultStatement();
+      case SafetyPackage.ANALYSIS_STATEMENT: return createAnalysisStatement();
       case SafetyPackage.INPUT_STATEMENT: return createInputStatement();
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
@@ -263,6 +264,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     FaultStatementImpl faultStatement = new FaultStatementImpl();
     return faultStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnalysisStatement createAnalysisStatement()
+  {
+    AnalysisStatementImpl analysisStatement = new AnalysisStatementImpl();
+    return analysisStatement;
   }
 
   /**

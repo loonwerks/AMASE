@@ -154,6 +154,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createFaultStatementAdapter();
       }
       @Override
+      public Adapter caseAnalysisStatement(AnalysisStatement object)
+      {
+        return createAnalysisStatementAdapter();
+      }
+      @Override
       public Adapter caseInputStatement(InputStatement object)
       {
         return createInputStatementAdapter();
@@ -506,6 +511,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFaultStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement <em>Analysis Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisStatement
+   * @generated
+   */
+  public Adapter createAnalysisStatementAdapter()
   {
     return null;
   }

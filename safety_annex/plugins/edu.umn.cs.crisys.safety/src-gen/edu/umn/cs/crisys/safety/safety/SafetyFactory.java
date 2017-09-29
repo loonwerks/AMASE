@@ -158,6 +158,15 @@ public interface SafetyFactory extends EFactory
   FaultStatement createFaultStatement();
 
   /**
+   * Returns a new object of class '<em>Analysis Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Analysis Statement</em>'.
+   * @generated
+   */
+  AnalysisStatement createAnalysisStatement();
+
+  /**
    * Returns a new object of class '<em>Input Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

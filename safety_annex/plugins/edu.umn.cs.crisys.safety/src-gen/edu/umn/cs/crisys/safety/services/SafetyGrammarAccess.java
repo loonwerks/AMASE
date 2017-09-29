@@ -143,59 +143,97 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class SpecStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.SpecStatement");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cFaultStatementAction_0 = (Action)cGroup.eContents().get(0);
-		private final Keyword cFaultKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cStrAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cStrSTRINGTerminalRuleCall_2_0 = (RuleCall)cStrAssignment_2.eContents().get(0);
-		private final Keyword cColonKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cFaultDefNameAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cFaultDefNameNestedDotIDParserRuleCall_4_0 = (RuleCall)cFaultDefNameAssignment_4.eContents().get(0);
-		private final Keyword cLeftCurlyBracketKeyword_5 = (Keyword)cGroup.eContents().get(5);
-		private final Assignment cFaultDefinitionsAssignment_6 = (Assignment)cGroup.eContents().get(6);
-		private final RuleCall cFaultDefinitionsFaultSubcomponentParserRuleCall_6_0 = (RuleCall)cFaultDefinitionsAssignment_6.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final Action cFaultStatementAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Keyword cFaultKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Assignment cStrAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
+		private final RuleCall cStrSTRINGTerminalRuleCall_0_2_0 = (RuleCall)cStrAssignment_0_2.eContents().get(0);
+		private final Keyword cColonKeyword_0_3 = (Keyword)cGroup_0.eContents().get(3);
+		private final Assignment cFaultDefNameAssignment_0_4 = (Assignment)cGroup_0.eContents().get(4);
+		private final RuleCall cFaultDefNameNestedDotIDParserRuleCall_0_4_0 = (RuleCall)cFaultDefNameAssignment_0_4.eContents().get(0);
+		private final Keyword cLeftCurlyBracketKeyword_0_5 = (Keyword)cGroup_0.eContents().get(5);
+		private final Assignment cFaultDefinitionsAssignment_0_6 = (Assignment)cGroup_0.eContents().get(6);
+		private final RuleCall cFaultDefinitionsFaultSubcomponentParserRuleCall_0_6_0 = (RuleCall)cFaultDefinitionsAssignment_0_6.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_0_7 = (Keyword)cGroup_0.eContents().get(7);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Action cAnalysisStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Keyword cAnalyzeKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Keyword cColonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
+		private final Keyword cMaxKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
+		private final Assignment cMaxFaultsAssignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
+		private final RuleCall cMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0 = (RuleCall)cMaxFaultsAssignment_1_4.eContents().get(0);
+		private final Keyword cFaultKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
 		
 		//@ Override SpecStatement:
 		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
-		//	'{' faultDefinitions+=FaultSubcomponent* '}';
+		//	'{' faultDefinitions+=FaultSubcomponent* '}'
+		//	| {AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
 		@Override public ParserRule getRule() { return rule; }
 
+		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
+		//{AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault'
+		public Alternatives getAlternatives() { return cAlternatives; }
+
 		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}'
-		public Group getGroup() { return cGroup; }
+		public Group getGroup_0() { return cGroup_0; }
 
 		//{FaultStatement}
-		public Action getFaultStatementAction_0() { return cFaultStatementAction_0; }
+		public Action getFaultStatementAction_0_0() { return cFaultStatementAction_0_0; }
 
 		//'fault'
-		public Keyword getFaultKeyword_1() { return cFaultKeyword_1; }
+		public Keyword getFaultKeyword_0_1() { return cFaultKeyword_0_1; }
 
 		//str=STRING?
-		public Assignment getStrAssignment_2() { return cStrAssignment_2; }
+		public Assignment getStrAssignment_0_2() { return cStrAssignment_0_2; }
 
 		//STRING
-		public RuleCall getStrSTRINGTerminalRuleCall_2_0() { return cStrSTRINGTerminalRuleCall_2_0; }
+		public RuleCall getStrSTRINGTerminalRuleCall_0_2_0() { return cStrSTRINGTerminalRuleCall_0_2_0; }
 
 		//':'
-		public Keyword getColonKeyword_3() { return cColonKeyword_3; }
+		public Keyword getColonKeyword_0_3() { return cColonKeyword_0_3; }
 
 		//faultDefName=NestedDotID
-		public Assignment getFaultDefNameAssignment_4() { return cFaultDefNameAssignment_4; }
+		public Assignment getFaultDefNameAssignment_0_4() { return cFaultDefNameAssignment_0_4; }
 
 		//NestedDotID
-		public RuleCall getFaultDefNameNestedDotIDParserRuleCall_4_0() { return cFaultDefNameNestedDotIDParserRuleCall_4_0; }
+		public RuleCall getFaultDefNameNestedDotIDParserRuleCall_0_4_0() { return cFaultDefNameNestedDotIDParserRuleCall_0_4_0; }
 
 		//'{'
-		public Keyword getLeftCurlyBracketKeyword_5() { return cLeftCurlyBracketKeyword_5; }
+		public Keyword getLeftCurlyBracketKeyword_0_5() { return cLeftCurlyBracketKeyword_0_5; }
 
 		//faultDefinitions+=FaultSubcomponent*
-		public Assignment getFaultDefinitionsAssignment_6() { return cFaultDefinitionsAssignment_6; }
+		public Assignment getFaultDefinitionsAssignment_0_6() { return cFaultDefinitionsAssignment_0_6; }
 
 		//FaultSubcomponent
-		public RuleCall getFaultDefinitionsFaultSubcomponentParserRuleCall_6_0() { return cFaultDefinitionsFaultSubcomponentParserRuleCall_6_0; }
+		public RuleCall getFaultDefinitionsFaultSubcomponentParserRuleCall_0_6_0() { return cFaultDefinitionsFaultSubcomponentParserRuleCall_0_6_0; }
 
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_7() { return cRightCurlyBracketKeyword_7; }
+		public Keyword getRightCurlyBracketKeyword_0_7() { return cRightCurlyBracketKeyword_0_7; }
+
+		//{AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault'
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{AnalysisStatement}
+		public Action getAnalysisStatementAction_1_0() { return cAnalysisStatementAction_1_0; }
+
+		//'analyze'
+		public Keyword getAnalyzeKeyword_1_1() { return cAnalyzeKeyword_1_1; }
+
+		//':'
+		public Keyword getColonKeyword_1_2() { return cColonKeyword_1_2; }
+
+		//'max'
+		public Keyword getMaxKeyword_1_3() { return cMaxKeyword_1_3; }
+
+		//maxFaults=INTEGER_LIT
+		public Assignment getMaxFaultsAssignment_1_4() { return cMaxFaultsAssignment_1_4; }
+
+		//INTEGER_LIT
+		public RuleCall getMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0() { return cMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0; }
+
+		//'fault'
+		public Keyword getFaultKeyword_1_5() { return cFaultKeyword_1_5; }
 	}
 
 	public class FaultSubcomponentElements extends AbstractParserRuleElementFinder {
@@ -1121,7 +1159,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//@ Override SpecStatement:
 	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
-	//	'{' faultDefinitions+=FaultSubcomponent* '}';
+	//	'{' faultDefinitions+=FaultSubcomponent* '}'
+	//	| {AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
 	}

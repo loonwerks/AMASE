@@ -796,6 +796,52 @@ public interface SafetyPackage extends EPackage
   int FAULT_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 3;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl <em>Analysis Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnalysisStatement()
+   * @generated
+   */
+  int ANALYSIS_STATEMENT = 15;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANALYSIS_STATEMENT__OWNED_ELEMENT = SPEC_STATEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANALYSIS_STATEMENT__OWNED_COMMENT = SPEC_STATEMENT__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Max Faults</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANALYSIS_STATEMENT__MAX_FAULTS = SPEC_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Analysis Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANALYSIS_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.InputStatementImpl <em>Input Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -803,7 +849,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 15;
+  int INPUT_STATEMENT = 16;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -858,7 +904,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 16;
+  int OUTPUT_STATEMENT = 17;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -913,7 +959,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 17;
+  int DURATION_STATEMENT = 18;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -968,7 +1014,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 18;
+  int TRIGGER_STATEMENT = 19;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1023,7 +1069,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPermanentConstraint()
    * @generated
    */
-  int PERMANENT_CONSTRAINT = 19;
+  int PERMANENT_CONSTRAINT = 20;
 
   /**
    * The number of structural features of the '<em>Permanent Constraint</em>' class.
@@ -1042,7 +1088,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTransientConstraint()
    * @generated
    */
-  int TRANSIENT_CONSTRAINT = 20;
+  int TRANSIENT_CONSTRAINT = 21;
 
   /**
    * The number of structural features of the '<em>Transient Constraint</em>' class.
@@ -1061,7 +1107,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getMustCondition()
    * @generated
    */
-  int MUST_CONDITION = 21;
+  int MUST_CONDITION = 22;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -1089,7 +1135,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEnablerCondition()
    * @generated
    */
-  int ENABLER_CONDITION = 22;
+  int ENABLER_CONDITION = 23;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -1117,7 +1163,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqValue()
    * @generated
    */
-  int EQ_VALUE = 23;
+  int EQ_VALUE = 24;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1172,7 +1218,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getIntervalEq()
    * @generated
    */
-  int INTERVAL_EQ = 24;
+  int INTERVAL_EQ = 25;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1227,7 +1273,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSetEq()
    * @generated
    */
-  int SET_EQ = 25;
+  int SET_EQ = 26;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1291,7 +1337,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getRangeEq()
    * @generated
    */
-  int RANGE_EQ = 26;
+  int RANGE_EQ = 27;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1355,7 +1401,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getClosedInterval()
    * @generated
    */
-  int CLOSED_INTERVAL = 27;
+  int CLOSED_INTERVAL = 28;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1392,7 +1438,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenLeftInterval()
    * @generated
    */
-  int OPEN_LEFT_INTERVAL = 28;
+  int OPEN_LEFT_INTERVAL = 29;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1429,7 +1475,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenRightInterval()
    * @generated
    */
-  int OPEN_RIGHT_INTERVAL = 29;
+  int OPEN_RIGHT_INTERVAL = 30;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1466,7 +1512,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenInterval()
    * @generated
    */
-  int OPEN_INTERVAL = 30;
+  int OPEN_INTERVAL = 31;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1744,6 +1790,27 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EReference getFaultStatement_FaultDefinitions();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement <em>Analysis Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Analysis Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisStatement
+   * @generated
+   */
+  EClass getAnalysisStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getMaxFaults <em>Max Faults</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Max Faults</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisStatement#getMaxFaults()
+   * @see #getAnalysisStatement()
+   * @generated
+   */
+  EAttribute getAnalysisStatement_MaxFaults();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.InputStatement <em>Input Statement</em>}'.
@@ -2347,6 +2414,24 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EReference FAULT_STATEMENT__FAULT_DEFINITIONS = eINSTANCE.getFaultStatement_FaultDefinitions();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl <em>Analysis Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnalysisStatement()
+     * @generated
+     */
+    EClass ANALYSIS_STATEMENT = eINSTANCE.getAnalysisStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Max Faults</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ANALYSIS_STATEMENT__MAX_FAULTS = eINSTANCE.getAnalysisStatement_MaxFaults();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.InputStatementImpl <em>Input Statement</em>}' class.

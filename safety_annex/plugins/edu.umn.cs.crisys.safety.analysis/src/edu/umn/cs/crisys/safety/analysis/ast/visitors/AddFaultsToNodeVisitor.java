@@ -20,6 +20,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
+import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
@@ -105,8 +106,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		if (isTop) {
 			topNode = node;
+			int maxFaults = this.gatherTopLevelFaultCount(node);
 			addTopLevelFaultDeclarations(node, new ArrayList<>(), nb);
-			addTopLevelFaultOccurrenceConstraints(node, nb);
+			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		}
 		
 		node = nb.build();		
@@ -310,6 +312,32 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return faults;
 	}
 
+	public int gatherTopLevelFaultCount(AgreeNode node) {
+		int maxFaults = 1;
+		boolean found = false;
+
+		List<SpecStatement> specs = 
+			SafetyUtil.collapseAnnexes(
+				SafetyUtil.getSafetyAnnexes(node, true));
+
+		 
+		for (SpecStatement s : specs) {
+			if (s instanceof AnalysisStatement) {
+				AnalysisStatement as = (AnalysisStatement)s;
+				maxFaults = Integer.valueOf(as.getMaxFaults());
+				if (maxFaults < 0) {
+					throw new SafetyException("Maximum number of faults must be non-negative.");
+				}
+				if (found) {
+					throw new SafetyException("Multiple analysis specifications found.  Only one can be processed");
+				}
+				found = true;
+			} 
+		}
+		return maxFaults;
+	}
+	
+	
 	/*
 	 * 1. For each subcomponent node
 		For each subcomponent fault (depth-first)
@@ -441,6 +469,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	public void addTopLevelFaultOccurrenceConstraints(
+			int maxFaults, 
 			AgreeNode topNode,
 			AgreeNodeBuilder builder) {
 		
@@ -458,7 +487,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		// assert that the value is <= 1
 		Expr lessEqual = 
-			new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(1));
+			new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(maxFaults));
 		builder.addAssertion(new AgreeStatement("", lessEqual, topNode.reference));
 		
 		// and Viola!

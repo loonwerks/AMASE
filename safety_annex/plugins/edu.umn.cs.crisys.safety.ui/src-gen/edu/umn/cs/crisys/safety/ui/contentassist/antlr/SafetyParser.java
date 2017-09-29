@@ -38,6 +38,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 				private static final long serialVersionUID = 1L;
 				{
 					put(grammarAccess.getElementSafetyAccess().getAlternatives(), "rule__ElementSafety__Alternatives");
+					put(grammarAccess.getSpecStatementAccess().getAlternatives(), "rule__SpecStatement__Alternatives");
 					put(grammarAccess.getFaultSubcomponentAccess().getAlternatives(), "rule__FaultSubcomponent__Alternatives");
 					put(grammarAccess.getTemporalConstraintAccess().getAlternatives(), "rule__TemporalConstraint__Alternatives");
 					put(grammarAccess.getTriggerConditionAccess().getAlternatives(), "rule__TriggerCondition__Alternatives");
@@ -83,7 +84,8 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyLibraryAccess().getGroup(), "rule__SafetyLibrary__Group__0");
 					put(grammarAccess.getSafetySubclauseAccess().getGroup(), "rule__SafetySubclause__Group__0");
 					put(grammarAccess.getSafetyContractAccess().getGroup(), "rule__SafetyContract__Group__0");
-					put(grammarAccess.getSpecStatementAccess().getGroup(), "rule__SpecStatement__Group__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_0(), "rule__SpecStatement__Group_0__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_1(), "rule__SpecStatement__Group_1__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_0(), "rule__FaultSubcomponent__Group_0__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_0_6(), "rule__FaultSubcomponent__Group_0_6__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_1(), "rule__FaultSubcomponent__Group_1__0");
@@ -335,9 +337,10 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSafetyLibraryAccess().getContractAssignment_1(), "rule__SafetyLibrary__ContractAssignment_1");
 					put(grammarAccess.getSafetySubclauseAccess().getContractAssignment_1(), "rule__SafetySubclause__ContractAssignment_1");
 					put(grammarAccess.getSafetyContractAccess().getSpecsAssignment_1(), "rule__SafetyContract__SpecsAssignment_1");
-					put(grammarAccess.getSpecStatementAccess().getStrAssignment_2(), "rule__SpecStatement__StrAssignment_2");
-					put(grammarAccess.getSpecStatementAccess().getFaultDefNameAssignment_4(), "rule__SpecStatement__FaultDefNameAssignment_4");
-					put(grammarAccess.getSpecStatementAccess().getFaultDefinitionsAssignment_6(), "rule__SpecStatement__FaultDefinitionsAssignment_6");
+					put(grammarAccess.getSpecStatementAccess().getStrAssignment_0_2(), "rule__SpecStatement__StrAssignment_0_2");
+					put(grammarAccess.getSpecStatementAccess().getFaultDefNameAssignment_0_4(), "rule__SpecStatement__FaultDefNameAssignment_0_4");
+					put(grammarAccess.getSpecStatementAccess().getFaultDefinitionsAssignment_0_6(), "rule__SpecStatement__FaultDefinitionsAssignment_0_6");
+					put(grammarAccess.getSpecStatementAccess().getMaxFaultsAssignment_1_4(), "rule__SpecStatement__MaxFaultsAssignment_1_4");
 					put(grammarAccess.getFaultSubcomponentAccess().getFault_inAssignment_0_3(), "rule__FaultSubcomponent__Fault_inAssignment_0_3");
 					put(grammarAccess.getFaultSubcomponentAccess().getNom_connAssignment_0_5(), "rule__FaultSubcomponent__Nom_connAssignment_0_5");
 					put(grammarAccess.getFaultSubcomponentAccess().getFault_inAssignment_0_6_1(), "rule__FaultSubcomponent__Fault_inAssignment_0_6_1");

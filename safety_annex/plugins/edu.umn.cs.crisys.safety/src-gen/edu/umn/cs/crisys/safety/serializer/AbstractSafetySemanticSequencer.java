@@ -69,6 +69,7 @@ import com.rockwellcollins.atc.agree.agree.WheneverHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WheneverImpliesStatement;
 import com.rockwellcollins.atc.agree.agree.WheneverOccursStatement;
 import com.rockwellcollins.atc.agree.serializer.AgreeSemanticSequencer;
+import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
@@ -422,6 +423,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			}
 		else if (epackage == SafetyPackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
+			case SafetyPackage.ANALYSIS_STATEMENT:
+				sequence_SpecStatement(context, (AnalysisStatement) semanticObject); 
+				return; 
 			case SafetyPackage.CLOSED_INTERVAL:
 				sequence_Interval(context, (ClosedInterval) semanticObject); 
 				return; 
@@ -746,6 +750,25 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSafetySubclauseAccess().getContractSafetyContractParserRuleCall_1_0(), semanticObject.getContract());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SpecStatement returns AnalysisStatement
+	 *     Element returns AnalysisStatement
+	 *
+	 * Constraint:
+	 *     maxFaults=INTEGER_LIT
+	 */
+	protected void sequence_SpecStatement(ISerializationContext context, AnalysisStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.ANALYSIS_STATEMENT__MAX_FAULTS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.ANALYSIS_STATEMENT__MAX_FAULTS));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSpecStatementAccess().getMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0(), semanticObject.getMaxFaults());
 		feeder.finish();
 	}
 	

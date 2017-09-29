@@ -240,22 +240,22 @@ ruleSpecStatement returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-((
+(((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getSpecStatementAccess().getFaultStatementAction_0(),
+            grammarAccess.getSpecStatementAccess().getFaultStatementAction_0_0(),
             $current);
     }
 )
 	otherlv_1=Fault
     {
-    	newLeafNode(otherlv_1, grammarAccess.getSpecStatementAccess().getFaultKeyword_1());
+    	newLeafNode(otherlv_1, grammarAccess.getSpecStatementAccess().getFaultKeyword_0_1());
     }
 (
 (
 		lv_str_2_0=RULE_STRING
 		{
-			newLeafNode(lv_str_2_0, grammarAccess.getSpecStatementAccess().getStrSTRINGTerminalRuleCall_2_0()); 
+			newLeafNode(lv_str_2_0, grammarAccess.getSpecStatementAccess().getStrSTRINGTerminalRuleCall_0_2_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -272,12 +272,12 @@ ruleSpecStatement returns [EObject current=null]
 )?
 	otherlv_3=Colon
     {
-    	newLeafNode(otherlv_3, grammarAccess.getSpecStatementAccess().getColonKeyword_3());
+    	newLeafNode(otherlv_3, grammarAccess.getSpecStatementAccess().getColonKeyword_0_3());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameNestedDotIDParserRuleCall_4_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameNestedDotIDParserRuleCall_0_4_0()); 
 	    }
 		lv_faultDefName_4_0=ruleNestedDotID		{
 	        if ($current==null) {
@@ -295,12 +295,12 @@ ruleSpecStatement returns [EObject current=null]
 )
 	otherlv_5=LeftCurlyBracket
     {
-    	newLeafNode(otherlv_5, grammarAccess.getSpecStatementAccess().getLeftCurlyBracketKeyword_5());
+    	newLeafNode(otherlv_5, grammarAccess.getSpecStatementAccess().getLeftCurlyBracketKeyword_0_5());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefinitionsFaultSubcomponentParserRuleCall_6_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefinitionsFaultSubcomponentParserRuleCall_0_6_0()); 
 	    }
 		lv_faultDefinitions_6_0=ruleFaultSubcomponent		{
 	        if ($current==null) {
@@ -318,9 +318,54 @@ ruleSpecStatement returns [EObject current=null]
 )*
 	otherlv_7=RightCurlyBracket
     {
-    	newLeafNode(otherlv_7, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_7());
+    	newLeafNode(otherlv_7, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_0_7());
     }
 )
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getSpecStatementAccess().getAnalysisStatementAction_1_0(),
+            $current);
+    }
+)
+	otherlv_9=Analyze
+    {
+    	newLeafNode(otherlv_9, grammarAccess.getSpecStatementAccess().getAnalyzeKeyword_1_1());
+    }
+
+	otherlv_10=Colon
+    {
+    	newLeafNode(otherlv_10, grammarAccess.getSpecStatementAccess().getColonKeyword_1_2());
+    }
+
+	otherlv_11=Max
+    {
+    	newLeafNode(otherlv_11, grammarAccess.getSpecStatementAccess().getMaxKeyword_1_3());
+    }
+(
+(
+		lv_maxFaults_12_0=RULE_INTEGER_LIT
+		{
+			newLeafNode(lv_maxFaults_12_0, grammarAccess.getSpecStatementAccess().getMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"maxFaults",
+        		lv_maxFaults_12_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.INTEGER_LIT");
+	    }
+
+)
+)
+	otherlv_13=Fault
+    {
+    	newLeafNode(otherlv_13, grammarAccess.getSpecStatementAccess().getFaultKeyword_1_5());
+    }
+))
 ;
 
 

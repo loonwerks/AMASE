@@ -217,6 +217,16 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.ANALYSIS_STATEMENT:
+      {
+        AnalysisStatement analysisStatement = (AnalysisStatement)theEObject;
+        T result = caseAnalysisStatement(analysisStatement);
+        if (result == null) result = caseSpecStatement(analysisStatement);
+        if (result == null) result = caseAgree_SpecStatement(analysisStatement);
+        if (result == null) result = caseElement(analysisStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.INPUT_STATEMENT:
       {
         InputStatement inputStatement = (InputStatement)theEObject;
@@ -597,6 +607,22 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFaultStatement(FaultStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Analysis Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Analysis Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnalysisStatement(AnalysisStatement object)
   {
     return null;
   }

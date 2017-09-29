@@ -30,8 +30,9 @@ ElementSafety returns aadl2::Element:
 
 @Override 
 SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDotID  
-			'{' faultDefinitions+=(FaultSubcomponent)* '}' ;
-
+			'{' faultDefinitions+=(FaultSubcomponent)* '}' 
+	|	{AnalysisStatement} 'analyze' ':' 'max' (maxFaults=INTEGER_LIT) 'fault' 
+;
 	
 
 FaultSubcomponent returns FaultSubcomponent: 

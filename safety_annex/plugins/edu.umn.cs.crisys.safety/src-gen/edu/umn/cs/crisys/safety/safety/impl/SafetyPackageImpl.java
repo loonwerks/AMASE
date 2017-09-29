@@ -4,6 +4,7 @@ package edu.umn.cs.crisys.safety.safety.impl;
 
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 
+import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.AnnexLibrary;
 import edu.umn.cs.crisys.safety.safety.AnnexSubclause;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
@@ -160,6 +161,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass faultStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass analysisStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -586,6 +594,26 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getAnalysisStatement()
+  {
+    return analysisStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAnalysisStatement_MaxFaults()
+  {
+    return (EAttribute)analysisStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getInputStatement()
   {
     return inputStatementEClass;
@@ -990,6 +1018,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEF_NAME);
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEFINITIONS);
 
+    analysisStatementEClass = createEClass(ANALYSIS_STATEMENT);
+    createEAttribute(analysisStatementEClass, ANALYSIS_STATEMENT__MAX_FAULTS);
+
     inputStatementEClass = createEClass(INPUT_STATEMENT);
     createEAttribute(inputStatementEClass, INPUT_STATEMENT__FAULT_IN);
     createEReference(inputStatementEClass, INPUT_STATEMENT__NOM_CONN);
@@ -1087,6 +1118,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     safetyContractSubclauseEClass.getESuperTypes().add(this.getSafetySubclause());
     safetyContractEClass.getESuperTypes().add(this.getContract());
     faultStatementEClass.getESuperTypes().add(this.getSpecStatement());
+    analysisStatementEClass.getESuperTypes().add(this.getSpecStatement());
     inputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     outputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     durationStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
@@ -1143,6 +1175,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEAttribute(getFaultStatement_Str(), theEcorePackage.getEString(), "str", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFaultStatement_FaultDefName(), theAgreePackage.getNestedDotID(), null, "faultDefName", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFaultStatement_FaultDefinitions(), this.getFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(analysisStatementEClass, AnalysisStatement.class, "AnalysisStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAnalysisStatement_MaxFaults(), theEcorePackage.getEString(), "maxFaults", null, 0, 1, AnalysisStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inputStatementEClass, InputStatement.class, "InputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getInputStatement_Fault_in(), theEcorePackage.getEString(), "fault_in", null, 0, -1, InputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
