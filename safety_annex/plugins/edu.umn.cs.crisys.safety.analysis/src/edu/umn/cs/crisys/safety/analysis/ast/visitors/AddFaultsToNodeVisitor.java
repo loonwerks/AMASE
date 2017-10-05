@@ -50,6 +50,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private List<Node> globalLustreNodes;
 	private AgreeNode topNode; 
 	private Set<String> faultyVars = new HashSet<>();
+	private Map<String, String> theMap = new HashMap<>();
 	
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
@@ -186,7 +187,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
-		Map<String, String> theMap = new HashMap<>(); 
+		theMap = new HashMap<>(); 
 		for (AgreeVar eqVar: eqVars) {
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
 		}
@@ -199,6 +200,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		newFault.explanitoryText = f.explanitoryText; 
 		newFault.faultNode = f.faultNode; 
 		newFault.triggers = f.triggers;
+		
 		
 		if (!f.triggers.isEmpty()) {
 			throw new SafetyException("Triggers are currently unsupported for translation");
@@ -491,5 +493,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		builder.addAssertion(new AgreeStatement("", lessEqual, topNode.reference));
 		
 		// and Viola!
+	}
+	
+	/*
+	 * Public accessor for the map<agreeid, faultid> strings.
+	 */
+	public Map<String, String> getEqIdMap(){
+		return theMap;
 	}
 }

@@ -1,14 +1,20 @@
 package edu.umn.cs.crisys.safety.analysis.transform;
 
 
+import java.util.Map;
+
+import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
+import jkind.api.results.AnalysisResult;
 
 public class AddFaultsToAgree implements AgreeAutomater {
 
 	private static boolean transformFlag = false;
+	
+	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor(); 
 
 	
 	/* For each AgreeNode:
@@ -67,7 +73,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			return program;
 		}
 
-		AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
+		faultVisitor = new AddFaultsToNodeVisitor();
 		
 		try{
 			program = faultVisitor.visit(program);
@@ -95,9 +101,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * Sets the transform flag to true.
 	 */
 	public static void setTransformFlag(boolean flag) {
-
 		transformFlag = flag;
-
 	}
 
 	/*
@@ -108,6 +112,27 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 */
 	public static boolean getTransformFlag(){
 		return transformFlag;
+	}
+
+	@Override
+	public AgreeRenaming rename(AgreeRenaming renaming) {
+		
+		Map<String, String> theMap = faultVisitor.getEqIdMap();
+		
+		for(String key : theMap.keySet()) {
+			renaming.addExplicitRename(key, theMap.get(key));
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("Key: value = "+key + ", "+theMap.get(key));
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+		}
+		
+		return renaming;
+	}
+
+	@Override
+	public AnalysisResult transformResult(AnalysisResult res) {
+		// TODO Auto-generated method stub
+		return res;
 	}
 
 
