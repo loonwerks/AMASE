@@ -106,6 +106,16 @@ system FCC
 
   **};
 
+--	annex safety {**
+--		fault "OSAS-S-140 fault.": OSAS_S_140.req_with_fault {
+--			inputs: val_in <- acts_out.AILL;     
+--			outputs: acts_out.AILL <- val_out;    
+--			duration: permanent;
+--			--trigger: enabler{acts_fail.AILL} [0.001];
+--		}
+--		
+--	**};
+
 end FCC;
 
 system implementation FCC.Impl
@@ -163,6 +173,10 @@ system implementation FCC.Impl
     	assert claw_acts = CLAW_comp.acts;
     **};
     
+   annex safety{**
+      -- No faults, but top-level contract specification.  
+      analyze : max 1 fault
+   **};
 --  annex agree {**
 --  	lift ISAS_comp;
 --  	lift OSAS_comp;

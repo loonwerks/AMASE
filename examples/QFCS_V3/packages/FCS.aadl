@@ -148,6 +148,11 @@ system implementation FCS.impl
     	
     **};
     
+   annex safety{**
+      -- No faults, but top-level contract specification.  
+      analyze : max 1 fault
+   **};
+    
 end FCS.impl;
 
 

@@ -40,5 +40,12 @@ annex agree {**
     res = fail => act = 0.0;
     
   tel;
+  
+    
+  node req_with_fault(val_in: real, trigger: bool) returns (val_out: real);
+	let
+ 	  val_out = val_in -> if (trigger) then 15000.0 else val_in; 
+	tel;
+  
 **};
 end OSAS_S_140;

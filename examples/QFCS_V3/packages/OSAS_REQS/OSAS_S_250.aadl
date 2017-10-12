@@ -1,6 +1,6 @@
 package OSAS_S_250
 public
-
+with faults;
 annex agree {**
 	  node req 
   	(acts_gain : DATA_TYPES::Actuators.impl,
@@ -40,5 +40,6 @@ annex agree {**
     res = 
       ctrl_laws_failed => act_gain = 0.0;
   tel;	
+  
 **};
 end OSAS_S_250;
