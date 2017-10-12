@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.FeatureInstance;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -189,7 +190,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
 		theMap = new HashMap<>(); 
 		for (AgreeVar eqVar: eqVars) {
+			ComponentInstance ci = eqVar.compInst;
+			String name = ci.getFullName();
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
+			
+//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
+//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}

@@ -212,10 +212,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// (1) 
 		// Get container of inputs (FaultSpecStmt)
 		EObject container = outputs.eContainer();
-		// defName: faults.fail_to
-		NestedDotID defName;
-		// defNameSub: fail_to
-		NamedElement defNameSub;
 		// Make an easy string list to access that contains the return names 
 		// from the node definition
 		ArrayList<String> retNames = new ArrayList<String>();
