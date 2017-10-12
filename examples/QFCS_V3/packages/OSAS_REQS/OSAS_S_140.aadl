@@ -42,10 +42,38 @@ annex agree {**
   tel;
   
     
-  node req_with_fault(val_in: real, trigger: bool) returns (val_out: real);
-	let
- 	  val_out = val_in -> if (trigger) then 15000.0 else val_in; 
+  node req_with_fault(val_in: DATA_TYPES::Actuators.impl, trigger: bool) returns (val_out: DATA_TYPES::Actuators.impl);
+    var temp_val_in: DATA_TYPES::Actuators.impl;
+    
+	let 
+	--let John Backes know record update expression may not be working
+	--temp_val_in = val_in{AILL = 15000.0} ;	 
+	temp_val_in =  DATA_TYPES::Actuators.impl{
+		THROTL = val_in.THROTL;
+		THROTR = val_in.THROTR;
+		ELLOB = val_in.ELLOB;
+		ELLIB = val_in.ELLIB;
+		ELROB = val_in.ELROB;
+		ELRIB = val_in.ELRIB;
+		AILL = 15000.0;
+		AILR = val_in.AILR;
+		RUDUP = val_in.RUDUP;
+		RUDLO = val_in.RUDLO;
+		SPLLIB = val_in.SPLLIB;
+		SPLLOB = val_in.SPLLOB;
+		SPLRIB = val_in.SPLRIB;
+		SPLROB = val_in.SPLROB;
+		FLAPLI = val_in.FLAPLI;
+		FLAPLO = val_in.FLAPLO;
+		FLAPRI = val_in.FLAPRI;
+		FLAPRO = val_in.FLAPRO;
+		GEAR = val_in.GEAR;
+		BRAKE = val_in.BRAKE;
+		STEER = val_in.STEER
+	};
+	val_out = if (trigger) then (temp_val_in) else val_in; 
 	tel;
   
 **};
+
 end OSAS_S_140;
