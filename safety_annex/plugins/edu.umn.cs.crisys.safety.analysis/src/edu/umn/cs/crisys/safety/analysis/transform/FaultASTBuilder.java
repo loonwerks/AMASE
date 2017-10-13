@@ -224,6 +224,7 @@ public class FaultASTBuilder {
 	public Fault buildFault(FaultStatement fstmt) {
 		String faultId = mkUniqueFaultId(fstmt); 
 		Fault fault = new Fault(fstmt, faultId);
+		fault.explanitoryText = fstmt.getStr();
 		setFaultNode(fstmt, fault);
 		processFaultSubcomponents(fault);
 		

@@ -34,7 +34,9 @@ public class TransformAgreeProgram implements AgreeAutomater{
 
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
-		// TODO Auto-generated method stub
+		
+		
+		
 		return renaming;
 	}
 
