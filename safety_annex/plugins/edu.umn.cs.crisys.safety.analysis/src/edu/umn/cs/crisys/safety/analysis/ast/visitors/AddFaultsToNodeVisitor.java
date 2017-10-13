@@ -52,6 +52,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private AgreeNode topNode; 
 	private Set<String> faultyVars = new HashSet<>();
 	private Map<String, String> theMap = new HashMap<>();
+	private Map<Fault, String> mapFaultToLustreName = new HashMap<>();
 	
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
@@ -194,9 +195,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			String name = ci.getFullName();
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
 			
-//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-//			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
-//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}
@@ -406,9 +407,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 		builder.addAssertion(new AgreeStatement("", assertExpr, f.faultStatement));
 	}
-
+	
+	/*
+	 * Create Lustre name using addPathDelimiters
+	 * Create map from fault to the constructed Lustre name 
+	 * 		(used in renaming)
+	 * Add in the __fault__active__ portion of the Lustre name
+	 * Add assertion to the builder with the fault statement equated to the 
+	 * 		active var id.
+	 */
 	public void mapFaultActiveToNodeInterface(Fault f, List<String> path, String base, AgreeNodeBuilder builder) {
 		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
+		
+		// Create map from fault to the constructed Lustre name
+		mapFaultToLustreName.put(f, interfaceVarId);
+		
 		String activeVarId = this.createFaultActiveId(base);
 		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, new IdExpr(activeVarId));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
@@ -503,9 +516,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	/*
-	 * Public accessor for the map<agreeid, faultid> strings.
+	 * Public accessor for the Map<Fault, String: LustreName> 
+	 * This map is created in mapFaultToActiveNodeInterface (line 410).
 	 */
-	public Map<String, String> getEqIdMap(){
-		return theMap;
+	public Map<Fault, String> getFaultToLustreNameMap(){
+		return mapFaultToLustreName;
 	}
 }
