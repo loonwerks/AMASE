@@ -85,23 +85,15 @@ system OSAS_Sys
     	    	
   **};
   
---	annex safety {**
---		fault "OSAS-S-140 fault.": OSAS_S_140.req_with_fault {
---			inputs: val_in <- acts_out.AILL;     
---			outputs: acts_out.AILL <- val_out;    
---			duration: permanent;
---			--trigger: enabler{acts_fail.AILL} [0.001];
---		}
 		
-			annex safety {**
+  annex safety {**
 		fault "OSAS-S-140 fault.": OSAS_S_140.req_with_fault {
 			inputs: val_in <- acts_out;     
 			outputs: acts_out <- val_out;    
 			duration: permanent;
-			--trigger: enabler{acts_fail.AILL} [0.001];
 		}
 		
-	**};
+  **};
 	
 end OSAS_Sys;
 
