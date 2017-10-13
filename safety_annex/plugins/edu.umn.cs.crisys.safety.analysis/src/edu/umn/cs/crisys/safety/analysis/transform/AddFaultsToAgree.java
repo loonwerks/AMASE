@@ -135,11 +135,18 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 */
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
-		Map<Fault, String> mapFaultToLustreName = faultVisitor.getFaultToLustreNameMap();
+		Map<Fault, List<String>> mapFaultToLustreName = faultVisitor.getFaultToLustreNameMap();
+		
+		
 		for(Fault key : mapFaultToLustreName.keySet()) {
 			
 			// Add to explicit renames map
-			renaming.addExplicitRename(mapFaultToLustreName.get(key), key.explanitoryText);
+			for(String name : mapFaultToLustreName.get(key)) {
+				renaming.addExplicitRename(name, key.explanitoryText);
+			}
+			
+			
+			
 			
 		}
 		return renaming;

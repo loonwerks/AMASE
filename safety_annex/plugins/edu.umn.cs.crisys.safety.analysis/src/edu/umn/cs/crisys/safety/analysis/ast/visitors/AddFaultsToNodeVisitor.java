@@ -52,7 +52,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private AgreeNode topNode; 
 	private Set<String> faultyVars = new HashSet<>();
 	private Map<String, String> theMap = new HashMap<>();
-	private Map<Fault, String> mapFaultToLustreName = new HashMap<>();
+	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
+	private Map<Fault, String> mapFaultToFaultyOutput = new HashMap<>();
 	
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
@@ -275,6 +276,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							ide.id + "'.");
 				} else {
 					outputSet.add(ide.id);
+					mapFaultToFaultyOutput.put(f, ide.id);
 				}
 			}
 		}
@@ -290,7 +292,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	public String createFaultNodeInputId(String base) {
-		return "__fault__trigger__" + base;		
+		return "fault__trigger__" + base;		
 	}
 	
 	public String createNominalId(String output) {
@@ -418,11 +420,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 */
 	public void mapFaultActiveToNodeInterface(Fault f, List<String> path, String base, AgreeNodeBuilder builder) {
 		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
+		String activeVarId = this.createFaultActiveId(base);
 		
 		// Create map from fault to the constructed Lustre name
-		mapFaultToLustreName.put(f, interfaceVarId);
+		if(mapFaultToLustreNames.containsKey(f)) {
+			mapFaultToLustreNames.get(f).add(interfaceVarId);
+			mapFaultToLustreNames.get(f).add(activeVarId);
+		}
+		else {
+			List<String> names = new ArrayList<>();
+			names.add(interfaceVarId);
+			names.add(activeVarId);
+			mapFaultToLustreNames.put(f, names);
+		}
 		
-		String activeVarId = this.createFaultActiveId(base);
+		
+		
+		
 		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, new IdExpr(activeVarId));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
 	}
@@ -441,6 +455,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			String base = addPathDelimiters(path, f.id);
 			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
 			nb.addInput(new AgreeVar(this.createFaultActiveId(base), NamedType.BOOL, f.faultStatement));
+			
+			if(mapFaultToLustreNames.containsKey(f)) {
+				mapFaultToLustreNames.get(f).add(this.createFaultEventId(base));
+			}
+			else {
+				List<String> names = new ArrayList<>();
+				names.add(this.createFaultEventId(base));
+				mapFaultToLustreNames.put(f, names);
+			}
 
 			// constrain fault-active depending on transient / permanent & map it to a 
 			// fault in the node interface
@@ -519,7 +542,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Public accessor for the Map<Fault, String: LustreName> 
 	 * This map is created in mapFaultToActiveNodeInterface (line 410).
 	 */
-	public Map<Fault, String> getFaultToLustreNameMap(){
-		return mapFaultToLustreName;
+	public Map<Fault, List<String>> getFaultToLustreNameMap(){
+		return mapFaultToLustreNames;
+	}
+	
+	/*
+	 * Public accessor for the Map<Fault,String:faultyOutputName>
+	 * This map is created in gatherFaultyOutputs (line 270).
+	 */
+	public Map<Fault, String> getMapFaultToFaultyOutput(){
+		return mapFaultToFaultyOutput;
 	}
 }
