@@ -105,7 +105,7 @@ features
 	**}	;
 
 	annex safety {**
-		fault "Output inverted.": faults.inverted_fail {
+		fault "In sys select_alt: select_alternate output inverted.": faults.inverted_fail {
 			inputs: val_in <- result;     
 			outputs: result <- val_out;    
 			duration: permanent;
@@ -166,7 +166,7 @@ features
 
 
 	annex safety {**
-		fault "Output inverted.": faults.inverted_fail {
+		fault "In bscu: select_altername output inverted.": faults.inverted_fail {
 			inputs: val_in <- Select_Alternate;     
 			outputs: Select_Alternate <- val_out;    
 			duration: permanent;

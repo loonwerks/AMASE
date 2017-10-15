@@ -15,7 +15,7 @@ features
 	**}	;
 
 	annex safety {**
-		fault "Output failed to non-deterministic alternate value.": faults.pressure_fail_to {
+		fault "In pump: pressure_output failed to non-deterministic value.": faults.pressure_fail_to {
 			-- non-deterministic "failed" value.
 			-- Note: system cannot handle 
 			eq alt_value :real;
