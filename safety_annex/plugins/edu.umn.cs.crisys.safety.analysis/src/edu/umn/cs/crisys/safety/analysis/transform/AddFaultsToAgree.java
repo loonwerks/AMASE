@@ -1,27 +1,16 @@
 package edu.umn.cs.crisys.safety.analysis.transform;
 
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.xtext.util.Pair;
-import org.osate.aadl2.ComponentClassifier;
-import org.osate.aadl2.instance.ComponentInstance;
-import org.osate.aadl2.instance.ConnectionInstance;
-import org.osate.aadl2.instance.FeatureInstance;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 
-import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import jkind.api.results.AnalysisResult;
-import jkind.lustre.IdExpr;
 
 public class AddFaultsToAgree implements AgreeAutomater {
 
