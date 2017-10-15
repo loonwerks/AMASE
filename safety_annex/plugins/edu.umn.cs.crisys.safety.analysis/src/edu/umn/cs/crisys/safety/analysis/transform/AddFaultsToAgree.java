@@ -131,23 +131,21 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * (non-Javadoc)
 	 * @see com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater#rename(com.rockwellcollins.atc.agree.analysis.AgreeRenaming)
 	 * 
+	 *  (1) Gets the fault Lustre names and renames them as the explanatory text
+	 *  associated with that fault statement. 
+	 *  
 	 *  
 	 */
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
 		Map<Fault, List<String>> mapFaultToLustreName = faultVisitor.getFaultToLustreNameMap();
-		
-		
+		 
 		for(Fault key : mapFaultToLustreName.keySet()) {
 			
 			// Add to explicit renames map
 			for(String name : mapFaultToLustreName.get(key)) {
 				renaming.addExplicitRename(name, key.explanitoryText);
-			}
-			
-			
-			
-			
+			}	
 		}
 		return renaming;
 	}

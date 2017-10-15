@@ -196,9 +196,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			String name = ci.getFullName();
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
 			
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
+//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}
