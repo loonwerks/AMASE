@@ -123,7 +123,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFaultSubcomponentParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
 		
 		//ElementSafety aadl2::Element:
-		//	SafetyEqStatement | Expr | FaultSubcomponent;
+		//	SafetyEqStatement
+		//	| Expr
+		//	| FaultSubcomponent;
 		@Override public ParserRule getRule() { return rule; }
 
 		//SafetyEqStatement | Expr | FaultSubcomponent
@@ -164,8 +166,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cFaultKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
 		
 		//@ Override SpecStatement:
-		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
-		//	{AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
+		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
+		//	'{' faultDefinitions+=FaultSubcomponent* '}'
+		//	| {AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
@@ -294,10 +297,12 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';' |
-		//	{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
-		//	fault_out+=ID)* ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' |
-		//	{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement;
+		//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
+		//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
+		//	fault_out+=ID)* ';'
+		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
+		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
+		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
 		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';' |
@@ -487,7 +492,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cTransientKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
 		//TemporalConstraint:
-		//	{PermanentConstraint} 'permanent' | {TransientConstraint} 'transient';
+		//	{PermanentConstraint} 'permanent'
+		//	| {TransientConstraint} 'transient';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{PermanentConstraint} 'permanent' | {TransientConstraint} 'transient'
@@ -539,8 +545,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
 		
 		//TriggerCondition:
-		//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}' | {EnablerCondition} 'enabler' '{' exprList+=Expr
-		//	("," exprList+=Expr)* '}';
+		//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
+		//	| {EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}' | {EnablerCondition} 'enabler' '{' exprList+=Expr
@@ -672,9 +678,10 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_3_9 = (Keyword)cGroup_3.eContents().get(9);
 		
 		//SafetyEqStatement:
-		//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';' | {IntervalEq} 'interval' lhs_int=Arg '='
-		//	interv=Interval ';' | {SetEq} 'set' lhs_set=Arg '=' '{' l1=Expr (',' list+=Expr)* '}' ';' | {RangeEq} 'range'
-		//	lhs_range=Arg '=' '{' l1=Expr ',' l2=Expr '}' ';';
+		//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+		//	| {IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval ';'
+		//	| {SetEq} 'set' lhs_set=Arg '=' '{' l1=Expr (',' list+=Expr)* '}' ';'
+		//	| {RangeEq} 'range' lhs_range=Arg '=' '{' l1=Expr ',' l2=Expr '}' ';';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';' | {IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval
@@ -1139,7 +1146,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ElementSafety aadl2::Element:
-	//	SafetyEqStatement | Expr | FaultSubcomponent;
+	//	SafetyEqStatement
+	//	| Expr
+	//	| FaultSubcomponent;
 	public ElementSafetyElements getElementSafetyAccess() {
 		return pElementSafety;
 	}
@@ -1149,8 +1158,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//@ Override SpecStatement:
-	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
-	//	{AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
+	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
+	//	'{' faultDefinitions+=FaultSubcomponent* '}'
+	//	| {AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
 	}
@@ -1160,10 +1170,12 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';' |
-	//	{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
-	//	fault_out+=ID)* ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' |
-	//	{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement;
+	//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
+	//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
+	//	fault_out+=ID)* ';'
+	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
+	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
+	//	| SafetyEqStatement;
 	public FaultSubcomponentElements getFaultSubcomponentAccess() {
 		return pFaultSubcomponent;
 	}
@@ -1173,7 +1185,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TemporalConstraint:
-	//	{PermanentConstraint} 'permanent' | {TransientConstraint} 'transient';
+	//	{PermanentConstraint} 'permanent'
+	//	| {TransientConstraint} 'transient';
 	public TemporalConstraintElements getTemporalConstraintAccess() {
 		return pTemporalConstraint;
 	}
@@ -1183,8 +1196,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TriggerCondition:
-	//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}' | {EnablerCondition} 'enabler' '{' exprList+=Expr
-	//	("," exprList+=Expr)* '}';
+	//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
+	//	| {EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}';
 	public TriggerConditionElements getTriggerConditionAccess() {
 		return pTriggerCondition;
 	}
@@ -1194,9 +1207,10 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SafetyEqStatement:
-	//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';' | {IntervalEq} 'interval' lhs_int=Arg '='
-	//	interv=Interval ';' | {SetEq} 'set' lhs_set=Arg '=' '{' l1=Expr (',' list+=Expr)* '}' ';' | {RangeEq} 'range'
-	//	lhs_range=Arg '=' '{' l1=Expr ',' l2=Expr '}' ';';
+	//	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+	//	| {IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval ';'
+	//	| {SetEq} 'set' lhs_set=Arg '=' '{' l1=Expr (',' list+=Expr)* '}' ';'
+	//	| {RangeEq} 'range' lhs_range=Arg '=' '{' l1=Expr ',' l2=Expr '}' ';';
 	public SafetyEqStatementElements getSafetyEqStatementAccess() {
 		return pSafetyEqStatement;
 	}
