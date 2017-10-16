@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
-import org.osate.aadl2.instance.FeatureInstance;
-
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNodeBuilder;
@@ -30,7 +28,6 @@ import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
-import jkind.lustre.BoolExpr;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.IfThenElseExpr;
@@ -193,12 +190,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		theMap = new HashMap<>(); 
 		for (AgreeVar eqVar: eqVars) {
 			ComponentInstance ci = eqVar.compInst;
-			String name = ci.getFullName();
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
 			
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
+//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}
