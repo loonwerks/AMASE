@@ -50,7 +50,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Set<String> faultyVars = new HashSet<>();
 	private Map<String, String> theMap = new HashMap<>();
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
-	private Map<Fault, String> mapFaultToFaultyOutput = new HashMap<>();
+	private Map<Fault, String> mapFaultToPath = new HashMap<>();
 	
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
@@ -272,7 +272,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							ide.id + "'.");
 				} else {
 					outputSet.add(ide.id);
-					mapFaultToFaultyOutput.put(f, ide.id);
 				}
 			}
 		}
@@ -430,6 +429,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			mapFaultToLustreNames.put(f, names);
 		}
 		
+		// ++++++++++++++++++++++++++   ISN'T THERE ONLY ONE PATH PER FAULT??
+		
+		// Create map from fault to it's relative path
+		// for the counterexample layout
+		for(String str : path) {	
+			mapFaultToPath.put(f, str);
+		}
 		
 		
 		
@@ -546,7 +552,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Public accessor for the Map<Fault,String:faultyOutputName>
 	 * This map is created in gatherFaultyOutputs (line 270).
 	 */
-	public Map<Fault, String> getMapFaultToFaultyOutput(){
-		return mapFaultToFaultyOutput;
+	public Map<Fault, String> getMapFaultToPath(){
+		return mapFaultToPath;
 	}
 }

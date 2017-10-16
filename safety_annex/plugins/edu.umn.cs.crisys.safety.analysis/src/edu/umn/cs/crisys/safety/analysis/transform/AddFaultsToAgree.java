@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
+import com.rockwellcollins.atc.agree.analysis.AgreeLayout.SigType;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
@@ -152,7 +153,11 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	@Override
 	public AgreeLayout transformLayout(AgreeLayout layout) {
-		// TODO Auto-generated method stub
+		
+		Map<Fault, String> mapFaultToPath = faultVisitor.getMapFaultToPath();
+		for(Fault key : mapFaultToPath.keySet()) {
+			layout.addElement(mapFaultToPath.get(key), key.explanitoryText, SigType.OUTPUT);
+		}
 		return layout;
 	}
 
