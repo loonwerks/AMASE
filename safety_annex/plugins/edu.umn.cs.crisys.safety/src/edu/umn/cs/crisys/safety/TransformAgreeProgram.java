@@ -50,7 +50,7 @@ public class TransformAgreeProgram implements AgreeAutomater{
 	@Override
 	public AgreeLayout transformLayout(AgreeLayout layout) {
 		// TODO Auto-generated method stub
-		return null;
+		return layout;
 	}
 	
 	
