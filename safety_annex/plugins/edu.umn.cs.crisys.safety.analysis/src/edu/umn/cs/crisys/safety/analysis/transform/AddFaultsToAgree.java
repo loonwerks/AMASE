@@ -134,8 +134,11 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			// Add to explicit renames map
 			for(String name : mapFaultToLustreName.get(key)) {
 				renaming.addExplicitRename(name, key.explanitoryText);
+				// Add to reference map
 				renaming.addToRefMap(name, key.faultStatement);
 			}	
+			
+			
 		}
 		return renaming;
 	}
