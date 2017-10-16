@@ -2,6 +2,7 @@ package edu.umn.cs.crisys.safety;
 
 import java.util.List;
 
+import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
@@ -44,6 +45,12 @@ public class TransformAgreeProgram implements AgreeAutomater{
 	public AnalysisResult transformResult(AnalysisResult res) {
 		// TODO Auto-generated method stub
 		return res;
+	}
+
+	@Override
+	public AgreeLayout transformLayout(AgreeLayout layout) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
