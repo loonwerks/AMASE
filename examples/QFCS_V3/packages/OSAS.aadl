@@ -85,10 +85,9 @@ system OSAS_Sys
     	    	
   **};
   
-		
-  annex safety {**
-		fault "OSAS-S-140 fault.": OSAS_S_140.req_with_fault {
-			inputs: val_in <- acts_out;     
+    annex safety {**
+		fault "OSAS-S-140 fault.": FAULTS.aill_out_fail_to_val {
+			inputs: val_in <- acts_out,  alt_val <- 15000.0;   
 			outputs: acts_out <- val_out;    
 			duration: permanent;
 		}
