@@ -55,6 +55,11 @@ annex agree {**
 	   val_out = if (trigger) then (val_in{AILL := alt_val}) else val_in;
 	tel;
 	
+    node persistent_aill_fail (val_in: DATA_TYPES::BoolActuators.impl, trigger: bool) returns (val_out: DATA_TYPES::BoolActuators.impl); 
+	let
+	   val_out = if (trigger) then (val_in{AILL := true}) else val_in;
+	tel;
+	
 **};	
 	
 end FAULTS;

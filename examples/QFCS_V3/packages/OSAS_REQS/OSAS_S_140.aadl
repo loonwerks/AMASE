@@ -41,12 +41,6 @@ annex agree {**
     
   tel;
   
-    
---  node abnormal_aill_val(val_in: DATA_TYPES::Actuators.impl, trigger: bool) returns (val_out: DATA_TYPES::Actuators.impl);
---	let 
---	val_out = if (trigger) then (val_in{AILL := 15000.0}) else val_in;
---	tel;
-  
 **};
 
 end OSAS_S_140;
