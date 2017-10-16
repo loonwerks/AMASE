@@ -209,7 +209,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check
 	public void checkOutput(OutputStatement outputs){
-		// (1) 
+		// List of nominal connections
+		EList<NestedDotID> nomConns = outputs.getNom_conn();
+		
 		// Get container of inputs (FaultSpecStmt)
 		EObject container = outputs.eContainer();
 		// Make an easy string list to access that contains the return names 
@@ -270,15 +272,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// (2) Make sure connections are valid component connections in aadl
 		// Event ports, data ports, buses, etc. 
 		
-		// List of nominal connections
-		EList<NestedDotID> nomConns = outputs.getNom_conn();
-		for(NestedDotID nom : nomConns) {
-			if (! (nom.getBase() instanceof Feature)) {
-				error(nom, "This connection must be a component connection (Feature). "
-			            +"Possible features are "
-						+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
-			}
-		}		
+//		for(NestedDotID nom : nomConns) {
+//			if (! (nom.getBase() instanceof Feature)) {
+//				error(nom, "This connection must be a component connection (Feature). "
+//			            +"Possible features are "
+//						+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
+//			}
+//		}		
 
 		/* MWW This is wrong if you are not assigning outputs of a subcomponent!
 		 * 
