@@ -137,8 +137,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 				// Add to reference map
 				renaming.addToRefMap(name, key.faultStatement);
 			}	
-			
-			
 		}
 		return renaming;
 	}
