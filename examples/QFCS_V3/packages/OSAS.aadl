@@ -96,17 +96,17 @@ system OSAS_Sys
 			outputs: acts_fail <- val_out;    
 			duration: permanent;
 		}
-		--Note: the following fault should accept two inputs, but the syntax editor only accepted one
-		--The following is replica of the expected behavior, not faulty behavior
-		--Also adding the fault below made the verification at FCC all true
-		fault "OSAS-S-120 determine failure": OSAS_S_120.determine_failure{		
-			--the following was accepted
-			--inputs: act <- acts_out.AILL;   
-			--the following was not accepted
-			--inputs: act <- acts_out.AILL, acts_ret <- acts_ret.AILL; 
-			outputs: acts_fail.AILL <- fail;    
-			duration: permanent;
-		}		
+--		--Note: the following fault should accept two inputs, but the syntax editor only accepted one
+--		--The following is replica of the expected behavior, not faulty behavior
+--		--Also adding the fault below made the verification at FCC all true
+--		fault "OSAS-S-120 determine failure": OSAS_S_120.determine_failure_new{		
+--			--the following was accepted
+--			--inputs: act <- acts_out.AILL;   
+--			--the following was not accepted
+--			inputs: act <- acts_out.AILL, acts_ret <- acts_ret.AILL; 
+--			outputs: acts_fail.AILL <- fail;    
+--			duration: permanent;
+--		}		
 		
   **};
 	
