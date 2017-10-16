@@ -4,6 +4,7 @@ package edu.umn.cs.crisys.safety.analysis.transform;
 import java.util.List;
 import java.util.Map;
 
+import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
@@ -147,6 +148,12 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	public AnalysisResult transformResult(AnalysisResult res) {
 		// TODO Auto-generated method stub
 		return res;
+	}
+
+	@Override
+	public AgreeLayout transformLayout(AgreeLayout layout) {
+		// TODO Auto-generated method stub
+		return layout;
 	}
 
 
