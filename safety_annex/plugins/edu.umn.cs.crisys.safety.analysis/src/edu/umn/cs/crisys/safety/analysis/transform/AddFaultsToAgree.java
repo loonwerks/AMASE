@@ -122,7 +122,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * 
 	 *  (1) Gets the fault Lustre names and renames them as the explanatory text
 	 *  associated with that fault statement. 
-	 *  
+	 *  (2) Add to reference map: Lustre fault -> FaultStatementImpl
 	 *  
 	 */
 	@Override
@@ -134,6 +134,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			// Add to explicit renames map
 			for(String name : mapFaultToLustreName.get(key)) {
 				renaming.addExplicitRename(name, key.explanitoryText);
+				renaming.addToRefMap(name, key.faultStatement);
 			}	
 		}
 		return renaming;
