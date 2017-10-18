@@ -60,6 +60,23 @@ annex agree {**
 	   val_out = if (trigger) then (val_in{AILL := true}) else val_in;
 	tel;
 	
+	node persistent_val1_fail(val_in: DATA_TYPES.quad_bool, trigger: bool) returns (val_out: DATA_TYPES.quad_bool);
+	let 
+		val_out = if(trigger) then (val_in{val1 := true}) else val_in;
+	tel;
+	
+	node invert_OSAS_S_120_AILL_fail (act: DATA_TYPES::Actuators.impl, act_ret: DATA_TYPES::Actuators.impl, acts_fail: DATA_TYPES::BoolActuators.impl, trigger: bool) returns (val_out: DATA_TYPES::BoolActuators.impl); 
+	var
+	 fail: bool;
+	let
+	  fail = 
+    		if(OCCURRED.f(RUN_LENGTH.f(OSAS_S_100.req(act.AILL,act_ret.AILL))>= 5)) then
+    			true
+    		else 
+    			(false -> pre (fail));
+	   val_out = if (trigger) then (acts_fail{AILL := not(fail)}) else acts_fail;
+	tel;	
+	
 **};	
 	
 end FAULTS;

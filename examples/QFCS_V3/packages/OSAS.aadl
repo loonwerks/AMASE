@@ -86,27 +86,27 @@ system OSAS_Sys
   **};
   
     annex safety {**
-		fault "OSAS-S-140 fault": FAULTS.aill_out_fail_to_val {
+    	--with max 1 fault at FCC, uncommenting all three faults below
+    	--makes FCC verification all valid, but having first and second, 
+    	--or first and third, or each single one individually can make
+    	--some guarantees in FCC verificaiton invalid
+    	--Question: how could the second and third fault cancel each other
+    	--if max of 1 fault can be triggered in the system?
+		fault "AILL OUT STUCK TO VAL": FAULTS.aill_out_fail_to_val {
 			inputs: val_in <- acts_out,  alt_val <- 15000.0;   
 			outputs: acts_out <- val_out;    
 			duration: permanent;
 		}
-		fault "OSAS-S-120 fault": FAULTS.persistent_aill_fail{	
+		fault "AILL PERSISTENT FAIL": FAULTS.persistent_aill_fail{	
 			inputs: val_in <- acts_fail;   
 			outputs: acts_fail <- val_out;    
 			duration: permanent;
 		}
---		--Note: the following fault should accept two inputs, but the syntax editor only accepted one
---		--The following is replica of the expected behavior, not faulty behavior
---		--Also adding the fault below made the verification at FCC all true
---		fault "OSAS-S-120 determine failure": OSAS_S_120.determine_failure_new{		
---			--the following was accepted
---			--inputs: act <- acts_out.AILL;   
---			--the following was not accepted
---			inputs: act <- acts_out.AILL, acts_ret <- acts_ret.AILL; 
---			outputs: acts_fail.AILL <- fail;    
---			duration: permanent;
---		}		
+		fault "AILL INVERT FAIL": FAULTS.invert_OSAS_S_120_AILL_fail{		
+			inputs: act <- acts_out, act_ret <- acts_ret, acts_fail <- acts_fail; 
+			outputs: acts_fail <- val_out;    
+			duration: permanent;
+		}		
 		
   **};
 	

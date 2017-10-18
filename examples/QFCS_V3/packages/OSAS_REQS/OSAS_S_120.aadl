@@ -50,33 +50,6 @@ annex agree{**
     		else 
     			(false -> pre (fail));
   tel;
-	
-	
-  node determine_failure
-    (act : real,
-     act_ret : real)
-  returns
-    (fail : bool);
-  let  
-    	fail = 
-    		if(OCCURRED.f(RUN_LENGTH.f(OSAS_S_100.req(act,act_ret))>= 5)) then
-    			true
-    		else 
-    			(false -> pre (fail));
-  tel;	
-
-    node determine_failure_new (act: real, act_ret: real, trigger: bool) returns (val_out: bool); 
-	var
-	 fail: bool;
-	let
-	  fail = 
-    		if(OCCURRED.f(RUN_LENGTH.f(OSAS_S_100.req(act,act_ret))>= 5)) then
-    			true
-    		else 
-    			(false -> pre (fail));
-	   val_out = if (trigger) then (not(fail)) else fail;
-	tel;	
- 
   
 **};
 
