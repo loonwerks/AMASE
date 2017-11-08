@@ -24,6 +24,7 @@ import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
+import com.rockwellcollins.atc.agree.agree.RecordType;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.validation.AgreeType;
 
@@ -266,44 +267,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 		
 
-		// MWW: what is this?
-		// ============================HERE++++++++++++++++++++++++++++++++++++++++++
-		
-		// (2) Make sure connections are valid component connections in aadl
-		// Event ports, data ports, buses, etc. 
-		
-//		for(NestedDotID nom : nomConns) {
-//			if (! (nom.getBase() instanceof Feature)) {
-//				error(nom, "This connection must be a component connection (Feature). "
-//			            +"Possible features are "
-//						+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
-//			}
-//		}		
-
-		/* MWW This is wrong if you are not assigning outputs of a subcomponent!
-		 * 
-		// The sub of the nominal connection
-		NestedDotID nomSub = null;
-		// The base of the sub of the nominal connection
-		NamedElement baseSubNom;
-
-		// Make sure that the connection is a valid component connection
-		for(NestedDotID nom : nomConns){
-			nomSub = nom.getSub();
-			if(nomSub != null){
-				baseSubNom = nomSub.getBase();
-				
-				if(!(baseSubNom instanceof Feature)){
-					error(nom, "This connection must be a component connection (Feature). "
-				            +"Possible features are "
-							+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
-				}
-				break;
-			}else{
-				error(nom, "The connection is null.");
-			}
-		}
-*/
 		
 		// (3) Type check between nominal connections and return values
 		
@@ -322,8 +285,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(outputs, "Return value list is empty.");
 			}
 			
-			// get agree type of return value
+			
+			
 			AgreeType typeReturnArg = getAgreeType(returnArg);
+				
 			// Get the final nested id of the nominal connection
 			NamedElement nestedNom = getFinalNestId(nom);
 			// Get agree type of that nested id
@@ -336,6 +301,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		}
 	}
+	
+
 	
 	/*
 	 * Check Duration: 

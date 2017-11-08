@@ -418,16 +418,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		String activeVarId = this.createFaultActiveId(base);
 		
 		// Create map from fault to the constructed Lustre name
-		if(mapFaultToLustreNames.containsKey(f)) {
-			mapFaultToLustreNames.get(f).add(interfaceVarId);
-			mapFaultToLustreNames.get(f).add(activeVarId);
-		}
-		else {
-			List<String> names = new ArrayList<>();
-			names.add(interfaceVarId);
-			names.add(activeVarId);
-			mapFaultToLustreNames.put(f, names);
-		}
+//		if(mapFaultToLustreNames.containsKey(f)) {
+//			mapFaultToLustreNames.get(f).add(interfaceVarId);
+//			//mapFaultToLustreNames.get(f).add(activeVarId);
+//		}
+//		else {
+//			List<String> names = new ArrayList<>();
+//			names.add(interfaceVarId);
+//			//names.add(activeVarId);
+//			mapFaultToLustreNames.put(f, names);
+//		}
 		
 		// ++++++++++++++++++++++++++   ISN'T THERE ONLY ONE PATH PER FAULT??
 		
@@ -459,11 +459,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			nb.addInput(new AgreeVar(this.createFaultActiveId(base), NamedType.BOOL, f.faultStatement));
 			
 			if(mapFaultToLustreNames.containsKey(f)) {
-				mapFaultToLustreNames.get(f).add(this.createFaultEventId(base));
+				mapFaultToLustreNames.get(f).add(this.createFaultActiveId(base));
 			}
 			else {
 				List<String> names = new ArrayList<>();
-				names.add(this.createFaultEventId(base));
+				names.add(this.createFaultActiveId(base));
 				mapFaultToLustreNames.put(f, names);
 			}
 
