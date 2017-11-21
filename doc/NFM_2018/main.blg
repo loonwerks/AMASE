@@ -1,72 +1,67 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2016)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main.aux
 The style file: abbrv.bst
 Database file #1: biblio.bib
-I was expecting a `,' or a `}'---line 329 of file biblio.bib
- : 
- : @article{Pajic2012,
-(Error may have been on previous line)
+Repeated entry---line 258 of file biblio.bib
+ : @inproceedings{QFCS15:backes
+ :                             ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 329 of file biblio.bib
+Repeated entry---line 274 of file biblio.bib
+ : @inproceedings{hilt2013
+ :                        ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 354 of file biblio.bib
  : @article{Pajic2012
  :                   ,
 I'm skipping whatever remains of this entry
-I was expecting an "="---line 371 of file biblio.bib
- : article 
+I was expecting an "="---line 396 of file biblio.bib
+ : ARTICLE 
  :         NUMBER = {7},
 I'm skipping whatever remains of this entry
 A bad cross reference---entry "DBLP:conf/adaEurope/SokolskyLC09"
 refers to entry "DBLP:conf/adaEurope/2009", which doesn't exist
-A bad cross reference---entry "DBLP:conf/tacas/BittnerBCCGGMMZ16"
-refers to entry "DBLP:conf/tacas/2016", which doesn't exist
-A bad cross reference---entry "DBLP:conf/cav/BozzanoCPJKPRT15"
-refers to entry "DBLP:conf/cav/2015-1", which doesn't exist
-Warning--I didn't find a database entry for "DBLP:conf/cav/2015-1"
 Warning--I didn't find a database entry for "DBLP:conf/adaEurope/2009"
-Warning--I didn't find a database entry for "DBLP:conf/tacas/2016"
-Warning--empty journal in DBLP:journals/scp/CimattiT15
-Warning--empty year in DBLP:journals/scp/CimattiT15
 Warning--empty chapter and pages in SysML
-You've used 25 entries,
+You've used 17 entries,
             2118 wiz_defined-function locations,
-            672 strings with 9740 characters,
-and the built_in function-call counts, 9613 in all, are:
-= -- 887
-> -- 549
-< -- 14
-+ -- 214
-- -- 189
-* -- 675
-:= -- 1549
-add.period$ -- 75
-call.type$ -- 25
-change.case$ -- 166
+            628 strings with 7522 characters,
+and the built_in function-call counts, 6399 in all, are:
+= -- 609
+> -- 347
+< -- 10
++ -- 135
+- -- 117
+* -- 443
+:= -- 1039
+add.period$ -- 55
+call.type$ -- 17
+change.case$ -- 106
 chr.to.int$ -- 0
-cite$ -- 28
-duplicate$ -- 364
-empty$ -- 728
-format.name$ -- 189
-if$ -- 2050
+cite$ -- 18
+duplicate$ -- 245
+empty$ -- 490
+format.name$ -- 117
+if$ -- 1370
 int.to.chr$ -- 0
-int.to.str$ -- 25
-missing$ -- 19
-newline$ -- 124
-num.names$ -- 54
-pop$ -- 224
+int.to.str$ -- 17
+missing$ -- 13
+newline$ -- 87
+num.names$ -- 38
+pop$ -- 137
 preamble$ -- 1
-purify$ -- 142
+purify$ -- 90
 quote$ -- 0
-skip$ -- 287
+skip$ -- 185
 stack$ -- 0
-substring$ -- 431
-swap$ -- 117
-text.length$ -- 14
+substring$ -- 294
+swap$ -- 75
+text.length$ -- 10
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 98
-warning$ -- 3
-while$ -- 78
-width$ -- 27
-write$ -- 267
-(There were 6 error messages)
+type$ -- 66
+warning$ -- 1
+while$ -- 56
+width$ -- 19
+write$ -- 192
+(There were 5 error messages)
