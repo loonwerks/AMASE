@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  27 NOV 2017 12:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  30 NOV 2017 07:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -647,10 +647,10 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]) (./fun
 ctionality.tex) (./architectureimplementation.tex)
-(./applications.tex) (./conclusion.tex) (./main.bbl
+(./applications.tex) (./conclusion.tex) (./main.bbl [2]
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¶ in font ptmr7t!
- [2]
+
 Underfull \hbox (badness 10000) in paragraph at lines 83--86
 []\OT1/ptm/m/n/9 MathWorks.  The Math-Works Inc. Simulink Prod-uct Web Site.
  []
@@ -667,7 +667,7 @@ Here is how much of TeX's memory you used:
  11093 multiletter control sequences out of 15000+600000
  24562 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,5n,35p,1217b,2397s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,5n,35p,1217b,2399s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc
 }</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></
 usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr
@@ -675,7 +675,7 @@ usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr
 exlive/2016/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/201
 6/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-di
 st/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (3 pages, 79406 bytes).
+Output written on main.pdf (3 pages, 79555 bytes).
 PDF statistics:
  39 PDF objects out of 1000 (max. 8388607)
  27 compressed objects within 1 object stream
