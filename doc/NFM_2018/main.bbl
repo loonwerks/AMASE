@@ -4,10 +4,6 @@
 {AADL}.
 \newblock {Predictable Model-Based Engineering}.
 
-\bibitem{AIR6110}
-{AIR 6110}.
-\newblock {Contiguous Aircraft/System Development Process Example}, Dec. 2011.
-
 \bibitem{QFCS15:backes}
 J.~Backes, D.~Cofer, S.~Miller, and M.~W. Whalen.
 \newblock {Requirements Analysis of a Quad-Redundant Flight Control System}.
@@ -34,13 +30,6 @@ D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
   NASA Formal Methods Symposium (NFM 2012)}, volume 7226, pages 126--140,
   Berlin, Heidelberg, April 2012. Springer-Verlag.
 
-\bibitem{SEI:AADL}
-J.~Delange, P.~Feiler, D.~P. Gluch, and J.~Hudak.
-\newblock {{AADL} Fault Modeling and Analysis Within an {ARP4761} Safety
-  Assessment}.
-\newblock Technical Report CMU/SEI-2014-TR-020, Software Engineering Institute:
-  Carnegie Mellon University, October 2014.
-
 \bibitem{SysML}
 S.~Friedenthal, A.~Moore, and R.~Steiner.
 \newblock {\em {A Practical Guide to {S}ys{ML}}}.
@@ -53,6 +42,12 @@ M.~Gudemann and F.~Ortmeier.
 \newblock In {\em Proceedings of the 2010 IEEE 12th International Symposium on
   High-Assurance Systems Engineering}, HASE '10, pages 132--141, Washington,
   DC, USA, 2010. IEEE Computer Society.
+
+\bibitem{Halbwachs91:IEEE}
+N.~Halbwachs, P.~Caspi, P.~Raymond, and D.~Pilaud.
+\newblock {The Synchronous Dataflow Programming Language Lustre}.
+\newblock In {\em {In Proceedings of the IEEE}}, volume 79(9), pages
+  1305--1320, 1991.
 
 \bibitem{Joshi05:SafeComp}
 A.~Joshi and M.~P. Heimdahl.
@@ -78,11 +73,6 @@ B.~Larson, J.~Hatcliff, K.~Fowler, and J.~Delange.
 \newblock In {\em Proceedings of the 2013 ACM SIGAda Annual Conference on High
   Integrity Language Technology}, HILT '13, pages 65--84, New York, NY, USA,
   2013. ACM.
-
-\bibitem{MathWorks}
-Math{W}orks.
-\newblock {The {M}ath{W}orks {I}nc. {S}imulink Product Web Site}.
-\newblock http://www.mathworks.com/products/simulink, 2004.
 
 \bibitem{hilt2013}
 A.~Murugesan, M.~W. Whalen, S.~Rayadurgam, and M.~P. Heimdahl.
