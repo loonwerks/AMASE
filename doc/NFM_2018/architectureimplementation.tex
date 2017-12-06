@@ -9,7 +9,7 @@ The architecture of the safety annex plugin is shown in Figure~\ref{fig:plugin-a
 \end{center}
 \vspace{-0.2in}
 \caption{Safety Annex Plug-in Architecture}
-\label{fig:agreeContract}
+\label{fig:plugin-arch}
 \end{figure}
 
 AGREE contracts are normally used to define the nominal behaviors of system components as {\em guarantees} under {\em assumptions} about the values the component's environment will provide.  The safety annex extends these contracts to allow faults to modify the expected behavior of component inputs and outputs.  To allow for these kinds of extensions, AGREE implements an Eclipse extension point interface that allows other plug-ins to modify the generated AST prior to its submission to the solver.  If the safety annex is enabled, these faults are added to the AGREE contract and, when enabled, override the normal guarantees provided by the component.  An example of a portion of an initial AGREE node and its extended contract is shown in Figure~\ref{fig:comp}.  The \texttt{fault} variables and declarations are added to allow the contract to override the nominal behavioral constraints (provided by guarantees) on outputs.  In the Lustre language, \texttt{assertion}s are constraints that are assumed to hold in the transition system.
