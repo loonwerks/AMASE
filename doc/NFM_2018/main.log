@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  6 DEC 2017 12:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  6 DEC 2017 13:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -645,47 +645,14 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
  [1
 
-{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-
-LaTeX Warning: Citation `PROSVIRNOVA2013127' on page 2 undefined on input line 
-16.
-
-
-LaTeX Warning: Citation `info8010007' on page 2 undefined on input line 16.
-
-
-LaTeX Warning: Citation `DBLP:conf/tacas/BittnerBCCGGMMZ16' on page 2 undefined
- on input line 16.
-
-
-LaTeX Warning: Citation `SAEAS' on page 2 undefined on input line 16.
-
-
-LaTeX Warning: Citation `Stewart17:IMBSA' on page 2 undefined on input line 18.
-
-
-) (./functionality.tex [2]
-
-LaTeX Warning: Citation `AIR6110' on page 3 undefined on input line 11.
-
-
-LaTeX Warning: Citation `Stewart17:IMBSA' on page 3 undefined on input line 11.
-
-
+{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]) (./fun
+ctionality.tex [2]
 <images/faultNode.png, id=15, 438.8897pt x 56.46094pt>
 File: images/faultNode.png Graphic file (type png)
 
 <use images/faultNode.png>
 Package pdftex.def Info: images/faultNode.png used on input line 18.
 (pdftex.def)             Requested size: 347.12354pt x 44.65704pt.
-
-
-LaTeX Warning: Citation `AIR6110' on page 3 undefined on input line 25.
-
-
-LaTeX Warning: Citation `Stewart17:IMBSA' on page 3 undefined on input line 25.
-
-
 
 Underfull \hbox (badness 10000) in paragraph at lines 25--26
 
@@ -728,6 +695,8 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [5 <./images/sample_code.png>] (./main.bbl
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¶ in font ptmr7t!
+Missing character: There is no ö in font ptmr7t!
+Missing character: There is no † in font ptmr7t!
  [6]) [7] (./main.aux)
 
 LaTeX Warning: There were undefined references.
@@ -738,10 +707,10 @@ LaTeX Warning: There were undefined references.
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 7788 strings out of 493014
- 109689 string characters out of 6133351
- 216192 words of memory out of 5000000
- 11121 multiletter control sequences out of 15000+600000
+ 7785 strings out of 493014
+ 109641 string characters out of 6133351
+ 216204 words of memory out of 5000000
+ 11118 multiletter control sequences out of 15000+600000
  25077 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,7n,35p,1224b,2441s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -752,7 +721,7 @@ usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr
 exlive/2016/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/201
 6/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-di
 st/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (7 pages, 135823 bytes).
+Output written on main.pdf (7 pages, 137104 bytes).
 PDF statistics:
  66 PDF objects out of 1000 (max. 8388607)
  40 compressed objects within 1 object stream

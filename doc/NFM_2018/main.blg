@@ -1,25 +1,69 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
 The style file: abbrv.bst
 Database file #1: biblio.bib
-Repeated entry---line 258 of file biblio.bib
+Repeated entry---line 265 of file biblio.bib
  : @inproceedings{QFCS15:backes
  :                             ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 274 of file biblio.bib
+Repeated entry---line 281 of file biblio.bib
  : @inproceedings{hilt2013
  :                        ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 354 of file biblio.bib
+Repeated entry---line 361 of file biblio.bib
  : @article{Pajic2012
  :                   ,
 I'm skipping whatever remains of this entry
-I was expecting an "="---line 396 of file biblio.bib
- : ARTICLE 
+I was expecting an "="---line 403 of file biblio.bib
+ : article 
  :         NUMBER = {7},
 I'm skipping whatever remains of this entry
 A bad cross reference---entry "DBLP:conf/adaEurope/SokolskyLC09"
 refers to entry "DBLP:conf/adaEurope/2009", which doesn't exist
-Warning--I didn't find a database entry for ""
+A bad cross reference---entry "DBLP:conf/tacas/BittnerBCCGGMMZ16"
+refers to entry "DBLP:conf/tacas/2016", which doesn't exist
 Warning--I didn't find a database entry for "DBLP:conf/adaEurope/2009"
-Warning--empty chapter and pages in SysML
-(There were 5 error messages)
+Warning--I didn't find a database entry for "DBLP:conf/tacas/2016"
+You've used 18 entries,
+            2118 wiz_defined-function locations,
+            630 strings with 8103 characters,
+and the built_in function-call counts, 7459 in all, are:
+= -- 696
+> -- 436
+< -- 11
++ -- 169
+- -- 151
+* -- 550
+:= -- 1204
+add.period$ -- 57
+call.type$ -- 18
+change.case$ -- 127
+chr.to.int$ -- 0
+cite$ -- 18
+duplicate$ -- 276
+empty$ -- 549
+format.name$ -- 151
+if$ -- 1586
+int.to.chr$ -- 0
+int.to.str$ -- 18
+missing$ -- 15
+newline$ -- 92
+num.names$ -- 40
+pop$ -- 154
+preamble$ -- 1
+purify$ -- 109
+quote$ -- 0
+skip$ -- 212
+stack$ -- 0
+substring$ -- 361
+swap$ -- 91
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 72
+warning$ -- 0
+while$ -- 61
+width$ -- 20
+write$ -- 203
+(There were 6 error messages)
