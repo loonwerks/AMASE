@@ -1,5 +1,9 @@
 \begin{thebibliography}{10}
 
+\bibitem{CHEN201391}
+{Systems Modeling with {EAST-ADL} for Fault Tree Analysis through {HiP-HOPS}*}.
+\newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
+
 \bibitem{AIR6110}
 {AIR 6110}.
 \newblock {Contiguous Aircraft/System Development Process Example}, Dec. 2011.
@@ -16,22 +20,13 @@ B.~Bittner, M.~Bozzano, R.~Cavada, A.~Cimatti, M.~Gario, A.~Griggio,
   C.~Mattarei, A.~Micheli, and G.~Zampedri.
 \newblock {The x{SAP} Safety Analysis Platform}.
 \newblock In {\em Tools and Algorithms for the Construction and Analysis of
-  Systems - 22nd International Conference, {TACAS} 2016, Held as Part of the
-  European Joint Conferences on Theory and Practice of Software, {ETAPS} 2016,
-  Eindhoven, The Netherlands, April 2-8, 2016, Proceedings}, pages 533--539,
-  2016.
+  Systems - 22nd International Conference, {TACAS} 2016, April 2-8, 2016,
+  Proceedings}, pages 533--539, 2016.
 
-\bibitem{CHEN201391}
-D.~Chen, N.~Mahmud, M.~Walker, L.~Feng, H.~LÃ¶nn, and Y.~Papadopoulos.
-\newblock {Systems Modeling with {EAST-ADL} for Fault Tree Analysis through
-  {HiP-HOPS}*}.
-\newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
-
-\bibitem{DBLP:journals/scp/CimattiT15}
-A.~Cimatti and S.~Tonetta.
-\newblock {Contracts-Refinement Proof System for Component-Based Embedded
-  System}.
-\newblock {\em Sci. Comput. Program.}, 97:333--348, 2015.
+\bibitem{CAV2015:BoCiGrMa}
+M.~Bozzano, A.~Cimatti, A.~Griggio, and C.~Mattarei.
+\newblock {Efficient Anytime Techniques for Model-Based Safety Analysis}.
+\newblock In {\em Computer Aided Verification (CAV '11}, 2015.
 
 \bibitem{NFM2012:CoGaMiWhLaLu}
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
@@ -56,42 +51,11 @@ P.~Hönig, R.~Lunde, and F.~Holzapfel.
 \newblock {Model Based Safety Analysis with smartIflow }†.
 \newblock {\em Information}, 8(1), 2017.
 
-\bibitem{Joshi05:SafeComp}
-A.~Joshi and M.~P. Heimdahl.
-\newblock {Model-Based Safety Analysis of Simulink Models Using SCADE Design
-  Verifier}.
-\newblock In {\em SAFECOMP}, volume 3688 of {\em LNCS}, page 122, 2005.
-
 \bibitem{Joshi05:Dasc}
 A.~Joshi, S.~P. Miller, M.~Whalen, and M.~P. Heimdahl.
 \newblock {A Proposal for Model-Based Safety Analysis}.
 \newblock In {\em {In Proceedings of 24th Digital Avionics Systems Conference
   (Awarded Best Paper of Track)}}, 2005.
-
-\bibitem{NasaRep:MBSA-Aug05}
-A.~Joshi, M.~Whalen, and M.~P. Heimdahl.
-\newblock {Automated Safety Analysis Draft Final Report}.
-\newblock Report for NASA Contract NCC-01001, August 2005.
-
-\bibitem{Larson:2013:IAE:2527269.2527271}
-B.~Larson, J.~Hatcliff, K.~Fowler, and J.~Delange.
-\newblock {Illustrating the {AADL} Error Modeling Annex (V.2) Using a Simple
-  Safety-critical Medical Device}.
-\newblock In {\em Proceedings of the 2013 ACM SIGAda Annual Conference on High
-  Integrity Language Technology}, HILT '13, pages 65--84, New York, NY, USA,
-  2013. ACM.
-
-\bibitem{hilt2013}
-A.~Murugesan, M.~W. Whalen, S.~Rayadurgam, and M.~P. Heimdahl.
-\newblock {Compositional Verification of a Medical Device System}.
-\newblock In {\em ACM Int'l Conf. on High Integrity Language Technology (HILT)
-  2013}. ACM, November 2013.
-
-\bibitem{Pajic2012}
-M.~Pajic, R.~Mangharam, O.~Sokolsky, D.~Arney, J.~Goldman, and I.~Lee.
-\newblock {Model-Driven Safety Analysis of Closed-Loop Medical Systems}.
-\newblock {\em Industrial Informatics, IEEE Transactions on}, PP:1--12, 2012.
-\newblock In early online access.
 
 \bibitem{PROSVIRNOVA2013127}
 T.~Prosvirnova, M.~Batteux, P.-A. Brameret, A.~Cherfi, T.~Friedlhuber, J.-M.
@@ -101,14 +65,7 @@ T.~Prosvirnova, M.~Batteux, P.-A. Brameret, A.~Cherfi, T.~Friedlhuber, J.-M.
 
 \bibitem{SAEAS}
 {SAE AS 5506B-3}.
-\newblock Aadl annex volume 1, Sept. 2015.
-
-\bibitem{DBLP:conf/adaEurope/SokolskyLC09}
-O.~Sokolsky, I.~Lee, and D.~Clarke.
-\newblock {Process-Algebraic Interpretation of {AADL} Models}.
-\newblock In {\em Reliable Software Technologies - Ada-Europe 2009, 14th
-  Ada-Europe International Conference, Brest, France, June 8-12, 2009.
-  Proceedings}, pages 222--236, 2009.
+\newblock {AADL Annex Volume 1}, Sept. 2015.
 
 \bibitem{Stewart17:IMBSA}
 D.~Stewart, M.~Whalen, D.~Cofer, and M.~P. Heimdahl.

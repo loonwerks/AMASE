@@ -1,26 +1,53 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
 The style file: abbrv.bst
 Database file #1: biblio.bib
-Repeated entry---line 265 of file biblio.bib
- : @inproceedings{QFCS15:backes
- :                             ,
-I'm skipping whatever remains of this entry
-Repeated entry---line 281 of file biblio.bib
- : @inproceedings{hilt2013
- :                        ,
-I'm skipping whatever remains of this entry
-Repeated entry---line 361 of file biblio.bib
- : @article{Pajic2012
- :                   ,
-I'm skipping whatever remains of this entry
-I was expecting an "="---line 403 of file biblio.bib
+I was expecting an "="---line 231 of file biblio.bib
  : article 
- :         NUMBER = {7},
+ :         NUMBER = {7}
 I'm skipping whatever remains of this entry
-A bad cross reference---entry "DBLP:conf/adaEurope/SokolskyLC09"
-refers to entry "DBLP:conf/adaEurope/2009", which doesn't exist
-A bad cross reference---entry "DBLP:conf/tacas/BittnerBCCGGMMZ16"
-refers to entry "DBLP:conf/tacas/2016", which doesn't exist
-Warning--I didn't find a database entry for "DBLP:conf/adaEurope/2009"
-Warning--I didn't find a database entry for "DBLP:conf/tacas/2016"
-(There were 6 error messages)
+Warning--to sort, need author or key in CHEN201391
+Warning--empty author in CHEN201391
+You've used 13 entries,
+            2118 wiz_defined-function locations,
+            589 strings with 6529 characters,
+and the built_in function-call counts, 5360 in all, are:
+= -- 488
+> -- 304
+< -- 9
++ -- 118
+- -- 105
+* -- 402
+:= -- 848
+add.period$ -- 38
+call.type$ -- 13
+change.case$ -- 89
+chr.to.int$ -- 0
+cite$ -- 15
+duplicate$ -- 205
+empty$ -- 411
+format.name$ -- 105
+if$ -- 1147
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 11
+newline$ -- 65
+num.names$ -- 28
+pop$ -- 115
+preamble$ -- 1
+purify$ -- 76
+quote$ -- 0
+skip$ -- 158
+stack$ -- 0
+substring$ -- 265
+swap$ -- 71
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 52
+warning$ -- 2
+while$ -- 41
+width$ -- 15
+write$ -- 141
+(There was 1 error message)
