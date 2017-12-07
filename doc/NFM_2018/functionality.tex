@@ -28,7 +28,7 @@ The \textit{fault statement} consists of a unique description string, the fault 
 \textit{Inputs}: The inputs in a fault statement are the parameters into the fault node definition. As shown in the example above, \textit{val\_in} and \textit{alt\_val} are the two parameters into the fault node. These are linked to the values found in \textit{blue\_output.val}, the output from the Selector component, and \textit{alt\_value}, a nondeterministic value defined within the Safety Annex. When the analysis is run, these values are passed into the fault node definition.\\
 \textit{Outputs}: The outputs of the fault definition correspond to the outputs of the fault node. The fault output statement links the component output (\textit{blue\_output.val}) with the fault node output (\textit{val\_out}). If the fault is triggered, the nominal value of \textit{blue\_output.val} is overridden by the failure value output by the fault node.\\
 \textit{Duration}: Currently the Safety Annex supports transient and permanent faults.\\
-\textit{Equation Statements}: Equation statements support deterministic or nondeterministic types. For more details on equation statements, see ~\cite{NFM2012:CoGaMiWhLaLu}.\\
+\textit{Equation Statements}: Equation statements support deterministic or nondeterministic types. For more details on equation statements, see ~\cite{NFM2012:CoGaMiWhLaLu}.
 
 
 
