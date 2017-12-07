@@ -1,18 +1,19 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
 The style file: abbrv.bst
 Database file #1: biblio.bib
-I was expecting a `,' or a `}'---line 329 of file biblio.bib
- : 
- : @article{Pajic2012,
-(Error may have been on previous line)
+Repeated entry---line 258 of file biblio.bib
+ : @inproceedings{QFCS15:backes
+ :                             ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 329 of file biblio.bib
+Repeated entry---line 274 of file biblio.bib
+ : @inproceedings{hilt2013
+ :                        ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 354 of file biblio.bib
  : @article{Pajic2012
  :                   ,
 I'm skipping whatever remains of this entry
-I was expecting an "="---line 371 of file biblio.bib
+I was expecting an "="---line 396 of file biblio.bib
  : article 
  :         NUMBER = {7},
 I'm skipping whatever remains of this entry
@@ -25,48 +26,5 @@ refers to entry "DBLP:conf/cav/2015-1", which doesn't exist
 Warning--I didn't find a database entry for "DBLP:conf/cav/2015-1"
 Warning--I didn't find a database entry for "DBLP:conf/adaEurope/2009"
 Warning--I didn't find a database entry for "DBLP:conf/tacas/2016"
-Warning--empty journal in DBLP:journals/scp/CimattiT15
-Warning--empty year in DBLP:journals/scp/CimattiT15
 Warning--empty chapter and pages in SysML
-You've used 25 entries,
-            2118 wiz_defined-function locations,
-            672 strings with 9740 characters,
-and the built_in function-call counts, 9613 in all, are:
-= -- 887
-> -- 549
-< -- 14
-+ -- 214
-- -- 189
-* -- 675
-:= -- 1549
-add.period$ -- 75
-call.type$ -- 25
-change.case$ -- 166
-chr.to.int$ -- 0
-cite$ -- 28
-duplicate$ -- 364
-empty$ -- 728
-format.name$ -- 189
-if$ -- 2050
-int.to.chr$ -- 0
-int.to.str$ -- 25
-missing$ -- 19
-newline$ -- 124
-num.names$ -- 54
-pop$ -- 224
-preamble$ -- 1
-purify$ -- 142
-quote$ -- 0
-skip$ -- 287
-stack$ -- 0
-substring$ -- 431
-swap$ -- 117
-text.length$ -- 14
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 98
-warning$ -- 3
-while$ -- 78
-width$ -- 27
-write$ -- 267
-(There were 6 error messages)
+(There were 7 error messages)
