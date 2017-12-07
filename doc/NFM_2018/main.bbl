@@ -40,6 +40,11 @@ D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
   NASA Formal Methods Symposium (NFM 2012)}, volume 7226, pages 126--140,
   Berlin, Heidelberg, April 2012. Springer-Verlag.
 
+\bibitem{Driscoll-Byzantine-Fault}
+K.~Driscoll, H.~Sivencrona, and P.~Zumsteg.
+\newblock {Byzantine Fault Tolerance, from Theory to Reality}.
+\newblock In {\em SAFECOMP}, volume 2788 of {\em LNCS}, pages 235--248, 2003.
+
 \bibitem{Halbwachs91:IEEE}
 N.~Halbwachs, P.~Caspi, P.~Raymond, and D.~Pilaud.
 \newblock {The Synchronous Dataflow Programming Language Lustre}.
