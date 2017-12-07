@@ -1,19 +1,19 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
 The style file: abbrv.bst
 Database file #1: biblio.bib
-Repeated entry---line 265 of file biblio.bib
+Repeated entry---line 280 of file biblio.bib
  : @inproceedings{QFCS15:backes
  :                             ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 281 of file biblio.bib
+Repeated entry---line 296 of file biblio.bib
  : @inproceedings{hilt2013
  :                        ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 361 of file biblio.bib
+Repeated entry---line 376 of file biblio.bib
  : @article{Pajic2012
  :                   ,
 I'm skipping whatever remains of this entry
-I was expecting an "="---line 403 of file biblio.bib
+I was expecting an "="---line 418 of file biblio.bib
  : article 
  :         NUMBER = {7},
 I'm skipping whatever remains of this entry

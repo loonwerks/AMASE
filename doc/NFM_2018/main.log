@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.4)  7 DEC 2017 09:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.14)  7 DEC 2017 10:37
 entering extended mode
-**./main.tex
-(main.tex
+**C:/Users/whalen/Documents/git/AMASE2/AMASE/doc/NFM_2018/main.tex
+(C:/Users/whalen/Documents/git/AMASE2/AMASE/doc/NFM_2018/main.tex
 LaTeX2e <2016/03/31> patch level 3
 Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
 (llncs.cls
@@ -195,7 +195,7 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
 ))
 ("C:\Program Files\MiKTeX 2.9\tex\latex\sttools\flushend.sty"
-Package: flushend 2017/03/27 v3.3 Balancing columns in twocolumn mode
+Package: flushend 2016/06/21 v3.2 Balancing columns in twocolumn mode
 \flushend@@lastskip@a=\skip48
 \flushend@@lastskip@b=\skip49
 \flushend@@lastskip@c=\skip50
@@ -214,7 +214,7 @@ Package: flushend 2017/03/27 v3.3 Balancing columns in twocolumn mode
 \atColsEnd=\toks22
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\etoolbox\etoolbox.sty"
-Package: etoolbox 2017/11/22 v2.5 e-TeX tools for LaTeX (JAW)
+Package: etoolbox 2015/08/02 v2.2a e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count119
 ))
 ("C:\Program Files\MiKTeX 2.9\tex\latex\cite\cite.sty"
@@ -444,7 +444,7 @@ Package: balance 1999/02/23 4.3 (PWD)
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\algorithm2e\algorithm2e.sty"
-Package: algorithm2e 2017/07/18 v5.2 algorithms environments
+Package: algorithm2e 2013/01/06 v5.00 algorithms environments
 \c@AlgoLine=\count151
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ifthen.sty"
@@ -452,13 +452,16 @@ Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \algocf@hangindent=\skip68
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\ifoddpage\ifoddpage.sty"
-Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
-\c@checkoddpage=\count152
-)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\ltxmisc\relsize.sty"
 Package: relsize 2003/07/04 ver 3.1
 )
+********************************************************
+Package `algorithm2e' Release 5.1 -- october 19 2015 --
+- algorithm2e-announce@lirmm.fr mailing list for announcement about releases
+- algorithm2e-discussion@lirmm.fr mailing list for discussion about package
+subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
+- Author: Christophe Fiorio (christophe.fiorio@umontpellier.fr)
+********************************************************
 \skiptotal=\skip69
 \skiplinenumber=\skip70
 \skiprule=\skip71
@@ -484,29 +487,27 @@ Package: relsize 2003/07/04 ver 3.1
 \algocf@untilbox=\box74
 \algocf@skipuntil=\skip81
 \algocf@capbox=\box75
-\algocf@lcaptionbox=\skip82
-\algoheightruledefault=\skip83
-\algoheightrule=\skip84
-\algotitleheightruledefault=\skip85
-\algotitleheightrule=\skip86
-\c@algocfline=\count153
-\c@algocfproc=\count154
-\c@algocf=\count155
+\algoheightruledefault=\skip82
+\algoheightrule=\skip83
+\algotitleheightruledefault=\skip84
+\algotitleheightrule=\skip85
+\c@algocfline=\count152
+\c@algocfproc=\count153
+\c@algocf=\count154
 \algocf@algoframe=\box76
 \algocf@algobox=\box77
-)
-("C:\Program Files\MiKTeX 2.9\tex\latex\csquotes\csquotes.sty"
-Package: csquotes 2017/03/11 v5.2b context-sensitive quotations (JAW)
-\csq@reset=\count156
-\csq@gtype=\count157
-\csq@glevel=\count158
-\csq@qlevel=\count159
-\csq@maxlvl=\count160
-\csq@tshold=\count161
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\csquotes\csquotes.sty"
+Package: csquotes 2017/02/03 v5.2a context-sensitive quotations (JAW)
+\csq@reset=\count155
+\csq@gtype=\count156
+\csq@glevel=\count157
+\csq@qlevel=\count158
+\csq@maxlvl=\count159
+\csq@tshold=\count160
 \csq@ltx@everypar=\toks32
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\csquotes\csquotes.def"
-File: csquotes.def 2017/03/11 v5.2b csquotes generic definitions (JAW)
+File: csquotes.def 2017/02/03 v5.2a csquotes generic definitions (JAW)
 )
 Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
 Package csquotes Info: ... configuration file loaded successfully.
@@ -544,16 +545,16 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count162
+\scratchcounter=\count161
 \scratchdimen=\dimen176
 \scratchbox=\box78
-\nofMPsegments=\count163
-\nofMParguments=\count164
+\nofMPsegments=\count162
+\nofMParguments=\count163
 \everyMPshowfont=\toks33
-\MPscratchCnt=\count165
+\MPscratchCnt=\count164
 \MPscratchDim=\dimen177
-\MPnumerator=\count166
-\makeMPintoPDFobject=\count167
+\MPnumerator=\count165
+\makeMPintoPDFobject=\count166
 \everyMPtoPDFconversion=\toks34
 ) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
 Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
@@ -600,7 +601,7 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
-\c@lstlisting=\count168
+\c@lstlisting=\count167
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 102.
 LaTeX Font Info:    Try loading font information for U+msa on input line 102.
@@ -677,36 +678,32 @@ File: images/sample_code.png Graphic file (type png)
 <use images/sample_code.png>
 Package pdftex.def Info: images/sample_code.png used on input line 19.
 (pdftex.def)             Requested size: 347.12354pt x 162.84537pt.
-
-
-LaTeX Warning: Reference `' on page 5 undefined on input line 27.
-
 ) (applications.tex [5 <./images/sample_code.png>]) (conclusion.tex) (main.bbl
-[6]
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¶ in font ptmr7t!
+ [6]
 Missing character: There is no ö in font ptmr7t!
 Missing character: There is no † in font ptmr7t!
-) [7] (main.aux)
+) [7] (main.aux) )
+(\end occurred inside a group at level 1)
 
-LaTeX Warning: There were undefined references.
-
- ) 
+### simple group (level 1) entered at line 1061 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 7838 strings out of 493334
- 109388 string characters out of 3139249
- 215137 words of memory out of 3000000
- 11158 multiletter control sequences out of 15000+200000
+ 7792 strings out of 493334
+ 108618 string characters out of 3139248
+ 215858 words of memory out of 3000000
+ 11115 multiletter control sequences out of 15000+200000
  25077 words of font info for 66 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,7n,35p,1226b,294s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
-ype1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/
-utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (7 pages, 145601 bytes).
+ 40i,7n,35p,1280b,2439s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program 
+Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utm
+r8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (7 pages, 145676 bytes).
 PDF statistics:
  64 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

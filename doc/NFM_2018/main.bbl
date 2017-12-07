@@ -45,6 +45,11 @@ K.~Driscoll, H.~Sivencrona, and P.~Zumsteg.
 \newblock {Byzantine Fault Tolerance, from Theory to Reality}.
 \newblock In {\em SAFECOMP}, volume 2788 of {\em LNCS}, pages 235--248, 2003.
 
+\bibitem{2017arXiv171201222G}
+A.~{Gacek}, J.~{Backes}, M.~{Whalen}, L.~{Wagner}, and E.~{Ghassabani}.
+\newblock {The JKind Model Checker}.
+\newblock {\em ArXiv e-prints}, Dec. 2017.
+
 \bibitem{Halbwachs91:IEEE}
 N.~Halbwachs, P.~Caspi, P.~Raymond, and D.~Pilaud.
 \newblock {The Synchronous Dataflow Programming Language Lustre}.
