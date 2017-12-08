@@ -1,7 +1,7 @@
 \section{Functionality}
 In this section, we describe the main features and functionality of the Safety Annex.
 %
-An AADL model of the nominal system behavior specifies the hardware and software components of the system and their interconnections. This nominal model is then annotated with assume-guarantee contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu} for AADL. The nominal model  requirements are verified using compositional verification techniques based on $k$-induction model checking~\cite{NFM2012:CoGaMiWhLaLu}.
+An AADL model of the nominal system behavior specifies the hardware and software components of the system and their interconnections. This nominal model is then annotated with assume-guarantee contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu} for AADL. The nominal model  requirements are verified using compositional verification techniques based on $k$-induction model checking~\cite{2017arXiv171201222G}.
 
 Once the nominal model behavior is defined and verified, the Safety Annex can be used to specify possible faulty behaviors for each component. The faults are defined on each of the relevant components using a customizable library of fault nodes and the faults are assigned a probability of occurrence. A probability threshold is also defined at the system level. This extended model can be analyzed to verify the behavior of the system in the presence of faults. Verification of the nominal model with or without the fault model is controlled through the safety analysis option during AGREE verification.
 
