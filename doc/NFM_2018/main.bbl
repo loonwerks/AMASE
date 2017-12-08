@@ -4,10 +4,6 @@
 {Systems Modeling with {EAST-ADL} for Fault Tree Analysis through {HiP-HOPS}*}.
 \newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
 
-\bibitem{AADL}
-{AADL}.
-\newblock {Predictable Model-Based Engineering}.
-
 \bibitem{AIR6110}
 {AIR 6110}.
 \newblock {Contiguous Aircraft/System Development Process Example}, Dec. 2011.
@@ -43,6 +39,12 @@ D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
 K.~Driscoll, H.~Sivencrona, and P.~Zumsteg.
 \newblock {Byzantine Fault Tolerance, from Theory to Reality}.
 \newblock In {\em SAFECOMP}, volume 2788 of {\em LNCS}, pages 235--248, 2003.
+
+\bibitem{FeilerModelBasedEngineering2012}
+P.~Feiler and D.~Gluch.
+\newblock {\em Model-Based Engineering with AADL: An Introduction to the SAE
+  Architecture Analysis \& Design Language}.
+\newblock Addison-Wesley Professional, 2012.
 
 \bibitem{2017arXiv171201222G}
 A.~{Gacek}, J.~{Backes}, M.~{Whalen}, L.~{Wagner}, and E.~{Ghassabani}.
