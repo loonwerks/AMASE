@@ -4,6 +4,10 @@
 {Systems Modeling with {EAST-ADL} for Fault Tree Analysis through {HiP-HOPS}*}.
 \newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
 
+\bibitem{AADL}
+{AADL}.
+\newblock {Predictable Model-Based Engineering}.
+
 \bibitem{AIR6110}
 {AIR 6110}.
 \newblock {Contiguous Aircraft/System Development Process Example}, Dec. 2011.
