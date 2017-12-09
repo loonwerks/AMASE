@@ -15,20 +15,20 @@ The fault library contains commonly used fault node definitions. An example of a
 \vspace{-0.4in}
 \end{figure}
 
-The \textit{fail\_to} node provides a way to inject a faulty input value. When the \textit{trigger} condition is satisfied, the nominal component output value is overridden by the \textit{fail\_to} failure value. In the WBS, the Selector valve component receives inputs from the hydraulic pressure pumps and a digital system component. The Selector will switch modes of the system depending on the inputs it receives (see ~\cite{AIR6110,Stewart17:IMBSA} for more information). There are two main hydraulic lines that feed into the Selector, namely the green line and the blue line corresponding to the normal and alternate modes of operation. The output of the Selector component will either be the green or the blue hydraulic fluid. Declaration of a non-deterministic fault in the Selector component is shown below:
+The \textit{fail\_to} node provides a way to inject a faulty input value. When the \textit{trigger} condition is satisfied, the nominal component output value is overridden by the \textit{fail\_to} failure value. In the WBS, the pump component generates an expected amount of pressure to a hydraulic line.  Declaration of a non-deterministic fault in the pump component is shown below:
 \begin{figure}[h!]
 \vspace{-0.17in}
 \begin{center}
-\includegraphics[trim=0 15 0 11,clip,width=1.0\textwidth]{images/annex.png}
+\includegraphics[trim=0 330 150 0,clip,width=1.0\textwidth]{images/annex.png}
 \end{center}
 \vspace{-0.40in}
 \end{figure}
 
 The \textit{fault statement} consists of a unique description string, the fault node definition name, and a series of \textit{fault subcomponent} statements. \\
-\textit{Inputs}: The inputs in a fault statement are the parameters of the fault node definition. In the example above, \textit{val\_in} and \textit{alt\_val} are the two input parameters of the fault node. These are linked to the output from the Selector component (\textit{blue\_output.val}), and \textit{alt\_value}, a nondeterministic value defined within the Safety Annex. When the analysis is run, these values are passed into the fault node definition.\\
-\textit{Outputs}: The outputs of the fault definition correspond to the outputs of the fault node. The fault output statement links the component output (\textit{blue\_output.val}) with the fault node output (\textit{val\_out}). If the fault is triggered, the nominal value of \textit{blue\_output.val} is overridden by the failure value output by the fault node. Faulty outputs can take deterministic or non-deterministic values. \\
-\textit{Duration}: Currently the Safety Annex supports transient and permanent faults.\\
-\textit{Probability}: The probability of a fault occurence can be specified.
+\textbf{Inputs} in a fault statement are the parameters of the fault node definition. In the example above, \textit{val\_in} and \textit{alt\_val} are the two input parameters of the fault node. These are linked to the output from the Pump component (\textbf{pressure\_output.val}), and \textit{alt\_value}, a nondeterministic value defined within the Safety Annex. When the analysis is run, these values are passed into the fault node definition.\\
+\textbf{Outputs} of the fault definition correspond to the outputs of the fault node. The fault output statement links the component output (\textit{pressure\_output.val}) with the fault node output (\textit{val\_out}). If the fault is triggered, the nominal value of \textit{pressure\_output.val} is overridden by the failure value output by the fault node. Faulty outputs can take deterministic or non-deterministic values. \\
+\textbf{Probability} describes the probability of a fault occurrence.
+\textbf{Duration} describes the duration of the fault; currently the Safety Annex supports transient and permanent faults.\\
 %\textit{Equation Statements}: Equation statements support deterministic or nondeterministic types. For more details on equation statements, see ~\cite{NFM2012:CoGaMiWhLaLu}.
 
 
