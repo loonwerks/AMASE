@@ -13,6 +13,7 @@
     <genClasses ecoreClass="Safety.ecore#//SafetySubclause"/>
     <genClasses ecoreClass="Safety.ecore#//Contract"/>
     <genClasses ecoreClass="Safety.ecore#//SpecStatement"/>
+    <genClasses ecoreClass="Safety.ecore#//AnalysisBehavior"/>
     <genClasses ecoreClass="Safety.ecore#//FaultSubcomponent"/>
     <genClasses ecoreClass="Safety.ecore#//TemporalConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TriggerCondition">
@@ -38,7 +39,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//AnalysisStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//AnalysisStatement/behavior"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//AnalysisStatement/maxFaults"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//FaultCountBehavior">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultCountBehavior/maxFaults"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ProbabilityBehavior">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ProbabilityBehavior/probabilty"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//InputStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute Safety.ecore#//InputStatement/fault_in"/>
@@ -59,14 +67,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//DurationStatement/tc"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//DurationStatement/interv"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ProbabilityStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ProbabilityStatement/probability"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//PermanentConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TransientConstraint"/>
-    <genClasses ecoreClass="Safety.ecore#//MustCondition"/>
-    <genClasses ecoreClass="Safety.ecore#//EnablerCondition"/>
+    <genClasses ecoreClass="Safety.ecore#//EnablerCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EnablerCondition/exprList"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//EqValue">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EqValue/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//EqValue/expr"/>
@@ -89,6 +101,7 @@
     <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenRightInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//MustCondition"/>
     <genClasses ecoreClass="Safety.ecore#//OutputAssignStatement"/>
     <genClasses ecoreClass="Safety.ecore#//FaultOutputAssignStmt">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultOutputAssignStmt/fault_output_eq"/>

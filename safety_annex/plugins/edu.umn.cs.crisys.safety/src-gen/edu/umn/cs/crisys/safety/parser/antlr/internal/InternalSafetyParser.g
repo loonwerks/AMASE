@@ -337,35 +337,110 @@ ruleSpecStatement returns [EObject current=null]
     {
     	newLeafNode(otherlv_10, grammarAccess.getSpecStatementAccess().getColonKeyword_1_2());
     }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getBehaviorAnalysisBehaviorParserRuleCall_1_3_0()); 
+	    }
+		lv_behavior_11_0=ruleAnalysisBehavior		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"behavior",
+        		lv_behavior_11_0, 
+        		"edu.umn.cs.crisys.safety.Safety.AnalysisBehavior");
+	        afterParserOrEnumRuleCall();
+	    }
 
-	otherlv_11=Max
+)
+)))
+;
+
+
+
+
+
+// Entry rule entryRuleAnalysisBehavior
+entryRuleAnalysisBehavior returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getAnalysisBehaviorRule()); }
+	 iv_ruleAnalysisBehavior=ruleAnalysisBehavior 
+	 { $current=$iv_ruleAnalysisBehavior.current; } 
+	 EOF 
+;
+
+// Rule AnalysisBehavior
+ruleAnalysisBehavior returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(((
     {
-    	newLeafNode(otherlv_11, grammarAccess.getSpecStatementAccess().getMaxKeyword_1_3());
+        $current = forceCreateModelElement(
+            grammarAccess.getAnalysisBehaviorAccess().getFaultCountBehaviorAction_0_0(),
+            $current);
+    }
+)
+	otherlv_1=Max
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getAnalysisBehaviorAccess().getMaxKeyword_0_1());
     }
 (
 (
-		lv_maxFaults_12_0=RULE_INTEGER_LIT
+		lv_maxFaults_2_0=RULE_INTEGER_LIT
 		{
-			newLeafNode(lv_maxFaults_12_0, grammarAccess.getSpecStatementAccess().getMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0()); 
+			newLeafNode(lv_maxFaults_2_0, grammarAccess.getAnalysisBehaviorAccess().getMaxFaultsINTEGER_LITTerminalRuleCall_0_2_0()); 
 		}
 		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	            $current = createModelElement(grammarAccess.getAnalysisBehaviorRule());
 	        }
        		setWithLastConsumed(
        			$current, 
        			"maxFaults",
-        		lv_maxFaults_12_0, 
+        		lv_maxFaults_2_0, 
         		"org.osate.xtext.aadl2.properties.Properties.INTEGER_LIT");
 	    }
 
 )
 )
-	otherlv_13=Fault
+	otherlv_3=Fault
     {
-    	newLeafNode(otherlv_13, grammarAccess.getSpecStatementAccess().getFaultKeyword_1_5());
+    	newLeafNode(otherlv_3, grammarAccess.getAnalysisBehaviorAccess().getFaultKeyword_0_3());
     }
-))
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getAnalysisBehaviorAccess().getProbabilityBehaviorAction_1_0(),
+            $current);
+    }
+)
+	otherlv_5=Probability
+    {
+    	newLeafNode(otherlv_5, grammarAccess.getAnalysisBehaviorAccess().getProbabilityKeyword_1_1());
+    }
+(
+(
+		lv_probabilty_6_0=RULE_REAL_LIT
+		{
+			newLeafNode(lv_probabilty_6_0, grammarAccess.getAnalysisBehaviorAccess().getProbabiltyREAL_LITTerminalRuleCall_1_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getAnalysisBehaviorRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"probabilty",
+        		lv_probabilty_6_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.REAL_LIT");
+	    }
+
+)
+)))
 ;
 
 
@@ -665,13 +740,13 @@ ruleFaultSubcomponent returns [EObject current=null]
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getFaultSubcomponentAccess().getTriggerStatementAction_3_0(),
+            grammarAccess.getFaultSubcomponentAccess().getProbabilityStatementAction_3_0(),
             $current);
     }
 )
-	otherlv_29=Trigger
+	otherlv_29=Probability
     {
-    	newLeafNode(otherlv_29, grammarAccess.getFaultSubcomponentAccess().getTriggerKeyword_3_1());
+    	newLeafNode(otherlv_29, grammarAccess.getFaultSubcomponentAccess().getProbabilityKeyword_3_1());
     }
 
 	otherlv_30=Colon
@@ -680,32 +755,9 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_3_3_0()); 
-	    }
-		lv_cond_31_0=ruleTriggerCondition		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
-	        }
-       		set(
-       			$current, 
-       			"cond",
-        		lv_cond_31_0, 
-        		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-)(
-	otherlv_32=LeftSquareBracket
-    {
-    	newLeafNode(otherlv_32, grammarAccess.getFaultSubcomponentAccess().getLeftSquareBracketKeyword_3_4_0());
-    }
-(
-(
-		lv_probability_33_0=RULE_REAL_LIT
+		lv_probability_31_0=RULE_REAL_LIT
 		{
-			newLeafNode(lv_probability_33_0, grammarAccess.getFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_3_4_1_0()); 
+			newLeafNode(lv_probability_31_0, grammarAccess.getFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_3_3_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -714,29 +766,59 @@ ruleFaultSubcomponent returns [EObject current=null]
        		setWithLastConsumed(
        			$current, 
        			"probability",
-        		lv_probability_33_0, 
+        		lv_probability_31_0, 
         		"org.osate.xtext.aadl2.properties.Properties.REAL_LIT");
 	    }
 
 )
 )
-	otherlv_34=RightSquareBracket
+	otherlv_32=Semicolon
     {
-    	newLeafNode(otherlv_34, grammarAccess.getFaultSubcomponentAccess().getRightSquareBracketKeyword_3_4_2());
+    	newLeafNode(otherlv_32, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_3_4());
     }
-)?
-	otherlv_35=Semicolon
+)
+    |((
     {
-    	newLeafNode(otherlv_35, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_3_5());
+        $current = forceCreateModelElement(
+            grammarAccess.getFaultSubcomponentAccess().getTriggerStatementAction_4_0(),
+            $current);
+    }
+)
+	otherlv_34=Enabled
+    {
+    	newLeafNode(otherlv_34, grammarAccess.getFaultSubcomponentAccess().getEnabledKeyword_4_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_4_2_0()); 
+	    }
+		lv_cond_35_0=ruleTriggerCondition		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"cond",
+        		lv_cond_35_0, 
+        		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_36=Semicolon
+    {
+    	newLeafNode(otherlv_36, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_4_3());
     }
 )
     |
     { 
-        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_4()); 
+        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_5()); 
     }
-    this_SafetyEqStatement_36=ruleSafetyEqStatement
+    this_SafetyEqStatement_37=ruleSafetyEqStatement
     {
-        $current = $this_SafetyEqStatement_36.current;
+        $current = $this_SafetyEqStatement_37.current;
         afterParserOrEnumRuleCall();
     }
 )
@@ -804,26 +886,26 @@ ruleTriggerCondition returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(((
+((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getTriggerConditionAccess().getMustConditionAction_0_0(),
+            grammarAccess.getTriggerConditionAccess().getEnablerConditionAction_0(),
             $current);
     }
 )
-	otherlv_1=Must
+	otherlv_1=By
     {
-    	newLeafNode(otherlv_1, grammarAccess.getTriggerConditionAccess().getMustKeyword_0_1());
+    	newLeafNode(otherlv_1, grammarAccess.getTriggerConditionAccess().getByKeyword_1());
     }
 
 	otherlv_2=LeftCurlyBracket
     {
-    	newLeafNode(otherlv_2, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_0_2());
+    	newLeafNode(otherlv_2, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_0_3_0()); 
+	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_3_0()); 
 	    }
 		lv_exprList_3_0=ruleExpr		{
 	        if ($current==null) {
@@ -841,12 +923,12 @@ ruleTriggerCondition returns [EObject current=null]
 )(
 	otherlv_4=Comma
     {
-    	newLeafNode(otherlv_4, grammarAccess.getTriggerConditionAccess().getCommaKeyword_0_4_0());
+    	newLeafNode(otherlv_4, grammarAccess.getTriggerConditionAccess().getCommaKeyword_4_0());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_0_4_1_0()); 
+	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_4_1_0()); 
 	    }
 		lv_exprList_5_0=ruleExpr		{
 	        if ($current==null) {
@@ -864,72 +946,9 @@ ruleTriggerCondition returns [EObject current=null]
 ))*
 	otherlv_6=RightCurlyBracket
     {
-    	newLeafNode(otherlv_6, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_0_5());
+    	newLeafNode(otherlv_6, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_5());
     }
 )
-    |((
-    {
-        $current = forceCreateModelElement(
-            grammarAccess.getTriggerConditionAccess().getEnablerConditionAction_1_0(),
-            $current);
-    }
-)
-	otherlv_8=Enabler
-    {
-    	newLeafNode(otherlv_8, grammarAccess.getTriggerConditionAccess().getEnablerKeyword_1_1());
-    }
-
-	otherlv_9=LeftCurlyBracket
-    {
-    	newLeafNode(otherlv_9, grammarAccess.getTriggerConditionAccess().getLeftCurlyBracketKeyword_1_2());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_1_3_0()); 
-	    }
-		lv_exprList_10_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getTriggerConditionRule());
-	        }
-       		add(
-       			$current, 
-       			"exprList",
-        		lv_exprList_10_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-)(
-	otherlv_11=Comma
-    {
-    	newLeafNode(otherlv_11, grammarAccess.getTriggerConditionAccess().getCommaKeyword_1_4_0());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getTriggerConditionAccess().getExprListExprParserRuleCall_1_4_1_0()); 
-	    }
-		lv_exprList_12_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getTriggerConditionRule());
-	        }
-       		add(
-       			$current, 
-       			"exprList",
-        		lv_exprList_12_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-))*
-	otherlv_13=RightCurlyBracket
-    {
-    	newLeafNode(otherlv_13, grammarAccess.getTriggerConditionAccess().getRightCurlyBracketKeyword_1_5());
-    }
-))
 ;
 
 

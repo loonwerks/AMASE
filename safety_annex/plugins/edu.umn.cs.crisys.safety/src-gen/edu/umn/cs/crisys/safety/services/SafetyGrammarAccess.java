@@ -160,19 +160,17 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cAnalysisStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cAnalyzeKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Keyword cColonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final Keyword cMaxKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
-		private final Assignment cMaxFaultsAssignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
-		private final RuleCall cMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0 = (RuleCall)cMaxFaultsAssignment_1_4.eContents().get(0);
-		private final Keyword cFaultKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
+		private final Assignment cBehaviorAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
+		private final RuleCall cBehaviorAnalysisBehaviorParserRuleCall_1_3_0 = (RuleCall)cBehaviorAssignment_1_3.eContents().get(0);
 		
 		//@ Override SpecStatement:
 		//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
 		//	'{' faultDefinitions+=FaultSubcomponent* '}'
-		//	| {AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
+		//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior;
 		@Override public ParserRule getRule() { return rule; }
 
 		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
-		//{AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault'
+		//{AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}'
@@ -211,7 +209,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_0_7() { return cRightCurlyBracketKeyword_0_7; }
 
-		//{AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault'
+		//{AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{AnalysisStatement}
@@ -223,17 +221,68 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_1_2() { return cColonKeyword_1_2; }
 
+		//behavior=AnalysisBehavior
+		public Assignment getBehaviorAssignment_1_3() { return cBehaviorAssignment_1_3; }
+
+		//AnalysisBehavior
+		public RuleCall getBehaviorAnalysisBehaviorParserRuleCall_1_3_0() { return cBehaviorAnalysisBehaviorParserRuleCall_1_3_0; }
+	}
+
+	public class AnalysisBehaviorElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnalysisBehavior");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final Action cFaultCountBehaviorAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Keyword cMaxKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Assignment cMaxFaultsAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
+		private final RuleCall cMaxFaultsINTEGER_LITTerminalRuleCall_0_2_0 = (RuleCall)cMaxFaultsAssignment_0_2.eContents().get(0);
+		private final Keyword cFaultKeyword_0_3 = (Keyword)cGroup_0.eContents().get(3);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Action cProbabilityBehaviorAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Keyword cProbabilityKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cProbabiltyAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cProbabiltyREAL_LITTerminalRuleCall_1_2_0 = (RuleCall)cProbabiltyAssignment_1_2.eContents().get(0);
+		
+		//AnalysisBehavior:
+		//	{FaultCountBehavior} 'max' maxFaults=INTEGER_LIT 'fault'
+		//	| {ProbabilityBehavior} 'probability' probabilty=REAL_LIT;
+		@Override public ParserRule getRule() { return rule; }
+
+		//{FaultCountBehavior} 'max' maxFaults=INTEGER_LIT 'fault' | {ProbabilityBehavior} 'probability' probabilty=REAL_LIT
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//{FaultCountBehavior} 'max' maxFaults=INTEGER_LIT 'fault'
+		public Group getGroup_0() { return cGroup_0; }
+
+		//{FaultCountBehavior}
+		public Action getFaultCountBehaviorAction_0_0() { return cFaultCountBehaviorAction_0_0; }
+
 		//'max'
-		public Keyword getMaxKeyword_1_3() { return cMaxKeyword_1_3; }
+		public Keyword getMaxKeyword_0_1() { return cMaxKeyword_0_1; }
 
 		//maxFaults=INTEGER_LIT
-		public Assignment getMaxFaultsAssignment_1_4() { return cMaxFaultsAssignment_1_4; }
+		public Assignment getMaxFaultsAssignment_0_2() { return cMaxFaultsAssignment_0_2; }
 
 		//INTEGER_LIT
-		public RuleCall getMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0() { return cMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0; }
+		public RuleCall getMaxFaultsINTEGER_LITTerminalRuleCall_0_2_0() { return cMaxFaultsINTEGER_LITTerminalRuleCall_0_2_0; }
 
 		//'fault'
-		public Keyword getFaultKeyword_1_5() { return cFaultKeyword_1_5; }
+		public Keyword getFaultKeyword_0_3() { return cFaultKeyword_0_3; }
+
+		//{ProbabilityBehavior} 'probability' probabilty=REAL_LIT
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{ProbabilityBehavior}
+		public Action getProbabilityBehaviorAction_1_0() { return cProbabilityBehaviorAction_1_0; }
+
+		//'probability'
+		public Keyword getProbabilityKeyword_1_1() { return cProbabilityKeyword_1_1; }
+
+		//probabilty=REAL_LIT
+		public Assignment getProbabiltyAssignment_1_2() { return cProbabiltyAssignment_1_2; }
+
+		//REAL_LIT
+		public RuleCall getProbabiltyREAL_LITTerminalRuleCall_1_2_0() { return cProbabiltyREAL_LITTerminalRuleCall_1_2_0; }
 	}
 
 	public class FaultSubcomponentElements extends AbstractParserRuleElementFinder {
@@ -283,32 +332,35 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIntervIntervalParserRuleCall_2_4_0 = (RuleCall)cIntervAssignment_2_4.eContents().get(0);
 		private final Keyword cSemicolonKeyword_2_5 = (Keyword)cGroup_2.eContents().get(5);
 		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Action cTriggerStatementAction_3_0 = (Action)cGroup_3.eContents().get(0);
-		private final Keyword cTriggerKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
+		private final Action cProbabilityStatementAction_3_0 = (Action)cGroup_3.eContents().get(0);
+		private final Keyword cProbabilityKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
 		private final Keyword cColonKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
-		private final Assignment cCondAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
-		private final RuleCall cCondTriggerConditionParserRuleCall_3_3_0 = (RuleCall)cCondAssignment_3_3.eContents().get(0);
-		private final Group cGroup_3_4 = (Group)cGroup_3.eContents().get(4);
-		private final Keyword cLeftSquareBracketKeyword_3_4_0 = (Keyword)cGroup_3_4.eContents().get(0);
-		private final Assignment cProbabilityAssignment_3_4_1 = (Assignment)cGroup_3_4.eContents().get(1);
-		private final RuleCall cProbabilityREAL_LITTerminalRuleCall_3_4_1_0 = (RuleCall)cProbabilityAssignment_3_4_1.eContents().get(0);
-		private final Keyword cRightSquareBracketKeyword_3_4_2 = (Keyword)cGroup_3_4.eContents().get(2);
-		private final Keyword cSemicolonKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
-		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
+		private final Assignment cProbabilityAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
+		private final RuleCall cProbabilityREAL_LITTerminalRuleCall_3_3_0 = (RuleCall)cProbabilityAssignment_3_3.eContents().get(0);
+		private final Keyword cSemicolonKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
+		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
+		private final Action cTriggerStatementAction_4_0 = (Action)cGroup_4.eContents().get(0);
+		private final Keyword cEnabledKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
+		private final Assignment cCondAssignment_4_2 = (Assignment)cGroup_4.eContents().get(2);
+		private final RuleCall cCondTriggerConditionParserRuleCall_4_2_0 = (RuleCall)cCondAssignment_4_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4_3 = (Keyword)cGroup_4.eContents().get(3);
+		private final RuleCall cSafetyEqStatementParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
 		
 		//FaultSubcomponent:
 		//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
 		//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
 		//	fault_out+=ID)* ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
-		//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
+		//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+		//	| {TriggerStatement} 'enabled' cond=TriggerCondition ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
 		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';' |
 		//{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
 		//fault_out+=ID)* ';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' |
-		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';' | SafetyEqStatement
+		//{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';' | {TriggerStatement} 'enabled' cond=TriggerCondition
+		//';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
@@ -441,44 +493,47 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_2_5() { return cSemicolonKeyword_2_5; }
 
-		//{TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
+		//{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
 		public Group getGroup_3() { return cGroup_3; }
 
-		//{TriggerStatement}
-		public Action getTriggerStatementAction_3_0() { return cTriggerStatementAction_3_0; }
+		//{ProbabilityStatement}
+		public Action getProbabilityStatementAction_3_0() { return cProbabilityStatementAction_3_0; }
 
-		//'trigger'
-		public Keyword getTriggerKeyword_3_1() { return cTriggerKeyword_3_1; }
+		//'probability'
+		public Keyword getProbabilityKeyword_3_1() { return cProbabilityKeyword_3_1; }
 
 		//':'
 		public Keyword getColonKeyword_3_2() { return cColonKeyword_3_2; }
 
-		//cond=TriggerCondition
-		public Assignment getCondAssignment_3_3() { return cCondAssignment_3_3; }
-
-		//TriggerCondition
-		public RuleCall getCondTriggerConditionParserRuleCall_3_3_0() { return cCondTriggerConditionParserRuleCall_3_3_0; }
-
-		//('[' probability=REAL_LIT ']')?
-		public Group getGroup_3_4() { return cGroup_3_4; }
-
-		//'['
-		public Keyword getLeftSquareBracketKeyword_3_4_0() { return cLeftSquareBracketKeyword_3_4_0; }
-
 		//probability=REAL_LIT
-		public Assignment getProbabilityAssignment_3_4_1() { return cProbabilityAssignment_3_4_1; }
+		public Assignment getProbabilityAssignment_3_3() { return cProbabilityAssignment_3_3; }
 
 		//REAL_LIT
-		public RuleCall getProbabilityREAL_LITTerminalRuleCall_3_4_1_0() { return cProbabilityREAL_LITTerminalRuleCall_3_4_1_0; }
-
-		//']'
-		public Keyword getRightSquareBracketKeyword_3_4_2() { return cRightSquareBracketKeyword_3_4_2; }
+		public RuleCall getProbabilityREAL_LITTerminalRuleCall_3_3_0() { return cProbabilityREAL_LITTerminalRuleCall_3_3_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_3_5() { return cSemicolonKeyword_3_5; }
+		public Keyword getSemicolonKeyword_3_4() { return cSemicolonKeyword_3_4; }
+
+		//{TriggerStatement} 'enabled' cond=TriggerCondition ';'
+		public Group getGroup_4() { return cGroup_4; }
+
+		//{TriggerStatement}
+		public Action getTriggerStatementAction_4_0() { return cTriggerStatementAction_4_0; }
+
+		//'enabled'
+		public Keyword getEnabledKeyword_4_1() { return cEnabledKeyword_4_1; }
+
+		//cond=TriggerCondition
+		public Assignment getCondAssignment_4_2() { return cCondAssignment_4_2; }
+
+		//TriggerCondition
+		public RuleCall getCondTriggerConditionParserRuleCall_4_2_0() { return cCondTriggerConditionParserRuleCall_4_2_0; }
+
+		//';'
+		public Keyword getSemicolonKeyword_4_3() { return cSemicolonKeyword_4_3; }
 
 		//SafetyEqStatement
-		public RuleCall getSafetyEqStatementParserRuleCall_4() { return cSafetyEqStatementParserRuleCall_4; }
+		public RuleCall getSafetyEqStatementParserRuleCall_5() { return cSafetyEqStatementParserRuleCall_5; }
 	}
 
 	public class TemporalConstraintElements extends AbstractParserRuleElementFinder {
@@ -520,104 +575,54 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class TriggerConditionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.TriggerCondition");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Action cMustConditionAction_0_0 = (Action)cGroup_0.eContents().get(0);
-		private final Keyword cMustKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final Keyword cLeftCurlyBracketKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
-		private final Assignment cExprListAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final RuleCall cExprListExprParserRuleCall_0_3_0 = (RuleCall)cExprListAssignment_0_3.eContents().get(0);
-		private final Group cGroup_0_4 = (Group)cGroup_0.eContents().get(4);
-		private final Keyword cCommaKeyword_0_4_0 = (Keyword)cGroup_0_4.eContents().get(0);
-		private final Assignment cExprListAssignment_0_4_1 = (Assignment)cGroup_0_4.eContents().get(1);
-		private final RuleCall cExprListExprParserRuleCall_0_4_1_0 = (RuleCall)cExprListAssignment_0_4_1.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_0_5 = (Keyword)cGroup_0.eContents().get(5);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Action cEnablerConditionAction_1_0 = (Action)cGroup_1.eContents().get(0);
-		private final Keyword cEnablerKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final Keyword cLeftCurlyBracketKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final Assignment cExprListAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final RuleCall cExprListExprParserRuleCall_1_3_0 = (RuleCall)cExprListAssignment_1_3.eContents().get(0);
-		private final Group cGroup_1_4 = (Group)cGroup_1.eContents().get(4);
-		private final Keyword cCommaKeyword_1_4_0 = (Keyword)cGroup_1_4.eContents().get(0);
-		private final Assignment cExprListAssignment_1_4_1 = (Assignment)cGroup_1_4.eContents().get(1);
-		private final RuleCall cExprListExprParserRuleCall_1_4_1_0 = (RuleCall)cExprListAssignment_1_4_1.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cEnablerConditionAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cByKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cExprListAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cExprListExprParserRuleCall_3_0 = (RuleCall)cExprListAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cCommaKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cExprListAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cExprListExprParserRuleCall_4_1_0 = (RuleCall)cExprListAssignment_4_1.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		
 		//TriggerCondition:
-		//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
-		//	| {EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}';
+		//	{EnablerCondition} 'by' '{' exprList+=Expr ("," exprList+=Expr)* '}';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}' | {EnablerCondition} 'enabler' '{' exprList+=Expr
-		//("," exprList+=Expr)* '}'
-		public Alternatives getAlternatives() { return cAlternatives; }
-
-		//{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
-		public Group getGroup_0() { return cGroup_0; }
-
-		//{MustCondition}
-		public Action getMustConditionAction_0_0() { return cMustConditionAction_0_0; }
-
-		//'must'
-		public Keyword getMustKeyword_0_1() { return cMustKeyword_0_1; }
-
-		//'{'
-		public Keyword getLeftCurlyBracketKeyword_0_2() { return cLeftCurlyBracketKeyword_0_2; }
-
-		//exprList+=Expr
-		public Assignment getExprListAssignment_0_3() { return cExprListAssignment_0_3; }
-
-		//Expr
-		public RuleCall getExprListExprParserRuleCall_0_3_0() { return cExprListExprParserRuleCall_0_3_0; }
-
-		//("," exprList+=Expr)*
-		public Group getGroup_0_4() { return cGroup_0_4; }
-
-		//","
-		public Keyword getCommaKeyword_0_4_0() { return cCommaKeyword_0_4_0; }
-
-		//exprList+=Expr
-		public Assignment getExprListAssignment_0_4_1() { return cExprListAssignment_0_4_1; }
-
-		//Expr
-		public RuleCall getExprListExprParserRuleCall_0_4_1_0() { return cExprListExprParserRuleCall_0_4_1_0; }
-
-		//'}'
-		public Keyword getRightCurlyBracketKeyword_0_5() { return cRightCurlyBracketKeyword_0_5; }
-
-		//{EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}'
-		public Group getGroup_1() { return cGroup_1; }
+		//{EnablerCondition} 'by' '{' exprList+=Expr ("," exprList+=Expr)* '}'
+		public Group getGroup() { return cGroup; }
 
 		//{EnablerCondition}
-		public Action getEnablerConditionAction_1_0() { return cEnablerConditionAction_1_0; }
+		public Action getEnablerConditionAction_0() { return cEnablerConditionAction_0; }
 
-		//'enabler'
-		public Keyword getEnablerKeyword_1_1() { return cEnablerKeyword_1_1; }
+		//'by'
+		public Keyword getByKeyword_1() { return cByKeyword_1; }
 
 		//'{'
-		public Keyword getLeftCurlyBracketKeyword_1_2() { return cLeftCurlyBracketKeyword_1_2; }
+		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
 		//exprList+=Expr
-		public Assignment getExprListAssignment_1_3() { return cExprListAssignment_1_3; }
+		public Assignment getExprListAssignment_3() { return cExprListAssignment_3; }
 
 		//Expr
-		public RuleCall getExprListExprParserRuleCall_1_3_0() { return cExprListExprParserRuleCall_1_3_0; }
+		public RuleCall getExprListExprParserRuleCall_3_0() { return cExprListExprParserRuleCall_3_0; }
 
 		//("," exprList+=Expr)*
-		public Group getGroup_1_4() { return cGroup_1_4; }
+		public Group getGroup_4() { return cGroup_4; }
 
 		//","
-		public Keyword getCommaKeyword_1_4_0() { return cCommaKeyword_1_4_0; }
+		public Keyword getCommaKeyword_4_0() { return cCommaKeyword_4_0; }
 
 		//exprList+=Expr
-		public Assignment getExprListAssignment_1_4_1() { return cExprListAssignment_1_4_1; }
+		public Assignment getExprListAssignment_4_1() { return cExprListAssignment_4_1; }
 
 		//Expr
-		public RuleCall getExprListExprParserRuleCall_1_4_1_0() { return cExprListExprParserRuleCall_1_4_1_0; }
+		public RuleCall getExprListExprParserRuleCall_4_1_0() { return cExprListExprParserRuleCall_4_1_0; }
 
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_1_5() { return cRightCurlyBracketKeyword_1_5; }
+		public Keyword getRightCurlyBracketKeyword_5() { return cRightCurlyBracketKeyword_5; }
 	}
 
 	public class SafetyEqStatementElements extends AbstractParserRuleElementFinder {
@@ -1031,6 +1036,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	private final SafetyContractElements pSafetyContract;
 	private final ElementSafetyElements pElementSafety;
 	private final SpecStatementElements pSpecStatement;
+	private final AnalysisBehaviorElements pAnalysisBehavior;
 	private final FaultSubcomponentElements pFaultSubcomponent;
 	private final TemporalConstraintElements pTemporalConstraint;
 	private final TriggerConditionElements pTriggerCondition;
@@ -1057,6 +1063,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSafetyContract = new SafetyContractElements();
 		this.pElementSafety = new ElementSafetyElements();
 		this.pSpecStatement = new SpecStatementElements();
+		this.pAnalysisBehavior = new AnalysisBehaviorElements();
 		this.pFaultSubcomponent = new FaultSubcomponentElements();
 		this.pTemporalConstraint = new TemporalConstraintElements();
 		this.pTriggerCondition = new TriggerConditionElements();
@@ -1160,7 +1167,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//@ Override SpecStatement:
 	//	{FaultStatement} 'fault' str=STRING? ':' faultDefName=NestedDotID
 	//	'{' faultDefinitions+=FaultSubcomponent* '}'
-	//	| {AnalysisStatement} 'analyze' ':' 'max' maxFaults=INTEGER_LIT 'fault';
+	//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior;
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
 	}
@@ -1169,12 +1176,24 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getSpecStatementAccess().getRule();
 	}
 
+	//AnalysisBehavior:
+	//	{FaultCountBehavior} 'max' maxFaults=INTEGER_LIT 'fault'
+	//	| {ProbabilityBehavior} 'probability' probabilty=REAL_LIT;
+	public AnalysisBehaviorElements getAnalysisBehaviorAccess() {
+		return pAnalysisBehavior;
+	}
+	
+	public ParserRule getAnalysisBehaviorRule() {
+		return getAnalysisBehaviorAccess().getRule();
+	}
+
 	//FaultSubcomponent:
 	//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
 	//	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID (',' nom_conn+=NestedDotID '<-'
 	//	fault_out+=ID)* ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
-	//	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition ('[' probability=REAL_LIT ']')? ';'
+	//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+	//	| {TriggerStatement} 'enabled' cond=TriggerCondition ';'
 	//	| SafetyEqStatement;
 	public FaultSubcomponentElements getFaultSubcomponentAccess() {
 		return pFaultSubcomponent;
@@ -1196,8 +1215,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TriggerCondition:
-	//	{MustCondition} 'must' '{' exprList+=Expr ("," exprList+=Expr)* '}'
-	//	| {EnablerCondition} 'enabler' '{' exprList+=Expr ("," exprList+=Expr)* '}';
+	//	{EnablerCondition} 'by' '{' exprList+=Expr ("," exprList+=Expr)* '}';
 	public TriggerConditionElements getTriggerConditionAccess() {
 		return pTriggerCondition;
 	}

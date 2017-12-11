@@ -109,6 +109,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createSpecStatementAdapter();
       }
       @Override
+      public Adapter caseAnalysisBehavior(AnalysisBehavior object)
+      {
+        return createAnalysisBehaviorAdapter();
+      }
+      @Override
       public Adapter caseFaultSubcomponent(FaultSubcomponent object)
       {
         return createFaultSubcomponentAdapter();
@@ -159,6 +164,16 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createAnalysisStatementAdapter();
       }
       @Override
+      public Adapter caseFaultCountBehavior(FaultCountBehavior object)
+      {
+        return createFaultCountBehaviorAdapter();
+      }
+      @Override
+      public Adapter caseProbabilityBehavior(ProbabilityBehavior object)
+      {
+        return createProbabilityBehaviorAdapter();
+      }
+      @Override
       public Adapter caseInputStatement(InputStatement object)
       {
         return createInputStatementAdapter();
@@ -174,6 +189,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createDurationStatementAdapter();
       }
       @Override
+      public Adapter caseProbabilityStatement(ProbabilityStatement object)
+      {
+        return createProbabilityStatementAdapter();
+      }
+      @Override
       public Adapter caseTriggerStatement(TriggerStatement object)
       {
         return createTriggerStatementAdapter();
@@ -187,11 +207,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
       public Adapter caseTransientConstraint(TransientConstraint object)
       {
         return createTransientConstraintAdapter();
-      }
-      @Override
-      public Adapter caseMustCondition(MustCondition object)
-      {
-        return createMustConditionAdapter();
       }
       @Override
       public Adapter caseEnablerCondition(EnablerCondition object)
@@ -381,6 +396,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.AnalysisBehavior <em>Analysis Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisBehavior
+   * @generated
+   */
+  public Adapter createAnalysisBehaviorAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultSubcomponent <em>Fault Subcomponent</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -531,6 +561,36 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior <em>Fault Count Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.FaultCountBehavior
+   * @generated
+   */
+  public Adapter createFaultCountBehaviorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ProbabilityBehavior <em>Probability Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityBehavior
+   * @generated
+   */
+  public Adapter createProbabilityBehaviorAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.InputStatement <em>Input Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -576,6 +636,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ProbabilityStatement <em>Probability Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityStatement
+   * @generated
+   */
+  public Adapter createProbabilityStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement <em>Trigger Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -616,21 +691,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTransientConstraintAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.MustCondition <em>Must Condition</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.MustCondition
-   * @generated
-   */
-  public Adapter createMustConditionAdapter()
   {
     return null;
   }

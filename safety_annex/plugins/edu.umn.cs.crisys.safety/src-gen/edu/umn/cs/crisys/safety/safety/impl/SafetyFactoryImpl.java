@@ -70,6 +70,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.SAFETY_SUBCLAUSE: return createSafetySubclause();
       case SafetyPackage.CONTRACT: return createContract();
       case SafetyPackage.SPEC_STATEMENT: return createSpecStatement();
+      case SafetyPackage.ANALYSIS_BEHAVIOR: return createAnalysisBehavior();
       case SafetyPackage.FAULT_SUBCOMPONENT: return createFaultSubcomponent();
       case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
@@ -80,13 +81,15 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.SAFETY_CONTRACT: return createSafetyContract();
       case SafetyPackage.FAULT_STATEMENT: return createFaultStatement();
       case SafetyPackage.ANALYSIS_STATEMENT: return createAnalysisStatement();
+      case SafetyPackage.FAULT_COUNT_BEHAVIOR: return createFaultCountBehavior();
+      case SafetyPackage.PROBABILITY_BEHAVIOR: return createProbabilityBehavior();
       case SafetyPackage.INPUT_STATEMENT: return createInputStatement();
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
+      case SafetyPackage.PROBABILITY_STATEMENT: return createProbabilityStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
       case SafetyPackage.PERMANENT_CONSTRAINT: return createPermanentConstraint();
       case SafetyPackage.TRANSIENT_CONSTRAINT: return createTransientConstraint();
-      case SafetyPackage.MUST_CONDITION: return createMustCondition();
       case SafetyPackage.ENABLER_CONDITION: return createEnablerCondition();
       case SafetyPackage.EQ_VALUE: return createEqValue();
       case SafetyPackage.INTERVAL_EQ: return createIntervalEq();
@@ -165,6 +168,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     SpecStatementImpl specStatement = new SpecStatementImpl();
     return specStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnalysisBehavior createAnalysisBehavior()
+  {
+    AnalysisBehaviorImpl analysisBehavior = new AnalysisBehaviorImpl();
+    return analysisBehavior;
   }
 
   /**
@@ -282,6 +296,28 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public FaultCountBehavior createFaultCountBehavior()
+  {
+    FaultCountBehaviorImpl faultCountBehavior = new FaultCountBehaviorImpl();
+    return faultCountBehavior;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ProbabilityBehavior createProbabilityBehavior()
+  {
+    ProbabilityBehaviorImpl probabilityBehavior = new ProbabilityBehaviorImpl();
+    return probabilityBehavior;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public InputStatement createInputStatement()
   {
     InputStatementImpl inputStatement = new InputStatementImpl();
@@ -315,6 +351,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public ProbabilityStatement createProbabilityStatement()
+  {
+    ProbabilityStatementImpl probabilityStatement = new ProbabilityStatementImpl();
+    return probabilityStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public TriggerStatement createTriggerStatement()
   {
     TriggerStatementImpl triggerStatement = new TriggerStatementImpl();
@@ -341,17 +388,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     TransientConstraintImpl transientConstraint = new TransientConstraintImpl();
     return transientConstraint;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MustCondition createMustCondition()
-  {
-    MustConditionImpl mustCondition = new MustConditionImpl();
-    return mustCondition;
   }
 
   /**

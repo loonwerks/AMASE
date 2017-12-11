@@ -136,6 +136,13 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.ANALYSIS_BEHAVIOR:
+      {
+        AnalysisBehavior analysisBehavior = (AnalysisBehavior)theEObject;
+        T result = caseAnalysisBehavior(analysisBehavior);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.FAULT_SUBCOMPONENT:
       {
         FaultSubcomponent faultSubcomponent = (FaultSubcomponent)theEObject;
@@ -227,6 +234,22 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.FAULT_COUNT_BEHAVIOR:
+      {
+        FaultCountBehavior faultCountBehavior = (FaultCountBehavior)theEObject;
+        T result = caseFaultCountBehavior(faultCountBehavior);
+        if (result == null) result = caseAnalysisBehavior(faultCountBehavior);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.PROBABILITY_BEHAVIOR:
+      {
+        ProbabilityBehavior probabilityBehavior = (ProbabilityBehavior)theEObject;
+        T result = caseProbabilityBehavior(probabilityBehavior);
+        if (result == null) result = caseAnalysisBehavior(probabilityBehavior);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.INPUT_STATEMENT:
       {
         InputStatement inputStatement = (InputStatement)theEObject;
@@ -254,6 +277,15 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.PROBABILITY_STATEMENT:
+      {
+        ProbabilityStatement probabilityStatement = (ProbabilityStatement)theEObject;
+        T result = caseProbabilityStatement(probabilityStatement);
+        if (result == null) result = caseFaultSubcomponent(probabilityStatement);
+        if (result == null) result = caseElement(probabilityStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.TRIGGER_STATEMENT:
       {
         TriggerStatement triggerStatement = (TriggerStatement)theEObject;
@@ -276,14 +308,6 @@ public class SafetySwitch<T> extends Switch<T>
         TransientConstraint transientConstraint = (TransientConstraint)theEObject;
         T result = caseTransientConstraint(transientConstraint);
         if (result == null) result = caseTemporalConstraint(transientConstraint);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SafetyPackage.MUST_CONDITION:
-      {
-        MustCondition mustCondition = (MustCondition)theEObject;
-        T result = caseMustCondition(mustCondition);
-        if (result == null) result = caseTriggerCondition(mustCondition);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -468,6 +492,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Analysis Behavior</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Analysis Behavior</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnalysisBehavior(AnalysisBehavior object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Fault Subcomponent</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -628,6 +668,38 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Fault Count Behavior</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Fault Count Behavior</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFaultCountBehavior(FaultCountBehavior object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Probability Behavior</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Probability Behavior</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseProbabilityBehavior(ProbabilityBehavior object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Input Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -676,6 +748,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Probability Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Probability Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseProbabilityStatement(ProbabilityStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Trigger Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -719,22 +807,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTransientConstraint(TransientConstraint object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Must Condition</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Must Condition</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseMustCondition(MustCondition object)
   {
     return null;
   }

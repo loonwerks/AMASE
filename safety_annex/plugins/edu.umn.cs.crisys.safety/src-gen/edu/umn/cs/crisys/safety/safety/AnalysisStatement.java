@@ -12,7 +12,7 @@ package edu.umn.cs.crisys.safety.safety;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getMaxFaults <em>Max Faults</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getBehavior <em>Behavior</em>}</li>
  * </ul>
  *
  * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getAnalysisStatement()
@@ -22,29 +22,29 @@ package edu.umn.cs.crisys.safety.safety;
 public interface AnalysisStatement extends SpecStatement
 {
   /**
-   * Returns the value of the '<em><b>Max Faults</b></em>' attribute.
+   * Returns the value of the '<em><b>Behavior</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Max Faults</em>' attribute isn't clear,
+   * If the meaning of the '<em>Behavior</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Max Faults</em>' attribute.
-   * @see #setMaxFaults(String)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getAnalysisStatement_MaxFaults()
-   * @model
+   * @return the value of the '<em>Behavior</em>' containment reference.
+   * @see #setBehavior(AnalysisBehavior)
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getAnalysisStatement_Behavior()
+   * @model containment="true"
    * @generated
    */
-  String getMaxFaults();
+  AnalysisBehavior getBehavior();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getMaxFaults <em>Max Faults</em>}' attribute.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getBehavior <em>Behavior</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Max Faults</em>' attribute.
-   * @see #getMaxFaults()
+   * @param value the new value of the '<em>Behavior</em>' containment reference.
+   * @see #getBehavior()
    * @generated
    */
-  void setMaxFaults(String value);
+  void setBehavior(AnalysisBehavior value);
 
 } // AnalysisStatement

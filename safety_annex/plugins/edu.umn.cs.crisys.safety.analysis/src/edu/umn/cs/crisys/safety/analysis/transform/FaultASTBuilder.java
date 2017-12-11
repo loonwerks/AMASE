@@ -26,6 +26,7 @@ import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
 import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 import edu.umn.cs.crisys.safety.safety.SetEq;
@@ -197,6 +198,10 @@ public class FaultASTBuilder {
 	public void addTrigger(Fault fault, TriggerStatement stmt) {
 		throw new SafetyException("Error: set equations are not yet implemented in translator!");
 	}
+	
+	public void addProbability(Fault fault, ProbabilityStatement stmt) {
+		fault.probability = Double.parseDouble(stmt.getProbability());
+	}
 
 	public void processFaultSubcomponents(Fault fault) {
 		for (FaultSubcomponent fs : fault.faultStatement.getFaultDefinitions()) {
@@ -210,6 +215,10 @@ public class FaultASTBuilder {
 				addSafetyEq(fault, (SafetyEqStatement)fs); 
 			} else if (fs instanceof TriggerStatement) {
 				addTrigger(fault, (TriggerStatement)fs);
+			} else if (fs instanceof ProbabilityStatement) {
+				addProbability(fault, (ProbabilityStatement)fs);
+			} else {
+				throw new SafetyException("Unrecognized Fault Statement type");
 			}
 		}
 	}
@@ -224,7 +233,6 @@ public class FaultASTBuilder {
 	public Fault buildFault(FaultStatement fstmt) {
 		String faultId = mkUniqueFaultId(fstmt); 
 		Fault fault = new Fault(fstmt, faultId);
-		fault.explanitoryText = fstmt.getStr();
 		setFaultNode(fstmt, fault);
 		processFaultSubcomponents(fault);
 		

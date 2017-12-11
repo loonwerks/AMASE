@@ -74,14 +74,16 @@ import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
+import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
-import edu.umn.cs.crisys.safety.safety.MustCondition;
 import edu.umn.cs.crisys.safety.safety.OpenInterval;
 import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
 import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
+import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
+import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
@@ -438,6 +440,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.EQ_VALUE:
 				sequence_SafetyEqStatement(context, (EqValue) semanticObject); 
 				return; 
+			case SafetyPackage.FAULT_COUNT_BEHAVIOR:
+				sequence_AnalysisBehavior(context, (FaultCountBehavior) semanticObject); 
+				return; 
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
 				return; 
@@ -446,9 +451,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case SafetyPackage.INTERVAL_EQ:
 				sequence_SafetyEqStatement(context, (IntervalEq) semanticObject); 
-				return; 
-			case SafetyPackage.MUST_CONDITION:
-				sequence_TriggerCondition(context, (MustCondition) semanticObject); 
 				return; 
 			case SafetyPackage.OPEN_INTERVAL:
 				sequence_Interval(context, (OpenInterval) semanticObject); 
@@ -464,6 +466,12 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case SafetyPackage.PERMANENT_CONSTRAINT:
 				sequence_TemporalConstraint(context, (PermanentConstraint) semanticObject); 
+				return; 
+			case SafetyPackage.PROBABILITY_BEHAVIOR:
+				sequence_AnalysisBehavior(context, (ProbabilityBehavior) semanticObject); 
+				return; 
+			case SafetyPackage.PROBABILITY_STATEMENT:
+				sequence_FaultSubcomponent(context, (ProbabilityStatement) semanticObject); 
 				return; 
 			case SafetyPackage.RANGE_EQ:
 				sequence_SafetyEqStatement(context, (RangeEq) semanticObject); 
@@ -490,6 +498,42 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
+	
+	/**
+	 * Contexts:
+	 *     AnalysisBehavior returns FaultCountBehavior
+	 *
+	 * Constraint:
+	 *     maxFaults=INTEGER_LIT
+	 */
+	protected void sequence_AnalysisBehavior(ISerializationContext context, FaultCountBehavior semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FAULT_COUNT_BEHAVIOR__MAX_FAULTS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FAULT_COUNT_BEHAVIOR__MAX_FAULTS));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getAnalysisBehaviorAccess().getMaxFaultsINTEGER_LITTerminalRuleCall_0_2_0(), semanticObject.getMaxFaults());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     AnalysisBehavior returns ProbabilityBehavior
+	 *
+	 * Constraint:
+	 *     probabilty=REAL_LIT
+	 */
+	protected void sequence_AnalysisBehavior(ISerializationContext context, ProbabilityBehavior semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.PROBABILITY_BEHAVIOR__PROBABILTY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROBABILITY_BEHAVIOR__PROBABILTY));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getAnalysisBehaviorAccess().getProbabiltyREAL_LITTerminalRuleCall_1_2_0(), semanticObject.getProbabilty());
+		feeder.finish();
+	}
+	
 	
 	/**
 	 * Contexts:
@@ -532,14 +576,39 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns ProbabilityStatement
+	 *     FaultSubcomponent returns ProbabilityStatement
+	 *
+	 * Constraint:
+	 *     probability=REAL_LIT
+	 */
+	protected void sequence_FaultSubcomponent(ISerializationContext context, ProbabilityStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.PROBABILITY_STATEMENT__PROBABILITY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROBABILITY_STATEMENT__PROBABILITY));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_3_3_0(), semanticObject.getProbability());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     ElementSafety returns TriggerStatement
 	 *     FaultSubcomponent returns TriggerStatement
 	 *
 	 * Constraint:
-	 *     (cond=TriggerCondition probability=REAL_LIT?)
+	 *     cond=TriggerCondition
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, TriggerStatement semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.TRIGGER_STATEMENT__COND) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.TRIGGER_STATEMENT__COND));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_4_2_0(), semanticObject.getCond());
+		feeder.finish();
 	}
 	
 	
@@ -760,15 +829,15 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     Element returns AnalysisStatement
 	 *
 	 * Constraint:
-	 *     maxFaults=INTEGER_LIT
+	 *     behavior=AnalysisBehavior
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, AnalysisStatement semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.ANALYSIS_STATEMENT__MAX_FAULTS) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.ANALYSIS_STATEMENT__MAX_FAULTS));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.ANALYSIS_STATEMENT__BEHAVIOR) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.ANALYSIS_STATEMENT__BEHAVIOR));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSpecStatementAccess().getMaxFaultsINTEGER_LITTerminalRuleCall_1_4_0(), semanticObject.getMaxFaults());
+		feeder.accept(grammarAccess.getSpecStatementAccess().getBehaviorAnalysisBehaviorParserRuleCall_1_3_0(), semanticObject.getBehavior());
 		feeder.finish();
 	}
 	
@@ -818,18 +887,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     (exprList+=Expr exprList+=Expr*)
 	 */
 	protected void sequence_TriggerCondition(ISerializationContext context, EnablerCondition semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     TriggerCondition returns MustCondition
-	 *
-	 * Constraint:
-	 *     (exprList+=Expr exprList+=Expr*)
-	 */
-	protected void sequence_TriggerCondition(ISerializationContext context, MustCondition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

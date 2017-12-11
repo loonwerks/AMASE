@@ -31,9 +31,12 @@ ElementSafety returns aadl2::Element:
 @Override 
 SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDotID  
 			'{' faultDefinitions+=(FaultSubcomponent)* '}' 
-	|	{AnalysisStatement} 'analyze' ':' 'max' (maxFaults=INTEGER_LIT) 'fault' 
+	|	{AnalysisStatement} 'analyze' ':' behavior = AnalysisBehavior 
 ;
 	
+AnalysisBehavior : {FaultCountBehavior} 'max' (maxFaults=INTEGER_LIT) 'fault'
+   | {ProbabilityBehavior} 'probability' (probabilty=REAL_LIT) 
+;	
 
 FaultSubcomponent returns FaultSubcomponent: 
 	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
@@ -43,7 +46,8 @@ FaultSubcomponent returns FaultSubcomponent:
 							(','nom_conn+=NestedDotID '<-' fault_out+=ID)*';'
 	
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
- 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
+ 	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	| {TriggerStatement} 'enabled' cond=TriggerCondition  ';'
 	| SafetyEqStatement ;
 
 	 
@@ -53,8 +57,7 @@ TemporalConstraint:
 ;
 
 TriggerCondition:
-	{MustCondition}'must' '{' exprList+=(Expr) ("," exprList+=(Expr))* '}'  
-  | {EnablerCondition} 'enabler' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
+   {EnablerCondition} 'by' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
 ;
 	
 SafetyEqStatement:
