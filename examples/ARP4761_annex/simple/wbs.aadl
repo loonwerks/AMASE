@@ -250,7 +250,8 @@ connections
 
    annex safety{**
       -- No faults, but top-level contract specification.  
-      analyze : max 2 fault
+      -- analyze : max 2 fault
+      analyze : probability 1.0E-9
    **};
 	
 end wbs.federated;

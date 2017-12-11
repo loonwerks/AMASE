@@ -62,6 +62,7 @@ features
 			inputs: val_in <- shutoff_output,
 					alt_val <- alt_value; 
 			outputs: shutoff_output <- val_out ;    
+         probability: 1.0E-5 ;
 			duration: permanent;
 		}
 	**};
@@ -97,6 +98,7 @@ features
 			inputs: val_in <- output,
 					alt_val <- alt_value; 
 			outputs: output <- val_out ;    
+         probability: 1.0E-5 ;
 			duration: permanent;
 		}
 	**};
@@ -181,6 +183,7 @@ features
 			inputs: val_in <- green_output,
 					alt_val <- alt_value1; 
 			outputs: green_output <- val_out ;    
+         probability: 1.0E-5 ;
 			duration: permanent;
 		}
 
@@ -191,6 +194,7 @@ features
 			inputs: val_in <- blue_output,
 					alt_val <- alt_value; 
 			outputs: blue_output <- val_out ;    
+         probability: 1.0E-5 ;
 			duration: permanent;
 		}
 	**};
@@ -226,6 +230,7 @@ features
          inputs: val_in <- blue_skid_output,
                alt_val <- alt_value; 
          outputs: blue_skid_output <- val_out ;    
+         probability: 1.0E-5 ;
          duration: permanent;
       }
    **};

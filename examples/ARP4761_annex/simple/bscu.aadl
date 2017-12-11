@@ -108,6 +108,7 @@ features
 		fault "In sys select_alt: select_alternate output inverted.": faults.inverted_fail {
 			inputs: val_in <- result;     
 			outputs: result <- val_out;    
+         probability: 1.0E-5 ;
 			duration: permanent;
 		}
 		
@@ -170,6 +171,7 @@ features
 			inputs: val_in <- Select_Alternate;     
 			outputs: Select_Alternate <- val_out;    
 			duration: permanent;
+         probability: 1.0E-5 ;
 		}
 		
 	**};
