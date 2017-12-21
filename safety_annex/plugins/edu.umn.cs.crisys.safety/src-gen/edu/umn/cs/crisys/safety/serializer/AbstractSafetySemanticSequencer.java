@@ -76,6 +76,7 @@ import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OpenInterval;
 import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
@@ -84,6 +85,8 @@ import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
+import edu.umn.cs.crisys.safety.safety.PropagateToStatement;
+import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
@@ -92,6 +95,8 @@ import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
+import edu.umn.cs.crisys.safety.safety.asymmetric;
+import edu.umn.cs.crisys.safety.safety.symmetric;
 import edu.umn.cs.crisys.safety.services.SafetyGrammarAccess;
 import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
@@ -432,8 +437,16 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_Interval(context, (ClosedInterval) semanticObject); 
 				return; 
 			case SafetyPackage.DURATION_STATEMENT:
-				sequence_FaultSubcomponent(context, (DurationStatement) semanticObject); 
-				return; 
+				if (rule == grammarAccess.getElementSafetyRule()
+						|| rule == grammarAccess.getFaultSubcomponentRule()) {
+					sequence_FaultSubcomponent(context, (DurationStatement) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getHWFaultSubcomponentRule()) {
+					sequence_HWFaultSubcomponent(context, (DurationStatement) semanticObject); 
+					return; 
+				}
+				else break;
 			case SafetyPackage.ENABLER_CONDITION:
 				sequence_TriggerCondition(context, (EnablerCondition) semanticObject); 
 				return; 
@@ -445,6 +458,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
+				return; 
+			case SafetyPackage.HW_FAULT_STATEMENT:
+				sequence_SpecStatement(context, (HWFaultStatement) semanticObject); 
 				return; 
 			case SafetyPackage.INPUT_STATEMENT:
 				sequence_FaultSubcomponent(context, (edu.umn.cs.crisys.safety.safety.InputStatement) semanticObject); 
@@ -471,8 +487,30 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_AnalysisBehavior(context, (ProbabilityBehavior) semanticObject); 
 				return; 
 			case SafetyPackage.PROBABILITY_STATEMENT:
-				sequence_FaultSubcomponent(context, (ProbabilityStatement) semanticObject); 
+				if (rule == grammarAccess.getElementSafetyRule()
+						|| rule == grammarAccess.getFaultSubcomponentRule()) {
+					sequence_FaultSubcomponent(context, (ProbabilityStatement) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getHWFaultSubcomponentRule()) {
+					sequence_HWFaultSubcomponent(context, (ProbabilityStatement) semanticObject); 
+					return; 
+				}
+				else break;
+			case SafetyPackage.PROPAGATE_TO_STATEMENT:
+				sequence_HWFaultSubcomponent(context, (PropagateToStatement) semanticObject); 
 				return; 
+			case SafetyPackage.PROPAGATION_TYPE_STATEMENT:
+				if (rule == grammarAccess.getElementSafetyRule()
+						|| rule == grammarAccess.getFaultSubcomponentRule()) {
+					sequence_FaultSubcomponent(context, (PropagationTypeStatement) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getHWFaultSubcomponentRule()) {
+					sequence_HWFaultSubcomponent(context, (PropagationTypeStatement) semanticObject); 
+					return; 
+				}
+				else break;
 			case SafetyPackage.RANGE_EQ:
 				sequence_SafetyEqStatement(context, (RangeEq) semanticObject); 
 				return; 
@@ -493,6 +531,12 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case SafetyPackage.TRIGGER_STATEMENT:
 				sequence_FaultSubcomponent(context, (TriggerStatement) semanticObject); 
+				return; 
+			case SafetyPackage.ASYMMETRIC:
+				sequence_PropagationTypeConstraint(context, (asymmetric) semanticObject); 
+				return; 
+			case SafetyPackage.SYMMETRIC:
+				sequence_PropagationTypeConstraint(context, (symmetric) semanticObject); 
 				return; 
 			}
 		if (errorAcceptor != null)
@@ -595,6 +639,25 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns PropagationTypeStatement
+	 *     FaultSubcomponent returns PropagationTypeStatement
+	 *
+	 * Constraint:
+	 *     pty=PropagationTypeConstraint
+	 */
+	protected void sequence_FaultSubcomponent(ISerializationContext context, PropagationTypeStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.PROPAGATION_TYPE_STATEMENT__PTY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROPAGATION_TYPE_STATEMENT__PTY));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_5_3_0(), semanticObject.getPty());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     ElementSafety returns TriggerStatement
 	 *     FaultSubcomponent returns TriggerStatement
 	 *
@@ -608,6 +671,66 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_4_2_0(), semanticObject.getCond());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     HWFaultSubcomponent returns DurationStatement
+	 *
+	 * Constraint:
+	 *     (tc=TemporalConstraint interv=Interval?)
+	 */
+	protected void sequence_HWFaultSubcomponent(ISerializationContext context, DurationStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     HWFaultSubcomponent returns ProbabilityStatement
+	 *
+	 * Constraint:
+	 *     probability=REAL_LIT
+	 */
+	protected void sequence_HWFaultSubcomponent(ISerializationContext context, ProbabilityStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.PROBABILITY_STATEMENT__PROBABILITY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROBABILITY_STATEMENT__PROBABILITY));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getHWFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_1_3_0(), semanticObject.getProbability());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     HWFaultSubcomponent returns PropagateToStatement
+	 *
+	 * Constraint:
+	 *     (faultList+=ID faultList+=ID*)
+	 */
+	protected void sequence_HWFaultSubcomponent(ISerializationContext context, PropagateToStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     HWFaultSubcomponent returns PropagationTypeStatement
+	 *
+	 * Constraint:
+	 *     pty=PropagationTypeConstraint
+	 */
+	protected void sequence_HWFaultSubcomponent(ISerializationContext context, PropagationTypeStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.PROPAGATION_TYPE_STATEMENT__PTY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROPAGATION_TYPE_STATEMENT__PTY));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getHWFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_3_3_0(), semanticObject.getPty());
 		feeder.finish();
 	}
 	
@@ -698,6 +821,30 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     PropagationTypeConstraint returns asymmetric
+	 *
+	 * Constraint:
+	 *     {asymmetric}
+	 */
+	protected void sequence_PropagationTypeConstraint(ISerializationContext context, asymmetric semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     PropagationTypeConstraint returns symmetric
+	 *
+	 * Constraint:
+	 *     {symmetric}
+	 */
+	protected void sequence_PropagationTypeConstraint(ISerializationContext context, symmetric semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     SafetyContract returns SafetyContract
 	 *
 	 * Constraint:
@@ -712,6 +859,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns EqValue
 	 *     FaultSubcomponent returns EqValue
+	 *     HWFaultSubcomponent returns EqValue
 	 *     SafetyEqStatement returns EqValue
 	 *
 	 * Constraint:
@@ -726,6 +874,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns IntervalEq
 	 *     FaultSubcomponent returns IntervalEq
+	 *     HWFaultSubcomponent returns IntervalEq
 	 *     SafetyEqStatement returns IntervalEq
 	 *
 	 * Constraint:
@@ -749,6 +898,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns RangeEq
 	 *     FaultSubcomponent returns RangeEq
+	 *     HWFaultSubcomponent returns RangeEq
 	 *     SafetyEqStatement returns RangeEq
 	 *
 	 * Constraint:
@@ -775,6 +925,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns SetEq
 	 *     FaultSubcomponent returns SetEq
+	 *     HWFaultSubcomponent returns SetEq
 	 *     SafetyEqStatement returns SetEq
 	 *
 	 * Constraint:
@@ -848,9 +999,22 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     Element returns FaultStatement
 	 *
 	 * Constraint:
-	 *     (str=STRING? faultDefName=NestedDotID faultDefinitions+=FaultSubcomponent*)
+	 *     (name=ID str=STRING? faultDefName=NestedDotID faultDefinitions+=FaultSubcomponent*)
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, FaultStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SpecStatement returns HWFaultStatement
+	 *     Element returns HWFaultStatement
+	 *
+	 * Constraint:
+	 *     (name=ID str=STRING? faultDefinitions+=HWFaultSubcomponent*)
+	 */
+	protected void sequence_SpecStatement(ISerializationContext context, HWFaultStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

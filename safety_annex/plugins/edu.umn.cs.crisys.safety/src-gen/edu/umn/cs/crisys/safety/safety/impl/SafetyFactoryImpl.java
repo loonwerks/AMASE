@@ -72,6 +72,8 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.SPEC_STATEMENT: return createSpecStatement();
       case SafetyPackage.ANALYSIS_BEHAVIOR: return createAnalysisBehavior();
       case SafetyPackage.FAULT_SUBCOMPONENT: return createFaultSubcomponent();
+      case SafetyPackage.HW_FAULT_SUBCOMPONENT: return createHWFaultSubcomponent();
+      case SafetyPackage.PROPAGATION_TYPE_CONSTRAINT: return createPropagationTypeConstraint();
       case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
       case SafetyPackage.SAFETY_EQ_STATEMENT: return createSafetyEqStatement();
@@ -81,6 +83,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.SAFETY_CONTRACT: return createSafetyContract();
       case SafetyPackage.FAULT_STATEMENT: return createFaultStatement();
       case SafetyPackage.ANALYSIS_STATEMENT: return createAnalysisStatement();
+      case SafetyPackage.HW_FAULT_STATEMENT: return createHWFaultStatement();
       case SafetyPackage.FAULT_COUNT_BEHAVIOR: return createFaultCountBehavior();
       case SafetyPackage.PROBABILITY_BEHAVIOR: return createProbabilityBehavior();
       case SafetyPackage.INPUT_STATEMENT: return createInputStatement();
@@ -88,6 +91,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
       case SafetyPackage.PROBABILITY_STATEMENT: return createProbabilityStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
+      case SafetyPackage.PROPAGATION_TYPE_STATEMENT: return createPropagationTypeStatement();
+      case SafetyPackage.PROPAGATE_TO_STATEMENT: return createPropagateToStatement();
+      case SafetyPackage.ASYMMETRIC: return createasymmetric();
+      case SafetyPackage.SYMMETRIC: return createsymmetric();
       case SafetyPackage.PERMANENT_CONSTRAINT: return createPermanentConstraint();
       case SafetyPackage.TRANSIENT_CONSTRAINT: return createTransientConstraint();
       case SafetyPackage.ENABLER_CONDITION: return createEnablerCondition();
@@ -197,6 +204,28 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public HWFaultSubcomponent createHWFaultSubcomponent()
+  {
+    HWFaultSubcomponentImpl hwFaultSubcomponent = new HWFaultSubcomponentImpl();
+    return hwFaultSubcomponent;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PropagationTypeConstraint createPropagationTypeConstraint()
+  {
+    PropagationTypeConstraintImpl propagationTypeConstraint = new PropagationTypeConstraintImpl();
+    return propagationTypeConstraint;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public TemporalConstraint createTemporalConstraint()
   {
     TemporalConstraintImpl temporalConstraint = new TemporalConstraintImpl();
@@ -296,6 +325,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public HWFaultStatement createHWFaultStatement()
+  {
+    HWFaultStatementImpl hwFaultStatement = new HWFaultStatementImpl();
+    return hwFaultStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public FaultCountBehavior createFaultCountBehavior()
   {
     FaultCountBehaviorImpl faultCountBehavior = new FaultCountBehaviorImpl();
@@ -366,6 +406,50 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     TriggerStatementImpl triggerStatement = new TriggerStatementImpl();
     return triggerStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PropagationTypeStatement createPropagationTypeStatement()
+  {
+    PropagationTypeStatementImpl propagationTypeStatement = new PropagationTypeStatementImpl();
+    return propagationTypeStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PropagateToStatement createPropagateToStatement()
+  {
+    PropagateToStatementImpl propagateToStatement = new PropagateToStatementImpl();
+    return propagateToStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public asymmetric createasymmetric()
+  {
+    asymmetricImpl asymmetric = new asymmetricImpl();
+    return asymmetric;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public symmetric createsymmetric()
+  {
+    symmetricImpl symmetric = new symmetricImpl();
+    return symmetric;
   }
 
   /**

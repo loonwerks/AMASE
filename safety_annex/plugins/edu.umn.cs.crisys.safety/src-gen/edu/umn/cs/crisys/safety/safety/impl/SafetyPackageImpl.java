@@ -16,6 +16,8 @@ import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
+import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
@@ -26,6 +28,9 @@ import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
+import edu.umn.cs.crisys.safety.safety.PropagateToStatement;
+import edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint;
+import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
@@ -41,6 +46,8 @@ import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
+import edu.umn.cs.crisys.safety.safety.asymmetric;
+import edu.umn.cs.crisys.safety.safety.symmetric;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -121,6 +128,20 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass hwFaultSubcomponentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass propagationTypeConstraintEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass temporalConstraintEClass = null;
 
   /**
@@ -184,6 +205,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass hwFaultStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass faultCountBehaviorEClass = null;
 
   /**
@@ -227,6 +255,34 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass triggerStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass propagationTypeStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass propagateToStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass asymmetricEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass symmetricEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -458,6 +514,26 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getHWFaultSubcomponent()
+  {
+    return hwFaultSubcomponentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPropagationTypeConstraint()
+  {
+    return propagationTypeConstraintEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getTemporalConstraint()
   {
     return temporalConstraintEClass;
@@ -588,7 +664,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFaultStatement_Str()
+  public EAttribute getFaultStatement_Name()
   {
     return (EAttribute)faultStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -598,9 +674,19 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getFaultStatement_Str()
+  {
+    return (EAttribute)faultStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getFaultStatement_FaultDefName()
   {
-    return (EReference)faultStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)faultStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -610,7 +696,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    */
   public EReference getFaultStatement_FaultDefinitions()
   {
-    return (EReference)faultStatementEClass.getEStructuralFeatures().get(2);
+    return (EReference)faultStatementEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -631,6 +717,46 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
   public EReference getAnalysisStatement_Behavior()
   {
     return (EReference)analysisStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getHWFaultStatement()
+  {
+    return hwFaultStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getHWFaultStatement_Name()
+  {
+    return (EAttribute)hwFaultStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getHWFaultStatement_Str()
+  {
+    return (EAttribute)hwFaultStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getHWFaultStatement_FaultDefinitions()
+  {
+    return (EReference)hwFaultStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -801,6 +927,66 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
   public EReference getTriggerStatement_Cond()
   {
     return (EReference)triggerStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPropagationTypeStatement()
+  {
+    return propagationTypeStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getPropagationTypeStatement_Pty()
+  {
+    return (EReference)propagationTypeStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPropagateToStatement()
+  {
+    return propagateToStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropagateToStatement_FaultList()
+  {
+    return (EAttribute)propagateToStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getasymmetric()
+  {
+    return asymmetricEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getsymmetric()
+  {
+    return symmetricEClass;
   }
 
   /**
@@ -1069,6 +1255,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     faultSubcomponentEClass = createEClass(FAULT_SUBCOMPONENT);
 
+    hwFaultSubcomponentEClass = createEClass(HW_FAULT_SUBCOMPONENT);
+
+    propagationTypeConstraintEClass = createEClass(PROPAGATION_TYPE_CONSTRAINT);
+
     temporalConstraintEClass = createEClass(TEMPORAL_CONSTRAINT);
 
     triggerConditionEClass = createEClass(TRIGGER_CONDITION);
@@ -1089,12 +1279,18 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEReference(safetyContractEClass, SAFETY_CONTRACT__SPECS);
 
     faultStatementEClass = createEClass(FAULT_STATEMENT);
+    createEAttribute(faultStatementEClass, FAULT_STATEMENT__NAME);
     createEAttribute(faultStatementEClass, FAULT_STATEMENT__STR);
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEF_NAME);
     createEReference(faultStatementEClass, FAULT_STATEMENT__FAULT_DEFINITIONS);
 
     analysisStatementEClass = createEClass(ANALYSIS_STATEMENT);
     createEReference(analysisStatementEClass, ANALYSIS_STATEMENT__BEHAVIOR);
+
+    hwFaultStatementEClass = createEClass(HW_FAULT_STATEMENT);
+    createEAttribute(hwFaultStatementEClass, HW_FAULT_STATEMENT__NAME);
+    createEAttribute(hwFaultStatementEClass, HW_FAULT_STATEMENT__STR);
+    createEReference(hwFaultStatementEClass, HW_FAULT_STATEMENT__FAULT_DEFINITIONS);
 
     faultCountBehaviorEClass = createEClass(FAULT_COUNT_BEHAVIOR);
     createEAttribute(faultCountBehaviorEClass, FAULT_COUNT_BEHAVIOR__MAX_FAULTS);
@@ -1119,6 +1315,16 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     triggerStatementEClass = createEClass(TRIGGER_STATEMENT);
     createEReference(triggerStatementEClass, TRIGGER_STATEMENT__COND);
+
+    propagationTypeStatementEClass = createEClass(PROPAGATION_TYPE_STATEMENT);
+    createEReference(propagationTypeStatementEClass, PROPAGATION_TYPE_STATEMENT__PTY);
+
+    propagateToStatementEClass = createEClass(PROPAGATE_TO_STATEMENT);
+    createEAttribute(propagateToStatementEClass, PROPAGATE_TO_STATEMENT__FAULT_LIST);
+
+    asymmetricEClass = createEClass(ASYMMETRIC);
+
+    symmetricEClass = createEClass(SYMMETRIC);
 
     permanentConstraintEClass = createEClass(PERMANENT_CONSTRAINT);
 
@@ -1196,18 +1402,27 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     faultSubcomponentEClass.getESuperTypes().add(theAadl2Package.getElement());
     safetyEqStatementEClass.getESuperTypes().add(theAadl2Package.getElement());
     safetyEqStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
+    safetyEqStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
     safetyContractLibraryEClass.getESuperTypes().add(this.getSafetyLibrary());
     safetyContractSubclauseEClass.getESuperTypes().add(this.getSafetySubclause());
     safetyContractEClass.getESuperTypes().add(this.getContract());
     faultStatementEClass.getESuperTypes().add(this.getSpecStatement());
     analysisStatementEClass.getESuperTypes().add(this.getSpecStatement());
+    hwFaultStatementEClass.getESuperTypes().add(this.getSpecStatement());
     faultCountBehaviorEClass.getESuperTypes().add(this.getAnalysisBehavior());
     probabilityBehaviorEClass.getESuperTypes().add(this.getAnalysisBehavior());
     inputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     outputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     durationStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
+    durationStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
     probabilityStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
+    probabilityStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
+    propagationTypeStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
+    propagationTypeStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
+    propagateToStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
+    asymmetricEClass.getESuperTypes().add(this.getPropagationTypeConstraint());
+    symmetricEClass.getESuperTypes().add(this.getPropagationTypeConstraint());
     permanentConstraintEClass.getESuperTypes().add(this.getTemporalConstraint());
     transientConstraintEClass.getESuperTypes().add(this.getTemporalConstraint());
     enablerConditionEClass.getESuperTypes().add(this.getTriggerCondition());
@@ -1237,6 +1452,10 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(faultSubcomponentEClass, FaultSubcomponent.class, "FaultSubcomponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+    initEClass(hwFaultSubcomponentEClass, HWFaultSubcomponent.class, "HWFaultSubcomponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(propagationTypeConstraintEClass, PropagationTypeConstraint.class, "PropagationTypeConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
     initEClass(temporalConstraintEClass, TemporalConstraint.class, "TemporalConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(triggerConditionEClass, TriggerCondition.class, "TriggerCondition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1257,12 +1476,18 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEReference(getSafetyContract_Specs(), this.getSpecStatement(), null, "specs", null, 0, -1, SafetyContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(faultStatementEClass, FaultStatement.class, "FaultStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFaultStatement_Name(), theEcorePackage.getEString(), "name", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFaultStatement_Str(), theEcorePackage.getEString(), "str", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFaultStatement_FaultDefName(), theAgreePackage.getNestedDotID(), null, "faultDefName", null, 0, 1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFaultStatement_FaultDefinitions(), this.getFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, FaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(analysisStatementEClass, AnalysisStatement.class, "AnalysisStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAnalysisStatement_Behavior(), this.getAnalysisBehavior(), null, "behavior", null, 0, 1, AnalysisStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(hwFaultStatementEClass, HWFaultStatement.class, "HWFaultStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getHWFaultStatement_Name(), theEcorePackage.getEString(), "name", null, 0, 1, HWFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getHWFaultStatement_Str(), theEcorePackage.getEString(), "str", null, 0, 1, HWFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getHWFaultStatement_FaultDefinitions(), this.getHWFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, HWFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(faultCountBehaviorEClass, FaultCountBehavior.class, "FaultCountBehavior", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFaultCountBehavior_MaxFaults(), theEcorePackage.getEString(), "maxFaults", null, 0, 1, FaultCountBehavior.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1287,6 +1512,16 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(triggerStatementEClass, TriggerStatement.class, "TriggerStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerStatement_Cond(), this.getTriggerCondition(), null, "cond", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(propagationTypeStatementEClass, PropagationTypeStatement.class, "PropagationTypeStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getPropagationTypeStatement_Pty(), this.getPropagationTypeConstraint(), null, "pty", null, 0, 1, PropagationTypeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(propagateToStatementEClass, PropagateToStatement.class, "PropagateToStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPropagateToStatement_FaultList(), theEcorePackage.getEString(), "faultList", null, 0, -1, PropagateToStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(asymmetricEClass, asymmetric.class, "asymmetric", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(symmetricEClass, symmetric.class, "symmetric", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(permanentConstraintEClass, PermanentConstraint.class, "PermanentConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

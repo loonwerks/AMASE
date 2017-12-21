@@ -9,9 +9,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="SpecStatement" eSuperTypes="platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//SpecStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisBehavior"/>
   <eClassifiers xsi:type="ecore:EClass" name="FaultSubcomponent" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HWFaultSubcomponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PropagationTypeConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerCondition"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SafetyEqStatement" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element #//FaultSubcomponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SafetyEqStatement" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element #//FaultSubcomponent #//HWFaultSubcomponent"/>
   <eClassifiers xsi:type="ecore:EClass" name="Interval">
     <eStructuralFeatures xsi:type="ecore:EReference" name="low" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
         containment="true"/>
@@ -31,6 +33,7 @@
         eType="#//SpecStatement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FaultStatement" eSuperTypes="#//SpecStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="str" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefName" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
         containment="true"/>
@@ -40,6 +43,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisStatement" eSuperTypes="#//SpecStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="behavior" eType="#//AnalysisBehavior"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HWFaultStatement" eSuperTypes="#//SpecStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="str" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefinitions" upperBound="-1"
+        eType="#//HWFaultSubcomponent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FaultCountBehavior" eSuperTypes="#//AnalysisBehavior">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxFaults" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
@@ -61,19 +70,29 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fault_out" unique="false"
         upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DurationStatement" eSuperTypes="#//FaultSubcomponent">
+  <eClassifiers xsi:type="ecore:EClass" name="DurationStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tc" eType="#//TemporalConstraint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interv" eType="#//Interval"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProbabilityStatement" eSuperTypes="#//FaultSubcomponent">
+  <eClassifiers xsi:type="ecore:EClass" name="ProbabilityStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerStatement" eSuperTypes="#//FaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cond" eType="#//TriggerCondition"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropagationTypeStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pty" eType="#//PropagationTypeConstraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropagateToStatement" eSuperTypes="#//HWFaultSubcomponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="faultList" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="asymmetric" eSuperTypes="#//PropagationTypeConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="symmetric" eSuperTypes="#//PropagationTypeConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="PermanentConstraint" eSuperTypes="#//TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TransientConstraint" eSuperTypes="#//TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="EnablerCondition" eSuperTypes="#//TriggerCondition">

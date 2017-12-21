@@ -95,6 +95,24 @@ public interface SafetyFactory extends EFactory
   FaultSubcomponent createFaultSubcomponent();
 
   /**
+   * Returns a new object of class '<em>HW Fault Subcomponent</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>HW Fault Subcomponent</em>'.
+   * @generated
+   */
+  HWFaultSubcomponent createHWFaultSubcomponent();
+
+  /**
+   * Returns a new object of class '<em>Propagation Type Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagation Type Constraint</em>'.
+   * @generated
+   */
+  PropagationTypeConstraint createPropagationTypeConstraint();
+
+  /**
    * Returns a new object of class '<em>Temporal Constraint</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -176,6 +194,15 @@ public interface SafetyFactory extends EFactory
   AnalysisStatement createAnalysisStatement();
 
   /**
+   * Returns a new object of class '<em>HW Fault Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>HW Fault Statement</em>'.
+   * @generated
+   */
+  HWFaultStatement createHWFaultStatement();
+
+  /**
    * Returns a new object of class '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -237,6 +264,42 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   TriggerStatement createTriggerStatement();
+
+  /**
+   * Returns a new object of class '<em>Propagation Type Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagation Type Statement</em>'.
+   * @generated
+   */
+  PropagationTypeStatement createPropagationTypeStatement();
+
+  /**
+   * Returns a new object of class '<em>Propagate To Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagate To Statement</em>'.
+   * @generated
+   */
+  PropagateToStatement createPropagateToStatement();
+
+  /**
+   * Returns a new object of class '<em>asymmetric</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>asymmetric</em>'.
+   * @generated
+   */
+  asymmetric createasymmetric();
+
+  /**
+   * Returns a new object of class '<em>symmetric</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>symmetric</em>'.
+   * @generated
+   */
+  symmetric createsymmetric();
 
   /**
    * Returns a new object of class '<em>Permanent Constraint</em>'.

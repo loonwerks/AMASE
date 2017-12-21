@@ -16,17 +16,23 @@ import org.eclipse.xtext.ui.editor.contentassist.antlr.internal.Lexer;
 
 
 
+Propagate_type : ('P'|'p')('R'|'r')('O'|'o')('P'|'p')('A'|'a')('G'|'g')('A'|'a')('T'|'t')('E'|'e')'_'('T'|'t')('Y'|'y')('P'|'p')('E'|'e');
+
 Linearization : ('L'|'l')('I'|'i')('N'|'n')('E'|'e')('A'|'a')('R'|'r')('I'|'i')('Z'|'z')('A'|'a')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
 
 Get_Property : ('G'|'g')('E'|'e')('T'|'t')'_'('P'|'p')('R'|'r')('O'|'o')('P'|'p')('E'|'e')('R'|'r')('T'|'t')('Y'|'y');
 
 Asynchronous : ('A'|'a')('S'|'s')('Y'|'y')('N'|'n')('C'|'c')('H'|'h')('R'|'r')('O'|'o')('N'|'n')('O'|'o')('U'|'u')('S'|'s');
 
+Propagate_to : ('P'|'p')('R'|'r')('O'|'o')('P'|'p')('A'|'a')('G'|'g')('A'|'a')('T'|'t')('E'|'e')'_'('T'|'t')('O'|'o');
+
 Agree_input : ('A'|'a')('G'|'g')('R'|'r')('E'|'e')('E'|'e')'_'('I'|'i')('N'|'n')('P'|'p')('U'|'u')('T'|'t');
 
 Exclusively : ('E'|'e')('X'|'x')('C'|'c')('L'|'l')('U'|'u')('S'|'s')('I'|'i')('V'|'v')('E'|'e')('L'|'l')('Y'|'y');
 
 Probability : ('P'|'p')('R'|'r')('O'|'o')('B'|'b')('A'|'a')('B'|'b')('I'|'i')('L'|'l')('I'|'i')('T'|'t')('Y'|'y');
+
+Asymmetric : ('A'|'a')('S'|'s')('Y'|'y')('M'|'m')('M'|'m')('E'|'e')('T'|'t')('R'|'r')('I'|'i')('C'|'c');
 
 Classifier : ('C'|'c')('L'|'l')('A'|'a')('S'|'s')('S'|'s')('I'|'i')('F'|'f')('I'|'i')('E'|'e')('R'|'r');
 
@@ -38,9 +44,13 @@ Permanent : ('P'|'p')('E'|'e')('R'|'r')('M'|'m')('A'|'a')('N'|'n')('E'|'e')('N'|
 
 Reference : ('R'|'r')('E'|'e')('F'|'f')('E'|'e')('R'|'r')('E'|'e')('N'|'n')('C'|'c')('E'|'e');
 
+Symmetric : ('S'|'s')('Y'|'y')('M'|'m')('M'|'m')('E'|'e')('T'|'t')('R'|'r')('I'|'i')('C'|'c');
+
 Synchrony : ('S'|'s')('Y'|'y')('N'|'n')('C'|'c')('H'|'h')('R'|'r')('O'|'o')('N'|'n')('Y'|'y');
 
 Transient : ('T'|'t')('R'|'r')('A'|'a')('N'|'n')('S'|'s')('I'|'i')('E'|'e')('N'|'n')('T'|'t');
+
+HW_fault : ('H'|'h')('W'|'w')'_'('F'|'f')('A'|'a')('U'|'u')('L'|'l')('T'|'t');
 
 Calendar : ('C'|'c')('A'|'a')('L'|'l')('E'|'e')('N'|'n')('D'|'d')('A'|'a')('R'|'r');
 

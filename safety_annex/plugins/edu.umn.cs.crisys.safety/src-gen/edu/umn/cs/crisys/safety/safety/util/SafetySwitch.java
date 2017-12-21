@@ -151,6 +151,20 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.HW_FAULT_SUBCOMPONENT:
+      {
+        HWFaultSubcomponent hwFaultSubcomponent = (HWFaultSubcomponent)theEObject;
+        T result = caseHWFaultSubcomponent(hwFaultSubcomponent);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.PROPAGATION_TYPE_CONSTRAINT:
+      {
+        PropagationTypeConstraint propagationTypeConstraint = (PropagationTypeConstraint)theEObject;
+        T result = casePropagationTypeConstraint(propagationTypeConstraint);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.TEMPORAL_CONSTRAINT:
       {
         TemporalConstraint temporalConstraint = (TemporalConstraint)theEObject;
@@ -170,6 +184,7 @@ public class SafetySwitch<T> extends Switch<T>
         SafetyEqStatement safetyEqStatement = (SafetyEqStatement)theEObject;
         T result = caseSafetyEqStatement(safetyEqStatement);
         if (result == null) result = caseFaultSubcomponent(safetyEqStatement);
+        if (result == null) result = caseHWFaultSubcomponent(safetyEqStatement);
         if (result == null) result = caseElement(safetyEqStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -234,6 +249,16 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.HW_FAULT_STATEMENT:
+      {
+        HWFaultStatement hwFaultStatement = (HWFaultStatement)theEObject;
+        T result = caseHWFaultStatement(hwFaultStatement);
+        if (result == null) result = caseSpecStatement(hwFaultStatement);
+        if (result == null) result = caseAgree_SpecStatement(hwFaultStatement);
+        if (result == null) result = caseElement(hwFaultStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.FAULT_COUNT_BEHAVIOR:
       {
         FaultCountBehavior faultCountBehavior = (FaultCountBehavior)theEObject;
@@ -273,6 +298,7 @@ public class SafetySwitch<T> extends Switch<T>
         DurationStatement durationStatement = (DurationStatement)theEObject;
         T result = caseDurationStatement(durationStatement);
         if (result == null) result = caseFaultSubcomponent(durationStatement);
+        if (result == null) result = caseHWFaultSubcomponent(durationStatement);
         if (result == null) result = caseElement(durationStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -282,6 +308,7 @@ public class SafetySwitch<T> extends Switch<T>
         ProbabilityStatement probabilityStatement = (ProbabilityStatement)theEObject;
         T result = caseProbabilityStatement(probabilityStatement);
         if (result == null) result = caseFaultSubcomponent(probabilityStatement);
+        if (result == null) result = caseHWFaultSubcomponent(probabilityStatement);
         if (result == null) result = caseElement(probabilityStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -292,6 +319,40 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseTriggerStatement(triggerStatement);
         if (result == null) result = caseFaultSubcomponent(triggerStatement);
         if (result == null) result = caseElement(triggerStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.PROPAGATION_TYPE_STATEMENT:
+      {
+        PropagationTypeStatement propagationTypeStatement = (PropagationTypeStatement)theEObject;
+        T result = casePropagationTypeStatement(propagationTypeStatement);
+        if (result == null) result = caseFaultSubcomponent(propagationTypeStatement);
+        if (result == null) result = caseHWFaultSubcomponent(propagationTypeStatement);
+        if (result == null) result = caseElement(propagationTypeStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.PROPAGATE_TO_STATEMENT:
+      {
+        PropagateToStatement propagateToStatement = (PropagateToStatement)theEObject;
+        T result = casePropagateToStatement(propagateToStatement);
+        if (result == null) result = caseHWFaultSubcomponent(propagateToStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.ASYMMETRIC:
+      {
+        asymmetric asymmetric = (asymmetric)theEObject;
+        T result = caseasymmetric(asymmetric);
+        if (result == null) result = casePropagationTypeConstraint(asymmetric);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SafetyPackage.SYMMETRIC:
+      {
+        symmetric symmetric = (symmetric)theEObject;
+        T result = casesymmetric(symmetric);
+        if (result == null) result = casePropagationTypeConstraint(symmetric);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -325,6 +386,7 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseEqValue(eqValue);
         if (result == null) result = caseSafetyEqStatement(eqValue);
         if (result == null) result = caseFaultSubcomponent(eqValue);
+        if (result == null) result = caseHWFaultSubcomponent(eqValue);
         if (result == null) result = caseElement(eqValue);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -335,6 +397,7 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseIntervalEq(intervalEq);
         if (result == null) result = caseSafetyEqStatement(intervalEq);
         if (result == null) result = caseFaultSubcomponent(intervalEq);
+        if (result == null) result = caseHWFaultSubcomponent(intervalEq);
         if (result == null) result = caseElement(intervalEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -345,6 +408,7 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseSetEq(setEq);
         if (result == null) result = caseSafetyEqStatement(setEq);
         if (result == null) result = caseFaultSubcomponent(setEq);
+        if (result == null) result = caseHWFaultSubcomponent(setEq);
         if (result == null) result = caseElement(setEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -355,6 +419,7 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseRangeEq(rangeEq);
         if (result == null) result = caseSafetyEqStatement(rangeEq);
         if (result == null) result = caseFaultSubcomponent(rangeEq);
+        if (result == null) result = caseHWFaultSubcomponent(rangeEq);
         if (result == null) result = caseElement(rangeEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -524,6 +589,38 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>HW Fault Subcomponent</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>HW Fault Subcomponent</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseHWFaultSubcomponent(HWFaultSubcomponent object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Propagation Type Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Propagation Type Constraint</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePropagationTypeConstraint(PropagationTypeConstraint object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Temporal Constraint</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -668,6 +765,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>HW Fault Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>HW Fault Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseHWFaultStatement(HWFaultStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -775,6 +888,70 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTriggerStatement(TriggerStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Propagation Type Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Propagation Type Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePropagationTypeStatement(PropagationTypeStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Propagate To Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Propagate To Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePropagateToStatement(PropagateToStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>asymmetric</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>asymmetric</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseasymmetric(asymmetric object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>symmetric</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>symmetric</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casesymmetric(symmetric object)
   {
     return null;
   }

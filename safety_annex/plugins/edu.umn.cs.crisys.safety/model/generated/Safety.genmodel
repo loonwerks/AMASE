@@ -15,6 +15,8 @@
     <genClasses ecoreClass="Safety.ecore#//SpecStatement"/>
     <genClasses ecoreClass="Safety.ecore#//AnalysisBehavior"/>
     <genClasses ecoreClass="Safety.ecore#//FaultSubcomponent"/>
+    <genClasses ecoreClass="Safety.ecore#//HWFaultSubcomponent"/>
+    <genClasses ecoreClass="Safety.ecore#//PropagationTypeConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TemporalConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TriggerCondition">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerCondition/exprList"/>
@@ -34,6 +36,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SafetyContract/specs"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//FaultStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultStatement/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultStatement/str"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefName"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//FaultStatement/faultDefinitions"/>
@@ -41,6 +44,11 @@
     <genClasses ecoreClass="Safety.ecore#//AnalysisStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//AnalysisStatement/behavior"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//AnalysisStatement/maxFaults"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//HWFaultStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//HWFaultStatement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//HWFaultStatement/str"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//HWFaultStatement/faultDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//FaultCountBehavior">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultCountBehavior/maxFaults"/>
@@ -74,6 +82,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//PropagationTypeStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//PropagationTypeStatement/pty"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//PropagateToStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//PropagateToStatement/faultList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//PropagateToStatement/faultDefName"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//asymmetric"/>
+    <genClasses ecoreClass="Safety.ecore#//symmetric"/>
     <genClasses ecoreClass="Safety.ecore#//PermanentConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TransientConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//EnablerCondition">

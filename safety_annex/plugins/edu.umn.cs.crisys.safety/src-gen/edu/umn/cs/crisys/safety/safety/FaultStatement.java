@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getName <em>Name</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getStr <em>Str</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefinitions <em>Fault Definitions</em>}</li>
@@ -26,6 +27,32 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface FaultStatement extends SpecStatement
 {
+  /**
+   * Returns the value of the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Name</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Name</em>' attribute.
+   * @see #setName(String)
+   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getFaultStatement_Name()
+   * @model
+   * @generated
+   */
+  String getName();
+
+  /**
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getName <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Name</em>' attribute.
+   * @see #getName()
+   * @generated
+   */
+  void setName(String value);
+
   /**
    * Returns the value of the '<em><b>Str</b></em>' attribute.
    * <!-- begin-user-doc -->
