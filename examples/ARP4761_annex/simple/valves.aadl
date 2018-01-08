@@ -173,29 +173,34 @@ features
 	        (green_output.val <= green_input.val) and (blue_output.val <= blue_input.val);
 	**};
 
+
+
 	annex safety {**
-		fault "Selector Green output failed to non-deterministic value.": faults.pressure_fail_to {
+			
+		 fault "Selector Green output failed to non-deterministic value.": faults.pressure_fail_to {
 			-- non-deterministic "failed" value.
 			-- Note: system cannot handle 
 			eq alt_value1 :real;
 			inputs: val_in <- green_output,
 					alt_val <- alt_value1; 
-			outputs: green_output <- val_out ;    
+			outputs: green_output <- val_out ;      
 			duration: permanent;
 		}
-
-		fault "Selector Blue output failed to non-deterministic value.": faults.pressure_fail_to {
-			-- non-deterministic "failed" value.
-			-- Note: system cannot handle 
+		fault "Selector: blue output failed to non-deterministic value.": faults.fail_to { 
 			eq alt_value :real;
-			inputs: val_in <- blue_output,
+			inputs: val_in <- blue_output.val,
 					alt_val <- alt_value; 
-			outputs: blue_output <- val_out ;    
+			outputs: blue_output.val <- val_out ;    
 			duration: permanent;
 		}
 	**};
 
+
+
 end selector_detailed;
+
+
+
 
 system accumulator_valve
 features

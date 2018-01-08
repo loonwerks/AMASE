@@ -17,9 +17,10 @@ import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
 
 public class Fault {
+	
 	// Map from fault node output names to the assigned vars
 	public Map<String, Expr> faultInputMap = new HashMap<>();
-	public Map<String, IdExpr> faultOutputMap = new HashMap<>();
+	public Map<String, Expr> faultOutputMap = new HashMap<>();
 	
 	public Node faultNode; 
 	public String id;

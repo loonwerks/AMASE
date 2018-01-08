@@ -9,6 +9,7 @@ import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.analysis.AgreeTypeUtils;
+import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -36,6 +37,7 @@ import jkind.lustre.BinaryOp;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
+import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.TupleExpr;
 import jkind.lustre.VarDecl;
 
@@ -68,7 +70,7 @@ public class FaultASTBuilder {
 		String fnName = AgreeTypeUtils.getNodeName(defExpr);
 		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
 		if (fault.faultNode == null) {
-			// This is a pretty random experiment...if we can get AgreeASTBuilder to 
+			// if we can get AgreeASTBuilder to 
 			// build us a node, we will add it to our list and return it.
 			builder.caseNodeDefExpr(defExpr);
 			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
@@ -78,7 +80,6 @@ public class FaultASTBuilder {
 				throw new SafetyException("for fault node: " + defExpr.getFullName() + " unable to find it in AgreeProgram.  As a temporary hack, please add a call to this node somewhere in your AGREE annex.");
 			}
 		}
-		// System.out.println("For Agree Node: " + agreeNode.id + " we have found fault node: " + fault.faultNode.id);
 	}
 
 	public static int findParam(String param, List<jkind.lustre.VarDecl> theList) {
@@ -106,13 +107,17 @@ public class FaultASTBuilder {
 			String param = output.getFault_out().get(i);
 			NestedDotID compOut = output.getNom_conn().get(i);
 			Expr result = builder.caseNestedDotID(compOut);
-			if (result == null ||
-					!(result instanceof IdExpr)) {
+			Expr resultRecord = null;
+			
+			if(result instanceof RecordAccessExpr) {
+				resultRecord = ((RecordAccessExpr) result).record;
+				fault.faultOutputMap.put(param, result);
+			}else if(result instanceof IdExpr) {
+				fault.faultOutputMap.put(param, (IdExpr)result);
+			}
+			else  {
 				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
 			}
-			fault.faultOutputMap.put(param, (IdExpr)result);
-			// System.out.println("Fault node output: " + result + "is assigned to node output: " + param);
-			// translating NestedDotId to AgreeVars...how?
 		}
 	}
 	

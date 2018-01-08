@@ -156,7 +156,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		
 		Map<Fault, String> mapFaultToPath = faultVisitor.getMapFaultToPath();
 		for(Fault key : mapFaultToPath.keySet()) {
-			layout.addElement(mapFaultToPath.get(key), key.explanitoryText, SigType.OUTPUT);
+			layout.addElement(mapFaultToPath.get(key), key.explanitoryText, SigType.INPUT);
 		}
 		return layout;
 	}

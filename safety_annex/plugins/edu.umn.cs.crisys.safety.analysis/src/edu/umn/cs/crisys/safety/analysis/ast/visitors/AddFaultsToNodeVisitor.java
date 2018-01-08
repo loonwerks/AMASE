@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
+
+import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNodeBuilder;
@@ -25,6 +27,7 @@ import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import edu.umn.cs.crisys.safety.util.RecordIdPathElement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
@@ -35,6 +38,8 @@ import jkind.lustre.IntExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
+import jkind.lustre.RecordAccessExpr;
+import jkind.lustre.RecordUpdateExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
@@ -45,9 +50,13 @@ import jkind.lustre.VarDecl;
 
 public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
+	// List of Lustre nodes.
 	private List<Node> globalLustreNodes;
-	private AgreeNode topNode; 
-	private Set<String> faultyVars = new HashSet<>();
+	private AgreeNode topNode;
+	
+	// What does the key represent for the following?
+	private Map<String, List<String>> faultyVars = new HashMap<String, List<String>>();
+	private Map<String, List<Pair<Expr,Fault>>> faultyVarsExpr = new HashMap<String, List<Pair<Expr,Fault>>>();
 	private Map<String, String> theMap = new HashMap<>();
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
 	private Map<Fault, String> mapFaultToPath = new HashMap<>();
@@ -79,12 +88,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return program;
 	}
 	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// AGREENODE TRAVERSAL STARTS HERE.
+	// 
 	// since we don't totally know the traversal order, if we only
 	// want to replace in a single node, we need to store the 
 	// 'stacked' inNode, then restore it after a traversal.
+	//
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	public AgreeNode visit(AgreeNode node) {
-		Set<String> oldFaultyVars = faultyVars;
+		Map<String, List<String>> oldFaultyVars = faultyVars;
 
 		boolean isTop = (node == this.topNode);
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop); 
@@ -119,9 +136,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
-		for (String faultyId : faultyVars) {
-			AgreeVar out = findVar(node.outputs, faultyId);
-			nb.addInput(new AgreeVar(createNominalId(faultyId), out.type, out.reference));
+		// Get key (faultyId string = root) and iterate through list of paths (faultPath)
+		// Create new nominal variables for each pair (root.path). 
+		for (String faultyId : faultyVars.keySet()) {
+			for(String faultPath: faultyVars.get(faultyId)) {
+			  AgreeVar out = findVar(node.outputs, (faultyId));
+		  	  nb.addInput(new AgreeVar(createNominalId((faultyId+"."+faultPath)), out.type, out.reference));
+			}
 		}
 	}
 
@@ -176,15 +197,65 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)), f.faultStatement);
 			nb.addLocalEquation(eq);
 			
-			for(Map.Entry<String, IdExpr> outMap: f.faultOutputMap.entrySet()) {
+			// CHANGE THIS!  
+			for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
 				String lhsId = this.createFaultNodeEqId(f.id,  outMap.getKey());
 				nb.addAssertion(
 					new AgreeStatement("",
 						new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
 						f.faultStatement));
 			}
+			
+
+			
+		}
+		// Binding happens HERE and is based on the map from Id -> list of Expr.
+		// Create an equality between the id and a nested WITH expression for each expr 
+		// in the list.
+		
+		for(String root : faultyVarsExpr.keySet()){
+			// so: root will be the LHS of the equality
+			// Expr base = createNominalId(e.id);
+			// base is the root of the WITH expression.
+			
+			
+			List<Pair<Expr,Fault>> list = faultyVarsExpr.get(root);
+			
+			String nomId = createNominalId(root);
+			Expr base = new IdExpr(nomId);
+			
+			for(Pair<Expr, Fault> pair : list) {
+				
+				List<RecordIdPathElement> path = AgreeUtils.getExprPath(new ArrayList<RecordIdPathElement>(), pair.ex);
+				// what we want here is to replace 'base' with a new 'base' based on the fault path replacement.
+				// In utils, we have createNestedUpdateExpr(root, path, repl)
+				// We have 1. Root (base).  We have path (path).
+				// What wwe need is repl.  This is the LHS of some fault node equation - how do we find it?
+				// The issue involves faults that assign more than one output...so just having the fault may not be 
+				// enough - we need to know the fault and which field is relevant for this assignment.
+				
+			}
+			
+			
 		}
 	}
+	
+	/*
+	 * Method used to create nested with statements
+	 */
+//	private List<Expr> createNestedWithStmt(List<Pair<Expr, Fault>> list) {
+//
+//		// Create new list for return values
+//		List<Expr> returnList = new ArrayList<Expr>();
+//		
+//		for(Pair<Expr,Fault> pair: list) {
+//			List<String> recs = AgreeUtils.getExprPath(new ArrayList<String>(), pair.ex);
+//			
+//			
+//		}
+//		
+//		return returnList;
+//	}
 	
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
 		theMap = new HashMap<>(); 
@@ -224,7 +295,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			newFault.safetyEqAsserts.add(visitor.visit(s));
 		}
 		
-		for (Map.Entry<String, IdExpr> element: f.faultOutputMap.entrySet()) {
+		for (Map.Entry<String, Expr> element: f.faultOutputMap.entrySet()) {
 			newFault.faultOutputMap.put(element.getKey(), visitor.visit(element.getValue()));
 		}
 		
@@ -247,8 +318,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	
 	@Override
 	public Expr visit(IdExpr e) {
-		if (faultyVars.contains(e.id)) {
+		if (faultyVars.containsKey(e.id)) {	
 			return new IdExpr(e.location, createNominalId(e.id));
+			
 		} else {
 			return e;
 		}
@@ -263,19 +335,58 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return null;
 	}
 	
-	private Set<String> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
-		Set<String> outputSet = new HashSet<>(); 
+	/*
+	private Map<String, List<String>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
+		Map<String, List<String>> outputSet = new HashMap<String, List<String>>(); 
+		RecordAccessExpr recordExpr = null;
+		IdExpr idExpr = null;
+		String id = "";
+		List<RecordIdPathElement> idPath = new ArrayList<>();
+		String finalPath = "";
 		for (Fault f: faults) {
-			for (IdExpr ide: f.faultOutputMap.values()) {
-				if (outputSet.contains(ide.id)) {
-					throw new SafetyException("Error: more than one fault affect output: '" + 
-							ide.id + "'.");
+			for (Expr ide: f.faultOutputMap.values()) {
+				
+				if(ide instanceof IdExpr) {
+					idExpr = (IdExpr) ide;
+					id = idExpr.id;
+					idPath = AgreeUtils.getExprPath(new ArrayList<RecordIdPathElement>(), idExpr);
+					addIdToMap(ide, id, f);
+				} else if(ide instanceof RecordAccessExpr) {
+					recordExpr = (RecordAccessExpr) ide;
+					id = recordExpr.record.toString();
+					addIdToMap(ide, id, f);
 				} else {
-					outputSet.add(ide.id);
+					throw new SafetyException("Error: Can only handle IdExpr and "+
+							"Record Access Expressions.");
+				}
+				// Check for id expression match. 
+				if (outputSet.containsKey(id)) {
+					// Concatenate idPath into '.' form
+					for(String part: idPath) {
+						finalPath = finalPath + "." + part;
+					}
+					outputSet.get(id).add(finalPath);
+					
+				} else {
+					outputSet.put(id, idPath);
 				}
 			}
 		}
 		return outputSet;
+	}
+	*/
+	
+	private void addIdToMap(Expr ex, String id, Fault f) {
+		Pair<Expr,Fault> pair = new Pair<Expr, Fault>(ex, f);
+		if(faultyVarsExpr.containsKey(id)) {
+			faultyVarsExpr.get(id).add(pair);
+		}
+		else {
+			List<Pair<Expr,Fault>> list = new ArrayList<Pair<Expr,Fault>>();
+			list.add(pair);
+			faultyVarsExpr.put(id, list);
+		}
+
 	}
 	
 	public String createFaultEventId(String base) {
@@ -297,8 +408,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public String createFaultEqId(String fault, String var) {
 		return fault + "__" + var; 
 	}
-	
 	public String createFaultNodeEqId(String fault, String var) {
+	
 		return fault + "__node__" + var; 
 	}
 	
@@ -417,27 +528,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
 		String activeVarId = this.createFaultActiveId(base);
 		
-		// Create map from fault to the constructed Lustre name
-//		if(mapFaultToLustreNames.containsKey(f)) {
-//			mapFaultToLustreNames.get(f).add(interfaceVarId);
-//			//mapFaultToLustreNames.get(f).add(activeVarId);
-//		}
-//		else {
-//			List<String> names = new ArrayList<>();
-//			names.add(interfaceVarId);
-//			//names.add(activeVarId);
-//			mapFaultToLustreNames.put(f, names);
-//		}
-		
-		// ++++++++++++++++++++++++++   ISN'T THERE ONLY ONE PATH PER FAULT??
-		
 		// Create map from fault to it's relative path
 		// for the counterexample layout
 		for(String str : path) {	
 			mapFaultToPath.put(f, str);
 		}
-		
-		
 		
 		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, new IdExpr(activeVarId));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
@@ -555,4 +650,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public Map<Fault, String> getMapFaultToPath(){
 		return mapFaultToPath;
 	}
+	
+	public class Pair<Expr, Fault>{
+		private Expr ex;
+		private Fault f;
+		
+		public Pair(Expr ex, Fault f) {
+			this.ex = ex;
+			this.f = f;
+		}
+	}
+
 }

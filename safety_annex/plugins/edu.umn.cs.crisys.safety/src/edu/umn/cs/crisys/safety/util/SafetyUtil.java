@@ -13,6 +13,7 @@ import org.osate.annexsupport.AnnexUtil;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
+import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
@@ -21,6 +22,7 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import jkind.lustre.Expr;
 import jkind.lustre.Node;
 
 public class SafetyUtil {
@@ -127,5 +129,23 @@ public class SafetyUtil {
 		}
 		return null;
 		
+	}
+	
+	public Expr createNestedUpdateExpr(Expr root, List<PathElement> path, Expr repl) {
+		
+		// Why cant I use safety exception here?
+		if(path.size() == 0) {
+			new AgreeException("Problem with nested update expr.");
+		}
+		
+		PathElement hd = path.get(0);
+		List<PathElement> tl = path.subList(1, path.size());
+		
+		if(tl == null) {
+			return hd.makeUpdateExpr(root, repl);
+		}else {
+			Expr newRoot = hd.makeAccessExpr(root);
+			return hd.makeUpdateExpr(root, createNestedUpdateExpr(newRoot, tl, repl));
+		}
 	}
 }

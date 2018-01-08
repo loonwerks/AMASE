@@ -82,8 +82,6 @@ public class SafetyLinkerFactory {
         
         
         int size = annexSubClauses.size();
-      
-
         if (annexSubClauses.size() == 0) {
             throw new SafetyException(
                     "There is no AGREE annex or Safety annex in the '" + sysType.getName() + "' system type.");
@@ -93,9 +91,6 @@ public class SafetyLinkerFactory {
         	throw new SafetyException(
         			"There must be both an AGREE annex and a Safety annex in the '" + sysType.getName() + "' system type.");
         }
-        
-        
-
         CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
 
         // check if we are analyzing all layers
