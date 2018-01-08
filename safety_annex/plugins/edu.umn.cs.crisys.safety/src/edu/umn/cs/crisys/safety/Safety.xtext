@@ -29,11 +29,16 @@ ElementSafety returns aadl2::Element:
 ;
 
 @Override 
-SpecStatement: {FaultStatement} 'fault' (str=STRING)? ':'  faultDefName=NestedDotID  
+SpecStatement: {FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=NestedDotID  
 			'{' faultDefinitions+=(FaultSubcomponent)* '}' 
-	|	{AnalysisStatement} 'analyze' ':' 'max' (maxFaults=INTEGER_LIT) 'fault' 
+	|	{AnalysisStatement} 'analyze' ':' behavior = AnalysisBehavior 
+	|   {HWFaultStatement} 'HW_fault' name = ID (str=STRING)? ':' 
+		'{' faultDefinitions+=(HWFaultSubcomponent)* '}'
 ;
 	
+AnalysisBehavior : {FaultCountBehavior} 'max' (maxFaults=INTEGER_LIT) 'fault'
+   | {ProbabilityBehavior} 'probability' (probabilty=REAL_LIT) 
+;	
 
 FaultSubcomponent returns FaultSubcomponent: 
 	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
@@ -43,9 +48,22 @@ FaultSubcomponent returns FaultSubcomponent:
 							(','nom_conn+=NestedDotID '<-' fault_out+=ID)*';'
 	
  	| {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
- 	| {TriggerStatement} 'trigger' ':' cond=TriggerCondition  ('['probability=REAL_LIT ']')? ';'
+ 	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	| {TriggerStatement} 'enabled' cond=TriggerCondition  ';'
+ 	| {PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
 	| SafetyEqStatement ;
+	
+HWFaultSubcomponent returns HWFaultSubcomponent: 
+	  {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
+ 	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	| {PropagateToStatement} 'propagate_to' ':' '{' faultList+= ID '.' ID (',' faultList+=ID '.' ID)* '}' ';'
+ 	| {PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
+	| SafetyEqStatement ;	
 
+PropagationTypeConstraint:
+	  {asymmetric} 'asymmetric'
+    | {symmetric} 'symmetric'
+;
 	 
 TemporalConstraint:
 	{PermanentConstraint} 'permanent' 
@@ -53,8 +71,7 @@ TemporalConstraint:
 ;
 
 TriggerCondition:
-	{MustCondition}'must' '{' exprList+=(Expr) ("," exprList+=(Expr))* '}'  
-  | {EnablerCondition} 'enabler' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
+   {EnablerCondition} 'by' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
 ;
 	
 SafetyEqStatement:

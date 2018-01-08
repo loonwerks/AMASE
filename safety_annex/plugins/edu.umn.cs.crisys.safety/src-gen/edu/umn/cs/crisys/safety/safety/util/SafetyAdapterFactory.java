@@ -109,9 +109,24 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createSpecStatementAdapter();
       }
       @Override
+      public Adapter caseAnalysisBehavior(AnalysisBehavior object)
+      {
+        return createAnalysisBehaviorAdapter();
+      }
+      @Override
       public Adapter caseFaultSubcomponent(FaultSubcomponent object)
       {
         return createFaultSubcomponentAdapter();
+      }
+      @Override
+      public Adapter caseHWFaultSubcomponent(HWFaultSubcomponent object)
+      {
+        return createHWFaultSubcomponentAdapter();
+      }
+      @Override
+      public Adapter casePropagationTypeConstraint(PropagationTypeConstraint object)
+      {
+        return createPropagationTypeConstraintAdapter();
       }
       @Override
       public Adapter caseTemporalConstraint(TemporalConstraint object)
@@ -159,6 +174,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createAnalysisStatementAdapter();
       }
       @Override
+      public Adapter caseHWFaultStatement(HWFaultStatement object)
+      {
+        return createHWFaultStatementAdapter();
+      }
+      @Override
+      public Adapter caseFaultCountBehavior(FaultCountBehavior object)
+      {
+        return createFaultCountBehaviorAdapter();
+      }
+      @Override
+      public Adapter caseProbabilityBehavior(ProbabilityBehavior object)
+      {
+        return createProbabilityBehaviorAdapter();
+      }
+      @Override
       public Adapter caseInputStatement(InputStatement object)
       {
         return createInputStatementAdapter();
@@ -174,9 +204,34 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createDurationStatementAdapter();
       }
       @Override
+      public Adapter caseProbabilityStatement(ProbabilityStatement object)
+      {
+        return createProbabilityStatementAdapter();
+      }
+      @Override
       public Adapter caseTriggerStatement(TriggerStatement object)
       {
         return createTriggerStatementAdapter();
+      }
+      @Override
+      public Adapter casePropagationTypeStatement(PropagationTypeStatement object)
+      {
+        return createPropagationTypeStatementAdapter();
+      }
+      @Override
+      public Adapter casePropagateToStatement(PropagateToStatement object)
+      {
+        return createPropagateToStatementAdapter();
+      }
+      @Override
+      public Adapter caseasymmetric(asymmetric object)
+      {
+        return createasymmetricAdapter();
+      }
+      @Override
+      public Adapter casesymmetric(symmetric object)
+      {
+        return createsymmetricAdapter();
       }
       @Override
       public Adapter casePermanentConstraint(PermanentConstraint object)
@@ -187,11 +242,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
       public Adapter caseTransientConstraint(TransientConstraint object)
       {
         return createTransientConstraintAdapter();
-      }
-      @Override
-      public Adapter caseMustCondition(MustCondition object)
-      {
-        return createMustConditionAdapter();
       }
       @Override
       public Adapter caseEnablerCondition(EnablerCondition object)
@@ -381,6 +431,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.AnalysisBehavior <em>Analysis Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisBehavior
+   * @generated
+   */
+  public Adapter createAnalysisBehaviorAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultSubcomponent <em>Fault Subcomponent</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -391,6 +456,36 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFaultSubcomponentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent <em>HW Fault Subcomponent</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent
+   * @generated
+   */
+  public Adapter createHWFaultSubcomponentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint <em>Propagation Type Constraint</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint
+   * @generated
+   */
+  public Adapter createPropagationTypeConstraintAdapter()
   {
     return null;
   }
@@ -531,6 +626,51 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.HWFaultStatement <em>HW Fault Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultStatement
+   * @generated
+   */
+  public Adapter createHWFaultStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior <em>Fault Count Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.FaultCountBehavior
+   * @generated
+   */
+  public Adapter createFaultCountBehaviorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ProbabilityBehavior <em>Probability Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityBehavior
+   * @generated
+   */
+  public Adapter createProbabilityBehaviorAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.InputStatement <em>Input Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -576,6 +716,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ProbabilityStatement <em>Probability Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityStatement
+   * @generated
+   */
+  public Adapter createProbabilityStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement <em>Trigger Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -586,6 +741,66 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTriggerStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PropagationTypeStatement <em>Propagation Type Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.PropagationTypeStatement
+   * @generated
+   */
+  public Adapter createPropagationTypeStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PropagateToStatement <em>Propagate To Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateToStatement
+   * @generated
+   */
+  public Adapter createPropagateToStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.asymmetric <em>asymmetric</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.asymmetric
+   * @generated
+   */
+  public Adapter createasymmetricAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.symmetric <em>symmetric</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.symmetric
+   * @generated
+   */
+  public Adapter createsymmetricAdapter()
   {
     return null;
   }
@@ -616,21 +831,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTransientConstraintAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.MustCondition <em>Must Condition</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.MustCondition
-   * @generated
-   */
-  public Adapter createMustConditionAdapter()
   {
     return null;
   }

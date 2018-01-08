@@ -29,6 +29,7 @@ import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.validation.AgreeType;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
+import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
@@ -361,25 +362,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// First check the trigger condition
 		checkTriggerCondition(triggerStmt.getCond());
 		
-		// Check the optional probability expression
-		if(triggerStmt.getProbability() != null ){
-			
-			// Check for non-real valued probability
-			// Try casting string to double, catch exceptions to print out error
-			double result = 0;
-			try{
-				result = Double.parseDouble(triggerStmt.getProbability());
-			} catch(NullPointerException npe){
-				error(triggerStmt, "Valid real number required");
-			} catch(NumberFormatException nfe){
-				error(triggerStmt, "Valid real number required");
-			}
-			
-			// Now check to make sure it's a valid probability (btwn 0 and 1 inclusive)
-			if((result < 0) || (result > 1)){
-				error(triggerStmt, "Probability must be between 0 and 1 inclusive");
-			}	
-		}
 	}
 	
 	/*
@@ -389,12 +371,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check
 	public void checkTriggerCondition(TriggerCondition tc){
-		if(tc != null){
+		if (tc instanceof EnablerCondition) {
+			EnablerCondition ec = (EnablerCondition)tc;
 			
 			// Make sure expression list for trigger conditions is nonempty
-			EList<Expr> exprList = tc.getExprList();
+			EList<Expr> exprList = ec.getExprList();
 			if(exprList.isEmpty()) {
-				error(tc, "Trigger condition list cannot be empty.");
+				error(tc, "Enabler trigger condition list cannot be empty.");
 			}
 			
 			// For each expression in the list, make sure they are all of type boolean

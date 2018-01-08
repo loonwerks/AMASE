@@ -25,6 +25,7 @@ public class Fault {
 	public Node faultNode; 
 	public String id;
 	public String explanitoryText;
+	public double probability;
 	
 	// Some information about the fault
 	public DurationStatement duration = null;
@@ -38,7 +39,24 @@ public class Fault {
 	public Fault(FaultStatement fstmt, 
 			String id) {
 		this.faultStatement = fstmt;
+		this.explanitoryText = fstmt.getStr();
 		this.id = id;
 	}
 
+	// deep copy
+	public Fault(Fault other) {
+		this.faultInputMap = new HashMap<>(other.faultInputMap);
+		this.faultOutputMap = new HashMap<>(other.faultOutputMap);
+		
+		this.faultNode = other.faultNode;
+		this.id = other.id;
+		this.explanitoryText = other.explanitoryText;
+		this.probability = other.probability;
+		this.duration = other.duration;
+		this.safetyEqVars = new ArrayList<>(other.safetyEqVars);
+		this.safetyEqAsserts = new ArrayList<>(other.safetyEqAsserts);
+		this.triggers = new ArrayList<>(other.triggers);
+
+		this.faultStatement = other.faultStatement;
+	}
 }

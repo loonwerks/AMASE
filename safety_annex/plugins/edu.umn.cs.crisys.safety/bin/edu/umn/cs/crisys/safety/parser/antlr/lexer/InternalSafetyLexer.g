@@ -16,15 +16,23 @@ import org.eclipse.xtext.parser.antlr.Lexer;
 
 
 
+Propagate_type : ('P'|'p')('R'|'r')('O'|'o')('P'|'p')('A'|'a')('G'|'g')('A'|'a')('T'|'t')('E'|'e')'_'('T'|'t')('Y'|'y')('P'|'p')('E'|'e');
+
 Linearization : ('L'|'l')('I'|'i')('N'|'n')('E'|'e')('A'|'a')('R'|'r')('I'|'i')('Z'|'z')('A'|'a')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
 
 Get_Property : ('G'|'g')('E'|'e')('T'|'t')'_'('P'|'p')('R'|'r')('O'|'o')('P'|'p')('E'|'e')('R'|'r')('T'|'t')('Y'|'y');
 
 Asynchronous : ('A'|'a')('S'|'s')('Y'|'y')('N'|'n')('C'|'c')('H'|'h')('R'|'r')('O'|'o')('N'|'n')('O'|'o')('U'|'u')('S'|'s');
 
+Propagate_to : ('P'|'p')('R'|'r')('O'|'o')('P'|'p')('A'|'a')('G'|'g')('A'|'a')('T'|'t')('E'|'e')'_'('T'|'t')('O'|'o');
+
 Agree_input : ('A'|'a')('G'|'g')('R'|'r')('E'|'e')('E'|'e')'_'('I'|'i')('N'|'n')('P'|'p')('U'|'u')('T'|'t');
 
 Exclusively : ('E'|'e')('X'|'x')('C'|'c')('L'|'l')('U'|'u')('S'|'s')('I'|'i')('V'|'v')('E'|'e')('L'|'l')('Y'|'y');
+
+Probability : ('P'|'p')('R'|'r')('O'|'o')('B'|'b')('A'|'a')('B'|'b')('I'|'i')('L'|'l')('I'|'i')('T'|'t')('Y'|'y');
+
+Asymmetric : ('A'|'a')('S'|'s')('Y'|'y')('M'|'m')('M'|'m')('E'|'e')('T'|'t')('R'|'r')('I'|'i')('C'|'c');
 
 Classifier : ('C'|'c')('L'|'l')('A'|'a')('S'|'s')('S'|'s')('I'|'i')('F'|'f')('I'|'i')('E'|'e')('R'|'r');
 
@@ -36,9 +44,13 @@ Permanent : ('P'|'p')('E'|'e')('R'|'r')('M'|'m')('A'|'a')('N'|'n')('E'|'e')('N'|
 
 Reference : ('R'|'r')('E'|'e')('F'|'f')('E'|'e')('R'|'r')('E'|'e')('N'|'n')('C'|'c')('E'|'e');
 
+Symmetric : ('S'|'s')('Y'|'y')('M'|'m')('M'|'m')('E'|'e')('T'|'t')('R'|'r')('I'|'i')('C'|'c');
+
 Synchrony : ('S'|'s')('Y'|'y')('N'|'n')('C'|'c')('H'|'h')('R'|'r')('O'|'o')('N'|'n')('Y'|'y');
 
 Transient : ('T'|'t')('R'|'r')('A'|'a')('N'|'n')('S'|'s')('I'|'i')('E'|'e')('N'|'n')('T'|'t');
+
+HW_fault : ('H'|'h')('W'|'w')'_'('F'|'f')('A'|'a')('U'|'u')('L'|'l')('T'|'t');
 
 Calendar : ('C'|'c')('A'|'a')('L'|'l')('E'|'e')('N'|'n')('D'|'d')('A'|'a')('R'|'r');
 
@@ -76,7 +88,7 @@ Binding : ('B'|'b')('I'|'i')('N'|'n')('D'|'d')('I'|'i')('N'|'n')('G'|'g');
 
 Compute : ('C'|'c')('O'|'o')('M'|'m')('P'|'p')('U'|'u')('T'|'t')('E'|'e');
 
-Enabler : ('E'|'e')('N'|'n')('A'|'a')('B'|'b')('L'|'l')('E'|'e')('R'|'r');
+Enabled : ('E'|'e')('N'|'n')('A'|'a')('B'|'b')('L'|'l')('E'|'e')('D'|'d');
 
 Implies : ('I'|'i')('M'|'m')('P'|'p')('L'|'l')('I'|'i')('E'|'e')('S'|'s');
 
@@ -85,8 +97,6 @@ Latched : ('L'|'l')('A'|'a')('T'|'t')('C'|'c')('H'|'h')('E'|'e')('D'|'d');
 Outputs : ('O'|'o')('U'|'u')('T'|'t')('P'|'p')('U'|'u')('T'|'t')('S'|'s');
 
 Returns : ('R'|'r')('E'|'e')('T'|'t')('U'|'u')('R'|'r')('N'|'n')('S'|'s');
-
-Trigger : ('T'|'t')('R'|'r')('I'|'i')('G'|'g')('G'|'g')('E'|'e')('R'|'r');
 
 KW__COUNT : '_'('C'|'c')('O'|'o')('U'|'u')('N'|'n')('T'|'t');
 
@@ -145,8 +155,6 @@ Each : ('E'|'e')('A'|'a')('C'|'c')('H'|'h');
 Else : ('E'|'e')('L'|'l')('S'|'s')('E'|'e');
 
 Enum : ('E'|'e')('N'|'n')('U'|'u')('M'|'m');
-
-Must : ('M'|'m')('U'|'u')('S'|'s')('T'|'t');
 
 Node : ('N'|'n')('O'|'o')('D'|'d')('E'|'e');
 
@@ -219,6 +227,8 @@ LessThanSignGreaterThanSign : '<''>';
 EqualsSignGreaterThanSign : '=''>';
 
 GreaterThanSignEqualsSign : '>''=';
+
+By : ('B'|'b')('Y'|'y');
 
 Eq : ('E'|'e')('Q'|'q');
 

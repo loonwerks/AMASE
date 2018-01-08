@@ -42,12 +42,8 @@ D.~Chen, N.~Mahmud, M.~Walker, L.~Feng, H.~Lönn, and Y.~Papadopoulos.
 \bibitem{DBLP:journals/scp/CimattiT15}
 A.~Cimatti and S.~Tonetta.
 \newblock {Contracts-Refinement Proof System for Component-Based Embedded
-  System}, journal = {Sci. Comput. Program.}, volume = {97}, pages =
-  {333--348}, year = {2015}, url =
-  {http://dx.doi.org/10.1016/j.scico.2014.06.011}, doi =
-  {10.1016/j.scico.2014.06.011}, timestamp = {Fri, 30 Jan 2015 18:56:15 +0100},
-  biburl = {http://dblp.uni-trier.de/rec/bib/journals/scp/CimattiT15},
-  bibsource = {dblp computer science bibliography, http://dblp.org}.
+  System}.
+\newblock {\em Sci. Comput. Program.}, 97:333--348, 2015.
 
 \bibitem{NFM2012:CoGaMiWhLaLu}
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
@@ -67,6 +63,14 @@ J.~Delange, P.~Feiler, D.~P. Gluch, and J.~Hudak.
 S.~Friedenthal, A.~Moore, and R.~Steiner.
 \newblock {\em {A Practical Guide to {S}ys{ML}}}.
 \newblock Morgan Kaufman Pub, 2008.
+
+\bibitem{Gudemann:2010:FQQ:1909626.1909813}
+M.~Gudemann and F.~Ortmeier.
+\newblock A framework for qualitative and quantitative formal model-based
+  safety analysis.
+\newblock In {\em Proceedings of the 2010 IEEE 12th International Symposium on
+  High-Assurance Systems Engineering}, HASE '10, pages 132--141, Washington,
+  DC, USA, 2010. IEEE Computer Society.
 
 \bibitem{Halbwachs91:IEEE}
 N.~Halbwachs, P.~Caspi, P.~Raymond, and D.~Pilaud.

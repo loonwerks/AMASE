@@ -1,10 +1,12 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
@@ -21,11 +23,14 @@ import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
+import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
+import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
+import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.util.RecordIdPathElement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
@@ -124,7 +129,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		if (isTop) {
 			topNode = node;
-			int maxFaults = this.gatherTopLevelFaultCount(node);
+			AnalysisBehavior maxFaults = this.gatherTopLevelFaultCount(node);
 			addTopLevelFaultDeclarations(node, new ArrayList<>(), nb);
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		}
@@ -260,7 +265,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
 		theMap = new HashMap<>(); 
 		for (AgreeVar eqVar: eqVars) {
-			ComponentInstance ci = eqVar.compInst;
+			// ComponentInstance ci = eqVar.compInst;
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
 			
 //			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
@@ -271,12 +276,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	public Fault renameEqId(Fault f, Map<String, String> idMap) {
-		Fault newFault = new Fault(f.faultStatement, f.id);
-		newFault.duration = f.duration;
-		newFault.explanitoryText = f.explanitoryText; 
-		newFault.faultNode = f.faultNode; 
-		newFault.triggers = f.triggers;
-		
+		Fault newFault = new Fault(f);
+		newFault.safetyEqVars.clear();
+		newFault.safetyEqAsserts.clear();
+		newFault.faultOutputMap.clear();
+		newFault.faultInputMap.clear();
 		
 		if (!f.triggers.isEmpty()) {
 			throw new SafetyException("Triggers are currently unsupported for translation");
@@ -430,21 +434,28 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return faults;
 	}
 
-	public int gatherTopLevelFaultCount(AgreeNode node) {
-		int maxFaults = 1;
+	public AnalysisBehavior gatherTopLevelFaultCount(AgreeNode node) {
+		AnalysisBehavior ab = null;
 		boolean found = false;
 
 		List<SpecStatement> specs = 
 			SafetyUtil.collapseAnnexes(
 				SafetyUtil.getSafetyAnnexes(node, true));
-
 		 
 		for (SpecStatement s : specs) {
 			if (s instanceof AnalysisStatement) {
 				AnalysisStatement as = (AnalysisStatement)s;
-				maxFaults = Integer.valueOf(as.getMaxFaults());
-				if (maxFaults < 0) {
-					throw new SafetyException("Maximum number of faults must be non-negative.");
+				ab = as.getBehavior();
+				if (ab instanceof FaultCountBehavior) {
+					int maxFaults = Integer.valueOf(((FaultCountBehavior)ab).getMaxFaults());
+					if (maxFaults < 0) {
+						throw new SafetyException("Maximum number of faults must be non-negative.");
+					}
+				} else if (ab instanceof ProbabilityBehavior) {
+					double minProbability = Double.valueOf(((ProbabilityBehavior)ab).getProbabilty());
+					if (minProbability > 1 || minProbability < 0) {
+						throw new SafetyException("Probability out of range [0, 1]");
+					}
 				}
 				if (found) {
 					throw new SafetyException("Multiple analysis specifications found.  Only one can be processed");
@@ -452,7 +463,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				found = true;
 			} 
 		}
-		return maxFaults;
+		if (!found) {
+			throw new SafetyException("No analysis statement; unable to run safety analysis");
+		}
+		return ab;
 	}
 	
 	
@@ -575,6 +589,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
+	
+	/*****************************************************************
+	 * 
+	 * # of occurrence-based fault calculations
+	 * 
+	 ******************************************************************/
+	
 	public Expr createSumExpr(Expr cond) {
 		return new IfThenElseExpr(cond, new IntExpr(1), new IntExpr(0));
 	}
@@ -610,8 +631,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 	
-	public void addTopLevelFaultOccurrenceConstraints(
-			int maxFaults, 
+	public void addTopLevelMaxFaultOccurrenceConstraint(
+			int maxFaults,
 			AgreeNode topNode,
 			AgreeNodeBuilder builder) {
 		
@@ -633,6 +654,183 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		builder.addAssertion(new AgreeStatement("", lessEqual, topNode.reference));
 		
 		// and Viola!
+	}
+	
+	/*****************************************************************
+	 * 
+	 * probability-based fault calculations
+	 * 
+	 ******************************************************************/
+	class FaultProbability implements Comparable<FaultProbability>{
+		public double probability;
+		public String faultName;
+		
+		public FaultProbability(String faultName, double probability) {
+			this.probability = probability;
+			this.faultName = faultName;
+		}
+
+		@Override
+		public int compareTo(FaultProbability o) {
+			// Want to sort LARGEST first, so negate probabilities.
+			return Double.compare(-probability,  -o.probability);
+		}
+		
+		public String toString() {
+			return "(" + probability + ", " + faultName + ")";
+		}
+	}; 
+	
+	class FaultSetProbability implements Comparable<FaultSetProbability> {
+		// invariant: probability should equal the multiple of all probabilities in elements.
+		public double probability;
+		public Set<FaultProbability> elements;
+
+		public FaultSetProbability(double probability, FaultProbability fp) {
+			this.probability = probability;
+			this.elements = Collections.singleton(fp);
+		}
+		
+		public FaultSetProbability(double probability, FaultSetProbability base, FaultProbability fp) {
+			this.probability = probability; 
+			this.elements = new HashSet<>(base.elements);
+			this.elements.add(fp);
+		}
+
+		@Override
+		public int compareTo(FaultSetProbability o) {
+			// Want to sort LARGEST first, so negate probabilities.
+			return Double.compare(-probability,  -o.probability);
+		}
+		
+		public String toString() {
+			return "(" + probability + ", " + elements.toString() + " )";
+		}
+	}
+	
+	public void getFaultProbExprList(
+			AgreeNode currentNode, 
+			List<String> path, 
+			List<FaultProbability> probabilities) {
+
+		List<Fault> faults = this.faultMap.get(currentNode.compInst) ; 
+		for (Fault f: faults) {
+			String base = addPathDelimiters(path, f.id);
+			probabilities.add(new FaultProbability(this.createFaultActiveId(base), f.probability));
+		}
+		
+		for (AgreeNode n: currentNode.subNodes) {
+			List<String> ext = new ArrayList<>(path);
+			ext.add(n.id);
+			getFaultProbExprList(n, ext, probabilities);
+		}
+	}
+	
+	public Expr getNoFaultProposition(Set<FaultProbability> elements) {
+		Expr noFaultExpr = null;  
+		for (FaultProbability fp: elements) {
+			Expr local = new UnaryExpr(UnaryOp.NOT, new IdExpr(fp.faultName));
+			if (noFaultExpr == null) {
+				noFaultExpr = local;
+			} else {
+				noFaultExpr = new BinaryExpr(local, BinaryOp.AND, noFaultExpr);
+			}
+		}
+		assert (noFaultExpr != null);
+		return noFaultExpr;
+	}
+	
+	
+	public void addTopLevelMaxFaultOccurrenceConstraint(
+			double minProbability, 
+			AgreeNode topNode, 
+			AgreeNodeBuilder builder) {
+		
+		ArrayList<FaultProbability> elementProbabilities = new ArrayList<>();
+		ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
+		PriorityQueue<FaultSetProbability> pq = new PriorityQueue<>();
+
+		// gather all fault probabilities.  If there are no faults, exit out.
+		getFaultProbExprList(topNode, new ArrayList<>(), elementProbabilities);
+		Collections.sort(elementProbabilities);		
+		if (elementProbabilities.isEmpty()) {
+			return;
+		}
+		
+		System.out.println("elementProbabilities: " + elementProbabilities); 
+		
+		// remove elements from list that are too unlikely & add remaining elements to 
+		// 'good' set.  
+		ArrayList<FaultProbability> remainder = new ArrayList<>(elementProbabilities);
+		for (int i=0; i < remainder.size(); i++) {
+			FaultProbability elementProbability = remainder.get(i);
+			if (elementProbability.probability < minProbability) {
+				remainder.subList(i, remainder.size()).clear();
+			}
+			else {
+				FaultSetProbability fsp = 
+					new FaultSetProbability(elementProbability.probability, elementProbability);
+				faultCombinationsAboveThreshold.add(fsp);
+				pq.add(fsp);
+			}
+		}
+		
+		// So...now we have a priority queue with remaining fault combinations to be checked
+		// for addition.  The PQ preserves the invariant that highest probability elements are 
+		// first.  We attempt to combine with remainder (also in priority order). 
+		// If unable to combine because combination below threshold, remove rest of 
+		// elementProbability list (the rest will be below threshold for all subsequent elements).
+		// Complete when either the PQ or the element list is empty.
+		
+		while (!pq.isEmpty() && !remainder.isEmpty()) {
+			FaultSetProbability fsp = pq.remove();
+			for (int i=0; i < remainder.size(); i++) {
+				FaultProbability fp = remainder.get(i);
+				double setProbability = fp.probability * fsp.probability; 
+				if (setProbability < minProbability) {
+					remainder.subList(i,  remainder.size()).clear();
+				} else if (!fsp.elements.contains(fp)){
+					FaultSetProbability newSet = 
+						new FaultSetProbability(setProbability, fsp, fp);
+					pq.add(newSet);
+					faultCombinationsAboveThreshold.add(newSet);
+				}
+			}
+		}
+		System.out.println("Fault hypothesis: " + faultCombinationsAboveThreshold); 
+
+		
+		// Now faultCombinationsAboveThreshold contains all the valid fault combinations and
+		// noFaultExpr has the default (no-fault) case.  Let's construct a proposition.
+		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
+		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
+		for (FaultSetProbability fsp: faultCombinationsAboveThreshold) {
+			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
+			goodElements.removeAll(fsp.elements);
+			Expr local = getNoFaultProposition(goodElements);
+			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
+		}
+
+		System.out.println("Probabilistic Fault Hypothesis is: " + faultHypothesis.toString());
+		
+		// Add this fault hypothesis as an assertion.
+		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
+	}
+
+	public void addTopLevelFaultOccurrenceConstraints(
+			AnalysisBehavior ab, 
+			AgreeNode topNode,
+			AgreeNodeBuilder builder) {
+		
+		if (ab instanceof FaultCountBehavior) {
+			addTopLevelMaxFaultOccurrenceConstraint(
+					Integer.parseInt(((FaultCountBehavior)ab).getMaxFaults()), 
+					topNode, builder);
+		} else if (ab instanceof ProbabilityBehavior) {
+			addTopLevelMaxFaultOccurrenceConstraint(
+					Double.parseDouble(((ProbabilityBehavior)ab).getProbabilty()), 
+					topNode, builder);
+		}
 	}
 	
 	/*

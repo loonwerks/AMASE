@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl#getName <em>Name</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl#getStr <em>Str</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl#getFaultDefName <em>Fault Def Name</em>}</li>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl#getFaultDefinitions <em>Fault Definitions</em>}</li>
@@ -40,6 +41,26 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class FaultStatementImpl extends SpecStatementImpl implements FaultStatement
 {
+  /**
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected static final String NAME_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected String name = NAME_EDEFAULT;
+
   /**
    * The default value of the '{@link #getStr() <em>Str</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -99,6 +120,29 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   protected EClass eStaticClass()
   {
     return SafetyPackage.Literals.FAULT_STATEMENT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__NAME, oldName, name));
   }
 
   /**
@@ -214,6 +258,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     switch (featureID)
     {
+      case SafetyPackage.FAULT_STATEMENT__NAME:
+        return getName();
       case SafetyPackage.FAULT_STATEMENT__STR:
         return getStr();
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
@@ -235,6 +281,9 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     switch (featureID)
     {
+      case SafetyPackage.FAULT_STATEMENT__NAME:
+        setName((String)newValue);
+        return;
       case SafetyPackage.FAULT_STATEMENT__STR:
         setStr((String)newValue);
         return;
@@ -259,6 +308,9 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     switch (featureID)
     {
+      case SafetyPackage.FAULT_STATEMENT__NAME:
+        setName(NAME_EDEFAULT);
+        return;
       case SafetyPackage.FAULT_STATEMENT__STR:
         setStr(STR_EDEFAULT);
         return;
@@ -282,6 +334,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     switch (featureID)
     {
+      case SafetyPackage.FAULT_STATEMENT__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case SafetyPackage.FAULT_STATEMENT__STR:
         return STR_EDEFAULT == null ? str != null : !STR_EDEFAULT.equals(str);
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
@@ -303,7 +357,9 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (str: ");
+    result.append(" (name: ");
+    result.append(name);
+    result.append(", str: ");
     result.append(str);
     result.append(')');
     return result.toString();

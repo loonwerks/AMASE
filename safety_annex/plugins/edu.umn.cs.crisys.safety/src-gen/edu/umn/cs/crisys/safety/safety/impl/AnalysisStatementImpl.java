@@ -2,12 +2,15 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -19,7 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl#getMaxFaults <em>Max Faults</em>}</li>
+ *   <li>{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl#getBehavior <em>Behavior</em>}</li>
  * </ul>
  *
  * @generated
@@ -27,24 +30,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class AnalysisStatementImpl extends SpecStatementImpl implements AnalysisStatement
 {
   /**
-   * The default value of the '{@link #getMaxFaults() <em>Max Faults</em>}' attribute.
+   * The cached value of the '{@link #getBehavior() <em>Behavior</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMaxFaults()
+   * @see #getBehavior()
    * @generated
    * @ordered
    */
-  protected static final String MAX_FAULTS_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getMaxFaults() <em>Max Faults</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMaxFaults()
-   * @generated
-   * @ordered
-   */
-  protected String maxFaults = MAX_FAULTS_EDEFAULT;
+  protected AnalysisBehavior behavior;
 
   /**
    * <!-- begin-user-doc -->
@@ -72,9 +65,9 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getMaxFaults()
+  public AnalysisBehavior getBehavior()
   {
-    return maxFaults;
+    return behavior;
   }
 
   /**
@@ -82,12 +75,53 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setMaxFaults(String newMaxFaults)
+  public NotificationChain basicSetBehavior(AnalysisBehavior newBehavior, NotificationChain msgs)
   {
-    String oldMaxFaults = maxFaults;
-    maxFaults = newMaxFaults;
+    AnalysisBehavior oldBehavior = behavior;
+    behavior = newBehavior;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.ANALYSIS_STATEMENT__MAX_FAULTS, oldMaxFaults, maxFaults));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR, oldBehavior, newBehavior);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setBehavior(AnalysisBehavior newBehavior)
+  {
+    if (newBehavior != behavior)
+    {
+      NotificationChain msgs = null;
+      if (behavior != null)
+        msgs = ((InternalEObject)behavior).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR, null, msgs);
+      if (newBehavior != null)
+        msgs = ((InternalEObject)newBehavior).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR, null, msgs);
+      msgs = basicSetBehavior(newBehavior, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR, newBehavior, newBehavior));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR:
+        return basicSetBehavior(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -100,8 +134,8 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
   {
     switch (featureID)
     {
-      case SafetyPackage.ANALYSIS_STATEMENT__MAX_FAULTS:
-        return getMaxFaults();
+      case SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR:
+        return getBehavior();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -116,8 +150,8 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
   {
     switch (featureID)
     {
-      case SafetyPackage.ANALYSIS_STATEMENT__MAX_FAULTS:
-        setMaxFaults((String)newValue);
+      case SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR:
+        setBehavior((AnalysisBehavior)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -133,8 +167,8 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
   {
     switch (featureID)
     {
-      case SafetyPackage.ANALYSIS_STATEMENT__MAX_FAULTS:
-        setMaxFaults(MAX_FAULTS_EDEFAULT);
+      case SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR:
+        setBehavior((AnalysisBehavior)null);
         return;
     }
     super.eUnset(featureID);
@@ -150,27 +184,10 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
   {
     switch (featureID)
     {
-      case SafetyPackage.ANALYSIS_STATEMENT__MAX_FAULTS:
-        return MAX_FAULTS_EDEFAULT == null ? maxFaults != null : !MAX_FAULTS_EDEFAULT.equals(maxFaults);
+      case SafetyPackage.ANALYSIS_STATEMENT__BEHAVIOR:
+        return behavior != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (maxFaults: ");
-    result.append(maxFaults);
-    result.append(')');
-    return result.toString();
   }
 
 } //AnalysisStatementImpl
