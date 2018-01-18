@@ -21,17 +21,18 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
-import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
-import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
+import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.util.RecordIdPathElement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
@@ -44,7 +45,6 @@ import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
 import jkind.lustre.RecordAccessExpr;
-import jkind.lustre.RecordUpdateExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
@@ -231,7 +231,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			
 			for(Pair<Expr, Fault> pair : list) {
 				
-				List<RecordIdPathElement> path = AgreeUtils.getExprPath(new ArrayList<RecordIdPathElement>(), pair.ex);
+				List<RecordIdPathElement> path = SafetyUtils.getExprPath(new ArrayList<RecordIdPathElement>(), pair.ex);
 				// what we want here is to replace 'base' with a new 'base' based on the fault path replacement.
 				// In utils, we have createNestedUpdateExpr(root, path, repl)
 				// We have 1. Root (base).  We have path (path).
@@ -339,7 +339,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return null;
 	}
 	
-	/*
+	
 	private Map<String, List<String>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
 		Map<String, List<String>> outputSet = new HashMap<String, List<String>>(); 
 		RecordAccessExpr recordExpr = null;
@@ -353,7 +353,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if(ide instanceof IdExpr) {
 					idExpr = (IdExpr) ide;
 					id = idExpr.id;
-					idPath = AgreeUtils.getExprPath(new ArrayList<RecordIdPathElement>(), idExpr);
+					idPath = SafetyUtils.getExprPath(new ArrayList<RecordIdPathElement>(), idExpr);
 					addIdToMap(ide, id, f);
 				} else if(ide instanceof RecordAccessExpr) {
 					recordExpr = (RecordAccessExpr) ide;
@@ -364,21 +364,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							"Record Access Expressions.");
 				}
 				// Check for id expression match. 
-				if (outputSet.containsKey(id)) {
-					// Concatenate idPath into '.' form
-					for(String part: idPath) {
-						finalPath = finalPath + "." + part;
-					}
-					outputSet.get(id).add(finalPath);
-					
-				} else {
-					outputSet.put(id, idPath);
-				}
+//				if (outputSet.containsKey(id)) {
+//					// Concatenate idPath into '.' form
+//					for(String part: idPath) {
+//						finalPath = finalPath + "." + part;
+//					}
+//					outputSet.get(id).add(finalPath);
+//					
+//				} else {
+//					outputSet.put(id, idPath);
+//				}
 			}
 		}
 		return outputSet;
 	}
-	*/
+	
 	
 	private void addIdToMap(Expr ex, String id, Fault f) {
 		Pair<Expr,Fault> pair = new Pair<Expr, Fault>(ex, f);

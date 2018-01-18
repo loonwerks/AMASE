@@ -1,5 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.osate.aadl2.AnnexSubclause;
@@ -8,9 +10,14 @@ import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Subcomponent;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
+import edu.umn.cs.crisys.safety.util.RecordIdPathElement;
+import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
+import jkind.lustre.RecordAccessExpr;
 /*
  * This class provides some utility methods:
  * typeContainsSafetyAnnex(Subcomponent)
@@ -60,6 +67,20 @@ public class SafetyUtils {
         return false;
     }
     
-   
+    public static List<RecordIdPathElement> getExprPath(List<RecordIdPathElement> path, Expr expr) {
+    	
+    	if(expr instanceof IdExpr) {
+    		return path;
+    	}
+    	if(!(expr instanceof RecordAccessExpr)){
+    		throw new AgreeException("Cannot get expression path in AgreeUtils.");
+    	}
+    	
+    	RecordAccessExpr record = (RecordAccessExpr) expr;
+    	getExprPath(path, record.record);
+    	path.add(new RecordIdPathElement(record.field));
+    	
+    	return path;
+    }
 	
 }
