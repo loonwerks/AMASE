@@ -1,4 +1,4 @@
-package edu.umn.cs.crisys.safety.analysis.ast.visitors;
+ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,25 +54,50 @@ import jkind.lustre.VarDecl;
 // Otherwise, we do id replacement across all nodes.
 
 public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
-
-	// List of Lustre nodes.
+	
+	// This is the list of Lustre nodes that are used by the safety analysis that may not
+	// be part of the set of nodes used by AGREE
 	private List<Node> globalLustreNodes;
+	// Top of the node hierarchy in AGREE
 	private AgreeNode topNode;
 	
-	// What does the key represent for the following?
+	// set of faulty variables (per node).  This set is maintained as a class variable
+	// in the visitor because there is no good way to pass it in as an argument.
+	// When a new node is visited, the "old" faultyVars set has to be maintained and restored.
 	private Map<String, List<String>> faultyVars = new HashMap<String, List<String>>();
+	
+	// This maps id to a pair consisting of the expression with the fault associated with that
+	// id and expression. 
 	private Map<String, List<Pair<Expr,Fault>>> faultyVarsExpr = new HashMap<String, List<Pair<Expr,Fault>>>();
+	
+	// This map is used to rename the variables that are emitted by a fault to 
+	// their "full names".  This is a horribly named data structure; also it does not 
+	// need to be a class-level data structure and should be local to the method in which 
+	// it is used.
 	private Map<String, String> theMap = new HashMap<>();
+	
+	// This map is used to track, for each fault, a list of paths to instances of 
+	// that fault (since nodes may be used in multiple locations), in order
+	// to produce the top-level variables to activate faults.
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
+	
+	// I am unsure as to whether this is necessary: it appears to map a fault to a single
+	// string.  As such, I believe it is incorrectly constructed.
 	private Map<Fault, String> mapFaultToPath = new HashMap<>();
 	
+	// It is used to properly set up the top-level node for triggering faults.
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
 	// have problems with "stale" AgreeNode references during transformations.
-
-	// It is used to properly set up the top-level node for triggering faults. 
 	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>(); 
 	
+	/*
+	 * public accessor for faultMap:
+	 * faultMap is used to properly set up the top-level node for triggering faults.
+	 * fault map: stores the faults associated with a node.
+	 * Keying off component instance rather than AgreeNode, just so we don't
+	 * have problems with "stale" AgreeNode references during transformations.
+	 */
 	public Map<ComponentInstance, List<Fault>> getFaultMap() {
 		return faultMap;
 	}

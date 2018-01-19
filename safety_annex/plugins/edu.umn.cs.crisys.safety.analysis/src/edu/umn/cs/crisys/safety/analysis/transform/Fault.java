@@ -18,8 +18,10 @@ import jkind.lustre.Node;
 
 public class Fault {
 	
-	// Map from fault node output names to the assigned vars
+	// Map from fault node parameter names to their actual expressions.
 	public Map<String, Expr> faultInputMap = new HashMap<>();
+	
+	// Map from fault output names to the variables that they assign.
 	public Map<String, Expr> faultOutputMap = new HashMap<>();
 	
 	public Node faultNode; 
@@ -29,8 +31,17 @@ public class Fault {
 	
 	// Some information about the fault
 	public DurationStatement duration = null;
+	
+	// Variables to be added to the agree node related to this fault.
+	// This is probably unnecessary, as these variables are simply named by the 
+	// concatenation of the fault id and the variable name.
 	public List<AgreeVar> safetyEqVars = new ArrayList<>();
+	
+	// Asserts to be added to the agree node related to this fault.
+	// This is also probably unnecessary.
 	public List<AgreeStatement> safetyEqAsserts = new ArrayList<>();
+	
+	// triggers (currently unused)
 	public List<TriggerStatement> triggers = new ArrayList<>();
 	
 	// initial data: 
