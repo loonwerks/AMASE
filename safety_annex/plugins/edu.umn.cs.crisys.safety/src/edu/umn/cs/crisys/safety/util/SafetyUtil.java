@@ -22,8 +22,13 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import jkind.lustre.ArrayAccessExpr;
+import jkind.lustre.ArrayUpdateExpr;
 import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
+import jkind.lustre.RecordAccessExpr;
+import jkind.lustre.RecordUpdateExpr;
 
 public class SafetyUtil {
 
@@ -131,21 +136,35 @@ public class SafetyUtil {
 		
 	}
 	
-	public Expr createNestedUpdateExpr(Expr root, List<PathElement> path, Expr repl) {
-		
-		// Why cant I use safety exception here?
-		if(path.size() == 0) {
-			new AgreeException("Problem with nested update expr.");
+	public static Expr createNestedUpdateExpr(Expr path, Expr repl) {
+		if(path instanceof IdExpr) {
+			return repl;
 		}
-		
-		PathElement hd = path.get(0);
-		List<PathElement> tl = path.subList(1, path.size());
-		
-		if(tl == null) {
-			return hd.makeUpdateExpr(root, repl);
+		else if(path instanceof RecordAccessExpr) {
+			RecordAccessExpr rae = (RecordAccessExpr) path;
+			// Base Case
+			if(rae.record instanceof IdExpr) {
+				return new RecordUpdateExpr(rae.record, rae.field, repl);
+			} 
+			// Recursive Case
+			else {
+				return createNestedUpdateExpr(rae.record, new RecordUpdateExpr(rae.record, rae.field, repl));
+			}
+			
+		}else if(path instanceof ArrayAccessExpr){
+			ArrayAccessExpr aae = (ArrayAccessExpr) path;
+			// Base Case
+			if(aae.array instanceof IdExpr) {
+				return new ArrayUpdateExpr(aae.array, aae.index, repl);
+			} 
+			// Recursive Case
+			else {
+				return createNestedUpdateExpr(aae.array, new ArrayUpdateExpr(aae.array, aae.index, repl));
+			}
 		}else {
-			Expr newRoot = hd.makeAccessExpr(root);
-			return hd.makeUpdateExpr(root, createNestedUpdateExpr(newRoot, tl, repl));
+			// Change to SafetyException once the files are moved around.
+			new AgreeException("Problem with record expression during safety analysis");
+			return null;
 		}
 	}
 }

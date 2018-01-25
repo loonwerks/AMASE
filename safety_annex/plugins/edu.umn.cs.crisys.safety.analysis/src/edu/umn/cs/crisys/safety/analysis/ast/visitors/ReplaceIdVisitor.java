@@ -24,25 +24,13 @@ public class ReplaceIdVisitor extends AgreeASTMapVisitor {
 		this.idMap = idMap;
 	}
 	
-	//@Override
-	public Expr visit(Expr expr) {
-		if(expr instanceof IdExpr) {
-		  if (idMap.containsKey(((IdExpr)expr).id)) {
-			return new IdExpr(expr.location,((IdExpr)expr).id);
-		  } else {
-			return expr;
-		  }
-		} else if(expr instanceof RecordAccessExpr) {
-			RecordAccessExpr recordId = (RecordAccessExpr) expr;
-			if(idMap.containsKey(recordId.record.toString())) {
-				return new RecordAccessExpr(expr.location, recordId.record, recordId.field);
-			}else {
-				return expr;
-			}
-		} else {
-			throw new SafetyException("Error visiting node: must have IdExpression or " +	
-				"Record Access Expression.");
-		}
-	}
+	 @Override
+	public IdExpr visit(IdExpr e) {
+	  if (idMap.containsKey(e.id)) {
+	   return new IdExpr(e.location, idMap.get(e.id));
+	  } else {
+	   return e;
+	  }
+	 }
 	
 }

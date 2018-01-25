@@ -22,7 +22,10 @@ public class Fault {
 	public Map<String, Expr> faultInputMap = new HashMap<>();
 	
 	// Map from fault output names to the variables that they assign.
-	public Map<String, Expr> faultOutputMap = new HashMap<>();
+	public Map<Expr, String> faultOutputMap = new HashMap<>();
+	
+	// Map from node output parameter names to their actual variable ids in the AgreeNode
+	public Map<String, AgreeVar> outputParamToActualMap = new HashMap<>();
 	
 	public Node faultNode; 
 	public String id;
@@ -35,10 +38,13 @@ public class Fault {
 	// Variables to be added to the agree node related to this fault.
 	// This is probably unnecessary, as these variables are simply named by the 
 	// concatenation of the fault id and the variable name.
+	
+	// These are the identifiers for local declarations (eq statements)
+	// within the fault grammar.
 	public List<AgreeVar> safetyEqVars = new ArrayList<>();
 	
-	// Asserts to be added to the agree node related to this fault.
-	// This is also probably unnecessary.
+	// Asserts to be added to the agree node related to local definitions
+	// for this fault.
 	public List<AgreeStatement> safetyEqAsserts = new ArrayList<>();
 	
 	// triggers (currently unused)

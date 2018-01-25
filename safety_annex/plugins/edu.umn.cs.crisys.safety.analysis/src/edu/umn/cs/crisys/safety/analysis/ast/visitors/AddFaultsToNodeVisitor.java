@@ -21,7 +21,6 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
@@ -33,8 +32,8 @@ import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
-import edu.umn.cs.crisys.safety.util.RecordIdPathElement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
+import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.Expr;
@@ -54,42 +53,35 @@ import jkind.lustre.VarDecl;
 // Otherwise, we do id replacement across all nodes.
 
 public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
+	// Global data structures for traversal
 	
 	// This is the list of Lustre nodes that are used by the safety analysis that may not
 	// be part of the set of nodes used by AGREE
 	private List<Node> globalLustreNodes;
 	// Top of the node hierarchy in AGREE
 	private AgreeNode topNode;
-	
-	// set of faulty variables (per node).  This set is maintained as a class variable
-	// in the visitor because there is no good way to pass it in as an argument.
-	// When a new node is visited, the "old" faultyVars set has to be maintained and restored.
-	private Map<String, List<String>> faultyVars = new HashMap<String, List<String>>();
-	
-	// This maps id to a pair consisting of the expression with the fault associated with that
-	// id and expression. 
-	private Map<String, List<Pair<Expr,Fault>>> faultyVarsExpr = new HashMap<String, List<Pair<Expr,Fault>>>();
-	
-	// This map is used to rename the variables that are emitted by a fault to 
-	// their "full names".  This is a horribly named data structure; also it does not 
-	// need to be a class-level data structure and should be local to the method in which 
-	// it is used.
-	private Map<String, String> theMap = new HashMap<>();
-	
 	// This map is used to track, for each fault, a list of paths to instances of 
 	// that fault (since nodes may be used in multiple locations), in order
-	// to produce the top-level variables to activate faults.
+	// to produce the top-level variables to activate faults. (Global)
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
-	
-	// I am unsure as to whether this is necessary: it appears to map a fault to a single
-	// string.  As such, I believe it is incorrectly constructed.
-	private Map<Fault, String> mapFaultToPath = new HashMap<>();
-	
 	// It is used to properly set up the top-level node for triggering faults.
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
 	// have problems with "stale" AgreeNode references during transformations.
 	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>(); 
+	// I am unsure as to whether this is necessary: it appears to map a fault to a single
+	// string.  As such, I believe it is incorrectly constructed.
+	private Map<Fault, String> mapFaultToPath = new HashMap<>();
+	
+	// Per node data structures: must be stored when visiting new node
+	
+	
+	// This maps id to a pair consisting of the expression with the fault associated with that
+	// id and expression. 
+	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
+
+	
+
 	
 	/*
 	 * public accessor for faultMap:
@@ -131,7 +123,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	
 	@Override
 	public AgreeNode visit(AgreeNode node) {
-		Map<String, List<String>> oldFaultyVars = faultyVars;
+		Map<String, List<Pair>> parentFaultyVarsExpr = faultyVarsExpr;
 
 		boolean isTop = (node == this.topNode);
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop); 
@@ -143,7 +135,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 		faultMap.put(node.compInst, faults);
 
-		faultyVars = gatherFaultyOutputs(faults, node);
+		faultyVarsExpr = gatherFaultyOutputs(faults, node);
 		node = super.visit(node);
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
@@ -161,18 +153,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		
 		node = nb.build();		
 		
-		faultyVars = oldFaultyVars;
+		faultyVarsExpr = parentFaultyVarsExpr;
 		return node;
 	}
 	
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
 		// Get key (faultyId string = root) and iterate through list of paths (faultPath)
 		// Create new nominal variables for each pair (root.path). 
-		for (String faultyId : faultyVars.keySet()) {
-			for(String faultPath: faultyVars.get(faultyId)) {
-			  AgreeVar out = findVar(node.outputs, (faultyId));
-		  	  nb.addInput(new AgreeVar(createNominalId((faultyId+"."+faultPath)), out.type, out.reference));
-			}
+		for (String faultyId : faultyVarsExpr.keySet()) {
+			
+			AgreeVar out = findVar(node.outputs, (faultyId));
+		  	nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
+			
 		}
 	}
 
@@ -219,76 +211,108 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			List<IdExpr> lhs = new ArrayList<IdExpr>();
 			for (VarDecl v: f.faultNode.outputs) {
 				String lhsId = this.createFaultNodeEqId(f.id, v.id);
-				nb.addLocal(new AgreeVar(lhsId, v.type, f.faultStatement));
+				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
+				nb.addLocal(actual);
 				lhs.add(new IdExpr(lhsId));
+				
+				// MWW: added 1/20/2018
+				f.outputParamToActualMap.put(v.id, actual);
 			}
 			
 			AgreeEquation eq = new AgreeEquation(lhs, 
 					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)), f.faultStatement);
 			nb.addLocalEquation(eq);
 			
+			
 			// CHANGE THIS!  
-			for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
-				String lhsId = this.createFaultNodeEqId(f.id,  outMap.getKey());
-				nb.addAssertion(
-					new AgreeStatement("",
-						new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
-						f.faultStatement));
-			}
-			
-
-			
+//			for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
+//				String lhsId = this.createFaultNodeEqId(f.id,  outMap.getKey());
+//				nb.addAssertion(
+//					new AgreeStatement("",
+//						new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
+//						f.faultStatement));
+//			}
+//			
+//
+//			
 		}
-		// Binding happens HERE and is based on the map from Id -> list of Expr.
+		// Binding happens HERE and is based on the map faultyVarsExpr.
 		// Create an equality between the id and a nested WITH expression for each expr 
 		// in the list.
 		
-		for(String root : faultyVarsExpr.keySet()){
-			// so: root will be the LHS of the equality
-			// Expr base = createNominalId(e.id);
+		for(String lhsWithStmtName : faultyVarsExpr.keySet()){
+			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
+			
+			// Create nominal id name with key from this map
+			String nomId = createNominalId(lhsWithStmtName);
 			// base is the root of the WITH expression.
+			Expr toAssign = new IdExpr(nomId);
 			
-			
-			List<Pair<Expr,Fault>> list = faultyVarsExpr.get(root);
-			
-			String nomId = createNominalId(root);
-			Expr base = new IdExpr(nomId);
-			
-			for(Pair<Expr, Fault> pair : list) {
+			// Go through pairs of the list and create with statements.
+			for(Pair pair : list) {
 				
-				List<RecordIdPathElement> path = SafetyUtils.getExprPath(new ArrayList<RecordIdPathElement>(), pair.ex);
-				// what we want here is to replace 'base' with a new 'base' based on the fault path replacement.
-				// In utils, we have createNestedUpdateExpr(root, path, repl)
-				// We have 1. Root (base).  We have path (path).
-				// What wwe need is repl.  This is the LHS of some fault node equation - how do we find it?
-				// The issue involves faults that assign more than one output...so just having the fault may not be 
-				// enough - we need to know the fault and which field is relevant for this assignment.
-				
+				// base : replace the expression with nominal expression
+				// repl : go from the fault to the actual
+				// toAssign: createNestedUpdateExpr using base, repl
+				Expr base = replPathIdExpr(pair.ex, toAssign);
+				Expr repl = faultToActual(pair.f, pair.ex);
+				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 			}
 			
-			
+			// create new assertion expression : id = ((nominal_id with p1 := f1) with ...)
+			nb.addAssertion(
+					new AgreeStatement("Adding new safety analysis BinaryExpr",
+						new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign),
+						null));
 		}
 	}
 	
 	/*
-	 * Method used to create nested with statements
+	 * Replace AgreeVar id with nominal id
 	 */
-//	private List<Expr> createNestedWithStmt(List<Pair<Expr, Fault>> list) {
-//
-//		// Create new list for return values
-//		List<Expr> returnList = new ArrayList<Expr>();
-//		
-//		for(Pair<Expr,Fault> pair: list) {
-//			List<String> recs = AgreeUtils.getExprPath(new ArrayList<String>(), pair.ex);
-//			
-//			
-//		}
-//		
-//		return returnList;
-//	}
+	private Expr replPathIdExpr(Expr original, Expr toAssign) {
+		
+		if(original instanceof IdExpr) {
+			return toAssign;
+		}
+		else if(original instanceof RecordAccessExpr) {
+			RecordAccessExpr rae = (RecordAccessExpr) original;
+			Expr newBase = replPathIdExpr(rae.record, toAssign);
+			return new RecordAccessExpr(newBase, rae.field);
+		}
+		else if(original instanceof ArrayAccessExpr) {
+			ArrayAccessExpr aae = (ArrayAccessExpr) original;
+			Expr newBase = replPathIdExpr(aae.array, aae.index);
+			return new ArrayAccessExpr(newBase, aae.index);
+		}
+		else {
+			new Exception("Problem with record expressions in safety analysis");
+			return null;
+		}
+	}
+	
+	/*
+	 * Used to traverse two maps:
+	 * fault -> output param -> actuals
+	 */
+	private Expr faultToActual(Fault f, Expr ex) {
+		// Match pair.ex -> key of faultOutputMap
+		// If this expression is not in map, return exception message
+		
+		
+		String outputName = f.faultOutputMap.get(ex);
+		if(outputName == null) {
+			new Exception("Cannot find expression in mapping: faultToActual (AddFaultsToNodeVisitor class)");
+		}
+		// Use outputName to get value from outputParamToActualMap
+		AgreeVar actual = f.outputParamToActualMap.get(outputName);
+		// Create IdExpr out of actual string
+		return new IdExpr(actual.id);
+		
+	}
 	
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
-		theMap = new HashMap<>(); 
+		HashMap<String, String> theMap = new HashMap<>(); 
 		for (AgreeVar eqVar: eqVars) {
 			// ComponentInstance ci = eqVar.compInst;
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
@@ -314,7 +338,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// update the variable declarations
 		for (AgreeVar eq: f.safetyEqVars) {
 			if (idMap.containsKey(eq.id)) {
-				eq = new AgreeVar(createFaultEqId(f.id, eq.id), eq.type, eq.reference);
+				eq = new AgreeVar(idMap.get(eq.id), eq.type, eq.reference);
 			}
 			newFault.safetyEqVars.add(eq); 
 		}
@@ -324,8 +348,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			newFault.safetyEqAsserts.add(visitor.visit(s));
 		}
 		
-		for (Map.Entry<String, Expr> element: f.faultOutputMap.entrySet()) {
-			newFault.faultOutputMap.put(element.getKey(), visitor.visit(element.getValue()));
+		for (Map.Entry<Expr, String> element: f.faultOutputMap.entrySet()) {
+			newFault.faultOutputMap.put(element.getKey().accept(visitor), element.getValue());
 		}
 		
 		for (Map.Entry<String, Expr> element: f.faultInputMap.entrySet()) {
@@ -347,7 +371,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	
 	@Override
 	public Expr visit(IdExpr e) {
-		if (faultyVars.containsKey(e.id)) {	
+		if (faultyVarsExpr.containsKey(e.id)) {	
 			return new IdExpr(e.location, createNominalId(e.id));
 			
 		} else {
@@ -365,53 +389,26 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 	
 	
-	private Map<String, List<String>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
-		Map<String, List<String>> outputSet = new HashMap<String, List<String>>(); 
-		RecordAccessExpr recordExpr = null;
-		IdExpr idExpr = null;
+	private HashMap<String, List<Pair>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
+		HashMap<String, List<Pair>> outputMap = new HashMap<String, List<Pair>>(); 
 		String id = "";
-		List<RecordIdPathElement> idPath = new ArrayList<>();
-		String finalPath = "";
 		for (Fault f: faults) {
-			for (Expr ide: f.faultOutputMap.values()) {
-				
-				if(ide instanceof IdExpr) {
-					idExpr = (IdExpr) ide;
-					id = idExpr.id;
-					idPath = SafetyUtils.getExprPath(new ArrayList<RecordIdPathElement>(), idExpr);
-					addIdToMap(ide, id, f);
-				} else if(ide instanceof RecordAccessExpr) {
-					recordExpr = (RecordAccessExpr) ide;
-					id = recordExpr.record.toString();
-					addIdToMap(ide, id, f);
-				} else {
-					throw new SafetyException("Error: Can only handle IdExpr and "+
-							"Record Access Expressions.");
-				}
-				// Check for id expression match. 
-//				if (outputSet.containsKey(id)) {
-//					// Concatenate idPath into '.' form
-//					for(String part: idPath) {
-//						finalPath = finalPath + "." + part;
-//					}
-//					outputSet.get(id).add(finalPath);
-//					
-//				} else {
-//					outputSet.put(id, idPath);
-//				}
+			for (Expr ide: f.faultOutputMap.keySet()) {
+				id = AgreeUtils.getExprRoot(ide).id;
+				addIdToMap(outputMap, ide, id, f);
 			}
 		}
-		return outputSet;
+		return outputMap;
 	}
 	
 	
-	private void addIdToMap(Expr ex, String id, Fault f) {
-		Pair<Expr,Fault> pair = new Pair<Expr, Fault>(ex, f);
+	private void addIdToMap(HashMap<String, List<Pair>> faultyVarsExpr, Expr ex, String id, Fault f) {
+		Pair pair = new Pair(ex, f);
 		if(faultyVarsExpr.containsKey(id)) {
 			faultyVarsExpr.get(id).add(pair);
 		}
 		else {
-			List<Pair<Expr,Fault>> list = new ArrayList<Pair<Expr,Fault>>();
+			List<Pair> list = new ArrayList<Pair>();
 			list.add(pair);
 			faultyVarsExpr.put(id, list);
 		}
@@ -874,7 +871,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return mapFaultToPath;
 	}
 	
-	public class Pair<Expr, Fault>{
+	public class Pair{
 		private Expr ex;
 		private Fault f;
 		

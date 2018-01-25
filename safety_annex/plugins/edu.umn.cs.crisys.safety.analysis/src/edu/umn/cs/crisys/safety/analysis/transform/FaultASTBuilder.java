@@ -112,9 +112,9 @@ public class FaultASTBuilder {
 			
 			if(result instanceof RecordAccessExpr) {
 				resultRecord = ((RecordAccessExpr) result).record;
-				fault.faultOutputMap.put(param, result);
+				fault.faultOutputMap.put(result, param);
 			}else if(result instanceof IdExpr) {
-				fault.faultOutputMap.put(param, (IdExpr)result);
+				fault.faultOutputMap.put((IdExpr)result, param);
 			}
 			else  {
 				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
@@ -150,6 +150,8 @@ public class FaultASTBuilder {
 		List<VarDecl> vars = 
 			builder.agreeVarsFromArgs(stmt.getLhs(), agreeNode.compInst);
 		for (VarDecl var : vars) {
+			
+			
 			fault.safetyEqVars.add((AgreeVar) var);
 		}
 	}

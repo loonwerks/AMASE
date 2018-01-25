@@ -195,13 +195,13 @@ features
 			duration: permanent;
 		}
 
-		fault pressure_fail_blue "Selector Blue output failed to non-deterministic value.": faults.pressure_fail_to {
+		fault pressure_fail_blue "Selector Blue output failed to non-deterministic value.": faults.fail_to {
 			-- non-deterministic "failed" value.
 			-- Note: system cannot handle 
 			eq alt_value :real;
 			inputs: val_in <- blue_output.val,
 					alt_val <- alt_value; 
-			outputs: blue_output <- val_out ;    
+			outputs: blue_output.val <- val_out ;    
          probability: 1.0E-5 ;
 			duration: permanent;
 		}
