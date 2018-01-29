@@ -14,6 +14,6 @@ import org.osate.aadl2.Element;
  * @model
  * @generated
  */
-public interface SafetyEqStatement extends Element, FaultSubcomponent
+public interface SafetyEqStatement extends Element, FaultSubcomponent, HWFaultSubcomponent
 {
 } // SafetyEqStatement

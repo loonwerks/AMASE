@@ -391,6 +391,25 @@ public interface SafetyPackage extends EPackage
   int SPEC_STATEMENT_FEATURE_COUNT = AgreePackage.SPEC_STATEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisBehaviorImpl <em>Analysis Behavior</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.AnalysisBehaviorImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnalysisBehavior()
+   * @generated
+   */
+  int ANALYSIS_BEHAVIOR = 6;
+
+  /**
+   * The number of structural features of the '<em>Analysis Behavior</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANALYSIS_BEHAVIOR_FEATURE_COUNT = 0;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultSubcomponentImpl <em>Fault Subcomponent</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -398,7 +417,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultSubcomponent()
    * @generated
    */
-  int FAULT_SUBCOMPONENT = 6;
+  int FAULT_SUBCOMPONENT = 7;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -428,6 +447,44 @@ public interface SafetyPackage extends EPackage
   int FAULT_SUBCOMPONENT_FEATURE_COUNT = Aadl2Package.ELEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.HWFaultSubcomponentImpl <em>HW Fault Subcomponent</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.HWFaultSubcomponentImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getHWFaultSubcomponent()
+   * @generated
+   */
+  int HW_FAULT_SUBCOMPONENT = 8;
+
+  /**
+   * The number of structural features of the '<em>HW Fault Subcomponent</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_SUBCOMPONENT_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagationTypeConstraintImpl <em>Propagation Type Constraint</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.PropagationTypeConstraintImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagationTypeConstraint()
+   * @generated
+   */
+  int PROPAGATION_TYPE_CONSTRAINT = 9;
+
+  /**
+   * The number of structural features of the '<em>Propagation Type Constraint</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATION_TYPE_CONSTRAINT_FEATURE_COUNT = 0;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.TemporalConstraintImpl <em>Temporal Constraint</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -435,7 +492,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTemporalConstraint()
    * @generated
    */
-  int TEMPORAL_CONSTRAINT = 7;
+  int TEMPORAL_CONSTRAINT = 10;
 
   /**
    * The number of structural features of the '<em>Temporal Constraint</em>' class.
@@ -454,16 +511,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerCondition()
    * @generated
    */
-  int TRIGGER_CONDITION = 8;
-
-  /**
-   * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int TRIGGER_CONDITION__EXPR_LIST = 0;
+  int TRIGGER_CONDITION = 11;
 
   /**
    * The number of structural features of the '<em>Trigger Condition</em>' class.
@@ -472,7 +520,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TRIGGER_CONDITION_FEATURE_COUNT = 1;
+  int TRIGGER_CONDITION_FEATURE_COUNT = 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyEqStatementImpl <em>Eq Statement</em>}' class.
@@ -482,7 +530,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyEqStatement()
    * @generated
    */
-  int SAFETY_EQ_STATEMENT = 9;
+  int SAFETY_EQ_STATEMENT = 12;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -519,7 +567,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInterval()
    * @generated
    */
-  int INTERVAL = 10;
+  int INTERVAL = 13;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -556,7 +604,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractLibrary()
    * @generated
    */
-  int SAFETY_CONTRACT_LIBRARY = 11;
+  int SAFETY_CONTRACT_LIBRARY = 14;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -629,7 +677,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContractSubclause()
    * @generated
    */
-  int SAFETY_CONTRACT_SUBCLAUSE = 12;
+  int SAFETY_CONTRACT_SUBCLAUSE = 15;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -711,7 +759,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSafetyContract()
    * @generated
    */
-  int SAFETY_CONTRACT = 13;
+  int SAFETY_CONTRACT = 16;
 
   /**
    * The feature id for the '<em><b>Specs</b></em>' containment reference list.
@@ -739,7 +787,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultStatement()
    * @generated
    */
-  int FAULT_STATEMENT = 14;
+  int FAULT_STATEMENT = 17;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -760,13 +808,22 @@ public interface SafetyPackage extends EPackage
   int FAULT_STATEMENT__OWNED_COMMENT = SPEC_STATEMENT__OWNED_COMMENT;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAULT_STATEMENT__NAME = SPEC_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Str</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FAULT_STATEMENT__STR = SPEC_STATEMENT_FEATURE_COUNT + 0;
+  int FAULT_STATEMENT__STR = SPEC_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Fault Def Name</b></em>' containment reference.
@@ -775,7 +832,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FAULT_STATEMENT__FAULT_DEF_NAME = SPEC_STATEMENT_FEATURE_COUNT + 1;
+  int FAULT_STATEMENT__FAULT_DEF_NAME = SPEC_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Fault Definitions</b></em>' containment reference list.
@@ -784,7 +841,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FAULT_STATEMENT__FAULT_DEFINITIONS = SPEC_STATEMENT_FEATURE_COUNT + 2;
+  int FAULT_STATEMENT__FAULT_DEFINITIONS = SPEC_STATEMENT_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Fault Statement</em>' class.
@@ -793,7 +850,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FAULT_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 3;
+  int FAULT_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisStatementImpl <em>Analysis Statement</em>}' class.
@@ -803,7 +860,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnalysisStatement()
    * @generated
    */
-  int ANALYSIS_STATEMENT = 15;
+  int ANALYSIS_STATEMENT = 18;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -824,13 +881,13 @@ public interface SafetyPackage extends EPackage
   int ANALYSIS_STATEMENT__OWNED_COMMENT = SPEC_STATEMENT__OWNED_COMMENT;
 
   /**
-   * The feature id for the '<em><b>Max Faults</b></em>' attribute.
+   * The feature id for the '<em><b>Behavior</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ANALYSIS_STATEMENT__MAX_FAULTS = SPEC_STATEMENT_FEATURE_COUNT + 0;
+  int ANALYSIS_STATEMENT__BEHAVIOR = SPEC_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Analysis Statement</em>' class.
@@ -842,6 +899,126 @@ public interface SafetyPackage extends EPackage
   int ANALYSIS_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.HWFaultStatementImpl <em>HW Fault Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.HWFaultStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getHWFaultStatement()
+   * @generated
+   */
+  int HW_FAULT_STATEMENT = 19;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_STATEMENT__OWNED_ELEMENT = SPEC_STATEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_STATEMENT__OWNED_COMMENT = SPEC_STATEMENT__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_STATEMENT__NAME = SPEC_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Str</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_STATEMENT__STR = SPEC_STATEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Fault Definitions</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_STATEMENT__FAULT_DEFINITIONS = SPEC_STATEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>HW Fault Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HW_FAULT_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultCountBehaviorImpl <em>Fault Count Behavior</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.FaultCountBehaviorImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultCountBehavior()
+   * @generated
+   */
+  int FAULT_COUNT_BEHAVIOR = 20;
+
+  /**
+   * The feature id for the '<em><b>Max Faults</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAULT_COUNT_BEHAVIOR__MAX_FAULTS = ANALYSIS_BEHAVIOR_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Fault Count Behavior</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAULT_COUNT_BEHAVIOR_FEATURE_COUNT = ANALYSIS_BEHAVIOR_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.ProbabilityBehaviorImpl <em>Probability Behavior</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.ProbabilityBehaviorImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getProbabilityBehavior()
+   * @generated
+   */
+  int PROBABILITY_BEHAVIOR = 21;
+
+  /**
+   * The feature id for the '<em><b>Probabilty</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROBABILITY_BEHAVIOR__PROBABILTY = ANALYSIS_BEHAVIOR_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Probability Behavior</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROBABILITY_BEHAVIOR_FEATURE_COUNT = ANALYSIS_BEHAVIOR_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.InputStatementImpl <em>Input Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -849,7 +1026,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 16;
+  int INPUT_STATEMENT = 22;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -904,7 +1081,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 17;
+  int OUTPUT_STATEMENT = 23;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -959,7 +1136,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 18;
+  int DURATION_STATEMENT = 24;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1007,6 +1184,52 @@ public interface SafetyPackage extends EPackage
   int DURATION_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl <em>Probability Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getProbabilityStatement()
+   * @generated
+   */
+  int PROBABILITY_STATEMENT = 25;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROBABILITY_STATEMENT__OWNED_ELEMENT = FAULT_SUBCOMPONENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROBABILITY_STATEMENT__OWNED_COMMENT = FAULT_SUBCOMPONENT__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Probability</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROBABILITY_STATEMENT__PROBABILITY = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Probability Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROBABILITY_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.TriggerStatementImpl <em>Trigger Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1014,7 +1237,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 19;
+  int TRIGGER_STATEMENT = 26;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1044,22 +1267,125 @@ public interface SafetyPackage extends EPackage
   int TRIGGER_STATEMENT__COND = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Probability</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int TRIGGER_STATEMENT__PROBABILITY = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
-
-  /**
    * The number of structural features of the '<em>Trigger Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TRIGGER_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 2;
+  int TRIGGER_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagationTypeStatementImpl <em>Propagation Type Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.PropagationTypeStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagationTypeStatement()
+   * @generated
+   */
+  int PROPAGATION_TYPE_STATEMENT = 27;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATION_TYPE_STATEMENT__OWNED_ELEMENT = FAULT_SUBCOMPONENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATION_TYPE_STATEMENT__OWNED_COMMENT = FAULT_SUBCOMPONENT__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Pty</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATION_TYPE_STATEMENT__PTY = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Propagation Type Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATION_TYPE_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl <em>Propagate To Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagateToStatement()
+   * @generated
+   */
+  int PROPAGATE_TO_STATEMENT = 28;
+
+  /**
+   * The feature id for the '<em><b>Fault List</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_TO_STATEMENT__FAULT_LIST = HW_FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Propagate To Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_TO_STATEMENT_FEATURE_COUNT = HW_FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.asymmetricImpl <em>asymmetric</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.asymmetricImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getasymmetric()
+   * @generated
+   */
+  int ASYMMETRIC = 29;
+
+  /**
+   * The number of structural features of the '<em>asymmetric</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASYMMETRIC_FEATURE_COUNT = PROPAGATION_TYPE_CONSTRAINT_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.symmetricImpl <em>symmetric</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.symmetricImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getsymmetric()
+   * @generated
+   */
+  int SYMMETRIC = 30;
+
+  /**
+   * The number of structural features of the '<em>symmetric</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYMMETRIC_FEATURE_COUNT = PROPAGATION_TYPE_CONSTRAINT_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PermanentConstraintImpl <em>Permanent Constraint</em>}' class.
@@ -1069,7 +1395,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPermanentConstraint()
    * @generated
    */
-  int PERMANENT_CONSTRAINT = 20;
+  int PERMANENT_CONSTRAINT = 31;
 
   /**
    * The number of structural features of the '<em>Permanent Constraint</em>' class.
@@ -1088,7 +1414,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTransientConstraint()
    * @generated
    */
-  int TRANSIENT_CONSTRAINT = 21;
+  int TRANSIENT_CONSTRAINT = 32;
 
   /**
    * The number of structural features of the '<em>Transient Constraint</em>' class.
@@ -1100,34 +1426,6 @@ public interface SafetyPackage extends EPackage
   int TRANSIENT_CONSTRAINT_FEATURE_COUNT = TEMPORAL_CONSTRAINT_FEATURE_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.MustConditionImpl <em>Must Condition</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see edu.umn.cs.crisys.safety.safety.impl.MustConditionImpl
-   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getMustCondition()
-   * @generated
-   */
-  int MUST_CONDITION = 22;
-
-  /**
-   * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MUST_CONDITION__EXPR_LIST = TRIGGER_CONDITION__EXPR_LIST;
-
-  /**
-   * The number of structural features of the '<em>Must Condition</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MUST_CONDITION_FEATURE_COUNT = TRIGGER_CONDITION_FEATURE_COUNT + 0;
-
-  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.EnablerConditionImpl <em>Enabler Condition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1135,7 +1433,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEnablerCondition()
    * @generated
    */
-  int ENABLER_CONDITION = 23;
+  int ENABLER_CONDITION = 33;
 
   /**
    * The feature id for the '<em><b>Expr List</b></em>' containment reference list.
@@ -1144,7 +1442,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ENABLER_CONDITION__EXPR_LIST = TRIGGER_CONDITION__EXPR_LIST;
+  int ENABLER_CONDITION__EXPR_LIST = TRIGGER_CONDITION_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Enabler Condition</em>' class.
@@ -1153,7 +1451,7 @@ public interface SafetyPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ENABLER_CONDITION_FEATURE_COUNT = TRIGGER_CONDITION_FEATURE_COUNT + 0;
+  int ENABLER_CONDITION_FEATURE_COUNT = TRIGGER_CONDITION_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.EqValueImpl <em>Eq Value</em>}' class.
@@ -1163,7 +1461,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getEqValue()
    * @generated
    */
-  int EQ_VALUE = 24;
+  int EQ_VALUE = 34;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1218,7 +1516,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getIntervalEq()
    * @generated
    */
-  int INTERVAL_EQ = 25;
+  int INTERVAL_EQ = 35;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1273,7 +1571,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getSetEq()
    * @generated
    */
-  int SET_EQ = 26;
+  int SET_EQ = 36;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1337,7 +1635,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getRangeEq()
    * @generated
    */
-  int RANGE_EQ = 27;
+  int RANGE_EQ = 37;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1401,7 +1699,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getClosedInterval()
    * @generated
    */
-  int CLOSED_INTERVAL = 28;
+  int CLOSED_INTERVAL = 38;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1438,7 +1736,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenLeftInterval()
    * @generated
    */
-  int OPEN_LEFT_INTERVAL = 29;
+  int OPEN_LEFT_INTERVAL = 39;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1475,7 +1773,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenRightInterval()
    * @generated
    */
-  int OPEN_RIGHT_INTERVAL = 30;
+  int OPEN_RIGHT_INTERVAL = 40;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1512,7 +1810,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOpenInterval()
    * @generated
    */
-  int OPEN_INTERVAL = 31;
+  int OPEN_INTERVAL = 41;
 
   /**
    * The feature id for the '<em><b>Low</b></em>' containment reference.
@@ -1603,6 +1901,16 @@ public interface SafetyPackage extends EPackage
   EClass getSpecStatement();
 
   /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.AnalysisBehavior <em>Analysis Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Analysis Behavior</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisBehavior
+   * @generated
+   */
+  EClass getAnalysisBehavior();
+
+  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.FaultSubcomponent <em>Fault Subcomponent</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1611,6 +1919,26 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EClass getFaultSubcomponent();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent <em>HW Fault Subcomponent</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>HW Fault Subcomponent</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent
+   * @generated
+   */
+  EClass getHWFaultSubcomponent();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint <em>Propagation Type Constraint</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Propagation Type Constraint</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint
+   * @generated
+   */
+  EClass getPropagationTypeConstraint();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.TemporalConstraint <em>Temporal Constraint</em>}'.
@@ -1631,17 +1959,6 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EClass getTriggerCondition();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.TriggerCondition#getExprList <em>Expr List</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Expr List</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.TriggerCondition#getExprList()
-   * @see #getTriggerCondition()
-   * @generated
-   */
-  EReference getTriggerCondition_ExprList();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.SafetyEqStatement <em>Eq Statement</em>}'.
@@ -1759,6 +2076,17 @@ public interface SafetyPackage extends EPackage
   EClass getFaultStatement();
 
   /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.FaultStatement#getName()
+   * @see #getFaultStatement()
+   * @generated
+   */
+  EAttribute getFaultStatement_Name();
+
+  /**
    * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getStr <em>Str</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1802,15 +2130,100 @@ public interface SafetyPackage extends EPackage
   EClass getAnalysisStatement();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getMaxFaults <em>Max Faults</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.AnalysisStatement#getBehavior <em>Behavior</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Max Faults</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.AnalysisStatement#getMaxFaults()
+   * @return the meta object for the containment reference '<em>Behavior</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.AnalysisStatement#getBehavior()
    * @see #getAnalysisStatement()
    * @generated
    */
-  EAttribute getAnalysisStatement_MaxFaults();
+  EReference getAnalysisStatement_Behavior();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.HWFaultStatement <em>HW Fault Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>HW Fault Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultStatement
+   * @generated
+   */
+  EClass getHWFaultStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.HWFaultStatement#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultStatement#getName()
+   * @see #getHWFaultStatement()
+   * @generated
+   */
+  EAttribute getHWFaultStatement_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.HWFaultStatement#getStr <em>Str</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Str</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultStatement#getStr()
+   * @see #getHWFaultStatement()
+   * @generated
+   */
+  EAttribute getHWFaultStatement_Str();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.HWFaultStatement#getFaultDefinitions <em>Fault Definitions</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Fault Definitions</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.HWFaultStatement#getFaultDefinitions()
+   * @see #getHWFaultStatement()
+   * @generated
+   */
+  EReference getHWFaultStatement_FaultDefinitions();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior <em>Fault Count Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Fault Count Behavior</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.FaultCountBehavior
+   * @generated
+   */
+  EClass getFaultCountBehavior();
+
+  /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior#getMaxFaults <em>Max Faults</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Max Faults</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.FaultCountBehavior#getMaxFaults()
+   * @see #getFaultCountBehavior()
+   * @generated
+   */
+  EAttribute getFaultCountBehavior_MaxFaults();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.ProbabilityBehavior <em>Probability Behavior</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Probability Behavior</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityBehavior
+   * @generated
+   */
+  EClass getProbabilityBehavior();
+
+  /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.ProbabilityBehavior#getProbabilty <em>Probabilty</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Probabilty</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityBehavior#getProbabilty()
+   * @see #getProbabilityBehavior()
+   * @generated
+   */
+  EAttribute getProbabilityBehavior_Probabilty();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.InputStatement <em>Input Statement</em>}'.
@@ -1909,6 +2322,27 @@ public interface SafetyPackage extends EPackage
   EReference getDurationStatement_Interv();
 
   /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.ProbabilityStatement <em>Probability Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Probability Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityStatement
+   * @generated
+   */
+  EClass getProbabilityStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.ProbabilityStatement#getProbability <em>Probability</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Probability</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.ProbabilityStatement#getProbability()
+   * @see #getProbabilityStatement()
+   * @generated
+   */
+  EAttribute getProbabilityStatement_Probability();
+
+  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement <em>Trigger Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1930,15 +2364,66 @@ public interface SafetyPackage extends EPackage
   EReference getTriggerStatement_Cond();
 
   /**
-   * Returns the meta object for the attribute '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}'.
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PropagationTypeStatement <em>Propagation Type Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Probability</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability()
-   * @see #getTriggerStatement()
+   * @return the meta object for class '<em>Propagation Type Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagationTypeStatement
    * @generated
    */
-  EAttribute getTriggerStatement_Probability();
+  EClass getPropagationTypeStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.PropagationTypeStatement#getPty <em>Pty</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Pty</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagationTypeStatement#getPty()
+   * @see #getPropagationTypeStatement()
+   * @generated
+   */
+  EReference getPropagationTypeStatement_Pty();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PropagateToStatement <em>Propagate To Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Propagate To Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateToStatement
+   * @generated
+   */
+  EClass getPropagateToStatement();
+
+  /**
+   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.PropagateToStatement#getFaultList <em>Fault List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Fault List</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateToStatement#getFaultList()
+   * @see #getPropagateToStatement()
+   * @generated
+   */
+  EAttribute getPropagateToStatement_FaultList();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.asymmetric <em>asymmetric</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>asymmetric</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.asymmetric
+   * @generated
+   */
+  EClass getasymmetric();
+
+  /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.symmetric <em>symmetric</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>symmetric</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.symmetric
+   * @generated
+   */
+  EClass getsymmetric();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PermanentConstraint <em>Permanent Constraint</em>}'.
@@ -1961,16 +2446,6 @@ public interface SafetyPackage extends EPackage
   EClass getTransientConstraint();
 
   /**
-   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.MustCondition <em>Must Condition</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Must Condition</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.MustCondition
-   * @generated
-   */
-  EClass getMustCondition();
-
-  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.EnablerCondition <em>Enabler Condition</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1979,6 +2454,17 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EClass getEnablerCondition();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.EnablerCondition#getExprList <em>Expr List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Expr List</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.EnablerCondition#getExprList()
+   * @see #getEnablerCondition()
+   * @generated
+   */
+  EReference getEnablerCondition_ExprList();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.EqValue <em>Eq Value</em>}'.
@@ -2254,6 +2740,16 @@ public interface SafetyPackage extends EPackage
     EClass SPEC_STATEMENT = eINSTANCE.getSpecStatement();
 
     /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.AnalysisBehaviorImpl <em>Analysis Behavior</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.AnalysisBehaviorImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getAnalysisBehavior()
+     * @generated
+     */
+    EClass ANALYSIS_BEHAVIOR = eINSTANCE.getAnalysisBehavior();
+
+    /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultSubcomponentImpl <em>Fault Subcomponent</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2262,6 +2758,26 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EClass FAULT_SUBCOMPONENT = eINSTANCE.getFaultSubcomponent();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.HWFaultSubcomponentImpl <em>HW Fault Subcomponent</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.HWFaultSubcomponentImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getHWFaultSubcomponent()
+     * @generated
+     */
+    EClass HW_FAULT_SUBCOMPONENT = eINSTANCE.getHWFaultSubcomponent();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagationTypeConstraintImpl <em>Propagation Type Constraint</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.PropagationTypeConstraintImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagationTypeConstraint()
+     * @generated
+     */
+    EClass PROPAGATION_TYPE_CONSTRAINT = eINSTANCE.getPropagationTypeConstraint();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.TemporalConstraintImpl <em>Temporal Constraint</em>}' class.
@@ -2282,14 +2798,6 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EClass TRIGGER_CONDITION = eINSTANCE.getTriggerCondition();
-
-    /**
-     * The meta object literal for the '<em><b>Expr List</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference TRIGGER_CONDITION__EXPR_LIST = eINSTANCE.getTriggerCondition_ExprList();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.SafetyEqStatementImpl <em>Eq Statement</em>}' class.
@@ -2392,6 +2900,14 @@ public interface SafetyPackage extends EPackage
     EClass FAULT_STATEMENT = eINSTANCE.getFaultStatement();
 
     /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FAULT_STATEMENT__NAME = eINSTANCE.getFaultStatement_Name();
+
+    /**
      * The meta object literal for the '<em><b>Str</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2426,12 +2942,82 @@ public interface SafetyPackage extends EPackage
     EClass ANALYSIS_STATEMENT = eINSTANCE.getAnalysisStatement();
 
     /**
+     * The meta object literal for the '<em><b>Behavior</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ANALYSIS_STATEMENT__BEHAVIOR = eINSTANCE.getAnalysisStatement_Behavior();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.HWFaultStatementImpl <em>HW Fault Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.HWFaultStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getHWFaultStatement()
+     * @generated
+     */
+    EClass HW_FAULT_STATEMENT = eINSTANCE.getHWFaultStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute HW_FAULT_STATEMENT__NAME = eINSTANCE.getHWFaultStatement_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Str</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute HW_FAULT_STATEMENT__STR = eINSTANCE.getHWFaultStatement_Str();
+
+    /**
+     * The meta object literal for the '<em><b>Fault Definitions</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference HW_FAULT_STATEMENT__FAULT_DEFINITIONS = eINSTANCE.getHWFaultStatement_FaultDefinitions();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultCountBehaviorImpl <em>Fault Count Behavior</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.FaultCountBehaviorImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultCountBehavior()
+     * @generated
+     */
+    EClass FAULT_COUNT_BEHAVIOR = eINSTANCE.getFaultCountBehavior();
+
+    /**
      * The meta object literal for the '<em><b>Max Faults</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ANALYSIS_STATEMENT__MAX_FAULTS = eINSTANCE.getAnalysisStatement_MaxFaults();
+    EAttribute FAULT_COUNT_BEHAVIOR__MAX_FAULTS = eINSTANCE.getFaultCountBehavior_MaxFaults();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.ProbabilityBehaviorImpl <em>Probability Behavior</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.ProbabilityBehaviorImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getProbabilityBehavior()
+     * @generated
+     */
+    EClass PROBABILITY_BEHAVIOR = eINSTANCE.getProbabilityBehavior();
+
+    /**
+     * The meta object literal for the '<em><b>Probabilty</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROBABILITY_BEHAVIOR__PROBABILTY = eINSTANCE.getProbabilityBehavior_Probabilty();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.InputStatementImpl <em>Input Statement</em>}' class.
@@ -2512,6 +3098,24 @@ public interface SafetyPackage extends EPackage
     EReference DURATION_STATEMENT__INTERV = eINSTANCE.getDurationStatement_Interv();
 
     /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl <em>Probability Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getProbabilityStatement()
+     * @generated
+     */
+    EClass PROBABILITY_STATEMENT = eINSTANCE.getProbabilityStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Probability</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROBABILITY_STATEMENT__PROBABILITY = eINSTANCE.getProbabilityStatement_Probability();
+
+    /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.TriggerStatementImpl <em>Trigger Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2530,12 +3134,60 @@ public interface SafetyPackage extends EPackage
     EReference TRIGGER_STATEMENT__COND = eINSTANCE.getTriggerStatement_Cond();
 
     /**
-     * The meta object literal for the '<em><b>Probability</b></em>' attribute feature.
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagationTypeStatementImpl <em>Propagation Type Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.PropagationTypeStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagationTypeStatement()
+     * @generated
+     */
+    EClass PROPAGATION_TYPE_STATEMENT = eINSTANCE.getPropagationTypeStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Pty</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TRIGGER_STATEMENT__PROBABILITY = eINSTANCE.getTriggerStatement_Probability();
+    EReference PROPAGATION_TYPE_STATEMENT__PTY = eINSTANCE.getPropagationTypeStatement_Pty();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl <em>Propagate To Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagateToStatement()
+     * @generated
+     */
+    EClass PROPAGATE_TO_STATEMENT = eINSTANCE.getPropagateToStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Fault List</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROPAGATE_TO_STATEMENT__FAULT_LIST = eINSTANCE.getPropagateToStatement_FaultList();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.asymmetricImpl <em>asymmetric</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.asymmetricImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getasymmetric()
+     * @generated
+     */
+    EClass ASYMMETRIC = eINSTANCE.getasymmetric();
+
+    /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.symmetricImpl <em>symmetric</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.symmetricImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getsymmetric()
+     * @generated
+     */
+    EClass SYMMETRIC = eINSTANCE.getsymmetric();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PermanentConstraintImpl <em>Permanent Constraint</em>}' class.
@@ -2558,16 +3210,6 @@ public interface SafetyPackage extends EPackage
     EClass TRANSIENT_CONSTRAINT = eINSTANCE.getTransientConstraint();
 
     /**
-     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.MustConditionImpl <em>Must Condition</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see edu.umn.cs.crisys.safety.safety.impl.MustConditionImpl
-     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getMustCondition()
-     * @generated
-     */
-    EClass MUST_CONDITION = eINSTANCE.getMustCondition();
-
-    /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.EnablerConditionImpl <em>Enabler Condition</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2576,6 +3218,14 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EClass ENABLER_CONDITION = eINSTANCE.getEnablerCondition();
+
+    /**
+     * The meta object literal for the '<em><b>Expr List</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENABLER_CONDITION__EXPR_LIST = eINSTANCE.getEnablerCondition_ExprList();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.EqValueImpl <em>Eq Value</em>}' class.

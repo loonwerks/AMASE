@@ -24,10 +24,12 @@ import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
+import com.rockwellcollins.atc.agree.agree.RecordType;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.validation.AgreeType;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
+import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
@@ -266,44 +268,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 		
 
-		// MWW: what is this?
-		// ============================HERE++++++++++++++++++++++++++++++++++++++++++
-		
-		// (2) Make sure connections are valid component connections in aadl
-		// Event ports, data ports, buses, etc. 
-		
-//		for(NestedDotID nom : nomConns) {
-//			if (! (nom.getBase() instanceof Feature)) {
-//				error(nom, "This connection must be a component connection (Feature). "
-//			            +"Possible features are "
-//						+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
-//			}
-//		}		
-
-		/* MWW This is wrong if you are not assigning outputs of a subcomponent!
-		 * 
-		// The sub of the nominal connection
-		NestedDotID nomSub = null;
-		// The base of the sub of the nominal connection
-		NamedElement baseSubNom;
-
-		// Make sure that the connection is a valid component connection
-		for(NestedDotID nom : nomConns){
-			nomSub = nom.getSub();
-			if(nomSub != null){
-				baseSubNom = nomSub.getBase();
-				
-				if(!(baseSubNom instanceof Feature)){
-					error(nom, "This connection must be a component connection (Feature). "
-				            +"Possible features are "
-							+"Port, BusAccess, DataAccess, SubprogramAccess, EventPort, EventDataPort.");
-				}
-				break;
-			}else{
-				error(nom, "The connection is null.");
-			}
-		}
-*/
 		
 		// (3) Type check between nominal connections and return values
 		
@@ -322,8 +286,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(outputs, "Return value list is empty.");
 			}
 			
-			// get agree type of return value
+			
+			
 			AgreeType typeReturnArg = getAgreeType(returnArg);
+				
 			// Get the final nested id of the nominal connection
 			NamedElement nestedNom = getFinalNestId(nom);
 			// Get agree type of that nested id
@@ -336,6 +302,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		}
 	}
+	
+
 	
 	/*
 	 * Check Duration: 
@@ -394,25 +362,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		// First check the trigger condition
 		checkTriggerCondition(triggerStmt.getCond());
 		
-		// Check the optional probability expression
-		if(triggerStmt.getProbability() != null ){
-			
-			// Check for non-real valued probability
-			// Try casting string to double, catch exceptions to print out error
-			double result = 0;
-			try{
-				result = Double.parseDouble(triggerStmt.getProbability());
-			} catch(NullPointerException npe){
-				error(triggerStmt, "Valid real number required");
-			} catch(NumberFormatException nfe){
-				error(triggerStmt, "Valid real number required");
-			}
-			
-			// Now check to make sure it's a valid probability (btwn 0 and 1 inclusive)
-			if((result < 0) || (result > 1)){
-				error(triggerStmt, "Probability must be between 0 and 1 inclusive");
-			}	
-		}
 	}
 	
 	/*
@@ -422,12 +371,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check
 	public void checkTriggerCondition(TriggerCondition tc){
-		if(tc != null){
+		if (tc instanceof EnablerCondition) {
+			EnablerCondition ec = (EnablerCondition)tc;
 			
 			// Make sure expression list for trigger conditions is nonempty
-			EList<Expr> exprList = tc.getExprList();
+			EList<Expr> exprList = ec.getExprList();
 			if(exprList.isEmpty()) {
-				error(tc, "Trigger condition list cannot be empty.");
+				error(tc, "Enabler trigger condition list cannot be empty.");
 			}
 			
 			// For each expression in the list, make sure they are all of type boolean

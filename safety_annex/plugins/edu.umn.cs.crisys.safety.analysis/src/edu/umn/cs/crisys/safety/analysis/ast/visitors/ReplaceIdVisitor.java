@@ -5,8 +5,10 @@ import java.util.Map;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
+import jkind.lustre.RecordAccessExpr;
 
 
 // Note: this is only designed for sub-parts of a node: 
@@ -22,13 +24,13 @@ public class ReplaceIdVisitor extends AgreeASTMapVisitor {
 		this.idMap = idMap;
 	}
 	
-	@Override
+	 @Override
 	public IdExpr visit(IdExpr e) {
-		if (idMap.containsKey(e.id)) {
-			return new IdExpr(e.location, idMap.get(e.id));
-		} else {
-			return e;
-		}
-	}
+	  if (idMap.containsKey(e.id)) {
+	   return new IdExpr(e.location, idMap.get(e.id));
+	  } else {
+	   return e;
+	  }
+	 }
 	
 }

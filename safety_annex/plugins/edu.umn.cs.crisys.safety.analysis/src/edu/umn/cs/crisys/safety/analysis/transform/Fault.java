@@ -17,18 +17,37 @@ import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
 
 public class Fault {
-	// Map from fault node output names to the assigned vars
+	
+	// Map from fault node parameter names to their actual expressions.
 	public Map<String, Expr> faultInputMap = new HashMap<>();
-	public Map<String, IdExpr> faultOutputMap = new HashMap<>();
+	
+	// Map from fault output names to the variables that they assign.
+	public Map<Expr, String> faultOutputMap = new HashMap<>();
+	
+	// Map from node output parameter names to their actual variable ids in the AgreeNode
+	public Map<String, AgreeVar> outputParamToActualMap = new HashMap<>();
 	
 	public Node faultNode; 
 	public String id;
 	public String explanitoryText;
+	public double probability;
 	
 	// Some information about the fault
 	public DurationStatement duration = null;
+	
+	// Variables to be added to the agree node related to this fault.
+	// This is probably unnecessary, as these variables are simply named by the 
+	// concatenation of the fault id and the variable name.
+	
+	// These are the identifiers for local declarations (eq statements)
+	// within the fault grammar.
 	public List<AgreeVar> safetyEqVars = new ArrayList<>();
+	
+	// Asserts to be added to the agree node related to local definitions
+	// for this fault.
 	public List<AgreeStatement> safetyEqAsserts = new ArrayList<>();
+	
+	// triggers (currently unused)
 	public List<TriggerStatement> triggers = new ArrayList<>();
 	
 	// initial data: 
@@ -37,7 +56,24 @@ public class Fault {
 	public Fault(FaultStatement fstmt, 
 			String id) {
 		this.faultStatement = fstmt;
+		this.explanitoryText = fstmt.getStr();
 		this.id = id;
 	}
 
+	// deep copy
+	public Fault(Fault other) {
+		this.faultInputMap = new HashMap<>(other.faultInputMap);
+		this.faultOutputMap = new HashMap<>(other.faultOutputMap);
+		
+		this.faultNode = other.faultNode;
+		this.id = other.id;
+		this.explanitoryText = other.explanitoryText;
+		this.probability = other.probability;
+		this.duration = other.duration;
+		this.safetyEqVars = new ArrayList<>(other.safetyEqVars);
+		this.safetyEqAsserts = new ArrayList<>(other.safetyEqAsserts);
+		this.triggers = new ArrayList<>(other.triggers);
+
+		this.faultStatement = other.faultStatement;
+	}
 }

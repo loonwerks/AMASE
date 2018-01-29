@@ -13,7 +13,6 @@ package edu.umn.cs.crisys.safety.safety;
  * </p>
  * <ul>
  *   <li>{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getCond <em>Cond</em>}</li>
- *   <li>{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}</li>
  * </ul>
  *
  * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getTriggerStatement()
@@ -47,31 +46,5 @@ public interface TriggerStatement extends FaultSubcomponent
    * @generated
    */
   void setCond(TriggerCondition value);
-
-  /**
-   * Returns the value of the '<em><b>Probability</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Probability</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Probability</em>' attribute.
-   * @see #setProbability(String)
-   * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getTriggerStatement_Probability()
-   * @model
-   * @generated
-   */
-  String getProbability();
-
-  /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.TriggerStatement#getProbability <em>Probability</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Probability</em>' attribute.
-   * @see #getProbability()
-   * @generated
-   */
-  void setProbability(String value);
 
 } // TriggerStatement

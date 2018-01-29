@@ -13,6 +13,7 @@ import org.osate.annexsupport.AnnexUtil;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
+import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
@@ -21,7 +22,13 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import jkind.lustre.ArrayAccessExpr;
+import jkind.lustre.ArrayUpdateExpr;
+import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
+import jkind.lustre.RecordAccessExpr;
+import jkind.lustre.RecordUpdateExpr;
 
 public class SafetyUtil {
 
@@ -127,5 +134,37 @@ public class SafetyUtil {
 		}
 		return null;
 		
+	}
+	
+	public static Expr createNestedUpdateExpr(Expr path, Expr repl) {
+		if(path instanceof IdExpr) {
+			return repl;
+		}
+		else if(path instanceof RecordAccessExpr) {
+			RecordAccessExpr rae = (RecordAccessExpr) path;
+			// Base Case
+			if(rae.record instanceof IdExpr) {
+				return new RecordUpdateExpr(rae.record, rae.field, repl);
+			} 
+			// Recursive Case
+			else {
+				return createNestedUpdateExpr(rae.record, new RecordUpdateExpr(rae.record, rae.field, repl));
+			}
+			
+		}else if(path instanceof ArrayAccessExpr){
+			ArrayAccessExpr aae = (ArrayAccessExpr) path;
+			// Base Case
+			if(aae.array instanceof IdExpr) {
+				return new ArrayUpdateExpr(aae.array, aae.index, repl);
+			} 
+			// Recursive Case
+			else {
+				return createNestedUpdateExpr(aae.array, new ArrayUpdateExpr(aae.array, aae.index, repl));
+			}
+		}else {
+			// Change to SafetyException once the files are moved around.
+			new AgreeException("Problem with record expression during safety analysis");
+			return null;
+		}
 	}
 }

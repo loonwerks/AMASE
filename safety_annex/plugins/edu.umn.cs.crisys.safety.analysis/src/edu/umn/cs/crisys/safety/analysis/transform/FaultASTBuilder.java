@@ -9,6 +9,7 @@ import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
 import com.rockwellcollins.atc.agree.analysis.AgreeTypeUtils;
+import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -26,6 +27,7 @@ import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
 import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 import edu.umn.cs.crisys.safety.safety.SetEq;
@@ -36,6 +38,7 @@ import jkind.lustre.BinaryOp;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
+import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.TupleExpr;
 import jkind.lustre.VarDecl;
 
@@ -68,7 +71,7 @@ public class FaultASTBuilder {
 		String fnName = AgreeTypeUtils.getNodeName(defExpr);
 		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
 		if (fault.faultNode == null) {
-			// This is a pretty random experiment...if we can get AgreeASTBuilder to 
+			// if we can get AgreeASTBuilder to 
 			// build us a node, we will add it to our list and return it.
 			builder.caseNodeDefExpr(defExpr);
 			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
@@ -78,7 +81,6 @@ public class FaultASTBuilder {
 				throw new SafetyException("for fault node: " + defExpr.getFullName() + " unable to find it in AgreeProgram.  As a temporary hack, please add a call to this node somewhere in your AGREE annex.");
 			}
 		}
-		// System.out.println("For Agree Node: " + agreeNode.id + " we have found fault node: " + fault.faultNode.id);
 	}
 
 	public static int findParam(String param, List<jkind.lustre.VarDecl> theList) {
@@ -106,13 +108,17 @@ public class FaultASTBuilder {
 			String param = output.getFault_out().get(i);
 			NestedDotID compOut = output.getNom_conn().get(i);
 			Expr result = builder.caseNestedDotID(compOut);
-			if (result == null ||
-					!(result instanceof IdExpr)) {
+			Expr resultRecord = null;
+			
+			if(result instanceof RecordAccessExpr) {
+				resultRecord = ((RecordAccessExpr) result).record;
+				fault.faultOutputMap.put(result, param);
+			}else if(result instanceof IdExpr) {
+				fault.faultOutputMap.put((IdExpr)result, param);
+			}
+			else  {
 				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
 			}
-			fault.faultOutputMap.put(param, (IdExpr)result);
-			// System.out.println("Fault node output: " + result + "is assigned to node output: " + param);
-			// translating NestedDotId to AgreeVars...how?
 		}
 	}
 	
@@ -144,6 +150,8 @@ public class FaultASTBuilder {
 		List<VarDecl> vars = 
 			builder.agreeVarsFromArgs(stmt.getLhs(), agreeNode.compInst);
 		for (VarDecl var : vars) {
+			
+			
 			fault.safetyEqVars.add((AgreeVar) var);
 		}
 	}
@@ -197,6 +205,10 @@ public class FaultASTBuilder {
 	public void addTrigger(Fault fault, TriggerStatement stmt) {
 		throw new SafetyException("Error: set equations are not yet implemented in translator!");
 	}
+	
+	public void addProbability(Fault fault, ProbabilityStatement stmt) {
+		fault.probability = Double.parseDouble(stmt.getProbability());
+	}
 
 	public void processFaultSubcomponents(Fault fault) {
 		for (FaultSubcomponent fs : fault.faultStatement.getFaultDefinitions()) {
@@ -210,6 +222,10 @@ public class FaultASTBuilder {
 				addSafetyEq(fault, (SafetyEqStatement)fs); 
 			} else if (fs instanceof TriggerStatement) {
 				addTrigger(fault, (TriggerStatement)fs);
+			} else if (fs instanceof ProbabilityStatement) {
+				addProbability(fault, (ProbabilityStatement)fs);
+			} else {
+				throw new SafetyException("Unrecognized Fault Statement type");
 			}
 		}
 	}
@@ -224,7 +240,6 @@ public class FaultASTBuilder {
 	public Fault buildFault(FaultStatement fstmt) {
 		String faultId = mkUniqueFaultId(fstmt); 
 		Fault fault = new Fault(fstmt, faultId);
-		fault.explanitoryText = fstmt.getStr();
 		setFaultNode(fstmt, fault);
 		processFaultSubcomponents(fault);
 		

@@ -24,10 +24,15 @@ annex agree {**
 	   r = if (m < n) then m else n;
 	tel;
 	
+	
+	
 	node fail_to(val_in: real, alt_val: real, trigger: bool) returns (val_out: real); 
 	let
 	   val_out = if (trigger) then alt_val else val_in;
 	tel;
+	 
+	 
+	 
 	 
     node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
 	let

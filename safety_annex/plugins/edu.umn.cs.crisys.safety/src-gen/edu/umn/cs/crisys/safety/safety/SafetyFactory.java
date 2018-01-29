@@ -77,6 +77,15 @@ public interface SafetyFactory extends EFactory
   SpecStatement createSpecStatement();
 
   /**
+   * Returns a new object of class '<em>Analysis Behavior</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Analysis Behavior</em>'.
+   * @generated
+   */
+  AnalysisBehavior createAnalysisBehavior();
+
+  /**
    * Returns a new object of class '<em>Fault Subcomponent</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -84,6 +93,24 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   FaultSubcomponent createFaultSubcomponent();
+
+  /**
+   * Returns a new object of class '<em>HW Fault Subcomponent</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>HW Fault Subcomponent</em>'.
+   * @generated
+   */
+  HWFaultSubcomponent createHWFaultSubcomponent();
+
+  /**
+   * Returns a new object of class '<em>Propagation Type Constraint</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagation Type Constraint</em>'.
+   * @generated
+   */
+  PropagationTypeConstraint createPropagationTypeConstraint();
 
   /**
    * Returns a new object of class '<em>Temporal Constraint</em>'.
@@ -167,6 +194,33 @@ public interface SafetyFactory extends EFactory
   AnalysisStatement createAnalysisStatement();
 
   /**
+   * Returns a new object of class '<em>HW Fault Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>HW Fault Statement</em>'.
+   * @generated
+   */
+  HWFaultStatement createHWFaultStatement();
+
+  /**
+   * Returns a new object of class '<em>Fault Count Behavior</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Fault Count Behavior</em>'.
+   * @generated
+   */
+  FaultCountBehavior createFaultCountBehavior();
+
+  /**
+   * Returns a new object of class '<em>Probability Behavior</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Probability Behavior</em>'.
+   * @generated
+   */
+  ProbabilityBehavior createProbabilityBehavior();
+
+  /**
    * Returns a new object of class '<em>Input Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -194,6 +248,15 @@ public interface SafetyFactory extends EFactory
   DurationStatement createDurationStatement();
 
   /**
+   * Returns a new object of class '<em>Probability Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Probability Statement</em>'.
+   * @generated
+   */
+  ProbabilityStatement createProbabilityStatement();
+
+  /**
    * Returns a new object of class '<em>Trigger Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -201,6 +264,42 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   TriggerStatement createTriggerStatement();
+
+  /**
+   * Returns a new object of class '<em>Propagation Type Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagation Type Statement</em>'.
+   * @generated
+   */
+  PropagationTypeStatement createPropagationTypeStatement();
+
+  /**
+   * Returns a new object of class '<em>Propagate To Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagate To Statement</em>'.
+   * @generated
+   */
+  PropagateToStatement createPropagateToStatement();
+
+  /**
+   * Returns a new object of class '<em>asymmetric</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>asymmetric</em>'.
+   * @generated
+   */
+  asymmetric createasymmetric();
+
+  /**
+   * Returns a new object of class '<em>symmetric</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>symmetric</em>'.
+   * @generated
+   */
+  symmetric createsymmetric();
 
   /**
    * Returns a new object of class '<em>Permanent Constraint</em>'.
@@ -219,15 +318,6 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   TransientConstraint createTransientConstraint();
-
-  /**
-   * Returns a new object of class '<em>Must Condition</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Must Condition</em>'.
-   * @generated
-   */
-  MustCondition createMustCondition();
 
   /**
    * Returns a new object of class '<em>Enabler Condition</em>'.

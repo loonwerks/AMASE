@@ -15,16 +15,14 @@ features
 	**}	;
 
 	annex safety {**
-		fault "In pump: pressure_output failed to non-deterministic value.": faults.pressure_fail_to {
-			-- non-deterministic "failed" value.
-			-- Note: system cannot handle 
+		fault pump_nondeterministic_out_fault "In pump: pressure_output failed to non-deterministic value.": faults.fail_to {
 			eq alt_value :real;
-			inputs: val_in <- pressure_output,
+			inputs: val_in <- pressure_output.val,
 					alt_val <- alt_value; 
-			outputs: pressure_output <- val_out ;    
+			outputs: pressure_output.val <- val_out ;   
+			probability: 1.0E-4 ;
 			duration: permanent;
-		}
-		
+		}		
 	**};
 	
 

@@ -39,6 +39,8 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	protected String getUnassignedRuleCallToken(EObject semanticObject, RuleCall ruleCall, INode node) {
 		if (ruleCall.getRule() == grammarAccess.getAppliesToKeywordsRule())
 			return getAppliesToKeywordsToken(semanticObject, ruleCall, node);
+		else if (ruleCall.getRule() == grammarAccess.getIDRule())
+			return getIDToken(semanticObject, ruleCall, node);
 		else if (ruleCall.getRule() == grammarAccess.getInBindingKeywordsRule())
 			return getInBindingKeywordsToken(semanticObject, ruleCall, node);
 		else if (ruleCall.getRule() == grammarAccess.getInModesKeywordsRule())
@@ -55,6 +57,19 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 		if (node != null)
 			return getTokenText(node);
 		return "appliesto";
+	}
+	
+	/**
+	 * terminal ID:	('a'..'z'
+	 *         |'A'..'Z'
+	 *         ) ( ('_')? ('a'..'z'
+	 *         |'A'..'Z'
+	 *         |'0'..'9'))*;
+	 */
+	protected String getIDToken(EObject semanticObject, RuleCall ruleCall, INode node) {
+		if (node != null)
+			return getTokenText(node);
+		return "";
 	}
 	
 	/**
@@ -150,7 +165,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	
 	/**
 	 * Ambiguous syntax:
-	 *     'occur' | 'occurs'
+	 *     'occurs' | 'occur'
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     effect=Expr (ambiguity) 'during' interval=TimeInterval
