@@ -1,0 +1,67 @@
+package phys_sys
+public
+with normal_sys;
+with alternate_sys;
+with wheel_brake;
+with Base_Types;
+	
+	system phys_sys
+		features
+			-- Inputs
+			hyd_supply1 : in data port Base_Types::Integer;
+			hyd_supply2 : in data port Base_Types::Integer;
+			pump_power1 : in data port Base_Types::Boolean;
+			pump_power2 : in data port Base_Types::Boolean;
+			sys_validity : in data port Base_Types::Boolean;
+			brake_as_cmd_1 : in data port Base_Types::Boolean;
+			brake_as_cmd_2 : in data port Base_Types::Boolean;
+			brake_as_cmd_3 : in data port Base_Types::Boolean;
+			brake_as_cmd_4 : in data port Base_Types::Boolean;
+			brake_as_cmd_5 : in data port Base_Types::Boolean;
+			brake_as_cmd_6 : in data port Base_Types::Boolean;
+			brake_as_cmd_7 : in data port Base_Types::Boolean;
+			brake_as_cmd_8 : in data port Base_Types::Boolean;
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean;
+			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			ground_speed : in data port Base_Types::Integer;
+			mech_pedal_pos_L : in data port Base_Types::Boolean;
+			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			accum_pressure_display : out data port Base_Types::Integer;
+			green_pressure_in_selec_valve : out data port Base_Types::Integer;
+			wheel_status1 : out data port Base_Types::Integer;
+			wheel_status2 : out data port Base_Types::Integer;
+			wheel_status3 : out data port Base_Types::Integer;
+			wheel_status4 : out data port Base_Types::Integer;
+			wheel_status5 : out data port Base_Types::Integer;
+			wheel_status6 : out data port Base_Types::Integer;
+			wheel_status7 : out data port Base_Types::Integer;
+			wheel_status8 : out data port Base_Types::Integer;
+			wheel_braking_force1 : out data port Base_Types::Integer;
+			wheel_braking_force2 : out data port Base_Types::Integer;
+			wheel_braking_force3 : out data port Base_Types::Integer;
+			wheel_braking_force4 : out data port Base_Types::Integer;
+			wheel_braking_force5 : out data port Base_Types::Integer;
+			wheel_braking_force6 : out data port Base_Types::Integer;
+			wheel_braking_force7 : out data port Base_Types::Integer;
+			wheel_braking_force8 : out data port Base_Types::Integer;
+	end phys_sys;
+	
+	system implementation phys_sys.inst
+		subcomponents
+			normal_sys : system normal_sys::normal_sys.inst;
+			alt_sys : system alternate_sys::alternate_sys.inst;
+			wheel_brake1 : system wheel_brake::wheel_brake.inst;
+			wheel_brake2 : system wheel_brake::wheel_brake.inst;
+			wheel_brake3 : system wheel_brake::wheel_brake.inst;
+			wheel_brake4 : system wheel_brake::wheel_brake.inst;
+			wheel_brake5 : system wheel_brake::wheel_brake.inst;
+			wheel_brake6 : system wheel_brake::wheel_brake.inst;
+			wheel_brake7 : system wheel_brake::wheel_brake.inst;
+			wheel_brake8 : system wheel_brake::wheel_brake.inst;
+	end phys_sys.inst;
+
+end phys_sys;

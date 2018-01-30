@@ -1,0 +1,45 @@
+package bscu_channel
+public
+with command_sys;
+with Base_Types;
+	
+	system bscu_channel
+		features
+			-- Inputs
+			power : in data port Base_Types::Boolean;
+			ground_speed : in data port Base_Types::Integer;
+			elec_pedal_pos_L : in data port Base_Types::Boolean;
+			elec_pedal_pos_R : in data port Base_Types::Boolean;
+			wheel_rolling_1 : in data port Base_Types::Boolean;
+			wheel_rolling_2 : in data port Base_Types::Boolean;
+			wheel_rolling_3 : in data port Base_Types::Boolean;
+			wheel_rolling_4 : in data port Base_Types::Boolean;
+			wheel_rolling_5 : in data port Base_Types::Boolean;
+			wheel_rolling_6 : in data port Base_Types::Boolean;
+			wheel_rolling_7 : in data port Base_Types::Boolean;
+			wheel_rolling_8 : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			brake_as_cmd_1 : out data port Base_Types::Boolean;
+			brake_as_cmd_2 : out data port Base_Types::Boolean;
+			brake_as_cmd_3 : out data port Base_Types::Boolean;
+			brake_as_cmd_4 : out data port Base_Types::Boolean;
+			brake_as_cmd_5 : out data port Base_Types::Boolean;
+			brake_as_cmd_6 : out data port Base_Types::Boolean;
+			brake_as_cmd_7 : out data port Base_Types::Boolean;
+			brake_as_cmd_8 : out data port Base_Types::Boolean;
+			as_cmd_pair_1_5 : out data port Base_Types::Boolean;
+			as_cmd_pair_2_6 : out data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : out data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
+			system_validity : out data port Base_Types::Boolean;
+			
+	end bscu_channel;
+	
+	system implementation bscu_channel.inst
+		subcomponents
+			command_sys1 : system command_sys::command_sys.inst;
+			command_sys2 : system command_sys::command_sys.inst;
+	end bscu_channel.inst;
+	
+end bscu_channel;

@@ -1,0 +1,49 @@
+package alternate_sys
+public
+with meter_valve;
+with Base_Types;
+
+	system alternate_sys
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer; 
+			mech_pedal_pos_L : in data port Base_Types::Boolean;
+			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean;
+			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
+			-- Outputs (to meter valves and antiskid shutoff valves)
+			hyd_pressure_out1 : out data port Base_Types::Integer;
+			hyd_pressure_out2 : out data port Base_Types::Integer;
+			hyd_pressure_out3 : out data port Base_Types::Integer;
+			hyd_pressure_out4 : out data port Base_Types::Integer;
+			
+	end alternate_sys;
+	
+	system implementation alternate_sys.inst
+		subcomponents
+			mv1 : system meter_valve::meter_valve.inst;
+			mv2 : system meter_valve::meter_valve.inst;
+			mv3 : system meter_valve::meter_valve.inst;
+			mv4 : system meter_valve::meter_valve.inst;
+			as_shutoff1 : system antiskid_shutoff_valve;
+			as_shutoff2 : system antiskid_shutoff_valve;
+			as_shutoff3 : system antiskid_shutoff_valve;
+			as_shutoff4 : system antiskid_shutoff_valve;
+	end alternate_sys.inst;
+	
+	
+	system antiskid_shutoff_valve
+		features
+			-- Inputs (from alternate system)
+			antiskid_cmd : in data port Base_Types::Boolean;
+			hyd_pressure_in : in data port Base_Types::Integer;
+			
+			-- Outputs 
+			-- pressure out goes to meter valve
+			hyd_pressure_out : out data port Base_Types::Integer;
+	end antiskid_shutoff_valve;
+	
+end alternate_sys;

@@ -1,0 +1,49 @@
+package wbs
+public
+with ctrl_sys;
+with phys_sys;
+with Base_Types;
+	
+	system wbs
+		features
+			-- Inputs
+			mech_pedal_pos_L : in data port Base_Types::Boolean;
+			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			power1 : in data port Base_Types::Boolean;
+			power2 : in data port Base_Types::Boolean;
+			pump_power1 : in data port Base_Types::Boolean;
+			pump_power2 : in data port Base_Types::Boolean;
+			ground_speed : in data port Base_Types::Integer;
+			hyd_supply1 : in data port Base_Types::Integer;
+			hyd_supply2 : in data port Base_Types::Integer;
+			
+			-- Outputs
+			accum_pressure_display : out data port Base_Types::Integer;
+			wheel_braking_force1 : out data port Base_Types::Integer;
+			wheel_braking_force2 : out data port Base_Types::Integer;
+			wheel_braking_force3 : out data port Base_Types::Integer;
+			wheel_braking_force4 : out data port Base_Types::Integer;
+			wheel_braking_force5 : out data port Base_Types::Integer;
+			wheel_braking_force6 : out data port Base_Types::Integer;
+			wheel_braking_force7 : out data port Base_Types::Integer;
+			wheel_braking_force8 : out data port Base_Types::Integer;
+			wheel_status1 : out data port Base_Types::Integer;
+			wheel_status2 : out data port Base_Types::Integer;
+			wheel_status3 : out data port Base_Types::Integer;
+			wheel_status4 : out data port Base_Types::Integer;
+			wheel_status5 : out data port Base_Types::Integer;
+			wheel_status6 : out data port Base_Types::Integer;
+			wheel_status7 : out data port Base_Types::Integer;
+			wheel_status8 : out data port Base_Types::Integer;
+			green_pressure_in_selec_valve : out data port Base_Types::Integer;
+			control_sys_validity : out data port Base_Types::Boolean;
+	end wbs;
+	
+	system implementation wbs.inst
+		subcomponents
+			phys_sys : system phys_sys::phys_sys.inst;
+			ctrl_sys : system ctrl_sys::ctrl_sys.inst;
+	end wbs.inst;
+
+
+end wbs;

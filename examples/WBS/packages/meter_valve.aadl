@@ -1,0 +1,19 @@
+package meter_valve
+public
+with Base_Types;
+
+	system meter_valve
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer;
+			brake_as_cmd : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			hyd_pressure_out : out data port Base_Types::Integer;
+			
+	end meter_valve;
+	
+	system implementation meter_valve.inst
+		
+	end meter_valve.inst;
+end meter_valve;

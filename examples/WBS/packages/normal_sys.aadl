@@ -1,0 +1,42 @@
+package normal_sys
+public
+with meter_valve;
+with Base_Types;
+
+	system normal_sys
+		features
+			-- Inputs
+			brake_as_cmd1 : in data port Base_Types::Boolean;
+			brake_as_cmd2 : in data port Base_Types::Boolean;
+			brake_as_cmd3 : in data port Base_Types::Boolean;
+			brake_as_cmd4 : in data port Base_Types::Boolean;
+			brake_as_cmd5 : in data port Base_Types::Boolean;
+			brake_as_cmd6 : in data port Base_Types::Boolean;
+			brake_as_cmd7 : in data port Base_Types::Boolean;
+			brake_as_cmd8 : in data port Base_Types::Boolean;
+			hyd_pressure_in : in data port Base_Types::Integer;
+			
+			-- Outputs
+			hyd_pressure_out1 : out data port Base_Types::Integer;
+			hyd_pressure_out2 : out data port Base_Types::Integer;
+			hyd_pressure_out3 : out data port Base_Types::Integer;
+			hyd_pressure_out4 : out data port Base_Types::Integer;
+			hyd_pressure_out5 : out data port Base_Types::Integer;
+			hyd_pressure_out6 : out data port Base_Types::Integer;
+			hyd_pressure_out7 : out data port Base_Types::Integer;
+			hyd_pressure_out8 : out data port Base_Types::Integer;
+		
+	end normal_sys;
+	
+	system implementation normal_sys.inst
+		subcomponents
+			mv1 : system meter_valve::meter_valve.inst;
+			mv2 : system meter_valve::meter_valve.inst;
+			mv3 : system meter_valve::meter_valve.inst;
+			mv4 : system meter_valve::meter_valve.inst;
+			mv5 : system meter_valve::meter_valve.inst;
+			mv6 : system meter_valve::meter_valve.inst;
+			mv7 : system meter_valve::meter_valve.inst;
+			mv8 : system meter_valve::meter_valve.inst;
+	end normal_sys.inst;
+end normal_sys;
