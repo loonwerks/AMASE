@@ -4,15 +4,28 @@ with normal_sys;
 with alternate_sys;
 with wheel_brake;
 with Base_Types;
+
+	with hydraulic_pump;
+
+	with valves;
+
+	with accumulator;
+
+	with wheel;
+
+	with addition_gate;
 	
 	system phys_sys
 		features
 			-- Inputs
 			hyd_supply1 : in data port Base_Types::Integer;
 			hyd_supply2 : in data port Base_Types::Integer;
+			
 			pump_power1 : in data port Base_Types::Boolean;
 			pump_power2 : in data port Base_Types::Boolean;
+			
 			sys_validity : in data port Base_Types::Boolean;
+			
 			brake_as_cmd_1 : in data port Base_Types::Boolean;
 			brake_as_cmd_2 : in data port Base_Types::Boolean;
 			brake_as_cmd_3 : in data port Base_Types::Boolean;
@@ -21,17 +34,22 @@ with Base_Types;
 			brake_as_cmd_6 : in data port Base_Types::Boolean;
 			brake_as_cmd_7 : in data port Base_Types::Boolean;
 			brake_as_cmd_8 : in data port Base_Types::Boolean;
+			
 			as_cmd_pair_1_5 : in data port Base_Types::Boolean;
 			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
 			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
 			ground_speed : in data port Base_Types::Integer;
+			
 			mech_pedal_pos_L : in data port Base_Types::Boolean;
 			mech_pedal_pos_R : in data port Base_Types::Boolean;
 			
 			-- Outputs
 			accum_pressure_display : out data port Base_Types::Integer;
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
+			
+			-- Enumerated types : {rolling, stopped}
 			wheel_status1 : out data port Base_Types::Integer;
 			wheel_status2 : out data port Base_Types::Integer;
 			wheel_status3 : out data port Base_Types::Integer;
@@ -40,6 +58,8 @@ with Base_Types;
 			wheel_status6 : out data port Base_Types::Integer;
 			wheel_status7 : out data port Base_Types::Integer;
 			wheel_status8 : out data port Base_Types::Integer;
+			
+			-- Output from wheel_brake components
 			wheel_braking_force1 : out data port Base_Types::Integer;
 			wheel_braking_force2 : out data port Base_Types::Integer;
 			wheel_braking_force3 : out data port Base_Types::Integer;
@@ -52,8 +72,19 @@ with Base_Types;
 	
 	system implementation phys_sys.inst
 		subcomponents
+			
+			blue_hyd_pump : system hydraulic_pump::hydraulic_pump.inst;
+			green_hyd_pump : system hydraulic_pump::hydraulic_pump.inst;
+			accumulator : system accumulator::accumulator.inst; 
+			
+			add_gate : system addition_gate::addition_gate.inst;
+			
+			shutoff_valve : system valves::shutoff_valve.inst;
+			selector_valve : system valves::selector_valve.inst;
+			 
 			normal_sys : system normal_sys::normal_sys.inst;
 			alt_sys : system alternate_sys::alternate_sys.inst;
+			
 			wheel_brake1 : system wheel_brake::wheel_brake.inst;
 			wheel_brake2 : system wheel_brake::wheel_brake.inst;
 			wheel_brake3 : system wheel_brake::wheel_brake.inst;
@@ -62,6 +93,103 @@ with Base_Types;
 			wheel_brake6 : system wheel_brake::wheel_brake.inst;
 			wheel_brake7 : system wheel_brake::wheel_brake.inst;
 			wheel_brake8 : system wheel_brake::wheel_brake.inst;
+			
+			wheel_1 : system wheel::wheel.inst;
+			wheel_2 : system wheel::wheel.inst;
+			wheel_3 : system wheel::wheel.inst;
+			wheel_4 : system wheel::wheel.inst;
+			wheel_5 : system wheel::wheel.inst;
+			wheel_6 : system wheel::wheel.inst;
+			wheel_7 : system wheel::wheel.inst;
+			wheel_8 : system wheel::wheel.inst;
+			
+		connections
+			-- Power to subcomponents
+			power_to_blue_pump : port pump_power1 -> blue_hyd_pump.power;
+			power_to_green_pump : port pump_power2 -> green_hyd_pump.power;
+			-- Hydraulic supply to pumps
+			hyd_supply_to_blue_pump : port hyd_supply1 -> blue_hyd_pump.hyd_supply;
+			hyd_supply_to_green_pump : port hyd_supply2 -> green_hyd_pump.hyd_supply;
+			
+			-- Blue and green pump ports
+			hyd_output_green : port green_hyd_pump.hyd_pressure_out -> shutoff_valve.hyd_pressure_in;
+			hyd_output_blue : port blue_hyd_pump.hyd_pressure_out -> add_gate.in_1;
+			pressure_to_accumulator : port blue_hyd_pump.hyd_pressure_out -> accumulator.circuit_pressure_value;
+			
+			-- accumulator 
+			accumulator_pressure : port accumulator.reserve_out -> selector_valve.blue_select_in;
+			----------------------------------------------------------------------------------------
+			-- NOT SURE WHY THIS IS A PROBLEM
+			----------------------------------------------------------------------------------------
+			--accumulator_display : port accum_pressure_display -> accumulator.pressure_display; 
+			
+			-- addition gate
+			addition_gate_blue_out : port add_gate.out_pressure -> selector_valve.blue_select_in;
+			
+			-- Shutoff valve
+			----------------------------------------------------------------------------------------
+			-- SYSTEM VALIDITY 
+			----------------------------------------------------------------------------------------
+			system_valid_to_shutoff : port sys_validity -> shutoff_valve.system_validity;
+			shutoff_pressure_out : port shutoff_valve.hyd_pressure_out -> green_pressure_in_selec_valve;
+			shutoff_pressure_to_selector : port shutoff_valve.hyd_pressure_out -> selector_valve.green_select_in;
+			
+			-- Selector valve
+			----------------------------------------------------------------------------------------
+			-- SYSTEM VALIDITY 
+			----------------------------------------------------------------------------------------
+			system_valid_to_selector : port sys_validity -> selector_valve.system_validity;
+			selector_green_out : port selector_valve.green_select_out -> normal_sys.hyd_pressure_in;
+			selector_blue_out : port selector_valve.blue_select_out -> alt_sys.hyd_pressure_in;
+			
+			-- Normal system
+			-- hyd pressure to wheel_brake components
+			pressure_to_wheel_1 : port normal_sys.hyd_pressure_out1 -> wheel_brake1.normal_hyd_pressure_in;
+			pressure_to_wheel_2 : port normal_sys.hyd_pressure_out2 -> wheel_brake2.normal_hyd_pressure_in;
+			pressure_to_wheel_3 : port normal_sys.hyd_pressure_out3 -> wheel_brake3.normal_hyd_pressure_in;
+			pressure_to_wheel_4 : port normal_sys.hyd_pressure_out4 -> wheel_brake4.normal_hyd_pressure_in;
+			pressure_to_wheel_5 : port normal_sys.hyd_pressure_out5 -> wheel_brake5.normal_hyd_pressure_in;
+			pressure_to_wheel_6 : port normal_sys.hyd_pressure_out6 -> wheel_brake6.normal_hyd_pressure_in;
+			pressure_to_wheel_7 : port normal_sys.hyd_pressure_out7 -> wheel_brake7.normal_hyd_pressure_in;
+			pressure_to_wheel_8 : port normal_sys.hyd_pressure_out8 -> wheel_brake8.normal_hyd_pressure_in;
+			
+			-- brake antiskid commands to normal system
+			brake_as_1 : port brake_as_cmd_1 -> normal_sys.brake_as_cmd1;
+			brake_as_2 : port brake_as_cmd_2 -> normal_sys.brake_as_cmd2;
+			brake_as_3 : port brake_as_cmd_3 -> normal_sys.brake_as_cmd3;
+			brake_as_4 : port brake_as_cmd_4 -> normal_sys.brake_as_cmd4;
+			brake_as_5 : port brake_as_cmd_5 -> normal_sys.brake_as_cmd5;
+			brake_as_6 : port brake_as_cmd_6 -> normal_sys.brake_as_cmd6;
+			brake_as_7 : port brake_as_cmd_7 -> normal_sys.brake_as_cmd7;
+			brake_as_8 : port brake_as_cmd_8 -> normal_sys.brake_as_cmd8;
+			
+			
+			-- Alternate system
+			-- mechanical pedal position
+			ped_position_L : port mech_pedal_pos_L -> alt_sys.mech_pedal_pos_L;
+			ped_position_R : port mech_pedal_pos_R -> alt_sys.mech_pedal_pos_R;
+			
+			-- antiskid command pair
+			as_cmd_1_5 : port as_cmd_pair_1_5 -> alt_sys.as_cmd_pair_1_5;
+			as_cmd_2_6 : port as_cmd_pair_2_6 -> alt_sys.as_cmd_pair_2_6;
+			as_cmd_3_7 : port as_cmd_pair_3_7 -> alt_sys.as_cmd_pair_3_7;
+			as_cmd_4_8 : port as_cmd_pair_4_8 -> alt_sys.as_cmd_pair_4_8;
+			
+			-- alternate hydraulic pressure out
+			alt_pressure_out_1 : port alt_sys.hyd_pressure_out1 -> wheel_brake1.alt_hyd_pressure_in;
+			alt_pressure_out_5 : port alt_sys.hyd_pressure_out1 -> wheel_brake5.alt_hyd_pressure_in;
+			alt_pressure_out_2 : port alt_sys.hyd_pressure_out2 -> wheel_brake2.alt_hyd_pressure_in;
+			alt_pressure_out_6 : port alt_sys.hyd_pressure_out2 -> wheel_brake6.alt_hyd_pressure_in;
+			alt_pressure_out_3 : port alt_sys.hyd_pressure_out3 -> wheel_brake3.alt_hyd_pressure_in;
+			alt_pressure_out_7 : port alt_sys.hyd_pressure_out3 -> wheel_brake7.alt_hyd_pressure_in;
+			alt_pressure_out_4 : port alt_sys.hyd_pressure_out4 -> wheel_brake4.alt_hyd_pressure_in;
+			alt_pressure_out_8 : port alt_sys.hyd_pressure_out4 -> wheel_brake8.alt_hyd_pressure_in;
+			
 	end phys_sys.inst;
+
+
+
+
+
 
 end phys_sys;

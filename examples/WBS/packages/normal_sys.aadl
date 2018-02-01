@@ -14,6 +14,7 @@ with Base_Types;
 			brake_as_cmd6 : in data port Base_Types::Boolean;
 			brake_as_cmd7 : in data port Base_Types::Boolean;
 			brake_as_cmd8 : in data port Base_Types::Boolean;
+			
 			hyd_pressure_in : in data port Base_Types::Integer;
 			
 			-- Outputs

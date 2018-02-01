@@ -1,0 +1,19 @@
+package hydraulic_pump
+public
+with Base_Types;
+
+	system hydraulic_pump
+		features
+			-- Inputs
+			power : in data port Base_Types::Boolean;
+			hyd_supply : in data port Base_Types::Integer;
+			-- Output
+			hyd_pressure_out : out data port Base_Types::Integer;
+	end hydraulic_pump;
+	
+	system implementation hydraulic_pump.inst
+	end hydraulic_pump.inst;
+	
+	
+	
+end hydraulic_pump;

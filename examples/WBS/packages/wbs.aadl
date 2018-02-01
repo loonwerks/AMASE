@@ -43,6 +43,12 @@ with Base_Types;
 		subcomponents
 			phys_sys : system phys_sys::phys_sys.inst;
 			ctrl_sys : system ctrl_sys::ctrl_sys.inst;
+			
+		-- Connections 
+		connections
+			validity : port control_sys_validity -> phys_sys.sys_validity;
+			
+			
 	end wbs.inst;
 
 

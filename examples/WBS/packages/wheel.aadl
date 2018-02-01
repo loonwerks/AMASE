@@ -1,0 +1,21 @@
+package wheel
+public
+with Base_Types;
+
+	system wheel
+		features
+			-- Input 
+			-- ground speed from top level ctrl_sys 
+			ground_speed : in data port Base_Types::Integer;
+			-- braking force from wheel_brake component
+			braking_force : in data port Base_Types::Integer;
+			
+			-- Outputs 
+			-- Should be enumerated type: {stopped, rolling}
+			wheel_status : out data port Base_Types::Boolean;
+	end wheel;
+	
+	system implementation wheel.inst
+		
+	end wheel.inst;
+end wheel;
