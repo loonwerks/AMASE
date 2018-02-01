@@ -1,0 +1,17 @@
+package ShutoffValve
+public
+with Base_Types;
+	system ShutoffValve
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer;
+			system_validity : in data port Base_Types::Boolean;
+				
+			-- Output
+			hyd_pressure_out : out data port Base_Types::Integer;
+	end ShutoffValve;
+	
+	system implementation ShutoffValve.inst
+		
+	end ShutoffValve.inst;
+end ShutoffValve;

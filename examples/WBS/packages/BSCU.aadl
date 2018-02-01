@@ -1,12 +1,16 @@
-package bscu_channel
+package BSCU
 public
-with command_sys;
+with Channel;
+with OrGate;
 with Base_Types;
+
+	with SwitchGate;
 	
-	system bscu_channel
+	system BSCU
 		features
 			-- Inputs
-			power : in data port Base_Types::Boolean;
+			power_1 : in data port Base_Types::Boolean;
+			power_2 : in data port Base_Types::Boolean;
 			ground_speed : in data port Base_Types::Integer;
 			elec_pedal_pos_L : in data port Base_Types::Boolean;
 			elec_pedal_pos_R : in data port Base_Types::Boolean;
@@ -33,13 +37,28 @@ with Base_Types;
 			as_cmd_pair_3_7 : out data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 			system_validity : out data port Base_Types::Boolean;
-			
-	end bscu_channel;
+	end BSCU;
 	
-	system implementation bscu_channel.inst
+	system implementation BSCU.inst
 		subcomponents
-			command_sys1 : system command_sys::command_sys.inst;
-			command_sys2 : system command_sys::command_sys.inst;
-	end bscu_channel.inst;
+			channel1 : system Channel::Channel.inst;
+			channel2 : system Channel::Channel.inst;
+			or_gate_system_validity : system OrGate::OrGate.inst;
+			switch_gate_brake_as_cmd_1 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_2 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_3 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_4 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_5 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_6 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_7 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_8 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_pair_1_5 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_pair_2_6 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_pair_3_7 : system SwitchGate::SwitchGate.inst;
+			switch_gate_brake_as_cmd_pair_4_8 : system SwitchGate::SwitchGate.inst;
+			
+			
+	end BSCU.inst;
+
 	
-end bscu_channel;
+end bscu;

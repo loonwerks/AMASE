@@ -1,0 +1,39 @@
+package MonitorSystem
+public
+with Base_Types;
+	system MonitorSystem
+		features
+			-- Inputs
+			power : in data port Base_Types::Boolean;
+			ground_speed : in data port Base_Types::Integer;
+			elec_pedal_pos_L : in data port Base_Types::Boolean;
+			elec_pedal_pos_R : in data port Base_Types::Boolean;
+			wheel_rolling_1 : in data port Base_Types::Boolean;
+			wheel_rolling_2 : in data port Base_Types::Boolean;
+			wheel_rolling_3 : in data port Base_Types::Boolean;
+			wheel_rolling_4 : in data port Base_Types::Boolean;
+			wheel_rolling_5 : in data port Base_Types::Boolean;
+			wheel_rolling_6 : in data port Base_Types::Boolean;
+			wheel_rolling_7 : in data port Base_Types::Boolean;
+			wheel_rolling_8 : in data port Base_Types::Boolean;
+			brake_as_cmd_1 : in data port Base_Types::Boolean;
+			brake_as_cmd_2 : in data port Base_Types::Boolean;
+			brake_as_cmd_3 : in data port Base_Types::Boolean;
+			brake_as_cmd_4 : in data port Base_Types::Boolean;
+			brake_as_cmd_5 : in data port Base_Types::Boolean;
+			brake_as_cmd_6 : in data port Base_Types::Boolean;
+			brake_as_cmd_7 : in data port Base_Types::Boolean;
+			brake_as_cmd_8 : in data port Base_Types::Boolean;
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean;
+			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
+			-- Output
+			bscu_validity : out data port Base_Types::Boolean;
+	end MonitorSystem;
+	
+	system implementation MonitorSystem.inst
+		
+	end MonitorSystem.inst;
+end MonitorSystem;

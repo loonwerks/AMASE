@@ -1,8 +1,8 @@
-package wheel
+package Wheel
 public
 with Base_Types;
 
-	system wheel
+	system Wheel
 		features
 			-- Input 
 			-- ground speed from top level ctrl_sys 
@@ -13,9 +13,9 @@ with Base_Types;
 			-- Outputs 
 			-- Should be enumerated type: {stopped, rolling}
 			wheel_status : out data port Base_Types::Integer;
-	end wheel;
+	end Wheel;
 	
-	system implementation wheel.inst
+	system implementation Wheel.inst
 		
-	end wheel.inst;
-end wheel;
+	end Wheel.inst;
+end Wheel;

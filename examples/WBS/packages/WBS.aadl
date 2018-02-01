@@ -1,12 +1,12 @@
-package wbs
+package WBS
 public
-with ctrl_sys;
-with phys_sys;
+with ControlSystem;
+with PhysicalSystem;
 with Base_Types;
 
 	with sensor;
 	
-	system wbs
+	system WBS
 		features
 			-- Inputs
 			mech_pedal_pos_L : in data port Base_Types::Boolean;
@@ -50,26 +50,26 @@ with Base_Types;
 			----------------------------------------------------------------------------
 			
 			control_sys_validity : out data port Base_Types::Boolean;
-	end wbs;
+	end WBS;
 	
-	system implementation wbs.inst
+	system implementation WBS.inst
 		subcomponents
-			phys_sys : system phys_sys::phys_sys.inst;
-			ctrl_sys : system ctrl_sys::ctrl_sys.inst;
+			phys_sys : system PhysicalSystem::PhysicalSystem.inst;
+			ctrl_sys : system ControlSystem::ControlSystem.inst;
 			
 			-- Wheel sensors
-			wheel_sensor1 : system sensor::wheel_sensor.inst;
-			wheel_sensor2 : system sensor::wheel_sensor.inst;
-			wheel_sensor3 : system sensor::wheel_sensor.inst;
-			wheel_sensor4 : system sensor::wheel_sensor.inst;
-			wheel_sensor5 : system sensor::wheel_sensor.inst;
-			wheel_sensor6 : system sensor::wheel_sensor.inst;
-			wheel_sensor7 : system sensor::wheel_sensor.inst;
-			wheel_sensor8 : system sensor::wheel_sensor.inst;
+			wheel_sensor1 : system Sensor::Sensor.inst;
+			wheel_sensor2 : system Sensor::Sensor.inst;
+			wheel_sensor3 : system Sensor::Sensor.inst;
+			wheel_sensor4 : system Sensor::Sensor.inst;
+			wheel_sensor5 : system Sensor::Sensor.inst;
+			wheel_sensor6 : system Sensor::Sensor.inst;
+			wheel_sensor7 : system Sensor::Sensor.inst;
+			wheel_sensor8 : system Sensor::Sensor.inst;
 			
 			-- Pedal sensors
-			pedal_sensor_L : system sensor::pedal_sensor.inst;
-			pedal_sensor_R : system sensor::pedal_sensor.inst;
+			pedal_sensor_L : system Sensor::SensorPedalPosition.inst;
+			pedal_sensor_R : system Sensor::SensorPedalPosition.inst;
 			
 		-- Connections 
 		connections
@@ -149,8 +149,8 @@ with Base_Types;
 			accumulator_display_out : port phys_sys.accum_pressure_display_out -> phys_sys.accum_pressure_display_in;
 			
 			
-	end wbs.inst;
+	end WBS.inst;
 
 
 
-end wbs;
+end WBS;

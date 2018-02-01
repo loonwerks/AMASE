@@ -1,9 +1,9 @@
-package command_sys
+package CommandSystem
 public
-with wheel_cmd_sys;
+with WheelPairCommandSystem;
 with Base_Types;
 
-	system command_sys
+	system CommandSystem
 		features
 			-- Inputs
 			power : in data port Base_Types::Boolean;
@@ -33,15 +33,15 @@ with Base_Types;
 			as_cmd_pair_3_7 : out data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 		
-	end command_sys;
+	end CommandSystem;
 	
-	system implementation command_sys.inst
+	system implementation CommandSystem.inst
 		subcomponents
-			w1_w5_cmd_sys : system wheel_cmd_sys::wheel_cmd_sys.inst;
-			w2_w6_cmd_sys : system wheel_cmd_sys::wheel_cmd_sys.inst;
-			w3_w7_cmd_sys : system wheel_cmd_sys::wheel_cmd_sys.inst;
-			w4_w8_cmd_sys : system wheel_cmd_sys::wheel_cmd_sys.inst;
+			w1_w5_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
+			w2_w6_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
+			w3_w7_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
+			w4_w8_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
 			
-	end command_sys.inst;
+	end CommandSystem.inst;
 	
-end command_sys;
+end CommandSystem;

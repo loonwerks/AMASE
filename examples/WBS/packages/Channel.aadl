@@ -1,9 +1,10 @@
-package bscu
+package Channel
 public
-with bscu_channel;
 with Base_Types;
-	
-	system bscu
+with CommandSystem;
+with MonitorSystem;
+
+	system Channel
 		features
 			-- Inputs
 			power : in data port Base_Types::Boolean;
@@ -33,12 +34,12 @@ with Base_Types;
 			as_cmd_pair_3_7 : out data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 			system_validity : out data port Base_Types::Boolean;
-	end bscu;
+			
+	end Channel;
 	
-	system implementation bscu.inst
+	system implementation Channel.inst
 		subcomponents
-			channel1 : system bscu_channel::bscu_channel.inst;
-			channel2 : system bscu_channel::bscu_channel.inst;
-	end bscu.inst;
-	
-end bscu;
+			monitor_sys : system MonitorSystem::MonitorSystem.inst;
+			command_sys : system CommandSystem::CommandSystem.inst;
+	end Channel.inst;
+end Channel;

@@ -1,0 +1,65 @@
+package WheelBrake
+public
+with Base_Types;
+	
+	system WheelBrake
+		features
+			-- Input from physical system
+			normal_hyd_pressure_in : in data port Base_Types::Integer;
+			alt_hyd_pressure_in : in data port Base_Types::Integer;
+			-- Output 
+			brake_force : out data port Base_Types::Integer;
+			
+	end WheelBrake;
+	
+	system implementation WheelBrake.inst
+		subcomponents
+			normal_hyd_fuse : system HydraulicFuse.inst;
+			normal_hyd_piston : system HydraulicPiston.inst;
+			alt_hyd_fuse : system HydraulicFuse.inst;
+			alt_hyd_piston : system HydraulicPiston.inst;
+			brake_actuator : system BrakeActuator.inst;
+	end WheelBrake.inst;
+	
+
+	system HydraulicFuse
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer;
+			--Output 
+			hyd_pressure_out : out data port Base_Types::Integer;
+	end HydraulicFuse;
+	
+	system implementation HydraulicFuse.inst
+		
+	end HydraulicFuse.inst;
+	
+	
+	system HydraulicPiston
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer;
+			--Output 
+			force_out : out data port Base_Types::Integer;
+		
+	end HydraulicPiston;
+	
+	system implementation HydraulicPiston.inst
+		
+	end HydraulicPiston.inst;
+	
+	system BrakeActuator
+		features
+			-- Inputs
+			normal_force_in : in data port Base_Types::Integer;
+			alternate_force_in : in data port Base_Types::Integer;
+			
+			-- Output
+			braking_force : out data port Base_Types::Integer;
+	end BrakeActuator;
+	
+	system implementation BrakeActuator.inst
+		
+	end BrakeActuator.inst;
+	
+end WheelBrake;

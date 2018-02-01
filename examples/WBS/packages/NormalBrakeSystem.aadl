@@ -1,9 +1,9 @@
-package normal_sys
+package NormalBrakeSystem
 public
-with meter_valve;
+with MeterValve;
 with Base_Types;
 
-	system normal_sys
+	system NormalBrakeSystem
 		features
 			-- Inputs
 			brake_as_cmd1 : in data port Base_Types::Boolean;
@@ -27,17 +27,17 @@ with Base_Types;
 			hyd_pressure_out7 : out data port Base_Types::Integer;
 			hyd_pressure_out8 : out data port Base_Types::Integer;
 		
-	end normal_sys;
+	end NormalBrakeSystem;
 	
-	system implementation normal_sys.inst
+	system implementation NormalBrakeSystem.inst
 		subcomponents
-			mv1 : system meter_valve::meter_valve.inst;
-			mv2 : system meter_valve::meter_valve.inst;
-			mv3 : system meter_valve::meter_valve.inst;
-			mv4 : system meter_valve::meter_valve.inst;
-			mv5 : system meter_valve::meter_valve.inst;
-			mv6 : system meter_valve::meter_valve.inst;
-			mv7 : system meter_valve::meter_valve.inst;
-			mv8 : system meter_valve::meter_valve.inst;
-	end normal_sys.inst;
-end normal_sys;
+			mv1 : system MeterValve::MeterValve.inst;
+			mv2 : system MeterValve::MeterValve.inst;
+			mv3 : system MeterValve::MeterValve.inst;
+			mv4 : system MeterValve::MeterValve.inst;
+			mv5 : system MeterValve::MeterValve.inst;
+			mv6 : system MeterValve::MeterValve.inst;
+			mv7 : system MeterValve::MeterValve.inst;
+			mv8 : system MeterValve::MeterValve.inst;
+	end NormalBrakeSystem.inst;
+end NormalBrakeSystem;

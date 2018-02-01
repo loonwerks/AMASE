@@ -1,0 +1,20 @@
+package MeterValve
+public
+with Base_Types;
+
+	system MeterValve
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer;
+			elec_cmd : in data port Base_Types::Boolean;
+			mech_cmd : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			hyd_pressure_out : out data port Base_Types::Integer;
+			
+	end MeterValve;
+	
+	system implementation MeterValve.inst
+		
+	end MeterValve.inst;
+end MeterValve;

@@ -1,17 +1,17 @@
-package addition_gate
+package AdditionGate
 public
 with Base_Types;
 
-	system addition_gate
+	system AdditionGate
 		features
 			--Inputs
 			in_1 : in data port Base_Types::Integer;
 			in_2 : in data port Base_Types::Integer;
 			-- Output
 			out_pressure : out data port Base_Types::Integer;
-	end addition_gate;
+	end AdditionGate;
 	
-	system implementation addition_gate.inst
+	system implementation AdditionGate.inst
 		
-	end addition_gate.inst;
-end addition_gate;
+	end AdditionGate.inst;
+end AdditionGate;

@@ -1,0 +1,22 @@
+package SelectorValve
+public
+with Base_Types;
+	system SelectorValve
+		features
+			-- Inputs
+			green_select_in : in data port Base_Types::Integer;
+			blue_select_in : in data port Base_Types::Integer;
+			system_validity : in data port Base_Types::Boolean;
+				
+			-- Outputs
+			green_select_out : out data port Base_Types::Integer;
+			blue_select_out : out data port Base_Types::Integer;
+			
+			-- Enumerated type: {green, blue}
+			sys_mode : out data port Base_Types::Integer;
+	end SelectorValve;
+	
+	system implementation SelectorValve.inst
+		
+	end SelectorValve.inst;
+end SelectorValve;

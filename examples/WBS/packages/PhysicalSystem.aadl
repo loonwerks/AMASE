@@ -1,21 +1,17 @@
-package phys_sys
+package PhysicalSystem
 public
-with normal_sys;
-with alternate_sys;
-with wheel_brake;
+with NormalBrakeSystem;
+with AlternateBrakeSystem;
+with WheelBrake;
 with Base_Types;
-
-	with hydraulic_pump;
-
-	with valves;
-
-	with accumulator;
-
-	with wheel;
-
-	with addition_gate;
+with HydraulicPump;
+with accumulator;
+with wheel;
+with AdditionGate;
+with SelectorValve;
+with ShutoffValve;
 	
-	system phys_sys
+	system PhysicalSystem
 		features
 			-- Inputs
 			hyd_supply1 : in data port Base_Types::Integer;
@@ -45,14 +41,10 @@ with Base_Types;
 			mech_pedal_pos_L_in : in data port Base_Types::Boolean;
 			mech_pedal_pos_R_in : in data port Base_Types::Boolean;
 			
-			accum_pressure_display_in : in data port Base_Types::Integer;
 			
 			-- Outputs
-			accum_pressure_display_out : out data port Base_Types::Integer;
+			accum_pressure_display : out data port Base_Types::Integer;
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
-			
-			mech_pedal_pos_L_out : out data port Base_Types::Boolean;
-			mech_pedal_pos_R_out : out data port Base_Types::Boolean;
 			
 			-- Enumerated types : {rolling, stopped}
 			wheel_status1 : out data port Base_Types::Integer;
@@ -73,40 +65,40 @@ with Base_Types;
 			wheel_braking_force6 : out data port Base_Types::Integer;
 			wheel_braking_force7 : out data port Base_Types::Integer;
 			wheel_braking_force8 : out data port Base_Types::Integer;
-	end phys_sys;
+	end PhysicalSystem;
 	
-	system implementation phys_sys.inst
+	system implementation PhysicalSystem.inst
 		subcomponents
 			
-			blue_hyd_pump : system hydraulic_pump::hydraulic_pump.inst;
-			green_hyd_pump : system hydraulic_pump::hydraulic_pump.inst;
+			blue_hyd_pump : system HydraulicPump::HydraulicPump.inst;
+			green_hyd_pump : system HydraulicPump::HydraulicPump.inst;
 			accumulator : system accumulator::accumulator.inst; 
 			
-			add_gate : system addition_gate::addition_gate.inst;
+			add_gate_hyd_pressure : system AdditionGate::AdditionGate.inst;
 			
-			shutoff_valve : system valves::shutoff_valve.inst;
-			selector_valve : system valves::selector_valve.inst;
+			shutoff_valve : system ShutoffValve::ShutoffValve.inst;
+			selector_valve : system SelectorValve::SelectorValve.inst;
 			 
-			normal_sys : system normal_sys::normal_sys.inst;
-			alt_sys : system alternate_sys::alternate_sys.inst;
+			normal_sys : system NormalBrakeSystem::NormalBrakeSystem.inst;
+			alt_sys : system AlternateBrakeSystem::AlternateBrakeSystem.inst;
 			
-			wheel_brake1 : system wheel_brake::wheel_brake.inst;
-			wheel_brake2 : system wheel_brake::wheel_brake.inst;
-			wheel_brake3 : system wheel_brake::wheel_brake.inst;
-			wheel_brake4 : system wheel_brake::wheel_brake.inst;
-			wheel_brake5 : system wheel_brake::wheel_brake.inst;
-			wheel_brake6 : system wheel_brake::wheel_brake.inst;
-			wheel_brake7 : system wheel_brake::wheel_brake.inst;
-			wheel_brake8 : system wheel_brake::wheel_brake.inst;
+			wheel_brake1 : system WheelBrake::WheelBrake.inst;
+			wheel_brake2 : system WheelBrake::WheelBrake.inst;
+			wheel_brake3 : system WheelBrake::WheelBrake.inst;
+			wheel_brake4 : system WheelBrake::WheelBrake.inst;
+			wheel_brake5 : system WheelBrake::WheelBrake.inst;
+			wheel_brake6 : system WheelBrake::WheelBrake.inst;
+			wheel_brake7 : system WheelBrake::WheelBrake.inst;
+			wheel_brake8 : system WheelBrake::WheelBrake.inst;
 			
-			wheel_1 : system wheel::wheel.inst;
-			wheel_2 : system wheel::wheel.inst;
-			wheel_3 : system wheel::wheel.inst;
-			wheel_4 : system wheel::wheel.inst;
-			wheel_5 : system wheel::wheel.inst;
-			wheel_6 : system wheel::wheel.inst;
-			wheel_7 : system wheel::wheel.inst;
-			wheel_8 : system wheel::wheel.inst;
+			wheel_1 : system Wheel::Wheel.inst;
+			wheel_2 : system Wheel::Wheel.inst;
+			wheel_3 : system Wheel::Wheel.inst;
+			wheel_4 : system Wheel::Wheel.inst;
+			wheel_5 : system Wheel::Wheel.inst;
+			wheel_6 : system Wheel::Wheel.inst;
+			wheel_7 : system Wheel::Wheel.inst;
+			wheel_8 : system Wheel::Wheel.inst;
 			
 		connections
 			-- Power to subcomponents
@@ -232,11 +224,11 @@ with Base_Types;
 			wheel_8_status : port wheel_8.wheel_status -> wheel_status8;
 			
 			
-	end phys_sys.inst;
+	end PhysicalSystem.inst;
 
 
 
 
 
 
-end phys_sys;
+end PhysicalSystem;

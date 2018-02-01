@@ -1,0 +1,18 @@
+package OrGate
+public
+with Base_Types;
+
+	system OrGate
+		features
+			-- Input
+			in_1 : in data port Base_Types::Boolean;
+			in_2 : in data port Base_Types::Boolean;
+			
+			-- Output
+			out_val : out data port Base_Types::Boolean;
+	end OrGate;	
+	
+	system implementation OrGate.inst
+		
+	end OrGate.inst;
+end OrGate;

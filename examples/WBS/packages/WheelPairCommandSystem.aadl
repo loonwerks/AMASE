@@ -1,0 +1,98 @@
+package WheelPairCommandSystem
+public
+with Base_Types;
+
+	system WheelPairCommandSystem
+		features
+			-- Inputs
+			power : in data port Base_Types::Boolean;
+			ground_speed : in data port Base_Types::Integer;
+			elec_pedal_pos : in data port Base_Types::Boolean;
+			wheel_rolling_1 : in data port Base_Types::Boolean;
+			wheel_rolling_2 : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			brake_as_cmd_1 : out data port Base_Types::Boolean;
+			brake_as_cmd_2 : out data port Base_Types::Boolean;
+			as_cmd_out : out data port Base_Types::Boolean;
+			
+	end WheelPairCommandSystem;
+	
+	system implementation WheelPairCommandSystem.inst
+		subcomponents
+			alternate_command_calculator : system AlternateCommandCalculator;
+			normal_command_calculator_1 : system NormalCommandCalculator;
+			normal_command_calculator_2 : system NormalCommandCalculator;
+			antiskid_command_facility_1 : system AntiSkidCommandFacility;
+			antiskid_command_facility_2 : system AntiSkidCommandFacility;
+			brake_command_facility : system BrakeCommandFacility;
+	end WheelPairCommandSystem.inst;
+	
+	
+	
+	system AlternateCommandCalculator
+		features 
+			--Inputs
+			power : in data port Base_Types::Boolean;
+			as_cmd_1 : in data port Base_Types::Boolean;
+			as_cmd_2 : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			as_cmd_out : out data port Base_Types::Boolean;
+	end AlternateCommandCalculator;
+	
+	system implementation AlternateCommandCalculator.inst
+		
+	end AlternateCommandCalculator.inst;
+	
+	
+	
+	system NormalCommandCalculator
+		features 
+			--Inputs
+			power : in data port Base_Types::Boolean;
+			brake_cmd : in data port Base_Types::Boolean;
+			as_cmd : in data port Base_Types::Boolean; 
+			
+			-- Outputs
+			brake_as_cmd : out data port Base_Types::Boolean;
+			
+	end NormalCommandCalculator;
+	
+	system implementation NormalCommandCalculator.inst
+		
+	end NormalCommandCalculator.inst;
+	
+	
+	
+	system AntiskidCommandFacility
+		features
+			-- Inputs
+			wheel_rolling : in data port Base_Types::Boolean;
+			power : in data port Base_Types::Boolean;
+			ground_speed : in data port Base_Types::Integer;
+			
+			-- Output
+			as_cmd : out data port Base_Types::Boolean;
+	end AntiskidCommandFacility;
+	
+	system implementation AntiskidCommandFacility.inst
+		
+	end AntiskidCommandFacility.inst;
+	
+	
+	
+	system BrakeCommandFacility
+		features
+			-- Inputs
+			electrical_pedal_pos : in data port Base_Types::Boolean;
+			power : in data port Base_Types::Boolean;
+			-- Output
+			brake_cmd : out data port Base_Types::Boolean;
+			
+	end BrakeCommandFacility;
+	
+	system implementation BrakeCommandFacility.inst
+		
+	end BrakeCommandFacility.inst;
+end WheelPairCommandSystem;
