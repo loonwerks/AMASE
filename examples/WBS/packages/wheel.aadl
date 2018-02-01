@@ -8,11 +8,11 @@ with Base_Types;
 			-- ground speed from top level ctrl_sys 
 			ground_speed : in data port Base_Types::Integer;
 			-- braking force from wheel_brake component
-			braking_force : in data port Base_Types::Integer;
+			brake_force : in data port Base_Types::Integer;
 			
 			-- Outputs 
 			-- Should be enumerated type: {stopped, rolling}
-			wheel_status : out data port Base_Types::Boolean;
+			wheel_status : out data port Base_Types::Integer;
 	end wheel;
 	
 	system implementation wheel.inst

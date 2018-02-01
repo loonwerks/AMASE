@@ -1,0 +1,31 @@
+package sensor
+public
+with Base_Types;
+
+	system pedal_sensor
+		features
+			-- Input
+			mech_pedal_pos : in data port Base_Types::Boolean;
+			-- Output
+			elec_pedal_pos : out data port Base_Types::Boolean;
+	end pedal_sensor;
+	
+	system implementation pedal_sensor.inst
+		
+	end pedal_sensor.inst;
+	
+	
+	
+	system wheel_sensor
+		features
+			-- Input 
+			-- Enumerated type {rolling, stopped}
+			wheel_status : in data port Base_Types::Integer;
+			-- Output
+			wheel_rolling : out data port Base_Types::Boolean;
+	end wheel_sensor;
+	
+	system implementation wheel_sensor.inst
+		
+	end wheel_sensor.inst;
+end sensor;

@@ -3,22 +3,29 @@ public
 with ctrl_sys;
 with phys_sys;
 with Base_Types;
+
+	with sensor;
 	
 	system wbs
 		features
 			-- Inputs
 			mech_pedal_pos_L : in data port Base_Types::Boolean;
 			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			
 			power1 : in data port Base_Types::Boolean;
 			power2 : in data port Base_Types::Boolean;
+			
 			pump_power1 : in data port Base_Types::Boolean;
 			pump_power2 : in data port Base_Types::Boolean;
+			
 			ground_speed : in data port Base_Types::Integer;
+			
 			hyd_supply1 : in data port Base_Types::Integer;
 			hyd_supply2 : in data port Base_Types::Integer;
 			
 			-- Outputs
 			accum_pressure_display : out data port Base_Types::Integer;
+			
 			wheel_braking_force1 : out data port Base_Types::Integer;
 			wheel_braking_force2 : out data port Base_Types::Integer;
 			wheel_braking_force3 : out data port Base_Types::Integer;
@@ -27,6 +34,7 @@ with Base_Types;
 			wheel_braking_force6 : out data port Base_Types::Integer;
 			wheel_braking_force7 : out data port Base_Types::Integer;
 			wheel_braking_force8 : out data port Base_Types::Integer;
+			
 			wheel_status1 : out data port Base_Types::Integer;
 			wheel_status2 : out data port Base_Types::Integer;
 			wheel_status3 : out data port Base_Types::Integer;
@@ -35,7 +43,12 @@ with Base_Types;
 			wheel_status6 : out data port Base_Types::Integer;
 			wheel_status7 : out data port Base_Types::Integer;
 			wheel_status8 : out data port Base_Types::Integer;
+			
+			-- I do not know what this is for!!!!
+			----------------------------------------------------------------------------
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
+			----------------------------------------------------------------------------
+			
 			control_sys_validity : out data port Base_Types::Boolean;
 	end wbs;
 	
@@ -44,12 +57,100 @@ with Base_Types;
 			phys_sys : system phys_sys::phys_sys.inst;
 			ctrl_sys : system ctrl_sys::ctrl_sys.inst;
 			
+			-- Wheel sensors
+			wheel_sensor1 : system sensor::wheel_sensor.inst;
+			wheel_sensor2 : system sensor::wheel_sensor.inst;
+			wheel_sensor3 : system sensor::wheel_sensor.inst;
+			wheel_sensor4 : system sensor::wheel_sensor.inst;
+			wheel_sensor5 : system sensor::wheel_sensor.inst;
+			wheel_sensor6 : system sensor::wheel_sensor.inst;
+			wheel_sensor7 : system sensor::wheel_sensor.inst;
+			wheel_sensor8 : system sensor::wheel_sensor.inst;
+			
+			-- Pedal sensors
+			pedal_sensor_L : system sensor::pedal_sensor.inst;
+			pedal_sensor_R : system sensor::pedal_sensor.inst;
+			
 		-- Connections 
 		connections
-			validity : port control_sys_validity -> phys_sys.sys_validity;
+			
+			-- Connections from wbs to ctrl_sys and phys_sys
+			-- ground speed to both physical and control
+			ground_speed_ctrl : port ground_speed -> ctrl_sys.ground_speed;
+			ground_speed_phys : port ground_speed -> phys_sys.ground_speed;
+			
+			-- power to control
+			power_control_1 : port power1 -> ctrl_sys.power_1;
+			power_control_2 : port power2 -> ctrl_sys.power_2;
+			
+			-- power to physical pumps ASSUMPTION HERE
+			--------------------------------------------------------------------------
+			power_pump_1 : port power1 -> phys_sys.pump_power1;
+			power_pump_2 : port power2 -> phys_sys.pump_power2;
+			
+			-- hydraulic supply to phys system ASSUMPTION HERE
+			-------------------------------------------------------------------------
+			hyd_supply_1 : port hyd_supply1 -> phys_sys.hyd_supply1;
+			hyd_supply_2 : port hyd_supply2 -> phys_sys.hyd_supply2;
+			
+			-- Connections from ctrl_sys to phys_sys
+			
+			-- system validity
+			sys_valid : port ctrl_sys.system_validity -> phys_sys.system_validity;
+			
+			-- brake antiskid commands
+			brake_antiskid_1 : port ctrl_sys.brake_as_cmd_1 -> phys_sys.brake_as_cmd_1;
+			brake_antiskid_2 : port ctrl_sys.brake_as_cmd_2 -> phys_sys.brake_as_cmd_2;
+			brake_antiskid_3 : port ctrl_sys.brake_as_cmd_3 -> phys_sys.brake_as_cmd_3;
+			brake_antiskid_4 : port ctrl_sys.brake_as_cmd_4 -> phys_sys.brake_as_cmd_4;
+			brake_antiskid_5 : port ctrl_sys.brake_as_cmd_5 -> phys_sys.brake_as_cmd_5;
+			brake_antiskid_6 : port ctrl_sys.brake_as_cmd_6 -> phys_sys.brake_as_cmd_6;
+			brake_antiskid_7 : port ctrl_sys.brake_as_cmd_7 -> phys_sys.brake_as_cmd_7;
+			brake_antiskid_8 : port ctrl_sys.brake_as_cmd_8 -> phys_sys.brake_as_cmd_8;
+			
+			-- antiskid command pairs
+			antiskid_pair1 : port ctrl_sys.as_cmd_pair_1_5 -> phys_sys.as_cmd_pair_1_5;
+			antiskid_pair2 : port ctrl_sys.as_cmd_pair_2_6 -> phys_sys.as_cmd_pair_2_6;
+			antiskid_pair3 : port ctrl_sys.as_cmd_pair_3_7 -> phys_sys.as_cmd_pair_3_7;
+			antiskid_pair4 : port ctrl_sys.as_cmd_pair_4_8 -> phys_sys.as_cmd_pair_4_8;
+			
+			-- Sensor connections
+			-- From phys_system to wheel sensor
+			wheel_status_sensor_in_1 : port phys_sys.wheel_status1 -> wheel_sensor1.wheel_status;
+			wheel_status_sensor_in_2 : port phys_sys.wheel_status2 -> wheel_sensor2.wheel_status;
+			wheel_status_sensor_in_3 : port phys_sys.wheel_status3 -> wheel_sensor3.wheel_status;
+			wheel_status_sensor_in_4 : port phys_sys.wheel_status4 -> wheel_sensor4.wheel_status;
+			wheel_status_sensor_in_5 : port phys_sys.wheel_status5 -> wheel_sensor5.wheel_status;
+			wheel_status_sensor_in_6 : port phys_sys.wheel_status6 -> wheel_sensor6.wheel_status;
+			wheel_status_sensor_in_7 : port phys_sys.wheel_status7 -> wheel_sensor7.wheel_status;
+			wheel_status_sensor_in_8 : port phys_sys.wheel_status8 -> wheel_sensor8.wheel_status;
+			
+			-- from sensor to ctrl_system
+			wheel_status_sensor_out_1 : port wheel_sensor1.wheel_rolling -> ctrl_sys.wheel_rolling_1;
+			wheel_status_sensor_out_2 : port wheel_sensor2.wheel_rolling -> ctrl_sys.wheel_rolling_2;
+			wheel_status_sensor_out_3 : port wheel_sensor3.wheel_rolling -> ctrl_sys.wheel_rolling_3;
+			wheel_status_sensor_out_4 : port wheel_sensor4.wheel_rolling -> ctrl_sys.wheel_rolling_4;
+			wheel_status_sensor_out_5 : port wheel_sensor5.wheel_rolling -> ctrl_sys.wheel_rolling_5;
+			wheel_status_sensor_out_6 : port wheel_sensor6.wheel_rolling -> ctrl_sys.wheel_rolling_6;
+			wheel_status_sensor_out_7 : port wheel_sensor7.wheel_rolling -> ctrl_sys.wheel_rolling_7;
+			wheel_status_sensor_out_8 : port wheel_sensor8.wheel_rolling -> ctrl_sys.wheel_rolling_8;
+			
+			-- from physical system to pedal sensor ASSUMPTIoN HERE
+			-----------------------------------------------------------------------------------
+			pedal_sensor_in_L : port phys_sys.mech_pedal_pos_L_out -> pedal_sensor_L.mech_pedal_pos;
+			pedal_sensor_in_R : port phys_sys.mech_pedal_pos_R_out -> pedal_sensor_R.mech_pedal_pos;
+			
+			-- from pedal sensor to control system
+			pedal_sensor_out_L : port pedal_sensor_L.elec_pedal_pos -> ctrl_sys.elec_pedal_pos_L;
+			pedal_sensor_out_R : port pedal_sensor_R.elec_pedal_pos -> ctrl_sys.elec_pedal_pos_R;
+			
+			
+			-- Accumulator display connection
+			accumulator_display_out : port phys_sys.accum_pressure_display_out -> phys_sys.accum_pressure_display_in;
 			
 			
 	end wbs.inst;
+
 
 
 end wbs;
