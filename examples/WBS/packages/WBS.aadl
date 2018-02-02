@@ -47,13 +47,8 @@ with datatypes;
 			wheel_status7 : out data port datatypes::WheelStatus;
 			wheel_status8 : out data port datatypes::WheelStatus;
 			
-			-- Do I need these?
-			-- Where are they coming from? 
-			----------------------------------------------------------------------------
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
-			----------------------------------------------------------------------------
 			control_sys_validity : out data port Base_Types::Boolean;
-			----------------------------------------------------------------------------
 	end WBS;
 	
 	system implementation WBS.inst
