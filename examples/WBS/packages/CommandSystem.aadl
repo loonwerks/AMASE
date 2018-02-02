@@ -41,6 +41,56 @@ with Base_Types;
 			w2_w6_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
 			w3_w7_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
 			w4_w8_cmd_sys : system WheelPairCommandSystem::WheelPairCommandSystem.inst;
+		
+		connections
+			-- connect the wheel pair command system to the outputs leaving 
+			-- this command system
+			brake_as_1 : port w1_w5_cmd_sys.brake_as_cmd_1 -> brake_as_cmd_1;
+			brake_as_5 : port w1_w5_cmd_sys.brake_as_cmd_2 -> brake_as_cmd_5;
+			as_pair_1_5 : port 	w1_w5_cmd_sys.as_cmd_out -> as_cmd_pair_1_5;
+			brake_as_2 : port w2_w6_cmd_sys.brake_as_cmd_1 -> brake_as_cmd_2;
+			brake_as_6 : port w2_w6_cmd_sys.brake_as_cmd_2 -> brake_as_cmd_6;
+			as_pair_2_6 : port 	w2_w6_cmd_sys.as_cmd_out -> as_cmd_pair_2_6;
+			brake_as_3 : port w3_w7_cmd_sys.brake_as_cmd_1 -> brake_as_cmd_3;
+			brake_as_7 : port w3_w7_cmd_sys.brake_as_cmd_2 -> brake_as_cmd_7;
+			as_pair_3_7 : port 	w3_w7_cmd_sys.as_cmd_out -> as_cmd_pair_3_7;
+			brake_as_4 : port w4_w8_cmd_sys.brake_as_cmd_1 -> brake_as_cmd_4;
+			brake_as_8 : port w4_w8_cmd_sys.brake_as_cmd_2 -> brake_as_cmd_8;
+			as_pair_4_8 : port 	w4_w8_cmd_sys.as_cmd_out -> as_cmd_pair_4_8;
+			
+			-- Send power to the wheel pair systems
+			power_1_5 : port power -> w1_w5_cmd_sys.power;
+			power_2_6 : port power -> w2_w6_cmd_sys.power;
+			power_3_7 : port power -> w3_w7_cmd_sys.power;
+			power_4_8 : port power -> w4_w8_cmd_sys.power;
+			
+			-- Groundspeed
+			ground_speed_1_5 : port ground_speed -> w1_w5_cmd_sys.ground_speed;
+			ground_speed_2_6 : port ground_speed -> w2_w6_cmd_sys.ground_speed;
+			ground_speed_3_7 : port ground_speed -> w3_w7_cmd_sys.ground_speed;
+			ground_speed_4_8 : port ground_speed -> w4_w8_cmd_sys.ground_speed;
+			
+			-- Pedal
+			-- L goes to 1_5 and 2_6
+			-- R goes to 3_7 and 4_8
+			elec_pedal_pos_L_1_5 : port elec_pedal_pos_L -> w1_w5_cmd_sys.elec_pedal_pos;
+			elec_pedal_pos_L_2_6 : port elec_pedal_pos_L -> w2_w6_cmd_sys.elec_pedal_pos;
+			elec_pedal_pos_R_3_7 : port elec_pedal_pos_R -> w3_w7_cmd_sys.elec_pedal_pos;
+			elec_pedal_pos_R_4_8 : port elec_pedal_pos_R -> w4_w8_cmd_sys.elec_pedal_pos;
+			
+			wheel_1_roll : port wheel_rolling_1 -> w1_w5_cmd_sys.wheel_rolling_1;
+			wheel_5_roll : port wheel_rolling_5 -> w1_w5_cmd_sys.wheel_rolling_2;
+			
+			wheel_2_roll : port wheel_rolling_2 -> w2_w6_cmd_sys.wheel_rolling_1;
+			wheel_6_roll : port wheel_rolling_6 -> w2_w6_cmd_sys.wheel_rolling_2;
+			
+			wheel_3_roll : port wheel_rolling_3 -> w3_w7_cmd_sys.wheel_rolling_1;
+			wheel_7_roll : port wheel_rolling_7 -> w3_w7_cmd_sys.wheel_rolling_2;
+			
+			wheel_4_roll : port wheel_rolling_4 -> w4_w8_cmd_sys.wheel_rolling_1;
+			wheel_8_roll : port wheel_rolling_8 -> w4_w8_cmd_sys.wheel_rolling_2;
+			
+			
 			
 	end CommandSystem.inst;
 	

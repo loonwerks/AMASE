@@ -9,16 +9,18 @@ with MonitorSystem;
 			-- Inputs
 			power : in data port Base_Types::Boolean;
 			ground_speed : in data port Base_Types::Integer;
+			
 			elec_pedal_pos_L : in data port Base_Types::Boolean;
 			elec_pedal_pos_R : in data port Base_Types::Boolean;
-			wheel_rolling_1 : in data port Base_Types::Boolean;
-			wheel_rolling_2 : in data port Base_Types::Boolean;
-			wheel_rolling_3 : in data port Base_Types::Boolean;
-			wheel_rolling_4 : in data port Base_Types::Boolean;
-			wheel_rolling_5 : in data port Base_Types::Boolean;
-			wheel_rolling_6 : in data port Base_Types::Boolean;
-			wheel_rolling_7 : in data port Base_Types::Boolean;
-			wheel_rolling_8 : in data port Base_Types::Boolean;
+			
+			wheel_rolling_1_in : in data port Base_Types::Boolean;
+			wheel_rolling_2_in : in data port Base_Types::Boolean;
+			wheel_rolling_3_in : in data port Base_Types::Boolean;
+			wheel_rolling_4_in : in data port Base_Types::Boolean;
+			wheel_rolling_5_in : in data port Base_Types::Boolean;
+			wheel_rolling_6_in : in data port Base_Types::Boolean;
+			wheel_rolling_7_in : in data port Base_Types::Boolean;
+			wheel_rolling_8_in : in data port Base_Types::Boolean;
 			
 			-- Outputs
 			brake_as_cmd_1 : out data port Base_Types::Boolean;
@@ -41,5 +43,51 @@ with MonitorSystem;
 		subcomponents
 			monitor_sys : system MonitorSystem::MonitorSystem.inst;
 			command_sys : system CommandSystem::CommandSystem.inst;
+			
+		connections
+			sys_valid : port monitor_sys.bscu_validity -> system_validity;
+			
+			brake_as_1 : port command_sys.brake_as_cmd_1 -> brake_as_cmd_1;
+			brake_as_2 : port command_sys.brake_as_cmd_2 -> brake_as_cmd_2;
+			brake_as_3 : port command_sys.brake_as_cmd_3 -> brake_as_cmd_3;
+			brake_as_4 : port command_sys.brake_as_cmd_4 -> brake_as_cmd_4;
+			brake_as_5 : port command_sys.brake_as_cmd_5 -> brake_as_cmd_5;
+			brake_as_6 : port command_sys.brake_as_cmd_6 -> brake_as_cmd_6;
+			brake_as_7 : port command_sys.brake_as_cmd_7 -> brake_as_cmd_7;
+			brake_as_8 : port command_sys.brake_as_cmd_8 -> brake_as_cmd_8;
+			
+			as_pair_1_5 : port command_sys.as_cmd_pair_1_5 -> as_cmd_pair_1_5;
+			as_pair_2_6 : port command_sys.as_cmd_pair_2_6 -> as_cmd_pair_2_6;
+			as_pair_3_7 : port command_sys.as_cmd_pair_3_7 -> as_cmd_pair_3_7;
+			as_pair_4_8 : port command_sys.as_cmd_pair_4_8 -> as_cmd_pair_4_8;
+			
+			-- Connections to monitor system
+			monitor_power : port power -> monitor_sys.power;
+			monitor_L_pedal : port elec_pedal_pos_L -> monitor_sys.elec_pedal_pos_L;
+			monitor_R_pedal : port elec_pedal_pos_R -> monitor_sys.elec_pedal_pos_R;
+			monitor_ground_speed : port ground_speed -> monitor_sys.ground_speed;
+			monitor_wheel_rolling_1 : port wheel_rolling_1_in -> monitor_sys.wheel_rolling_1;
+			monitor_wheel_rolling_2 : port wheel_rolling_2_in -> monitor_sys.wheel_rolling_2;
+			monitor_wheel_rolling_3 : port wheel_rolling_3_in -> monitor_sys.wheel_rolling_3;
+			monitor_wheel_rolling_4 : port wheel_rolling_4_in -> monitor_sys.wheel_rolling_4;
+			monitor_wheel_rolling_5 : port wheel_rolling_5_in -> monitor_sys.wheel_rolling_5;
+			monitor_wheel_rolling_6 : port wheel_rolling_6_in -> monitor_sys.wheel_rolling_6;
+			monitor_wheel_rolling_7 : port wheel_rolling_7_in -> monitor_sys.wheel_rolling_7;
+			monitor_wheel_rolling_8 : port wheel_rolling_8_in -> monitor_sys.wheel_rolling_8;
+			
+			-- Connections to command system
+			command_power : port power -> monitor_sys.power;
+			command_L_pedal : port elec_pedal_pos_L -> command_sys.elec_pedal_pos_L;
+			command_R_pedal : port elec_pedal_pos_R -> command_sys.elec_pedal_pos_R;
+			command_ground_speed : port ground_speed -> command_sys.ground_speed;
+			command_wheel_rolling_1 : port wheel_rolling_1_in -> command_sys.wheel_rolling_1;
+			command_wheel_rolling_2 : port wheel_rolling_2_in -> command_sys.wheel_rolling_2;
+			command_wheel_rolling_3 : port wheel_rolling_3_in -> command_sys.wheel_rolling_3;
+			command_wheel_rolling_4 : port wheel_rolling_4_in -> command_sys.wheel_rolling_4;
+			command_wheel_rolling_5 : port wheel_rolling_5_in -> command_sys.wheel_rolling_5;
+			command_wheel_rolling_6 : port wheel_rolling_6_in -> command_sys.wheel_rolling_6;
+			command_wheel_rolling_7 : port wheel_rolling_7_in -> command_sys.wheel_rolling_7;
+			command_wheel_rolling_8 : port wheel_rolling_8_in -> command_sys.wheel_rolling_8;
+			
 	end Channel.inst;
 end Channel;

@@ -26,6 +26,48 @@ with Base_Types;
 			antiskid_command_facility_1 : system AntiSkidCommandFacility;
 			antiskid_command_facility_2 : system AntiSkidCommandFacility;
 			brake_command_facility : system BrakeCommandFacility;
+			
+		connections
+			as_cmd_output : port alternate_command_calculator.as_cmd_out -> as_cmd_out;
+			brake_as_out_1 : port normal_command_calculator_1.brake_as_cmd -> brake_as_cmd_1;
+			brake_as_out_2 : port normal_command_calculator_2.brake_as_cmd -> brake_as_cmd_2;
+		
+			-- Inputs to alternate command calculator
+			power_to_alt_calc : port power -> alternate_command_calculator.power;
+			as_cmd_fac_1 : port antiskid_command_facility_1.as_cmd -> alternate_command_calculator.as_cmd_1;
+			as_cmd_fac_2 : port antiskid_command_facility_2.as_cmd -> alternate_command_calculator.as_cmd_2;
+			
+			-- Inputs to normal command calc 1
+			power_to_norm_calc_1 : port power -> normal_command_calculator_1.power; 
+			brake_cmd_to_norm_calc_1 : port brake_command_facility.brake_cmd -> normal_command_calculator_1.brake_cmd;
+			as_cmd_fac_1_to_norm_calc_1 : port antiskid_command_facility_1.as_cmd -> normal_command_calculator_1.as_cmd;
+			
+			-- Inputs to normal command calc 2
+			power_to_norm_calc_2 : port power -> normal_command_calculator_2.power; 
+			brake_cmd_to_norm_calc_2 : port brake_command_facility.brake_cmd -> normal_command_calculator_2.brake_cmd;
+			as_cmd_fac_2_to_norm_calc_2 : port antiskid_command_facility_2.as_cmd -> normal_command_calculator_2.as_cmd;
+			
+			-- Inputs to as command facility 1
+			power_to_as_facility_1 : port power -> antiskid_command_facility_1.power;
+			ground_speed_to_as_facility_1 : port ground_speed -> antiskid_command_facility_1.ground_speed;
+			wheel_rolling_1_to_as_facility_1 : port wheel_rolling_1 -> antiskid_command_facility_1.wheel_rolling;
+			
+			-- Inputs to as command facility 2
+			power_to_as_facility_2 : port power -> antiskid_command_facility_1.power;
+			ground_speed_to_as_facility_2 : port ground_speed -> antiskid_command_facility_2.ground_speed;
+			wheel_rolling_1_to_as_facility_2 : port wheel_rolling_2 -> antiskid_command_facility_2.wheel_rolling;
+			
+			-- Inputs to brake command facility
+			pedal_pos_to_brake_facility : port elec_pedal_pos -> brake_command_facility.electrical_pedal_pos;
+			power_to_brake_facility : port power -> brake_command_facility.power;
+			
+			
+			-- Heading out of this component
+			as_cmd_out_from_alt_calc : port alternate_command_calculator.as_cmd_out -> as_cmd_out;
+			brake_as_cmd_1_from_norm_calc_1 : port normal_command_calculator_1.brake_as_cmd -> brake_as_cmd_1;
+			brake_as_cmd_2_from_norm_calc_2 : port normal_command_calculator_2.brake_as_cmd -> brake_as_cmd_2;
+			
+		
 	end WheelPairCommandSystem.inst;
 	
 	

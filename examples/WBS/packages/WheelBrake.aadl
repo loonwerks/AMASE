@@ -19,6 +19,23 @@ with Base_Types;
 			alt_hyd_fuse : system HydraulicFuse.inst;
 			alt_hyd_piston : system HydraulicPiston.inst;
 			brake_actuator : system BrakeActuator.inst;
+			
+		connections
+			-- To normal hyd fuse
+			norm_pressure_to_fuse : port normal_hyd_pressure_in -> normal_hyd_fuse.hyd_pressure_in;
+			-- To normal piston
+			norm_fuse_to_piston : port normal_hyd_fuse.hyd_pressure_out ->  normal_hyd_piston.hyd_pressure_in;
+			-- alt hyd fuse
+			pressure_to_alt_fuse : port alt_hyd_pressure_in -> alt_hyd_fuse.hyd_pressure_in;
+			-- To alt piston
+			alt_fuse_to_piston : port alt_hyd_fuse.hyd_pressure_out -> alt_hyd_piston.hyd_pressure_in;
+			-- brake actuator
+			normal_force_to_actuator : port normal_hyd_piston.force_out -> brake_actuator.normal_force_in;
+			alt_force_to_actuator : port alt_hyd_piston.force_out -> brake_actuator.alternate_force_in;
+			
+			-- Braking force
+			brake_force_out : port brake_actuator.braking_force -> brake_force;
+			
 	end WheelBrake.inst;
 	
 

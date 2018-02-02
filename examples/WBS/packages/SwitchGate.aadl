@@ -7,10 +7,14 @@ with Base_Types;
 			-- Inputs
 			cmd_in_1 : in data port Base_Types::Boolean;
 			cmd_in_2 : in data port Base_Types::Boolean;
+			validity1 : in data port Base_Types::Boolean;
+			validity2 : in data port Base_Types::Boolean;
 			
 			-- Outputs
-			validity1 : out data port Base_Types::Boolean;
-			validity2 : out data port Base_Types::Boolean;
+			cmd_out : out data port Base_Types::Boolean;
+			
+			-- Enumerated type {pos1, no_output, pos2}
+			state : out data port Base_Types::Integer;
 			
 	end SwitchGate;	
 	

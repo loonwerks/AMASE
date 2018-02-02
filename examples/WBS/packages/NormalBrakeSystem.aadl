@@ -39,5 +39,28 @@ with Base_Types;
 			mv6 : system MeterValve::MeterValve.inst;
 			mv7 : system MeterValve::MeterValve.inst;
 			mv8 : system MeterValve::MeterValve.inst;
+			
+		connections
+			-- hyd pressure to all meter valves
+			pressure_1 : port hyd_pressure_in -> mv1.hyd_pressure_in;
+			pressure_2 : port hyd_pressure_in -> mv2.hyd_pressure_in;
+			pressure_3 : port hyd_pressure_in -> mv3.hyd_pressure_in;
+			pressure_4 : port hyd_pressure_in -> mv4.hyd_pressure_in;
+			pressure_5 : port hyd_pressure_in -> mv5.hyd_pressure_in;
+			pressure_6 : port hyd_pressure_in -> mv6.hyd_pressure_in;
+			pressure_7 : port hyd_pressure_in -> mv7.hyd_pressure_in;
+			pressure_8 : port hyd_pressure_in -> mv8.hyd_pressure_in;
+			
+			-- antiskid commands to mv
+			as_to_mv_1 : port brake_as_cmd1 -> mv1.elec_cmd;
+			as_to_mv_2 : port brake_as_cmd2 -> mv2.elec_cmd;
+			as_to_mv_3 : port brake_as_cmd3 -> mv3.elec_cmd;
+			as_to_mv_4 : port brake_as_cmd4 -> mv4.elec_cmd;
+			as_to_mv_5 : port brake_as_cmd5 -> mv5.elec_cmd;
+			as_to_mv_6 : port brake_as_cmd6 -> mv6.elec_cmd;
+			as_to_mv_7 : port brake_as_cmd7 -> mv7.elec_cmd;
+			as_to_mv_8 : port brake_as_cmd8 -> mv8.elec_cmd;
+			
+			
 	end NormalBrakeSystem.inst;
 end NormalBrakeSystem;

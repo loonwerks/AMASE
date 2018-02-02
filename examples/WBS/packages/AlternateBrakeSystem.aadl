@@ -1,4 +1,4 @@
-package AlternateBrakeSystem
+package AlternateBrakeSystem 
 public
 with MeterValve;
 with Base_Types;
@@ -28,10 +28,44 @@ with Base_Types;
 			mv2 : system MeterValve::MeterValve.inst;
 			mv3 : system MeterValve::MeterValve.inst;
 			mv4 : system MeterValve::MeterValve.inst;
-			as_shutoff1 : system AntiskidShutoffValve;
-			as_shutoff2 : system AntiskidShutoffValve;
-			as_shutoff3 : system AntiskidShutoffValve;
-			as_shutoff4 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_1 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_2 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_3 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_4 : system AntiskidShutoffValve;
+			
+		connections
+			-- To as_shutoff valves
+			antiskid_cmd_to_1_5 : port as_cmd_pair_1_5 -> antiskid_shutoff_valve_1.antiskid_cmd;
+			antiskid_cmd_to_2_6 : port as_cmd_pair_2_6 -> antiskid_shutoff_valve_2.antiskid_cmd;
+			antiskid_cmd_to_3_7 : port as_cmd_pair_3_7 -> antiskid_shutoff_valve_3.antiskid_cmd;
+			antiskid_cmd_to_4_8 : port as_cmd_pair_4_8 -> antiskid_shutoff_valve_4.antiskid_cmd;
+			
+			-- Pressure to shutoff valves
+			antiskid_pressure_1 : port hyd_pressure_in -> antiskid_shutoff_valve_1.hyd_pressure_in;
+			antiskid_pressure_2 : port hyd_pressure_in -> antiskid_shutoff_valve_2.hyd_pressure_in;
+			antiskid_pressure_3 : port hyd_pressure_in -> antiskid_shutoff_valve_3.hyd_pressure_in;
+			antiskid_pressure_4 : port hyd_pressure_in -> antiskid_shutoff_valve_4.hyd_pressure_in;
+			
+			-- Pedal pos to meter valves
+			pedal_pos_to_mv1_L : port mech_pedal_pos_L -> mv1.mech_cmd;
+			pedal_pos_to_mv2_L : port mech_pedal_pos_L -> mv2.mech_cmd;
+			pedal_pos_to_mv3_R : port mech_pedal_pos_R -> mv3.mech_cmd;
+			pedal_pos_to_mv4_R : port mech_pedal_pos_R -> mv4.mech_cmd;
+			
+			-- pressure to mvs
+			pressure_to_mv_1 : port antiskid_shutoff_valve_1.hyd_pressure_out -> mv1.hyd_pressure_in;
+			pressure_to_mv_2 : port antiskid_shutoff_valve_2.hyd_pressure_out -> mv2.hyd_pressure_in;
+			pressure_to_mv_3 : port antiskid_shutoff_valve_3.hyd_pressure_out -> mv3.hyd_pressure_in;
+			pressure_to_mv_4 : port antiskid_shutoff_valve_4.hyd_pressure_out -> mv4.hyd_pressure_in;
+			
+			-- Outputs
+			hyd_press_out_1 : port mv1.hyd_pressure_out -> hyd_pressure_out1;
+			hyd_press_out_2 : port mv2.hyd_pressure_out -> hyd_pressure_out2;
+			hyd_press_out_3 : port mv3.hyd_pressure_out -> hyd_pressure_out3;
+			hyd_press_out_4 : port mv4.hyd_pressure_out -> hyd_pressure_out4;
+			
+			
+			
 	end AlternateBrakeSystem.inst;
 	
 	

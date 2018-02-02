@@ -44,6 +44,32 @@ with Base_Types;
 		subcomponents
 			bscu: system BSCU::BSCU.inst;
 			
+		connections
+			sys_valid : port bscu.system_validity -> system_validity;
+			
+			brake_as_1 : port bscu.brake_as_cmd_1 -> brake_as_cmd_1;
+			brake_as_2 : port bscu.brake_as_cmd_2 -> brake_as_cmd_2;
+			brake_as_3 : port bscu.brake_as_cmd_3 -> brake_as_cmd_3;
+			brake_as_4 : port bscu.brake_as_cmd_4 -> brake_as_cmd_4;
+			brake_as_5 : port bscu.brake_as_cmd_5 -> brake_as_cmd_5;
+			brake_as_6 : port bscu.brake_as_cmd_6 -> brake_as_cmd_6;
+			brake_as_7 : port bscu.brake_as_cmd_7 -> brake_as_cmd_7;
+			brake_as_8 : port bscu.brake_as_cmd_8 -> brake_as_cmd_8;
+			
+			as_pair_1_5 : port bscu.as_cmd_pair_1_5 -> as_cmd_pair_1_5;
+			as_pair_2_6 : port bscu.as_cmd_pair_2_6 -> as_cmd_pair_2_6;
+			as_pair_3_7 : port bscu.as_cmd_pair_3_7 -> as_cmd_pair_3_7;
+			as_pair_4_8 : port bscu.as_cmd_pair_4_8 -> as_cmd_pair_4_8;
+			
+			wheel_rolling_to_bscu_1 : port wheel_rolling_1 -> bscu.wheel_rolling_1;
+			wheel_rolling_to_bscu_2 : port wheel_rolling_2 -> bscu.wheel_rolling_2;
+			wheel_rolling_to_bscu_3 : port wheel_rolling_3 -> bscu.wheel_rolling_3;
+			wheel_rolling_to_bscu_4 : port wheel_rolling_4 -> bscu.wheel_rolling_4;
+			wheel_rolling_to_bscu_5 : port wheel_rolling_5 -> bscu.wheel_rolling_5;
+			wheel_rolling_to_bscu_6 : port wheel_rolling_6 -> bscu.wheel_rolling_6;
+			wheel_rolling_to_bscu_7 : port wheel_rolling_7 -> bscu.wheel_rolling_7;
+		    wheel_rolling_to_bscu_8 : port wheel_rolling_8 -> bscu.wheel_rolling_8;
+			
 	end ControlSystem.inst;
 
 end ControlSystem;

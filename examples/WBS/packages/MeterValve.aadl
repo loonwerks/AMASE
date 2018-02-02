@@ -5,13 +5,16 @@ with Base_Types;
 	system MeterValve
 		features
 			-- Inputs
-			hyd_pressure_in : in data port Base_Types::Integer;
 			elec_cmd : in data port Base_Types::Boolean;
 			mech_cmd : in data port Base_Types::Boolean;
+			hyd_pressure_in : in data port Base_Types::Integer;
 			
 			-- Outputs
 			hyd_pressure_out : out data port Base_Types::Integer;
 			
+			
+			-- FOR AGREE:
+			-- all mech commands coming in are false in wbs_arch4
 	end MeterValve;
 	
 	system implementation MeterValve.inst
