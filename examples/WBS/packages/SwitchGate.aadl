@@ -1,6 +1,7 @@
 package SwitchGate
 public
 with Base_Types;
+with datatypes;
 
 	system SwitchGate
 		features
@@ -14,11 +15,12 @@ with Base_Types;
 			cmd_out : out data port Base_Types::Boolean;
 			
 			-- Enumerated type {pos1, no_output, pos2}
-			state : out data port Base_Types::Integer;
+			state : out data port datatypes::SwitchState;
 			
 	end SwitchGate;	
 	
 	system implementation SwitchGate.inst
 		
 	end SwitchGate.inst;
+
 end SwitchGate;

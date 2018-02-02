@@ -1,6 +1,7 @@
 package Wheel
 public
 with Base_Types;
+with datatypes;
 
 	system Wheel
 		features
@@ -12,10 +13,11 @@ with Base_Types;
 			
 			-- Outputs 
 			-- Should be enumerated type: {stopped, rolling}
-			wheel_status : out data port Base_Types::Integer;
+			wheel_status : out data port datatypes::WheelStatus;
 	end Wheel;
 	
 	system implementation Wheel.inst
 		
 	end Wheel.inst;
+
 end Wheel;

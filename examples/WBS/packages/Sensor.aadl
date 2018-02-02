@@ -1,6 +1,7 @@
 package Sensor
 public
 with Base_Types;
+with datatypes;
 
 	system SensorPedalPosition
 		features
@@ -20,7 +21,7 @@ with Base_Types;
 		features
 			-- Input 
 			-- Enumerated type {rolling, stopped}
-			wheel_status : in data port Base_Types::Integer;
+			wheel_status : in data port datatypes::WheelStatus;
 			-- Output
 			wheel_rolling : out data port Base_Types::Boolean;
 	end Sensor;
@@ -28,4 +29,5 @@ with Base_Types;
 	system implementation Sensor.inst
 		
 	end Sensor.inst;
+
 end Sensor;

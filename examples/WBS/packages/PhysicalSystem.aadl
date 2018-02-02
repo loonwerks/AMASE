@@ -10,6 +10,8 @@ with wheel;
 with AdditionGate;
 with SelectorValve;
 with ShutoffValve;
+
+	with datatypes;
 	
 	system PhysicalSystem
 		features
@@ -50,14 +52,14 @@ with ShutoffValve;
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
 			
 			-- Enumerated types : {rolling, stopped}
-			wheel_status1 : out data port Base_Types::Integer;
-			wheel_status2 : out data port Base_Types::Integer;
-			wheel_status3 : out data port Base_Types::Integer;
-			wheel_status4 : out data port Base_Types::Integer;
-			wheel_status5 : out data port Base_Types::Integer;
-			wheel_status6 : out data port Base_Types::Integer;
-			wheel_status7 : out data port Base_Types::Integer;
-			wheel_status8 : out data port Base_Types::Integer;
+			wheel_status1 : out data port datatypes::WheelStatus;
+			wheel_status2 : out data port datatypes::WheelStatus;
+			wheel_status3 : out data port datatypes::WheelStatus;
+			wheel_status4 : out data port datatypes::WheelStatus;
+			wheel_status5 : out data port datatypes::WheelStatus;
+			wheel_status6 : out data port datatypes::WheelStatus;
+			wheel_status7 : out data port datatypes::WheelStatus;
+			wheel_status8 : out data port datatypes::WheelStatus;
 			
 			-- Output from wheel_brake components
 			wheel_braking_force1 : out data port Base_Types::Integer;
@@ -93,7 +95,7 @@ with ShutoffValve;
 			wheel_brake6 : system WheelBrake::WheelBrake.inst;
 			wheel_brake7 : system WheelBrake::WheelBrake.inst;
 			wheel_brake8 : system WheelBrake::WheelBrake.inst;
-			
+			 
 			wheel_1 : system Wheel::Wheel.inst;
 			wheel_2 : system Wheel::Wheel.inst;
 			wheel_3 : system Wheel::Wheel.inst;
@@ -219,6 +221,7 @@ with ShutoffValve;
 			
 			
 	end PhysicalSystem.inst;
+
 
 
 

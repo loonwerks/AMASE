@@ -3,8 +3,8 @@ public
 with ControlSystem;
 with PhysicalSystem;
 with Base_Types;
-
-	with sensor;
+with sensor;
+with datatypes;
 	
 	system WBS
 		features
@@ -37,14 +37,15 @@ with Base_Types;
 			wheel_braking_force7 : out data port Base_Types::Integer;
 			wheel_braking_force8 : out data port Base_Types::Integer;
 			
-			wheel_status1 : out data port Base_Types::Integer;
-			wheel_status2 : out data port Base_Types::Integer;
-			wheel_status3 : out data port Base_Types::Integer;
-			wheel_status4 : out data port Base_Types::Integer;
-			wheel_status5 : out data port Base_Types::Integer;
-			wheel_status6 : out data port Base_Types::Integer;
-			wheel_status7 : out data port Base_Types::Integer;
-			wheel_status8 : out data port Base_Types::Integer;
+			-- enumerated types : {stopped, rolling}
+			wheel_status1 : out data port datatypes::WheelStatus;
+			wheel_status2 : out data port datatypes::WheelStatus;
+			wheel_status3 : out data port datatypes::WheelStatus;
+			wheel_status4 : out data port datatypes::WheelStatus;
+			wheel_status5 : out data port datatypes::WheelStatus;
+			wheel_status6 : out data port datatypes::WheelStatus;
+			wheel_status7 : out data port datatypes::WheelStatus;
+			wheel_status8 : out data port datatypes::WheelStatus;
 			
 			-- Do I need these?
 			-- Where are they coming from? 
@@ -185,6 +186,7 @@ with Base_Types;
 			wheel_status_8 : port phys_sys.wheel_status8 -> wheel_status8;
 			
 	end WBS.inst;
+
 
 
 

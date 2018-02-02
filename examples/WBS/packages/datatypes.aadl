@@ -1,4 +1,17 @@
 package datatypes
 public
+with Data_Model;
+	 
+	data WheelStatus
+  		properties
+    		Data_Model::Data_Representation => Enum;
+    		Data_Model::Enumerators => ("stopped", "rolling");
+  	end WheelStatus;
+
+	data SwitchState
+  		properties
+    		Data_Model::Data_Representation => Enum;
+    		Data_Model::Enumerators => ("pos1", "no_output", "pos2");
+  	end SwitchState;
 	
 end datatypes;
