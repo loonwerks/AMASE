@@ -49,6 +49,19 @@ with datatypes;
 			
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
 			control_sys_validity : out data port Base_Types::Boolean;
+	
+	annex agree {**
+		
+		-- Hydraulic supply {0,...,10} allowable values
+		-- Ground speed {0,...,10} allowable values
+		assume "(WBS top level) Hydraulic pressure bounded between 0 and 10 inclusive." :
+			(hyd_supply1 > -1 and hyd_supply1 < 11) and (hyd_supply2 > -1 and hyd_supply2 < 11) and 
+			(ground_speed > -1 and ground_speed < 11);
+			
+		
+		
+	**};
+	
 	end WBS;
 	
 	system implementation WBS.inst

@@ -9,10 +9,19 @@ with datatypes;
 			mech_pedal_pos : in data port Base_Types::Boolean;
 			-- Output
 			elec_pedal_pos : out data port Base_Types::Boolean;
+			
+			
+			annex agree {**
+				
+				-- pedal_position_translation_norm_guarantee := (TRUE ->  G (mechanical_pedal_pos <-> electrical_pedal_pos));
+				guarantee "(SensorPedalPosition) mechanical pedal position is equivalent to electrical pedal position." :
+					mech_pedal_pos <=> elec_pedal_pos;
+				
+			**};
 	end SensorPedalPosition;
 	
 	system implementation SensorPedalPosition.inst
-		
+	
 	end SensorPedalPosition.inst;
 	
 	
@@ -24,10 +33,27 @@ with datatypes;
 			wheel_status : in data port datatypes::WheelStatus;
 			-- Output
 			wheel_rolling : out data port Base_Types::Boolean;
+			
+			annex agree {**
+				
+				-- sensor_translation_norm_guarantee := (TRUE ->  G (wheel_rolling <-> wheel_status = rolling));
+				guarantee "(Sensor) wheel_rolling is true if and only if wheel_status = 'rolling' " :
+						true -> wheel_rolling <=> (wheel_status = enum(datatypes::WheelStatus, rolling));
+				
+			**};
 	end Sensor;
 	
 	system implementation Sensor.inst
-		
+			annex agree {**
+				
+				eq roll : bool = true ->
+					if wheel_status = enum(datatypes::WheelStatus, rolling)
+						then true
+					else false;
+					
+				assert(roll = wheel_rolling);
+				
+			**};
 	end Sensor.inst;
 
 end Sensor;

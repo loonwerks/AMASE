@@ -14,6 +14,17 @@ with datatypes;
 			-- Outputs 
 			-- Should be enumerated type: {stopped, rolling}
 			wheel_status : out data port datatypes::WheelStatus;
+			
+			annex agree {**
+				
+				-- braking_behavior_norm_guarantee := 
+				--   (TRUE -> G
+	   			--		  (((braking_force > 8 & ground_speed > 1) -> next(status) = stopped) 
+				--		&  ((braking_force <= 8 & ground_speed > 1) -> next(status) = rolling))) 
+				--		&  (ground_speed < 2 -> next(status) = stopped)));
+				
+			**};
+			
 	end Wheel;
 	
 	system implementation Wheel.inst

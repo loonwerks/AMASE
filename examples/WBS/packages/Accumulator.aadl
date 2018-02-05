@@ -8,7 +8,7 @@ with Base_Types;
 			circuit_pressure_value : in data port Base_Types::Integer;
 			
 			-- Outputs
-			pressure_display : in data port Base_Types::Integer;
+			pressure_display : out data port Base_Types::Integer;
 			reserve_out : out data port Base_Types::Integer;
 	end Accumulator;
 	
