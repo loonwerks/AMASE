@@ -38,6 +38,28 @@ with Base_Types;
 			as_cmd_pair_3_7 : out data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 			system_validity : in out data port Base_Types::Boolean;
+				
+			annex agree {**
+				
+				-- Properties
+				
+				
+				
+				-- Contracts
+				
+				--	expected_behavior_as_cmd_pair_4_8_norm_guarantee := 
+				--	(TRUE -> ( G 
+				--		(((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)) -> as_cmd_pair_4_8) 
+				--	&  G (as_cmd_pair_4_8 -> ((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)))));
+				
+				
+				
+				
+				
+				
+			**};
+				
+				
 	end BSCU;
 	
 	system implementation BSCU.inst
