@@ -10,6 +10,19 @@ with Base_Types;
 			-- Output 
 			brake_force : out data port Base_Types::Integer;
 			
+			annex agree {**
+				
+				--  supply_braking_force_norm_guarantee := (TRUE ->  
+				--       G (braking_force > 0 <-> (normal_hyd_pressure_in > 0 | alternate_hyd_pressure_in > 0))
+				
+				guarantee "(WheelBrake) braking force is positive if and only if
+							either normal or alternate pressure is positive." :
+							true -> brake_force > 0 <=> (normal_hyd_pressure_in > 0 or alt_hyd_pressure_in > 0);			
+				
+				
+				
+			**};
+			
 	end WheelBrake;
 	
 	system implementation WheelBrake.inst
@@ -45,6 +58,13 @@ with Base_Types;
 			hyd_pressure_in : in data port Base_Types::Integer;
 			--Output 
 			hyd_pressure_out : out data port Base_Types::Integer;
+			
+			annex agree {**
+				--  fuse_behavior_norm_guarantee := (TRUE ->  G hyd_pressure_out = hyd_pressure_in);
+				guarantee "(HydraulicFuse) hydraulic pressure in equals hydraulic pressure out." :
+							true -> (hyd_pressure_in = hyd_pressure_out);
+			**};
+			
 	end HydraulicFuse;
 	
 	system implementation HydraulicFuse.inst
@@ -58,7 +78,14 @@ with Base_Types;
 			hyd_pressure_in : in data port Base_Types::Integer;
 			--Output 
 			force_out : out data port Base_Types::Integer;
-		
+			
+			annex agree {**
+					
+				--  create_force_norm_guarantee := (TRUE ->  G hyd_pressure_in = force_out);
+
+				guarantee "(HydraulicPiston) hydraulic pressure in equals force out." :
+							true -> (hyd_pressure_in = force_out);
+			**};		
 	end HydraulicPiston;
 	
 	system implementation HydraulicPiston.inst
@@ -73,6 +100,16 @@ with Base_Types;
 			
 			-- Output
 			braking_force : out data port Base_Types::Integer;
+			
+			annex agree {**
+					
+				-- transform_force_norm_guarantee := (TRUE ->  G ((normal_force_in > 0 | alternate_force_in > 0) <-> braking_force > 0));
+
+				guarantee "(BrakeActuator) Braking force is positive if and only if
+							normal force or alternate force is positive." :
+							true -> (braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));
+			**};
+			
 	end BrakeActuator;
 	
 	system implementation BrakeActuator.inst
