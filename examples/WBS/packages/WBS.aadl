@@ -61,7 +61,7 @@ with datatypes;
 		-- Ground speed {0,...,10} allowable values
 		assume "(WBS top level) Hydraulic pressure bounded between 0 and 10 inclusive." :
 			(hyd_supply1_range) and (hyd_supply2_range) and (ground_speed_range);
-			
+
 		
 		
 	**};
