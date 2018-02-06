@@ -52,11 +52,15 @@ with datatypes;
 	
 	annex agree {**
 		
+		-- Some properties that are used often in these contracts
+		property hyd_supply1_range = hyd_supply1 > -1 and hyd_supply1 < 11;
+		property hyd_supply2_range = hyd_supply2 > -1 and hyd_supply2 < 11;
+		property ground_speed_range = ground_speed > -1 and ground_speed < 11;
+		
 		-- Hydraulic supply {0,...,10} allowable values
 		-- Ground speed {0,...,10} allowable values
 		assume "(WBS top level) Hydraulic pressure bounded between 0 and 10 inclusive." :
-			(hyd_supply1 > -1 and hyd_supply1 < 11) and (hyd_supply2 > -1 and hyd_supply2 < 11) and 
-			(ground_speed > -1 and ground_speed < 11);
+			(hyd_supply1_range) and (hyd_supply2_range) and (ground_speed_range);
 			
 		
 		

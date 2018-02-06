@@ -38,6 +38,69 @@ with Base_Types;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 			
 			system_validity : out data port Base_Types::Boolean;
+				
+			annex agree {**
+				
+				-- Contracts for control system
+				
+				-- Commonly used properties
+				property SPEED = ground_speed > 0;
+				property VALID = system_validity;
+				
+				-- expected_behavior_as_cmd_pair_4_8_norm_guarantee := 
+ 				--	TRUE ->  G 
+				--		(((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)) -> as_cmd_pair_4_8) 
+				--	&   (as_cmd_pair_4_8 -> ((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)));
+				
+				-- Translates to:
+				guarantee "(ctrl system) Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
+						  if and only if antiskid is commanded to the pair." :
+						  true -> ((VALID and SPEED) and (not wheel_rolling_1 or not wheel_rolling_5)) <=> as_cmd_pair_1_5;
+				
+				
+				guarantee "(ctrl system) Expected antiskid behavior pair 2,6: Valid system and ground speed and either wheel is not rolling
+						  if and only if antiskid is commanded to the pair." :
+						  true -> ((VALID and SPEED) and (not wheel_rolling_2 or not wheel_rolling_6)) <=> as_cmd_pair_2_6;
+				
+				
+				guarantee "(ctrl system) Expected antiskid behavior pair 3,7: Valid system and ground speed and either wheel is not rolling
+						  if and only if antiskid is commanded to the pair." :
+						  true -> ((VALID and SPEED) and (not wheel_rolling_3 or not wheel_rolling_7)) <=> as_cmd_pair_3_7;
+						  
+						  
+				guarantee "(ctrl system) Expected antiskid behavior pair 4,8: Valid system and ground speed and either wheel is not rolling
+						  if and only if antiskid is commanded to the pair." :
+						  true -> ((VALID and SPEED) and (not wheel_rolling_4 or not wheel_rolling_8)) <=> as_cmd_pair_4_8;
+				
+				
+				--	as_cmd_excludes_brake_as_cmd_norm_guarantee := 
+				--	(TRUE -> ((( G 
+				--		((as_cmd_pair_1_5 & system_validity) -> (!brake_as_cmd_1 | !brake_as_cmd_5)) 
+				--	&  G ((as_cmd_pair_2_6 & system_validity) -> (!brake_as_cmd_2 | !brake_as_cmd_6))) 
+				--	&  G ((as_cmd_pair_3_7 & system_validity) -> (!brake_as_cmd_3 | !brake_as_cmd_7))) 
+				--	&  G ((as_cmd_pair_4_8 & system_validity) -> (!brake_as_cmd_4 | !brake_as_cmd_8))));
+				
+				-- Translates to
+
+
+				property VALIDPAIR_15 = as_cmd_pair_1_5 and system_validity;
+				property VALIDPAIR_26 = as_cmd_pair_2_6 and system_validity;
+				property VALIDPAIR_37 = as_cmd_pair_3_7 and system_validity;
+				property VALIDPAIR_48 = as_cmd_pair_4_8 and system_validity;
+				property BRAKE_AS_NOTCOMMANDED_15 = not brake_as_cmd_1 or not brake_as_cmd_5;
+				property BRAKE_AS_NOTCOMMANDED_26 = not brake_as_cmd_2 or not brake_as_cmd_6;
+				property BRAKE_AS_NOTCOMMANDED_37 = not brake_as_cmd_3 or not brake_as_cmd_7;
+				property BRAKE_AS_NOTCOMMANDED_48 = not brake_as_cmd_4 or not brake_as_cmd_8;
+				
+				guarantee "(ctrl system) Valid antiskid command to the pair implies that one of the brake antiskid commands are not true." :
+					true -> ((VALIDPAIR_15 => BRAKE_AS_NOTCOMMANDED_15) 
+							and (VALIDPAIR_26 => BRAKE_AS_NOTCOMMANDED_26)
+							and (VALIDPAIR_37 => BRAKE_AS_NOTCOMMANDED_37)
+							and (VALIDPAIR_48 => BRAKE_AS_NOTCOMMANDED_48));
+				
+						
+			**};
+				
 	end ControlSystem;
 	
 	system implementation ControlSystem.inst
