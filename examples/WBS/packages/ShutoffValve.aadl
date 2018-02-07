@@ -9,6 +9,25 @@ with Base_Types;
 				
 			-- Output
 			hyd_pressure_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+			
+			-- apply_command_norm_guarantee := (TRUE -> ( G 
+			-- ((hyd_pressure_in > 0 & system_validity_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in)) 
+			--   &  G ((hyd_pressure_in = 0 | !system_validity_cmd) -> hyd_pressure_out = 0)
+			
+			property POSITIVEPRESSUREOUT = (hyd_pressure_in > 0 and system_validity) 
+				=> (hyd_pressure_out > 0 and hyd_pressure_out = hyd_pressure_in) ;
+				
+			property ZEROPRESSUREOUT = (hyd_pressure_in = 0 or not system_validity) => hyd_pressure_out = 0;
+			
+			
+			guarantee "(ShutoffValve) Positive pressure out occurs whenever pressure in is positive and system is valid. 
+						Zero pressure out occurs whenever hyd pressure in is zero or system is not valid." :
+						true -> POSITIVEPRESSUREOUT and ZEROPRESSUREOUT;
+		
+		**};
+	
 	end ShutoffValve;
 	
 	system implementation ShutoffValve.inst

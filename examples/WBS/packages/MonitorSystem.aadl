@@ -35,7 +35,51 @@ with Base_Types;
 			
 			-- Output
 			bscu_validity : out data port Base_Types::Boolean;
+		
+		annex agree {**
 			
+			-- bscu_validity_norm_guarantee := (TRUE ->  
+			--	G (bscu_validity <-> 
+			--	
+			--	((((((((((((power  
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_1) | ground_speed = 0)) <-> brake_as_cmd_1))
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_2) | ground_speed = 0)) <-> brake_as_cmd_2)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_3) | ground_speed = 0)) <-> brake_as_cmd_3)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_4) | ground_speed = 0)) <-> brake_as_cmd_4)) 
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_5) | ground_speed = 0)) <-> brake_as_cmd_5)) 
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_6) | ground_speed = 0)) <-> brake_as_cmd_6)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_7) | ground_speed = 0)) <-> brake_as_cmd_7)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_8) | ground_speed = 0)) <-> brake_as_cmd_8)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_1 | !wheel_rolling_5)) <-> as_cmd_pair_1_5)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_2 | !wheel_rolling_6)) <-> as_cmd_pair_2_6)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_3 | !wheel_rolling_7)) <-> as_cmd_pair_3_7)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_4 | !wheel_rolling_8)) <-> as_cmd_pair_4_8)))));
+			
+			-- BSCU Validity
+			property SPEED = ground_speed > 0;
+			property PAIR_ROLL_15 = wheel_rolling_1 and wheel_rolling_5;
+			property PAIR_ROLL_26 = wheel_rolling_2 and wheel_rolling_6;
+			property PAIR_ROLL_37 = wheel_rolling_3 and wheel_rolling_7;
+			property PAIR_ROLL_48 = wheel_rolling_4 and wheel_rolling_8;
+			
+			guarantee "(MonitorSystem) BSCU valid contract." :
+					true -> (bscu_validity <=>
+						  power 
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) <=> brake_as_cmd_3)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) <=> brake_as_cmd_4)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) <=> brake_as_cmd_5)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8)
+					  and ((SPEED and (not PAIR_ROLL_15)) <=> as_cmd_pair_1_5)
+					  and ((SPEED and (not PAIR_ROLL_26)) <=> as_cmd_pair_2_6)
+					  and ((SPEED and (not PAIR_ROLL_37)) <=> as_cmd_pair_3_7)
+					  and ((SPEED and (not PAIR_ROLL_48)) <=> as_cmd_pair_4_8));
+					
+			
+		**}	;
 	end MonitorSystem;
 	
 	system implementation MonitorSystem.inst

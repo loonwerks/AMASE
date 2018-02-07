@@ -22,7 +22,16 @@ with datatypes;
 	   			--		  (((braking_force > 8 & ground_speed > 1) -> next(status) = stopped) 
 				--		&  ((braking_force <= 8 & ground_speed > 1) -> next(status) = rolling))) 
 				--		&  (ground_speed < 2 -> next(status) = stopped)));
+				guarantee "(Wheel) Stopped status: if in previous state braking force > 8 and ground speed < 1, 
+							or the ground speed is less than 2, then this state, status is stopped." :
+							true -> 
+								((pre(brake_force) > 8 and pre(ground_speed) < 1) or (pre(ground_speed) < 2)) 
+										=> wheel_status = enum(datatypes::WheelStatus, Stopped);
 				
+				guarantee "(Wheel) Rolling status: If in previous state the brake force is < 9 and ground speed > 1, 
+							then this state, status is rolling.":
+							true ->
+								(pre(brake_force) < 9 and pre(ground_speed) > 1) => wheel_status = enum(datatypes::WheelStatus, Rolling);
 			**};
 			
 	end Wheel;

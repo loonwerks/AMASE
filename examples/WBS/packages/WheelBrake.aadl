@@ -104,7 +104,7 @@ with Base_Types;
 			annex agree {**
 					
 				-- transform_force_norm_guarantee := (TRUE ->  G ((normal_force_in > 0 | alternate_force_in > 0) <-> braking_force > 0));
-
+ 
 				guarantee "(BrakeActuator) Braking force is positive if and only if
 							normal force or alternate force is positive." :
 							true -> (braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));

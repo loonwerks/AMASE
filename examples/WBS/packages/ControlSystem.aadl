@@ -244,6 +244,9 @@ with Base_Types;
 			wheel_rolling_to_bscu_6 : port wheel_rolling_6 -> bscu.wheel_rolling_6;
 			wheel_rolling_to_bscu_7 : port wheel_rolling_7 -> bscu.wheel_rolling_7;
 		    wheel_rolling_to_bscu_8 : port wheel_rolling_8 -> bscu.wheel_rolling_8;
+		    
+		    elec_pedal_pos_L_to_bscu : port elec_pedal_pos_L -> bscu.elec_pedal_pos_L;
+		    elec_pedal_pos_R_to_bscu : port elec_pedal_pos_R -> bscu.elec_pedal_pos_R;
 			
 	end ControlSystem.inst;
 

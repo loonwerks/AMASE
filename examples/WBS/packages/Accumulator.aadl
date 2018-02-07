@@ -5,11 +5,22 @@ with Base_Types;
 	system Accumulator
 		features
 			-- Inputs
+			
+			-- Circuit pressure value is pressure coming from the blue hyd pump
 			circuit_pressure_value : in data port Base_Types::Integer;
 			
 			-- Outputs
 			pressure_display : out data port Base_Types::Integer;
 			reserve_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+			
+			--  supply_reserve_norm_guarantee := (TRUE ->  G (circuit_pressure_value = 0 <-> reserve_out > 0));
+			guarantee "(Accumulator) The reserve out pressure is positive if and only if the circuit pressure value is zero.":
+						true -> reserve_out > 0 <=> circuit_pressure_value = 0;
+			
+		**};
+		
 	end Accumulator;
 	
 	system implementation Accumulator.inst
