@@ -176,18 +176,58 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cFaultDefinitionsAssignment_2_6 = (Assignment)cGroup_2.eContents().get(6);
 		private final RuleCall cFaultDefinitionsHWFaultSubcomponentParserRuleCall_2_6_0 = (RuleCall)cFaultDefinitionsAssignment_2_6.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_2_7 = (Keyword)cGroup_2.eContents().get(7);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final Action cPropagateStatementAction_3_0 = (Action)cGroup_3.eContents().get(0);
+		private final Keyword cPropagate_fromKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
+		private final Keyword cColonKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Keyword cLeftCurlyBracketKeyword_3_3 = (Keyword)cGroup_3.eContents().get(3);
+		private final Assignment cSrcFaultListAssignment_3_4 = (Assignment)cGroup_3.eContents().get(4);
+		private final RuleCall cSrcFaultListIDTerminalRuleCall_3_4_0 = (RuleCall)cSrcFaultListAssignment_3_4.eContents().get(0);
+		private final Keyword cCommercialAtKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
+		private final Assignment cSrcComp_pathAssignment_3_6 = (Assignment)cGroup_3.eContents().get(6);
+		private final RuleCall cSrcComp_pathNestedDotIDParserRuleCall_3_6_0 = (RuleCall)cSrcComp_pathAssignment_3_6.eContents().get(0);
+		private final Group cGroup_3_7 = (Group)cGroup_3.eContents().get(7);
+		private final Keyword cCommaKeyword_3_7_0 = (Keyword)cGroup_3_7.eContents().get(0);
+		private final Assignment cSrcFaultListAssignment_3_7_1 = (Assignment)cGroup_3_7.eContents().get(1);
+		private final RuleCall cSrcFaultListIDTerminalRuleCall_3_7_1_0 = (RuleCall)cSrcFaultListAssignment_3_7_1.eContents().get(0);
+		private final Keyword cCommercialAtKeyword_3_7_2 = (Keyword)cGroup_3_7.eContents().get(2);
+		private final Assignment cSrcComp_pathAssignment_3_7_3 = (Assignment)cGroup_3_7.eContents().get(3);
+		private final RuleCall cSrcComp_pathNestedDotIDParserRuleCall_3_7_3_0 = (RuleCall)cSrcComp_pathAssignment_3_7_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_3_8 = (Keyword)cGroup_3.eContents().get(8);
+		private final Keyword cToKeyword_3_9 = (Keyword)cGroup_3.eContents().get(9);
+		private final Keyword cLeftCurlyBracketKeyword_3_10 = (Keyword)cGroup_3.eContents().get(10);
+		private final Assignment cDestFaultListAssignment_3_11 = (Assignment)cGroup_3.eContents().get(11);
+		private final RuleCall cDestFaultListIDTerminalRuleCall_3_11_0 = (RuleCall)cDestFaultListAssignment_3_11.eContents().get(0);
+		private final Keyword cCommercialAtKeyword_3_12 = (Keyword)cGroup_3.eContents().get(12);
+		private final Assignment cDestComp_pathAssignment_3_13 = (Assignment)cGroup_3.eContents().get(13);
+		private final RuleCall cDestComp_pathNestedDotIDParserRuleCall_3_13_0 = (RuleCall)cDestComp_pathAssignment_3_13.eContents().get(0);
+		private final Group cGroup_3_14 = (Group)cGroup_3.eContents().get(14);
+		private final Keyword cCommaKeyword_3_14_0 = (Keyword)cGroup_3_14.eContents().get(0);
+		private final Assignment cDestFaultListAssignment_3_14_1 = (Assignment)cGroup_3_14.eContents().get(1);
+		private final RuleCall cDestFaultListIDTerminalRuleCall_3_14_1_0 = (RuleCall)cDestFaultListAssignment_3_14_1.eContents().get(0);
+		private final Keyword cCommercialAtKeyword_3_14_2 = (Keyword)cGroup_3_14.eContents().get(2);
+		private final Assignment cDestComp_pathAssignment_3_14_3 = (Assignment)cGroup_3_14.eContents().get(3);
+		private final RuleCall cDestComp_pathNestedDotIDParserRuleCall_3_14_3_0 = (RuleCall)cDestComp_pathAssignment_3_14_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_3_15 = (Keyword)cGroup_3.eContents().get(15);
+		private final Keyword cSemicolonKeyword_3_16 = (Keyword)cGroup_3.eContents().get(16);
 		
 		//@ Override SpecStatement:
 		//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID
 		//	'{' faultDefinitions+=FaultSubcomponent* '}'
 		//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
 		//	| {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
-		//	'{' faultDefinitions+=HWFaultSubcomponent* '}';
+		//	'{' faultDefinitions+=HWFaultSubcomponent* '}'
+		//	| {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (','
+		//	srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}'
+		//	'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}'
+		//	';';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
 		//{AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior | {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
-		//'{' faultDefinitions+=HWFaultSubcomponent* '}'
+		//'{' faultDefinitions+=HWFaultSubcomponent* '}' | {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@'
+		//srcComp_path+=NestedDotID (',' srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 'to' '{' destFaultList+=ID '@'
+		//destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}'
@@ -285,6 +325,110 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_2_7() { return cRightCurlyBracketKeyword_2_7; }
+
+		//{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (',' srcFaultList+=ID '@'
+		//srcComp_path+=NestedDotID)* '}' 'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@'
+		//destComp_path+=NestedDotID)* '}' ';'
+		public Group getGroup_3() { return cGroup_3; }
+
+		//{PropagateStatement}
+		public Action getPropagateStatementAction_3_0() { return cPropagateStatementAction_3_0; }
+
+		//'propagate_from'
+		public Keyword getPropagate_fromKeyword_3_1() { return cPropagate_fromKeyword_3_1; }
+
+		//':'
+		public Keyword getColonKeyword_3_2() { return cColonKeyword_3_2; }
+
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_3_3() { return cLeftCurlyBracketKeyword_3_3; }
+
+		//srcFaultList+=ID
+		public Assignment getSrcFaultListAssignment_3_4() { return cSrcFaultListAssignment_3_4; }
+
+		//ID
+		public RuleCall getSrcFaultListIDTerminalRuleCall_3_4_0() { return cSrcFaultListIDTerminalRuleCall_3_4_0; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_3_5() { return cCommercialAtKeyword_3_5; }
+
+		//srcComp_path+=NestedDotID
+		public Assignment getSrcComp_pathAssignment_3_6() { return cSrcComp_pathAssignment_3_6; }
+
+		//NestedDotID
+		public RuleCall getSrcComp_pathNestedDotIDParserRuleCall_3_6_0() { return cSrcComp_pathNestedDotIDParserRuleCall_3_6_0; }
+
+		//(',' srcFaultList+=ID '@' srcComp_path+=NestedDotID)*
+		public Group getGroup_3_7() { return cGroup_3_7; }
+
+		//','
+		public Keyword getCommaKeyword_3_7_0() { return cCommaKeyword_3_7_0; }
+
+		//srcFaultList+=ID
+		public Assignment getSrcFaultListAssignment_3_7_1() { return cSrcFaultListAssignment_3_7_1; }
+
+		//ID
+		public RuleCall getSrcFaultListIDTerminalRuleCall_3_7_1_0() { return cSrcFaultListIDTerminalRuleCall_3_7_1_0; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_3_7_2() { return cCommercialAtKeyword_3_7_2; }
+
+		//srcComp_path+=NestedDotID
+		public Assignment getSrcComp_pathAssignment_3_7_3() { return cSrcComp_pathAssignment_3_7_3; }
+
+		//NestedDotID
+		public RuleCall getSrcComp_pathNestedDotIDParserRuleCall_3_7_3_0() { return cSrcComp_pathNestedDotIDParserRuleCall_3_7_3_0; }
+
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_3_8() { return cRightCurlyBracketKeyword_3_8; }
+
+		//'to'
+		public Keyword getToKeyword_3_9() { return cToKeyword_3_9; }
+
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_3_10() { return cLeftCurlyBracketKeyword_3_10; }
+
+		//destFaultList+=ID
+		public Assignment getDestFaultListAssignment_3_11() { return cDestFaultListAssignment_3_11; }
+
+		//ID
+		public RuleCall getDestFaultListIDTerminalRuleCall_3_11_0() { return cDestFaultListIDTerminalRuleCall_3_11_0; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_3_12() { return cCommercialAtKeyword_3_12; }
+
+		//destComp_path+=NestedDotID
+		public Assignment getDestComp_pathAssignment_3_13() { return cDestComp_pathAssignment_3_13; }
+
+		//NestedDotID
+		public RuleCall getDestComp_pathNestedDotIDParserRuleCall_3_13_0() { return cDestComp_pathNestedDotIDParserRuleCall_3_13_0; }
+
+		//(',' destFaultList+=ID '@' destComp_path+=NestedDotID)*
+		public Group getGroup_3_14() { return cGroup_3_14; }
+
+		//','
+		public Keyword getCommaKeyword_3_14_0() { return cCommaKeyword_3_14_0; }
+
+		//destFaultList+=ID
+		public Assignment getDestFaultListAssignment_3_14_1() { return cDestFaultListAssignment_3_14_1; }
+
+		//ID
+		public RuleCall getDestFaultListIDTerminalRuleCall_3_14_1_0() { return cDestFaultListIDTerminalRuleCall_3_14_1_0; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_3_14_2() { return cCommercialAtKeyword_3_14_2; }
+
+		//destComp_path+=NestedDotID
+		public Assignment getDestComp_pathAssignment_3_14_3() { return cDestComp_pathAssignment_3_14_3; }
+
+		//NestedDotID
+		public RuleCall getDestComp_pathNestedDotIDParserRuleCall_3_14_3_0() { return cDestComp_pathNestedDotIDParserRuleCall_3_14_3_0; }
+
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_3_15() { return cRightCurlyBracketKeyword_3_15; }
+
+		//';'
+		public Keyword getSemicolonKeyword_3_16() { return cSemicolonKeyword_3_16; }
 	}
 
 	public class AnalysisBehaviorElements extends AbstractParserRuleElementFinder {
@@ -644,42 +788,24 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cProbabilityREAL_LITTerminalRuleCall_1_3_0 = (RuleCall)cProbabilityAssignment_1_3.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Action cPropagateToStatementAction_2_0 = (Action)cGroup_2.eContents().get(0);
-		private final Keyword cPropagate_toKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Action cPropagationTypeStatementAction_2_0 = (Action)cGroup_2.eContents().get(0);
+		private final Keyword cPropagate_typeKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
 		private final Keyword cColonKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
-		private final Keyword cLeftCurlyBracketKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
-		private final Assignment cFaultListAssignment_2_4 = (Assignment)cGroup_2.eContents().get(4);
-		private final RuleCall cFaultListIDTerminalRuleCall_2_4_0 = (RuleCall)cFaultListAssignment_2_4.eContents().get(0);
-		private final Keyword cFullStopKeyword_2_5 = (Keyword)cGroup_2.eContents().get(5);
-		private final RuleCall cIDTerminalRuleCall_2_6 = (RuleCall)cGroup_2.eContents().get(6);
-		private final Group cGroup_2_7 = (Group)cGroup_2.eContents().get(7);
-		private final Keyword cCommaKeyword_2_7_0 = (Keyword)cGroup_2_7.eContents().get(0);
-		private final Assignment cFaultListAssignment_2_7_1 = (Assignment)cGroup_2_7.eContents().get(1);
-		private final RuleCall cFaultListIDTerminalRuleCall_2_7_1_0 = (RuleCall)cFaultListAssignment_2_7_1.eContents().get(0);
-		private final Keyword cFullStopKeyword_2_7_2 = (Keyword)cGroup_2_7.eContents().get(2);
-		private final RuleCall cIDTerminalRuleCall_2_7_3 = (RuleCall)cGroup_2_7.eContents().get(3);
-		private final Keyword cRightCurlyBracketKeyword_2_8 = (Keyword)cGroup_2.eContents().get(8);
-		private final Keyword cSemicolonKeyword_2_9 = (Keyword)cGroup_2.eContents().get(9);
-		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Action cPropagationTypeStatementAction_3_0 = (Action)cGroup_3.eContents().get(0);
-		private final Keyword cPropagate_typeKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
-		private final Keyword cColonKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
-		private final Assignment cPtyAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
-		private final RuleCall cPtyPropagationTypeConstraintParserRuleCall_3_3_0 = (RuleCall)cPtyAssignment_3_3.eContents().get(0);
-		private final Keyword cSemicolonKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
-		private final RuleCall cSafetyEqStatementParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
+		private final Assignment cPtyAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
+		private final RuleCall cPtyPropagationTypeConstraintParserRuleCall_2_3_0 = (RuleCall)cPtyAssignment_2_3.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2_4 = (Keyword)cGroup_2.eContents().get(4);
+		private final RuleCall cSafetyEqStatementParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
 		//HWFaultSubcomponent:
 		//	{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
 		//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-		//	| {PropagateToStatement} 'propagate_to' ':' '{' faultList+=ID '.' ID (',' faultList+=ID '.' ID)* '}' ';'
 		//	| {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
 		//{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' | {ProbabilityStatement} 'probability' ':'
-		//probability=REAL_LIT ';' | {PropagateToStatement} 'propagate_to' ':' '{' faultList+=ID '.' ID (',' faultList+=ID '.'
-		//ID)* '}' ';' | {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';' | SafetyEqStatement
+		//probability=REAL_LIT ';' | {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';' |
+		//SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
@@ -730,80 +856,29 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_1_4() { return cSemicolonKeyword_1_4; }
 
-		//{PropagateToStatement} 'propagate_to' ':' '{' faultList+=ID '.' ID (',' faultList+=ID '.' ID)* '}' ';'
+		//{PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
 		public Group getGroup_2() { return cGroup_2; }
 
-		//{PropagateToStatement}
-		public Action getPropagateToStatementAction_2_0() { return cPropagateToStatementAction_2_0; }
+		//{PropagationTypeStatement}
+		public Action getPropagationTypeStatementAction_2_0() { return cPropagationTypeStatementAction_2_0; }
 
-		//'propagate_to'
-		public Keyword getPropagate_toKeyword_2_1() { return cPropagate_toKeyword_2_1; }
+		//'propagate_type'
+		public Keyword getPropagate_typeKeyword_2_1() { return cPropagate_typeKeyword_2_1; }
 
 		//':'
 		public Keyword getColonKeyword_2_2() { return cColonKeyword_2_2; }
 
-		//'{'
-		public Keyword getLeftCurlyBracketKeyword_2_3() { return cLeftCurlyBracketKeyword_2_3; }
-
-		//faultList+=ID
-		public Assignment getFaultListAssignment_2_4() { return cFaultListAssignment_2_4; }
-
-		//ID
-		public RuleCall getFaultListIDTerminalRuleCall_2_4_0() { return cFaultListIDTerminalRuleCall_2_4_0; }
-
-		//'.'
-		public Keyword getFullStopKeyword_2_5() { return cFullStopKeyword_2_5; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_2_6() { return cIDTerminalRuleCall_2_6; }
-
-		//(',' faultList+=ID '.' ID)*
-		public Group getGroup_2_7() { return cGroup_2_7; }
-
-		//','
-		public Keyword getCommaKeyword_2_7_0() { return cCommaKeyword_2_7_0; }
-
-		//faultList+=ID
-		public Assignment getFaultListAssignment_2_7_1() { return cFaultListAssignment_2_7_1; }
-
-		//ID
-		public RuleCall getFaultListIDTerminalRuleCall_2_7_1_0() { return cFaultListIDTerminalRuleCall_2_7_1_0; }
-
-		//'.'
-		public Keyword getFullStopKeyword_2_7_2() { return cFullStopKeyword_2_7_2; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_2_7_3() { return cIDTerminalRuleCall_2_7_3; }
-
-		//'}'
-		public Keyword getRightCurlyBracketKeyword_2_8() { return cRightCurlyBracketKeyword_2_8; }
-
-		//';'
-		public Keyword getSemicolonKeyword_2_9() { return cSemicolonKeyword_2_9; }
-
-		//{PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
-		public Group getGroup_3() { return cGroup_3; }
-
-		//{PropagationTypeStatement}
-		public Action getPropagationTypeStatementAction_3_0() { return cPropagationTypeStatementAction_3_0; }
-
-		//'propagate_type'
-		public Keyword getPropagate_typeKeyword_3_1() { return cPropagate_typeKeyword_3_1; }
-
-		//':'
-		public Keyword getColonKeyword_3_2() { return cColonKeyword_3_2; }
-
 		//pty=PropagationTypeConstraint
-		public Assignment getPtyAssignment_3_3() { return cPtyAssignment_3_3; }
+		public Assignment getPtyAssignment_2_3() { return cPtyAssignment_2_3; }
 
 		//PropagationTypeConstraint
-		public RuleCall getPtyPropagationTypeConstraintParserRuleCall_3_3_0() { return cPtyPropagationTypeConstraintParserRuleCall_3_3_0; }
+		public RuleCall getPtyPropagationTypeConstraintParserRuleCall_2_3_0() { return cPtyPropagationTypeConstraintParserRuleCall_2_3_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_3_4() { return cSemicolonKeyword_3_4; }
+		public Keyword getSemicolonKeyword_2_4() { return cSemicolonKeyword_2_4; }
 
 		//SafetyEqStatement
-		public RuleCall getSafetyEqStatementParserRuleCall_4() { return cSafetyEqStatementParserRuleCall_4; }
+		public RuleCall getSafetyEqStatementParserRuleCall_3() { return cSafetyEqStatementParserRuleCall_3; }
 	}
 
 	public class PropagationTypeConstraintElements extends AbstractParserRuleElementFinder {
@@ -1480,7 +1555,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	'{' faultDefinitions+=FaultSubcomponent* '}'
 	//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
 	//	| {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
-	//	'{' faultDefinitions+=HWFaultSubcomponent* '}';
+	//	'{' faultDefinitions+=HWFaultSubcomponent* '}'
+	//	| {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (','
+	//	srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}'
+	//	'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}'
+	//	';';
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
 	}
@@ -1520,7 +1599,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//HWFaultSubcomponent:
 	//	{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
 	//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-	//	| {PropagateToStatement} 'propagate_to' ':' '{' faultList+=ID '.' ID (',' faultList+=ID '.' ID)* '}' ';'
 	//	| {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
 	//	| SafetyEqStatement;
 	public HWFaultSubcomponentElements getHWFaultSubcomponentAccess() {

@@ -84,6 +84,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.FAULT_STATEMENT: return createFaultStatement();
       case SafetyPackage.ANALYSIS_STATEMENT: return createAnalysisStatement();
       case SafetyPackage.HW_FAULT_STATEMENT: return createHWFaultStatement();
+      case SafetyPackage.PROPAGATE_STATEMENT: return createPropagateStatement();
       case SafetyPackage.FAULT_COUNT_BEHAVIOR: return createFaultCountBehavior();
       case SafetyPackage.PROBABILITY_BEHAVIOR: return createProbabilityBehavior();
       case SafetyPackage.INPUT_STATEMENT: return createInputStatement();
@@ -92,7 +93,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.PROBABILITY_STATEMENT: return createProbabilityStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
       case SafetyPackage.PROPAGATION_TYPE_STATEMENT: return createPropagationTypeStatement();
-      case SafetyPackage.PROPAGATE_TO_STATEMENT: return createPropagateToStatement();
       case SafetyPackage.ASYMMETRIC: return createasymmetric();
       case SafetyPackage.SYMMETRIC: return createsymmetric();
       case SafetyPackage.PERMANENT_CONSTRAINT: return createPermanentConstraint();
@@ -336,6 +336,17 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public PropagateStatement createPropagateStatement()
+  {
+    PropagateStatementImpl propagateStatement = new PropagateStatementImpl();
+    return propagateStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public FaultCountBehavior createFaultCountBehavior()
   {
     FaultCountBehaviorImpl faultCountBehavior = new FaultCountBehaviorImpl();
@@ -417,17 +428,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     PropagationTypeStatementImpl propagationTypeStatement = new PropagationTypeStatementImpl();
     return propagationTypeStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public PropagateToStatement createPropagateToStatement()
-  {
-    PropagateToStatementImpl propagateToStatement = new PropagateToStatementImpl();
-    return propagateToStatement;
   }
 
   /**

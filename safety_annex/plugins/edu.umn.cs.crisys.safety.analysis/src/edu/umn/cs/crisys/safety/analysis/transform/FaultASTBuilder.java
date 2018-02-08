@@ -239,7 +239,9 @@ public class FaultASTBuilder {
 	
 	public Fault buildFault(FaultStatement fstmt) {
 		String faultId = mkUniqueFaultId(fstmt); 
-		Fault fault = new Fault(fstmt, faultId);
+		//incorporate user-given fault name in the fault info
+		String faultName = fstmt.getName();
+		Fault fault = new Fault(fstmt, faultId, faultName);
 		setFaultNode(fstmt, fault);
 		processFaultSubcomponents(fault);
 		

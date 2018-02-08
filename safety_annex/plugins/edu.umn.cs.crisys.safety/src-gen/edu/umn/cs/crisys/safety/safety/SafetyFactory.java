@@ -203,6 +203,15 @@ public interface SafetyFactory extends EFactory
   HWFaultStatement createHWFaultStatement();
 
   /**
+   * Returns a new object of class '<em>Propagate Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Propagate Statement</em>'.
+   * @generated
+   */
+  PropagateStatement createPropagateStatement();
+
+  /**
    * Returns a new object of class '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -273,15 +282,6 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   PropagationTypeStatement createPropagationTypeStatement();
-
-  /**
-   * Returns a new object of class '<em>Propagate To Statement</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Propagate To Statement</em>'.
-   * @generated
-   */
-  PropagateToStatement createPropagateToStatement();
 
   /**
    * Returns a new object of class '<em>asymmetric</em>'.

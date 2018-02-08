@@ -259,6 +259,16 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.PROPAGATE_STATEMENT:
+      {
+        PropagateStatement propagateStatement = (PropagateStatement)theEObject;
+        T result = casePropagateStatement(propagateStatement);
+        if (result == null) result = caseSpecStatement(propagateStatement);
+        if (result == null) result = caseAgree_SpecStatement(propagateStatement);
+        if (result == null) result = caseElement(propagateStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.FAULT_COUNT_BEHAVIOR:
       {
         FaultCountBehavior faultCountBehavior = (FaultCountBehavior)theEObject;
@@ -329,14 +339,6 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = caseFaultSubcomponent(propagationTypeStatement);
         if (result == null) result = caseHWFaultSubcomponent(propagationTypeStatement);
         if (result == null) result = caseElement(propagationTypeStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SafetyPackage.PROPAGATE_TO_STATEMENT:
-      {
-        PropagateToStatement propagateToStatement = (PropagateToStatement)theEObject;
-        T result = casePropagateToStatement(propagateToStatement);
-        if (result == null) result = caseHWFaultSubcomponent(propagateToStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -781,6 +783,22 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Propagate Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Propagate Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePropagateStatement(PropagateStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -904,22 +922,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T casePropagationTypeStatement(PropagationTypeStatement object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Propagate To Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Propagate To Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casePropagateToStatement(PropagateToStatement object)
   {
     return null;
   }

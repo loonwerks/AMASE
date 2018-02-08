@@ -28,7 +28,7 @@ import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
-import edu.umn.cs.crisys.safety.safety.PropagateToStatement;
+import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint;
 import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
@@ -212,6 +212,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass propagateStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass faultCountBehaviorEClass = null;
 
   /**
@@ -262,13 +269,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass propagationTypeStatementEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass propagateToStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -764,6 +764,56 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getPropagateStatement()
+  {
+    return propagateStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropagateStatement_SrcFaultList()
+  {
+    return (EAttribute)propagateStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getPropagateStatement_SrcComp_path()
+  {
+    return (EReference)propagateStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropagateStatement_DestFaultList()
+  {
+    return (EAttribute)propagateStatementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getPropagateStatement_DestComp_path()
+  {
+    return (EReference)propagateStatementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getFaultCountBehavior()
   {
     return faultCountBehaviorEClass;
@@ -947,26 +997,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
   public EReference getPropagationTypeStatement_Pty()
   {
     return (EReference)propagationTypeStatementEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getPropagateToStatement()
-  {
-    return propagateToStatementEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropagateToStatement_FaultList()
-  {
-    return (EAttribute)propagateToStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1292,6 +1322,12 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEAttribute(hwFaultStatementEClass, HW_FAULT_STATEMENT__STR);
     createEReference(hwFaultStatementEClass, HW_FAULT_STATEMENT__FAULT_DEFINITIONS);
 
+    propagateStatementEClass = createEClass(PROPAGATE_STATEMENT);
+    createEAttribute(propagateStatementEClass, PROPAGATE_STATEMENT__SRC_FAULT_LIST);
+    createEReference(propagateStatementEClass, PROPAGATE_STATEMENT__SRC_COMP_PATH);
+    createEAttribute(propagateStatementEClass, PROPAGATE_STATEMENT__DEST_FAULT_LIST);
+    createEReference(propagateStatementEClass, PROPAGATE_STATEMENT__DEST_COMP_PATH);
+
     faultCountBehaviorEClass = createEClass(FAULT_COUNT_BEHAVIOR);
     createEAttribute(faultCountBehaviorEClass, FAULT_COUNT_BEHAVIOR__MAX_FAULTS);
 
@@ -1318,9 +1354,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     propagationTypeStatementEClass = createEClass(PROPAGATION_TYPE_STATEMENT);
     createEReference(propagationTypeStatementEClass, PROPAGATION_TYPE_STATEMENT__PTY);
-
-    propagateToStatementEClass = createEClass(PROPAGATE_TO_STATEMENT);
-    createEAttribute(propagateToStatementEClass, PROPAGATE_TO_STATEMENT__FAULT_LIST);
 
     asymmetricEClass = createEClass(ASYMMETRIC);
 
@@ -1409,6 +1442,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     faultStatementEClass.getESuperTypes().add(this.getSpecStatement());
     analysisStatementEClass.getESuperTypes().add(this.getSpecStatement());
     hwFaultStatementEClass.getESuperTypes().add(this.getSpecStatement());
+    propagateStatementEClass.getESuperTypes().add(this.getSpecStatement());
     faultCountBehaviorEClass.getESuperTypes().add(this.getAnalysisBehavior());
     probabilityBehaviorEClass.getESuperTypes().add(this.getAnalysisBehavior());
     inputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
@@ -1420,7 +1454,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     propagationTypeStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     propagationTypeStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
-    propagateToStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
     asymmetricEClass.getESuperTypes().add(this.getPropagationTypeConstraint());
     symmetricEClass.getESuperTypes().add(this.getPropagationTypeConstraint());
     permanentConstraintEClass.getESuperTypes().add(this.getTemporalConstraint());
@@ -1489,6 +1522,12 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEAttribute(getHWFaultStatement_Str(), theEcorePackage.getEString(), "str", null, 0, 1, HWFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getHWFaultStatement_FaultDefinitions(), this.getHWFaultSubcomponent(), null, "faultDefinitions", null, 0, -1, HWFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(propagateStatementEClass, PropagateStatement.class, "PropagateStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPropagateStatement_SrcFaultList(), theEcorePackage.getEString(), "srcFaultList", null, 0, -1, PropagateStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPropagateStatement_SrcComp_path(), theAgreePackage.getNestedDotID(), null, "srcComp_path", null, 0, -1, PropagateStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropagateStatement_DestFaultList(), theEcorePackage.getEString(), "destFaultList", null, 0, -1, PropagateStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPropagateStatement_DestComp_path(), theAgreePackage.getNestedDotID(), null, "destComp_path", null, 0, -1, PropagateStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(faultCountBehaviorEClass, FaultCountBehavior.class, "FaultCountBehavior", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFaultCountBehavior_MaxFaults(), theEcorePackage.getEString(), "maxFaults", null, 0, 1, FaultCountBehavior.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1515,9 +1554,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(propagationTypeStatementEClass, PropagationTypeStatement.class, "PropagationTypeStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getPropagationTypeStatement_Pty(), this.getPropagationTypeConstraint(), null, "pty", null, 0, 1, PropagationTypeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(propagateToStatementEClass, PropagateToStatement.class, "PropagateToStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getPropagateToStatement_FaultList(), theEcorePackage.getEString(), "faultList", null, 0, -1, PropagateToStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(asymmetricEClass, asymmetric.class, "asymmetric", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

@@ -1,16 +1,25 @@
- package edu.umn.cs.crisys.safety.analysis.ast.visitors;
+package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.Element;
+import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.instance.ComponentInstance;
 
+import com.rockwellcollins.atc.agree.agree.EnumStatement;
+import com.rockwellcollins.atc.agree.agree.EqStatement;
+import com.rockwellcollins.atc.agree.agree.InputStatement;
+import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -21,6 +30,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
@@ -29,6 +39,7 @@ import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
+import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
@@ -48,19 +59,19 @@ import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
 
-
 // If agreeNode is non-null, then we scope the replacement to only occur in one node.
 // Otherwise, we do id replacement across all nodes.
 
 public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Global data structures for traversal
-	
-	// This is the list of Lustre nodes that are used by the safety analysis that may not
+
+	// This is the list of Lustre nodes that are used by the safety analysis that
+	// may not
 	// be part of the set of nodes used by AGREE
 	private List<Node> globalLustreNodes;
 	// Top of the node hierarchy in AGREE
 	private AgreeNode topNode;
-	// This map is used to track, for each fault, a list of paths to instances of 
+	// This map is used to track, for each fault, a list of paths to instances of
 	// that fault (since nodes may be used in multiple locations), in order
 	// to produce the top-level variables to activate faults. (Global)
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
@@ -68,32 +79,29 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
 	// have problems with "stale" AgreeNode references during transformations.
-	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>(); 
-	// I am unsure as to whether this is necessary: it appears to map a fault to a single
-	// string.  As such, I believe it is incorrectly constructed.
+	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>();
+	// I am unsure as to whether this is necessary: it appears to map a fault to a
+	// single
+	// string. As such, I believe it is incorrectly constructed.
 	private Map<Fault, String> mapFaultToPath = new HashMap<>();
-	
+
 	// Per node data structures: must be stored when visiting new node
-	
-	
-	// This maps id to a pair consisting of the expression with the fault associated with that
-	// id and expression. 
+
+	// This maps id to a pair consisting of the expression with the fault associated
+	// with that
+	// id and expression.
 	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
 
-	
-
-	
 	/*
-	 * public accessor for faultMap:
-	 * faultMap is used to properly set up the top-level node for triggering faults.
-	 * fault map: stores the faults associated with a node.
-	 * Keying off component instance rather than AgreeNode, just so we don't
-	 * have problems with "stale" AgreeNode references during transformations.
+	 * public accessor for faultMap: faultMap is used to properly set up the
+	 * top-level node for triggering faults. fault map: stores the faults associated
+	 * with a node. Keying off component instance rather than AgreeNode, just so we
+	 * don't have problems with "stale" AgreeNode references during transformations.
 	 */
 	public Map<ComponentInstance, List<Fault>> getFaultMap() {
 		return faultMap;
 	}
-	
+
 	public AddFaultsToNodeVisitor() {
 		super(new jkind.lustre.visitors.TypeMapVisitor());
 	}
@@ -101,34 +109,34 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	@Override
 	public AgreeProgram visit(AgreeProgram program) {
 		globalLustreNodes = new ArrayList<>(program.globalLustreNodes);
-		this.topNode = program.topNode;  
-		
-		// do not call back to 'super'.  This is BROKEN!
+		this.topNode = program.topNode;
+
+		// do not call back to 'super'. This is BROKEN!
 		AgreeNode topNode = this.visit(program.topNode);
 
-		program = new AgreeProgram(program.agreeNodes, globalLustreNodes, program.globalTypes, topNode, program.containsRealTimePatterns);
+		program = new AgreeProgram(program.agreeNodes, globalLustreNodes, program.globalTypes, topNode,
+				program.containsRealTimePatterns);
 		return program;
 	}
-	
-	
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	// AGREENODE TRAVERSAL STARTS HERE.
-	// 
+	//
 	// since we don't totally know the traversal order, if we only
-	// want to replace in a single node, we need to store the 
+	// want to replace in a single node, we need to store the
 	// 'stacked' inNode, then restore it after a traversal.
 	//
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	@Override
 	public AgreeNode visit(AgreeNode node) {
 		Map<String, List<Pair>> parentFaultyVarsExpr = faultyVarsExpr;
 
 		boolean isTop = (node == this.topNode);
-		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop); 
+		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop);
 		faults = renameFaultEqs(faults);
-		
+
 		if (faultMap.containsKey(node.compInst)) {
 			System.out.println("Node: " + node.id + " has already been visited!");
 			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
@@ -139,118 +147,125 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		node = super.visit(node);
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
-		addNominalVars(node, nb); 
+		addNominalVars(node, nb);
 		addFaultInputs(faults, nb);
-		addFaultLocalEqsAndAsserts(faults, nb); 
-		addFaultNodeEqs(faults, nb); 
+		addFaultLocalEqsAndAsserts(faults, nb);
+		addFaultNodeEqs(faults, nb);
 
 		if (isTop) {
 			topNode = node;
 			AnalysisBehavior maxFaults = this.gatherTopLevelFaultCount(node);
+			// check propagation statement and store in a propagation map
+			HashSet<SafetyPropagation> propagations = this.gatherFaultPropagation(faultMap, node);
+			// TODO: take the propagation map as an argument when constructing top level
+			// fault declarations
 			addTopLevelFaultDeclarations(node, new ArrayList<>(), nb);
+			// TODO: take the propagation map as an argument when constructing top level
+			// fault occurrence constraints
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		}
-		
-		node = nb.build();		
-		
+
+		node = nb.build();
+
 		faultyVarsExpr = parentFaultyVarsExpr;
 		return node;
 	}
-	
+
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
-		// Get key (faultyId string = root) and iterate through list of paths (faultPath)
-		// Create new nominal variables for each pair (root.path). 
+		// Get key (faultyId string = root) and iterate through list of paths
+		// (faultPath)
+		// Create new nominal variables for each pair (root.path).
 		for (String faultyId : faultyVarsExpr.keySet()) {
-			
+
 			AgreeVar out = findVar(node.outputs, (faultyId));
-		  	nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
-			
+			nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
+
 		}
 	}
 
 	public void addFaultInputs(List<Fault> faults, AgreeNodeBuilder nb) {
-		for (Fault f: faults) {
+		for (Fault f : faults) {
 			nb.addInput(new AgreeVar(createFaultNodeInputId(f.id), NamedType.BOOL, f.faultStatement));
 		}
 	}
-	
+
 	public void addFaultLocalEqsAndAsserts(List<Fault> faults, AgreeNodeBuilder nb) {
-		for (Fault f: faults) {
+		for (Fault f : faults) {
 			nb.addInput(f.safetyEqVars);
 			nb.addAssertion(f.safetyEqAsserts);
 		}
 	}
 
 	public List<Expr> constructNodeInputs(Fault f) {
-		List<Expr> actuals = new ArrayList<>(); 
-		for (VarDecl vd: f.faultNode.inputs) {
-			// there is an extra "trigger" input 
-			Expr actual ;
+		List<Expr> actuals = new ArrayList<>();
+		for (VarDecl vd : f.faultNode.inputs) {
+			// there is an extra "trigger" input
+			Expr actual;
 			if (vd.id.equalsIgnoreCase("trigger")) {
 				if (f.faultInputMap.containsKey(vd.id)) {
-					throw new SafetyException("Trigger input for fault node should not be explicitly assigned by user.");
+					throw new SafetyException(
+							"Trigger input for fault node should not be explicitly assigned by user.");
 				}
 				actual = new IdExpr(createFaultNodeInputId(f.id));
 			} else {
 				actual = f.faultInputMap.get(vd.id);
-				
+
 				// do any name conversions on the stored expression.
 				actual = actual.accept(this);
-				
+
 				if (actual == null) {
-					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");					
+					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
 				}
 			}
 			actuals.add(actual);
 		}
 		return actuals;
 	}
-	
+
 	public void addFaultNodeEqs(List<Fault> faults, AgreeNodeBuilder nb) {
-		for (Fault f: faults) {
+		for (Fault f : faults) {
 			List<IdExpr> lhs = new ArrayList<IdExpr>();
-			for (VarDecl v: f.faultNode.outputs) {
+			for (VarDecl v : f.faultNode.outputs) {
 				String lhsId = this.createFaultNodeEqId(f.id, v.id);
 				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
 				nb.addLocal(actual);
 				lhs.add(new IdExpr(lhsId));
-				
+
 				// MWW: added 1/20/2018
 				f.outputParamToActualMap.put(v.id, actual);
 			}
-			
-			AgreeEquation eq = new AgreeEquation(lhs, 
-					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)), f.faultStatement);
+
+			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
+					f.faultStatement);
 			nb.addLocalEquation(eq);
-			
-			
-			// CHANGE THIS!  
-//			for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
-//				String lhsId = this.createFaultNodeEqId(f.id,  outMap.getKey());
-//				nb.addAssertion(
-//					new AgreeStatement("",
-//						new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
-//						f.faultStatement));
-//			}
-//			
-//
-//			
+
+			// CHANGE THIS!
+			// for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
+			// String lhsId = this.createFaultNodeEqId(f.id, outMap.getKey());
+			// nb.addAssertion(
+			// new AgreeStatement("",
+			// new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
+			// f.faultStatement));
+			// }
+			//
+			//
+			//
 		}
 		// Binding happens HERE and is based on the map faultyVarsExpr.
-		// Create an equality between the id and a nested WITH expression for each expr 
+		// Create an equality between the id and a nested WITH expression for each expr
 		// in the list.
-		
-		for(String lhsWithStmtName : faultyVarsExpr.keySet()){
+
+		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
 			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
-			
+
 			// Create nominal id name with key from this map
 			String nomId = createNominalId(lhsWithStmtName);
 			// base is the root of the WITH expression.
 			Expr toAssign = new IdExpr(nomId);
-			
+
 			// Go through pairs of the list and create with statements.
-			for(Pair pair : list) {
-				
+			for (Pair pair : list) {
+
 				// base : replace the expression with nominal expression
 				// repl : go from the fault to the actual
 				// toAssign: createNestedUpdateExpr using base, repl
@@ -258,199 +273,188 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Expr repl = faultToActual(pair.f, pair.ex);
 				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 			}
-			
+
 			// create new assertion expression : id = ((nominal_id with p1 := f1) with ...)
-			nb.addAssertion(
-					new AgreeStatement("Adding new safety analysis BinaryExpr",
-						new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign),
-						null));
+			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
+					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
 		}
 	}
-	
+
 	/*
 	 * Replace AgreeVar id with nominal id
 	 */
 	private Expr replPathIdExpr(Expr original, Expr toAssign) {
-		
-		if(original instanceof IdExpr) {
+
+		if (original instanceof IdExpr) {
 			return toAssign;
-		}
-		else if(original instanceof RecordAccessExpr) {
+		} else if (original instanceof RecordAccessExpr) {
 			RecordAccessExpr rae = (RecordAccessExpr) original;
 			Expr newBase = replPathIdExpr(rae.record, toAssign);
 			return new RecordAccessExpr(newBase, rae.field);
-		}
-		else if(original instanceof ArrayAccessExpr) {
+		} else if (original instanceof ArrayAccessExpr) {
 			ArrayAccessExpr aae = (ArrayAccessExpr) original;
 			Expr newBase = replPathIdExpr(aae.array, aae.index);
 			return new ArrayAccessExpr(newBase, aae.index);
-		}
-		else {
+		} else {
 			new Exception("Problem with record expressions in safety analysis");
 			return null;
 		}
 	}
-	
+
 	/*
-	 * Used to traverse two maps:
-	 * fault -> output param -> actuals
+	 * Used to traverse two maps: fault -> output param -> actuals
 	 */
 	private Expr faultToActual(Fault f, Expr ex) {
 		// Match pair.ex -> key of faultOutputMap
 		// If this expression is not in map, return exception message
-		
-		
+
 		String outputName = f.faultOutputMap.get(ex);
-		if(outputName == null) {
+		if (outputName == null) {
 			new Exception("Cannot find expression in mapping: faultToActual (AddFaultsToNodeVisitor class)");
 		}
 		// Use outputName to get value from outputParamToActualMap
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
 		// Create IdExpr out of actual string
 		return new IdExpr(actual.id);
-		
+
 	}
-	
+
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
-		HashMap<String, String> theMap = new HashMap<>(); 
-		for (AgreeVar eqVar: eqVars) {
+		HashMap<String, String> theMap = new HashMap<>();
+		for (AgreeVar eqVar : eqVars) {
 			// ComponentInstance ci = eqVar.compInst;
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
-			
-//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-//			System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id, name));
-//			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+
+			// System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+			// System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id,
+			// name));
+			// System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}
-	
+
 	public Fault renameEqId(Fault f, Map<String, String> idMap) {
 		Fault newFault = new Fault(f);
 		newFault.safetyEqVars.clear();
 		newFault.safetyEqAsserts.clear();
 		newFault.faultOutputMap.clear();
 		newFault.faultInputMap.clear();
-		
+
 		if (!f.triggers.isEmpty()) {
 			throw new SafetyException("Triggers are currently unsupported for translation");
 		}
-		
+
 		// update the variable declarations
-		for (AgreeVar eq: f.safetyEqVars) {
+		for (AgreeVar eq : f.safetyEqVars) {
 			if (idMap.containsKey(eq.id)) {
 				eq = new AgreeVar(idMap.get(eq.id), eq.type, eq.reference);
 			}
-			newFault.safetyEqVars.add(eq); 
+			newFault.safetyEqVars.add(eq);
 		}
-		
+
 		ReplaceIdVisitor visitor = new ReplaceIdVisitor(idMap);
-		for (AgreeStatement s: f.safetyEqAsserts) {
+		for (AgreeStatement s : f.safetyEqAsserts) {
 			newFault.safetyEqAsserts.add(visitor.visit(s));
 		}
-		
-		for (Map.Entry<Expr, String> element: f.faultOutputMap.entrySet()) {
+
+		for (Map.Entry<Expr, String> element : f.faultOutputMap.entrySet()) {
 			newFault.faultOutputMap.put(element.getKey().accept(visitor), element.getValue());
 		}
-		
-		for (Map.Entry<String, Expr> element: f.faultInputMap.entrySet()) {
+
+		for (Map.Entry<String, Expr> element : f.faultInputMap.entrySet()) {
 			newFault.faultInputMap.put(element.getKey(), element.getValue().accept(visitor));
 		}
-		
+
 		return newFault;
 	}
-	
+
 	public List<Fault> renameFaultEqs(List<Fault> faults) {
-		List<Fault> newFaults = new ArrayList<>(); 
-		for (Fault f: faults) {
+		List<Fault> newFaults = new ArrayList<>();
+		for (Fault f : faults) {
 			Map<String, String> idMap = constructEqIdMap(f, f.safetyEqVars);
 			newFaults.add(this.renameEqId(f, idMap));
 		}
 		return newFaults;
 	}
-	
-	
+
 	@Override
 	public Expr visit(IdExpr e) {
-		if (faultyVarsExpr.containsKey(e.id)) {	
+		if (faultyVarsExpr.containsKey(e.id)) {
 			return new IdExpr(e.location, createNominalId(e.id));
-			
+
 		} else {
 			return e;
 		}
 	}
 
 	public static AgreeVar findVar(List<AgreeVar> vars, String id) {
-		for (AgreeVar v: vars) {
+		for (AgreeVar v : vars) {
 			if (v.id.equals(id)) {
 				return v;
 			}
 		}
 		return null;
 	}
-	
-	
+
 	private HashMap<String, List<Pair>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
-		HashMap<String, List<Pair>> outputMap = new HashMap<String, List<Pair>>(); 
+		HashMap<String, List<Pair>> outputMap = new HashMap<String, List<Pair>>();
 		String id = "";
-		for (Fault f: faults) {
-			for (Expr ide: f.faultOutputMap.keySet()) {
+		for (Fault f : faults) {
+			for (Expr ide : f.faultOutputMap.keySet()) {
 				id = AgreeUtils.getExprRoot(ide).id;
 				addIdToMap(outputMap, ide, id, f);
 			}
 		}
 		return outputMap;
 	}
-	
-	
+
 	private void addIdToMap(HashMap<String, List<Pair>> faultyVarsExpr, Expr ex, String id, Fault f) {
 		Pair pair = new Pair(ex, f);
-		if(faultyVarsExpr.containsKey(id)) {
+		if (faultyVarsExpr.containsKey(id)) {
 			faultyVarsExpr.get(id).add(pair);
-		}
-		else {
+		} else {
 			List<Pair> list = new ArrayList<Pair>();
 			list.add(pair);
 			faultyVarsExpr.put(id, list);
 		}
 
 	}
-	
+
 	public String createFaultEventId(String base) {
-		return "__fault__event__" + base;		
+		return "__fault__event__" + base;
 	}
-	
+
 	public String createFaultActiveId(String base) {
-		return "__fault__active__" + base;		
+		return "__fault__active__" + base;
 	}
-	
+
 	public String createFaultNodeInputId(String base) {
-		return "fault__trigger__" + base;		
+		return "fault__trigger__" + base;
 	}
-	
+
 	public String createNominalId(String output) {
 		return "__fault__nominal__" + output;
 	}
 
 	public String createFaultEqId(String fault, String var) {
-		return fault + "__" + var; 
+		return fault + "__" + var;
 	}
+
 	public String createFaultNodeEqId(String fault, String var) {
-	
-		return fault + "__node__" + var; 
+
+		return fault + "__node__" + var;
 	}
-	
+
 	public List<Fault> gatherFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
-		List<SpecStatement> specs = 
-			SafetyUtil.collapseAnnexes(
-				SafetyUtil.getSafetyAnnexes(node, isTop));
-		
-		List<Fault> faults = new ArrayList<>(); 
+		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
+
+		List<Fault> faults = new ArrayList<>();
 		for (SpecStatement s : specs) {
 			if (s instanceof FaultStatement) {
-				FaultStatement fs = (FaultStatement)s;
+				FaultStatement fs = (FaultStatement) s;
 				FaultASTBuilder builder = new FaultASTBuilder(globalLustreNodes, node);
 				Fault safetyFault = builder.buildFault(fs);
-				faults.add(safetyFault); 
+				faults.add(safetyFault);
 			}
 		}
 		return faults;
@@ -460,21 +464,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		AnalysisBehavior ab = null;
 		boolean found = false;
 
-		List<SpecStatement> specs = 
-			SafetyUtil.collapseAnnexes(
-				SafetyUtil.getSafetyAnnexes(node, true));
-		 
+		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, true));
+
 		for (SpecStatement s : specs) {
 			if (s instanceof AnalysisStatement) {
-				AnalysisStatement as = (AnalysisStatement)s;
+				AnalysisStatement as = (AnalysisStatement) s;
 				ab = as.getBehavior();
 				if (ab instanceof FaultCountBehavior) {
-					int maxFaults = Integer.valueOf(((FaultCountBehavior)ab).getMaxFaults());
+					int maxFaults = Integer.valueOf(((FaultCountBehavior) ab).getMaxFaults());
 					if (maxFaults < 0) {
 						throw new SafetyException("Maximum number of faults must be non-negative.");
 					}
 				} else if (ab instanceof ProbabilityBehavior) {
-					double minProbability = Double.valueOf(((ProbabilityBehavior)ab).getProbabilty());
+					double minProbability = Double.valueOf(((ProbabilityBehavior) ab).getProbabilty());
 					if (minProbability > 1 || minProbability < 0) {
 						throw new SafetyException("Probability out of range [0, 1]");
 					}
@@ -483,210 +485,241 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					throw new SafetyException("Multiple analysis specifications found.  Only one can be processed");
 				}
 				found = true;
-			} 
+			}
 		}
 		if (!found) {
 			throw new SafetyException("No analysis statement; unable to run safety analysis");
 		}
 		return ab;
 	}
-	
-	
+
+	// Identify the fault associated with a ComponentInstance given the fault name
+	// and the component path
+	public Fault findFaultInCompInst(Map<ComponentInstance, List<Fault>> curFaultMap, String faultName,
+			NestedDotID compPath) {
+		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(curFaultMap.keySet());
+
+		for (ComponentInstance compInst : compInsts) {
+			if (compInst.getName().equals(compPath.getBase().getName())) {
+				List<Fault> faults = new ArrayList<Fault>(curFaultMap.get(compInst));
+				for (Fault fault : faults) {
+					if (fault.name.equals(faultName)) {
+						return fault;
+					}
+				}
+
+			}
+		}
+		throw new SafetyException("Unable to identify fault for " + faultName + "@"+compPath.getBase().getName());
+	}
+
+	public HashSet<SafetyPropagation> gatherFaultPropagation(Map<ComponentInstance, List<Fault>> curFaultMap,
+			AgreeNode node) {
+		HashSet<SafetyPropagation> propagationSet = new HashSet<SafetyPropagation>();
+
+		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, true));
+
+		for (SpecStatement s : specs) {
+			if (s instanceof PropagateStatement) {
+				PropagateStatement ps = (PropagateStatement) s;
+				Iterator<String> srcFaultIt = ps.getSrcFaultList().iterator();
+				Iterator<NestedDotID> srcCompPathIt = ps.getSrcComp_path().iterator();
+
+				// create a SafetyPropagation
+				Fault srcFault = null;
+				// for each src fault name and path, locate the fault
+				while (srcFaultIt.hasNext() && srcCompPathIt.hasNext()) {
+					NestedDotID srcCompPath = srcCompPathIt.next();
+					String srcFaultName = srcFaultIt.next();
+					srcFault = findFaultInCompInst(curFaultMap, srcFaultName, srcCompPath);
+					// for each destination fault name and path, locate the fault
+					Fault destFault = null;
+					Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
+					Iterator<NestedDotID> destCompPathIt = ps.getDestComp_path().iterator();
+					while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
+						NestedDotID destCompPath = destCompPathIt.next();
+						String destFaultName = destFaultIt.next();
+						destFault = findFaultInCompInst(curFaultMap, destFaultName, destCompPath);
+						SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);
+						propagationSet.add(propagation);
+					}
+				}
+			}
+		}
+		return propagationSet;
+	}
+
 	/*
-	 * 1. For each subcomponent node
-		For each subcomponent fault (depth-first)
-			0. Perform a traversal to find all the node/fault pairs
-			1a. Define an unconstrained local eq. to represent each fault-event 
-			1b. Define a constrained local eq. to assign fault-active value depending on 
-				fault duration in node.
-			1c. Assign subcomponent fault input to fault-active eq with assertions (yay!) 
-	(test: print updated AST)
-		2. Assign faults-active equation to sum of all fault-active values
-			(test: print updated AST)
-		3. Assert that this value is <= 1 (FOR NOW!)	
-			(test: print updated AST)
-		4. Use shiny new fault annex to perform safety analysis
-			(test: analysis results)
+	 * 1. For each subcomponent node For each subcomponent fault (depth-first) 0.
+	 * Perform a traversal to find all the node/fault pairs 1a. Define an
+	 * unconstrained local eq. to represent each fault-event 1b. Define a
+	 * constrained local eq. to assign fault-active value depending on fault
+	 * duration in node. 1c. Assign subcomponent fault input to fault-active eq with
+	 * assertions (yay!) (test: print updated AST) 2. Assign faults-active equation
+	 * to sum of all fault-active values (test: print updated AST) 3. Assert that
+	 * this value is <= 1 (FOR NOW!) (test: print updated AST) 4. Use shiny new
+	 * fault annex to perform safety analysis (test: analysis results)
 	 */
 
-	
 	public String addPathDelimiters(List<String> path, String var) {
-		String id = ""; 
-		for (String p: path) {
+		String id = "";
+		for (String p : path) {
 			id = id + p + "__";
 		}
 		return id + var;
 	}
 
 	public Expr createPermanentExpr(Expr varId, Expr expr) {
-		Expr latch = 
-			new BinaryExpr(expr, BinaryOp.ARROW, 
-				new BinaryExpr(expr, BinaryOp.OR, 
-					new UnaryExpr(UnaryOp.PRE, varId)));
-		Expr equate = 
-			new BinaryExpr(varId, BinaryOp.EQUAL, latch);
-		
+		Expr latch = new BinaryExpr(expr, BinaryOp.ARROW,
+				new BinaryExpr(expr, BinaryOp.OR, new UnaryExpr(UnaryOp.PRE, varId)));
+		Expr equate = new BinaryExpr(varId, BinaryOp.EQUAL, latch);
+
 		return equate;
 	}
-	
+
 	public Expr createTransientExpr(Expr varId, Expr expr) {
-		Expr equate = 
-				new BinaryExpr(varId, BinaryOp.EQUAL, expr);
+		Expr equate = new BinaryExpr(varId, BinaryOp.EQUAL, expr);
 		return equate;
 	}
-	
+
 	public void constrainFaultActive(Fault f, String nameBase, AgreeNodeBuilder builder) {
 		IdExpr eventExpr = new IdExpr(this.createFaultEventId(nameBase));
 		IdExpr activeExpr = new IdExpr(this.createFaultActiveId(nameBase));
 		Expr assertExpr;
-		
+		// TODO: when creating PermanentConstraint or TransientConstraint, use the
+		// disjunction of eventExpr
+		// and the fault it depends on
 		TemporalConstraint tc = f.duration.getTc();
 		if (tc instanceof PermanentConstraint) {
-			assertExpr = createPermanentExpr(activeExpr, eventExpr); 
-		} else if (tc instanceof TransientConstraint){
+			assertExpr = createPermanentExpr(activeExpr, eventExpr);
+		} else if (tc instanceof TransientConstraint) {
 			System.out.println("WARNING: ignoring duration on transient faults");
 			assertExpr = createTransientExpr(activeExpr, eventExpr);
 		} else {
-			throw new SafetyException("Unknown constraint type during translation of fault "+ f.id);
+			throw new SafetyException("Unknown constraint type during translation of fault " + f.id);
 		}
 		builder.addAssertion(new AgreeStatement("", assertExpr, f.faultStatement));
 	}
-	
+
 	/*
-	 * Create Lustre name using addPathDelimiters
-	 * Create map from fault to the constructed Lustre name 
-	 * 		(used in renaming)
-	 * Add in the __fault__active__ portion of the Lustre name
-	 * Add assertion to the builder with the fault statement equated to the 
-	 * 		active var id.
+	 * Create Lustre name using addPathDelimiters Create map from fault to the
+	 * constructed Lustre name (used in renaming) Add in the __fault__active__
+	 * portion of the Lustre name Add assertion to the builder with the fault
+	 * statement equated to the active var id.
 	 */
 	public void mapFaultActiveToNodeInterface(Fault f, List<String> path, String base, AgreeNodeBuilder builder) {
 		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
 		String activeVarId = this.createFaultActiveId(base);
-		
+
 		// Create map from fault to it's relative path
 		// for the counterexample layout
-		for(String str : path) {	
+		for (String str : path) {
 			mapFaultToPath.put(f, str);
 		}
-		
+
 		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, new IdExpr(activeVarId));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
 	}
-	
-	
-	public void addTopLevelFaultDeclarations(
-			AgreeNode currentNode, 
-			List<String> path, 
-			AgreeNodeBuilder nb) {
-		
-		List<Fault> faults = this.faultMap.get(currentNode.compInst) ; 
-		
-		// Add unconstrained input and constrained local to represent fault event and 
+
+	public void addTopLevelFaultDeclarations(AgreeNode currentNode, List<String> path, AgreeNodeBuilder nb) {
+
+		List<Fault> faults = this.faultMap.get(currentNode.compInst);
+
+		// Add unconstrained input and constrained local to represent fault event and
 		// whether or not fault is currently active.
-		for (Fault f: faults) {
+		for (Fault f : faults) {
 			String base = addPathDelimiters(path, f.id);
 			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
 			nb.addInput(new AgreeVar(this.createFaultActiveId(base), NamedType.BOOL, f.faultStatement));
-			
-			if(mapFaultToLustreNames.containsKey(f)) {
+
+			if (mapFaultToLustreNames.containsKey(f)) {
 				mapFaultToLustreNames.get(f).add(this.createFaultActiveId(base));
-			}
-			else {
+			} else {
 				List<String> names = new ArrayList<>();
 				names.add(this.createFaultActiveId(base));
 				mapFaultToLustreNames.put(f, names);
 			}
 
-			// constrain fault-active depending on transient / permanent & map it to a 
+			// constrain fault-active depending on transient / permanent & map it to a
 			// fault in the node interface
+			// TODO: take the propagation map when constrainFaultActive
 			constrainFaultActive(f, base, nb);
 			mapFaultActiveToNodeInterface(f, path, base, nb);
 		}
-		
-		for (AgreeNode n: currentNode.subNodes) {
+
+		for (AgreeNode n : currentNode.subNodes) {
 			List<String> ext = new ArrayList<>(path);
 			ext.add(n.id);
 			addTopLevelFaultDeclarations(n, ext, nb);
 		}
 	}
 
-	
 	/*****************************************************************
 	 * 
 	 * # of occurrence-based fault calculations
 	 * 
 	 ******************************************************************/
-	
+
 	public Expr createSumExpr(Expr cond) {
 		return new IfThenElseExpr(cond, new IntExpr(1), new IntExpr(0));
 	}
-	
-	public void getFaultCountExprList(
-			AgreeNode currentNode, 
-			List<String> path, 
-			List<Expr> sumExprs) {
 
-		List<Fault> faults = this.faultMap.get(currentNode.compInst) ; 
-		for (Fault f: faults) {
+	public void getFaultCountExprList(AgreeNode currentNode, List<String> path, List<Expr> sumExprs) {
+
+		List<Fault> faults = this.faultMap.get(currentNode.compInst);
+		for (Fault f : faults) {
+			// only add a fault to sumExprs when the fault is not an dependently active
+			// fault in the propagation map
 			String base = addPathDelimiters(path, f.id);
-			sumExprs.add(
-				createSumExpr(new IdExpr(this.createFaultActiveId(base))));
+			sumExprs.add(createSumExpr(new IdExpr(this.createFaultActiveId(base))));
 		}
-		
-		for (AgreeNode n: currentNode.subNodes) {
+
+		for (AgreeNode n : currentNode.subNodes) {
 			List<String> ext = new ArrayList<>(path);
 			ext.add(n.id);
 			getFaultCountExprList(n, ext, sumExprs);
 		}
 	}
-	
+
 	public Expr buildFaultCountExpr(List<Expr> exprList, int index) {
 		if (index > exprList.size() - 1) {
 			return new IntExpr(0);
-		}
-		else if (index == exprList.size() - 1) {
+		} else if (index == exprList.size() - 1) {
 			return exprList.get(index);
 		} else {
-			return new BinaryExpr(exprList.get(index), BinaryOp.PLUS, 
-					buildFaultCountExpr(exprList, index+1));
+			return new BinaryExpr(exprList.get(index), BinaryOp.PLUS, buildFaultCountExpr(exprList, index + 1));
 		}
 	}
-	
-	public void addTopLevelMaxFaultOccurrenceConstraint(
-			int maxFaults,
-			AgreeNode topNode,
-			AgreeNodeBuilder builder) {
-		
+
+	public void addTopLevelMaxFaultOccurrenceConstraint(int maxFaults, AgreeNode topNode, AgreeNodeBuilder builder) {
+
 		// add a global fault count
-		String id = "__fault__global_count"; 
+		String id = "__fault__global_count";
 		builder.addInput(new AgreeVar(id, NamedType.INT, topNode.reference));
 
 		// assign it.
-		List<Expr> sumExprs = new ArrayList<>(); 
+		List<Expr> sumExprs = new ArrayList<>();
 		getFaultCountExprList(topNode, new ArrayList<>(), sumExprs);
 		Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
-		Expr equate = 
-			new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
+		Expr equate = new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
 		builder.addAssertion(new AgreeStatement("", equate, topNode.reference));
 
 		// assert that the value is <= 1
-		Expr lessEqual = 
-			new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(maxFaults));
+		Expr lessEqual = new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(maxFaults));
 		builder.addAssertion(new AgreeStatement("", lessEqual, topNode.reference));
-		
+
 		// and Viola!
 	}
-	
+
 	/*****************************************************************
 	 * 
 	 * probability-based fault calculations
 	 * 
 	 ******************************************************************/
-	class FaultProbability implements Comparable<FaultProbability>{
+	class FaultProbability implements Comparable<FaultProbability> {
 		public double probability;
 		public String faultName;
-		
+
 		public FaultProbability(String faultName, double probability) {
 			this.probability = probability;
 			this.faultName = faultName;
@@ -695,16 +728,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		@Override
 		public int compareTo(FaultProbability o) {
 			// Want to sort LARGEST first, so negate probabilities.
-			return Double.compare(-probability,  -o.probability);
+			return Double.compare(-probability, -o.probability);
 		}
-		
+
 		public String toString() {
 			return "(" + probability + ", " + faultName + ")";
 		}
-	}; 
-	
+	};
+
 	class FaultSetProbability implements Comparable<FaultSetProbability> {
-		// invariant: probability should equal the multiple of all probabilities in elements.
+		// invariant: probability should equal the multiple of all probabilities in
+		// elements.
 		public double probability;
 		public Set<FaultProbability> elements;
 
@@ -712,9 +746,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			this.probability = probability;
 			this.elements = Collections.singleton(fp);
 		}
-		
+
 		public FaultSetProbability(double probability, FaultSetProbability base, FaultProbability fp) {
-			this.probability = probability; 
+			this.probability = probability;
 			this.elements = new HashSet<>(base.elements);
 			this.elements.add(fp);
 		}
@@ -722,35 +756,32 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		@Override
 		public int compareTo(FaultSetProbability o) {
 			// Want to sort LARGEST first, so negate probabilities.
-			return Double.compare(-probability,  -o.probability);
+			return Double.compare(-probability, -o.probability);
 		}
-		
+
 		public String toString() {
 			return "(" + probability + ", " + elements.toString() + " )";
 		}
 	}
-	
-	public void getFaultProbExprList(
-			AgreeNode currentNode, 
-			List<String> path, 
-			List<FaultProbability> probabilities) {
 
-		List<Fault> faults = this.faultMap.get(currentNode.compInst) ; 
-		for (Fault f: faults) {
+	public void getFaultProbExprList(AgreeNode currentNode, List<String> path, List<FaultProbability> probabilities) {
+
+		List<Fault> faults = this.faultMap.get(currentNode.compInst);
+		for (Fault f : faults) {
 			String base = addPathDelimiters(path, f.id);
 			probabilities.add(new FaultProbability(this.createFaultActiveId(base), f.probability));
 		}
-		
-		for (AgreeNode n: currentNode.subNodes) {
+
+		for (AgreeNode n : currentNode.subNodes) {
 			List<String> ext = new ArrayList<>(path);
 			ext.add(n.id);
 			getFaultProbExprList(n, ext, probabilities);
 		}
 	}
-	
+
 	public Expr getNoFaultProposition(Set<FaultProbability> elements) {
-		Expr noFaultExpr = null;  
-		for (FaultProbability fp: elements) {
+		Expr noFaultExpr = null;
+		for (FaultProbability fp : elements) {
 			Expr local = new UnaryExpr(UnaryOp.NOT, new IdExpr(fp.faultName));
 			if (noFaultExpr == null) {
 				noFaultExpr = local;
@@ -761,72 +792,69 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		assert (noFaultExpr != null);
 		return noFaultExpr;
 	}
-	
-	
-	public void addTopLevelMaxFaultOccurrenceConstraint(
-			double minProbability, 
-			AgreeNode topNode, 
+
+	public void addTopLevelMaxFaultOccurrenceConstraint(double minProbability, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
-		
+
 		ArrayList<FaultProbability> elementProbabilities = new ArrayList<>();
 		ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
 		PriorityQueue<FaultSetProbability> pq = new PriorityQueue<>();
 
-		// gather all fault probabilities.  If there are no faults, exit out.
+		// gather all fault probabilities. If there are no faults, exit out.
 		getFaultProbExprList(topNode, new ArrayList<>(), elementProbabilities);
-		Collections.sort(elementProbabilities);		
+		Collections.sort(elementProbabilities);
 		if (elementProbabilities.isEmpty()) {
 			return;
 		}
-		
-		System.out.println("elementProbabilities: " + elementProbabilities); 
-		
-		// remove elements from list that are too unlikely & add remaining elements to 
-		// 'good' set.  
+
+		System.out.println("elementProbabilities: " + elementProbabilities);
+
+		// remove elements from list that are too unlikely & add remaining elements to
+		// 'good' set.
 		ArrayList<FaultProbability> remainder = new ArrayList<>(elementProbabilities);
-		for (int i=0; i < remainder.size(); i++) {
+		for (int i = 0; i < remainder.size(); i++) {
 			FaultProbability elementProbability = remainder.get(i);
 			if (elementProbability.probability < minProbability) {
 				remainder.subList(i, remainder.size()).clear();
-			}
-			else {
-				FaultSetProbability fsp = 
-					new FaultSetProbability(elementProbability.probability, elementProbability);
+			} else {
+				FaultSetProbability fsp = new FaultSetProbability(elementProbability.probability, elementProbability);
 				faultCombinationsAboveThreshold.add(fsp);
 				pq.add(fsp);
 			}
 		}
-		
-		// So...now we have a priority queue with remaining fault combinations to be checked
-		// for addition.  The PQ preserves the invariant that highest probability elements are 
-		// first.  We attempt to combine with remainder (also in priority order). 
-		// If unable to combine because combination below threshold, remove rest of 
-		// elementProbability list (the rest will be below threshold for all subsequent elements).
+
+		// So...now we have a priority queue with remaining fault combinations to be
+		// checked
+		// for addition. The PQ preserves the invariant that highest probability
+		// elements are
+		// first. We attempt to combine with remainder (also in priority order).
+		// If unable to combine because combination below threshold, remove rest of
+		// elementProbability list (the rest will be below threshold for all subsequent
+		// elements).
 		// Complete when either the PQ or the element list is empty.
-		
+
 		while (!pq.isEmpty() && !remainder.isEmpty()) {
 			FaultSetProbability fsp = pq.remove();
-			for (int i=0; i < remainder.size(); i++) {
+			for (int i = 0; i < remainder.size(); i++) {
 				FaultProbability fp = remainder.get(i);
-				double setProbability = fp.probability * fsp.probability; 
+				double setProbability = fp.probability * fsp.probability;
 				if (setProbability < minProbability) {
-					remainder.subList(i,  remainder.size()).clear();
-				} else if (!fsp.elements.contains(fp)){
-					FaultSetProbability newSet = 
-						new FaultSetProbability(setProbability, fsp, fp);
+					remainder.subList(i, remainder.size()).clear();
+				} else if (!fsp.elements.contains(fp)) {
+					FaultSetProbability newSet = new FaultSetProbability(setProbability, fsp, fp);
 					pq.add(newSet);
 					faultCombinationsAboveThreshold.add(newSet);
 				}
 			}
 		}
-		System.out.println("Fault hypothesis: " + faultCombinationsAboveThreshold); 
+		System.out.println("Fault hypothesis: " + faultCombinationsAboveThreshold);
 
-		
-		// Now faultCombinationsAboveThreshold contains all the valid fault combinations and
-		// noFaultExpr has the default (no-fault) case.  Let's construct a proposition.
+		// Now faultCombinationsAboveThreshold contains all the valid fault combinations
+		// and
+		// noFaultExpr has the default (no-fault) case. Let's construct a proposition.
 		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
 		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
-		for (FaultSetProbability fsp: faultCombinationsAboveThreshold) {
+		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
 			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
 			goodElements.removeAll(fsp.elements);
 			Expr local = getNoFaultProposition(goodElements);
@@ -834,47 +862,43 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 
 		System.out.println("Probabilistic Fault Hypothesis is: " + faultHypothesis.toString());
-		
+
 		// Add this fault hypothesis as an assertion.
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
-	public void addTopLevelFaultOccurrenceConstraints(
-			AnalysisBehavior ab, 
-			AgreeNode topNode,
+	public void addTopLevelFaultOccurrenceConstraints(AnalysisBehavior ab, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
-		
+
 		if (ab instanceof FaultCountBehavior) {
-			addTopLevelMaxFaultOccurrenceConstraint(
-					Integer.parseInt(((FaultCountBehavior)ab).getMaxFaults()), 
-					topNode, builder);
+			addTopLevelMaxFaultOccurrenceConstraint(Integer.parseInt(((FaultCountBehavior) ab).getMaxFaults()), topNode,
+					builder);
 		} else if (ab instanceof ProbabilityBehavior) {
-			addTopLevelMaxFaultOccurrenceConstraint(
-					Double.parseDouble(((ProbabilityBehavior)ab).getProbabilty()), 
+			addTopLevelMaxFaultOccurrenceConstraint(Double.parseDouble(((ProbabilityBehavior) ab).getProbabilty()),
 					topNode, builder);
 		}
 	}
-	
+
 	/*
-	 * Public accessor for the Map<Fault, String: LustreName> 
-	 * This map is created in mapFaultToActiveNodeInterface (line 410).
+	 * Public accessor for the Map<Fault, String: LustreName> This map is created in
+	 * mapFaultToActiveNodeInterface (line 410).
 	 */
-	public Map<Fault, List<String>> getFaultToLustreNameMap(){
+	public Map<Fault, List<String>> getFaultToLustreNameMap() {
 		return mapFaultToLustreNames;
 	}
-	
+
 	/*
-	 * Public accessor for the Map<Fault,String:faultyOutputName>
-	 * This map is created in gatherFaultyOutputs (line 270).
+	 * Public accessor for the Map<Fault,String:faultyOutputName> This map is
+	 * created in gatherFaultyOutputs (line 270).
 	 */
-	public Map<Fault, String> getMapFaultToPath(){
+	public Map<Fault, String> getMapFaultToPath() {
 		return mapFaultToPath;
 	}
-	
-	public class Pair{
+
+	public class Pair {
 		private Expr ex;
 		private Fault f;
-		
+
 		public Pair(Expr ex, Fault f) {
 			this.ex = ex;
 			this.f = f;
