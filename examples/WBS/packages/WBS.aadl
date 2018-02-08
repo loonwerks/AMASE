@@ -156,7 +156,7 @@ with datatypes;
 			-- Ground speed
 			ground_speed_ctrl : port ground_speed -> ctrl_sys.ground_speed;
 			-- power to control
-			power_control_1 : port power1 -> ctrl_sys.power_1;
+			power_control_1 : port power1 -> ctrl_sys.power_1; 
 			power_control_2 : port power2 -> ctrl_sys.power_2;
 			
 			-- from pedal sensor to control system
@@ -169,7 +169,7 @@ with datatypes;
 			wheel_status_sensor_out_3 : port wheel_sensor3.wheel_rolling -> ctrl_sys.wheel_rolling_3;
 			wheel_status_sensor_out_4 : port wheel_sensor4.wheel_rolling -> ctrl_sys.wheel_rolling_4;
 			wheel_status_sensor_out_5 : port wheel_sensor5.wheel_rolling -> ctrl_sys.wheel_rolling_5;
-			wheel_status_sensor_out_6 : port wheel_sensor6.wheel_rolling -> ctrl_sys.wheel_rolling_6;
+			wheel_status_sensor_out_6 : port wheel_sensor6.wheel_rolling -> ctrl_sys.wheel_rolling_6; 
 			wheel_status_sensor_out_7 : port wheel_sensor7.wheel_rolling -> ctrl_sys.wheel_rolling_7;
 			wheel_status_sensor_out_8 : port wheel_sensor8.wheel_rolling -> ctrl_sys.wheel_rolling_8;
 			

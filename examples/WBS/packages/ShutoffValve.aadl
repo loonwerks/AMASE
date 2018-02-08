@@ -11,6 +11,7 @@ with Base_Types;
 			hyd_pressure_out : out data port Base_Types::Integer;
 			
 		annex agree {**
+			guarantee "Testing pressure output" : true -> hyd_pressure_in > 0 and hyd_pressure_out > 0;
 			
 			-- apply_command_norm_guarantee := (TRUE -> ( G 
 			-- ((hyd_pressure_in > 0 & system_validity_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in)) 

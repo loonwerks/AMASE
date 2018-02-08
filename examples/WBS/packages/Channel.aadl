@@ -55,29 +55,23 @@ with MonitorSystem;
 				--	(TRUE ->  G (((power & ground_speed > 0) & (!wheel_rolling_3 | !wheel_rolling_7)) <-> as_cmd_pair_3_7));
 				
 				-- Antiskid command equivalence
-				guarantee "(Channel) Antiskid command to pair 1,5: Command is true if and only if
+				guarantee "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
 							true -> (power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
 							
-				guarantee "(Channel) Antiskid command to pair 2,6: Command is true if and only if
+				guarantee "(Channel) Antiskid command to pair 2,6: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
 							true -> (power and SPEED and PAIR_NOT_ROLLING_26) <=> as_cmd_pair_2_6;
 							
-				guarantee "(Channel) Antiskid command to pair 3,7: Command is true if and only if
+				guarantee "(Channel) Antiskid command to pair 3,7: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
 							true -> (power and SPEED and PAIR_NOT_ROLLING_37) <=> as_cmd_pair_3_7;
 							
-				guarantee "(Channel) Antiskid command to pair 4,8: Command is true if and only if
+				guarantee "(Channel) Antiskid command to pair 4,8: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
 							true -> (power and SPEED and PAIR_NOT_ROLLING_48) <=> as_cmd_pair_4_8;
-							
-							
-				
-				
-				
-				
-				
-				
+			
+			
 			**};
 			
 	end Channel;
@@ -119,7 +113,7 @@ with MonitorSystem;
 			monitor_wheel_rolling_8 : port wheel_rolling_8 -> monitor_sys.wheel_rolling_8;
 			
 			-- Connections to command system
-			command_power : port power -> monitor_sys.power;
+			command_power : port power -> command_sys.power;
 			command_L_pedal : port elec_pedal_pos_L -> command_sys.elec_pedal_pos_L;
 			command_R_pedal : port elec_pedal_pos_R -> command_sys.elec_pedal_pos_R;
 			command_ground_speed : port ground_speed -> command_sys.ground_speed;

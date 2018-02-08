@@ -215,7 +215,7 @@ with Base_Types;
 				
 	end ControlSystem;
 	
-	system implementation ControlSystem.inst
+	system implementation ControlSystem.inst 
 		subcomponents
 			bscu: system BSCU::BSCU.inst;
 			

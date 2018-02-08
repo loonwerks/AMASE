@@ -107,6 +107,16 @@ with Base_Types;
 			as_to_mv_7 : port brake_as_cmd7 -> mv7.elec_cmd;
 			as_to_mv_8 : port brake_as_cmd8 -> mv8.elec_cmd;
 			
+			-- Meter valve pressure out
+			press_out_1 : port mv1.hyd_pressure_out -> hyd_pressure_out1;
+			press_out_2 : port mv2.hyd_pressure_out -> hyd_pressure_out2;
+			press_out_3 : port mv3.hyd_pressure_out -> hyd_pressure_out3;
+			press_out_4 : port mv4.hyd_pressure_out -> hyd_pressure_out4;
+			press_out_5 : port mv5.hyd_pressure_out -> hyd_pressure_out5;
+			press_out_6 : port mv6.hyd_pressure_out -> hyd_pressure_out6;
+			press_out_7 : port mv7.hyd_pressure_out -> hyd_pressure_out7;
+			press_out_8 : port mv8.hyd_pressure_out -> hyd_pressure_out8;
+			
 			
 	end NormalBrakeSystem.inst;
 end NormalBrakeSystem;

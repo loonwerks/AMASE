@@ -45,7 +45,7 @@ with ShutoffValve;
 			
 			-- This is to pass accumulator pressure display up to the 
 			-- wbs enclosing component
-			accum_pressure_display_in : in out data port Base_Types::Integer;
+			accum_pressure_display_in : out data port Base_Types::Integer;
 			
 			-- Outputs
 			accum_pressure_display : out data port Base_Types::Integer;
@@ -58,7 +58,7 @@ with ShutoffValve;
 			wheel_status4 : out data port datatypes::WheelStatus;
 			wheel_status5 : out data port datatypes::WheelStatus;
 			wheel_status6 : out data port datatypes::WheelStatus;
-			wheel_status7 : out data port datatypes::WheelStatus;
+			wheel_status7 : out data port datatypes::WheelStatus; 
 			wheel_status8 : out data port datatypes::WheelStatus;
 			
 			-- Output from wheel_brake components
@@ -302,7 +302,6 @@ with ShutoffValve;
 			-- Selector valve
 			system_valid_to_selector : port system_validity -> selector_valve.system_validity;
 			add_gate_to_selector : port add_gate_hyd_pressure.out_pressure -> selector_valve.blue_select_in;
-			sys_valid_to_selector : port system_validity -> selector_valve.system_validity;
 			
 			selector_green_out : port selector_valve.green_select_out -> normal_sys.hyd_pressure_in;
 			selector_blue_out : port selector_valve.blue_select_out -> alt_sys.hyd_pressure_in;

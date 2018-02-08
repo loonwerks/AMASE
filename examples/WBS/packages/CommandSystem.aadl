@@ -41,13 +41,13 @@ with Base_Types;
 				true -> as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_1 or not wheel_rolling_5));
 				
 			guarantee "(CommandSystem) Pair 2,6: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_2 or not wheel_rolling_6));
+				true -> as_cmd_pair_2_6 <=> (power and ground_speed > 0 and (not wheel_rolling_2 or not wheel_rolling_6));
 				
 			guarantee "(CommandSystem) Pair 3,7: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_3 or not wheel_rolling_7));
+				true -> as_cmd_pair_3_7 <=> (power and ground_speed > 0 and (not wheel_rolling_3 or not wheel_rolling_7));
 				
 			guarantee "(CommandSystem) Pair 4,8: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_4 or not wheel_rolling_8));
+				true -> as_cmd_pair_4_8 <=> (power and ground_speed > 0 and (not wheel_rolling_4 or not wheel_rolling_8));
 				
 			--  command_creation_normal_1_norm_guarantee := (TRUE ->  
 			--     		G (((power & electrical_pedal_pos_L) & ((ground_speed > 0 & wheel_rolling_1) | ground_speed = 0)) <-> brake_as_cmd_1)
