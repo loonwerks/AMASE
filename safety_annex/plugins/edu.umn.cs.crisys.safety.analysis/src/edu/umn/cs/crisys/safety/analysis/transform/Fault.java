@@ -29,6 +29,7 @@ public class Fault {
 	
 	public Node faultNode; 
 	public String id;
+	public String name;
 	public String explanitoryText;
 	public double probability;
 	
@@ -54,10 +55,11 @@ public class Fault {
 	public FaultStatement faultStatement; 
 
 	public Fault(FaultStatement fstmt, 
-			String id) {
+			String id, String name) {
 		this.faultStatement = fstmt;
 		this.explanitoryText = fstmt.getStr();
 		this.id = id;
+		this.name = name;
 	}
 
 	// deep copy
@@ -67,6 +69,7 @@ public class Fault {
 		
 		this.faultNode = other.faultNode;
 		this.id = other.id;
+		this.name = other.name;
 		this.explanitoryText = other.explanitoryText;
 		this.probability = other.probability;
 		this.duration = other.duration;
