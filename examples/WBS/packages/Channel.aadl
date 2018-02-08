@@ -13,14 +13,14 @@ with MonitorSystem;
 			elec_pedal_pos_L : in data port Base_Types::Boolean;
 			elec_pedal_pos_R : in data port Base_Types::Boolean;
 			
-			wheel_rolling_1_in : in data port Base_Types::Boolean;
-			wheel_rolling_2_in : in data port Base_Types::Boolean;
-			wheel_rolling_3_in : in data port Base_Types::Boolean;
-			wheel_rolling_4_in : in data port Base_Types::Boolean;
-			wheel_rolling_5_in : in data port Base_Types::Boolean;
-			wheel_rolling_6_in : in data port Base_Types::Boolean;
-			wheel_rolling_7_in : in data port Base_Types::Boolean;
-			wheel_rolling_8_in : in data port Base_Types::Boolean;
+			wheel_rolling_1 : in data port Base_Types::Boolean;
+			wheel_rolling_2 : in data port Base_Types::Boolean;
+			wheel_rolling_3 : in data port Base_Types::Boolean;
+			wheel_rolling_4 : in data port Base_Types::Boolean;
+			wheel_rolling_5 : in data port Base_Types::Boolean;
+			wheel_rolling_6 : in data port Base_Types::Boolean;
+			wheel_rolling_7 : in data port Base_Types::Boolean;
+			wheel_rolling_8 : in data port Base_Types::Boolean;
 			
 			-- Outputs
 			brake_as_cmd_1 : out data port Base_Types::Boolean;
@@ -36,6 +36,49 @@ with MonitorSystem;
 			as_cmd_pair_3_7 : out data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 			system_validity : out data port Base_Types::Boolean;
+			
+			annex agree {**
+				
+				-- Properties 
+				property SPEED = ground_speed > 0;
+				-- When one of the wheels in a pair is not rolling
+				property PAIR_NOT_ROLLING_15 = not wheel_rolling_1 or not wheel_rolling_5;
+				property PAIR_NOT_ROLLING_26 = not wheel_rolling_2 or not wheel_rolling_6;
+				property PAIR_NOT_ROLLING_37 = not wheel_rolling_3 or not wheel_rolling_7;
+				property PAIR_NOT_ROLLING_48 = not wheel_rolling_4 or not wheel_rolling_8;				
+				
+				
+				
+				-- Contracts
+				
+				--	command_creation_alternate_3_norm_guarantee := 
+				--	(TRUE ->  G (((power & ground_speed > 0) & (!wheel_rolling_3 | !wheel_rolling_7)) <-> as_cmd_pair_3_7));
+				
+				-- Antiskid command equivalence
+				guarantee "(Channel) Antiskid command to pair 1,5: Command is true if and only if
+							we have power, ground speed is positive, and one of the two wheels is not rolling." :
+							true -> (power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
+							
+				guarantee "(Channel) Antiskid command to pair 2,6: Command is true if and only if
+							we have power, ground speed is positive, and one of the two wheels is not rolling." :
+							true -> (power and SPEED and PAIR_NOT_ROLLING_26) <=> as_cmd_pair_2_6;
+							
+				guarantee "(Channel) Antiskid command to pair 3,7: Command is true if and only if
+							we have power, ground speed is positive, and one of the two wheels is not rolling." :
+							true -> (power and SPEED and PAIR_NOT_ROLLING_37) <=> as_cmd_pair_3_7;
+							
+				guarantee "(Channel) Antiskid command to pair 4,8: Command is true if and only if
+							we have power, ground speed is positive, and one of the two wheels is not rolling." :
+							true -> (power and SPEED and PAIR_NOT_ROLLING_48) <=> as_cmd_pair_4_8;
+							
+							
+				
+				
+				
+				
+				
+				
+			**};
 			
 	end Channel;
 	
@@ -66,28 +109,28 @@ with MonitorSystem;
 			monitor_L_pedal : port elec_pedal_pos_L -> monitor_sys.elec_pedal_pos_L;
 			monitor_R_pedal : port elec_pedal_pos_R -> monitor_sys.elec_pedal_pos_R;
 			monitor_ground_speed : port ground_speed -> monitor_sys.ground_speed;
-			monitor_wheel_rolling_1 : port wheel_rolling_1_in -> monitor_sys.wheel_rolling_1;
-			monitor_wheel_rolling_2 : port wheel_rolling_2_in -> monitor_sys.wheel_rolling_2;
-			monitor_wheel_rolling_3 : port wheel_rolling_3_in -> monitor_sys.wheel_rolling_3;
-			monitor_wheel_rolling_4 : port wheel_rolling_4_in -> monitor_sys.wheel_rolling_4;
-			monitor_wheel_rolling_5 : port wheel_rolling_5_in -> monitor_sys.wheel_rolling_5;
-			monitor_wheel_rolling_6 : port wheel_rolling_6_in -> monitor_sys.wheel_rolling_6;
-			monitor_wheel_rolling_7 : port wheel_rolling_7_in -> monitor_sys.wheel_rolling_7;
-			monitor_wheel_rolling_8 : port wheel_rolling_8_in -> monitor_sys.wheel_rolling_8;
+			monitor_wheel_rolling_1 : port wheel_rolling_1 -> monitor_sys.wheel_rolling_1;
+			monitor_wheel_rolling_2 : port wheel_rolling_2 -> monitor_sys.wheel_rolling_2;
+			monitor_wheel_rolling_3 : port wheel_rolling_3 -> monitor_sys.wheel_rolling_3;
+			monitor_wheel_rolling_4 : port wheel_rolling_4 -> monitor_sys.wheel_rolling_4;
+			monitor_wheel_rolling_5 : port wheel_rolling_5 -> monitor_sys.wheel_rolling_5;
+			monitor_wheel_rolling_6 : port wheel_rolling_6 -> monitor_sys.wheel_rolling_6;
+			monitor_wheel_rolling_7 : port wheel_rolling_7 -> monitor_sys.wheel_rolling_7;
+			monitor_wheel_rolling_8 : port wheel_rolling_8 -> monitor_sys.wheel_rolling_8;
 			
 			-- Connections to command system
 			command_power : port power -> monitor_sys.power;
 			command_L_pedal : port elec_pedal_pos_L -> command_sys.elec_pedal_pos_L;
 			command_R_pedal : port elec_pedal_pos_R -> command_sys.elec_pedal_pos_R;
 			command_ground_speed : port ground_speed -> command_sys.ground_speed;
-			command_wheel_rolling_1 : port wheel_rolling_1_in -> command_sys.wheel_rolling_1;
-			command_wheel_rolling_2 : port wheel_rolling_2_in -> command_sys.wheel_rolling_2;
-			command_wheel_rolling_3 : port wheel_rolling_3_in -> command_sys.wheel_rolling_3;
-			command_wheel_rolling_4 : port wheel_rolling_4_in -> command_sys.wheel_rolling_4;
-			command_wheel_rolling_5 : port wheel_rolling_5_in -> command_sys.wheel_rolling_5;
-			command_wheel_rolling_6 : port wheel_rolling_6_in -> command_sys.wheel_rolling_6;
-			command_wheel_rolling_7 : port wheel_rolling_7_in -> command_sys.wheel_rolling_7;
-			command_wheel_rolling_8 : port wheel_rolling_8_in -> command_sys.wheel_rolling_8;
+			command_wheel_rolling_1 : port wheel_rolling_1 -> command_sys.wheel_rolling_1;
+			command_wheel_rolling_2 : port wheel_rolling_2 -> command_sys.wheel_rolling_2;
+			command_wheel_rolling_3 : port wheel_rolling_3 -> command_sys.wheel_rolling_3;
+			command_wheel_rolling_4 : port wheel_rolling_4 -> command_sys.wheel_rolling_4;
+			command_wheel_rolling_5 : port wheel_rolling_5 -> command_sys.wheel_rolling_5;
+			command_wheel_rolling_6 : port wheel_rolling_6 -> command_sys.wheel_rolling_6;
+			command_wheel_rolling_7 : port wheel_rolling_7 -> command_sys.wheel_rolling_7;
+			command_wheel_rolling_8 : port wheel_rolling_8 -> command_sys.wheel_rolling_8;
 			
 	end Channel.inst;
 end Channel;

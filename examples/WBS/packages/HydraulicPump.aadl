@@ -9,6 +9,18 @@ with Base_Types;
 			hyd_supply : in data port Base_Types::Integer;
 			-- Output
 			hyd_pressure_out : out data port Base_Types::Integer;
+		
+		annex agree {**
+			
+			-- supply_hydraulic_norm_guarantee := (TRUE -> ( G 
+			-- 		((power & hydraulic_supply > 0) -> hyd_pressure_out > 0) 
+			-- 	&  G ((!power | hydraulic_supply = 0) -> hyd_pressure_out = 0)));
+			guarantee "(HydraulicPump) If we have power and hydraulic sypply, then pressure out is positive.
+						If we have no power or our supply is zero, then pressure out is zero." :
+						true -> ((power and hyd_supply > 0) => hyd_pressure_out > 0)
+								and ((not power or hyd_supply = 0) => hyd_pressure_out = 0);
+			
+		**};
 	end HydraulicPump;
 	
 	system implementation HydraulicPump.inst

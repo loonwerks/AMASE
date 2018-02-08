@@ -15,6 +15,17 @@ with Base_Types;
 			
 			-- FOR AGREE:
 			-- all mech commands coming in are false in wbs_arch4
+			
+			annex agree {**
+					
+				-- apply_command_norm_guarantee := (TRUE ->  G (((elec_cmd | mech_cmd) & hyd_pressure_in > 0) <-> hyd_pressure_out > 0));
+				
+				guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
+				 we have either electrical or mechanical command and positive pressure." :
+				 true -> ((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0;
+					
+			**};
+			
 	end MeterValve;
 	
 	system implementation MeterValve.inst

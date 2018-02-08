@@ -16,6 +16,24 @@ with Base_Types;
 			brake_as_cmd_2 : out data port Base_Types::Boolean;
 			as_cmd_out : out data port Base_Types::Boolean;
 			
+		annex agree {**
+			
+    		--	    LTLSPEC NAME commands_creation_norm_guarantee := (TRUE ->  G 
+		
+			-- (((((power & ground_speed > 0) & (!wheel_rolling_1 | !wheel_rolling_2)) <-> as_cmd_out) 
+			
+			--  & (((power & electrical_pedal_pos) & ((ground_speed > 0 & wheel_rolling_1) | ground_speed = 0)) <-> brake_as_cmd_out_1)) 
+			
+			--  & (((power & electrical_pedal_pos) & ((ground_speed > 0 & wheel_rolling_2) | ground_speed = 0)) <-> brake_as_cmd_out_2))); 
+    		
+    		property AS_CMD_OUT = ((power and ground_speed > 0) and (not wheel_rolling_1 or not wheel_rolling_2)) <=> as_cmd_out;
+    		property BRAKE_AS_1 = ((power and elec_pedal_pos) and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0)) <=> brake_as_cmd_1;
+    		property BRAKE_AS_2 = ((power and elec_pedal_pos) and ((ground_speed > 0 and wheel_rolling_2) or ground_speed = 0)) <=> brake_as_cmd_2;
+    		
+    		guarantee "(WheelPairCommandSystem) Assign antiskid command and brake commands according to input values." :
+						true -> AS_CMD_OUT and BRAKE_AS_1 and BRAKE_AS_2;
+			
+		**};	
 	end WheelPairCommandSystem;
 	
 	system implementation WheelPairCommandSystem.inst
@@ -81,6 +99,14 @@ with Base_Types;
 			
 			-- Outputs
 			as_cmd_out : out data port Base_Types::Boolean;
+		annex agree {**
+			
+    		-- alternate_command_computation_norm_guarantee := (TRUE ->  G ((power & (as_cmd_in_1 | as_cmd_in_2)) <-> as_cmd_out));
+			guarantee "(AntiskidCommandFacility) Antiskid command is true if and only if power and either one of the antiskid inputs is true." :
+						true -> (power and (as_cmd_1 or as_cmd_2)) <=> as_cmd_out;
+			
+		**};
+	
 	end AlternateCommandCalculator;
 	
 	system implementation AlternateCommandCalculator.inst
@@ -98,7 +124,14 @@ with Base_Types;
 			
 			-- Outputs
 			brake_as_cmd : out data port Base_Types::Boolean;
+		
+		annex agree {**
 			
+   			--  normal_command_computation_norm_guarantee := (TRUE ->  G (((power & brake_cmd) & !as_cmd) <-> brake_as_cmd));
+			guarantee "(NormalCommandCalculator) Brake command is true if and only if power, brake_cmd, and not antiskid." :
+						true -> (power and brake_cmd and not as_cmd) <=> brake_as_cmd;
+			
+		**};	
 	end NormalCommandCalculator;
 	
 	system implementation NormalCommandCalculator.inst
@@ -116,6 +149,14 @@ with Base_Types;
 			
 			-- Output
 			as_cmd : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			-- as_command_creation_norm_guarantee := (TRUE ->  G (((power & ground_speed > 0) & !wheel_rolling) <-> as_cmd));
+			guarantee "(AntiskidCommandFacility) antiskid command is true if and only if power, wheel not rolling, and ground speed is positive." :
+						true -> (power and ground_speed > 0 and not wheel_rolling) <=> as_cmd;
+			
+		**};
 	end AntiskidCommandFacility;
 	
 	system implementation AntiskidCommandFacility.inst
@@ -131,7 +172,14 @@ with Base_Types;
 			power : in data port Base_Types::Boolean;
 			-- Output
 			brake_cmd : out data port Base_Types::Boolean;
+		
+		annex agree {**
 			
+			-- brake_command_creation_norm_guarantee := (TRUE ->  G ((power & electrical_pedal_pos) <-> brake_cmd));
+			guarantee "(BrakeCommandFacility) brake command output is equivalent to power and elec_pedal_position.":
+						true -> (power and electrical_pedal_pos) <=> brake_cmd;
+			
+		**}	;
 	end BrakeCommandFacility;
 	
 	system implementation BrakeCommandFacility.inst

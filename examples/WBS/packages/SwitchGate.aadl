@@ -1,7 +1,6 @@
 package SwitchGate
 public
 with Base_Types;
-with datatypes;
 
 	system SwitchGate
 		features
@@ -14,8 +13,26 @@ with datatypes;
 			-- Outputs
 			cmd_out : out data port Base_Types::Boolean;
 			
-			-- Enumerated type {pos1, no_output, pos2}
-			state : out data port datatypes::SwitchState;
+			-- Enumerated type {pos1, no_output, pos2} state is local variable (to AGREE perhaps?)
+			
+			annex agree {**
+				
+				--switch_behavior_norm_guarantee := (TRUE -> (( G 
+				-- 		(validity_1 -> (cmd_out <-> cmd_in_1)) 
+				-- 		&  G ((!validity_1 & validity_2) -> (cmd_out <-> cmd_in_2))) 
+				-- 		&  G ((!validity_1 & !validity_2) -> cmd_out = FALSE)));
+				
+				guarantee "(SwitchGate) If channel 1 is valid, then cmd_out is equivalent to cmd_in_1 (from channel 1).
+						  If channel 2 is valid and not channel 1, then cmd_out is equivalent to cmd_in_2 (from channel 2).
+						  And if neither channel is valid, then cmd_out is false." :
+						  true -> 
+						  	(validity1 => (cmd_out <=> cmd_in_1))
+						  	and ((not validity1 and validity2) => (cmd_out <=> cmd_in_2))
+						  	and ((not validity1 and not validity2) => (cmd_out <=> false));
+				
+				
+				
+			**};
 			
 	end SwitchGate;	
 	

@@ -20,6 +20,30 @@ with Base_Types;
 			hyd_pressure_out3 : out data port Base_Types::Integer;
 			hyd_pressure_out4 : out data port Base_Types::Integer;
 			
+			annex agree {**
+					
+				-- apply_command_3_norm_guarantee := 
+				--		(TRUE ->  G (((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & hyd_pressure_in > 0) <-> hyd_pressure_out_3 > 0));
+				guarantee "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out1 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_1_5)));
+							
+				guarantee "(AlternateBrakeSystem) Pair 2,6: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out2 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_2_6)));
+							
+				guarantee "(AlternateBrakeSystem) Pair 3,7: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out3 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_3_7)));
+							
+				guarantee "(AlternateBrakeSystem) Pair 4,8: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
+							
+				
+					
+			**};
+			
 	end AlternateBrakeSystem;
 	
 	system implementation AlternateBrakeSystem.inst
@@ -78,6 +102,23 @@ with Base_Types;
 			-- Outputs 
 			-- pressure out goes to meter valve
 			hyd_pressure_out : out data port Base_Types::Integer;
+			
+			annex agree {**
+				
+				-- apply_command_norm_guarantee := (TRUE -> 
+				-- 		( G ((hyd_pressure_in = 0 | as_cmd) -> hyd_pressure_out = 0) 
+				--	   &  G ((hyd_pressure_in > 0 & !as_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in))
+				
+				guarantee "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
+							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
+							to the hyd pressure in." :
+							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
+								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
+			
+				
+				
+			**};
+			
 	end AntiskidShutoffValve;
 	
 end AlternateBrakeSystem;

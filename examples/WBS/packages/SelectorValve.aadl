@@ -14,6 +14,25 @@ with Base_Types;
 			
 			-- Enumerated type: {green, blue}
 			sys_mode : out data port Base_Types::Integer;
+			
+		annex agree {**
+			
+			-- select_circuit_norm_guarantee := (TRUE -> (( G 
+			--   ((green_select_in > 0 & system_validity) -> (green_select_out > 0 & blue_select_out = 0)) 
+			--    &  G (((green_select_in = 0 | !system_validity) & blue_select_in > 0) -> (green_select_out = 0 & blue_select_out > 0))
+			--    &  G (((green_select_in = 0 | !system_validity) & blue_select_in = 0) -> (green_select_out = 0 & blue_select_out = 0))));
+			property GREENLINE = ((green_select_in > 0 and system_validity) => (green_select_out > 0 and blue_select_out = 0));
+			property BLUELINE = ((green_select_in = 0 or not system_validity) and blue_select_in > 0) -> (green_select_out = 0 and blue_select_out > 0);
+			property NEITHER = ((green_select_in = 0 or not system_validity) and blue_select_in = 0) -> (green_select_out = 0 and blue_select_out = 0);
+			
+			guarantee "(SelectorValve) The green line is selected under valid system and positive green pressure. 
+						The blue line is selected under invalid system or no green pressure and positive blue pressure.
+						Neither are selected in any other case." :
+						true -> GREENLINE and BLUELINE and NEITHER;
+			
+			
+			
+		**};
 	end SelectorValve;
 	
 	system implementation SelectorValve.inst

@@ -49,6 +49,84 @@ with datatypes;
 			
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
 			control_sys_validity : out data port Base_Types::Boolean;
+	
+	annex agree {**
+		
+		-- Some properties that are used often in these contracts
+		property hyd_supply1_range = hyd_supply1 > -1 and hyd_supply1 < 11;
+		property hyd_supply2_range = hyd_supply2 > -1 and hyd_supply2 < 11;
+		property ground_speed_range = ground_speed > -1 and ground_speed < 11;
+		
+		-- Hydraulic supply {0,...,10} allowable values
+		-- Ground speed {0,...,10} allowable values
+		assume "(WBS top level) Hydraulic pressure bounded between 0 and 10 inclusive." :
+			(hyd_supply1_range) and (hyd_supply2_range) and (ground_speed_range);
+
+		
+		-- Properties
+		-- All power is supplied
+		property POWER = power1 and power2 and pump_power1 and pump_power2;
+		-- Hydraulic fluid is at it's max value (10)
+		property HYD_PRESSURE_MAX = (hyd_supply1 = 10) and (hyd_supply2 = 10);
+		-- Speed is positive
+		property SPEED = ground_speed > 0;
+		-- wheel rolling
+		property W1ROLL = (wheel_status1 = enum(datatypes::WheelStatus, rolling));
+		property W2ROLL = (wheel_status2 = enum(datatypes::WheelStatus, rolling));
+		property W3ROLL = (wheel_status3 = enum(datatypes::WheelStatus, rolling));
+		property W4ROLL = (wheel_status4 = enum(datatypes::WheelStatus, rolling));
+		property W5ROLL = (wheel_status5 = enum(datatypes::WheelStatus, rolling));
+		property W6ROLL = (wheel_status6 = enum(datatypes::WheelStatus, rolling));
+		property W7ROLL = (wheel_status7 = enum(datatypes::WheelStatus, rolling));
+		property W8ROLL = (wheel_status8 = enum(datatypes::WheelStatus, rolling));
+		
+		--		never_inadvertent_braking_of_wheel_4_norm_guarantee := 
+		--	  (G (((((power_1 & power_2) & pump_power_1) & pump_power_2) & hydraulic_supply_1 = 10) & hydraulic_supply_2 = 10) 
+		--  ->  G !(((!mechanical_pedal_pos_R & ground_speed > 0) & wheel_braking_force_4 > 0) & wheel_status_4 = rolling));
+		
+		guarantee "(WBS) Inadvertent braking of wheel 1: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_L or (not SPEED) or (wheel_braking_force1 = 0) or (not W1ROLL));
+		
+		guarantee "(WBS) Inadvertent braking of wheel 2: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_L or (not SPEED) or (wheel_braking_force2 = 0) or (not W2ROLL));
+					
+		guarantee "(WBS) Inadvertent braking of wheel 3: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_R or (not SPEED) or (wheel_braking_force3 = 0) or (not W3ROLL));
+					
+		guarantee "(WBS) Inadvertent braking of wheel 4: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_R or (not SPEED) or (wheel_braking_force4 = 0) or (not W4ROLL));		
+		
+		guarantee "(WBS) Inadvertent braking of wheel 5: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_L or (not SPEED) or (wheel_braking_force5 = 0) or (not W5ROLL));
+					
+		guarantee "(WBS) Inadvertent braking of wheel 6: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_L or (not SPEED) or (wheel_braking_force6 = 0) or (not W6ROLL));
+					
+		guarantee "(WBS) Inadvertent braking of wheel 7: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_R or (not SPEED) or (wheel_braking_force7 = 0) or (not W7ROLL));
+					
+		guarantee "(WBS) Inadvertent braking of wheel 8: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
+					POWER and HYD_PRESSURE_MAX => (mech_pedal_pos_R or (not SPEED) or (wheel_braking_force8 = 0) or (not W8ROLL));															
+					
+							
+	**};
+	
 	end WBS;
 	
 	system implementation WBS.inst
@@ -72,7 +150,7 @@ with datatypes;
 			
 		-- Connections 
 		connections
-			
+			 
 			-- Inputs to control system
 			
 			-- Ground speed

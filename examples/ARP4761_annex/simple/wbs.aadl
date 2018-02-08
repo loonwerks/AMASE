@@ -42,7 +42,7 @@ subcomponents
 	
 	--  The selector subsystem
 	selector   		: system valves::selector;
-	bscu       		: system bscu::bscu.generic;
+	bscu       		: system bscu::bscu.generic; 
 
     -- The accumulator subsystem (new)
     accumulator_valve		: system valves::accumulator_valve;
