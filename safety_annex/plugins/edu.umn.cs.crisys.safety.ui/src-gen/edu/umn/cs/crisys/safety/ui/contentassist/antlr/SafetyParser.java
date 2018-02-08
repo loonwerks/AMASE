@@ -89,6 +89,9 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getGroup_0(), "rule__SpecStatement__Group_0__0");
 					put(grammarAccess.getSpecStatementAccess().getGroup_1(), "rule__SpecStatement__Group_1__0");
 					put(grammarAccess.getSpecStatementAccess().getGroup_2(), "rule__SpecStatement__Group_2__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_3(), "rule__SpecStatement__Group_3__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_3_7(), "rule__SpecStatement__Group_3_7__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_3_14(), "rule__SpecStatement__Group_3_14__0");
 					put(grammarAccess.getAnalysisBehaviorAccess().getGroup_0(), "rule__AnalysisBehavior__Group_0__0");
 					put(grammarAccess.getAnalysisBehaviorAccess().getGroup_1(), "rule__AnalysisBehavior__Group_1__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_0(), "rule__FaultSubcomponent__Group_0__0");
@@ -102,8 +105,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_0(), "rule__HWFaultSubcomponent__Group_0__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_1(), "rule__HWFaultSubcomponent__Group_1__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_2(), "rule__HWFaultSubcomponent__Group_2__0");
-					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_2_7(), "rule__HWFaultSubcomponent__Group_2_7__0");
-					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_3(), "rule__HWFaultSubcomponent__Group_3__0");
 					put(grammarAccess.getPropagationTypeConstraintAccess().getGroup_0(), "rule__PropagationTypeConstraint__Group_0__0");
 					put(grammarAccess.getPropagationTypeConstraintAccess().getGroup_1(), "rule__PropagationTypeConstraint__Group_1__0");
 					put(grammarAccess.getTemporalConstraintAccess().getGroup_0(), "rule__TemporalConstraint__Group_0__0");
@@ -357,6 +358,14 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getNameAssignment_2_2(), "rule__SpecStatement__NameAssignment_2_2");
 					put(grammarAccess.getSpecStatementAccess().getStrAssignment_2_3(), "rule__SpecStatement__StrAssignment_2_3");
 					put(grammarAccess.getSpecStatementAccess().getFaultDefinitionsAssignment_2_6(), "rule__SpecStatement__FaultDefinitionsAssignment_2_6");
+					put(grammarAccess.getSpecStatementAccess().getSrcFaultListAssignment_3_4(), "rule__SpecStatement__SrcFaultListAssignment_3_4");
+					put(grammarAccess.getSpecStatementAccess().getSrcComp_pathAssignment_3_6(), "rule__SpecStatement__SrcComp_pathAssignment_3_6");
+					put(grammarAccess.getSpecStatementAccess().getSrcFaultListAssignment_3_7_1(), "rule__SpecStatement__SrcFaultListAssignment_3_7_1");
+					put(grammarAccess.getSpecStatementAccess().getSrcComp_pathAssignment_3_7_3(), "rule__SpecStatement__SrcComp_pathAssignment_3_7_3");
+					put(grammarAccess.getSpecStatementAccess().getDestFaultListAssignment_3_11(), "rule__SpecStatement__DestFaultListAssignment_3_11");
+					put(grammarAccess.getSpecStatementAccess().getDestComp_pathAssignment_3_13(), "rule__SpecStatement__DestComp_pathAssignment_3_13");
+					put(grammarAccess.getSpecStatementAccess().getDestFaultListAssignment_3_14_1(), "rule__SpecStatement__DestFaultListAssignment_3_14_1");
+					put(grammarAccess.getSpecStatementAccess().getDestComp_pathAssignment_3_14_3(), "rule__SpecStatement__DestComp_pathAssignment_3_14_3");
 					put(grammarAccess.getAnalysisBehaviorAccess().getMaxFaultsAssignment_0_2(), "rule__AnalysisBehavior__MaxFaultsAssignment_0_2");
 					put(grammarAccess.getAnalysisBehaviorAccess().getProbabiltyAssignment_1_2(), "rule__AnalysisBehavior__ProbabiltyAssignment_1_2");
 					put(grammarAccess.getFaultSubcomponentAccess().getFault_inAssignment_0_3(), "rule__FaultSubcomponent__Fault_inAssignment_0_3");
@@ -375,9 +384,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getHWFaultSubcomponentAccess().getTcAssignment_0_3(), "rule__HWFaultSubcomponent__TcAssignment_0_3");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getIntervAssignment_0_4(), "rule__HWFaultSubcomponent__IntervAssignment_0_4");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getProbabilityAssignment_1_3(), "rule__HWFaultSubcomponent__ProbabilityAssignment_1_3");
-					put(grammarAccess.getHWFaultSubcomponentAccess().getFaultListAssignment_2_4(), "rule__HWFaultSubcomponent__FaultListAssignment_2_4");
-					put(grammarAccess.getHWFaultSubcomponentAccess().getFaultListAssignment_2_7_1(), "rule__HWFaultSubcomponent__FaultListAssignment_2_7_1");
-					put(grammarAccess.getHWFaultSubcomponentAccess().getPtyAssignment_3_3(), "rule__HWFaultSubcomponent__PtyAssignment_3_3");
+					put(grammarAccess.getHWFaultSubcomponentAccess().getPtyAssignment_2_3(), "rule__HWFaultSubcomponent__PtyAssignment_2_3");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_3(), "rule__TriggerCondition__ExprListAssignment_3");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_4_1(), "rule__TriggerCondition__ExprListAssignment_4_1");
 					put(grammarAccess.getSafetyEqStatementAccess().getLhsAssignment_0_2_0(), "rule__SafetyEqStatement__LhsAssignment_0_2_0");

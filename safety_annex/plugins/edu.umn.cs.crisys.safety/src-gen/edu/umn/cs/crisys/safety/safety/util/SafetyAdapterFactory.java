@@ -179,6 +179,11 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createHWFaultStatementAdapter();
       }
       @Override
+      public Adapter casePropagateStatement(PropagateStatement object)
+      {
+        return createPropagateStatementAdapter();
+      }
+      @Override
       public Adapter caseFaultCountBehavior(FaultCountBehavior object)
       {
         return createFaultCountBehaviorAdapter();
@@ -217,11 +222,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
       public Adapter casePropagationTypeStatement(PropagationTypeStatement object)
       {
         return createPropagationTypeStatementAdapter();
-      }
-      @Override
-      public Adapter casePropagateToStatement(PropagateToStatement object)
-      {
-        return createPropagateToStatementAdapter();
       }
       @Override
       public Adapter caseasymmetric(asymmetric object)
@@ -641,6 +641,21 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement <em>Propagate Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateStatement
+   * @generated
+   */
+  public Adapter createPropagateStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior <em>Fault Count Behavior</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -756,21 +771,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createPropagationTypeStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PropagateToStatement <em>Propagate To Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.PropagateToStatement
-   * @generated
-   */
-  public Adapter createPropagateToStatementAdapter()
   {
     return null;
   }

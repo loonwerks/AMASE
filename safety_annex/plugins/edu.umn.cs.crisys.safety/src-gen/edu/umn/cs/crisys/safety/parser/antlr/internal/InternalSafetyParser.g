@@ -454,6 +454,227 @@ ruleSpecStatement returns [EObject current=null]
     {
     	newLeafNode(otherlv_20, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_2_7());
     }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getSpecStatementAccess().getPropagateStatementAction_3_0(),
+            $current);
+    }
+)
+	otherlv_22=Propagate_from
+    {
+    	newLeafNode(otherlv_22, grammarAccess.getSpecStatementAccess().getPropagate_fromKeyword_3_1());
+    }
+
+	otherlv_23=Colon
+    {
+    	newLeafNode(otherlv_23, grammarAccess.getSpecStatementAccess().getColonKeyword_3_2());
+    }
+
+	otherlv_24=LeftCurlyBracket
+    {
+    	newLeafNode(otherlv_24, grammarAccess.getSpecStatementAccess().getLeftCurlyBracketKeyword_3_3());
+    }
+(
+(
+		lv_srcFaultList_25_0=RULE_ID
+		{
+			newLeafNode(lv_srcFaultList_25_0, grammarAccess.getSpecStatementAccess().getSrcFaultListIDTerminalRuleCall_3_4_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		addWithLastConsumed(
+       			$current, 
+       			"srcFaultList",
+        		lv_srcFaultList_25_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_26=CommercialAt
+    {
+    	newLeafNode(otherlv_26, grammarAccess.getSpecStatementAccess().getCommercialAtKeyword_3_5());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getSrcComp_pathNestedDotIDParserRuleCall_3_6_0()); 
+	    }
+		lv_srcComp_path_27_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"srcComp_path",
+        		lv_srcComp_path_27_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(
+	otherlv_28=Comma
+    {
+    	newLeafNode(otherlv_28, grammarAccess.getSpecStatementAccess().getCommaKeyword_3_7_0());
+    }
+(
+(
+		lv_srcFaultList_29_0=RULE_ID
+		{
+			newLeafNode(lv_srcFaultList_29_0, grammarAccess.getSpecStatementAccess().getSrcFaultListIDTerminalRuleCall_3_7_1_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		addWithLastConsumed(
+       			$current, 
+       			"srcFaultList",
+        		lv_srcFaultList_29_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_30=CommercialAt
+    {
+    	newLeafNode(otherlv_30, grammarAccess.getSpecStatementAccess().getCommercialAtKeyword_3_7_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getSrcComp_pathNestedDotIDParserRuleCall_3_7_3_0()); 
+	    }
+		lv_srcComp_path_31_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"srcComp_path",
+        		lv_srcComp_path_31_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*
+	otherlv_32=RightCurlyBracket
+    {
+    	newLeafNode(otherlv_32, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_3_8());
+    }
+
+	otherlv_33=To
+    {
+    	newLeafNode(otherlv_33, grammarAccess.getSpecStatementAccess().getToKeyword_3_9());
+    }
+
+	otherlv_34=LeftCurlyBracket
+    {
+    	newLeafNode(otherlv_34, grammarAccess.getSpecStatementAccess().getLeftCurlyBracketKeyword_3_10());
+    }
+(
+(
+		lv_destFaultList_35_0=RULE_ID
+		{
+			newLeafNode(lv_destFaultList_35_0, grammarAccess.getSpecStatementAccess().getDestFaultListIDTerminalRuleCall_3_11_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		addWithLastConsumed(
+       			$current, 
+       			"destFaultList",
+        		lv_destFaultList_35_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_36=CommercialAt
+    {
+    	newLeafNode(otherlv_36, grammarAccess.getSpecStatementAccess().getCommercialAtKeyword_3_12());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getDestComp_pathNestedDotIDParserRuleCall_3_13_0()); 
+	    }
+		lv_destComp_path_37_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"destComp_path",
+        		lv_destComp_path_37_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(
+	otherlv_38=Comma
+    {
+    	newLeafNode(otherlv_38, grammarAccess.getSpecStatementAccess().getCommaKeyword_3_14_0());
+    }
+(
+(
+		lv_destFaultList_39_0=RULE_ID
+		{
+			newLeafNode(lv_destFaultList_39_0, grammarAccess.getSpecStatementAccess().getDestFaultListIDTerminalRuleCall_3_14_1_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		addWithLastConsumed(
+       			$current, 
+       			"destFaultList",
+        		lv_destFaultList_39_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_40=CommercialAt
+    {
+    	newLeafNode(otherlv_40, grammarAccess.getSpecStatementAccess().getCommercialAtKeyword_3_14_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getDestComp_pathNestedDotIDParserRuleCall_3_14_3_0()); 
+	    }
+		lv_destComp_path_41_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"destComp_path",
+        		lv_destComp_path_41_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*
+	otherlv_42=RightCurlyBracket
+    {
+    	newLeafNode(otherlv_42, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_3_15());
+    }
+
+	otherlv_43=Semicolon
+    {
+    	newLeafNode(otherlv_43, grammarAccess.getSpecStatementAccess().getSemicolonKeyword_3_16());
+    }
 ))
 ;
 
@@ -1082,141 +1303,50 @@ ruleHWFaultSubcomponent returns [EObject current=null]
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getHWFaultSubcomponentAccess().getPropagateToStatementAction_2_0(),
+            grammarAccess.getHWFaultSubcomponentAccess().getPropagationTypeStatementAction_2_0(),
             $current);
     }
 )
-	otherlv_12=Propagate_to
+	otherlv_12=Propagate_type
     {
-    	newLeafNode(otherlv_12, grammarAccess.getHWFaultSubcomponentAccess().getPropagate_toKeyword_2_1());
+    	newLeafNode(otherlv_12, grammarAccess.getHWFaultSubcomponentAccess().getPropagate_typeKeyword_2_1());
     }
 
 	otherlv_13=Colon
     {
     	newLeafNode(otherlv_13, grammarAccess.getHWFaultSubcomponentAccess().getColonKeyword_2_2());
     }
-
-	otherlv_14=LeftCurlyBracket
-    {
-    	newLeafNode(otherlv_14, grammarAccess.getHWFaultSubcomponentAccess().getLeftCurlyBracketKeyword_2_3());
-    }
-(
-(
-		lv_faultList_15_0=RULE_ID
-		{
-			newLeafNode(lv_faultList_15_0, grammarAccess.getHWFaultSubcomponentAccess().getFaultListIDTerminalRuleCall_2_4_0()); 
-		}
-		{
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getHWFaultSubcomponentRule());
-	        }
-       		addWithLastConsumed(
-       			$current, 
-       			"faultList",
-        		lv_faultList_15_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
-	    }
-
-)
-)
-	otherlv_16=FullStop
-    {
-    	newLeafNode(otherlv_16, grammarAccess.getHWFaultSubcomponentAccess().getFullStopKeyword_2_5());
-    }
-this_ID_17=RULE_ID
-    { 
-    newLeafNode(this_ID_17, grammarAccess.getHWFaultSubcomponentAccess().getIDTerminalRuleCall_2_6()); 
-    }
-(
-	otherlv_18=Comma
-    {
-    	newLeafNode(otherlv_18, grammarAccess.getHWFaultSubcomponentAccess().getCommaKeyword_2_7_0());
-    }
-(
-(
-		lv_faultList_19_0=RULE_ID
-		{
-			newLeafNode(lv_faultList_19_0, grammarAccess.getHWFaultSubcomponentAccess().getFaultListIDTerminalRuleCall_2_7_1_0()); 
-		}
-		{
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getHWFaultSubcomponentRule());
-	        }
-       		addWithLastConsumed(
-       			$current, 
-       			"faultList",
-        		lv_faultList_19_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
-	    }
-
-)
-)
-	otherlv_20=FullStop
-    {
-    	newLeafNode(otherlv_20, grammarAccess.getHWFaultSubcomponentAccess().getFullStopKeyword_2_7_2());
-    }
-this_ID_21=RULE_ID
-    { 
-    newLeafNode(this_ID_21, grammarAccess.getHWFaultSubcomponentAccess().getIDTerminalRuleCall_2_7_3()); 
-    }
-)*
-	otherlv_22=RightCurlyBracket
-    {
-    	newLeafNode(otherlv_22, grammarAccess.getHWFaultSubcomponentAccess().getRightCurlyBracketKeyword_2_8());
-    }
-
-	otherlv_23=Semicolon
-    {
-    	newLeafNode(otherlv_23, grammarAccess.getHWFaultSubcomponentAccess().getSemicolonKeyword_2_9());
-    }
-)
-    |((
-    {
-        $current = forceCreateModelElement(
-            grammarAccess.getHWFaultSubcomponentAccess().getPropagationTypeStatementAction_3_0(),
-            $current);
-    }
-)
-	otherlv_25=Propagate_type
-    {
-    	newLeafNode(otherlv_25, grammarAccess.getHWFaultSubcomponentAccess().getPropagate_typeKeyword_3_1());
-    }
-
-	otherlv_26=Colon
-    {
-    	newLeafNode(otherlv_26, grammarAccess.getHWFaultSubcomponentAccess().getColonKeyword_3_2());
-    }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_3_3_0()); 
+	        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_2_3_0()); 
 	    }
-		lv_pty_27_0=rulePropagationTypeConstraint		{
+		lv_pty_14_0=rulePropagationTypeConstraint		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getHWFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"pty",
-        		lv_pty_27_0, 
+        		lv_pty_14_0, 
         		"edu.umn.cs.crisys.safety.Safety.PropagationTypeConstraint");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_28=Semicolon
+	otherlv_15=Semicolon
     {
-    	newLeafNode(otherlv_28, grammarAccess.getHWFaultSubcomponentAccess().getSemicolonKeyword_3_4());
+    	newLeafNode(otherlv_15, grammarAccess.getHWFaultSubcomponentAccess().getSemicolonKeyword_2_4());
     }
 )
     |
     { 
-        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_4()); 
+        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_3()); 
     }
-    this_SafetyEqStatement_29=ruleSafetyEqStatement
+    this_SafetyEqStatement_16=ruleSafetyEqStatement
     {
-        $current = $this_SafetyEqStatement_29.current;
+        $current = $this_SafetyEqStatement_16.current;
         afterParserOrEnumRuleCall();
     }
 )

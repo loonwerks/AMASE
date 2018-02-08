@@ -963,6 +963,79 @@ public interface SafetyPackage extends EPackage
   int HW_FAULT_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 3;
 
   /**
+   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagateStatementImpl <em>Propagate Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see edu.umn.cs.crisys.safety.safety.impl.PropagateStatementImpl
+   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagateStatement()
+   * @generated
+   */
+  int PROPAGATE_STATEMENT = 20;
+
+  /**
+   * The feature id for the '<em><b>Owned Element</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT__OWNED_ELEMENT = SPEC_STATEMENT__OWNED_ELEMENT;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT__OWNED_COMMENT = SPEC_STATEMENT__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Src Fault List</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT__SRC_FAULT_LIST = SPEC_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Src Comp path</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT__SRC_COMP_PATH = SPEC_STATEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Dest Fault List</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT__DEST_FAULT_LIST = SPEC_STATEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Dest Comp path</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT__DEST_COMP_PATH = SPEC_STATEMENT_FEATURE_COUNT + 3;
+
+  /**
+   * The number of structural features of the '<em>Propagate Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPAGATE_STATEMENT_FEATURE_COUNT = SPEC_STATEMENT_FEATURE_COUNT + 4;
+
+  /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultCountBehaviorImpl <em>Fault Count Behavior</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -970,7 +1043,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getFaultCountBehavior()
    * @generated
    */
-  int FAULT_COUNT_BEHAVIOR = 20;
+  int FAULT_COUNT_BEHAVIOR = 21;
 
   /**
    * The feature id for the '<em><b>Max Faults</b></em>' attribute.
@@ -998,7 +1071,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getProbabilityBehavior()
    * @generated
    */
-  int PROBABILITY_BEHAVIOR = 21;
+  int PROBABILITY_BEHAVIOR = 22;
 
   /**
    * The feature id for the '<em><b>Probabilty</b></em>' attribute.
@@ -1026,7 +1099,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getInputStatement()
    * @generated
    */
-  int INPUT_STATEMENT = 22;
+  int INPUT_STATEMENT = 23;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1081,7 +1154,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getOutputStatement()
    * @generated
    */
-  int OUTPUT_STATEMENT = 23;
+  int OUTPUT_STATEMENT = 24;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1136,7 +1209,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getDurationStatement()
    * @generated
    */
-  int DURATION_STATEMENT = 24;
+  int DURATION_STATEMENT = 25;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1191,7 +1264,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getProbabilityStatement()
    * @generated
    */
-  int PROBABILITY_STATEMENT = 25;
+  int PROBABILITY_STATEMENT = 26;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1237,7 +1310,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getTriggerStatement()
    * @generated
    */
-  int TRIGGER_STATEMENT = 26;
+  int TRIGGER_STATEMENT = 27;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1283,7 +1356,7 @@ public interface SafetyPackage extends EPackage
    * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagationTypeStatement()
    * @generated
    */
-  int PROPAGATION_TYPE_STATEMENT = 27;
+  int PROPAGATION_TYPE_STATEMENT = 28;
 
   /**
    * The feature id for the '<em><b>Owned Element</b></em>' reference list.
@@ -1320,34 +1393,6 @@ public interface SafetyPackage extends EPackage
    * @ordered
    */
   int PROPAGATION_TYPE_STATEMENT_FEATURE_COUNT = FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl <em>Propagate To Statement</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl
-   * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagateToStatement()
-   * @generated
-   */
-  int PROPAGATE_TO_STATEMENT = 28;
-
-  /**
-   * The feature id for the '<em><b>Fault List</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPAGATE_TO_STATEMENT__FAULT_LIST = HW_FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Propagate To Statement</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPAGATE_TO_STATEMENT_FEATURE_COUNT = HW_FAULT_SUBCOMPONENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link edu.umn.cs.crisys.safety.safety.impl.asymmetricImpl <em>asymmetric</em>}' class.
@@ -2184,6 +2229,60 @@ public interface SafetyPackage extends EPackage
   EReference getHWFaultStatement_FaultDefinitions();
 
   /**
+   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement <em>Propagate Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Propagate Statement</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateStatement
+   * @generated
+   */
+  EClass getPropagateStatement();
+
+  /**
+   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcFaultList <em>Src Fault List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Src Fault List</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcFaultList()
+   * @see #getPropagateStatement()
+   * @generated
+   */
+  EAttribute getPropagateStatement_SrcFaultList();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcComp_path <em>Src Comp path</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Src Comp path</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcComp_path()
+   * @see #getPropagateStatement()
+   * @generated
+   */
+  EReference getPropagateStatement_SrcComp_path();
+
+  /**
+   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestFaultList <em>Dest Fault List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Dest Fault List</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestFaultList()
+   * @see #getPropagateStatement()
+   * @generated
+   */
+  EAttribute getPropagateStatement_DestFaultList();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestComp_path <em>Dest Comp path</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Dest Comp path</em>'.
+   * @see edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestComp_path()
+   * @see #getPropagateStatement()
+   * @generated
+   */
+  EReference getPropagateStatement_DestComp_path();
+
+  /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior <em>Fault Count Behavior</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2383,27 +2482,6 @@ public interface SafetyPackage extends EPackage
    * @generated
    */
   EReference getPropagationTypeStatement_Pty();
-
-  /**
-   * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.PropagateToStatement <em>Propagate To Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Propagate To Statement</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.PropagateToStatement
-   * @generated
-   */
-  EClass getPropagateToStatement();
-
-  /**
-   * Returns the meta object for the attribute list '{@link edu.umn.cs.crisys.safety.safety.PropagateToStatement#getFaultList <em>Fault List</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Fault List</em>'.
-   * @see edu.umn.cs.crisys.safety.safety.PropagateToStatement#getFaultList()
-   * @see #getPropagateToStatement()
-   * @generated
-   */
-  EAttribute getPropagateToStatement_FaultList();
 
   /**
    * Returns the meta object for class '{@link edu.umn.cs.crisys.safety.safety.asymmetric <em>asymmetric</em>}'.
@@ -2984,6 +3062,48 @@ public interface SafetyPackage extends EPackage
     EReference HW_FAULT_STATEMENT__FAULT_DEFINITIONS = eINSTANCE.getHWFaultStatement_FaultDefinitions();
 
     /**
+     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagateStatementImpl <em>Propagate Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see edu.umn.cs.crisys.safety.safety.impl.PropagateStatementImpl
+     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagateStatement()
+     * @generated
+     */
+    EClass PROPAGATE_STATEMENT = eINSTANCE.getPropagateStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Src Fault List</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROPAGATE_STATEMENT__SRC_FAULT_LIST = eINSTANCE.getPropagateStatement_SrcFaultList();
+
+    /**
+     * The meta object literal for the '<em><b>Src Comp path</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PROPAGATE_STATEMENT__SRC_COMP_PATH = eINSTANCE.getPropagateStatement_SrcComp_path();
+
+    /**
+     * The meta object literal for the '<em><b>Dest Fault List</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROPAGATE_STATEMENT__DEST_FAULT_LIST = eINSTANCE.getPropagateStatement_DestFaultList();
+
+    /**
+     * The meta object literal for the '<em><b>Dest Comp path</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PROPAGATE_STATEMENT__DEST_COMP_PATH = eINSTANCE.getPropagateStatement_DestComp_path();
+
+    /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.FaultCountBehaviorImpl <em>Fault Count Behavior</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3150,24 +3270,6 @@ public interface SafetyPackage extends EPackage
      * @generated
      */
     EReference PROPAGATION_TYPE_STATEMENT__PTY = eINSTANCE.getPropagationTypeStatement_Pty();
-
-    /**
-     * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl <em>Propagate To Statement</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see edu.umn.cs.crisys.safety.safety.impl.PropagateToStatementImpl
-     * @see edu.umn.cs.crisys.safety.safety.impl.SafetyPackageImpl#getPropagateToStatement()
-     * @generated
-     */
-    EClass PROPAGATE_TO_STATEMENT = eINSTANCE.getPropagateToStatement();
-
-    /**
-     * The meta object literal for the '<em><b>Fault List</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPAGATE_TO_STATEMENT__FAULT_LIST = eINSTANCE.getPropagateToStatement_FaultList();
 
     /**
      * The meta object literal for the '{@link edu.umn.cs.crisys.safety.safety.impl.asymmetricImpl <em>asymmetric</em>}' class.
