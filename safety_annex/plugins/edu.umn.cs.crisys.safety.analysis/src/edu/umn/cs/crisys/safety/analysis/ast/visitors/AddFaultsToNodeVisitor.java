@@ -47,6 +47,7 @@ import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
+import jkind.lustre.BoolExpr;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.IfThenElseExpr;
@@ -80,6 +81,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Keying off component instance rather than AgreeNode, just so we don't
 	// have problems with "stale" AgreeNode references during transformations.
 	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>();
+	// It is used to store src to dest fault propagations
+	private HashSet<SafetyPropagation> propagations = new HashSet<>();
+	
 	// I am unsure as to whether this is necessary: it appears to map a fault to a
 	// single
 	// string. As such, I believe it is incorrectly constructed.
@@ -132,9 +136,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	@Override
 	public AgreeNode visit(AgreeNode node) {
 		Map<String, List<Pair>> parentFaultyVarsExpr = faultyVarsExpr;
-
 		boolean isTop = (node == this.topNode);
+		
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop);
+		//rename var names in faults, like faultname_varname
 		faults = renameFaultEqs(faults);
 
 		if (faultMap.containsKey(node.compInst)) {
@@ -144,6 +149,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faultMap.put(node.compInst, faults);
 
 		faultyVarsExpr = gatherFaultyOutputs(faults, node);
+		//this will traverse through the decendent nodes
 		node = super.visit(node);
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
@@ -155,13 +161,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (isTop) {
 			topNode = node;
 			AnalysisBehavior maxFaults = this.gatherTopLevelFaultCount(node);
-			// check propagation statement and store in a propagation map
-			HashSet<SafetyPropagation> propagations = this.gatherFaultPropagation(faultMap, node);
-			// TODO: take the propagation map as an argument when constructing top level
-			// fault declarations
+			//gather path information for the faults (for creating names later)
+			collectFaultPath(node, new ArrayList<>());
+			this.gatherFaultPropagation(node);
+			// empty path to pass to top level node fault
+			// node id used as the path to pass to sub level node fault
 			addTopLevelFaultDeclarations(node, new ArrayList<>(), nb);
-			// TODO: take the propagation map as an argument when constructing top level
-			// fault occurrence constraints
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		}
 
@@ -424,8 +429,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return "__fault__event__" + base;
 	}
 
-	public String createFaultActiveId(String base) {
-		return "__fault__active__" + base;
+	public String createFaultIndependentActiveId(String base) {
+		return "__fault__independently__active__" + base;
+	}
+	
+	public String createFaultDependentActiveId(String base) {
+		return "__fault__dependently__active__" + base;
 	}
 
 	public String createFaultNodeInputId(String base) {
@@ -449,6 +458,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
 
 		List<Fault> faults = new ArrayList<>();
+		
 		for (SpecStatement s : specs) {
 			if (s instanceof FaultStatement) {
 				FaultStatement fs = (FaultStatement) s;
@@ -495,13 +505,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	// Identify the fault associated with a ComponentInstance given the fault name
 	// and the component path
-	public Fault findFaultInCompInst(Map<ComponentInstance, List<Fault>> curFaultMap, String faultName,
-			NestedDotID compPath) {
-		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(curFaultMap.keySet());
+	public Fault findFaultInCompInst(String faultName, NestedDotID compPath) {
+		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(faultMap.keySet());
 
 		for (ComponentInstance compInst : compInsts) {
 			if (compInst.getName().equals(compPath.getBase().getName())) {
-				List<Fault> faults = new ArrayList<Fault>(curFaultMap.get(compInst));
+				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
 				for (Fault fault : faults) {
 					if (fault.name.equals(faultName)) {
 						return fault;
@@ -513,9 +522,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		throw new SafetyException("Unable to identify fault for " + faultName + "@"+compPath.getBase().getName());
 	}
 
-	public HashSet<SafetyPropagation> gatherFaultPropagation(Map<ComponentInstance, List<Fault>> curFaultMap,
-			AgreeNode node) {
-		HashSet<SafetyPropagation> propagationSet = new HashSet<SafetyPropagation>();
+	public void gatherFaultPropagation(AgreeNode node) {
 
 		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, true));
 
@@ -531,7 +538,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				while (srcFaultIt.hasNext() && srcCompPathIt.hasNext()) {
 					NestedDotID srcCompPath = srcCompPathIt.next();
 					String srcFaultName = srcFaultIt.next();
-					srcFault = findFaultInCompInst(curFaultMap, srcFaultName, srcCompPath);
+					srcFault = findFaultInCompInst(srcFaultName, srcCompPath);
 					// for each destination fault name and path, locate the fault
 					Fault destFault = null;
 					Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
@@ -539,14 +546,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
 						NestedDotID destCompPath = destCompPathIt.next();
 						String destFaultName = destFaultIt.next();
-						destFault = findFaultInCompInst(curFaultMap, destFaultName, destCompPath);
+						destFault = findFaultInCompInst(destFaultName, destCompPath);
 						SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);
-						propagationSet.add(propagation);
+						propagations.add(propagation);
 					}
 				}
 			}
 		}
-		return propagationSet;
 	}
 
 	/*
@@ -569,9 +575,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return id + var;
 	}
 
-	public Expr createPermanentExpr(Expr varId, Expr expr) {
-		Expr latch = new BinaryExpr(expr, BinaryOp.ARROW,
-				new BinaryExpr(expr, BinaryOp.OR, new UnaryExpr(UnaryOp.PRE, varId)));
+	public Expr createPermanentExpr(Expr varId, Expr eventExpr) {
+		Expr latch = new BinaryExpr(eventExpr, BinaryOp.ARROW,
+				new BinaryExpr(eventExpr, BinaryOp.OR, new UnaryExpr(UnaryOp.PRE, varId)));
 		Expr equate = new BinaryExpr(varId, BinaryOp.EQUAL, latch);
 
 		return equate;
@@ -583,22 +589,35 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	public void constrainFaultActive(Fault f, String nameBase, AgreeNodeBuilder builder) {
-		IdExpr eventExpr = new IdExpr(this.createFaultEventId(nameBase));
-		IdExpr activeExpr = new IdExpr(this.createFaultActiveId(nameBase));
-		Expr assertExpr;
-		// TODO: when creating PermanentConstraint or TransientConstraint, use the
-		// disjunction of eventExpr
-		// and the fault it depends on
+		IdExpr independentlyActiveExpr = new IdExpr(this.createFaultIndependentActiveId(nameBase));
+		IdExpr dependentlyActiveExpr = new IdExpr(this.createFaultDependentActiveId(nameBase));
+		IdExpr independentEventExpr = new IdExpr(this.createFaultEventId(nameBase));
+		
+		List<Expr> faultExprs = new ArrayList<>();
+		//collect the list of source faults in the propagations 
+		//whose target fault is the current fault
+		//the names of those source faults are created through createFaultIndependentActiveId
+		getSrcFaultExprList(f, faultExprs);
+		//create a disjunction of the source faults as the triggering event
+		//for the dependent fault
+		Expr dependentEventExpr = buildFaultDisjunctionExpr(faultExprs, 0);
+		
+		Expr assertIndependentExpr;
+		Expr assertDependentExpr;
+
 		TemporalConstraint tc = f.duration.getTc();
 		if (tc instanceof PermanentConstraint) {
-			assertExpr = createPermanentExpr(activeExpr, eventExpr);
+			assertIndependentExpr = createPermanentExpr(independentlyActiveExpr, independentEventExpr);
+			assertDependentExpr = createPermanentExpr(dependentlyActiveExpr, dependentEventExpr);
 		} else if (tc instanceof TransientConstraint) {
 			System.out.println("WARNING: ignoring duration on transient faults");
-			assertExpr = createTransientExpr(activeExpr, eventExpr);
+			assertIndependentExpr = createTransientExpr(independentlyActiveExpr, independentEventExpr);
+			assertDependentExpr = createTransientExpr(dependentlyActiveExpr, dependentEventExpr);			
 		} else {
 			throw new SafetyException("Unknown constraint type during translation of fault " + f.id);
 		}
-		builder.addAssertion(new AgreeStatement("", assertExpr, f.faultStatement));
+		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, f.faultStatement));
+		builder.addAssertion(new AgreeStatement("", assertDependentExpr, f.faultStatement));
 	}
 
 	/*
@@ -609,7 +628,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 */
 	public void mapFaultActiveToNodeInterface(Fault f, List<String> path, String base, AgreeNodeBuilder builder) {
 		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
-		String activeVarId = this.createFaultActiveId(base);
+		String indepentlyActiveVarId = this.createFaultIndependentActiveId(base);
+		String depentlyActiveVarId = this.createFaultDependentActiveId(base);
 
 		// Create map from fault to it's relative path
 		// for the counterexample layout
@@ -617,10 +637,38 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			mapFaultToPath.put(f, str);
 		}
 
-		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, new IdExpr(activeVarId));
+		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, 
+				new BinaryExpr(new IdExpr(indepentlyActiveVarId), BinaryOp.OR, new IdExpr(depentlyActiveVarId)));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
 	}
 
+	
+	public void collectFaultPath(AgreeNode currentNode, List<String> path) {
+
+		List<Fault> faults = this.faultMap.get(currentNode.compInst);
+		
+		// Add unconstrained input and constrained local to represent fault event and
+		// whether or not fault is currently active.
+		int index = 0;
+		for (Fault f : faults) {
+			String base = addPathDelimiters(path, f.id);
+			//update fault name base
+			f.setNameBase(base);
+			//update fault list
+			faults.set(index,f);
+			index++;
+		}
+		//update faultMap
+		this.faultMap.put(currentNode.compInst, faults);
+		
+		//repeating it for the decendents of the node
+		for (AgreeNode n : currentNode.subNodes) {
+			List<String> ext = new ArrayList<>(path);
+			ext.add(n.id);
+			collectFaultPath(n, ext);
+		}
+	}
+	
 	public void addTopLevelFaultDeclarations(AgreeNode currentNode, List<String> path, AgreeNodeBuilder nb) {
 
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
@@ -630,19 +678,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (Fault f : faults) {
 			String base = addPathDelimiters(path, f.id);
 			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
-			nb.addInput(new AgreeVar(this.createFaultActiveId(base), NamedType.BOOL, f.faultStatement));
+			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
+			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(base), NamedType.BOOL, f.faultStatement));			
 
+			 //add to lustre fault map with the explanatory text (string given for fault definition)
 			if (mapFaultToLustreNames.containsKey(f)) {
-				mapFaultToLustreNames.get(f).add(this.createFaultActiveId(base));
+				mapFaultToLustreNames.get(f).add(this.createFaultIndependentActiveId(base));
+				mapFaultToLustreNames.get(f).add(this.createFaultDependentActiveId(base));
 			} else {
 				List<String> names = new ArrayList<>();
-				names.add(this.createFaultActiveId(base));
+				names.add(this.createFaultIndependentActiveId(base));
+				names.add(this.createFaultDependentActiveId(base));				
 				mapFaultToLustreNames.put(f, names);
 			}
 
 			// constrain fault-active depending on transient / permanent & map it to a
 			// fault in the node interface
-			// TODO: take the propagation map when constrainFaultActive
+			// take the propagation map when constrainFaultActive
 			constrainFaultActive(f, base, nb);
 			mapFaultActiveToNodeInterface(f, path, base, nb);
 		}
@@ -663,15 +715,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public Expr createSumExpr(Expr cond) {
 		return new IfThenElseExpr(cond, new IntExpr(1), new IntExpr(0));
 	}
-
+	
 	public void getFaultCountExprList(AgreeNode currentNode, List<String> path, List<Expr> sumExprs) {
 
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
 		for (Fault f : faults) {
-			// only add a fault to sumExprs when the fault is not an dependently active
-			// fault in the propagation map
+			// only add independently active fault to sumExprs
 			String base = addPathDelimiters(path, f.id);
-			sumExprs.add(createSumExpr(new IdExpr(this.createFaultActiveId(base))));
+			sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(base))));
 		}
 
 		for (AgreeNode n : currentNode.subNodes) {
@@ -680,7 +731,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			getFaultCountExprList(n, ext, sumExprs);
 		}
 	}
+	
+	//collect the list of expressions for the source faults in the propagations 
+	//whose target fault is the current fault
+	//the names of those source faults are created through createFaultIndependentActiveId
+	public void getSrcFaultExprList(Fault f, List<Expr> faultExprs) {
 
+		for(SafetyPropagation propagation: propagations) {
+			if(propagation.destFault.equals(f)) {
+				faultExprs.add(new IdExpr(this.createFaultIndependentActiveId(f.nameBase)));
+			}
+		}
+	}
+	
 	public Expr buildFaultCountExpr(List<Expr> exprList, int index) {
 		if (index > exprList.size() - 1) {
 			return new IntExpr(0);
@@ -688,6 +751,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			return exprList.get(index);
 		} else {
 			return new BinaryExpr(exprList.get(index), BinaryOp.PLUS, buildFaultCountExpr(exprList, index + 1));
+		}
+	}
+	
+	public Expr buildFaultDisjunctionExpr(List<Expr> exprList, int index) {
+		if (index > exprList.size() - 1) {
+			return new BoolExpr(false);
+		} else if (index == exprList.size() - 1) {
+			return exprList.get(index);
+		} else {
+			return new BinaryExpr(exprList.get(index), BinaryOp.OR, buildFaultDisjunctionExpr(exprList, index + 1));
 		}
 	}
 
@@ -769,7 +842,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
 		for (Fault f : faults) {
 			String base = addPathDelimiters(path, f.id);
-			probabilities.add(new FaultProbability(this.createFaultActiveId(base), f.probability));
+			probabilities.add(new FaultProbability(this.createFaultIndependentActiveId(base), f.probability));
 		}
 
 		for (AgreeNode n : currentNode.subNodes) {

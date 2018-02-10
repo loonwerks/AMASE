@@ -32,6 +32,8 @@ public class Fault {
 	public String name;
 	public String explanitoryText;
 	public double probability;
+	//name base for creating variable names
+	public String nameBase;
 	
 	// Some information about the fault
 	public DurationStatement duration = null;
@@ -79,4 +81,9 @@ public class Fault {
 
 		this.faultStatement = other.faultStatement;
 	}
+	
+	public void setNameBase(String nameBase) {
+		this.nameBase = nameBase;
+	}
+
 }
