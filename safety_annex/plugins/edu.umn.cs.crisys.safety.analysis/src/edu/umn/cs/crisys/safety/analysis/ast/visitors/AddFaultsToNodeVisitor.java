@@ -739,7 +739,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		for(SafetyPropagation propagation: propagations) {
 			if(propagation.destFault.equals(f)) {
-				faultExprs.add(new IdExpr(this.createFaultIndependentActiveId(f.nameBase)));
+				faultExprs.add(new IdExpr(this.createFaultIndependentActiveId(propagation.srcFault.nameBase)));
 			}
 		}
 	}
