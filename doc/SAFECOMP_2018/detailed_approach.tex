@@ -34,6 +34,13 @@ The \textit{fault statement} consists of a unique description string, the fault 
 \textbf{Duration} describes the duration of the fault; currently the Safety Annex supports transient and permanent faults.\\
 %\textit{Equation Statements}: Equation statements support deterministic or nondeterministic types. For more details on equation statements, see ~\cite{NFM2012:CoGaMiWhLaLu}.
 
+To-add: HW fault and dependent fault:
+
+Fault propagations: it resides outside of fault statements and inside safety annex. This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. In addition, having fault propagations specified outside of a component’s fault statements makes it easier to reuse the component in different systems. 
+
+HW fault: no behavioral aspects.
+
+Dependent fault modeling: With the introduction of dependent faults, active faults are divided into two categories: independently active (activated by its own triggering event) and dependently active (activated when the faults they depend on become active). Top level fault hypothesis (e.g., maximum number of faults that can be active, or probability threshold for occurrences of faults) now applies to independently active faults. Faulty behaviors augment nominal behaviors whenever their corresponding faults are active (either independently active or dependently active).
 
 \subsection{Architecture and Implementation}
 
