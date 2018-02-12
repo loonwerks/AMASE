@@ -2874,12 +2874,6 @@ rule__HWFaultSubcomponent__Alternatives
 { after(grammarAccess.getHWFaultSubcomponentAccess().getGroup_2()); }
 )
 
-    |(
-{ before(grammarAccess.getHWFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_3()); }
-	ruleSafetyEqStatement
-{ after(grammarAccess.getHWFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_3()); }
-)
-
 ;
 finally {
 	restoreStackSize(stackSize);

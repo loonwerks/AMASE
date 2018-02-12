@@ -16,7 +16,7 @@ import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
 
-public class Fault {
+public class Fault implements BaseFault {
 	
 	// Map from fault node parameter names to their actual expressions.
 	public Map<String, Expr> faultInputMap = new HashMap<>();
@@ -32,8 +32,6 @@ public class Fault {
 	public String name;
 	public String explanitoryText;
 	public double probability;
-	//name base for creating variable names
-	public String nameBase;
 	
 	// Some information about the fault
 	public DurationStatement duration = null;
@@ -52,6 +50,9 @@ public class Fault {
 	
 	// triggers (currently unused)
 	public List<TriggerStatement> triggers = new ArrayList<>();
+	
+	//path to create the fault name
+	public List<String> path = new ArrayList<>();
 	
 	// initial data: 
 	public FaultStatement faultStatement; 
@@ -82,8 +83,8 @@ public class Fault {
 		this.faultStatement = other.faultStatement;
 	}
 	
-	public void setNameBase(String nameBase) {
-		this.nameBase = nameBase;
+	public void setPath(List<String> path) {
+		this.path = new ArrayList<>(path);
 	}
 
 }

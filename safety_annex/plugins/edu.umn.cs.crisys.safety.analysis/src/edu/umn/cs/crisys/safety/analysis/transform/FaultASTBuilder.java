@@ -21,6 +21,7 @@ import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
@@ -203,7 +204,7 @@ public class FaultASTBuilder {
 	}
 	
 	public void addTrigger(Fault fault, TriggerStatement stmt) {
-		throw new SafetyException("Error: set equations are not yet implemented in translator!");
+		throw new SafetyException("Error: trigger equations are not yet implemented in translator!");
 	}
 	
 	public void addProbability(Fault fault, ProbabilityStatement stmt) {

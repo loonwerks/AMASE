@@ -31,12 +31,16 @@ import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
+import edu.umn.cs.crisys.safety.analysis.transform.BaseFault;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
+import edu.umn.cs.crisys.safety.analysis.transform.HWFault;
+import edu.umn.cs.crisys.safety.analysis.transform.HWFaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
@@ -81,6 +85,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Keying off component instance rather than AgreeNode, just so we don't
 	// have problems with "stale" AgreeNode references during transformations.
 	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>();
+	private Map<ComponentInstance, List<HWFault>> hwfaultMap = new HashMap<>();
 	// It is used to store src to dest fault propagations
 	private HashSet<SafetyPropagation> propagations = new HashSet<>();
 	
@@ -137,16 +142,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public AgreeNode visit(AgreeNode node) {
 		Map<String, List<Pair>> parentFaultyVarsExpr = faultyVarsExpr;
 		boolean isTop = (node == this.topNode);
-		
+		//gather SW/SYS faults
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop);
+		//gather HW faults
+		List<HWFault> hwFaults = gatherHWFaults(globalLustreNodes, node, isTop);
 		//rename var names in faults, like faultname_varname
 		faults = renameFaultEqs(faults);
 
-		if (faultMap.containsKey(node.compInst)) {
+		if (faultMap.containsKey(node.compInst) || hwfaultMap.containsKey(node.compInst)) {
 			System.out.println("Node: " + node.id + " has already been visited!");
 			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
 		}
 		faultMap.put(node.compInst, faults);
+		hwfaultMap.put(node.compInst, hwFaults);
 
 		faultyVarsExpr = gatherFaultyOutputs(faults, node);
 		//this will traverse through the decendent nodes
@@ -155,6 +163,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		addNominalVars(node, nb);
 		addFaultInputs(faults, nb);
+		addHWFaultInputs(hwFaults, nb);
 		addFaultLocalEqsAndAsserts(faults, nb);
 		addFaultNodeEqs(faults, nb);
 
@@ -166,7 +175,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			this.gatherFaultPropagation(node);
 			// empty path to pass to top level node fault
 			// node id used as the path to pass to sub level node fault
-			addTopLevelFaultDeclarations(node, new ArrayList<>(), nb);
+			addTopLevelFaultDeclarations(node, nb);
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		}
 
@@ -193,6 +202,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			nb.addInput(new AgreeVar(createFaultNodeInputId(f.id), NamedType.BOOL, f.faultStatement));
 		}
 	}
+
+	public void addHWFaultInputs(List<HWFault> hwfaults, AgreeNodeBuilder nb) {
+		for (HWFault hwf : hwfaults) {
+			nb.addInput(new AgreeVar(createFaultNodeInputId(hwf.id), NamedType.BOOL, hwf.hwFaultStatement));
+		}
+	}
+	
 
 	public void addFaultLocalEqsAndAsserts(List<Fault> faults, AgreeNodeBuilder nb) {
 		for (Fault f : faults) {
@@ -469,6 +485,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 		return faults;
 	}
+	
+	public List<HWFault> gatherHWFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
+		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
+
+		List<HWFault> hwFaults = new ArrayList<>();
+		
+		for (SpecStatement s : specs) {
+			if (s instanceof HWFaultStatement) {
+				HWFaultStatement hwfs = (HWFaultStatement) s;
+				HWFaultASTBuilder builder = new HWFaultASTBuilder(globalLustreNodes, node);
+				HWFault safetyFault = builder.buildHWFault(hwfs);
+				hwFaults.add(safetyFault);
+			}
+		}
+		return hwFaults;
+	}
 
 	public AnalysisBehavior gatherTopLevelFaultCount(AgreeNode node) {
 		AnalysisBehavior ab = null;
@@ -505,7 +537,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	// Identify the fault associated with a ComponentInstance given the fault name
 	// and the component path
-	public Fault findFaultInCompInst(String faultName, NestedDotID compPath) {
+	public BaseFault findFaultInCompInst(String faultName, NestedDotID compPath) {
 		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(faultMap.keySet());
 
 		for (ComponentInstance compInst : compInsts) {
@@ -519,6 +551,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 			}
 		}
+
+		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
+
+		for (ComponentInstance compInst : compInsts) {
+			if (compInst.getName().equals(compPath.getBase().getName())) {
+				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
+				for (HWFault hwfault : hwfaults) {
+					if (hwfault.name.equals(faultName)) {
+						return hwfault;
+					}
+				}
+
+			}
+		}
+		
 		throw new SafetyException("Unable to identify fault for " + faultName + "@"+compPath.getBase().getName());
 	}
 
@@ -533,14 +580,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Iterator<NestedDotID> srcCompPathIt = ps.getSrcComp_path().iterator();
 
 				// create a SafetyPropagation
-				Fault srcFault = null;
+				BaseFault srcFault = null;
 				// for each src fault name and path, locate the fault
 				while (srcFaultIt.hasNext() && srcCompPathIt.hasNext()) {
 					NestedDotID srcCompPath = srcCompPathIt.next();
 					String srcFaultName = srcFaultIt.next();
 					srcFault = findFaultInCompInst(srcFaultName, srcCompPath);
 					// for each destination fault name and path, locate the fault
-					Fault destFault = null;
+					BaseFault destFault = null;
 					Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
 					Iterator<NestedDotID> destCompPathIt = ps.getDestComp_path().iterator();
 					while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
@@ -619,6 +666,38 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, f.faultStatement));
 		builder.addAssertion(new AgreeStatement("", assertDependentExpr, f.faultStatement));
 	}
+	
+	public void constrainFaultActive(HWFault hwf, String nameBase, AgreeNodeBuilder builder) {
+		IdExpr independentlyActiveExpr = new IdExpr(this.createFaultIndependentActiveId(nameBase));
+		IdExpr dependentlyActiveExpr = new IdExpr(this.createFaultDependentActiveId(nameBase));
+		IdExpr independentEventExpr = new IdExpr(this.createFaultEventId(nameBase));
+		
+		List<Expr> faultExprs = new ArrayList<>();
+		//collect the list of source faults in the propagations 
+		//whose target fault is the current fault
+		//the names of those source faults are created through createFaultIndependentActiveId
+		getSrcFaultExprList(hwf, faultExprs);
+		//create a disjunction of the source faults as the triggering event
+		//for the dependent fault
+		Expr dependentEventExpr = buildFaultDisjunctionExpr(faultExprs, 0);
+		
+		Expr assertIndependentExpr;
+		Expr assertDependentExpr;
+
+		TemporalConstraint tc = hwf.duration.getTc();
+		if (tc instanceof PermanentConstraint) {
+			assertIndependentExpr = createPermanentExpr(independentlyActiveExpr, independentEventExpr);
+			assertDependentExpr = createPermanentExpr(dependentlyActiveExpr, dependentEventExpr);
+		} else if (tc instanceof TransientConstraint) {
+			System.out.println("WARNING: ignoring duration on transient faults");
+			assertIndependentExpr = createTransientExpr(independentlyActiveExpr, independentEventExpr);
+			assertDependentExpr = createTransientExpr(dependentlyActiveExpr, dependentEventExpr);			
+		} else {
+			throw new SafetyException("Unknown constraint type during translation of fault " + hwf.id);
+		}
+		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, hwf.hwFaultStatement));
+		builder.addAssertion(new AgreeStatement("", assertDependentExpr, hwf.hwFaultStatement));
+	}
 
 	/*
 	 * Create Lustre name using addPathDelimiters Create map from fault to the
@@ -631,7 +710,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		String indepentlyActiveVarId = this.createFaultIndependentActiveId(base);
 		String depentlyActiveVarId = this.createFaultDependentActiveId(base);
 
-		// Create map from fault to it's relative path
+		// Create map from fault to its relative path
 		// for the counterexample layout
 		for (String str : path) {
 			mapFaultToPath.put(f, str);
@@ -641,25 +720,47 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				new BinaryExpr(new IdExpr(indepentlyActiveVarId), BinaryOp.OR, new IdExpr(depentlyActiveVarId)));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
 	}
+	
+	public void mapFaultActiveToNodeInterface(HWFault hwf, List<String> path, String base, AgreeNodeBuilder builder) {
+		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(hwf.id));
+		String indepentlyActiveVarId = this.createFaultIndependentActiveId(base);
+		String depentlyActiveVarId = this.createFaultDependentActiveId(base);
+
+		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL, 
+				new BinaryExpr(new IdExpr(indepentlyActiveVarId), BinaryOp.OR, new IdExpr(depentlyActiveVarId)));
+		builder.addAssertion(new AgreeStatement("", equate, hwf.hwFaultStatement));
+	}
 
 	
 	public void collectFaultPath(AgreeNode currentNode, List<String> path) {
 
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
+		List<HWFault> hwfaults = this.hwfaultMap.get(currentNode.compInst);
 		
 		// Add unconstrained input and constrained local to represent fault event and
 		// whether or not fault is currently active.
 		int index = 0;
 		for (Fault f : faults) {
-			String base = addPathDelimiters(path, f.id);
 			//update fault name base
-			f.setNameBase(base);
+			f.setPath(path);
 			//update fault list
 			faults.set(index,f);
 			index++;
 		}
 		//update faultMap
 		this.faultMap.put(currentNode.compInst, faults);
+		
+		index = 0;
+		for (HWFault hwf : hwfaults) {
+			//update fault name base
+			hwf.setPath(path);
+			//update fault list
+			hwfaults.set(index,hwf);
+			index++;
+		}
+		//update faultMap
+		this.faultMap.put(currentNode.compInst, faults);
+		this.hwfaultMap.put(currentNode.compInst, hwfaults);
 		
 		//repeating it for the decendents of the node
 		for (AgreeNode n : currentNode.subNodes) {
@@ -669,14 +770,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 	
-	public void addTopLevelFaultDeclarations(AgreeNode currentNode, List<String> path, AgreeNodeBuilder nb) {
+	public void addTopLevelFaultDeclarations(AgreeNode currentNode, AgreeNodeBuilder nb) {
 
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
 
 		// Add unconstrained input and constrained local to represent fault event and
 		// whether or not fault is currently active.
 		for (Fault f : faults) {
-			String base = addPathDelimiters(path, f.id);
+			String base = addPathDelimiters(f.path, f.id);
 			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
 			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
 			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(base), NamedType.BOOL, f.faultStatement));			
@@ -696,13 +797,29 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// fault in the node interface
 			// take the propagation map when constrainFaultActive
 			constrainFaultActive(f, base, nb);
-			mapFaultActiveToNodeInterface(f, path, base, nb);
+			mapFaultActiveToNodeInterface(f, f.path, base, nb);
 		}
 
+		List<HWFault> hwfaults = this.hwfaultMap.get(currentNode.compInst);
+
+		// Add unconstrained input and constrained local to represent fault event and
+		// whether or not fault is currently active.
+		for (HWFault hwf : hwfaults) {
+			String base = addPathDelimiters(hwf.path, hwf.id);	
+			
+			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, hwf.hwFaultStatement));
+			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, hwf.hwFaultStatement));
+			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(base), NamedType.BOOL, hwf.hwFaultStatement));
+			
+			// constrain fault-active depending on transient / permanent & map it to a
+			// fault in the node interface
+			// take the propagation map when constrainFaultActive
+			constrainFaultActive(hwf, base, nb);
+			mapFaultActiveToNodeInterface(hwf, hwf.path, base, nb);
+		}
+		
 		for (AgreeNode n : currentNode.subNodes) {
-			List<String> ext = new ArrayList<>(path);
-			ext.add(n.id);
-			addTopLevelFaultDeclarations(n, ext, nb);
+			addTopLevelFaultDeclarations(n, nb);
 		}
 	}
 
@@ -735,11 +852,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	//collect the list of expressions for the source faults in the propagations 
 	//whose target fault is the current fault
 	//the names of those source faults are created through createFaultIndependentActiveId
-	public void getSrcFaultExprList(Fault f, List<Expr> faultExprs) {
+	public void getSrcFaultExprList(BaseFault f, List<Expr> faultExprs) {
 
 		for(SafetyPropagation propagation: propagations) {
 			if(propagation.destFault.equals(f)) {
-				faultExprs.add(new IdExpr(this.createFaultIndependentActiveId(propagation.srcFault.nameBase)));
+				if(propagation.srcFault instanceof HWFault) {
+					//use the triggering event for HW fault in the src fault expr, so to get the effect
+					//from both hw dependent and hw independent faults
+					String interfaceVarId = addPathDelimiters(((HWFault)propagation.srcFault).path, this.createFaultNodeInputId(((HWFault)propagation.srcFault).id));
+					faultExprs.add(new IdExpr(interfaceVarId));
+				}
+				else if(propagation.srcFault instanceof Fault) {
+					String base = addPathDelimiters(((Fault)propagation.srcFault).path, ((Fault)propagation.srcFault).id);
+					faultExprs.add(new IdExpr(this.createFaultIndependentActiveId(base)));
+				}	
 			}
 		}
 	}

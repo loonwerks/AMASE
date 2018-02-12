@@ -1339,17 +1339,7 @@ ruleHWFaultSubcomponent returns [EObject current=null]
     {
     	newLeafNode(otherlv_15, grammarAccess.getHWFaultSubcomponentAccess().getSemicolonKeyword_2_4());
     }
-)
-    |
-    { 
-        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_3()); 
-    }
-    this_SafetyEqStatement_16=ruleSafetyEqStatement
-    {
-        $current = $this_SafetyEqStatement_16.current;
-        afterParserOrEnumRuleCall();
-    }
-)
+))
 ;
 
 

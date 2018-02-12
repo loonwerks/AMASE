@@ -60,7 +60,7 @@ HWFaultSubcomponent returns HWFaultSubcomponent:
 	  {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
  	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
  	| {PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
-	| SafetyEqStatement ;	
+    ;	
 
 PropagationTypeConstraint:
 	  {asymmetric} 'asymmetric'

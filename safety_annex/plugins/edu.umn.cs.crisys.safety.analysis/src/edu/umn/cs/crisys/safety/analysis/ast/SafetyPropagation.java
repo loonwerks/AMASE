@@ -1,13 +1,13 @@
 package edu.umn.cs.crisys.safety.analysis.ast;
 
-import edu.umn.cs.crisys.safety.analysis.transform.Fault;
+import edu.umn.cs.crisys.safety.analysis.transform.BaseFault;
 
 public class SafetyPropagation implements SafetyASTElement{
 	
-	public final Fault srcFault;
-	public final Fault destFault;
+	public final BaseFault srcFault;
+	public final BaseFault destFault;
 	
-	public SafetyPropagation(Fault srcFault, Fault destFault){
+	public SafetyPropagation(BaseFault srcFault, BaseFault destFault){
 		
 		this.srcFault = srcFault;
 		this.destFault = destFault;
