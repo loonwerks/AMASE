@@ -184,7 +184,6 @@ public class SafetySwitch<T> extends Switch<T>
         SafetyEqStatement safetyEqStatement = (SafetyEqStatement)theEObject;
         T result = caseSafetyEqStatement(safetyEqStatement);
         if (result == null) result = caseFaultSubcomponent(safetyEqStatement);
-        if (result == null) result = caseHWFaultSubcomponent(safetyEqStatement);
         if (result == null) result = caseElement(safetyEqStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -388,7 +387,6 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseEqValue(eqValue);
         if (result == null) result = caseSafetyEqStatement(eqValue);
         if (result == null) result = caseFaultSubcomponent(eqValue);
-        if (result == null) result = caseHWFaultSubcomponent(eqValue);
         if (result == null) result = caseElement(eqValue);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -399,7 +397,6 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseIntervalEq(intervalEq);
         if (result == null) result = caseSafetyEqStatement(intervalEq);
         if (result == null) result = caseFaultSubcomponent(intervalEq);
-        if (result == null) result = caseHWFaultSubcomponent(intervalEq);
         if (result == null) result = caseElement(intervalEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -410,7 +407,6 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseSetEq(setEq);
         if (result == null) result = caseSafetyEqStatement(setEq);
         if (result == null) result = caseFaultSubcomponent(setEq);
-        if (result == null) result = caseHWFaultSubcomponent(setEq);
         if (result == null) result = caseElement(setEq);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -421,7 +417,6 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseRangeEq(rangeEq);
         if (result == null) result = caseSafetyEqStatement(rangeEq);
         if (result == null) result = caseFaultSubcomponent(rangeEq);
-        if (result == null) result = caseHWFaultSubcomponent(rangeEq);
         if (result == null) result = caseElement(rangeEq);
         if (result == null) result = defaultCase(theEObject);
         return result;

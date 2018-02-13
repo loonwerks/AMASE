@@ -13,7 +13,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="PropagationTypeConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerCondition"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SafetyEqStatement" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element #//FaultSubcomponent #//HWFaultSubcomponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SafetyEqStatement" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element #//FaultSubcomponent"/>
   <eClassifiers xsi:type="ecore:EClass" name="Interval">
     <eStructuralFeatures xsi:type="ecore:EReference" name="low" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
         containment="true"/>

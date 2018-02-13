@@ -249,7 +249,8 @@ connections
 	**};
 
    annex safety{**
-	  analyze : max 2 fault
+	  analyze : max 1 fault
+	  propagate_from: {valve_failed@shutoff} to {shutoff_fault@shutoff};
    **};
 	
 end wbs.federated;

@@ -794,18 +794,15 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cPtyAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
 		private final RuleCall cPtyPropagationTypeConstraintParserRuleCall_2_3_0 = (RuleCall)cPtyAssignment_2_3.eContents().get(0);
 		private final Keyword cSemicolonKeyword_2_4 = (Keyword)cGroup_2.eContents().get(4);
-		private final RuleCall cSafetyEqStatementParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
 		//HWFaultSubcomponent:
 		//	{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
 		//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-		//	| {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
-		//	| SafetyEqStatement;
+		//	| {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';' | {ProbabilityStatement} 'probability' ':'
-		//probability=REAL_LIT ';' | {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';' |
-		//SafetyEqStatement
+		//probability=REAL_LIT ';' | {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
@@ -876,9 +873,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 		//';'
 		public Keyword getSemicolonKeyword_2_4() { return cSemicolonKeyword_2_4; }
-
-		//SafetyEqStatement
-		public RuleCall getSafetyEqStatementParserRuleCall_3() { return cSafetyEqStatementParserRuleCall_3; }
 	}
 
 	public class PropagationTypeConstraintElements extends AbstractParserRuleElementFinder {
@@ -1599,8 +1593,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//HWFaultSubcomponent:
 	//	{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
 	//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-	//	| {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';'
-	//	| SafetyEqStatement;
+	//	| {PropagationTypeStatement} 'propagate_type' ':' pty=PropagationTypeConstraint ';';
 	public HWFaultSubcomponentElements getHWFaultSubcomponentAccess() {
 		return pHWFaultSubcomponent;
 	}

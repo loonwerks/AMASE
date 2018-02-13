@@ -1435,7 +1435,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     faultSubcomponentEClass.getESuperTypes().add(theAadl2Package.getElement());
     safetyEqStatementEClass.getESuperTypes().add(theAadl2Package.getElement());
     safetyEqStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
-    safetyEqStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
     safetyContractLibraryEClass.getESuperTypes().add(this.getSafetyLibrary());
     safetyContractSubclauseEClass.getESuperTypes().add(this.getSafetySubclause());
     safetyContractEClass.getESuperTypes().add(this.getContract());

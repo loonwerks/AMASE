@@ -68,8 +68,6 @@ features
 		HW_fault valve_failed "Valve failed": {
 			probability: 1.0E-5;
 			duration: permanent;
-			propagate_to: {pump.pump_nondeterministic_out_fault, boolean_shutoff.shutoff_fault};
-			propagate_type: symmetric;
 		}
 	**};
 

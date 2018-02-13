@@ -851,7 +851,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns EqValue
 	 *     FaultSubcomponent returns EqValue
-	 *     HWFaultSubcomponent returns EqValue
 	 *     SafetyEqStatement returns EqValue
 	 *
 	 * Constraint:
@@ -866,7 +865,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns IntervalEq
 	 *     FaultSubcomponent returns IntervalEq
-	 *     HWFaultSubcomponent returns IntervalEq
 	 *     SafetyEqStatement returns IntervalEq
 	 *
 	 * Constraint:
@@ -890,7 +888,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns RangeEq
 	 *     FaultSubcomponent returns RangeEq
-	 *     HWFaultSubcomponent returns RangeEq
 	 *     SafetyEqStatement returns RangeEq
 	 *
 	 * Constraint:
@@ -917,7 +914,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Contexts:
 	 *     ElementSafety returns SetEq
 	 *     FaultSubcomponent returns SetEq
-	 *     HWFaultSubcomponent returns SetEq
 	 *     SafetyEqStatement returns SetEq
 	 *
 	 * Constraint:
