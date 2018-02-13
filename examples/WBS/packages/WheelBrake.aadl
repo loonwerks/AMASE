@@ -12,6 +12,14 @@ with Base_Types;
 			
 			annex agree {**
 				
+				assume "(WheelBrake) Hyd pressure in is always bounded between 0 and 10 inclusive." :
+					(normal_hyd_pressure_in < 11) and (normal_hyd_pressure_in > -1) and (alt_hyd_pressure_in < 11) and 
+						(alt_hyd_pressure_in > -1);
+				
+				-- Added guarantee that brake force is between 0 to 10 inclusive
+				guarantee "(WheelBrake) Braking force is always from 0 to 10 inclusive." :
+						true -> brake_force < 11 and brake_force > -1;
+				
 				--  supply_braking_force_norm_guarantee := (TRUE ->  
 				--       G (braking_force > 0 <-> (normal_hyd_pressure_in > 0 | alternate_hyd_pressure_in > 0))
 				
@@ -102,6 +110,11 @@ with Base_Types;
 			braking_force : out data port Base_Types::Integer;
 			
 			annex agree {**
+				
+				
+				-- Added guarantee: brake force is always either normal or alternate force value
+				guarantee "(BrakeActuator) Brake force is equivalent to either alternate or normal force in." :
+							true -> (braking_force = alternate_force_in) or (braking_force = normal_force_in);
 					
 				-- transform_force_norm_guarantee := (TRUE ->  G ((normal_force_in > 0 | alternate_force_in > 0) <-> braking_force > 0));
  

@@ -11,7 +11,9 @@ with util;
 			out_pressure : out data port Base_Types::Integer;
 			
 			annex agree {**
-				
+				assume "(AdditionGate) Inputs are always bounded between 0 and 10 inclusive." :
+					(in_1 < 11) and (in_1 > -1) and (in_2 < 11) and 
+						(in_2 > -1);
 				-- addition_behavior_norm_guarantee := 
 				--		(TRUE ->  G (out = 10 <-> in_1 + in_2 >= 10) & (out = in_1 + in_2 <-> in_1 + in_2 <= 10)));
 				guarantee "(AdditionGate) Output is min {in_1+in_2, 10}" : 

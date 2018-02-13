@@ -17,12 +17,23 @@ with Base_Types;
 			-- all mech commands coming in are false in wbs_arch4
 			
 			annex agree {**
-					
+				
+				assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
 				-- apply_command_norm_guarantee := (TRUE ->  G (((elec_cmd | mech_cmd) & hyd_pressure_in > 0) <-> hyd_pressure_out > 0));
 				
 				guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
 				 we have either electrical or mechanical command and positive pressure." :
-				 true -> ((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0;
+					true -> ((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0;
+				
+				-- hyd pressure out is equivalent to hyd pressure in whenever we have elec and mech cmd true
+				guarantee "(MeterValve) elec_cmd or mech cmd implies hyd pressure in equals pressure out" :
+						true -> (elec_cmd or mech_cmd) => hyd_pressure_in = hyd_pressure_out; 
+				
+				
+				-- If hyd pressure in is zero, then output is also zero
+				guarantee "(MeterValve) If hyd pressure in is zero, then output is also zero." : 
+						true -> hyd_pressure_in = 0 => hyd_pressure_out = 0;
 					
 			**};
 			

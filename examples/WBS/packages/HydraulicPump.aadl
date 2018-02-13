@@ -11,7 +11,7 @@ with Base_Types;
 			hyd_pressure_out : out data port Base_Types::Integer;
 		
 		annex agree {**
-			assume "Positive pressure input" : (hyd_supply >= 0 and hyd_supply <= 10);
+			assume "Pressure input from 0 to 10 inclusive" : (hyd_supply >= 0 and hyd_supply <= 10);
 			
 			-- supply_hydraulic_norm_guarantee := (TRUE -> ( G 
 			-- 		((power & hydraulic_supply > 0) -> hyd_pressure_out > 0) 

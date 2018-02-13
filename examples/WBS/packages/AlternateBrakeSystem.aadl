@@ -21,6 +21,8 @@ with Base_Types;
 			hyd_pressure_out4 : out data port Base_Types::Integer;
 			
 			annex agree {**
+				
+				assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
 					
 				-- apply_command_3_norm_guarantee := 
 				--		(TRUE ->  G (((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & hyd_pressure_in > 0) <-> hyd_pressure_out_3 > 0));
@@ -105,6 +107,8 @@ with Base_Types;
 			
 			annex agree {**
 				
+				assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
 				-- apply_command_norm_guarantee := (TRUE -> 
 				-- 		( G ((hyd_pressure_in = 0 | as_cmd) -> hyd_pressure_out = 0) 
 				--	   &  G ((hyd_pressure_in > 0 & !as_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in))
@@ -116,6 +120,8 @@ with Base_Types;
 								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
 			
 				
+				
+				guarantee "Pressure input from 0 to 10 inclusive" : (hyd_pressure_out >= 0 and hyd_pressure_out <= 10);
 				
 			**};
 			

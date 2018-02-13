@@ -1,7 +1,6 @@
 package Wheel
 public
 with Base_Types;
-with datatypes;
 
 	system Wheel
 		features
@@ -13,9 +12,12 @@ with datatypes;
 			
 			-- Outputs 
 			-- Should be enumerated type: {stopped, rolling}
-			wheel_status : out data port datatypes::WheelStatus;
+			-- Instead: true = rolling, false = stopped
+			wheel_status : out data port Base_Types::Boolean;
 			
 			annex agree {**
+				
+				
 				
 				-- braking_behavior_norm_guarantee := 
 				--   (TRUE -> G
@@ -26,12 +28,12 @@ with datatypes;
 							or the ground speed is less than 2, then this state, status is stopped." :
 							true -> 
 								((pre(brake_force) > 8 and pre(ground_speed) < 1) or (pre(ground_speed) < 2)) 
-										=> wheel_status = enum(datatypes::WheelStatus, Stopped);
+										=> not wheel_status;
 				
 				guarantee "(Wheel) Rolling status: If in previous state the brake force is < 9 and ground speed > 1, 
 							then this state, status is rolling.":
 							true ->
-								(pre(brake_force) < 9 and pre(ground_speed) > 1) => wheel_status = enum(datatypes::WheelStatus, Rolling);
+								(pre(brake_force) < 9 and pre(ground_speed) > 1) => wheel_status;
 			**};
 			
 	end Wheel;

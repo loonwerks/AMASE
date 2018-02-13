@@ -11,7 +11,6 @@ with AdditionGate;
 with SelectorValve;
 with ShutoffValve;
 
-	with datatypes;
 	
 	system PhysicalSystem
 		features
@@ -52,14 +51,14 @@ with ShutoffValve;
 			green_pressure_in_selec_valve : out data port Base_Types::Integer;
 			
 			-- Enumerated types : {rolling, stopped}
-			wheel_status1 : out data port datatypes::WheelStatus;
-			wheel_status2 : out data port datatypes::WheelStatus;
-			wheel_status3 : out data port datatypes::WheelStatus;
-			wheel_status4 : out data port datatypes::WheelStatus;
-			wheel_status5 : out data port datatypes::WheelStatus;
-			wheel_status6 : out data port datatypes::WheelStatus;
-			wheel_status7 : out data port datatypes::WheelStatus; 
-			wheel_status8 : out data port datatypes::WheelStatus;
+			wheel_status1 : out data port Base_Types::Boolean;
+			wheel_status2 : out data port Base_Types::Boolean;
+			wheel_status3 : out data port Base_Types::Boolean;
+			wheel_status4 : out data port Base_Types::Boolean;
+			wheel_status5 : out data port Base_Types::Boolean;
+			wheel_status6 : out data port Base_Types::Boolean;
+			wheel_status7 : out data port Base_Types::Boolean; 
+			wheel_status8 : out data port Base_Types::Boolean;
 			
 			-- Output from wheel_brake components
 			wheel_braking_force1 : out data port Base_Types::Integer;
@@ -72,6 +71,15 @@ with ShutoffValve;
 			wheel_braking_force8 : out data port Base_Types::Integer;
 	
 		annex agree {**
+
+			property hyd_supply1_range = hyd_supply1 > -1 and hyd_supply1 < 11;
+			property hyd_supply2_range = hyd_supply2 > -1 and hyd_supply2 < 11;
+			property ground_speed_range = ground_speed > -1 and ground_speed < 11;
+		
+			-- Hydraulic supply {0,...,10} allowable values
+			-- Ground speed {0,...,10} allowable values
+			assume "(PhysicalSystem) Hydraulic pressure and ground speed bounded between 0 and 10 inclusive." :
+				(hyd_supply1_range) and (hyd_supply2_range) and (ground_speed_range);		
 			
 			-- cmd_implies_braking_wheel_7_norm_guarantee := (TRUE ->  G 
 			--    (((brake_as_cmd_7 & (green_pressure_in_selector_valve > 0 & system_validity)) 
@@ -217,16 +225,16 @@ with ShutoffValve;
 			property ALL_WHEELS_BRAKE = wheel_braking_force1 > 0 and wheel_braking_force2 > 0 
 					and wheel_braking_force3 > 0 and wheel_braking_force4 > 0 
 			 		and wheel_braking_force5 > 0 and wheel_braking_force6 > 0 
-					and wheel_braking_force7 > 0 and wheel_braking_force8 > 0;
+					and wheel_braking_force7 > 0 and wheel_braking_force8 > 0; 
 					
-			property ALL_WHEELS_STOPPED = wheel_status1 = enum(datatypes::WheelStatus, Stopped) 
-									  and wheel_status2 = enum(datatypes::WheelStatus, Stopped)
-									  and wheel_status3 = enum(datatypes::WheelStatus, Stopped)
-									  and wheel_status4 = enum(datatypes::WheelStatus, Stopped)
-									  and wheel_status5 = enum(datatypes::WheelStatus, Stopped)
-									  and wheel_status6 = enum(datatypes::WheelStatus, Stopped)
-									  and wheel_status7 = enum(datatypes::WheelStatus, Stopped)
-									  and wheel_status8 = enum(datatypes::WheelStatus, Stopped);
+			property ALL_WHEELS_STOPPED = not wheel_status1 
+									  and not wheel_status2
+									  and not wheel_status3
+									  and not wheel_status4
+									  and not wheel_status5
+									  and not wheel_status6
+									  and not wheel_status7
+									  and not wheel_status8;
 									  
 			property BRAKE_AS_NOT_COMMANDED = not brake_as_cmd_1 and not brake_as_cmd_2 and not brake_as_cmd_3 and not brake_as_cmd_4 
 										  and not brake_as_cmd_5 and not brake_as_cmd_6 and not brake_as_cmd_7 and not brake_as_cmd_8;
