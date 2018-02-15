@@ -39,8 +39,8 @@ with ShutoffValve;
 			
 			ground_speed : in data port Base_Types::Integer;
 			
-			mech_pedal_pos_L_in : in data port Base_Types::Boolean;
-			mech_pedal_pos_R_in : in data port Base_Types::Boolean;
+			mech_pedal_pos_L : in data port Base_Types::Boolean;
+			mech_pedal_pos_R : in data port Base_Types::Boolean;
 			
 			-- This is to pass accumulator pressure display up to the 
 			-- wbs enclosing component
@@ -89,14 +89,14 @@ with ShutoffValve;
 			property GREEN_PRESSURE_VALID = green_pressure_in_selec_valve > 0 and system_validity;
 			
 			property NORMAL1 = brake_as_cmd_1 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE1 = ((mech_pedal_pos_L_in and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE1 = ((mech_pedal_pos_L and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 1 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
 						true -> (NORMAL1 or ALTERNATE1) => wheel_braking_force1 > 0;
 			
 			property NORMAL2 = brake_as_cmd_2 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE2 = ((mech_pedal_pos_L_in and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE2 = ((mech_pedal_pos_L and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 2 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
@@ -104,42 +104,42 @@ with ShutoffValve;
 			
 			
 			property NORMAL3 = brake_as_cmd_3 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE3 = ((mech_pedal_pos_R_in and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE3 = ((mech_pedal_pos_R and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 3 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
 						true -> (NORMAL3 or ALTERNATE3) => wheel_braking_force3 > 0;
 			
 			property NORMAL4 = brake_as_cmd_4 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE4 = ((mech_pedal_pos_R_in and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE4 = ((mech_pedal_pos_R and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 4 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
 						true -> (NORMAL4 or ALTERNATE4) => wheel_braking_force4 > 0;
 			
 			property NORMAL5 = brake_as_cmd_5 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE5 = ((mech_pedal_pos_L_in and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE5 = ((mech_pedal_pos_L and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 5 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
 						true -> (NORMAL5 or ALTERNATE5) => wheel_braking_force5 > 0;
 			
 			property NORMAL6 = brake_as_cmd_6 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE6 = ((mech_pedal_pos_L_in and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE6 = ((mech_pedal_pos_L and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 6 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
 						true -> (NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0;
 			
 			property NORMAL7 = brake_as_cmd_1 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE7 = ((mech_pedal_pos_R_in and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE7 = ((mech_pedal_pos_R and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 7 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
 						true -> (NORMAL7 or ALTERNATE7) => wheel_braking_force7 > 0;
 			
 			property NORMAL8 = brake_as_cmd_8 and (GREEN_PRESSURE_VALID);
-			property ALTERNATE8 = ((mech_pedal_pos_R_in and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
+			property ALTERNATE8 = ((mech_pedal_pos_R and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 8 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
@@ -157,57 +157,57 @@ with ShutoffValve;
 			--		->  G (wheel_braking_force_5 > 0 -> ((brake_as_cmd_5 & (green_pressure_in_selector_valve > 0 & system_validity)) 
 			--											| ((mechanical_pedal_pos_L & !as_cmd_pair_1_5) & (green_pressure_in_selector_valve = 0 | !system_validity)))));
 			
-			property L_PEDAL_VALID = mech_pedal_pos_L_in and system_validity;
-			property R_PEDAL_VALID = mech_pedal_pos_R_in and system_validity;
+			property L_PEDAL_VALID = mech_pedal_pos_L and system_validity;
+			property R_PEDAL_VALID = mech_pedal_pos_R and system_validity;
 			
 			
 			guarantee "(PhysicalSystem) Wheel 1 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_1) => as_cmd_pair_1_5)
 						=> (wheel_braking_force1 > 0 => (brake_as_cmd_1 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L_in and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 2 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_2) => as_cmd_pair_2_6)
 						=> (wheel_braking_force2 > 0 => (brake_as_cmd_2 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L_in and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 3 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_3) => as_cmd_pair_3_7)
 						=> (wheel_braking_force3 > 0 => (brake_as_cmd_3 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R_in and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 4 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_4) => as_cmd_pair_4_8)
 						=> (wheel_braking_force4 > 0 => (brake_as_cmd_4 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R_in and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 5 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_5) => as_cmd_pair_1_5)
 						=> (wheel_braking_force5 > 0 => (brake_as_cmd_5 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L_in and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 6 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_6) => as_cmd_pair_2_6)
 						=> (wheel_braking_force6 > 0 => (brake_as_cmd_6 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L_in and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 7 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_7) => as_cmd_pair_3_7)
 						=> (wheel_braking_force7 > 0 => (brake_as_cmd_7 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R_in and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 8 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
 						((L_PEDAL_VALID and not brake_as_cmd_8) => as_cmd_pair_1_5)
 						=> (wheel_braking_force8 > 0 => (brake_as_cmd_8 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R_in and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
 						
 			
 			-- never_inadvertent_braking_with_all_wheels_locked_norm_guarantee := (TRUE ->  G 
@@ -239,7 +239,7 @@ with ShutoffValve;
 			property BRAKE_AS_NOT_COMMANDED = not brake_as_cmd_1 and not brake_as_cmd_2 and not brake_as_cmd_3 and not brake_as_cmd_4 
 										  and not brake_as_cmd_5 and not brake_as_cmd_6 and not brake_as_cmd_7 and not brake_as_cmd_8;
 										  
-			property PEDALS_NOT_PRESSED = not mech_pedal_pos_L_in and not mech_pedal_pos_R_in;
+			property PEDALS_NOT_PRESSED = not mech_pedal_pos_L and not mech_pedal_pos_R;
 			
 			guarantee "(Physical System) It will not occur that all wheels are stopped, ground speed is positive, 
 						wheel brake force is positive, pedals are pressed, brake_as is commanded." :
@@ -342,8 +342,8 @@ with ShutoffValve;
 			
 			-- Alternate system
 			-- mechanical pedal position
-			ped_position_L : port mech_pedal_pos_L_in -> alt_sys.mech_pedal_pos_L;
-			ped_position_R : port mech_pedal_pos_R_in -> alt_sys.mech_pedal_pos_R;
+			ped_position_L : port mech_pedal_pos_L -> alt_sys.mech_pedal_pos_L;
+			ped_position_R : port mech_pedal_pos_R -> alt_sys.mech_pedal_pos_R;
 			
 			-- antiskid command pair
 			as_cmd_1_5 : port as_cmd_pair_1_5 -> alt_sys.as_cmd_pair_1_5;

@@ -25,6 +25,11 @@ with Base_Types;
 			--   ((green_select_in > 0 & system_validity) -> (green_select_out > 0 & blue_select_out = 0)) 
 			--    &  G (((green_select_in = 0 | !system_validity) & blue_select_in > 0) -> (green_select_out = 0 & blue_select_out > 0))
 			--    &  G (((green_select_in = 0 | !system_validity) & blue_select_in = 0) -> (green_select_out = 0 & blue_select_out = 0))));
+			
+			-- When I write the contract as it is stated above, we get inconsistency within this component. 
+			-- If I make them 'or', then it becomes consistent. 
+			-- Why is this...? 
+			
 			property GREENLINE = ((green_select_in > 0 and system_validity) => (green_select_out > 0 and blue_select_out = 0));
 			property BLUELINE = ((green_select_in = 0 or not system_validity) and blue_select_in > 0) -> (green_select_out = 0 and blue_select_out > 0);
 			property NEITHER = ((green_select_in = 0 or not system_validity) and blue_select_in = 0) -> (green_select_out = 0 and blue_select_out = 0);
@@ -32,7 +37,7 @@ with Base_Types;
 			guarantee "(SelectorValve) The green line is selected under valid system and positive green pressure. 
 						The blue line is selected under invalid system or no green pressure and positive blue pressure.
 						Neither are selected in any other case." :
-						true -> GREENLINE and BLUELINE and NEITHER;
+						true -> GREENLINE or BLUELINE or NEITHER;
 			
 			
 			

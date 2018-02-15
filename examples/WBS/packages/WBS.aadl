@@ -197,8 +197,8 @@ with sensor;
 			antiskid_pair4 : port ctrl_sys.as_cmd_pair_4_8 -> phys_sys.as_cmd_pair_4_8;
 			
 			-- mechanical pedal position
-			mech_pedal_position_L : port mech_pedal_pos_L -> phys_sys.mech_pedal_pos_L_in;
-			mech_pedal_position_R : port mech_pedal_pos_R -> phys_sys.mech_pedal_pos_R_in;
+			mech_pedal_position_L : port mech_pedal_pos_L -> phys_sys.mech_pedal_pos_L;
+			mech_pedal_position_R : port mech_pedal_pos_R -> phys_sys.mech_pedal_pos_R;
 			---------------------------------------------------------------------------------	
 		
 			
@@ -248,13 +248,7 @@ with sensor;
 			wheel_status_7 : port phys_sys.wheel_status7 -> wheel_status7;
 			wheel_status_8 : port phys_sys.wheel_status8 -> wheel_status8;
 	
-	annex agree {**
-		
-				
-							
-	**};
-			
-	end WBS.inst;
+end WBS.inst;
 
 
 
