@@ -57,19 +57,19 @@ with Base_Types;
 		subcomponents
 			channel1 : system Channel::Channel.inst;
 			channel2 : system Channel::Channel.inst;
-			or_gate_system_validity : system OrGate::OrGate.inst;
-			switch_gate_brake_as_cmd_1 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_2 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_3 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_4 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_5 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_6 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_7 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_8 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_pair_1_5 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_pair_2_6 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_pair_3_7 : system SwitchGate::SwitchGate.inst;
-			switch_gate_brake_as_cmd_pair_4_8 : system SwitchGate::SwitchGate.inst;
+			or_gate_system_validity : system OrGate::OrGate;
+			switch_gate_brake_as_cmd_1 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_2 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_3 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_4 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_5 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_6 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_7 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_8 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_pair_1_5 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_pair_2_6 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_pair_3_7 : system SwitchGate::SwitchGate;
+			switch_gate_brake_as_cmd_pair_4_8 : system SwitchGate::SwitchGate;
 			
 		connections
 			sys_valid : port or_gate_system_validity.out_val -> system_validity;

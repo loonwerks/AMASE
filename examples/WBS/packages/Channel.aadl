@@ -78,7 +78,7 @@ with MonitorSystem;
 	
 	system implementation Channel.inst
 		subcomponents
-			monitor_sys : system MonitorSystem::MonitorSystem.inst;
+			monitor_sys : system MonitorSystem::MonitorSystem;
 			command_sys : system CommandSystem::CommandSystem.inst;
 			
 		connections

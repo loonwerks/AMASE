@@ -43,11 +43,7 @@ with Base_Types;
 	end Sensor;
 	
 	system implementation Sensor.inst
-			annex agree {**
-				
-				
-				
-			**};
+		
 	end Sensor.inst;
 
 end Sensor;

@@ -50,10 +50,10 @@ with Base_Types;
 	
 	system implementation AlternateBrakeSystem.inst
 		subcomponents
-			mv1 : system MeterValve::MeterValve.inst;
-			mv2 : system MeterValve::MeterValve.inst;
-			mv3 : system MeterValve::MeterValve.inst;
-			mv4 : system MeterValve::MeterValve.inst;
+			mv1 : system MeterValve::MeterValve;
+			mv2 : system MeterValve::MeterValve;
+			mv3 : system MeterValve::MeterValve;
+			mv4 : system MeterValve::MeterValve;
 			antiskid_shutoff_valve_1 : system AntiskidShutoffValve;
 			antiskid_shutoff_valve_2 : system AntiskidShutoffValve;
 			antiskid_shutoff_valve_3 : system AntiskidShutoffValve;

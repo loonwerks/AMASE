@@ -125,18 +125,18 @@ with sensor;
 			ctrl_sys : system ControlSystem::ControlSystem.inst;
 			
 			-- Wheel sensors
-			wheel_sensor1 : system Sensor::Sensor.inst;
-			wheel_sensor2 : system Sensor::Sensor.inst;
-			wheel_sensor3 : system Sensor::Sensor.inst;
-			wheel_sensor4 : system Sensor::Sensor.inst;
-			wheel_sensor5 : system Sensor::Sensor.inst;
-			wheel_sensor6 : system Sensor::Sensor.inst;
-			wheel_sensor7 : system Sensor::Sensor.inst;
-			wheel_sensor8 : system Sensor::Sensor.inst;
+			wheel_sensor1 : system Sensor::Sensor;
+			wheel_sensor2 : system Sensor::Sensor;
+			wheel_sensor3 : system Sensor::Sensor;
+			wheel_sensor4 : system Sensor::Sensor;
+			wheel_sensor5 : system Sensor::Sensor;
+			wheel_sensor6 : system Sensor::Sensor;
+			wheel_sensor7 : system Sensor::Sensor;
+			wheel_sensor8 : system Sensor::Sensor;
 			
 			-- Pedal sensors
-			pedal_sensor_L : system Sensor::SensorPedalPosition.inst;
-			pedal_sensor_R : system Sensor::SensorPedalPosition.inst;
+			pedal_sensor_L : system Sensor::SensorPedalPosition;
+			pedal_sensor_R : system Sensor::SensorPedalPosition;
 			
 		-- Connections 
 		connections

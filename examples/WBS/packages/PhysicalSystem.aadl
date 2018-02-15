@@ -261,14 +261,14 @@ with ShutoffValve;
 	system implementation PhysicalSystem.inst
 		subcomponents
 			
-			blue_hyd_pump : system HydraulicPump::HydraulicPump.inst;
-			green_hyd_pump : system HydraulicPump::HydraulicPump.inst;
-			accumulator : system accumulator::accumulator.inst; 
+			blue_hyd_pump : system HydraulicPump::HydraulicPump;
+			green_hyd_pump : system HydraulicPump::HydraulicPump;
+			accumulator : system Accumulator::Accumulator; 
 			
-			add_gate_hyd_pressure : system AdditionGate::AdditionGate.inst;
+			add_gate_hyd_pressure : system AdditionGate::AdditionGate;
 			
-			shutoff_valve : system ShutoffValve::ShutoffValve.inst;
-			selector_valve : system SelectorValve::SelectorValve.inst;
+			shutoff_valve : system ShutoffValve::ShutoffValve;
+			selector_valve : system SelectorValve::SelectorValve;
 			 
 			normal_sys : system NormalBrakeSystem::NormalBrakeSystem.inst;
 			alt_sys : system AlternateBrakeSystem::AlternateBrakeSystem.inst;
@@ -282,14 +282,14 @@ with ShutoffValve;
 			wheel_brake7 : system WheelBrake::WheelBrake.inst;
 			wheel_brake8 : system WheelBrake::WheelBrake.inst;
 			 
-			wheel_1 : system Wheel::Wheel.inst;
-			wheel_2 : system Wheel::Wheel.inst;
-			wheel_3 : system Wheel::Wheel.inst;
-			wheel_4 : system Wheel::Wheel.inst;
-			wheel_5 : system Wheel::Wheel.inst;
-			wheel_6 : system Wheel::Wheel.inst;
-			wheel_7 : system Wheel::Wheel.inst;
-			wheel_8 : system Wheel::Wheel.inst;
+			wheel_1 : system Wheel::Wheel;
+			wheel_2 : system Wheel::Wheel;
+			wheel_3 : system Wheel::Wheel;
+			wheel_4 : system Wheel::Wheel;
+			wheel_5 : system Wheel::Wheel;
+			wheel_6 : system Wheel::Wheel;
+			wheel_7 : system Wheel::Wheel;
+			wheel_8 : system Wheel::Wheel;
 			
 		connections
 			-- Power to subcomponents

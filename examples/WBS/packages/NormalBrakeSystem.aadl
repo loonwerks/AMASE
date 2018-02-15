@@ -79,14 +79,14 @@ with Base_Types;
 	
 	system implementation NormalBrakeSystem.inst
 		subcomponents
-			mv1 : system MeterValve::MeterValve.inst;
-			mv2 : system MeterValve::MeterValve.inst;
-			mv3 : system MeterValve::MeterValve.inst;
-			mv4 : system MeterValve::MeterValve.inst;
-			mv5 : system MeterValve::MeterValve.inst;
-			mv6 : system MeterValve::MeterValve.inst;
-			mv7 : system MeterValve::MeterValve.inst;
-			mv8 : system MeterValve::MeterValve.inst;
+			mv1 : system MeterValve::MeterValve;
+			mv2 : system MeterValve::MeterValve;
+			mv3 : system MeterValve::MeterValve;
+			mv4 : system MeterValve::MeterValve;
+			mv5 : system MeterValve::MeterValve;
+			mv6 : system MeterValve::MeterValve;
+			mv7 : system MeterValve::MeterValve;
+			mv8 : system MeterValve::MeterValve;
 			
 		connections
 			-- hyd pressure to all meter valves

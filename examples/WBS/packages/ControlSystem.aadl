@@ -44,7 +44,7 @@ with Base_Types;
 				-- Properties for control system
 				
 				-- Ground speed positive, system valid
-				property SPEED = ground_speed > 0;
+				property SPEED = ground_speed > 0; 
 				property VALID = system_validity;
 				
 				-- When one of the wheels in a pair is not rolling
@@ -217,7 +217,7 @@ with Base_Types;
 	
 	system implementation ControlSystem.inst 
 		subcomponents
-			bscu: system BSCU::BSCU.inst;
+			bscu: system BSCU::BSCU.inst; 
 			
 		connections
 			sys_valid : port bscu.system_validity -> system_validity;

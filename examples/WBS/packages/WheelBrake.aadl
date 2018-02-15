@@ -35,11 +35,11 @@ with Base_Types;
 	
 	system implementation WheelBrake.inst
 		subcomponents
-			normal_hyd_fuse : system HydraulicFuse.inst;
-			normal_hyd_piston : system HydraulicPiston.inst;
-			alt_hyd_fuse : system HydraulicFuse.inst;
-			alt_hyd_piston : system HydraulicPiston.inst;
-			brake_actuator : system BrakeActuator.inst;
+			normal_hyd_fuse : system HydraulicFuse;
+			normal_hyd_piston : system HydraulicPiston;
+			alt_hyd_fuse : system HydraulicFuse;
+			alt_hyd_piston : system HydraulicPiston;
+			brake_actuator : system BrakeActuator;
 			
 		connections
 			-- To normal hyd fuse

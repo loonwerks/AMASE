@@ -13,11 +13,14 @@ with Base_Types;
 		annex agree {**
 			assume "Pressure input from 0 to 10 inclusive" : (hyd_supply >= 0 and hyd_supply <= 10);
 			
+			guarantee "Hyd pressure out first step" :
+						(hyd_pressure_out = 0) -> true;
+			
 			-- supply_hydraulic_norm_guarantee := (TRUE -> ( G 
 			-- 		((power & hydraulic_supply > 0) -> hyd_pressure_out > 0) 
 			-- 	&  G ((!power | hydraulic_supply = 0) -> hyd_pressure_out = 0)));
 			guarantee "(HydraulicPump) If we have power and hydraulic sypply, then pressure out is positive." :
-						true -> ((power and hyd_supply > 0) => hyd_pressure_out > 0);
+						true -> ((power and hyd_supply > 0) => (hyd_pressure_out = hyd_supply));
 			
 			
 			guarantee "(Hydraulic Pump) If we have no power or our supply is zero, then pressure out is zero." :
