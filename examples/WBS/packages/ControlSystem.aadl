@@ -40,6 +40,9 @@ with Base_Types;
 			system_validity : out data port Base_Types::Boolean;
 				
 			annex agree {**
+				assume "(ControlSystem) Ground speed always greater than zero." : 
+					(ground_speed >= 0) and (ground_speed <= 10);
+				
 				
 				-- Properties for control system
 				
@@ -94,11 +97,10 @@ with Base_Types;
 				--	&   (as_cmd_pair_4_8 -> ((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)));
 				
 				-- Translates to:
-				guarantee "(ctrl system) Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
+				guarantee "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  true -> ((VALID and SPEED) and (PAIR_NOT_ROLLING_15)) <=> as_cmd_pair_1_5;
-				
-				
+						  true -> (((VALID and SPEED) and (PAIR_NOT_ROLLING_15)) <=> as_cmd_pair_1_5);
+						  
 				guarantee "(ctrl system) Expected antiskid behavior pair 2,6: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
 						  true -> ((VALID and SPEED) and (PAIR_NOT_ROLLING_26)) <=> as_cmd_pair_2_6;
@@ -204,7 +206,7 @@ with Base_Types;
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 7): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							true -> (((VALID and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
-							
+							 
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 8): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							true -> (((VALID and elec_pedal_pos_L) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
@@ -232,7 +234,7 @@ with Base_Types;
 			brake_as_8 : port bscu.brake_as_cmd_8 -> brake_as_cmd_8;
 			
 			as_pair_1_5 : port bscu.as_cmd_pair_1_5 -> as_cmd_pair_1_5;
-			as_pair_2_6 : port bscu.as_cmd_pair_2_6 -> as_cmd_pair_2_6;
+			as_pair_2_6 : port bscu.as_cmd_pair_2_6 -> as_cmd_pair_2_6; 
 			as_pair_3_7 : port bscu.as_cmd_pair_3_7 -> as_cmd_pair_3_7;
 			as_pair_4_8 : port bscu.as_cmd_pair_4_8 -> as_cmd_pair_4_8;
 			
@@ -248,6 +250,14 @@ with Base_Types;
 		    elec_pedal_pos_L_to_bscu : port elec_pedal_pos_L -> bscu.elec_pedal_pos_L;
 		    elec_pedal_pos_R_to_bscu : port elec_pedal_pos_R -> bscu.elec_pedal_pos_R;
 			
+			speed_to_bscu : port ground_speed -> bscu.ground_speed;
+			
+			
+		annex agree {**
+			lemma "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
+						  if and only if antiskid is commanded to the pair." :
+						  true -> (((bscu.system_validity and (bscu.ground_speed > 0)) and (not bscu.wheel_rolling_1 or not bscu.wheel_rolling_5)) <=> bscu.as_cmd_pair_1_5);
+		**};
 	end ControlSystem.inst;
 
 end ControlSystem;

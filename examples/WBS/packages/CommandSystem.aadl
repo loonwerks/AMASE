@@ -34,6 +34,8 @@ with Base_Types;
 			as_cmd_pair_4_8 : out data port Base_Types::Boolean;
 		
 		annex agree {**
+			assume "(CommandSystem) Ground speed always greater than zero." : 
+					(ground_speed >= 0) and (ground_speed <= 10);
 			
 			-- command_creation_alternate_1_norm_guarantee := (TRUE ->  
 			-- 		G (((power & ground_speed > 0) & (!wheel_rolling_1 | !wheel_rolling_5)) <-> as_cmd_pair_1_5));
@@ -132,7 +134,7 @@ with Base_Types;
 			elec_pedal_pos_L_1_5 : port elec_pedal_pos_L -> w1_w5_cmd_sys.elec_pedal_pos;
 			elec_pedal_pos_L_2_6 : port elec_pedal_pos_L -> w2_w6_cmd_sys.elec_pedal_pos;
 			elec_pedal_pos_R_3_7 : port elec_pedal_pos_R -> w3_w7_cmd_sys.elec_pedal_pos;
-			elec_pedal_pos_R_4_8 : port elec_pedal_pos_R -> w4_w8_cmd_sys.elec_pedal_pos;
+			elec_pedal_pos_R_4_8 : port elec_pedal_pos_R -> w4_w8_cmd_sys.elec_pedal_pos; 
 			
 			wheel_1_roll : port wheel_rolling_1 -> w1_w5_cmd_sys.wheel_rolling_1;
 			wheel_5_roll : port wheel_rolling_5 -> w1_w5_cmd_sys.wheel_rolling_2;
@@ -146,7 +148,12 @@ with Base_Types;
 			wheel_4_roll : port wheel_rolling_4 -> w4_w8_cmd_sys.wheel_rolling_1;
 			wheel_8_roll : port wheel_rolling_8 -> w4_w8_cmd_sys.wheel_rolling_2;
 			
-			
+--			annex agree {**
+--				property AS_CMD_OUT = ((power and ground_speed > 0) and (not wheel_rolling_1 or not wheel_rolling_5)) <=> w1_w5_cmd_sys.as_cmd_out;
+--				
+----				lemma "antiskid command: " : true -> (AS_CMD_OUT); 
+--				
+--			**};
 			
 	end CommandSystem.inst;
 	

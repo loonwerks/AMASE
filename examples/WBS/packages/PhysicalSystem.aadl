@@ -405,7 +405,7 @@ with ShutoffValve;
 			wheel_8_status : port wheel_8.wheel_status -> wheel_status8;
 			
 			
-	end PhysicalSystem.inst;
+	end PhysicalSystem.inst; 
 
 
 

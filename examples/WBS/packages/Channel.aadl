@@ -38,7 +38,27 @@ with MonitorSystem;
 			system_validity : out data port Base_Types::Boolean;
 			
 			annex agree {**
+				assume "(ChannelSystem) Ground speed always greater than zero." : 
+					(ground_speed >= 0) and (ground_speed <= 10);
 				
+--				guarantee "Brake as cmd 1" : (power and (elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) = brake_as_cmd_1);
+--				assume "Brase as cmd 2" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) = brake_as_cmd_2);
+--				assume "Brase as cmd 3" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) = brake_as_cmd_3);
+--				assume "Brase as cmd 4" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) = brake_as_cmd_4);
+--				assume "Brase as cmd 5" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) = brake_as_cmd_5);
+--				assume "Brase as cmd 6" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) = brake_as_cmd_6);
+--				assume "Brase as cmd 7" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) = brake_as_cmd_7);
+--				assume "Brase as cmd 8" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) = brake_as_cmd_8);
+--				assume "Antiskid cmd pair 1,5" : ((power and SPEED and (PAIR_NOT_ROLLING_15)) = as_cmd_pair_1_5);
+--				assume "Antiskid cmd pair 2,6" : ((power and SPEED and (PAIR_NOT_ROLLING_26)) = as_cmd_pair_2_6);
+--				assume "Antiskid cmd pair 3,7" : ((power and SPEED and (PAIR_NOT_ROLLING_37)) = as_cmd_pair_3_7);
+--				assume "Antiskid cmd pair 4,8" : ((power and SPEED and (PAIR_NOT_ROLLING_48)) = as_cmd_pair_4_8);
+				
+--				guarantee "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
+--						  if and only if antiskid is commanded to the pair." :
+--						  true -> (((system_validity and (ground_speed > 0)) and (not wheel_rolling_1 or not wheel_rolling_5)) <=>  as_cmd_pair_1_5);
+--				
+									
 				-- Properties 
 				property SPEED = ground_speed > 0;
 				-- When one of the wheels in a pair is not rolling
@@ -112,6 +132,20 @@ with MonitorSystem;
 			monitor_wheel_rolling_7 : port wheel_rolling_7 -> monitor_sys.wheel_rolling_7;
 			monitor_wheel_rolling_8 : port wheel_rolling_8 -> monitor_sys.wheel_rolling_8;
 			
+			brake_as_1_monitor : port command_sys.brake_as_cmd_1 -> monitor_sys.brake_as_cmd_1;
+			brake_as_2_monitor : port command_sys.brake_as_cmd_2 -> monitor_sys.brake_as_cmd_2;
+			brake_as_3_monitor : port command_sys.brake_as_cmd_3 -> monitor_sys.brake_as_cmd_3;
+			brake_as_4_monitor : port command_sys.brake_as_cmd_4 -> monitor_sys.brake_as_cmd_4;
+			brake_as_5_monitor : port command_sys.brake_as_cmd_5 -> monitor_sys.brake_as_cmd_5;
+			brake_as_6_monitor : port command_sys.brake_as_cmd_6 -> monitor_sys.brake_as_cmd_6;
+			brake_as_7_monitor : port command_sys.brake_as_cmd_7 -> monitor_sys.brake_as_cmd_7;
+			brake_as_8_monitor : port command_sys.brake_as_cmd_8 -> monitor_sys.brake_as_cmd_8;
+			
+			as_pair_1_5_monitor : port command_sys.as_cmd_pair_1_5 -> monitor_sys.as_cmd_pair_1_5;
+			as_pair_2_6_monitor : port command_sys.as_cmd_pair_2_6 -> monitor_sys.as_cmd_pair_2_6;
+			as_pair_3_7_monitor : port command_sys.as_cmd_pair_3_7 -> monitor_sys.as_cmd_pair_3_7;
+			as_pair_4_8_monitor : port command_sys.as_cmd_pair_4_8 -> monitor_sys.as_cmd_pair_4_8;
+			
 			-- Connections to command system
 			command_power : port power -> command_sys.power;
 			command_L_pedal : port elec_pedal_pos_L -> command_sys.elec_pedal_pos_L;
@@ -125,6 +159,19 @@ with MonitorSystem;
 			command_wheel_rolling_6 : port wheel_rolling_6 -> command_sys.wheel_rolling_6;
 			command_wheel_rolling_7 : port wheel_rolling_7 -> command_sys.wheel_rolling_7;
 			command_wheel_rolling_8 : port wheel_rolling_8 -> command_sys.wheel_rolling_8;
+		
+		annex agree {**
+     		lemma "Brake as cmd 1" : true -> ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) = brake_as_cmd_1);
+			lemma "Cmd sys output = mon sys input" : command_sys.brake_as_cmd_1 = monitor_sys.brake_as_cmd_1;
+			lemma "Cmd sys input = mon sys input" : (command_sys.power  = monitor_sys.power);
+			
+--			guarantee "(CommandSystem) Wheel 1: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
+--						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0))	
+--									<=> brake_as_cmd_1);
+			
+--			lemma "Brake as cmd 1" : true -> ((command_sys.power and command_sys.elec_pedal_pos_L and ((command_sys.ground_speed > 0 and command_sys.wheel_rolling_1) or (not (command_sys.ground_speed > 0)))) = command_sys.brake_as_cmd_1);
+			
+		**};
 			
 	end Channel.inst;
 end Channel;

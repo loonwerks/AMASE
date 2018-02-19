@@ -17,6 +17,8 @@ with Base_Types;
 			as_cmd_out : out data port Base_Types::Boolean;
 			
 		annex agree {**
+			assume "(WheelPairCommandSystem) Ground speed always greater than zero." : 
+					(ground_speed >= 0) and (ground_speed <= 10);
 			
     		--	    LTLSPEC NAME commands_creation_norm_guarantee := (TRUE ->  G 
 		
@@ -30,8 +32,14 @@ with Base_Types;
     		property BRAKE_AS_1 = ((power and elec_pedal_pos) and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0)) <=> brake_as_cmd_1;
     		property BRAKE_AS_2 = ((power and elec_pedal_pos) and ((ground_speed > 0 and wheel_rolling_2) or ground_speed = 0)) <=> brake_as_cmd_2;
     		
-    		guarantee "(WheelPairCommandSystem) Assign antiskid command and brake commands according to input values." :
-						true -> AS_CMD_OUT and BRAKE_AS_1 and BRAKE_AS_2;
+    		guarantee "(WheelPairCommandSystem) 1 Assign antiskid command and brake commands according to input values." :
+						true -> AS_CMD_OUT;
+						
+			guarantee "(WheelPairCommandSystem) 2 Assign antiskid command and brake commands according to input values." :
+						true -> BRAKE_AS_1;
+						
+			guarantee "(WheelPairCommandSystem) 3 Assign antiskid command and brake commands according to input values." :
+						true -> BRAKE_AS_2;
 			
 		**};	
 	end WheelPairCommandSystem;

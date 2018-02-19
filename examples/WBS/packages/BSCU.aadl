@@ -43,10 +43,9 @@ with Base_Types;
 				
 				-- Properties
 				
-			 
-				
-				
-				
+				assume "(BSCU) Ground speed always greater than zero." : 
+					(ground_speed >= 0) and (ground_speed <= 10);
+			
 				
 			**};
 				
@@ -55,7 +54,7 @@ with Base_Types;
 	
 	system implementation BSCU.inst
 		subcomponents
-			channel1 : system Channel::Channel.inst;
+			channel1 : system Channel::Channel.inst; 
 			channel2 : system Channel::Channel.inst;
 			or_gate_system_validity : system OrGate::OrGate;
 			switch_gate_brake_as_cmd_1 : system SwitchGate::SwitchGate;
@@ -87,6 +86,48 @@ with Base_Types;
 			as_pair_2_6 : port switch_gate_brake_as_cmd_pair_2_6.cmd_out -> as_cmd_pair_2_6;
 			as_pair_3_7 : port switch_gate_brake_as_cmd_pair_3_7.cmd_out -> as_cmd_pair_3_7;
 			as_pair_4_8 : port switch_gate_brake_as_cmd_pair_4_8.cmd_out -> as_cmd_pair_4_8;
+			
+			-- To switch gates:
+			sg1_cmd_in_1 : port channel1.brake_as_cmd_1 -> switch_gate_brake_as_cmd_1.cmd_in_1;
+			sg1_cmd_in_2 : port channel2.brake_as_cmd_1 -> switch_gate_brake_as_cmd_1.cmd_in_2;
+			sg1_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_1.validity1;
+			sg1_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_1.validity2;
+			
+			sg2_cmd_in_1 : port channel1.brake_as_cmd_2 -> switch_gate_brake_as_cmd_2.cmd_in_1;
+			sg2_cmd_in_2 : port channel2.brake_as_cmd_2 -> switch_gate_brake_as_cmd_2.cmd_in_2;
+			sg2_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_2.validity1;
+			sg2_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_2.validity2;
+		
+			sg3_cmd_in_1 : port channel1.brake_as_cmd_3 -> switch_gate_brake_as_cmd_3.cmd_in_1;
+			sg3_cmd_in_2 : port channel2.brake_as_cmd_3 -> switch_gate_brake_as_cmd_3.cmd_in_2;
+			sg3_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_3.validity1;
+			sg3_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_3.validity2;
+			
+			sg4_cmd_in_1 : port channel1.brake_as_cmd_4 -> switch_gate_brake_as_cmd_4.cmd_in_1;
+			sg4_cmd_in_2 : port channel2.brake_as_cmd_4 -> switch_gate_brake_as_cmd_4.cmd_in_2;
+			sg4_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_4.validity1;
+			sg4_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_4.validity2;
+			
+			sg5_cmd_in_1 : port channel1.brake_as_cmd_5 -> switch_gate_brake_as_cmd_5.cmd_in_1;
+			sg5_cmd_in_2 : port channel2.brake_as_cmd_5 -> switch_gate_brake_as_cmd_5.cmd_in_2;
+			sg5_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_5.validity1;
+			sg5_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_5.validity2;
+			
+			sg6_cmd_in_1 : port channel1.brake_as_cmd_6 -> switch_gate_brake_as_cmd_6.cmd_in_1;
+			sg6_cmd_in_2 : port channel2.brake_as_cmd_6 -> switch_gate_brake_as_cmd_6.cmd_in_2;
+			sg6_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_6.validity1;
+			sg6_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_6.validity2;
+			
+			sg7_cmd_in_1 : port channel1.brake_as_cmd_7 -> switch_gate_brake_as_cmd_7.cmd_in_1;
+			sg7_cmd_in_2 : port channel2.brake_as_cmd_7 -> switch_gate_brake_as_cmd_7.cmd_in_2;
+			sg7_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_7.validity1;
+			sg7_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_7.validity2;
+			
+			sg8_cmd_in_1 : port channel1.brake_as_cmd_8 -> switch_gate_brake_as_cmd_8.cmd_in_1;
+			sg8_cmd_in_2 : port channel2.brake_as_cmd_8 -> switch_gate_brake_as_cmd_8.cmd_in_2;
+			sg8_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_8.validity1;
+			sg8_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_8.validity2;
+			
 			
 			-- Inputs to channels
 			
