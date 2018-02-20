@@ -49,6 +49,7 @@ with Base_Types;
 				-- Ground speed positive, system valid
 				property SPEED = ground_speed > 0; 
 				property VALID = system_validity;
+				property power = power_1 or power_2; 
 				
 				-- When one of the wheels in a pair is not rolling
 				property PAIR_NOT_ROLLING_15 = not wheel_rolling_1 or not wheel_rolling_5;
@@ -201,17 +202,27 @@ with Base_Types;
 				
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 6): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							true -> (((VALID and elec_pedal_pos_R) and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6);
+							true -> (((VALID and elec_pedal_pos_L) and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6);
 				
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 7): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							true -> (((VALID and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
+							true -> (((VALID and elec_pedal_pos_R) and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7);
 							 
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 8): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							true -> (((VALID and elec_pedal_pos_L) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
+							true -> (((VALID and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
 				
 				
+
+
+--guarantee " (Channel) Brake antiskid command behavior (wheel 1): Brake antiskid is commanded to the wheel only when 
+--							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
+--							true -> (((power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1);
+
+
+
+
+
 						
 			**};
 				

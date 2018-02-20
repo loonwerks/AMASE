@@ -117,6 +117,9 @@ with Base_Types;
 						and as_cmd_pair_3_7
 						and as_cmd_pair_4_8));
 				  
+			
+			guarantee "(MonitorSystem) If we have no power, bscu is not valid":
+					true -> (not power => not bscu_validity);
 										
 		**}	;
 	end MonitorSystem;
