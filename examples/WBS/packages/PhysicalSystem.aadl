@@ -93,14 +93,14 @@ with ShutoffValve;
 			
 			guarantee "(PhysicalSystem) Wheel 1 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL1 or ALTERNATE1) => wheel_braking_force1 > 0;
+						true -> ((NORMAL1 or ALTERNATE1) => wheel_braking_force1 > 0);
 			
 			property NORMAL2 = brake_as_cmd_2 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE2 = ((mech_pedal_pos_L and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 2 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL2 or ALTERNATE2) => wheel_braking_force2 > 0;
+						true -> ((NORMAL2 or ALTERNATE2) => wheel_braking_force2 > 0);
 			
 			
 			property NORMAL3 = brake_as_cmd_3 and (GREEN_PRESSURE_VALID);
@@ -108,48 +108,48 @@ with ShutoffValve;
 			
 			guarantee "(PhysicalSystem) Wheel 3 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL3 or ALTERNATE3) => wheel_braking_force3 > 0;
+						true -> ((NORMAL3 or ALTERNATE3) => wheel_braking_force3 > 0);
 			
 			property NORMAL4 = brake_as_cmd_4 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE4 = ((mech_pedal_pos_R and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 4 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL4 or ALTERNATE4) => wheel_braking_force4 > 0;
+						true -> ((NORMAL4 or ALTERNATE4) => wheel_braking_force4 > 0);
 			
 			property NORMAL5 = brake_as_cmd_5 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE5 = ((mech_pedal_pos_L and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 5 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL5 or ALTERNATE5) => wheel_braking_force5 > 0;
+						true -> ((NORMAL5 or ALTERNATE5) => wheel_braking_force5 > 0);
 			
 			property NORMAL6 = brake_as_cmd_6 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE6 = ((mech_pedal_pos_L and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 6 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0;
+						true -> ((NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0);
 			
 			property NORMAL7 = brake_as_cmd_1 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE7 = ((mech_pedal_pos_R and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 7 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL7 or ALTERNATE7) => wheel_braking_force7 > 0;
+						true -> ((NORMAL7 or ALTERNATE7) => wheel_braking_force7 > 0);
 			
 			property NORMAL8 = brake_as_cmd_8 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE8 = ((mech_pedal_pos_R and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 8 braking force: under either normal or alternate operating mode, the wheel brake
 						force is positive." :
-						true -> (NORMAL8 or ALTERNATE8) => wheel_braking_force8 > 0;
+						true -> ((NORMAL8 or ALTERNATE8) => wheel_braking_force8 > 0);
 			
 			-- getting_green_pressure_in_selector_valve_norm_guarantee := (TRUE ->  G 
 			--     (green_pressure_in_selector_valve > 0 <-> ((system_validity & pump_power_1) & hydraulic_supply_1 > 0)));
 			guarantee "(PhysicalSystem) Green pressure into selector valve is positive if and only if
 						system is valid, pump has power, and we have hydraulic supplied." :
-						true -> green_pressure_in_selec_valve > 0 <=> (system_validity and pump_power1 and hyd_supply1 > 0);
+						true -> ((green_pressure_in_selec_valve > 0) <=> (system_validity and pump_power1 and hyd_supply1 > 0));
 			
 			
 			-- braking_wheel_5_implies_cmd_norm_guarantee := ( G 
@@ -244,7 +244,7 @@ with ShutoffValve;
 			guarantee "(Physical System) It will not occur that all wheels are stopped, ground speed is positive, 
 						wheel brake force is positive, pedals are pressed, brake_as is commanded." :
 						true -> 
-							not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ALL_WHEELS_STOPPED and ground_speed > 0);
+							(not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ALL_WHEELS_STOPPED and ground_speed > 0));
 							
 			-- never_inadvertent_braking_of_all_wheels_norm_guarantee := (TRUE ->  G 
 			-- 			!(((((((((((!mechanical_pedal_pos_L & !mechanical_pedal_pos_R) & !brake_as_cmd_1) & !brake_as_cmd_2) & !brake_as_cmd_3) & !brake_as_cmd_4) & !brake_as_cmd_5) & !brake_as_cmd_6) & !brake_as_cmd_7) & !brake_as_cmd_8) 
@@ -252,7 +252,7 @@ with ShutoffValve;
 			-- 			& ground_speed > 0));
 			
 			guarantee "(PhysicalSystem) It will not occur that all wheels are braked inadvertently." :
-				true -> not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ground_speed > 0);  
+				true -> (not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ground_speed > 0));  
 							
 		**};
 	
@@ -306,6 +306,7 @@ with ShutoffValve;
 			system_valid_to_shutoff : port system_validity -> shutoff_valve.system_validity;
 			shutoff_pressure_out : port shutoff_valve.hyd_pressure_out -> green_pressure_in_selec_valve;
 			shutoff_pressure_to_selector : port shutoff_valve.hyd_pressure_out -> selector_valve.green_select_in;
+			blue_pressure_to_accum : port green_hyd_pump.hyd_pressure_out -> shutoff_valve.hyd_pressure_in;
 			
 			-- Selector valve
 			system_valid_to_selector : port system_validity -> selector_valve.system_validity;
@@ -403,7 +404,46 @@ with ShutoffValve;
 			wheel_6_status : port wheel_6.wheel_status -> wheel_status6;
 			wheel_7_status : port wheel_7.wheel_status -> wheel_status7;
 			wheel_8_status : port wheel_8.wheel_status -> wheel_status8;
+		
+		
+		annex agree {**
 			
+--			lemma "(BlueHydraulicPump) If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
+--						true -> (
+--							if (blue_hyd_pump.power and blue_hyd_pump.hyd_supply > 0) then (blue_hyd_pump.hyd_pressure_out = blue_hyd_pump.hyd_supply)
+--								else (blue_hyd_pump.hyd_pressure_out = 0)
+--						);
+--			
+--			lemma "(GreenHydraulicPump) If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
+--						true -> (
+--							if (green_hyd_pump.power and green_hyd_pump.hyd_supply > 0) then (green_hyd_pump.hyd_pressure_out = green_hyd_pump.hyd_supply)
+--								else (green_hyd_pump.hyd_pressure_out = 0)
+--						);
+		
+		
+			lemma "Testing pump supply" :
+				true -> (
+					(hyd_supply1 = blue_hyd_pump.hyd_supply) and (hyd_supply2 = green_hyd_pump.hyd_supply)
+				);
+		
+			
+			lemma "Testing pump outputs" :
+				true -> (
+					(green_hyd_pump.hyd_pressure_out = shutoff_valve.hyd_pressure_in) and (blue_hyd_pump.hyd_pressure_out = accumulator.circuit_pressure_value)
+				);
+		
+		
+			lemma "(NormalBrakeSys) (W1) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+						true -> (
+							((normal_sys.brake_as_cmd1 and normal_sys.hyd_pressure_in > 0) <=> normal_sys.hyd_pressure_out1 > 0)) ;
+		
+		
+			lemma "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (alt_sys.hyd_pressure_out1 > 0 <=> (alt_sys.mech_pedal_pos_L and alt_sys.hyd_pressure_in > 0 and (not alt_sys.as_cmd_pair_1_5)));
+		
+		**}	;
 			
 	end PhysicalSystem.inst; 
 

@@ -9,10 +9,12 @@ with Base_Types;
 			hyd_pressure_in : in data port Base_Types::Integer; 
 			mech_pedal_pos_L : in data port Base_Types::Boolean;
 			mech_pedal_pos_R : in data port Base_Types::Boolean;
-			as_cmd_pair_1_5 : in data port Base_Types::Boolean;
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean; 
 			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
 			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
 			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
+			false_to_mv : in data port Base_Types::Boolean;
 			
 			-- Outputs (to meter valves and antiskid shutoff valves)
 			hyd_pressure_out1 : out data port Base_Types::Integer;
@@ -23,6 +25,9 @@ with Base_Types;
 			annex agree {**
 				
 				assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
+				assume "False is passed to meter valves for elec_cmd" :
+					true -> (false_to_mv = false);
 					
 				-- apply_command_3_norm_guarantee := 
 				--		(TRUE ->  G (((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & hyd_pressure_in > 0) <-> hyd_pressure_out_3 > 0));
@@ -42,7 +47,10 @@ with Base_Types;
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
 							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
 							
-				
+--				true -> (
+--								if ((hyd_pressure_in = 0) or antiskid_cmd) then (hyd_pressure_out = 0)
+--									else (hyd_pressure_out = hyd_pressure_in)
+--								);
 					
 			**};
 			
@@ -90,7 +98,27 @@ with Base_Types;
 			hyd_press_out_3 : port mv3.hyd_pressure_out -> hyd_pressure_out3;
 			hyd_press_out_4 : port mv4.hyd_pressure_out -> hyd_pressure_out4;
 			
+			-- elec cmd in meter valves is always false for alt system
+			false_to_mv_1 : port false_to_mv -> mv1.elec_cmd;
+			false_to_mv_2 : port false_to_mv -> mv2.elec_cmd;
+			false_to_mv_3 : port false_to_mv -> mv3.elec_cmd;
+			false_to_mv_4 : port false_to_mv -> mv4.elec_cmd;
 			
+			
+		annex agree {**
+			
+			lemma "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
+							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
+							to the hyd pressure in." :
+							
+							true -> (
+								if ((antiskid_shutoff_valve_1.hyd_pressure_in = 0) or antiskid_shutoff_valve_1.antiskid_cmd) then (antiskid_shutoff_valve_1.hyd_pressure_out = 0)
+									else (antiskid_shutoff_valve_1.hyd_pressure_out = antiskid_shutoff_valve_1.hyd_pressure_in)
+								);
+			
+			lemma "Output on as comp": true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out > -1);
+			
+		**};
 			
 	end AlternateBrakeSystem.inst;
 	
@@ -116,15 +144,23 @@ with Base_Types;
 				guarantee "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
 							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
 							to the hyd pressure in." :
-							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
-								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
+							
+							true -> (
+								if ((hyd_pressure_in = 0) or antiskid_cmd) then (hyd_pressure_out = 0)
+									else (hyd_pressure_out = hyd_pressure_in)
+								);
+							
+							
+--							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
+--								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
 			
-				
-				
-				guarantee "Pressure input from 0 to 10 inclusive" : (hyd_pressure_out >= 0 and hyd_pressure_out <= 10);
-				
+--				guarantee "Output from 0 to 10" : true -> ();			
 			**};
 			
 	end AntiskidShutoffValve;
+	
+	
+	system implementation AntiskidShutoffValve.inst
+	end AntiskidShutoffValve.inst;
 	
 end AlternateBrakeSystem;
