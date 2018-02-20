@@ -32,13 +32,13 @@ using models to assist the safety assessment process (either by augmenting the e
 	\label{fig:proposed_safety_process}
 \end{figure}
 
-Using the same system design model to conduct both system design and safety analysis can help reduce the gap in comprehending the system behavior and transferring the knowledge between the design model to the safety analysis model. It maintains a living model that captures the latest state of the system design as the process flows per Figure~\ref{fig:plugin-arch}. It also allows all participants of the ARP4754A process to be able to communicate and review the system design using the ``single source of truth''.
+Using the same system design model to conduct both system design and safety analysis can help reduce the gap in comprehending the system behavior and transferring the knowledge between the design model to the safety analysis model. It maintains a living model that captures the latest state of the system design as the process flows per Figure~\ref{fig:arp4754a_process}. It also allows all participants of the ARP4754A process to be able to communicate and review the system design using the ``single source of truth''.
 
 In order to allow performing system design and safety analysis on the same model, the system design model will need to be augmented to include both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure mode, failure rate), at the same time keeping the two types of information distinguishable yet interactable from each other.
 
 Figure~\ref{fig:proposed_safety_process} presents our proposed use of the shared system design and safety analysis model (to be referred as "the shared model" in the rest of this section) in the ARP4754A Safety Assessment Process Model [ref Figure 7 of ARP4754A]. As seen in the figure, the shared model represents a system development artifact from the ``Development of System Architecture'' and ``Allocation of System Requirements to Item'' activities in the System Development Process, which interacts with the PSSAs and SSAs activities in the Safety Assessment Process. The shared model can serve as a wrapper and interface to capture the information relevant to safety analysis from the system design and implementation.
 
-Figure~\ref{fig:arp4754a_process} shows how an example how the preliminary FTAs and FTAs, artifacts from the PSSA and SSA activities in the Safety Assessment Process, can guide and be updated from the shared model. The next subsection will describe the foundation of the modeling technique in more details.
+Figure~\ref{fig:interaction_with_FTA} shows how an example how the preliminary FTAs and FTAs, artifacts from the PSSA and SSA activities in the Safety Assessment Process, can guide and be updated from the shared model. The next subsection will describe the foundation of the modeling technique in more details.
 
 \begin{figure}[h!]
 	\vspace{-0.19in}
