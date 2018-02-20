@@ -177,7 +177,7 @@ with MonitorSystem;
 			
 			brake_as_1_monitor : port command_sys.brake_as_cmd_1 -> monitor_sys.brake_as_cmd_1;
 			brake_as_2_monitor : port command_sys.brake_as_cmd_2 -> monitor_sys.brake_as_cmd_2;
-			brake_as_3_monitor : port command_sys.brake_as_cmd_3 -> monitor_sys.brake_as_cmd_3;
+			brake_as_3_monitor : port command_sys.brake_as_cmd_3 -> monitor_sys.brake_as_cmd_3; 
 			brake_as_4_monitor : port command_sys.brake_as_cmd_4 -> monitor_sys.brake_as_cmd_4;
 			brake_as_5_monitor : port command_sys.brake_as_cmd_5 -> monitor_sys.brake_as_cmd_5;
 			brake_as_6_monitor : port command_sys.brake_as_cmd_6 -> monitor_sys.brake_as_cmd_6;
