@@ -20,6 +20,9 @@ with Base_Types;
 			guarantee "(Accumulator) The reserve out pressure is positive if and only if the circuit pressure value is zero.":
 						true -> (reserve_out > 0 <=> circuit_pressure_value = 0);
 			
+			guarantee "(Accumulator) Reserve out is always between 0 and 10" : 
+				true -> (reserve_out <= 10 and reserve_out >= 0);
+			
 		**};
 		
 	end Accumulator;

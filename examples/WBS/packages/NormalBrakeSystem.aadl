@@ -84,6 +84,15 @@ with Base_Types;
 							((brake_as_cmd8 and hyd_pressure_in > 0) <=> hyd_pressure_out8 > 0);
 											
 			 
+			 guarantee "(NormalBrakeSys) Pressure out 1 bounded." : true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 2 bounded." : true -> (hyd_pressure_out2 <= 10 and hyd_pressure_out2 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 3 bounded." : true -> (hyd_pressure_out3 <= 10 and hyd_pressure_out3 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 4 bounded." : true -> (hyd_pressure_out4 <= 10 and hyd_pressure_out4 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 5 bounded." : true -> (hyd_pressure_out5 <= 10 and hyd_pressure_out5 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 6 bounded." : true -> (hyd_pressure_out6 <= 10 and hyd_pressure_out6 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 7 bounded." : true -> (hyd_pressure_out7 <= 10 and hyd_pressure_out7 >= 0);
+			 guarantee "(NormalBrakeSys) Pressure out 8 bounded." : true -> (hyd_pressure_out8 <= 10 and hyd_pressure_out8 >= 0);
+			 
 		**};
 	end NormalBrakeSystem;
 	
@@ -137,9 +146,10 @@ with Base_Types;
 			press_out_5 : port mv5.hyd_pressure_out -> hyd_pressure_out5;
 			press_out_6 : port mv6.hyd_pressure_out -> hyd_pressure_out6;
 			press_out_7 : port mv7.hyd_pressure_out -> hyd_pressure_out7;
-			press_out_8 : port mv8.hyd_pressure_out -> hyd_pressure_out8;
+			press_out_8 : port mv8.hyd_pressure_out -> hyd_pressure_out8; 
 			
 		annex agree {**
+			
 			
 			
 			lemma "(MeterValve) 1 Hydraulic pressure out is positive if and only if

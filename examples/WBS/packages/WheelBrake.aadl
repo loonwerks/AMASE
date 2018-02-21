@@ -12,10 +12,14 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "(WheelBrake) Hyd pressure in is always bounded between 0 and 10 inclusive." :
+				assume "(WheelBrake) Normal hyd pressure in is always bounded between 0 and 10 inclusive." :
 					true -> 
-					((normal_hyd_pressure_in <= 10) and (normal_hyd_pressure_in >= 0) and (alt_hyd_pressure_in <= 10) and 
-						(alt_hyd_pressure_in >= 0));
+					((normal_hyd_pressure_in <= 10) and (normal_hyd_pressure_in >= 0));
+				
+				
+				assume "(WheelBrake) Alt hyd pressure in is always bounded between 0 and 10 inclusive." :
+					true -> 
+					((alt_hyd_pressure_in <= 10) and (alt_hyd_pressure_in >= 0));
 				
 				-- Added guarantee that brake force is between 0 to 10 inclusive
 				guarantee "(WheelBrake) Braking force is always from 0 to 10 inclusive." :

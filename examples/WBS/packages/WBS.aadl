@@ -70,8 +70,6 @@ with sensor;
 		property W6ROLL = wheel_status6;
 		property W7ROLL = wheel_status7;
 		property W8ROLL = wheel_status8;
-		
-
 	
 		**};
 	
@@ -258,6 +256,7 @@ with sensor;
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
 					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL))));
+		
 		
 		
 	**};

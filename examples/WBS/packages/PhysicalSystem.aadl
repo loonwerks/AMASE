@@ -131,7 +131,7 @@ with ShutoffValve;
 						force is positive." :
 						true -> ((NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0);
 			
-			property NORMAL7 = brake_as_cmd_1 and (GREEN_PRESSURE_VALID);
+			property NORMAL7 = brake_as_cmd_7 and (GREEN_PRESSURE_VALID);
 			property ALTERNATE7 = ((mech_pedal_pos_R and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
 			
 			guarantee "(PhysicalSystem) Wheel 7 braking force: under either normal or alternate operating mode, the wheel brake
@@ -163,51 +163,52 @@ with ShutoffValve;
 			
 			guarantee "(PhysicalSystem) Wheel 1 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_1) => as_cmd_pair_1_5)
-						=> (wheel_braking_force1 > 0 => (brake_as_cmd_1 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_1) => as_cmd_pair_1_5)
+						=> ((wheel_braking_force1 > 0 => (brake_as_cmd_1 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID))));
+			
 			
 			guarantee "(PhysicalSystem) Wheel 2 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_2) => as_cmd_pair_2_6)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_2) => as_cmd_pair_2_6)
 						=> (wheel_braking_force2 > 0 => (brake_as_cmd_2 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID)));
 			
 			guarantee "(PhysicalSystem) Wheel 3 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_3) => as_cmd_pair_3_7)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_3) => as_cmd_pair_3_7)
 						=> (wheel_braking_force3 > 0 => (brake_as_cmd_3 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID)));
 			
 			guarantee "(PhysicalSystem) Wheel 4 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_4) => as_cmd_pair_4_8)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_4) => as_cmd_pair_4_8)
 						=> (wheel_braking_force4 > 0 => (brake_as_cmd_4 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID)));
 			
 			guarantee "(PhysicalSystem) Wheel 5 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_5) => as_cmd_pair_1_5)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_5) => as_cmd_pair_1_5)
 						=> (wheel_braking_force5 > 0 => (brake_as_cmd_5 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID)));
 			
 			guarantee "(PhysicalSystem) Wheel 6 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_6) => as_cmd_pair_2_6)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_6) => as_cmd_pair_2_6)
 						=> (wheel_braking_force6 > 0 => (brake_as_cmd_6 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID)));
 			
 			guarantee "(PhysicalSystem) Wheel 7 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_7) => as_cmd_pair_3_7)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_7) => as_cmd_pair_3_7)
 						=> (wheel_braking_force7 > 0 => (brake_as_cmd_7 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID)));
 			
 			guarantee "(PhysicalSystem) Wheel 8 force: Antiskid command for pair active implies wheel brake force
 						which implies brake antiskid command in valid system or invalid system" :
-						((L_PEDAL_VALID and not brake_as_cmd_8) => as_cmd_pair_1_5)
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_8) => as_cmd_pair_1_5)
 						=> (wheel_braking_force8 > 0 => (brake_as_cmd_8 and (GREEN_PRESSURE_VALID)) 
-							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
+							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID)));
 						
 			
 			-- never_inadvertent_braking_with_all_wheels_locked_norm_guarantee := (TRUE ->  G 
@@ -409,6 +410,8 @@ with ShutoffValve;
 		
 		annex agree {**
 			
+			-- Hyd pumps
+			
 			lemma "(HydraulicPump) Blue hyd pressure out first step" :
 						(blue_hyd_pump.hyd_pressure_out = 0) -> true;
 			
@@ -427,34 +430,51 @@ with ShutoffValve;
 								else (green_hyd_pump.hyd_pressure_out = 0)
 						);
 		
+			-- Accumulator
+				
 			lemma "Testing pressure into accumulator" :
 				true -> (
 					(green_hyd_pump.hyd_pressure_out >= 0) and (green_hyd_pump.hyd_pressure_out <= 10)
 				);
 		
+
+			lemma "(Accumulator) The reserve out pressure is positive if and only if the circuit pressure value is zero.":
+						true -> (accumulator.reserve_out > 0 <=> accumulator.circuit_pressure_value = 0);
+
+			lemma "(Accumulator) Reserve out is always between 0 and 10" : 
+				true -> (accumulator.reserve_out <= 10 and accumulator.reserve_out >= 0);
+
+
+			-- Shutoff valve
+	
+			lemma "(ShutoffValve) Positive pressure out occurs whenever pressure in is positive and system is valid. 
+						Zero pressure out occurs whenever hyd pressure in is zero or system is not valid." :
+						true -> (if(shutoff_valve.hyd_pressure_in > 0 and shutoff_valve.system_validity) then (shutoff_valve.hyd_pressure_out = shutoff_valve.hyd_pressure_in)
+								else (shutoff_valve.hyd_pressure_out = 0));
+	
+			lemma "Shutoff input comes from green pump" :
+				true -> (green_hyd_pump.hyd_pressure_out = shutoff_valve.hyd_pressure_in);
+	
 		
-			lemma "Testing pump supply" :
-				true -> (
-					(hyd_supply1 = green_hyd_pump.hyd_supply) and (hyd_supply2 = blue_hyd_pump.hyd_supply)
-				);
+			lemma "Shutoff output goes to selector" :
+				true -> ((shutoff_valve.hyd_pressure_out = green_pressure_in_selec_valve) and (selector_valve.green_select_in = shutoff_valve.hyd_pressure_out));
+		
 		
 			
-			lemma "Testing pump outputs" :
-				true -> (
-					(green_hyd_pump.hyd_pressure_out = shutoff_valve.hyd_pressure_in) and (blue_hyd_pump.hyd_pressure_out = accumulator.circuit_pressure_value)
-				);
+			lemma "Validity to shutoff" : true -> (system_validity = shutoff_valve.system_validity);
 		
 		
-			lemma "Testing pump ranges" :
-				true -> (
-					(green_hyd_pump.hyd_pressure_out = shutoff_valve.hyd_pressure_in) and (blue_hyd_pump.hyd_pressure_out = accumulator.circuit_pressure_value)
-				);
+		
+			lemma "Shutoff pressure range" : true -> (shutoff_valve.hyd_pressure_in >= 0 and shutoff_valve.hyd_pressure_in <= 10);
 		
 		
-			lemma "Testing pump power" :
-				true -> (
-					(pump_power1 = green_hyd_pump.power and pump_power2 = blue_hyd_pump.power)
-				);
+		
+			-- Addition gate
+		
+			lemma "Input to add gate" : true -> ((blue_hyd_pump.hyd_pressure_out = add_gate_hyd_pressure.in_1) and (accumulator.reserve_out = add_gate_hyd_pressure.in_2));
+		
+		
+			-- Selector valve
 		
 			lemma "(SelectorValve) The green line is selected under valid system and positive green pressure. 
 						The blue line is selected under invalid system or no green pressure and positive blue pressure.
@@ -468,9 +488,13 @@ with ShutoffValve;
 										
 							
 							);
-			lemma "(ShutoffValve) Positive pressure out occurs whenever pressure in is positive and system is valid. 
-						Zero pressure out occurs whenever hyd pressure in is zero or system is not valid." :
-						true -> (shutoff_valve.POSITIVEPRESSUREOUT and shutoff_valve.ZEROPRESSUREOUT);		
+		
+		
+			lemma "(SelectorValve) Output is bounded from 0 to 10" :
+				true -> ((selector_valve.green_select_out >= 0 and selector_valve.green_select_out <= 10)
+					and (selector_valve.blue_select_out >= 0 and selector_valve.blue_select_out <= 10));
+		
+			-- NBS
 		
 			lemma "(NormalBrakeSys) (W1) Hydraulic pressure out is positive if and only if
 						brake_as_cmd input is true and hyd pressure in is positive." :
@@ -478,9 +502,79 @@ with ShutoffValve;
 							((normal_sys.brake_as_cmd1 and normal_sys.hyd_pressure_in > 0) <=> normal_sys.hyd_pressure_out1 > 0)) ;
 		
 		
+			lemma "(NBS) Pressure out of selector is pressure into NBS" :
+				true -> (selector_valve.green_select_out = normal_sys.hyd_pressure_in);
+		
+			lemma "(NormalBrakeSys) Pressure out bounded." : true -> (normal_sys.hyd_pressure_out1 <= 10 and normal_sys.hyd_pressure_out1 >= 0);
+		
+			assert (normal_sys.false_to_mv = false);
+		
+			
+			-- ABS
+		
 			lemma "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
 							true -> (alt_sys.hyd_pressure_out1 > 0 <=> (alt_sys.mech_pedal_pos_L and alt_sys.hyd_pressure_in > 0 and (not alt_sys.as_cmd_pair_1_5)));
+		
+			assert (alt_sys.false_to_mv = false); 
+		
+			lemma "(AlternateBrakeSystem) Hyd out 1 bounded" : 
+					true -> (alt_sys.hyd_pressure_out1 <= 10 and alt_sys.hyd_pressure_out1 >= 0);
+		
+			-- Physical sys
+			
+			
+--			lemma "(PhysicalSystem) Wheel 1 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_1) => as_cmd_pair_1_5)
+--						=> ((wheel_braking_force1 > 0 => (brake_as_cmd_1 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID)));
+--			
+--			
+--			
+--			
+--			lemma "(PhysicalSystem) Wheel 2 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_2) => as_cmd_pair_2_6)
+--						=> (wheel_braking_force2 > 0 => (brake_as_cmd_2 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
+--			
+--			lemma "(PhysicalSystem) Wheel 3 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_3) => as_cmd_pair_3_7)
+--						=> (wheel_braking_force3 > 0 => (brake_as_cmd_3 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
+--			
+--			guarantee "(PhysicalSystem) Wheel 4 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_4) => as_cmd_pair_4_8)
+--						=> (wheel_braking_force4 > 0 => (brake_as_cmd_4 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
+--			
+--			guarantee "(PhysicalSystem) Wheel 5 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_5) => as_cmd_pair_1_5)
+--						=> (wheel_braking_force5 > 0 => (brake_as_cmd_5 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID));
+--			
+--			guarantee "(PhysicalSystem) Wheel 6 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_6) => as_cmd_pair_2_6)
+--						=> (wheel_braking_force6 > 0 => (brake_as_cmd_6 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID));
+--			
+--			guarantee "(PhysicalSystem) Wheel 7 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_7) => as_cmd_pair_3_7)
+--						=> (wheel_braking_force7 > 0 => (brake_as_cmd_7 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID));
+--			
+--			assume "(PhysicalSystem) Wheel 8 force: Antiskid command for pair active implies wheel brake force
+--						which implies brake antiskid command in valid system or invalid system" :
+--						((L_PEDAL_VALID and not brake_as_cmd_8) => as_cmd_pair_1_5)
+--						=> (wheel_braking_force8 > 0 => (brake_as_cmd_8 and (GREEN_PRESSURE_VALID)) 
+--							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID));
+		
 		
 		**}	;
 			
