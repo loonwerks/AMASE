@@ -210,13 +210,13 @@ with sensor;
 		--		never_inadvertent_braking_of_wheel_4_norm_guarantee := 
 		--	  (G (((((power_1 & power_2) & pump_power_1) & pump_power_2) & hydraulic_supply_1 = 10) & hydraulic_supply_2 = 10) 
 		--  ->  G !(((!mechanical_pedal_pos_R & ground_speed > 0) & wheel_braking_force_4 > 0) & wheel_status_4 = rolling));
-		
-		
-		lemma "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
-						  if and only if antiskid is commanded to the pair." :
-						  true -> (((ctrl_sys.VALID and ctrl_sys.power and ctrl_sys.SPEED) and (ctrl_sys.PAIR_NOT_ROLLING_15)) <=> ctrl_sys.as_cmd_pair_1_5);
-		
-		
+--		
+--		
+--		lemma "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
+--						  if and only if antiskid is commanded to the pair." :
+--						  true -> (((ctrl_sys.VALID and ctrl_sys.power and ctrl_sys.SPEED) and (ctrl_sys.PAIR_NOT_ROLLING_15)) <=> ctrl_sys.as_cmd_pair_1_5);
+--		
+--		
 		lemma "(WBS) Inadvertent braking of wheel 1: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
