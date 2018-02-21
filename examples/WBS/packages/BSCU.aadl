@@ -57,19 +57,19 @@ with Base_Types;
 				-- Antiskid command equivalence
 				guarantee "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							true -> (power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
+							true -> ((as_cmd_pair_1_5 = (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 2,6: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							true -> (power and SPEED and PAIR_NOT_ROLLING_26) <=> as_cmd_pair_2_6;
+							true -> ((as_cmd_pair_2_6 = (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 3,7: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							true -> (power and SPEED and PAIR_NOT_ROLLING_37) <=> as_cmd_pair_3_7;
+							true -> ((as_cmd_pair_3_7 = (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 4,8: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							true -> (power and SPEED and PAIR_NOT_ROLLING_48) <=> as_cmd_pair_4_8;
+							true -> ((as_cmd_pair_4_8 = (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
 
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 1): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
@@ -103,20 +103,20 @@ with Base_Types;
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
 
-					guarantee "bscu valid" :	true -> (system_validity <=> 
-						(power 
-						and brake_as_cmd_1
-						and brake_as_cmd_2 
-						and brake_as_cmd_3
-						and brake_as_cmd_4
-						and brake_as_cmd_5
-						and brake_as_cmd_6
-						and brake_as_cmd_7
-						and brake_as_cmd_8
-						and as_cmd_pair_1_5
-						and as_cmd_pair_2_6
-						and as_cmd_pair_3_7
-						and as_cmd_pair_4_8));
+--					guarantee "bscu valid" :	true -> (system_validity <=> 
+--						(power 
+--						and brake_as_cmd_1
+--						and brake_as_cmd_2 
+--						and brake_as_cmd_3
+--						and brake_as_cmd_4
+--						and brake_as_cmd_5
+--						and brake_as_cmd_6
+--						and brake_as_cmd_7
+--						and brake_as_cmd_8
+--						and as_cmd_pair_1_5
+--						and as_cmd_pair_2_6
+--						and as_cmd_pair_3_7
+--						and as_cmd_pair_4_8));
 	
 			**};
 				
@@ -201,6 +201,25 @@ with Base_Types;
 			sg8_valid_in_1 : port channel1.system_validity -> switch_gate_brake_as_cmd_8.validity1;
 			sg8_valid_in_2 : port channel2.system_validity -> switch_gate_brake_as_cmd_8.validity2;
 			
+			ch1_validity_to_switch_gate_1_5: port channel1.system_validity -> switch_gate_brake_as_cmd_pair_1_5.validity1;
+			ch2_validity_to_switch_gate_1_5: port channel2.system_validity -> switch_gate_brake_as_cmd_pair_1_5.validity2;
+			ch1_1_as_cmd_pair_to_switch_gate_1_5: port channel1.as_cmd_pair_1_5 -> switch_gate_brake_as_cmd_pair_1_5.cmd_in_1;
+			ch1_2_as_cmd_pair_to_switch_gate_1_5: port channel2.as_cmd_pair_1_5 -> switch_gate_brake_as_cmd_pair_1_5.cmd_in_2;
+			
+			ch1_validity_to_switch_gate_2_6: port channel1.system_validity -> switch_gate_brake_as_cmd_pair_2_6 .validity1;
+			ch2_validity_to_switch_gate_2_6: port channel2.system_validity -> switch_gate_brake_as_cmd_pair_2_6 .validity2;
+			ch1_1_as_cmd_pair_to_switch_gate_2_6: port channel1.as_cmd_pair_2_6 -> switch_gate_brake_as_cmd_pair_2_6.cmd_in_1;
+			ch1_2_as_cmd_pair_to_switch_gate_2_6: port channel2.as_cmd_pair_2_6 -> switch_gate_brake_as_cmd_pair_2_6.cmd_in_2;			
+			
+			ch1_validity_to_switch_gate_3_7: port channel1.system_validity -> switch_gate_brake_as_cmd_pair_3_7.validity1;
+			ch2_validity_to_switch_gate_3_7: port channel2.system_validity -> switch_gate_brake_as_cmd_pair_3_7.validity2;
+			ch1_1_as_cmd_pair_to_switch_gate_3_7: port channel1.as_cmd_pair_3_7 -> switch_gate_brake_as_cmd_pair_3_7.cmd_in_1;
+			ch1_2_as_cmd_pair_to_switch_gate_3_7: port channel2.as_cmd_pair_3_7 -> switch_gate_brake_as_cmd_pair_3_7.cmd_in_2;	
+			
+			ch1_validity_to_switch_gate_4_8: port channel1.system_validity -> switch_gate_brake_as_cmd_pair_4_8.validity1;
+			ch2_validity_to_switch_gate_4_8: port channel2.system_validity -> switch_gate_brake_as_cmd_pair_4_8.validity2;
+			ch1_1_as_cmd_pair_to_switch_gate_4_8: port channel1.as_cmd_pair_4_8 -> switch_gate_brake_as_cmd_pair_4_8.cmd_in_1;
+			ch1_2_as_cmd_pair_to_switch_gate_4_8: port channel2.as_cmd_pair_4_8 -> switch_gate_brake_as_cmd_pair_4_8.cmd_in_2;				
 			
 			-- Inputs to channels
 			
@@ -324,9 +343,6 @@ with Base_Types;
 				lemma " (ctrl system) Brake antiskid command behavior (wheel 1): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							true -> (((system_validity and (power and elec_pedal_pos_L)) and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1);		
-		
-		
-		
 		
 		**};
 		

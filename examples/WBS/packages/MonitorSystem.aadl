@@ -86,36 +86,36 @@ with Base_Types;
 			property PAIR_ROLL_37 = wheel_rolling_3 and wheel_rolling_7;
 			property PAIR_ROLL_48 = wheel_rolling_4 and wheel_rolling_8;
 			
---			guarantee "(MonitorSystem) 1 BSCU valid contract." : 
---					true -> (bscu_validity <=>
---						  pre(power) 
---					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1)
---					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2)
---					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) <=> brake_as_cmd_3)
---					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) <=> brake_as_cmd_4)
---					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) <=> brake_as_cmd_5)
---					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6)
---					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7)
---					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8))
---					  and ((SPEED and (not PAIR_ROLL_15)) <=> as_cmd_pair_1_5)
---					  and ((SPEED and (not PAIR_ROLL_26)) <=> as_cmd_pair_2_6)
---					  and ((SPEED and (not PAIR_ROLL_37)) <=> as_cmd_pair_3_7)
---					  and ((SPEED and (not PAIR_ROLL_48)) <=> as_cmd_pair_4_8);
+			guarantee "(MonitorSystem) 1 BSCU valid contract." : 
+					true -> (bscu_validity <=>
+						  (power) 
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) <=> brake_as_cmd_3)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) <=> brake_as_cmd_4)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) <=> brake_as_cmd_5)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8))
+					  and ((SPEED and (not PAIR_ROLL_15)) <=> as_cmd_pair_1_5)
+					  and ((SPEED and (not PAIR_ROLL_26)) <=> as_cmd_pair_2_6)
+					  and ((SPEED and (not PAIR_ROLL_37)) <=> as_cmd_pair_3_7)
+					  and ((SPEED and (not PAIR_ROLL_48)) <=> as_cmd_pair_4_8);
 		
-			guarantee "bscu valid" :	true -> (bscu_validity <=> 
-						(power 
-						and brake_as_cmd_1
-						and brake_as_cmd_2
-						and brake_as_cmd_3
-						and brake_as_cmd_4
-						and brake_as_cmd_5
-						and brake_as_cmd_6
-						and brake_as_cmd_7
-						and brake_as_cmd_8
-						and as_cmd_pair_1_5
-						and as_cmd_pair_2_6
-						and as_cmd_pair_3_7
-						and as_cmd_pair_4_8));
+--			guarantee "bscu valid" :	true -> (bscu_validity <=> 
+--						(power 
+--						and brake_as_cmd_1
+--						and brake_as_cmd_2
+--						and brake_as_cmd_3
+--						and brake_as_cmd_4
+--						and brake_as_cmd_5
+--						and brake_as_cmd_6
+--						and brake_as_cmd_7
+--						and brake_as_cmd_8
+--						and as_cmd_pair_1_5
+--						and as_cmd_pair_2_6
+--						and as_cmd_pair_3_7
+--						and as_cmd_pair_4_8));
 				  
 			
 			guarantee "(MonitorSystem) If we have no power, bscu is not valid":

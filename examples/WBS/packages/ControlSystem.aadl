@@ -80,22 +80,19 @@ with Base_Types;
 				-- Translates to:
 				guarantee "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  true -> (((VALID and power and SPEED) and (PAIR_NOT_ROLLING_15)) <=> as_cmd_pair_1_5);
+						  true -> ((as_cmd_pair_1_5 = (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false));
 						  
 				guarantee "(ctrl system) Expected antiskid behavior pair 2,6: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  true -> ((VALID and SPEED) and (PAIR_NOT_ROLLING_26)) <=> as_cmd_pair_2_6;
-				
+						  true -> ((as_cmd_pair_2_6 = (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
 				
 				guarantee "(ctrl system) Expected antiskid behavior pair 3,7: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  true -> ((VALID and SPEED) and (PAIR_NOT_ROLLING_37)) <=> as_cmd_pair_3_7;
-						  
-						  
+						  true -> ((as_cmd_pair_3_7 = (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
+						  				  
 				guarantee "(ctrl system) Expected antiskid behavior pair 4,8: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  true -> ((VALID and SPEED) and (PAIR_NOT_ROLLING_48)) <=> as_cmd_pair_4_8;
-				
+						  true -> ((as_cmd_pair_4_8 = (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
 				
 				--	as_cmd_excludes_brake_as_cmd_norm_guarantee := 
 				--	(TRUE -> ((( G 
@@ -134,22 +131,22 @@ with Base_Types;
 				
 				
 				
-				guarantee "(ctrl system) System validity: System is valid if and only if: power is supplied, antiskid commanded to wheel
-							is valid in all cases, and brake antiskid is valid in all cases." :
-							true -> (system_validity <=> 
-									((power_1 or power_2) 
-									and brake_as_cmd_1 
-									and brake_as_cmd_2 
-									and brake_as_cmd_3 
-									and brake_as_cmd_4 
-									and brake_as_cmd_5 
-									and brake_as_cmd_6 
-									and brake_as_cmd_7 
-									and brake_as_cmd_8
-									and as_cmd_pair_1_5 
-									and as_cmd_pair_2_6 
-									and as_cmd_pair_3_7 
-									and as_cmd_pair_4_8));
+--				guarantee "(ctrl system) System validity: System is valid if and only if: power is supplied, antiskid commanded to wheel
+--							is valid in all cases, and brake antiskid is valid in all cases." :
+--							true -> (system_validity <=> 
+--									((power_1 or power_2) 
+--									and brake_as_cmd_1 
+--									and brake_as_cmd_2 
+--									and brake_as_cmd_3 
+--									and brake_as_cmd_4 
+--									and brake_as_cmd_5 
+--									and brake_as_cmd_6 
+--									and brake_as_cmd_7 
+--									and brake_as_cmd_8
+--									and as_cmd_pair_1_5 
+--									and as_cmd_pair_2_6 
+--									and as_cmd_pair_3_7 
+--									and as_cmd_pair_4_8));
 				
 				
 				
@@ -267,25 +264,25 @@ with Base_Types;
 						  true -> (((system_validity and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2);
 		
 		
-			lemma "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							true -> (power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
-		
-		
-			lemma "bscu valid" :	true -> (system_validity <=> 
-						(power 
-						and brake_as_cmd_1
-						and brake_as_cmd_2 
-						and brake_as_cmd_3
-						and brake_as_cmd_4
-						and brake_as_cmd_5
-						and brake_as_cmd_6
-						and brake_as_cmd_7
-						and brake_as_cmd_8
-						and as_cmd_pair_1_5
-						and as_cmd_pair_2_6
-						and as_cmd_pair_3_7
-						and as_cmd_pair_4_8));
+--			lemma "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
+--							we have power, ground speed is positive, and one of the two wheels is not rolling." :
+--							true -> (power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
+--		
+--		
+--			lemma "bscu valid" :	true -> (system_validity <=> 
+--						(power 
+--						and brake_as_cmd_1
+--						and brake_as_cmd_2 
+--						and brake_as_cmd_3
+--						and brake_as_cmd_4
+--						and brake_as_cmd_5
+--						and brake_as_cmd_6
+--						and brake_as_cmd_7
+--						and brake_as_cmd_8
+--						and as_cmd_pair_1_5
+--						and as_cmd_pair_2_6
+--						and as_cmd_pair_3_7
+--						and as_cmd_pair_4_8));
 	
 		    
 		**};
