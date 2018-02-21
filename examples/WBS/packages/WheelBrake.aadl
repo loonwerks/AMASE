@@ -12,18 +12,18 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "(WheelBrake) Normal hyd pressure in is always bounded between 0 and 10 inclusive." :
-					true -> 
-					((normal_hyd_pressure_in <= 10) and (normal_hyd_pressure_in >= 0));
+--				assume "(WheelBrake) Normal hyd pressure in is always bounded between 0 and 10 inclusive." :
+--					true -> 
+--					((normal_hyd_pressure_in <= 10) and (normal_hyd_pressure_in >= 0));
 				
 				
-				assume "(WheelBrake) Alt hyd pressure in is always bounded between 0 and 10 inclusive." :
-					true -> 
-					((alt_hyd_pressure_in <= 10) and (alt_hyd_pressure_in >= 0));
+--				assume "(WheelBrake) Alt hyd pressure in is always bounded between 0 and 10 inclusive." :
+--					true -> 
+--					((alt_hyd_pressure_in <= 10) and (alt_hyd_pressure_in >= 0));
 				
 				-- Added guarantee that brake force is between 0 to 10 inclusive
-				guarantee "(WheelBrake) Braking force is always from 0 to 10 inclusive." :
-						true -> (brake_force <= 10 and brake_force >= 0);
+--				guarantee "(WheelBrake) Braking force is always from 0 to 10 inclusive." :
+--						true -> (brake_force <= 10 and brake_force >= 0);
 				
 				--  supply_braking_force_norm_guarantee := (TRUE ->  
 				--       G (braking_force > 0 <-> (normal_hyd_pressure_in > 0 | alternate_hyd_pressure_in > 0))
@@ -74,9 +74,9 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "(HydraulicFuse) Hyd pressure in is always bounded between 0 and 10 inclusive." :
-					true -> 
-					((hyd_pressure_in <= 10) and (hyd_pressure_in >= 0));
+--				assume "(HydraulicFuse) Hyd pressure in is always bounded between 0 and 10 inclusive." :
+--					true -> 
+--					((hyd_pressure_in <= 10) and (hyd_pressure_in >= 0));
 				
 				--  fuse_behavior_norm_guarantee := (TRUE ->  G hyd_pressure_out = hyd_pressure_in);
 				guarantee "(HydraulicFuse) hydraulic pressure in equals hydraulic pressure out." :
@@ -99,9 +99,9 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "(HydraulicPiston) Hyd pressure in is always bounded between 0 and 10 inclusive." :
-					true -> 
-					((hyd_pressure_in <= 10) and (hyd_pressure_in >= 0));
+--				assume "(HydraulicPiston) Hyd pressure in is always bounded between 0 and 10 inclusive." :
+--					true -> 
+--					((hyd_pressure_in <= 10) and (hyd_pressure_in >= 0));
 					
 				--  create_force_norm_guarantee := (TRUE ->  G hyd_pressure_in = force_out);
 
@@ -125,9 +125,9 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "(BrakeActuator) Force in is always bounded between 0 and 10 inclusive." :
-					true -> 
-					((normal_force_in <= 10) and (normal_force_in >= 0) and (alternate_force_in <= 10) and (alternate_force_in >= 0));
+--				assume "(BrakeActuator) Force in is always bounded between 0 and 10 inclusive." :
+--					true -> 
+--					((normal_force_in <= 10) and (normal_force_in >= 0) and (alternate_force_in <= 10) and (alternate_force_in >= 0));
 				
 				-- Added guarantee: brake force is always either normal or alternate force value
 				guarantee "(BrakeActuator) Brake force is equivalent to either alternate or normal force in." :

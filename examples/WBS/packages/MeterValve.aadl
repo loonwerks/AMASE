@@ -18,7 +18,7 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				--assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
 				
 				-- apply_command_norm_guarantee := (TRUE ->  G (((elec_cmd | mech_cmd) & hyd_pressure_in > 0) <-> hyd_pressure_out > 0));
 				
@@ -26,7 +26,7 @@ with Base_Types;
 				 we have either electrical or mechanical command and positive pressure." :
 					true -> (((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);
 				
-				guarantee "(MeterValve) Pressure out 8 bounded." : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);	
+				--guarantee "(MeterValve) Pressure out 8 bounded." : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);	
 			**};
 			
 	end MeterValve;

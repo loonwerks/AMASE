@@ -505,7 +505,7 @@ with ShutoffValve;
 			lemma "(NBS) Pressure out of selector is pressure into NBS" :
 				true -> (selector_valve.green_select_out = normal_sys.hyd_pressure_in);
 		
-			lemma "(NormalBrakeSys) Pressure out bounded." : true -> (normal_sys.hyd_pressure_out1 <= 10 and normal_sys.hyd_pressure_out1 >= 0);
+			--lemma "(NormalBrakeSys) Pressure out bounded." : true -> (normal_sys.hyd_pressure_out1 <= 10 and normal_sys.hyd_pressure_out1 >= 0);
 		
 			assert (normal_sys.false_to_mv = false);
 		
@@ -518,8 +518,8 @@ with ShutoffValve;
 		
 			assert (alt_sys.false_to_mv = false); 
 		
-			lemma "(AlternateBrakeSystem) Hyd out 1 bounded" : 
-					true -> (alt_sys.hyd_pressure_out1 <= 10 and alt_sys.hyd_pressure_out1 >= 0);
+--			lemma "(AlternateBrakeSystem) Hyd out 1 bounded" : 
+--					true -> (alt_sys.hyd_pressure_out1 <= 10 and alt_sys.hyd_pressure_out1 >= 0);
 		
 			-- Physical sys
 			

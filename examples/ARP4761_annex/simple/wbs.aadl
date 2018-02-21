@@ -250,7 +250,7 @@ connections
 
    annex safety{**
 	  analyze : max 1 fault
-	  propagate_from: {valve_failed@shutoff} to {shutoff_fault@shutoff};
+	  propagate_from: {valve_failed@shutoff} to {pressure_fail_blue@selector};
    **};
 	
 end wbs.federated;
