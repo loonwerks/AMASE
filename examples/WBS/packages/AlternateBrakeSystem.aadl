@@ -47,14 +47,14 @@ with Base_Types;
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
 							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
 							
-				guarantee "(AlternateBrakeSystem) Hyd out 1 bounded" : 
-					true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
-				guarantee "(AlternateBrakeSystem) Hyd out 2 bounded" : 
-					true -> (hyd_pressure_out2 <= 10 and hyd_pressure_out2 >= 0);
-				guarantee "(AlternateBrakeSystem) Hyd out 3 bounded" : 
-					true -> (hyd_pressure_out3 <= 10 and hyd_pressure_out3 >= 0);
-				guarantee "(AlternateBrakeSystem) Hyd out 4 bounded" : 
-					true -> (hyd_pressure_out4 <= 10 and hyd_pressure_out4 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 1 bounded" : 
+--					true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 2 bounded" : 
+--					true -> (hyd_pressure_out2 <= 10 and hyd_pressure_out2 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 3 bounded" : 
+--					true -> (hyd_pressure_out3 <= 10 and hyd_pressure_out3 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 4 bounded" : 
+--					true -> (hyd_pressure_out4 <= 10 and hyd_pressure_out4 >= 0);
 					
 					
 			**};
@@ -121,7 +121,7 @@ with Base_Types;
 									else (antiskid_shutoff_valve_1.hyd_pressure_out = antiskid_shutoff_valve_1.hyd_pressure_in)
 								);
 			
-			lemma "Output on as comp": true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out > -1);
+			lemma "Output on as comp": true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);
 			
 		**};
 			
@@ -140,7 +140,7 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				--assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
 				
 				-- apply_command_norm_guarantee := (TRUE -> 
 				-- 		( G ((hyd_pressure_in = 0 | as_cmd) -> hyd_pressure_out = 0) 
