@@ -1,21 +1,11 @@
-\subsection{Architecture Description and Design Contracts}
+\subsection{Modeling Language for System Design}
 \label{subsec:aadl-agree}
-
-
+%Talk about AADL, AGREE, and why safety annex
+%Pull AADL/AGREE background from previous papers to support points in the safety process
+The Architectural Analysis and Design Language (AADL)
+\cite{FeilerModelBasedEngineering2012} is an SAE International standard \cite{AADL_Standard} that defines a language and provides a unifying framework for describing the system architecture for ``performance-critical, embedded, real-time systems'' \cite{AADL_Standard}. An AADL model describes a system in terms of a hierarchy of components and their interconnections, where each component can either represent a logical entity (e.g., application software functions, data) or a physical entity (e.g., buses, processors). An AADL model can be associated with properties and be extended with language annexes to provide a richer set of modeling elements for various system design and analysis needs (e.g., performance-related characteristics, configuration settings, dynamic behaviors). The language semantics supports formal analysis tools that allow for early phase error/defect detection.
 
 \begin{comment}
-In order to allow performing system design and safety analysis on the same model, the system design model will need to be augmented to include both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure mode, failure rate), at the same time keeping the two types of information distinguishable yet interactable from each other.
-
-Figure~\ref{fig:proposed_safety_process} presents our proposed use of the shared system design and safety analysis model (to be referred as "the shared model" in the rest of this section) in the ARP4754A Safety Assessment Process Model [ref Figure 7 of ARP4754A]. As seen in the figure, the shared model represents a system development artifact from the ``Development of System Architecture'' and ``Allocation of System Requirements to Item'' activities in the System Development Process, which interacts with the PSSAs and SSAs activities in the Safety Assessment Process. The shared model can serve as a wrapper and interface to capture the information relevant to safety analysis from the system design and implementation.
-
-Figure~\ref{fig:interaction_with_FTA} shows how an example how the preliminary FTAs and FTAs, artifacts from the PSSA and SSA activities in the Safety Assessment Process, can guide and be updated from the shared model. The next subsection will describe the foundation of the modeling technique in more details.
-
-%Pull AADL/AGREE background from previous papers to support points in the safety process
-%Talk about AADL, AGREE, and why safety annex
-The Architecture Analysis and Design Language(AADL) [ref AADL] is an architecture modeling language %borrow wording from liu-backes-cofer-gacek-NFM2016 paper 
-
-It comes with associated annexes and tool extensions (see Section) in the Open Source AADL Tool Environment (OSATE) and allows for a wide range of system modeling and analysis capabilities (e.g., latency, throughput, behaviors). 
-
 Talk about AGREE
 
 Following the motivation/discussion in the process subsection, talk about why we choose to extend AGREE in safety annex, instead of using a separate safety model, or a semi-separate safety model like EMV2.

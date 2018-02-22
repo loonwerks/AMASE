@@ -12,6 +12,10 @@
 {AIR 6110}.
 \newblock {Contiguous Aircraft/System Development Process Example}, Dec. 2011.
 
+\bibitem{AADL_Standard}
+{AS5506C}.
+\newblock {Architecture Analysis & Design Language (AADL)}, Jan. 2017.
+
 \bibitem{QFCS15:backes}
 J.~Backes, D.~Cofer, S.~Miller, and M.~W. Whalen.
 \newblock {Requirements Analysis of a Quad-Redundant Flight Control System}.
