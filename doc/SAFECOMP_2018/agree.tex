@@ -1,6 +1,13 @@
 \subsection{Architecture Description and Design Contracts}
 \label{subsec:aadl-agree}
 
+\begin{comment}
+In order to allow performing system design and safety analysis on the same model, the system design model will need to be augmented to include both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure mode, failure rate), at the same time keeping the two types of information distinguishable yet interactable from each other.
+
+Figure~\ref{fig:proposed_safety_process} presents our proposed use of the shared system design and safety analysis model (to be referred as "the shared model" in the rest of this section) in the ARP4754A Safety Assessment Process Model [ref Figure 7 of ARP4754A]. As seen in the figure, the shared model represents a system development artifact from the ``Development of System Architecture'' and ``Allocation of System Requirements to Item'' activities in the System Development Process, which interacts with the PSSAs and SSAs activities in the Safety Assessment Process. The shared model can serve as a wrapper and interface to capture the information relevant to safety analysis from the system design and implementation.
+
+Figure~\ref{fig:interaction_with_FTA} shows how an example how the preliminary FTAs and FTAs, artifacts from the PSSA and SSA activities in the Safety Assessment Process, can guide and be updated from the shared model. The next subsection will describe the foundation of the modeling technique in more details.
+
 %Pull AADL/AGREE background from previous papers to support points in the safety process
 %Talk about AADL, AGREE, and why safety annex
 The Architecture Analysis and Design Language(AADL) [ref AADL] is an architecture modeling language %borrow wording from liu-backes-cofer-gacek-NFM2016 paper 
@@ -10,3 +17,69 @@ It comes with associated annexes and tool extensions (see Section) in the Open S
 Talk about AGREE
 
 Following the motivation/discussion in the process subsection, talk about why we choose to extend AGREE in safety annex, instead of using a separate safety model, or a semi-separate safety model like EMV2.
+\end{comment}
+
+The Architectural Analysis and Design Language (AADL)
+\cite{Feiler12:AADL-MBE-book} is a architecture modeling language for embedded,
+real-time, distributed systems. It was approved as an SAE Standard in 2004, and
+its standardization committee has active participation from many academic and
+industrial partners in the aerospace industry. It provides the constructs needed
+to model both hardware and software in embedded systems such as threads, processes, processors, buses, and memory. It is sufficiently formal for our purposes,
+and is extensible through the use of language annexes that can initiate calls to
+separately developed analysis tools.
+
+\begin{comment}
+A model described in AADL consists of
+a number of components and connections. Components are typical
+constructs that appear in embedded systems. Components can represent
+hardware constructs (e.g., processors, buses, memories) or software
+constructs (e.g., processes, threads, subprograms). The language
+distinguishes between component types and implementations. A component
+type describes the component's interface (e.g., inputs, outputs) as
+well as other component specific properties. A component
+implementation describes the subcomponents and connections that
+implement this interface.
+\end{comment}
+
+The Assume Guarantee Reasoning
+Environment (AGREE) \cite{Cofer12:comp-verif} 
+is a language and tool for compositional verification of AADL models.  It is implemented as an AADL annex
+that allows AADL models to be annotated with  assume-guarantee behavioral contracts.  
+A contract contains a set of assumptions about the component's
+inputs and a set of guarantees about the component's outputs. The assumptions
+and guarantees may also contain predicates that reason about how the state of
+a component evolves over time.
+
+AGREE uses a syntax similar to Lustre \cite{Lustre-91} to express a contract's assumptions
+and guarantees. AGREE translates an AADL model and its contract annotations
+into Lustre and then queries a user-selected model checker to perform verification.
+The goal of the analysis is to prove that each component's contract
+is satisfied by the interaction of its direct subcomponents as
+described by their respective contracts. Verification is performed at each
+layer of the architecture hierarchy and details of lower level
+components are abstracted away during verification of higher level
+component contracts.  This compositional approach allows large systems to be analyzed efficiently.  
+
+Component contracts at the lowest level of the
+architecture are assumed to be true by AGREE. Verification of these
+component contracts must be performed outside of the AADL/AGREE environment.  
+In a traditional software development process, components will be developed to meet
+the high-level requirements corresponding to these contracts and verified by testing or code review.
+However, there are two problems with this approach:
+
+\begin{enumerate}
+	\item Verification methodologies like test and code review are not exhaustive. 
+	Errors in these activities can cause the compositional verification that 
+	AGREE performs to be incorrect.
+	\item Manual translation of an AGREE contract into a property for verification at the component level can be
+	time-consuming and error-prone.
+	%There may be errors in the translation of the AGREE contract from the 
+	%properties that were proved from component level verification activities.
+\end{enumerate}
+
+Our solution to these problems is to automatically translate AGREE
+contracts of software components into
+expressions in the development language of the component software. A formal
+verification tool that reasons about artifacts expressed in this
+language can then be used to verify that the contracts hold. 
+The remainder of the paper describes this solution in detail.
