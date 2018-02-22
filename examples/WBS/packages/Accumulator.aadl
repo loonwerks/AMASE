@@ -24,6 +24,26 @@ with Base_Types;
 				true -> (reserve_out <= 10 and reserve_out >= 0);
 			
 		**};
+
+
+		-- "No pressure" fault: 
+		-- Should there also be a fault associated with the pressure display? I don't think
+		-- this value has any bearing on the system behavior, so it may not matter.
+		annex safety {**
+			fault stuck_no_pressure_fault "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
+				inputs: val_in <- reserve_out, alt_val <- 0; 
+				outputs: reserve_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+			fault stuck_open_fault "(Accumulator) Stuck open fault." : faults.fail_to {
+				inputs: val_in <- reserve_out, alt_val <- circuit_pressure_value; 
+				outputs: reserve_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+		**};
 		
 	end Accumulator;
 	

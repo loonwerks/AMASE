@@ -28,7 +28,23 @@ with Base_Types;
 							);
 		
 		**};
-	
+
+		annex safety {**
+			fault stuck_closed_fault "(ShutoffValve) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+				outputs: hyd_pressure_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+			fault stuck_open_fault "(ShutoffValve) Stuck open fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in; 
+				outputs: hyd_pressure_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+		**};
+
 	end ShutoffValve;
 	
 	system implementation ShutoffValve.inst
