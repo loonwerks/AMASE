@@ -15,7 +15,7 @@ with Base_Types;
 			-- Instead: true = rolling, false = stopped
 			wheel_status : out data port Base_Types::Boolean;
 			
-			annex agree {**
+		annex agree {**
 				
 				
 				
@@ -34,8 +34,16 @@ with Base_Types;
 							then this state, status is rolling.":
 							true ->
 								(pre(brake_force) < 9 and pre(ground_speed) > 1) => wheel_status;
-			**};
+		**};
+		annex safety {**
+			fault inverted_boolean_fault "(Wheel) Inverted boolean (Switch mode) fault." : faults.inverted_fail {
+				inputs: val_in <- wheel_status; 
+				outputs: wheel_status <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
 			
+		**};		
 	end Wheel;
 	
 	system implementation Wheel.inst

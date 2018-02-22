@@ -82,7 +82,15 @@ with Base_Types;
 				guarantee "(HydraulicFuse) hydraulic pressure in equals hydraulic pressure out." :
 							true -> (hyd_pressure_in = hyd_pressure_out);
 			**};
+		annex safety {**
+			fault stuck_closed_fault "(HydraulicFuse) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+				outputs: hyd_pressure_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
 			
+		**};		
 	end HydraulicFuse;
 	
 	system implementation HydraulicFuse.inst
@@ -107,7 +115,23 @@ with Base_Types;
 
 				guarantee "(HydraulicPiston) hydraulic pressure in equals force out." :
 							true -> (hyd_pressure_in = force_out);
-			**};		
+			**};
+			
+			
+		annex safety {**
+			fault stuck_closed_fault "(HydraulicPiston) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- force_out, alt_val <- 0; 
+				outputs: force_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			fault stuck_last_value_fault "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
+				inputs: val_in <- force_out, alt_val <- pre(force_out); 
+				outputs: force_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+		**};		
 	end HydraulicPiston;
 	
 	system implementation HydraulicPiston.inst
@@ -139,7 +163,20 @@ with Base_Types;
 							normal force or alternate force is positive." :
 							true -> (braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));
 			**};
-			
+		annex safety {**
+			fault stuck_closed_fault "(BrakeActuator) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- braking_force, alt_val <- 0; 
+				outputs: braking_force <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			fault stuck_last_value_fault "(BrakeActuator) Stuck at last value fault." : faults.fail_to {
+				inputs: val_in <- braking_force, alt_val <- pre(braking_force); 
+				outputs: braking_force <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+		**};		
 	end BrakeActuator;
 	
 	system implementation BrakeActuator.inst
