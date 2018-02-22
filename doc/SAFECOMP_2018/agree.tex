@@ -1,6 +1,8 @@
 \subsection{Architecture Description and Design Contracts}
 \label{subsec:aadl-agree}
 
+
+
 \begin{comment}
 In order to allow performing system design and safety analysis on the same model, the system design model will need to be augmented to include both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure mode, failure rate), at the same time keeping the two types of information distinguishable yet interactable from each other.
 
@@ -17,10 +19,10 @@ It comes with associated annexes and tool extensions (see Section) in the Open S
 Talk about AGREE
 
 Following the motivation/discussion in the process subsection, talk about why we choose to extend AGREE in safety annex, instead of using a separate safety model, or a semi-separate safety model like EMV2.
-\end{comment}
+
 
 The Architectural Analysis and Design Language (AADL)
-\cite{Feiler12:AADL-MBE-book} is a architecture modeling language for embedded,
+\cite{FeilerModelBasedEngineering2012} is a architecture modeling language for embedded,
 real-time, distributed systems. It was approved as an SAE Standard in 2004, and
 its standardization committee has active participation from many academic and
 industrial partners in the aerospace industry. It provides the constructs needed
@@ -28,7 +30,7 @@ to model both hardware and software in embedded systems such as threads, process
 and is extensible through the use of language annexes that can initiate calls to
 separately developed analysis tools.
 
-\begin{comment}
+
 A model described in AADL consists of
 a number of components and connections. Components are typical
 constructs that appear in embedded systems. Components can represent
@@ -39,7 +41,7 @@ type describes the component's interface (e.g., inputs, outputs) as
 well as other component specific properties. A component
 implementation describes the subcomponents and connections that
 implement this interface.
-\end{comment}
+
 
 The Assume Guarantee Reasoning
 Environment (AGREE) \cite{Cofer12:comp-verif} 
@@ -83,3 +85,4 @@ expressions in the development language of the component software. A formal
 verification tool that reasons about artifacts expressed in this
 language can then be used to verify that the contracts hold. 
 The remainder of the paper describes this solution in detail.
+\end{comment}
