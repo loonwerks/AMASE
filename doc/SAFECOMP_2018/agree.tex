@@ -2,77 +2,24 @@
 \label{subsec:aadl-agree}
 %Talk about AADL, AGREE, and why safety annex
 %Pull AADL/AGREE background from previous papers to support points in the safety process
+%Following the motivation/discussion in the process subsection, talk about why we choose to extend AGREE in safety annex, instead of using a separate safety model, or a semi-separate safety model like EMV2.
 The Architectural Analysis and Design Language (AADL)
 \cite{FeilerModelBasedEngineering2012} is an SAE International standard \cite{AADL_Standard} that defines a language and provides a unifying framework for describing the system architecture for ``performance-critical, embedded, real-time systems'' \cite{AADL_Standard}. An AADL model describes a system in terms of a hierarchy of components and their interconnections, where each component can either represent a logical entity (e.g., application software functions, data) or a physical entity (e.g., buses, processors). An AADL model can be associated with properties and be extended with language annexes to provide a richer set of modeling elements for various system design and analysis needs (e.g., performance-related characteristics, configuration settings, dynamic behaviors). The language semantics supports formal analysis tools that allow for early phase error/defect detection.
 
-\begin{comment}
-Talk about AGREE
-
-Following the motivation/discussion in the process subsection, talk about why we choose to extend AGREE in safety annex, instead of using a separate safety model, or a semi-separate safety model like EMV2.
-
-
-The Architectural Analysis and Design Language (AADL)
-\cite{FeilerModelBasedEngineering2012} is a architecture modeling language for embedded,
-real-time, distributed systems. It was approved as an SAE Standard in 2004, and
-its standardization committee has active participation from many academic and
-industrial partners in the aerospace industry. It provides the constructs needed
-to model both hardware and software in embedded systems such as threads, processes, processors, buses, and memory. It is sufficiently formal for our purposes,
-and is extensible through the use of language annexes that can initiate calls to
-separately developed analysis tools.
-
-
-A model described in AADL consists of
-a number of components and connections. Components are typical
-constructs that appear in embedded systems. Components can represent
-hardware constructs (e.g., processors, buses, memories) or software
-constructs (e.g., processes, threads, subprograms). The language
-distinguishes between component types and implementations. A component
-type describes the component's interface (e.g., inputs, outputs) as
-well as other component specific properties. A component
-implementation describes the subcomponents and connections that
-implement this interface.
-
-
 The Assume Guarantee Reasoning
-Environment (AGREE) \cite{Cofer12:comp-verif} 
-is a language and tool for compositional verification of AADL models.  It is implemented as an AADL annex
-that allows AADL models to be annotated with  assume-guarantee behavioral contracts.  
-A contract contains a set of assumptions about the component's
-inputs and a set of guarantees about the component's outputs. The assumptions
-and guarantees may also contain predicates that reason about how the state of
-a component evolves over time.
+Environment (AGREE) \cite{NFM2012:CoGaMiWhLaLu} implements as an AADL annex and annotates AADL components with formal behavioral contracts. Each component's contracts can include assumptions and guarantees about the component's inputs and outputs respectively, as well as predicates on how the state of the component can evolve over time.
 
-AGREE uses a syntax similar to Lustre \cite{Lustre-91} to express a contract's assumptions
-and guarantees. AGREE translates an AADL model and its contract annotations
-into Lustre and then queries a user-selected model checker to perform verification.
-The goal of the analysis is to prove that each component's contract
-is satisfied by the interaction of its direct subcomponents as
-described by their respective contracts. Verification is performed at each
-layer of the architecture hierarchy and details of lower level
-components are abstracted away during verification of higher level
-component contracts.  This compositional approach allows large systems to be analyzed efficiently.  
+AGREE translates an AADL model and the behavioral contracts into Lustre\cite{Halbwachs91:IEEE} and then query a user-selected
+model checker to conduct the bac-end verification. The verification is performed compositionally along the architecture hierarchy such that verification at a higher level is only using the components and their behavioral contracts from its immediate lower level. This allows the verification to scale for large and complex systems.
 
-Component contracts at the lowest level of the
-architecture are assumed to be true by AGREE. Verification of these
-component contracts must be performed outside of the AADL/AGREE environment.  
-In a traditional software development process, components will be developed to meet
-the high-level requirements corresponding to these contracts and verified by testing or code review.
-However, there are two problems with this approach:
+AADL with the AGREE extension serves as a good candidate as the modeling language for describing the system design aspects of a shared system design and safety analysis model. Our prior work \cite{Stewart17:IMBSA} adds the initial failure effect modeling capability to this language and tool set. However, the following goals are yet to be achieved before the combined language and tool set can be used to satisfy system safety objectives of ARP4754A \cite{SAE:ARP4754A} and ARP4761 \cite{SAE:ARP4761}:
 
 \begin{enumerate}
-	\item Verification methodologies like test and code review are not exhaustive. 
-	Errors in these activities can cause the compositional verification that 
-	AGREE performs to be incorrect.
-	\item Manual translation of an AGREE contract into a property for verification at the component level can be
-	time-consuming and error-prone.
-	%There may be errors in the translation of the AGREE contract from the 
-	%properties that were proved from component level verification activities.
+	\item Being able to provide a comprehensive, qualitative description of the causal relationship between basic events and system level safety requirements.
+	\item Being able to provide an accurate, quantitative description of the contribution relationship between failure rates of the basic events and numerical probability requirements at the system level.
 \end{enumerate}
 
-Our solution to these problems is to automatically translate AGREE
-contracts of software components into
-expressions in the development language of the component software. A formal
-verification tool that reasons about artifacts expressed in this
-language can then be used to verify that the contracts hold. 
-The remainder of the paper describes this solution in detail.
-\end{comment}
+The remainder of the paper describes our approach towards both of the goals.
+
+
+
