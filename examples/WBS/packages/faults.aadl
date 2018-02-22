@@ -25,7 +25,7 @@ annex agree {**
 	
 	
 	
-	node fail_to(val_in: real, alt_val: real, trigger: bool) returns (val_out: real); 
+	node fail_to(val_in: int, alt_val: int, trigger: bool) returns (val_out: int); 
 	let
 	   val_out = if (trigger) then alt_val else val_in;
 	tel;
