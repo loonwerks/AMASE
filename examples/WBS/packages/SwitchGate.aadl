@@ -40,7 +40,15 @@ with Base_Types;
 				
 				
 			**};
+		annex safety {**
+			fault stuck_inverted_boolean_fault "(SwitchGate) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- cmd_out; 
+				outputs: cmd_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
 			
+		**};		
 	end SwitchGate;	
 	
 	system implementation SwitchGate.inst

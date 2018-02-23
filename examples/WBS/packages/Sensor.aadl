@@ -19,7 +19,7 @@ with Base_Types;
 		**};
 			
 		annex safety {**
-			fault stuck_closed_fault "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
+			fault inverted_boolean_fault "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- elec_pedal_pos; 
 				outputs: elec_pedal_pos <- val_out;    
         		--probability: 1.0E-5 ;

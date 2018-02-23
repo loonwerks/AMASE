@@ -107,11 +107,19 @@ with Base_Types;
 		annex agree {**
 			
     		-- alternate_command_computation_norm_guarantee := (TRUE ->  G ((power & (as_cmd_in_1 | as_cmd_in_2)) <-> as_cmd_out));
-			guarantee "(AntiskidCommandFacility) Antiskid command is true if and only if power and either one of the antiskid inputs is true." :
+			guarantee "(AlternateCommandCalculator) Antiskid command is true if and only if power and either one of the antiskid inputs is true." :
 						true -> (power and (as_cmd_1 or as_cmd_2)) <=> as_cmd_out;
 			
 		**};
-	
+		annex safety {**
+			fault inverted_boolean_fault "(AlternateCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- as_cmd_out; 
+				outputs: as_cmd_out <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+		**};
 	end AlternateCommandCalculator;
 	
 	system implementation AlternateCommandCalculator.inst
@@ -135,6 +143,16 @@ with Base_Types;
    			--  normal_command_computation_norm_guarantee := (TRUE ->  G (((power & brake_cmd) & !as_cmd) <-> brake_as_cmd));
 			guarantee "(NormalCommandCalculator) Brake command is true if and only if power, brake_cmd, and not antiskid." :
 						true -> (power and brake_cmd and not as_cmd) <=> brake_as_cmd;
+			
+		**};
+		
+		annex safety {**
+			fault inverted_boolean_fault "(NormalCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- brake_as_cmd; 
+				outputs: brake_as_cmd <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
 			
 		**};	
 	end NormalCommandCalculator;
@@ -162,6 +180,16 @@ with Base_Types;
 						true -> (power and ground_speed > 0 and not wheel_rolling) <=> as_cmd;
 			
 		**};
+		
+		annex safety {**
+			fault inverted_boolean_fault "(AntiskidCommandFacility) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- as_cmd; 
+				outputs: as_cmd <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+		**};
 	end AntiskidCommandFacility;
 	
 	system implementation AntiskidCommandFacility.inst
@@ -185,6 +213,16 @@ with Base_Types;
 						true -> (power and electrical_pedal_pos) <=> brake_cmd;
 			
 		**}	;
+		
+		annex safety {**
+			fault inverted_boolean_fault "(BrakeCommandFacility) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- brake_cmd; 
+				outputs: brake_cmd <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+		**};
 	end BrakeCommandFacility;
 	
 	system implementation BrakeCommandFacility.inst

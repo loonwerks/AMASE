@@ -122,6 +122,16 @@ with Base_Types;
 					true -> (not power => not bscu_validity);
 										
 		**}	;
+		
+		annex safety {**
+			fault stuck_closed_fault "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- bscu_validity; 
+				outputs: bscu_validity <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+		**};
 	end MonitorSystem;
 	
 	system implementation MonitorSystem.inst

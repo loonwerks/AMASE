@@ -38,7 +38,8 @@ with Base_Types;
 			}
 			
 			fault stuck_open_fault "(Accumulator) Stuck open fault." : faults.fail_to {
-				inputs: val_in <- reserve_out, alt_val <- circuit_pressure_value; 
+				eq nondet_value : int;
+				inputs: val_in <- reserve_out, alt_val <- nondet_value; 
 				outputs: reserve_out <- val_out;    
         		--probability: 1.0E-5 ;
 				duration: permanent;
