@@ -163,6 +163,14 @@ with Base_Types;
 --								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
 			
 				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 1);			
+			
+				-- used for nondeterministic range in fault analysis
+				eq low : int = 0;
+				eq high : int = 10;
+				eq rangeval : int;
+				
+				
+			
 			**};
 			
 			
@@ -191,8 +199,7 @@ with Base_Types;
 			}
 			
 			fault stuck_nondeterministic_fault "(AntiskidShutoff) Stuck at nondeterministic fault." : faults.fail_to {
-				eq nondet_value : int;
-				inputs: val_in <- hyd_pressure_out, alt_val <- nondet_value; 
+				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
 				outputs: hyd_pressure_out <- val_out;    
         		--probability: 1.0E-5 ;
 				duration: permanent;
@@ -203,6 +210,10 @@ with Base_Types;
 	
 	
 	system implementation AntiskidShutoffValve.inst
+	
+		annex agree{**
+			assert(low <= rangeval and rangeval <= high);
+		**};
 	end AntiskidShutoffValve.inst;
 	
 end AlternateBrakeSystem;

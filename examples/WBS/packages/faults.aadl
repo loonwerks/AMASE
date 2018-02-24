@@ -7,7 +7,7 @@ annex agree {**
 	   val_out = if (trigger) then alt_val else val_in;
 	tel;
  
-    node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
+ 	node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
 	let
 	  val_out = if trigger then not(val_in) else val_in;
 	tel;

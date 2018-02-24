@@ -25,7 +25,10 @@ with Base_Types;
 				guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
 				 we have either electrical or mechanical command and positive pressure." :
 					true -> (((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);
-					
+				
+				eq low : int = 0;
+				eq high : int = 10;
+				eq rangeval : int;	
 		**};
 		annex safety {**
 			fault stuck_open_fault "(MeterValve) Stuck open fault.": faults.fail_to {
@@ -50,8 +53,7 @@ with Base_Types;
 			}
 			
 			fault stuck_nondeterministic_fault "(MeterValve) Stuck at nondeterministic fault." : faults.fail_to {
-				eq nondet_value : int;
-				inputs: val_in <- hyd_pressure_out, alt_val <- nondet_value; 
+				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
 				outputs: hyd_pressure_out <- val_out;    
         		--probability: 1.0E-5 ;
 				duration: permanent;
@@ -61,6 +63,8 @@ with Base_Types;
 	end MeterValve;
 	
 	system implementation MeterValve.inst
-		
+		annex agree {**
+			assert(low <= rangeval and rangeval <= high);
+		**};
 	end MeterValve.inst;
 end MeterValve;
