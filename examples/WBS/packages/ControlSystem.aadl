@@ -202,7 +202,7 @@ with Base_Types;
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
 				
-				
+				 
 
 
 --guarantee " (Channel) Brake antiskid command behavior (wheel 1): Brake antiskid is commanded to the wheel only when 

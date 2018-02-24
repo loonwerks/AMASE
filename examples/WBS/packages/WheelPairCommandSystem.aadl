@@ -17,7 +17,7 @@ with Base_Types;
 			as_cmd_out : out data port Base_Types::Boolean;
 			
 		annex agree {**
-			assume "(WheelPairCommandSystem) Ground speed always greater than zero." : 
+			assume "(WheelPairCommandSystem) Ground speed always greater than zero." :  
 					(ground_speed >= 0) and (ground_speed <= 10);
 			
     		--	    LTLSPEC NAME commands_creation_norm_guarantee := (TRUE ->  G 
@@ -41,7 +41,7 @@ with Base_Types;
 			guarantee "(WheelPairCommandSystem) 3 Assign antiskid command and brake commands according to input values." :
 						true -> BRAKE_AS_2;
 			
-		**};	
+		**};	 
 	end WheelPairCommandSystem;
 	
 	system implementation WheelPairCommandSystem.inst
@@ -61,7 +61,7 @@ with Base_Types;
 			as_cmd_fac_2 : port antiskid_command_facility_2.as_cmd -> alternate_command_calculator.as_cmd_2;
 			
 			-- Inputs to normal command calc 1
-			power_to_norm_calc_1 : port power -> normal_command_calculator_1.power; 
+			power_to_norm_calc_1 : port power -> normal_command_calculator_1.power;  
 			brake_cmd_to_norm_calc_1 : port brake_command_facility.brake_cmd -> normal_command_calculator_1.brake_cmd;
 			as_cmd_fac_1_to_norm_calc_1 : port antiskid_command_facility_1.as_cmd -> normal_command_calculator_1.as_cmd;
 			
@@ -211,6 +211,8 @@ with Base_Types;
 			-- brake_command_creation_norm_guarantee := (TRUE ->  G ((power & electrical_pedal_pos) <-> brake_cmd));
 			guarantee "(BrakeCommandFacility) brake command output is equivalent to power and elec_pedal_position.":
 						true -> (power and electrical_pedal_pos) <=> brake_cmd;
+						
+						
 			
 		**}	;
 		

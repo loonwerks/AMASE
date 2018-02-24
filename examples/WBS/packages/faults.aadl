@@ -1,74 +1,23 @@
 package faults
 public
 annex agree {**	
-	
-	-- Change boolean to integer 
-	-- TRUE == 1
-	-- FALSE == 0
-	node bool_to_int(b: bool) returns (i: int); 
-	let
-		i = if (b) then 1 else 0;
-	tel; 
-	
-	-- If historically the case, return true
-	-- else false
-	node historically(b: bool) returns (h: bool); 
-	let
-	   h = b -> b or pre(h); 
-	tel;
-	
-	-- Return minimum of two values passed in
-	node min(m: real, n: real) returns (r:real);
-	let
-	   r = if (m < n) then m else n;
-	tel;
-	
-	
-	
+
 	node fail_to(val_in: int, alt_val: int, trigger: bool) returns (val_out: int); 
 	let
 	   val_out = if (trigger) then alt_val else val_in;
 	tel;
-	 
-	 
-	 
-	 
+ 
     node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
 	let
 	  val_out = if trigger then not(val_in) else val_in;
 	tel;
 
-	-- Seems like this is ramp up... 
-	-- Possible change to (val_out - delta) ?
-	node ramp_down(val_in: real, delt: real, val_max: real, trigger: bool) returns (val_out: real);
+	node no_data_fail(val_in : bool, trigger: bool) returns (val_out: bool);
 	let
- 	  val_out = val_in -> if (trigger) then min(val_max, pre(val_out + delt)) else val_in; 
-	tel;	
-
-
-	-- Faults to add:
-	-- Frozen: val_out = val_in
-	-- or possibly val_out = pre(val_out) ? Need init if that's the case
-	--
-	node frozen(val_in: real,alt_val:real, trigger: bool) returns (val_out: real);
-	let
-	  val_out = if (trigger) then (alt_val) else (val_in);
+		val_out = if trigger then (val_in) else not(val_in);
 	tel;
-	
 
-	
 **};	
 	
 end faults;
 
-	--node ramp_down(val_in: real, delt: real, val_max: real, fail_occurred: bool) returns (val_out: real); 
-   -- var
-   --   cond : bool;
-   --   then_branch : real;
-   --   else_branch : real;
-	--let
-	--  cond = historically(fail_occurred);
-	--  then_branch =  min(val_max, pre(val_out + delt));
-	--  else_branch = val_in;
- 	--  val_out = val_in -> if (cond) then then_branch else else_branch; 
-	--tel;	

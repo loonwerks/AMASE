@@ -1,12 +1,14 @@
 package datatypes
 public
-with Data_Model;
+with Base_Types;
 	 
---	data WheelStatus
---  		properties
---    		Data_Model::Data_Representation => Enum;
---    		Data_Model::Enumerators => ("stopped", "rolling");
---  	end WheelStatus;
-
+data sensor
 	
+end sensor;
+	
+data implementation sensor.impl
+	subcomponents
+		val : data Base_Types::Boolean;
+		no_data : data Base_Types::Boolean;
+end sensor.impl;
 end datatypes;
