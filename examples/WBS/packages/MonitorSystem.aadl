@@ -15,7 +15,7 @@ with Base_Types;
 			wheel_rolling_2 : in data port Base_Types::Boolean;  
 			wheel_rolling_3 : in data port Base_Types::Boolean;
 			wheel_rolling_4 : in data port Base_Types::Boolean;
-			wheel_rolling_5 : in data port Base_Types::Boolean;
+			wheel_rolling_5 : in data port Base_Types::Boolean; 
 			wheel_rolling_6 : in data port Base_Types::Boolean;
 			wheel_rolling_7 : in data port Base_Types::Boolean;
 			wheel_rolling_8 : in data port Base_Types::Boolean;
