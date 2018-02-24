@@ -260,7 +260,9 @@ with sensor;
 		
 		
 	**};
-	
+   annex safety{**
+	  analyze : max 1 fault
+   **};
 end WBS.inst;
 
 
