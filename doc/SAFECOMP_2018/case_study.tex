@@ -46,7 +46,7 @@ Upon compositional analysis of each layer of the model, details of the system be
 
 \textbf{Note from Danielle: I think we should sum up the number of subcomponents, depth of the model in terms of layers, show time of verification for each of the compositional layers, number of fault nodes defined in total, and time it takes for fault analysis verificatiion. I will create a little table that shows some of these values. Does anyone know if there is a way to easily count the subcomponents without manually counting? An option in aadl perhaps...?}
 
-Once the behavioral contracts were specified, both monolithic and compositional verification were run on the WBS model. There is a total of XXXX layers of compositional verification and the time of verification was between XXX and XXX seconds. Monolithic verification was run on the top level of the system which took 24 seconds. 
+Once the behavioral contracts were specified, both monolithic and compositional verification were run on the WBS model. There is a maximum layer depth of 6 for compositional verification and the time of verification was between 0 and 4 seconds. Monolithic verification was run on the top level of the system which took 24 seconds. 
 
 \subsubsection{Fault Analysis of WBS using Safety Annex}
 After the verification was completed, we defined faults equivalent to those described in the xSAP model for the NuSMV WBS system in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A total of 33 fault definitions were given to 18 different components and the top level compositional verification was run with one permanant fault introduced into the system. 
