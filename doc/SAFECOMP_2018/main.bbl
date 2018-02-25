@@ -1,9 +1,5 @@
 \begin{thebibliography}{10}
 
-\bibitem{CHEN201391}
-{Systems Modeling with {EAST-ADL} for Fault Tree Analysis through {HiP-HOPS}*}.
-\newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
-
 \bibitem{AC:20-174}
 {AC 20-174}.
 \newblock {Development of Civil Aircraft and Systems}, September 2011.
@@ -23,10 +19,77 @@ J.~Backes, D.~Cofer, S.~Miller, and M.~W. Whalen.
   Methods}}, volume 9058 of {\em Lecture Notes in Computer Science}, pages
   82--96. Springer International Publishing, 2015.
 
+\bibitem{DBLP:conf/tacas/BittnerBCCGGMMZ16}
+B.~Bittner, M.~Bozzano, R.~Cavada, A.~Cimatti, M.~Gario, A.~Griggio,
+  C.~Mattarei, A.~Micheli, and G.~Zampedri.
+\newblock {The x{SAP} Safety Analysis Platform}.
+\newblock In {\em Tools and Algorithms for the Construction and Analysis of
+  Systems - 22nd International Conference, {TACAS} 2016, April 2-8, 2016,
+  Proceedings}, pages 533--539, 2016.
+
 \bibitem{CAV2015:BoCiGrMa}
 M.~Bozzano, A.~Cimatti, A.~Griggio, and C.~Mattarei.
 \newblock {Efficient Anytime Techniques for Model-Based Safety Analysis}.
 \newblock In {\em Computer Aided Verification (CAV '11}, 2015.
+
+\bibitem{Bozzano:2011:SDP:1992983.1992988}
+M.~Bozzano, A.~Cimatti, J.-P. Katoen, V.~Y. Nguyen, T.~Noll, and M.~Roveri.
+\newblock Safety, dependability and performance analysis of extended aadl
+  models.
+\newblock {\em Comput. J.}, 54(5):754--775, May 2011.
+
+\bibitem{symbAltaRica}
+M.~Bozzano, A.~Cimatti, O.~Lisagor, C.~Mattarei, S.~Mover, M.~Roveri, and
+  S.~Tonetta.
+\newblock {Symbolic Model Checking and Safety Assessment of Altarica Models}.
+\newblock In {\em Science of Computer Programming}, volume~98, 09 2011.
+
+\bibitem{10.1007/978-3-319-11936-6-7}
+M.~Bozzano, A.~Cimatti, C.~Mattarei, and S.~Tonetta.
+\newblock Formal safety assessment via contract-based design.
+\newblock In F.~Cassez and J.-F. Raskin, editors, {\em Automated Technology for
+  Verification and Analysis}, pages 81--97, Cham, 2014. Springer International
+  Publishing.
+
+\bibitem{DBLP:conf/cav/BozzanoCPJKPRT15}
+M.~Bozzano, A.~Cimatti, A.~F. Pires, D.~Jones, G.~Kimberly, T.~Petri,
+  R.~Robinson, and S.~Tonetta.
+\newblock {Formal Design and Safety Analysis of {AIR6110} Wheel Brake System}.
+\newblock In {\em Computer Aided Verification - 27th International Conference,
+  {CAV} 2015, San Francisco, CA, USA, July 18-24, 2015, Proceedings, Part {I}},
+  pages 518--535, 2015.
+
+\bibitem{10.1007/978-3-540-75596-8-13}
+M.~Bozzano, A.~Cimatti, and F.~Tapparo.
+\newblock Symbolic fault tree analysis for reactive systems.
+\newblock In K.~S. Namjoshi, T.~Yoneda, T.~Higashino, and Y.~Okamura, editors,
+  {\em Automated Technology for Verification and Analysis}, pages 162--176,
+  Berlin, Heidelberg, 2007. Springer Berlin Heidelberg.
+
+\bibitem{Bozzano:2010:DSA:1951720}
+M.~Bozzano and A.~Villafiorita.
+\newblock {\em Design and Safety Assessment of Critical Systems}.
+\newblock Auerbach Publications, Boston, MA, USA, 1st edition, 2010.
+
+\bibitem{CHEN201391}
+D.~Chen, N.~Mahmud, M.~Walker, L.~Feng, H.~L{\"o}nn, and Y.~Papadopoulos.
+\newblock {Systems Modeling with {EAST-ADL} for Fault Tree Analysis through
+  {HiP-HOPS}*}.
+\newblock {\em IFAC Proceedings Volumes}, 46(22):91 -- 96, 2013.
+
+\bibitem{propBasedProofSys}
+A.~Cimatti and S.~Tonetta.
+\newblock A property-based proof system for contract-based design.
+\newblock In {\em Proceedings - 38th EUROMICRO Conference on Software
+  Engineering and Advanced Applications, SEAA 2012}, pages 21--28, 09 2012.
+
+\bibitem{CIMATTI2015333}
+A.~Cimatti and S.~Tonetta.
+\newblock Contracts-refinement proof system for component-based embedded
+  systems.
+\newblock {\em Science of Computer Programming}, 97:333 -- 348, 2015.
+\newblock Object-Oriented Programming and Systems (OOPS 2010) Modeling and
+  Analysis of Compositional Software (papers from EUROMICRO SEAA’12).
 
 \bibitem{NFM2012:CoGaMiWhLaLu}
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
@@ -34,11 +97,6 @@ D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
 \newblock In A.~E. Goodloe and S.~Person, editors, {\em Proceedings of the 4th
   NASA Formal Methods Symposium (NFM 2012)}, volume 7226, pages 126--140,
   Berlin, Heidelberg, April 2012. Springer-Verlag.
-
-\bibitem{EMV2}
-J.~Delange, P.~Feiler, J.~Hudak, and D.~Gluch.
-\newblock Architecture fault modeling and analysis with the error model annex,
-  version 2, 06 2016.
 
 \bibitem{Driscoll-Byzantine-Fault}
 K.~Driscoll, H.~Sivencrona, and P.~Zumsteg.
@@ -51,10 +109,25 @@ P.~Feiler and D.~Gluch.
   Architecture Analysis \& Design Language}.
 \newblock Addison-Wesley Professional, 2012.
 
+\bibitem{EMV2}
+P.~Feiler, J.~Hudak, J.~Delange, and D.~Gluch.
+\newblock Architecture fault modeling and analysis with the error model annex,
+  version 2.
+\newblock Technical Report CMU/SEI-2016-TR-009, Software Engineering Institute,
+  06 2016.
+
 \bibitem{2017arXiv171201222G}
 A.~{Gacek}, J.~{Backes}, M.~{Whalen}, L.~{Wagner}, and E.~{Ghassabani}.
 \newblock {The JKind Model Checker}.
 \newblock {\em ArXiv e-prints}, Dec. 2017.
+
+\bibitem{Gudemann:2010:FQQ:1909626.1909813}
+M.~Gudemann and F.~Ortmeier.
+\newblock A framework for qualitative and quantitative formal model-based
+  safety analysis.
+\newblock In {\em Proceedings of the 2010 IEEE 12th International Symposium on
+  High-Assurance Systems Engineering}, HASE '10, pages 132--141, Washington,
+  DC, USA, 2010. IEEE Computer Society.
 
 \bibitem{Halbwachs91:IEEE}
 N.~Halbwachs, P.~Caspi, P.~Raymond, and D.~Pilaud.
@@ -67,11 +140,39 @@ P.~H{\"o}nig, R.~Lunde, and F.~Holzapfel.
 \newblock {Model Based Safety Analysis with smartIflow}.
 \newblock {\em Information}, 8(1), 2017.
 
+\bibitem{Joshi05:SafeComp}
+A.~Joshi and M.~P. Heimdahl.
+\newblock {Model-Based Safety Analysis of Simulink Models Using SCADE Design
+  Verifier}.
+\newblock In {\em SAFECOMP}, volume 3688 of {\em LNCS}, page 122, 2005.
+
 \bibitem{Joshi05:Dasc}
 A.~Joshi, S.~P. Miller, M.~Whalen, and M.~P. Heimdahl.
 \newblock {A Proposal for Model-Based Safety Analysis}.
 \newblock In {\em {In Proceedings of 24th Digital Avionics Systems Conference
   (Awarded Best Paper of Track)}}, 2005.
+
+\bibitem{NasaRep:MBSA-Aug05}
+A.~Joshi, M.~Whalen, and M.~P. Heimdahl.
+\newblock {Automated Safety Analysis Draft Final Report}.
+\newblock Report for NASA Contract NCC-01001, August 2005.
+
+\bibitem{MathWorks}
+Math{W}orks.
+\newblock {The {M}ath{W}orks {I}nc. {S}imulink Product Web Site}.
+\newblock http://www.mathworks.com/products/simulink, 2004.
+
+\bibitem{hilt2013:MuWhRaHe}
+A.~Murugesan, M.~W. Whalen, S.~Rayadurgam, and M.~P. Heimdahl.
+\newblock {Compositional Verification of a Medical Device System}.
+\newblock In {\em ACM Int'l Conf. on High Integrity Language Technology (HILT)
+  2013}. ACM, November 2013.
+
+\bibitem{Pajic2012}
+M.~Pajic, R.~Mangharam, O.~Sokolsky, D.~Arney, J.~Goldman, and I.~Lee.
+\newblock {Model-Driven Safety Analysis of Closed-Loop Medical Systems}.
+\newblock {\em Industrial Informatics, IEEE Transactions on}, PP:1--12, 2012.
+\newblock In early online access.
 
 \bibitem{PROSVIRNOVA2013127}
 T.~Prosvirnova, M.~Batteux, P.-A. Brameret, A.~Cherfi, T.~Friedlhuber, J.-M.
@@ -79,15 +180,15 @@ T.~Prosvirnova, M.~Batteux, P.-A. Brameret, A.~Cherfi, T.~Friedlhuber, J.-M.
 \newblock {The {A}lta{R}ica 3.0 Project for Model-Based Safety Assessment}.
 \newblock {\em IFAC Proceedings Volumes}, 46(22):127 -- 132, 2013.
 
+\bibitem{SAE:ARP4761}
+{SAE ARP 4761}.
+\newblock {Guidelines and Methods for Conducting the Safety Assessment Process
+  on Civil Airborne Systems and Equipment}, December 1996.
+
 \bibitem{SAE:ARP4754A}
 {SAE ARP4754A}.
 \newblock {Guidelines for Development of Civil Aircraft and Systems}, December
   2010.
-
-\bibitem{SAE:ARP4761}
-{SAE ARP4761}.
-\newblock {Guidelines and Methods for Conducting the Safety Assessment Process
-  on Civil Airborne Systems and Equipment}, December 1996.
 
 \bibitem{Stewart17:IMBSA}
 D.~Stewart, M.~Whalen, D.~Cofer, and M.~P. Heimdahl.

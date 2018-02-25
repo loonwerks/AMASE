@@ -103,7 +103,7 @@ with sensor;
 			ground_speed_ctrl : port ground_speed -> ctrl_sys.ground_speed;
 			-- power to control
 			power_control_1 : port power1 -> ctrl_sys.power_1; 
-			power_control_2 : port power2 -> ctrl_sys.power_2;
+			power_control_2 : port power2 -> ctrl_sys.power_2;  
 			
 			-- from pedal sensor to control system
 			pedal_sensor_out_L : port pedal_sensor_L.elec_pedal_pos -> ctrl_sys.elec_pedal_pos_L;
@@ -121,7 +121,7 @@ with sensor;
 			
 			-------------------------------------------------------------------------------------
 			-- Inputs to physical system
-			
+			  
 			-- ground speed 
 			ground_speed_phys : port ground_speed -> phys_sys.ground_speed;
 			
@@ -157,7 +157,7 @@ with sensor;
 			mech_pedal_position_R : port mech_pedal_pos_R -> phys_sys.mech_pedal_pos_R;
 			---------------------------------------------------------------------------------	
 		
-			
+			 
 			-- Sensor connections
 			-- From phys_system to wheel sensor
 			wheel_status_sensor_in_1 : port phys_sys.wheel_status1 -> wheel_sensor1.wheel_status;
@@ -260,7 +260,9 @@ with sensor;
 		
 		
 	**};
-	
+   annex safety{**
+	  analyze : max 1 fault
+   **};
 end WBS.inst;
 
 

@@ -14,7 +14,8 @@ with Base_Types;
 				
 				-- pedal_position_translation_norm_guarantee := (TRUE ->  G (mechanical_pedal_pos <-> electrical_pedal_pos));
 				guarantee "(SensorPedalPosition) mechanical pedal position is equivalent to electrical pedal position." :
-					mech_pedal_pos <=> elec_pedal_pos;
+					true -> mech_pedal_pos <=> elec_pedal_pos;
+					
 				
 		**};
 			
@@ -25,7 +26,12 @@ with Base_Types;
         		--probability: 1.0E-5 ;
 				duration: permanent;
 			}
-			
+			fault no_data_fault "(SensorPedalPosition) No Data fault." : faults.no_data_fail {
+				inputs: val_in <- elec_pedal_pos; 
+				outputs: elec_pedal_pos <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
 		**};
 	end SensorPedalPosition;
 	
@@ -48,6 +54,7 @@ with Base_Types;
 				-- sensor_translation_norm_guarantee := (TRUE ->  G (wheel_rolling <-> wheel_status = rolling));
 				guarantee "(Sensor) wheel_rolling is true if and only if wheel_status = 'rolling' " :
 						true -> wheel_rolling <=> wheel_status;
+						
 				
 		**};
 			
@@ -61,12 +68,16 @@ with Base_Types;
         		--probability: 1.0E-5 ;
 				duration: permanent;
 			}
-			
+			fault no_data_fault "(Sensor) No Data fault." : faults.no_data_fail {
+				inputs: val_in <- wheel_rolling; 
+				outputs: wheel_rolling <- val_out;    
+        		--probability: 1.0E-5 ;
+				duration: permanent;
+			}
 		**};
 	end Sensor;
 	
 	system implementation Sensor.inst
-		
 	end Sensor.inst;
 
 end Sensor;

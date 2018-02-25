@@ -9,7 +9,7 @@ with Base_Types;
 	system BSCU
 		features
 			-- Inputs
-			power_1 : in data port Base_Types::Boolean;
+			power_1 : in data port Base_Types::Boolean; 
 			power_2 : in data port Base_Types::Boolean;
 			ground_speed : in data port Base_Types::Integer;
 			elec_pedal_pos_L : in data port Base_Types::Boolean;
@@ -305,7 +305,7 @@ with Base_Types;
 					true -> (
 						(system_validity = or_gate_system_validity.out_val)
 					);
-				
+				 
 				lemma "(OrGate) The inputs from the channels match what we expect" :
 					true -> (
 						(or_gate_system_validity.in_1 = switch_gate_brake_as_cmd_1.validity1) and (or_gate_system_validity.in_2 = switch_gate_brake_as_cmd_1.validity2)
