@@ -1,16 +1,28 @@
 \section{Detailed Approach}
 \label{sec:detailed_approach}
 
+In this section, we describe the main features and functionality of the Safety Annex, and how they can be used to for a shared system design and safety analysis model, and to describe the qualitative and quantitative causal relationship between faults and system safety requirements.
+
+\subsection{Mapping to Safety Concepts}
+\janet{Can our approach describe faults, errors, failures? What about non-deterministic faults?
+address Mike Peterson's comments}
 \begin{comment}
-\begin{enumerate}
-\item Being able to provide a comprehensive, qualitative description of the causal relationship between basic events and system level safety requirements.
-\item Being able to provide an accurate, quantitative description of the contribution relationship between failure rates of the basic events and numerical probability requirements at the system level.
-\end{enumerate}
+This paper should define how your team of authors see the interaction between "functions" and "system".  
+Here is how I see the interaction / relationship:
+(a) Aircraft Functions are the highest level
+(b) Aircraft Functions are comprised of one or more System
+(c) Each System performs one or more System Function
+(d) Each System is comprised of one or more LRUs (a.k.a. "items")
+
+In Section 2.1, what is the basis for your designation of small, medium, and large systems?  Is it based on the number of lines of software code or what other criteria?
+
+In Section 2.2, you use the term "verification".  I am not sure that how you use this term matches the definition of "verification" in ARP4754A.  It seems to me that in Section 2.2, you would be using the term "validation" based on how that term is defined in ARP4754A.
+
+In Section 3.1, you introduce the term "non-deterministic".  I am not sure how your new process can be used by the safety engineering discipline unless things are "deterministic" and therefore "repeatable".
+
+Errors/Faults/Failures - to a safety engineer, these terms have very specific meanings.  You will see my specific comments on this topic where I located them by your Section 3.3.  If needed, we can talk about this comment after I send you my mark-ups.
 \end{comment}
-
-In this section, we describe the main features and functionality of the Safety Annex.
-
-\subsection{Basic Functionality}
+\subsection{Safety Annex Modeling Elements}
 
 An AADL model of the nominal system behavior specifies the hardware and software components of the system and their interconnections. This nominal model is then annotated with assume-guarantee contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu} for AADL. The nominal model requirements are verified using compositional verification techniques based on $k$-induction model checking~\cite{2017arXiv171201222G}.
 
