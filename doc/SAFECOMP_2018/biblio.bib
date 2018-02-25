@@ -22,21 +22,6 @@
   pages =        "122"
 }
 
-@MISC{MathWorks,
-  author =       {Math{W}orks},
-  title =        {{The {M}ath{W}orks {I}nc. {S}imulink Product Web Site}},
-  year = "2004",
-  howpublished = "http://www.mathworks.com/products/simulink"
-}
-
-@MISC{NasaRep:MBSA-Aug05,
-  author =       {Anjali Joshi and Michael Whalen and Mats P.E. Heimdahl},
-  title =       {{Automated Safety Analysis Draft Final Report}},
-  howpublished = {Report for NASA Contract NCC-01001},
-  year =         "2005",
-  month =        "August"
-}
-
 @inproceedings{Joshi07:Hase,
   author =       {Anjali Joshi and Mats P.E. Heimdahl},
   title =        {{Behavioral Fault Modeling for Model-based Safety Analysis}},
@@ -169,7 +154,6 @@ archivePrefix = "arXiv",
                {I}},
   pages     = {518--535},
   year      = {2015},
-  crossref  = {DBLP:conf/cav/2015-1},
   url       = {http://dx.doi.org/10.1007/978-3-319-21690-4_36},
   doi       = {10.1007/978-3-319-21690-4_36},
   timestamp = {Wed, 17 Feb 2016 11:29:56 +0100},
@@ -187,17 +171,9 @@ archivePrefix = "arXiv",
 @MISC{AIR6110,
   author = {{AIR 6110}},
   title = {{Contiguous Aircraft/System Development Process Example}},
-  publisher = {SAE International},
+  publisher = {SAE},
   month = {Dec.},
   year={2011}
-}
-
-@MISC{AADL_Standard,
-	author = {{AS5506C}},
-	title = {{Architecture Analysis & Design Language (AADL)}},
-	publisher = {SAE International},
-	month = {Jan.},
-	year={2017}
 }
 
 @inproceedings{CAV2015:BoCiGrMa,
@@ -216,12 +192,13 @@ archivePrefix = "arXiv",
  year = {2011}
 }
 
-@unknown{EMV2,
-author = {Delange, Julien and Feiler, Peter and Hudak, John and Gluch, Dave},
+@TECHREPORT{EMV2,
+author = {Feiler, Peter and Hudak, John and Delange, Julien and Gluch, Dave},
 year = {2016},
 month = {06},
-pages = {},
-title = {Architecture Fault Modeling and Analysis with the Error Model Annex, Version 2}
+title = {Architecture Fault Modeling and Analysis with the Error Model Annex, Version 2},
+institution = {Software Engineering Institute},
+number = {CMU/SEI-2016-TR-009}
 }
 
 @ARTICLE{info17:HaLuHo,
@@ -236,6 +213,7 @@ title = {Architecture Fault Modeling and Analysis with the Error Model Annex, Ve
 
 @article{CHEN201391,
 title = {{Systems Modeling with {EAST-ADL} for Fault Tree Analysis through {HiP-HOPS}*}},
+ author = {Chen, DeJiu and Mahmud, Nidhal and Walker, Martin and Feng, Lei and L{\"o}nn, Henrik and Papadopoulos, Yiannis},
 journal = "IFAC Proceedings Volumes",
 volume = "46",
 number = "22",
@@ -255,17 +233,8 @@ issn = "1474-6670"
  url = {http://resources.sei.cmu.edu/asset_files/technicalreport/2014_005_001_311911.pdf}
 }
 
-@MISC{AC:20-174,
-	author = {{AC 20-174}},
-	title = {{Development of Civil Aircraft and Systems}},
-	publisher = {U.S. Department of Transportation Federal Aviation Administration},
-	day = {30},
-	month = {September},
-	year={2011}
-}
-
 @MISC{SAE:ARP4761,
-  author = {{SAE ARP4761}},
+  author = {{SAE ARP 4761}},
   title = {{Guidelines and Methods for Conducting the Safety Assessment
 Process on Civil Airborne Systems and Equipment}},
   publisher = {SAE International},
@@ -280,6 +249,159 @@ Process on Civil Airborne Systems and Equipment}},
 	location = {Warrendale, PA, USA},
 	month = {December},
 	year={2010}
+}
+
+@MISC{AC:20-174,
+	author = {{AC 20-174}},
+	title = {{Development of Civil Aircraft and Systems}},
+	publisher = {U.S. Department of Transportation Federal Aviation Administration},
+	day = {30},
+	month = {September},
+	year={2011}
+}
+
+@MISC{AADL_Standard,
+	author = {{AS5506C}},
+	title = {{Architecture Analysis & Design Language (AADL)}},
+	publisher = {SAE International},
+	month = {Jan.},
+	year={2017}
+}
+
+@article{CIMATTI2015333,
+	title = "Contracts-refinement proof system for component-based embedded systems",
+	journal = "Science of Computer Programming",
+	volume = "97",
+	pages = "333 - 348",
+	year = "2015",
+	note = "Object-Oriented Programming and Systems (OOPS 2010) Modeling and Analysis of Compositional Software (papers from EUROMICRO SEAA’12)",
+	issn = "0167-6423",
+	doi = "https://doi.org/10.1016/j.scico.2014.06.011",
+	url = "http://www.sciencedirect.com/science/article/pii/S0167642314002901",
+	author = "Alessandro Cimatti and Stefano Tonetta",
+	keywords = "Contract-based design, Temporal logics, Embedded systems, OCRA"
+}
+
+@MISC{MathWorks,
+	author =       {Math{W}orks},
+	title =        {{The {M}ath{W}orks {I}nc. {S}imulink Product Web Site}},
+	year = "2004",
+	howpublished = "http://www.mathworks.com/products/simulink"
+}
+
+@article{Bozzano:2011:SDP:1992983.1992988,
+	author = {Bozzano, Marco and Cimatti, Alessandro and Katoen, Joost-Pieter and Nguyen, Viet Yen and Noll, Thomas and Roveri, Marco},
+	title = {Safety, Dependability and Performance Analysis of Extended AADL Models},
+	journal = {Comput. J.},
+	issue_date = {May 2011},
+	volume = {54},
+	number = {5},
+	month = may,
+	year = {2011},
+	issn = {0010-4620},
+	pages = {754--775},
+	numpages = {22},
+	url = {http://dx.doi.org/10.1093/comjnl/bxq024},
+	doi = {10.1093/comjnl/bxq024},
+	acmid = {1992988},
+	publisher = {Oxford University Press},
+	address = {Oxford, UK},
+} 
+
+@inproceedings{symbAltaRica,
+	author    = {Marco Bozzano and
+	Alessandro Cimatti and
+	Oleg Lisagor and
+	Cristian Mattarei and
+	Sergio Mover and
+	Marco Roveri and
+	Stefano Tonetta},
+	title     = {{Symbolic Model Checking and Safety Assessment of Altarica Models}},
+	volume = {98},
+	booktitle = {Science of Computer Programming},
+	year = {2011},
+	month = {09},
+	pages = {},
+}
+
+@InProceedings{10.1007/978-3-540-75596-8-13,
+	author="Bozzano, Marco
+	and Cimatti, Alessandro
+	and Tapparo, Francesco",
+	editor="Namjoshi, Kedar S.
+	and Yoneda, Tomohiro
+	and Higashino, Teruo
+	and Okamura, Yoshio",
+	title="Symbolic Fault Tree Analysis for Reactive Systems",
+	booktitle="Automated Technology for Verification and Analysis",
+	year="2007",
+	publisher="Springer Berlin Heidelberg",
+	address="Berlin, Heidelberg",
+	pages="162--176",
+	abstract="Fault tree analysis is a traditional and well-established technique for analyzing system design and robustness. Its purpose is to identify sets of basic events, called cut sets, which can cause a given top level event, e.g. a system malfunction, to occur. Generating fault trees is particularly critical in the case of reactive systems, as hazards can be the result of complex interactions involving the dynamics of the system and of the faults. Recently, there has been a growing interest in model-based fault tree analysis using formal methods, and in particular symbolic model checking techniques. In this paper we present a broad range of algorithmic strategies for efficient fault tree analysis, based on binary decision diagrams (BDDS). We describe different algorithms encompassing different directions (forward or backward) for reachability analysis, using dynamic cone of influence techniques to optimize the use of the finite state machine of the system, and dynamically pruning of the frontier states. We evaluate the relative performance of the different algorithms on a set of industrial-size test cases.",
+	isbn="978-3-540-75596-8"
+}
+
+@InProceedings{10.1007/978-3-319-11936-6-7,
+	author="Bozzano, Marco
+	and Cimatti, Alessandro
+	and Mattarei, Cristian
+	and Tonetta, Stefano",
+	editor="Cassez, Franck
+	and Raskin, Jean-Fran{\c{c}}ois",
+	title="Formal Safety Assessment via Contract-Based Design",
+	booktitle="Automated Technology for Verification and Analysis",
+	year="2014",
+	publisher="Springer International Publishing",
+	address="Cham",
+	pages="81--97",
+	abstract="Safety Assessment (SA) is an engineering discipline aiming at the analysis of systems under faults. According to industrial practice and standards, SA is based on the construction of complex artifacts such as Fault Trees, which describe how certain faults may cause some top-level events. SA is intended to mirror the hierarchical design of the system focusing on the safety aspects.",
+	isbn="978-3-319-11936-6"
+}
+
+@InProceedings{propBasedProofSys,
+	author = {Cimatti, Alessandro and Tonetta, Stefano},
+	year = {2012},
+	month = {09},
+	pages = {21-28},
+	title = {A Property-Based Proof System for Contract-Based Design},
+	isbn = {978-1-4673-2451-9},
+	booktitle = {Proceedings - 38th EUROMICRO Conference on Software Engineering and Advanced Applications, SEAA 2012}
+}
+
+@MISC{NasaRep:MBSA-Aug05,
+	author =       {Anjali Joshi and Michael Whalen and Mats P.E. Heimdahl},
+	title =       {{Automated Safety Analysis Draft Final Report}},
+	howpublished = {Report for NASA Contract NCC-01001},
+	year =         "2005",
+	month =        "August"
+}
+
+@book{Bozzano:2010:DSA:1951720,
+	author = {Bozzano, Marco and Villafiorita, Adolfo},
+	title = {Design and Safety Assessment of Critical Systems},
+	year = {2010},
+	isbn = {1439803315, 9781439803318},
+	edition = {1st},
+	publisher = {Auerbach Publications},
+	address = {Boston, MA, USA},
+} 
+
+@inproceedings{DBLP:conf/tacas/BittnerBCCGGMMZ16,
+  author    = {Benjamin Bittner and
+               Marco Bozzano and
+               Roberto Cavada and
+               Alessandro Cimatti and
+               Marco Gario and
+               Alberto Griggio and
+               Cristian Mattarei and
+               Andrea Micheli and
+               Gianni Zampedri},
+  title     = {{The x{SAP} Safety Analysis Platform}},
+  booktitle = {Tools and Algorithms for the Construction and Analysis of Systems
+               - 22nd International Conference, {TACAS} 2016,  April 2-8, 2016, Proceedings},
+  pages     = {533--539},
+  year      = {2016}
 }
 
 @Article{info8010007,
@@ -358,128 +480,4 @@ keywords = "Model-Based design."
 	volume =       "2788",
 	series =       {LNCS},
 	pages =        "235--248"
-}
-
-
-@book{Bozzano:2010:DSA:1951720,
- author = {Bozzano, Marco and Villafiorita, Adolfo},
- title = {Design and Safety Assessment of Critical Systems},
- year = {2010},
- isbn = {1439803315, 9781439803318},
- edition = {1st},
- publisher = {Auerbach Publications},
- address = {Boston, MA, USA},
-} 
-
-@article{CIMATTI2015333,
-title = "Contracts-refinement proof system for component-based embedded systems",
-journal = "Science of Computer Programming",
-volume = "97",
-pages = "333 - 348",
-year = "2015",
-note = "Object-Oriented Programming and Systems (OOPS 2010) Modeling and Analysis of Compositional Software (papers from EUROMICRO SEAA’12)",
-issn = "0167-6423",
-doi = "https://doi.org/10.1016/j.scico.2014.06.011",
-url = "http://www.sciencedirect.com/science/article/pii/S0167642314002901",
-author = "Alessandro Cimatti and Stefano Tonetta",
-keywords = "Contract-based design, Temporal logics, Embedded systems, OCRA"
-}
-
-@article{Bozzano:2011:SDP:1992983.1992988,
- author = {Bozzano, Marco and Cimatti, Alessandro and Katoen, Joost-Pieter and Nguyen, Viet Yen and Noll, Thomas and Roveri, Marco},
- title = {Safety, Dependability and Performance Analysis of Extended AADL Models},
- journal = {Comput. J.},
- issue_date = {May 2011},
- volume = {54},
- number = {5},
- month = may,
- year = {2011},
- issn = {0010-4620},
- pages = {754--775},
- numpages = {22},
- url = {http://dx.doi.org/10.1093/comjnl/bxq024},
- doi = {10.1093/comjnl/bxq024},
- acmid = {1992988},
- publisher = {Oxford University Press},
- address = {Oxford, UK},
-} 
-
-@unknown{symbAltaRica,
-author = {Bozzano, Marco and Cimatti, Alessandro and Lisagor, Oleg and Mattarei, Cristian and Mover, Sergio and Roveri, Marco and Tonetta, Stefano},
-year = {2011},
-month = {09},
-pages = {},
-title = {Symbolic Model Checking and Safety Assessment of Altarica models},
-volume = {98},
-booktitle = {Science of Computer Programming}
-}
-
-@InProceedings{10.1007/978-3-540-75596-8-13,
-author="Bozzano, Marco
-and Cimatti, Alessandro
-and Tapparo, Francesco",
-editor="Namjoshi, Kedar S.
-and Yoneda, Tomohiro
-and Higashino, Teruo
-and Okamura, Yoshio",
-title="Symbolic Fault Tree Analysis for Reactive Systems",
-booktitle="Automated Technology for Verification and Analysis",
-year="2007",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
-pages="162--176",
-abstract="Fault tree analysis is a traditional and well-established technique for analyzing system design and robustness. Its purpose is to identify sets of basic events, called cut sets, which can cause a given top level event, e.g. a system malfunction, to occur. Generating fault trees is particularly critical in the case of reactive systems, as hazards can be the result of complex interactions involving the dynamics of the system and of the faults. Recently, there has been a growing interest in model-based fault tree analysis using formal methods, and in particular symbolic model checking techniques. In this paper we present a broad range of algorithmic strategies for efficient fault tree analysis, based on binary decision diagrams (BDDS). We describe different algorithms encompassing different directions (forward or backward) for reachability analysis, using dynamic cone of influence techniques to optimize the use of the finite state machine of the system, and dynamically pruning of the frontier states. We evaluate the relative performance of the different algorithms on a set of industrial-size test cases.",
-isbn="978-3-540-75596-8"
-}
-
-@inproceedings{DBLP:conf/tacas/BittnerBCCGGMMZ16,
-  author    = {Benjamin Bittner and
-               Marco Bozzano and
-               Roberto Cavada and
-               Alessandro Cimatti and
-               Marco Gario and
-               Alberto Griggio and
-               Cristian Mattarei and
-               Andrea Micheli and
-               Gianni Zampedri},
-  title     = {{The x{SAP} Safety Analysis Platform}},
-  booktitle = {Tools and Algorithms for the Construction and Analysis of Systems
-               - 22nd International Conference, {TACAS} 2016, Held as Part of the
-               European Joint Conferences on Theory and Practice of Software, {ETAPS}
-               2016, Eindhoven, The Netherlands, April 2-8, 2016, Proceedings},
-  pages     = {533--539},
-  year      = {2016},
-  crossref  = {DBLP:conf/tacas/2016},
-  url       = {http://dx.doi.org/10.1007/978-3-662-49674-9_31},
-  doi       = {10.1007/978-3-662-49674-9_31},
-  timestamp = {Mon, 11 Apr 2016 15:34:17 +0200},
-  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/tacas/BittnerBCCGGMMZ16},
-  bibsource = {dblp computer science bibliography, http://dblp.org}
-}
-
-@InProceedings{10.1007/978-3-319-11936-6-7,
-author="Bozzano, Marco
-and Cimatti, Alessandro
-and Mattarei, Cristian
-and Tonetta, Stefano",
-editor="Cassez, Franck
-and Raskin, Jean-Fran{\c{c}}ois",
-title="Formal Safety Assessment via Contract-Based Design",
-booktitle="Automated Technology for Verification and Analysis",
-year="2014",
-publisher="Springer International Publishing",
-address="Cham",
-pages="81--97",
-abstract="Safety Assessment (SA) is an engineering discipline aiming at the analysis of systems under faults. According to industrial practice and standards, SA is based on the construction of complex artifacts such as Fault Trees, which describe how certain faults may cause some top-level events. SA is intended to mirror the hierarchical design of the system focusing on the safety aspects.",
-isbn="978-3-319-11936-6"
-}
-
-@InProceedings{propBasedProofSys,
-author = {Cimatti, Alessandro and Tonetta, Stefano},
-year = {2012},
-month = {09},
-pages = {21-28},
-title = {A Property-Based Proof System for Contract-Based Design},
-isbn = {978-1-4673-2451-9},
-booktitle = {Proceedings - 38th EUROMICRO Conference on Software Engineering and Advanced Applications, SEAA 2012}
 }
