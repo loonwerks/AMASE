@@ -8,8 +8,8 @@ with sensor;
 	system WBS
 		features
 			-- Inputs
-			mech_pedal_pos_L : in data port Base_Types::Boolean;
-			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			mechanical_pedal_pos_L : in data port Base_Types::Boolean;
+			mechanical_pedal_pos_R : in data port Base_Types::Boolean;
 			
 			power1 : in data port Base_Types::Boolean;
 			power2 : in data port Base_Types::Boolean;
@@ -47,7 +47,7 @@ with sensor;
 			wheel_status8 : out data port Base_Types::Boolean;
 			
 			green_pressure_in_selector_valve : out data port Base_Types::Integer;
-			control_sys_validity : out data port Base_Types::Boolean;
+			system_validity : out data port Base_Types::Boolean;
 	
 		annex agree {**
 			assume "(WBS) Hydraulic supply and ground speed is bounded from 0 to 10 inclusive." :
@@ -153,8 +153,8 @@ with sensor;
 			antiskid_pair4 : port ctrl_sys.as_cmd_pair_4_8 -> phys_sys.as_cmd_pair_4_8;
 			
 			-- mechanical pedal position
-			mech_pedal_position_L : port mech_pedal_pos_L -> phys_sys.mech_pedal_pos_L;
-			mech_pedal_position_R : port mech_pedal_pos_R -> phys_sys.mech_pedal_pos_R;
+			mech_pedal_position_L : port mechanical_pedal_pos_L -> phys_sys.mech_pedal_pos_L;
+			mech_pedal_position_R : port mechanical_pedal_pos_R -> phys_sys.mech_pedal_pos_R;
 			---------------------------------------------------------------------------------	
 		
 			 
@@ -172,8 +172,8 @@ with sensor;
 		
 			-- from wbs to pedal sensor 
 			-----------------------------------------------------------------------------------
-			pedal_sensor_in_L : port mech_pedal_pos_L -> pedal_sensor_L.mech_pedal_pos;
-			pedal_sensor_in_R : port mech_pedal_pos_R -> pedal_sensor_R.mech_pedal_pos;
+			pedal_sensor_in_L : port mechanical_pedal_pos_L -> pedal_sensor_L.mech_pedal_pos;
+			pedal_sensor_in_R : port mechanical_pedal_pos_R -> pedal_sensor_R.mech_pedal_pos;
 			
 			-- To get accumulator pressure display from phys_sys
 			accum_pressure_display_in: port phys_sys.accum_pressure_display_in -> accum_pressure_display;
@@ -182,7 +182,7 @@ with sensor;
 			green_pressure_in_display : port phys_sys.green_pressure_in_selec_valve -> green_pressure_in_selector_valve;
 			
 			-- Get control system validity
-			control_sys_valid : port ctrl_sys.system_validity -> control_sys_validity;
+			control_sys_valid : port ctrl_sys.system_validity -> system_validity;
 			
 			-- Get wheel_braking_force from phys_sys
 			brake_force_1 : port phys_sys.wheel_braking_force1 -> wheel_braking_force1;
@@ -206,83 +206,83 @@ with sensor;
 	
 	
 	annex agree {**
+		-- AIR6110:
+		-- Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff
 
-		--		never_inadvertent_braking_of_wheel_4_norm_guarantee := 
-		--	  (G (((((power_1 & power_2) & pump_power_1) & pump_power_2) & hydraulic_supply_1 = 10) & hydraulic_supply_2 = 10) 
-		--  ->  G !(((!mechanical_pedal_pos_R & ground_speed > 0) & wheel_braking_force_4 > 0) & wheel_status_4 = rolling));
---		
---		
---		lemma "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
---						  if and only if antiskid is commanded to the pair." :
---						  true -> (((ctrl_sys.VALID and ctrl_sys.power and ctrl_sys.SPEED) and (ctrl_sys.PAIR_NOT_ROLLING_15)) <=> ctrl_sys.as_cmd_pair_1_5);
---		
---		
 		lemma "(WBS) Inadvertent braking of wheel 1: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_L or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL))));
 		
 		lemma "(WBS) Inadvertent braking of wheel 2: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_L or (not SPEED) or (wheel_braking_force2 <= 0) or (not W2ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force2 <= 0) or (not W2ROLL))));
 					
 		lemma "(WBS) Inadvertent braking of wheel 3: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_R or (not SPEED) or (wheel_braking_force3 <= 0) or (not W3ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force3 <= 0) or (not W3ROLL))));
 					
 		lemma "(WBS) Inadvertent braking of wheel 4: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_R or (not SPEED) or (wheel_braking_force4 <= 0) or (not W4ROLL))));		
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force4 <= 0) or (not W4ROLL))));		
 		
 		lemma "(WBS) Inadvertent braking of wheel 5: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_L or (not SPEED) or (wheel_braking_force5 <= 0) or (not W5ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force5 <= 0) or (not W5ROLL))));
 					
 		lemma "(WBS) Inadvertent braking of wheel 6: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_L or (not SPEED) or (wheel_braking_force6 <= 0) or (not W6ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force6 <= 0) or (not W6ROLL))));
 					
 		lemma "(WBS) Inadvertent braking of wheel 7: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_R or (not SPEED) or (wheel_braking_force7 <= 0) or (not W7ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force7 <= 0) or (not W7ROLL))));
 					
 		lemma "(WBS) Inadvertent braking of wheel 8: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mech_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL))));
+	
 		
-		
-		
-		
---		LTLSPEC NAME asymmetrical_left_braking_norm_guarantee := (TRUE ->  G 
---		((((((brake_as_cmd_1 & (green_pressure_in_selector_valve > 0 & system_validity)) 
---		| ((mechanical_pedal_pos_L & !as_cmd_pair_1_5) & (green_pressure_in_selector_valve = 0 | !system_validity))) 
---				-> wheel_braking_force_1 > 0) 
---	  & (((brake_as_cmd_2 & (green_pressure_in_selector_valve > 0 & system_validity)) 
---		| ((mechanical_pedal_pos_L & !as_cmd_pair_2_6) & (green_pressure_in_selector_valve = 0 | !system_validity))) 
---				-> wheel_braking_force_2 > 0)) 
---	  & (((brake_as_cmd_5 & (green_pressure_in_selector_valve > 0 & system_validity)) 
---		| ((mechanical_pedal_pos_L & !as_cmd_pair_1_5) & (green_pressure_in_selector_valve = 0 | !system_validity))) 
---				-> wheel_braking_force_5 > 0)) 
---	  & (((brake_as_cmd_6 & (green_pressure_in_selector_valve > 0 & system_validity)) 
---		| ((mechanical_pedal_pos_L & !as_cmd_pair_2_6) & (green_pressure_in_selector_valve = 0 | !system_validity))) 
---			-> wheel_braking_force_6 > 0)));
+		-- AIR 6110
+		-- Asymmetrical loss of wheel braking coupled with loss of rudder or nose wheel steering 
+		-- during landing shall be less than 5E-7 per flight. 
+		lemma "(WBS) Asymmetrical left braking." :
+			(true -> ((((((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)) 
+				and (((ctrl_sys.brake_as_cmd_2 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force2 > 0))) 
+				and (((ctrl_sys.brake_as_cmd_5 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force5 > 0))) 
+				and (((ctrl_sys.brake_as_cmd_6 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force6 > 0))));
 
---		lemma "(WBS) Asymmetricacl left braking." :
---			(true -> ((((((brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and sys_validity)) or ((mech_pedal_pos_L and (not as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not sys_validity)))) => (wheel_braking_force1 > 0)) and (((brake_as_cmd_2 and ((green_pressure_in_selector_valve > 0) and sys_validity)) or ((mech_pedal_pos_L and (not as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not sys_validity)))) => (wheel_braking_force2 > 0))) and (((brake_as_cmd_5 and ((green_pressure_in_selector_valve > 0) and sys_validity)) or ((mech_pedal_pos_L and (not as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not sys_validity)))) => (wheel_braking_force5 > 0))) and (((brake_as_cmd_6 and ((green_pressure_in_selector_valve > 0) and sys_validity)) or ((mech_pedal_pos_L and (not as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not sys_validity)))) => (wheel_braking_force6 > 0))));
-
+		lemma "(WBS) Asymmetrical right braking" :
+			(true -> ((((((ctrl_sys.brake_as_cmd_3 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force3 > 0)) 
+				and (((ctrl_sys.brake_as_cmd_4 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force4 > 0))) 
+				and (((ctrl_sys.brake_as_cmd_7 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force7 > 0))) 
+				and (((ctrl_sys.brake_as_cmd_8 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force8 > 0))));
 			
+		-- AIR 6110
+		-- Loss of all wheel braking (unannunciated or annunciated) during landing or RTO shall be less than 5E-7 per flight.
+		lemma "(WBS) Never loss of all wheel braking" :
+			(true -> (not ((((((((((mechanical_pedal_pos_L and mechanical_pedal_pos_R) and (ground_speed > 0)) and (not (((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_2 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force2 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_5 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force5 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_6 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force6 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_3 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force3 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_4 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force4 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_7 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force7 > 0)))) 
+				and (not (((ctrl_sys.brake_as_cmd_8 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force8 > 0)))
+			)));
 		
 		
 	**};
    annex safety{**
 	  analyze : max 1 fault
+	  probability 5.0E-7
    **};
 end WBS.inst;
 
