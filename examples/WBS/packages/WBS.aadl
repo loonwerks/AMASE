@@ -283,7 +283,6 @@ with sensor;
 	**};
    annex safety{**
 	  analyze : max 1 fault
-	  --probability 1.3E-6;
    **};
 end WBS.inst;
 
