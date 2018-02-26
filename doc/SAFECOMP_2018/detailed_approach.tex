@@ -35,13 +35,13 @@ The \textit{fault statement} consists of a unique description string, the fault 
 \textbf{Duration} describes the duration of the fault; currently the Safety Annex supports transient and permanent faults.\\
 %\textit{Equation Statements}: Equation statements support deterministic or nondeterministic types. For more details on equation statements, see ~\cite{NFM2012:CoGaMiWhLaLu}.
 
-\subsection{Hardware Fault and Dependent Fault}
+\subsection{Hardware Failures and Dependent Fault}
 
-Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system (SYS) components that depend on them.  For example, a CPU fault may trigger faulty behavior in threads bound to that CPU.  In addition, an fault in one HW component may trigger faults in other HW components located nearby, such as a fire or water damage. 
+Failures in hardware (HW) components can trigger behavioral faults in the software (SW) or system (SYS) components that depend on them.  For example, a CPU failure may trigger faulty behavior in threads bound to that CPU.  In addition, an fault in one HW component may trigger failures in other HW components located nearby, such as cascading failure caused by a fire or water damage. 
 
-Faults propagate in AGREE as part of a system’s nominal behavior. This means that any fault propagation in the HW portion of an AADL model would have to be artificially modeled using data ports and AGREE behaviors in SW. This is less than ideal as there may not be concrete behaviors associated with HW components. In other words, faulty behaviors mainly manifest themselves on the SW/SYS components that depend on the hardware components. 
+Faults propagate in AGREE as part of a system’s nominal behavior. This means that any propagation in the HW portion of an AADL model would have to be artificially modeled using data ports and AGREE behaviors in SW. This is less than ideal as there may not be concrete behaviors associated with HW components. In other words, faulty behaviors mainly manifest themselves on the SW/SYS components that depend on the hardware components. 
 
-To better model HW dependent faults, we have introduced a new fault model element for HW components. In comparison to the basic fault statement introduced in the previous section, users are not specifying behavioral effects for the HW faults, nor data ports to apply the fault. An example of a HW fault declaration is shown below:
+To better model faults at the system level dependent on HW failures, we have introduced a new fault model element for HW components. In comparison to the basic fault statement introduced in the previous section, users are not specifying behavioral effects for the HW failures, nor data ports to apply the failure. An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
 		\vspace{-0.2in}
 	\begin{center}
