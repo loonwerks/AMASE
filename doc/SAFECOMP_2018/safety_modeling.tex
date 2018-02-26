@@ -1,0 +1,84 @@
+\section{Shared System and Safety Modeling}
+\label{sec:safety_modeling}
+
+In this section, we describe how different features of the Safety Annex can be used to describe the qualitative and quantitative causal relationship between faults and system safety requirements, and to perform safety analysis on a shared system and safety model.
+
+\subsection{Mapping to Safety Concepts}
+The following list describes how the basic safety concepts can be represented using the Safety Annex.
+
+\begin{enumerate}
+	\item \textbf{Error} Definition and how we model it
+	\item \textbf{Fault} Definition and how we model it
+	\item \textbf{Failure} Definition and how we model it. Non deterministic faults
+	\item \textbf{Failure Mode} 
+\end{enumerate}
+
+
+
+\begin{comment}
+Errors/Faults/Failures - to a safety engineer, these terms have very specific meanings.  You will see my specific comments on this topic where I located them by your Section 3.3.  If needed, we can talk about this comment after I send you my mark-ups.
+In Section 3.1, you introduce the term "non-deterministic".  I am not sure how your new process can be used by the safety engineering discipline unless things are "deterministic" and therefore "repeatable".
+\end{comment}
+
+\subsection{Interacting with System Design}
+
+\begin{comment}
+This paper should define how your team of authors see the interaction between "functions" and "system".  
+Here is how I see the interaction / relationship:
+(a) Aircraft Functions are the highest level
+(b) Aircraft Functions are comprised of one or more System
+(c) Each System performs one or more System Function
+(d) Each System is comprised of one or more LRUs (a.k.a. "items")
+\end{comment}
+
+\subsection{Generating Safety Analysis Artifacts}
+
+
+
+\begin{comment}
+%check Figure 7 of ARP-4754A for step by step process of the traditional approach
+%How our approach can help: step by step process; inputs and outputs
+%Drawback/inefficiencies with the current safety assessment
+%The causal effect in the fault tree is manually come up by safety engineers after understanding the signal and function flow in the system/sw design documents for the related functionality.
+%The logical causal relationship is represented in a descriptive fault tree structure.
+%It works well when the signals are processed in a sequential/linear fashion, but not when there are interactions/feedback loops that make the causal effect no longer linear?
+
+%case study
+%AIR6110, Rockwell white paper
+"working on safety analysis process. Strategy:
+1. Check the example Mike Peterson did with stall warning
+2. Come up with model in our end
+3. See if we can catch anything missed by the fault tree, or help supply the fault tree analysis"
+start process investigation by:
+1. select the example from stall warning where mike has produced a fault tree from the document
+2. independently model from the stall warning doc and try to:
+get information from the fault tree that can build the structure of the fault tree
+get information from the verification that can help trim/update the probability numbers of the fault tree
+3. Compare the fault tree produced by Mike and the information supplied by our study, and see if we provide values to this study
+Repeat this for an example fault tree from the white paper Mike sent
+
+Process investigation
+How should our model interact with the fault tree that Mike come up with? Any place we can work to create the tree for him? Or provide additional scenarios? Or validate the probabilities for his tree? Or SW/HW/Sys interactions that our approach captures that is hard to capture/verify using his approach?
+How does the behavioral/interaction part of the document be modeled in the fault tree and in our model?
+What findings from the safety process is driving the model/design updates, such as redundancy?
+Would the AMASE modeling and analysis approach justify to make a conservative fault tree less conservative?
+How the process steps are different from the process steps for ARP4761A MBSA?
+
+With our process, do we have to use our tool/approach? Or other tools/approaches like xSAP could also work? What's the uniqueness of using our tool in this process? What's the benefit of this process in comparison to the current/traditional safety process?
+
+"Documents to read:
+- the white paper by Mike Peterson's group
+- ARP4761A model based development supplement
+- AIR 6110
+- ARP4761
+- ARP4754"
+According to ARP4761A MBSA supplement draft, the MBSA model is called the Failure Propagation Model (FPM).
+ARP4761A MBSA supplement identified some limitation of MBSA, including "it may be difficult to represent complicated Failed Conditions".
+Check the simple example (Section 6) in ARP4761A MBSA
+
+Answer from process point of view: why is our approach better than what's out there? What problem are we trying to solve?
+Are we doing FPM (Failure Propagation Model) per ARP4761 MBSA?
+MBSA section 6.2 shows a complex MBSA example
+
+Give a detailed description of how fault tree is related to the AMASE nominal and faulty model, and the results from the AMASE verificaiton is relayed/fed bak to the fault tree
+\end{comment}
