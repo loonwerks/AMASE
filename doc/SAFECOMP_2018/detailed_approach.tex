@@ -1,4 +1,4 @@
-\section{Detailed Approach}
+\section{The Safety Annex}
 \label{sec:detailed_approach}
 
 In this section, we describe the main features and functionality of the Safety Annex.
@@ -35,13 +35,13 @@ The \textit{fault statement} consists of a unique description string, the fault 
 \textbf{Duration} describes the duration of the fault; currently the Safety Annex supports transient and permanent faults.\\
 %\textit{Equation Statements}: Equation statements support deterministic or nondeterministic types. For more details on equation statements, see ~\cite{NFM2012:CoGaMiWhLaLu}.
 
-\subsection{Hardware Fault and Dependent Fault}
+\subsection{Hardware Failures and Dependent Fault}
 
-Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system (SYS) components that depend on them.  For example, a CPU fault may trigger faulty behavior in threads bound to that CPU.  In addition, an fault in one HW component may trigger faults in other HW components located nearby, such as a fire or water damage. 
+Failures in hardware (HW) components can trigger behavioral faults in the software (SW) or system (SYS) components that depend on them.  For example, a CPU failure may trigger faulty behavior in threads bound to that CPU.  In addition, an fault in one HW component may trigger failures in other HW components located nearby, such as cascading failure caused by a fire or water damage. 
 
-Faults propagate in AGREE as part of a system’s nominal behavior. This means that any fault propagation in the HW portion of an AADL model would have to be artificially modeled using data ports and AGREE behaviors in SW. This is less than ideal as there may not be concrete behaviors associated with HW components. In other words, faulty behaviors mainly manifest themselves on the SW/SYS components that depend on the hardware components. 
+Faults propagate in AGREE as part of a system’s nominal behavior. This means that any propagation in the HW portion of an AADL model would have to be artificially modeled using data ports and AGREE behaviors in SW. This is less than ideal as there may not be concrete behaviors associated with HW components. In other words, faulty behaviors mainly manifest themselves on the SW/SYS components that depend on the hardware components. 
 
-To better model HW dependent faults, we have introduced a new fault model element for HW components. In comparison to the basic fault statement introduced in the previous section, users are not specifying behavioral effects for the HW faults, nor data ports to apply the fault. An example of a HW fault declaration is shown below:
+To better model faults at the system level dependent on HW failures, we have introduced a new fault model element for HW components. In comparison to the basic fault statement introduced in the previous section, users are not specifying behavioral effects for the HW failures, nor data ports to apply the failure. An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
 		\vspace{-0.2in}
 	\begin{center}
@@ -89,3 +89,70 @@ An annotation in the AADL model determines the fault hypothesis.  This may speci
 With the introduction of dependent faults, active faults are divided into two categories: independently active (activated by its own triggering event) and dependently active (activated when the faults they depend on become active). Top level fault hypothesis applies to independently active faults. Faulty behaviors augment nominal behaviors whenever their corresponding faults are active (either independently active or dependently active).
 
 Once augmented with fault information, the AGREE model follows the standard AGREE translation path to the model checker JKind~\cite{2017arXiv171201222G}, an infinite-state model checker for safety properties.  The augmentation includes traceability information so that when counterexamples are displayed to users, the active faults for each component are visualized.
+
+
+\subsection{Mapping to Safety Analysis Artifacts}
+
+\begin{comment}
+The following list describes how the basic safety concepts can be represented using the Safety Annex.
+
+\begin{enumerate}
+\item \textbf{Error} Definition and how we model it
+\item \textbf{Fault} Definition and how we model it
+\item \textbf{Failure} Definition and how we model it. Non deterministic faults
+\item \textbf{Failure Mode} 
+\end{enumerate}
+
+
+Errors/Faults/Failures - to a safety engineer, these terms have very specific meanings.  You will see my specific comments on this topic where I located them by your Section 3.3.  If needed, we can talk about this comment after I send you my mark-ups.
+In Section 3.1, you introduce the term "non-deterministic".  I am not sure how your new process can be used by the safety engineering discipline unless things are "deterministic" and therefore "repeatable".
+\end{comment}
+
+\begin{comment}
+A prerequisite of performing the safety assessment of a system design is to understand how the system works, primarily focusing on the integrity of the outputs and the availability of the product. The safety engineers then use the acquired understanding to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety related requirements.
+%check Figure 7 of ARP-4754A for step by step process of the traditional approach
+%How our approach can help: step by step process; inputs and outputs
+%Drawback/inefficiencies with the current safety assessment
+%The causal effect in the fault tree is manually come up by safety engineers after understanding the signal and function flow in the system/sw design documents for the related functionality.
+%The logical causal relationship is represented in a descriptive fault tree structure.
+%It works well when the signals are processed in a sequential/linear fashion, but not when there are interactions/feedback loops that make the causal effect no longer linear?
+
+%case study
+%AIR6110, Rockwell white paper
+"working on safety analysis process. Strategy:
+1. Check the example Mike Peterson did with stall warning
+2. Come up with model in our end
+3. See if we can catch anything missed by the fault tree, or help supply the fault tree analysis"
+start process investigation by:
+1. select the example from stall warning where mike has produced a fault tree from the document
+2. independently model from the stall warning doc and try to:
+get information from the fault tree that can build the structure of the fault tree
+get information from the verification that can help trim/update the probability numbers of the fault tree
+3. Compare the fault tree produced by Mike and the information supplied by our study, and see if we provide values to this study
+Repeat this for an example fault tree from the white paper Mike sent
+
+Process investigation
+How should our model interact with the fault tree that Mike come up with? Any place we can work to create the tree for him? Or provide additional scenarios? Or validate the probabilities for his tree? Or SW/HW/Sys interactions that our approach captures that is hard to capture/verify using his approach?
+How does the behavioral/interaction part of the document be modeled in the fault tree and in our model?
+What findings from the safety process is driving the model/design updates, such as redundancy?
+Would the AMASE modeling and analysis approach justify to make a conservative fault tree less conservative?
+How the process steps are different from the process steps for ARP4761A MBSA?
+
+With our process, do we have to use our tool/approach? Or other tools/approaches like xSAP could also work? What's the uniqueness of using our tool in this process? What's the benefit of this process in comparison to the current/traditional safety process?
+
+"Documents to read:
+- the white paper by Mike Peterson's group
+- ARP4761A model based development supplement
+- AIR 6110
+- ARP4761
+- ARP4754"
+According to ARP4761A MBSA supplement draft, the MBSA model is called the Failure Propagation Model (FPM).
+ARP4761A MBSA supplement identified some limitation of MBSA, including "it may be difficult to represent complicated Failed Conditions".
+Check the simple example (Section 6) in ARP4761A MBSA
+
+Answer from process point of view: why is our approach better than what's out there? What problem are we trying to solve?
+Are we doing FPM (Failure Propagation Model) per ARP4761 MBSA?
+MBSA section 6.2 shows a complex MBSA example
+
+Give a detailed description of how fault tree is related to the AMASE nominal and faulty model, and the results from the AMASE verificaiton is relayed/fed bak to the fault tree
+\end{comment}
