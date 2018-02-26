@@ -30,18 +30,18 @@ with Base_Types;
 		-- Should there also be a fault associated with the pressure display? I don't think
 		-- this value has any bearing on the system behavior, so it may not matter.
 		annex safety {**
-			fault stuck_no_pressure_fault "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
+			fault Accumulator_FailedNoPressure "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
 				inputs: val_in <- reserve_out, alt_val <- 0; 
 				outputs: reserve_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 5.0E-5 ;
 				duration: permanent;
 			}
 			
-			fault stuck_open_fault "(Accumulator) Stuck open fault." : faults.fail_to {
+			fault Accumulator_FailedOpen "(Accumulator) Stuck open fault." : faults.fail_to {
 				eq nondet_value : int;
 				inputs: val_in <- reserve_out, alt_val <- nondet_value; 
 				outputs: reserve_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 5.0E-5 ;
 				duration: permanent;
 			}
 		**};

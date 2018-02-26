@@ -31,31 +31,31 @@ with Base_Types;
 				eq rangeval : int;	
 		**};
 		annex safety {**
-			fault stuck_open_fault "(MeterValve) Stuck open fault.": faults.fail_to {
+			fault MeterValve_FailedOpen "(MeterValve) Stuck open fault.": faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
 				outputs: hyd_pressure_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			
-			fault stuck_closed_fault "(MeterValve) Stuck closed fault." : faults.fail_to {
+			fault MeterValve_FailedClosed "(MeterValve) Stuck closed fault." : faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
 				outputs: hyd_pressure_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			
-			fault stuck_last_position_fault "(MeterValve) Stuck at last position fault." : faults.fail_to {
+			fault MeterValve_FailedLastPosition "(MeterValve) Stuck at last position fault." : faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
 				outputs: hyd_pressure_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			
-			fault stuck_nondeterministic_fault "(MeterValve) Stuck at nondeterministic fault." : faults.fail_to {
+			fault MeterValve_FailedRandomPosition "(MeterValve) Stuck at nondeterministic fault." : faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
 				outputs: hyd_pressure_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			

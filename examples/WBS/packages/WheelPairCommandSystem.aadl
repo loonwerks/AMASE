@@ -112,10 +112,10 @@ with Base_Types;
 			
 		**};
 		annex safety {**
-			fault inverted_boolean_fault "(AlternateCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
+			fault AlternateCommandCalculator_ErroneousData "(AlternateCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- as_cmd_out; 
 				outputs: as_cmd_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 9.0E-6 ;
 				duration: permanent;
 			}
 			
@@ -147,10 +147,10 @@ with Base_Types;
 		**};
 		
 		annex safety {**
-			fault inverted_boolean_fault "(NormalCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
+			fault NormalCommandCalculator_ErroneousData "(NormalCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- brake_as_cmd; 
 				outputs: brake_as_cmd <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 9.0E-6 ;
 				duration: permanent;
 			}
 			
@@ -182,10 +182,10 @@ with Base_Types;
 		**};
 		
 		annex safety {**
-			fault inverted_boolean_fault "(AntiskidCommandFacility) Inverted boolean fault." : faults.inverted_fail {
+			fault AntiskidCommandFacility_ErroneousData "(AntiskidCommandFacility) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- as_cmd; 
 				outputs: as_cmd <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 9.0E-6 ;
 				duration: permanent;
 			}
 			
@@ -217,10 +217,10 @@ with Base_Types;
 		**}	;
 		
 		annex safety {**
-			fault inverted_boolean_fault "(BrakeCommandFacility) Inverted boolean fault." : faults.inverted_fail {
+			fault BrakeCommandFacility_ErroneousData "(BrakeCommandFacility) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- brake_cmd; 
 				outputs: brake_cmd <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 9.0E-6 ;
 				duration: permanent;
 			}
 			

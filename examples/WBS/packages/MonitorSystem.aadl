@@ -125,7 +125,7 @@ with Base_Types;
 		**}	;
 		
 		annex safety {**
-			fault stuck_closed_fault "(SensorPedalPosition) Inverted boolean fault: sys validity incorrect." : faults.inverted_fail {
+			fault MonitorSystem_ErroneousData "(MonitorSystem) Inverted boolean fault: sys validity incorrect." : faults.inverted_fail {
 				inputs: val_in <- bscu_validity; 
 				outputs: bscu_validity <- val_out;    
         		probability: 8.0E-7 ;

@@ -20,16 +20,16 @@ with Base_Types;
 		**};
 			
 		annex safety {**
-			fault inverted_boolean_fault "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
+			fault SensorPedalPosition_ErroneousData "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- elec_pedal_pos; 
 				outputs: elec_pedal_pos <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 5.0E-6 ;
 				duration: permanent;
 			}
-			fault no_data_fault "(SensorPedalPosition) No Data fault." : faults.no_data_fail {
+			fault SensorPedalPosition_NoData "(SensorPedalPosition) No Data fault." : faults.no_data_fail {
 				inputs: val_in <- elec_pedal_pos; 
 				outputs: elec_pedal_pos <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 5.0E-6 ;
 				duration: permanent;
 			}
 		**};
@@ -62,16 +62,16 @@ with Base_Types;
 				
 				-- No data, erroneous data
 				-- Erroneous data I will model as inverted boolean... not sure about no data...
-			fault inverted_boolean_fault "(Sensor) Inverted boolean (Erroneous data) fault." : faults.inverted_fail {
+			fault Sensor_ErroneousData "(Sensor) Inverted boolean (Erroneous data) fault." : faults.inverted_fail {
 				inputs: val_in <- wheel_rolling; 
 				outputs: wheel_rolling <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 5.0E-6 ;
 				duration: permanent;
 			}
-			fault no_data_fault "(Sensor) No Data fault." : faults.no_data_fail {
+			fault Sensor_NoData "(Sensor) No Data fault." : faults.no_data_fail {
 				inputs: val_in <- wheel_rolling; 
 				outputs: wheel_rolling <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 5.0E-6 ;
 				duration: permanent;
 			}
 		**};

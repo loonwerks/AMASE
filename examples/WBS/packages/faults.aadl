@@ -16,6 +16,11 @@ annex agree {**
 	let
 		val_out = if trigger then (val_in) else not(val_in);
 	tel;
+	
+	node fail_to_bool(val_in: bool, alt_val: bool, trigger: bool) returns (val_out: bool); 
+	let
+	   val_out = if (trigger) then alt_val else val_in;
+	tel;
 
 **};	
 	
