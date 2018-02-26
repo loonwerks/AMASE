@@ -9,9 +9,12 @@ The Assume Guarantee Reasoning
 Environment (AGREE)~\cite{NFM2012:CoGaMiWhLaLu} implements as an AADL annex and annotates AADL components with formal behavioral contracts. Each component's contracts can include assumptions and guarantees about the component's inputs and outputs respectively, as well as predicates on how the state of the component can evolve over time.
 
 AGREE translates an AADL model and the behavioral contracts into Lustre~\cite{Halbwachs91:IEEE} and then query a user-selected
-model checker to conduct the back-end verification. The verification is performed compositionally along the architecture hierarchy such that verification at a higher level is only using the components and their behavioral contracts from its immediate lower level. This allows the verification to scale for the design of large and complex systems. 
+model checker to conduct the back-end analysis. The analysis is performed compositionally along the architecture hierarchy such that analysis at a higher level is only using the components and their behavioral contracts from its immediate lower level. This allows the analysis to scale for the design of large and complex systems. 
+
+In the avionics context, a physical system (e.g., a Line-Replaceable Unit) is represented by an AADL component, and the functions the physical system performs (e.g., input signal processing system function) is represented by the logical model elements in AADL (e.g., input and output data ports and the connections between the data ports) and the behavioral contracts in AGREE (e.g., assumptions on the inputs value range, constraints on the output value range, how outputs are calculated from inputs). Functions and systems and their interactions are all captured in the same AADL/AGREE model.
 
 \begin{comment}
+Comment from Mike Peterson:
 This paper should define how your team of authors see the interaction between "functions" and "system".  
 Here is how I see the interaction / relationship:
 (a) Aircraft Functions are the highest level
