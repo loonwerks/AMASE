@@ -43,10 +43,24 @@ During compositional analysis of the model, details of the system behavior contr
 Once the behavioral contracts were specified, both monolithic and compositional verification were run on the WBS model. There is a maximum layer depth of 6 for compositional verification and the time of verification was between 0 and 4 seconds. Monolithic verification was run on the top level of the system which took 24 seconds. 
 
 \subsubsection{Fault Analysis of WBS using Safety Annex}
-After the verification was completed, we defined faults equivalent to those described in the xSAP model for the NuSMV WBS system in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A total of 33 fault definitions were given to 18 different components and the top level compositional verification was run with one permanant fault introduced into the system. 
+After the verification was completed, we defined faults equivalent to those described in the xSAP model for the NuSMV WBS system in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A description of modelling metrics can be found in Figure~\ref{fig:metrics}.
 
-Compositional analysis on the top level WBS system was run with maximum one permanant fault present in the system. This caused the top level property \textit{ Inadvertant braking at the wheel} to fail. This was caused by a fault on the pedal position sensor. This sensor determines if the mechanical brakes are pressed. If so, it sends an electrical command to the BSCU to command braking. The fault was an inverted boolean fault which inverted the mechanical pedal value (false) and created a true electrical pedal value. Thus, we have a situation where no  braking is commanded mechanically, but braking is commanded electronically nonetheless.
+\begin{figure}[h!]
+	\vspace{-0.17in}
+	\begin{center}
+		%\includegraphics[trim=0 330 150 0,clip,width=1.0\textwidth]{images/pump_fault.png}
+		\includegraphics[trim=0 400 0 90,clip,width=1.0\textwidth]{images/arch_table.pdf}
+		\caption{Modeling, Verification, and Fault Analysis Metrics}
+ 		\label{fig:metrics}
+	\end{center}
+	\vspace{-0.40in}
+\end{figure}
 
+Compositional analysis on the top level WBS system was run with maximum one permanant fault present in the system. This caused the top level property \textit{ Inadvertant braking at the wheel} to fail. This was caused by a fault on the pedal position sensor. This sensor determines if the mechanical brakes are pressed. If so, it sends an electrical command to the BSCU to command braking. The fault was an inverted boolean fault which inverted the mechanical pedal value (false) and created a true electrical pedal value. Thus, we have a situation where no  braking is commanded mechanically, but braking is commanded electronically nonetheless. This corresponds to the safety requirement \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff} as stated in AIR6110. According to AIR6110, no single failure should result in this condition. 
+
+Using only probabilistic analysis, this sensor fault has probability of $5.0e-6$ which means that the safety requirement holds. Using maximum one fault, the inadvertant braking safety requirements do not hold.
+
+By performing this fault analysis, it became clear that the design of the system requires redundant sensors in order to prevent this single fault from violating the safety requirement. Furthermore, the analysis provides a clear counterexample to the invalid top level properties. This makes it possible to trace the actual failure propogation and determine weak points in the system. 
 
 
 \subsection{Quad-Redundant Flight Control System}
