@@ -38,8 +38,6 @@ The ARCH4 NuSMV model is annotated with LTL formulae for each of the subcomponen
 
 During compositional analysis of the model, details of the system behavior contracts needed further clarification. For instance, the control system of the WBS consists of a BSCU which has two channels for redundancy. All of the electrical components calculate system validity, electronic pedal commands, and braking commands to the wheels. The contracts specified in the BSCU and all subcomponents do take into account whether power is supplied to the control system. The higher level component Control System does not require power to be supplied in order to have correct behavior. In the AGREE behavioral model specifications, this needed to be added in order to complete compositional verification. 
 
-\danielle{ I think we should sum up the number of subcomponents, depth of the model in terms of layers, show time of verification for each of the compositional layers, number of fault nodes defined in total, and time it takes for fault analysis verificatiion. I will create a little table that shows some of these values. Does anyone know if there is a way to easily count the subcomponents without manually counting? An option in aadl perhaps...?}
-
 Once the behavioral contracts were specified, both monolithic and compositional verification were run on the WBS model. There is a maximum layer depth of 6 for compositional verification and the time of verification was between 0 and 4 seconds. Monolithic verification was run on the top level of the system which took 24 seconds. 
 
 \subsubsection{Fault Analysis of WBS using Safety Annex}
@@ -49,22 +47,22 @@ After the verification was completed, we defined faults equivalent to those desc
 	\vspace{-0.17in}
 	\begin{center}
 		%\includegraphics[trim=0 330 150 0,clip,width=1.0\textwidth]{images/pump_fault.png}
-		\includegraphics[trim=0 400 0 90,clip,width=1.0\textwidth]{images/arch_table.pdf}
+		\includegraphics[trim=0 435 0 90,clip,width=1.0\textwidth]{images/arch_table.pdf}
 		\caption{Modeling, Verification, and Fault Analysis Metrics}
  		\label{fig:metrics}
 	\end{center}
 	\vspace{-0.40in}
 \end{figure}
 
-Compositional analysis on the top level WBS system was run with maximum one permanant fault present in the system. This caused the top level property \textit{ Inadvertant braking at the wheel} to fail. This was caused by a fault on the pedal position sensor. This sensor determines if the mechanical brakes are pressed. If so, it sends an electrical command to the BSCU to command braking. The fault was an inverted boolean fault which inverted the mechanical pedal value (false) and created a true electrical pedal value. Thus, we have a situation where no  braking is commanded mechanically, but braking is commanded electronically nonetheless. This corresponds to the safety requirement \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff} as stated in AIR6110. According to AIR6110, no single failure should result in this condition. 
+Compositional analysis on the top level WBS system was run with maximum one permanant fault present in the system. This caused the top level property \textit{Inadvertant braking at the wheel} to fail. This was caused by a fault on the pedal position sensor. This sensor determines if the mechanical brakes are pressed. If so, it sends an electrical command to the BSCU to command braking. The fault was an inverted boolean fault which inverted the mechanical pedal value (false) and created a true electrical pedal value. Thus, we have a situation where no  braking is commanded mechanically, but braking is commanded electronically nonetheless. This corresponds to the safety requirement \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff} as stated in AIR6110. According to AIR6110, no single failure should result in this condition (see Figure 21 of AIR 6110~\cite{AIR6110}). 
 
 Using only probabilistic analysis, this sensor fault has probability of $5.0e-6$ which means that the safety requirement holds. Using maximum one fault, the inadvertant braking safety requirements do not hold.
 
-By performing this fault analysis, it became clear that the design of the system requires redundant sensors in order to prevent this single fault from violating the safety requirement. Furthermore, the analysis provides a clear counterexample to the invalid top level properties. This makes it possible to trace the actual failure propogation and determine weak points in the system. 
+By performing this fault analysis, it became clear that the design of the system requires redundant sensors in order to prevent this single fault from violating the safety requirement. Redundancy in the BSCU is not sufficient to prevent this catastrophic failure since the electrical pedal position is supplied to the BSCU channels as input (see Figure 28 in AIR6110). Furthermore, the analysis provides a clear counterexample to the invalid top level properties. This makes it possible to trace the actual failure propogation and determine weak points in the system. 
 
 
 \subsection{Quad-Redundant Flight Control System}
-In order to discuss Byzantine faults and Hardware dependencies, we applied the Safety Annex to the Quad-Redundant Flight Control System (QFCS) model~\cite{QFCS15:backes}. Faulty behaviors were introduced in order to see the response of the system to several faults, and to evaluate fault mitigation logic in the model.  The QFCS system-level properties failed when unhandled faulty behaviors were introduced.
+In order to discuss Byzantine faults and hardware errors with their propogations, we applied the Safety Annex to the Quad-Redundant Flight Control System (QFCS) model~\cite{QFCS15:backes}. Faulty behaviors were introduced in order to see the response of the system to several faults, and to evaluate fault mitigation logic in the model.  The QFCS system-level properties failed when unhandled faulty behaviors were introduced.
 
 We also used the Safety Annex to explore more complicated faults at the system level on a simplified QFCS model with cross-channel communication between its Flight Control Computers.
 
