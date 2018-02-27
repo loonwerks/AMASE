@@ -45,8 +45,6 @@ Once the behavioral contracts were specified, both monolithic and compositional 
 \subsubsection{Fault Analysis of WBS using Safety Annex}
 After the verification was completed, we defined faults equivalent to those described in the xSAP model for the NuSMV WBS system in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A description of modelling metrics can be found in Figure~\ref{fig:metrics}.
 
-Compositional analysis on the top level WBS system was run with maximum one permanant fault present in the system. This caused the top level property \textit{ Inadvertant braking at the wheel} to fail. This was caused by a fault on the pedal position sensor. This sensor determines if the mechanical brakes are pressed. If so, it sends an electrical command to the BSCU to command braking. The fault was an inverted boolean fault which inverted the mechanical pedal value (false) and created a true electrical pedal value. Thus, we have a situation where no  braking is commanded mechanically, but braking is commanded electronically nonetheless.
-
 \begin{figure}[h!]
 	\vspace{-0.17in}
 	\begin{center}
@@ -57,6 +55,12 @@ Compositional analysis on the top level WBS system was run with maximum one perm
 	\end{center}
 	\vspace{-0.40in}
 \end{figure}
+
+Compositional analysis on the top level WBS system was run with maximum one permanant fault present in the system. This caused the top level property \textit{ Inadvertant braking at the wheel} to fail. This was caused by a fault on the pedal position sensor. This sensor determines if the mechanical brakes are pressed. If so, it sends an electrical command to the BSCU to command braking. The fault was an inverted boolean fault which inverted the mechanical pedal value (false) and created a true electrical pedal value. Thus, we have a situation where no  braking is commanded mechanically, but braking is commanded electronically nonetheless. This corresponds to the safety requirement \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff} as stated in AIR6110. According to AIR6110, no single failure should result in this condition. 
+
+Using only probabilistic analysis, this sensor fault has probability of $5.0e-6$ which means that the safety requirement holds. Using maximum one fault, the inadvertant braking safety requirements do not hold.
+
+By performing this fault analysis, it became clear that the design of the system requires redundant sensors in order to prevent this single fault from violating the safety requirement. Furthermore, the analysis provides a clear counterexample to the invalid top level properties. This makes it possible to trace the actual failure propogation and determine weak points in the system. 
 
 
 \subsection{Quad-Redundant Flight Control System}
