@@ -71,17 +71,17 @@ with Base_Types;
 		
 		
 		annex safety {**
-			fault stuck_last_position_fault "(SelectorValve) Stuck at last position (blue line) fault." : faults.fail_to {
+			fault SelectorValve_FailedLastPosition "(SelectorValve) Stuck at last position (blue line) fault." : faults.fail_to {
 				inputs: val_in <- blue_select_out, alt_val <- pre(blue_select_out); 
 				outputs: blue_select_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 1.0E-5 ;
 				duration: permanent;
 			}
 			
-			fault stuck_last_position_fault "(SelectorValve) Stuck at last position (green line) fault." : faults.fail_to {
+			fault SelectorValve_FailedLastPosition "(SelectorValve) Stuck at last position (green line) fault." : faults.fail_to {
 				inputs: val_in <- green_select_out, alt_val <- pre(green_select_out); 
 				outputs: green_select_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 1.0E-5 ;
 				duration: permanent;
 			}
 		**};

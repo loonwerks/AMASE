@@ -30,12 +30,11 @@ with Base_Types;
 		
 		
 		-- Fault defined as "Fail off" 
-		-- Since power is an input, I am modeling this as a fail to zero value.
 		annex safety {**
-			fault stuck_closed_fault "(HydraulicPump) Stuck closed fault." : faults.fail_to {
+			fault HydPump_FailedOff "(HydraulicPump) Stuck off fault." : faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
 				outputs: hyd_pressure_out <- val_out;    
-        		--probability: 1.0E-5 ;
+        		probability: 3.0E-5 ;
 				duration: permanent;
 			}
 			

@@ -18,7 +18,7 @@ with ShutoffValve;
 			hyd_supply1 : in data port Base_Types::Integer;
 			hyd_supply2 : in data port Base_Types::Integer;
 			
-			pump_power1 : in data port Base_Types::Boolean;
+			pump_power1 : in data port Base_Types::Boolean; 
 			pump_power2 : in data port Base_Types::Boolean;
 			
 			system_validity : in data port Base_Types::Boolean;

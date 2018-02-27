@@ -9,16 +9,9 @@ The Assume Guarantee Reasoning
 Environment (AGREE)~\cite{NFM2012:CoGaMiWhLaLu} implements as an AADL annex and annotates AADL components with formal behavioral contracts. Each component's contracts can include assumptions and guarantees about the component's inputs and outputs respectively, as well as predicates on how the state of the component can evolve over time.
 
 AGREE translates an AADL model and the behavioral contracts into Lustre~\cite{Halbwachs91:IEEE} and then query a user-selected
-model checker to conduct the back-end verification. The verification is performed compositionally along the architecture hierarchy such that verification at a higher level is only using the components and their behavioral contracts from its immediate lower level. This allows the verification to scale for the design of large and complex systems. 
+model checker to conduct the back-end analysis. The analysis is performed compositionally along the architecture hierarchy such that analysis at a higher level is only using the components and their behavioral contracts from its immediate lower level. This allows the analysis to scale for the design of large and complex systems. 
 
-\begin{comment}
-This paper should define how your team of authors see the interaction between "functions" and "system".  
-Here is how I see the interaction / relationship:
-(a) Aircraft Functions are the highest level
-(b) Aircraft Functions are comprised of one or more System
-(c) Each System performs one or more System Function
-(d) Each System is comprised of one or more LRUs (a.k.a. "items")
-\end{comment}
+In the avionics context, the software functions/applications, the hardware equipments, and the system that is composed of their integrations can all be represented as components connected to/composed of/bind to other components in a hierarchical AADL model. AGREE contracts can be used to capture the functional requirements at each level of the hierarchy. Once the model has been reviewed and the requirements captured have been validated, the back-end analysis can be conducted to verify if each level of the model implements its higher level requirements correctly.
 
 AADL with the AGREE extension serves as a good candidate as the modeling language for describing the system design aspects of a shared system design and safety analysis model. Our prior work~\cite{Stewart17:IMBSA} adds the initial failure effect modeling capability to this language and tool set. However, the following goals are yet to be achieved before the combined language and tool set can be used to satisfy system safety objectives of ARP4754A~\cite{SAE:ARP4754A} and ARP4761~\cite{SAE:ARP4761}:
 
