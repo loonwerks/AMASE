@@ -10,7 +10,7 @@ An AADL model of the nominal system behavior specifies the hardware and software
 Once the nominal model behavior is defined and verified, the Safety Annex can be used to specify possible faulty behaviors for each component. The faults are defined on each of the relevant components using a customizable library of fault nodes and the faults are assigned a probability of occurrence. A probability threshold is also defined at the system level. This extended model can be analyzed to verify the behavior of the system in the presence of faults. Verification of the nominal model with or without the fault model is controlled through the safety analysis option during AGREE verification.
 
 To illustrate the syntax of the Safety Annex, we use an example based on the Wheel Brake System (WBS) described in ~\cite{AIR6110} and used in our previous work ~\cite{Stewart17:IMBSA}.
-The fault library contains commonly used fault node definitions. An example of a fault node is shown below: \janet{rename ``non-deterministic fault'' to ``pressure-output fail to close fault'' in the text and in the figure so don't associate ``non-deterministic'' with fault? Also, the way we define the faulty behaviors, sounds like they are failure modes/failures?}
+The fault library contains commonly used fault node definitions. An example of a fault node is shown below: 
 \begin{figure}[h!]
 	\vspace{-0.19in}
 	\begin{center}
