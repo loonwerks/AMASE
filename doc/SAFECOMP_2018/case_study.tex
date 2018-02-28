@@ -33,13 +33,6 @@ In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit.
 
 The last mode of operation of the WBS is the \textit{emergency} mode. This is supported by the blue circut but operates if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode. 
 
-\subsubsection{WBS translation from NuSMV to AADL/AGREE}
-The ARCH4 NuSMV model is annotated with LTL formulae for each of the subcomponent behavioral contracts. To assist in the process of translation from LTL into AGREE, a translation tool was developed. \danielle{ Not sure how we want to cite this or if we should even include it here....}
-
-During compositional analysis of the model, details of the system behavior contracts needed further clarification. For instance, the control system of the WBS consists of a BSCU which has two channels for redundancy. All of the electrical components calculate system validity, electronic pedal commands, and braking commands to the wheels. The contracts specified in the BSCU and all subcomponents do take into account whether power is supplied to the control system. The higher level component Control System does not require power to be supplied in order to have correct behavior. In the AGREE behavioral model specifications, this needed to be added in order to complete compositional verification. 
-
-Once the behavioral contracts were specified, both monolithic and compositional verification were run on the WBS model. There is a maximum layer depth of 6 for compositional verification and the time of verification was between 0 and 4 seconds. Monolithic verification was run on the top level of the system which took 24 seconds. 
-
 \subsubsection{Fault Analysis of WBS using Safety Annex}
 After the verification was completed, we defined faults equivalent to those described in the xSAP model for the NuSMV WBS system in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A description of modelling metrics can be found in Figure~\ref{fig:metrics}.
 
