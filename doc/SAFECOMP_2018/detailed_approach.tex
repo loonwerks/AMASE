@@ -51,7 +51,7 @@ To better model faults at the system level dependent on HW failures, we have int
 	\vspace{-0.4in}
 \end{figure}
 
-In addition, users specify fault dependencies/propagations outside of fault statements and inside safety annex, typically in the system implementation where the system configuration that causes the dependencies (e.g., binding between SW and HW components, co-location of HW components) becomes clear. This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. Having fault propagations specified outside of a component’s fault statements also makes it easier to reuse the component in different systems. An example of a fault dependency specification is shown below:
+In addition, users specify fault dependencies/propagations outside of fault statements and inside safety annex, typically in the system implementation where the system configuration that causes the dependencies (e.g., binding between SW and HW components, co-location of HW components) becomes clear. This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. Having fault propagations specified outside of a component’s fault statements also makes it easier to reuse the component in different systems. An example of a fault dependency specification is shown below, \janet{showing that the valve{\_}failed fault at the shutoff subcomponent triggers the pressure{\_}fail{\_}blue fault at the selector subcomponent.}
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
