@@ -23,21 +23,19 @@ It also allows all participants of the ARP4754A process to be able to communicat
 
 In order to allow performing system design and safety analysis on the same model, the system design model will need to be augmented to include both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure mode, failure rate), at the same time keeping the two types of information distinguishable yet interactable from each other.
 
-Figure~\ref{fig:proposed_safety_process} presents our proposed use of the shared system design and safety analysis model (to be referred as ``the shared model" in the rest of this section) inside the ARP4754A Safety Assessment Process Model (Figure 7 of~\cite{SAE:ARP4754A}). As seen in the figure, the shared model represents a system development artifact from the ``Development of System Architecture'' and ``Allocation of System Requirements to Item'' activities in the System Development Process, which interacts with the PSSAs and SSAs activities in the Safety Assessment Process. The shared model can serve as a wrapper and interface to capture the information relevant to safety analysis from the system design and implementation.
-
-\begin{figure}[h!]
+\begin{figure}[t!]
 	\vspace{-0.19in}
 	\begin{center}
-		\includegraphics[trim=0 9 0 5,clip,width=0.9\textwidth]{images/Safety_Assessment_Process_update.png}
+		\includegraphics[trim=0 9 0 5,clip,width=0.85\textwidth]{images/Safety_Assessment_Process.png}
 	\end{center}
 	%\vspace{0.4in}
 	\caption{Using the Shared System/Safety Model in the ARP4754A Safety Assessment Process}
 	\label{fig:proposed_safety_process}
 \end{figure}
 
-Figure~\ref{fig:interaction_with_FTA} shows an example how the preliminary FTAs and FTAs (artifacts from the PSSA and SSA activities in the Safety Assessment Process) can guide and be updated from the shared model. The next subsection will describe the foundation of the modeling technique in more details.
+Figure~\ref{fig:proposed_safety_process} presents our proposed use of the shared system design and safety analysis model (to be referred as ``the shared model" in the rest of this section) inside the ARP4754A Safety Assessment Process Model (Figure 7 of~\cite{SAE:ARP4754A}). As seen in the figure, the shared model represents a system development artifact from the ``Development of System Architecture'' and ``Allocation of System Requirements to Item'' activities in the System Development Process, which interacts with the PSSAs and SSAs activities in the Safety Assessment Process. The shared model can serve as a wrapper and interface to capture the information relevant to safety analysis from the system design and implementation.
 
-\begin{figure}[h!]
+\begin{figure}[t!]
 	\vspace{-0.19in}
 	\begin{center}
 		\includegraphics[width=0.9\textwidth]{images/FTA_MBD_Workflow.png}
@@ -46,3 +44,7 @@ Figure~\ref{fig:interaction_with_FTA} shows an example how the preliminary FTAs 
 	\caption{Example Interactions between the Shared System/Safety Model and  the FTAs}
 	\label{fig:interaction_with_FTA}
 \end{figure}
+
+Figure~\ref{fig:interaction_with_FTA} shows an example how the preliminary FTAs and FTAs (artifacts from the PSSA and SSA activities in the Safety Assessment Process) can guide and be updated from the shared model. The next subsection will describe the foundation of the modeling technique in more details.
+
+
