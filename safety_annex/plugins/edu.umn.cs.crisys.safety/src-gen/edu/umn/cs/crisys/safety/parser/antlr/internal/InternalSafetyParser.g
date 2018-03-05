@@ -7206,87 +7206,24 @@ ruleTermExpr returns [EObject current=null]
     	newLeafNode(otherlv_52, grammarAccess.getTermExprAccess().getRightParenthesisKeyword_13_4());
     }
 )
-    |((
-    {
-        $current = forceCreateModelElement(
-            grammarAccess.getTermExprAccess().getAADLEnumeratorAction_14_0(),
-            $current);
-    }
-)
-	otherlv_54=Enum
-    {
-    	newLeafNode(otherlv_54, grammarAccess.getTermExprAccess().getEnumKeyword_14_1());
-    }
-
-	otherlv_55=LeftParenthesis
-    {
-    	newLeafNode(otherlv_55, grammarAccess.getTermExprAccess().getLeftParenthesisKeyword_14_2());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getTermExprAccess().getEnumTypeNestedDotIDParserRuleCall_14_3_0()); 
-	    }
-		lv_enumType_56_0=ruleNestedDotID		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getTermExprRule());
-	        }
-       		set(
-       			$current, 
-       			"enumType",
-        		lv_enumType_56_0, 
-        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-)
-	otherlv_57=Comma
-    {
-    	newLeafNode(otherlv_57, grammarAccess.getTermExprAccess().getCommaKeyword_14_4());
-    }
-(
-(
-		lv_value_58_0=RULE_ID
-		{
-			newLeafNode(lv_value_58_0, grammarAccess.getTermExprAccess().getValueIDTerminalRuleCall_14_5_0()); 
-		}
-		{
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getTermExprRule());
-	        }
-       		setWithLastConsumed(
-       			$current, 
-       			"value",
-        		lv_value_58_0, 
-        		"org.osate.xtext.aadl2.properties.Properties.ID");
-	    }
-
-)
-)
-	otherlv_59=RightParenthesis
-    {
-    	newLeafNode(otherlv_59, grammarAccess.getTermExprAccess().getRightParenthesisKeyword_14_6());
-    }
-)
     |(
-	otherlv_60=LeftParenthesis
+	otherlv_53=LeftParenthesis
     {
-    	newLeafNode(otherlv_60, grammarAccess.getTermExprAccess().getLeftParenthesisKeyword_15_0());
+    	newLeafNode(otherlv_53, grammarAccess.getTermExprAccess().getLeftParenthesisKeyword_14_0());
     }
 
     { 
-        newCompositeNode(grammarAccess.getTermExprAccess().getExprParserRuleCall_15_1()); 
+        newCompositeNode(grammarAccess.getTermExprAccess().getExprParserRuleCall_14_1()); 
     }
-    this_Expr_61=ruleExpr
+    this_Expr_54=ruleExpr
     {
-        $current = $this_Expr_61.current;
+        $current = $this_Expr_54.current;
         afterParserOrEnumRuleCall();
     }
 
-	otherlv_62=RightParenthesis
+	otherlv_55=RightParenthesis
     {
-    	newLeafNode(otherlv_62, grammarAccess.getTermExprAccess().getRightParenthesisKeyword_15_2());
+    	newLeafNode(otherlv_55, grammarAccess.getTermExprAccess().getRightParenthesisKeyword_14_2());
     }
 ))
 ;
