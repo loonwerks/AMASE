@@ -18,10 +18,10 @@ with Base_Types;
 			
 			--  supply_reserve_norm_guarantee := (TRUE ->  G (circuit_pressure_value = 0 <-> reserve_out > 0));
 			guarantee "(Accumulator) The reserve out pressure is positive if and only if the circuit pressure value is zero.":
-						true -> (reserve_out > 0 <=> circuit_pressure_value = 0);
+						 (circuit_pressure_value = 0) <=> (reserve_out > 0);
 			
 			guarantee "(Accumulator) Reserve out is always between 0 and 10" : 
-				true -> (reserve_out <= 10 and reserve_out >= 0);
+				(reserve_out <= 10 and reserve_out >= 0);
 			
 		**};
 
@@ -48,7 +48,20 @@ with Base_Types;
 		
 	end Accumulator;
 	
-	system implementation Accumulator.inst
-		
-	end Accumulator.inst;
 end Accumulator;
+
+---- ===============================================================================
+--MODULE Accumulator(circuit_pressure_value)
+--    VAR
+--        reserve_out : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+--        pressure_display : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+--
+--    LTLSPEC NAME supply_reserve_norm_guarantee := (TRUE ->  G (circuit_pressure_value = 0 <-> reserve_out > 0));
+--
+--    ASSIGN
+--           reserve_out :=  (circuit_pressure_value = 0 ? 1 .. 10 : 0) ;
+--
+--
+---- ===============================================================================
+----                               End of module
+---- ===============================================================================

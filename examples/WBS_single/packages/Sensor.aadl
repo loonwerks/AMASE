@@ -35,16 +35,11 @@ with Base_Types;
 		**};
 	end SensorPedalPosition;
 	
-	system implementation SensorPedalPosition.inst
-	
-	end SensorPedalPosition.inst;
-	
-	
 	
 	system Sensor
 		features
 			-- Input 
-			-- Enumerated type {rolling, stopped}
+			-- Enumerated type {rolling = true, stopped = false}
 			wheel_status : in data port Base_Types::Boolean;
 			-- Output
 			wheel_rolling : out data port Base_Types::Boolean;

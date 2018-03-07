@@ -20,12 +20,8 @@ with Base_Types;
 			
 			guarantee "(ShutoffValve) Positive pressure out occurs whenever pressure in is positive and system is valid. 
 						Zero pressure out occurs whenever hyd pressure in is zero or system is not valid." :
-						true -> (
-							
-							if(hyd_pressure_in > 0 and system_validity) then (hyd_pressure_out = hyd_pressure_in)
-								else (hyd_pressure_out = 0)
-							
-							);
+							if(hyd_pressure_in > 0 and system_validity) then (hyd_pressure_out > 0 and hyd_pressure_out = hyd_pressure_in)
+								else (hyd_pressure_out = 0); 
 		
 		**};
 

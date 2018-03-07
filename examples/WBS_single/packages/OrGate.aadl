@@ -15,7 +15,7 @@ with Base_Types;
 				
 				-- or_behavior_norm_guarantee := (TRUE ->  G (out <-> (in_1 | in_2)));
 				guarantee "(OrGate) Output is equivalent to input1 or input2." : 
-					true -> out_val <=> (in_1 or in_2);
+					out_val <=> (in_1 or in_2);
 				
 				-- Changing this slightly to make more predictable behavior...
 				-- If channel1 is valid, go with that. Else, go with channel 2.

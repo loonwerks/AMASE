@@ -108,7 +108,7 @@ with Base_Types;
 			
     		-- alternate_command_computation_norm_guarantee := (TRUE ->  G ((power & (as_cmd_in_1 | as_cmd_in_2)) <-> as_cmd_out));
 			guarantee "(AlternateCommandCalculator) Antiskid command is true if and only if power and either one of the antiskid inputs is true." :
-						true -> (power and (as_cmd_1 or as_cmd_2)) <=> as_cmd_out;
+						(power and (as_cmd_1 or as_cmd_2)) <=> as_cmd_out;
 			
 		**};
 		annex safety {**
@@ -121,11 +121,6 @@ with Base_Types;
 			
 		**};
 	end AlternateCommandCalculator;
-	
-	system implementation AlternateCommandCalculator.inst
-		
-	end AlternateCommandCalculator.inst;
-	
 	
 	
 	system NormalCommandCalculator
@@ -142,7 +137,7 @@ with Base_Types;
 			
    			--  normal_command_computation_norm_guarantee := (TRUE ->  G (((power & brake_cmd) & !as_cmd) <-> brake_as_cmd));
 			guarantee "(NormalCommandCalculator) Brake command is true if and only if power, brake_cmd, and not antiskid." :
-						true -> (power and brake_cmd and not as_cmd) <=> brake_as_cmd;
+						(power and brake_cmd and not as_cmd) <=> brake_as_cmd;
 			
 		**};
 		
@@ -177,7 +172,7 @@ with Base_Types;
 			
 			-- as_command_creation_norm_guarantee := (TRUE ->  G (((power & ground_speed > 0) & !wheel_rolling) <-> as_cmd));
 			guarantee "(AntiskidCommandFacility) antiskid command is true if and only if power, wheel not rolling, and ground speed is positive." :
-						true -> (power and ground_speed > 0 and not wheel_rolling) <=> as_cmd;
+						(power and ground_speed > 0 and not wheel_rolling) <=> as_cmd;
 			
 		**};
 		
@@ -210,7 +205,7 @@ with Base_Types;
 			
 			-- brake_command_creation_norm_guarantee := (TRUE ->  G ((power & electrical_pedal_pos) <-> brake_cmd));
 			guarantee "(BrakeCommandFacility) brake command output is equivalent to power and elec_pedal_position.":
-						true -> (power and electrical_pedal_pos) <=> brake_cmd;
+						(power and electrical_pedal_pos) <=> brake_cmd;
 						
 						
 			

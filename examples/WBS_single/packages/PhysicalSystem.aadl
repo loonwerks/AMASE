@@ -271,17 +271,17 @@ with ShutoffValve;
 			shutoff_valve : system ShutoffValve::ShutoffValve;
 			selector_valve : system SelectorValve::SelectorValve;
 			 
-			normal_sys : system NormalBrakeSystem::NormalBrakeSystem.inst;
+			normal_sys : system NormalBrakeSystem::NormalBrakeSystem;
 			alt_sys : system AlternateBrakeSystem::AlternateBrakeSystem.inst;
 			
-			wheel_brake1 : system WheelBrake::WheelBrake.inst;
-			wheel_brake2 : system WheelBrake::WheelBrake.inst;
-			wheel_brake3 : system WheelBrake::WheelBrake.inst;
-			wheel_brake4 : system WheelBrake::WheelBrake.inst;
-			wheel_brake5 : system WheelBrake::WheelBrake.inst;
-			wheel_brake6 : system WheelBrake::WheelBrake.inst;
-			wheel_brake7 : system WheelBrake::WheelBrake.inst;
-			wheel_brake8 : system WheelBrake::WheelBrake.inst;
+			wheel_brake1 : system WheelBrake::WheelBrake;
+			wheel_brake2 : system WheelBrake::WheelBrake;
+			wheel_brake3 : system WheelBrake::WheelBrake;
+			wheel_brake4 : system WheelBrake::WheelBrake;
+			wheel_brake5 : system WheelBrake::WheelBrake;
+			wheel_brake6 : system WheelBrake::WheelBrake;
+			wheel_brake7 : system WheelBrake::WheelBrake;
+			wheel_brake8 : system WheelBrake::WheelBrake;
 			 
 			wheel_1 : system Wheel::Wheel;
 			wheel_2 : system Wheel::Wheel;
@@ -366,14 +366,14 @@ with ShutoffValve;
 			
 			-- Wheel brake component outputs
 			-- Brake force to wheel component
-			brake_force_1 : port wheel_brake1.brake_force -> wheel_1.brake_force;
-			brake_force_2 : port wheel_brake2.brake_force -> wheel_2.brake_force;
-			brake_force_3 : port wheel_brake3.brake_force -> wheel_3.brake_force;
-			brake_force_4 : port wheel_brake4.brake_force -> wheel_4.brake_force;
-			brake_force_5 : port wheel_brake5.brake_force -> wheel_5.brake_force;
-			brake_force_6 : port wheel_brake6.brake_force -> wheel_6.brake_force;
-			brake_force_7 : port wheel_brake7.brake_force -> wheel_7.brake_force;
-			brake_force_8 : port wheel_brake8.brake_force -> wheel_8.brake_force;
+			brake_force_1 : port wheel_brake1.brake_force -> wheel_1.braking_force;
+			brake_force_2 : port wheel_brake2.brake_force -> wheel_2.braking_force;
+			brake_force_3 : port wheel_brake3.brake_force -> wheel_3.braking_force;
+			brake_force_4 : port wheel_brake4.brake_force -> wheel_4.braking_force;
+			brake_force_5 : port wheel_brake5.brake_force -> wheel_5.braking_force;
+			brake_force_6 : port wheel_brake6.brake_force -> wheel_6.braking_force;
+			brake_force_7 : port wheel_brake7.brake_force -> wheel_7.braking_force;
+			brake_force_8 : port wheel_brake8.brake_force -> wheel_8.braking_force;
 			
 			-- Brake force to enclosing component
 			braking_force_out_1 : port wheel_brake1.brake_force -> wheel_braking_force1;
@@ -398,14 +398,14 @@ with ShutoffValve;
 			ground_speed_8 : port ground_speed -> wheel_8.ground_speed;
 			
 			-- wheel status output {running, stopped}
-			wheel_1_status : port wheel_1.wheel_status -> wheel_status1;
-			wheel_2_status : port wheel_2.wheel_status -> wheel_status2;
-			wheel_3_status : port wheel_3.wheel_status -> wheel_status3;
-			wheel_4_status : port wheel_4.wheel_status -> wheel_status4;
-			wheel_5_status : port wheel_5.wheel_status -> wheel_status5;
-			wheel_6_status : port wheel_6.wheel_status -> wheel_status6;
-			wheel_7_status : port wheel_7.wheel_status -> wheel_status7;
-			wheel_8_status : port wheel_8.wheel_status -> wheel_status8;
+			wheel_1_status : port wheel_1.status -> wheel_status1;
+			wheel_2_status : port wheel_2.status -> wheel_status2;
+			wheel_3_status : port wheel_3.status -> wheel_status3;
+			wheel_4_status : port wheel_4.status -> wheel_status4;
+			wheel_5_status : port wheel_5.status -> wheel_status5;
+			wheel_6_status : port wheel_6.status -> wheel_status6;
+			wheel_7_status : port wheel_7.status -> wheel_status7;
+			wheel_8_status : port wheel_8.status -> wheel_status8;
 		
 		
 		annex agree {**

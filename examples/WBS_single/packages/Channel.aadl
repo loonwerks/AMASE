@@ -163,8 +163,8 @@ with MonitorSystem;
 			
 			-- Connections to monitor system
 			monitor_power : port power -> monitor_sys.power;
-			monitor_L_pedal : port elec_pedal_pos_L -> monitor_sys.elec_pedal_pos_L;
-			monitor_R_pedal : port elec_pedal_pos_R -> monitor_sys.elec_pedal_pos_R;
+			monitor_L_pedal : port elec_pedal_pos_L -> monitor_sys.electrical_pedal_pos_L;
+			monitor_R_pedal : port elec_pedal_pos_R -> monitor_sys.electrical_pedal_pos_R;
 			monitor_ground_speed : port ground_speed -> monitor_sys.ground_speed;
 			monitor_wheel_rolling_1 : port wheel_rolling_1 -> monitor_sys.wheel_rolling_1;
 			monitor_wheel_rolling_2 : port wheel_rolling_2 -> monitor_sys.wheel_rolling_2;

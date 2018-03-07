@@ -24,28 +24,28 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
 				
 				assume "False is passed to meter valves for elec_cmd" :
-					true -> (false_to_mv = false);
+					(false_to_mv = false);
 					
 				-- apply_command_3_norm_guarantee := 
 				--		(TRUE ->  G (((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & hyd_pressure_in > 0) <-> hyd_pressure_out_3 > 0));
 				guarantee "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							true -> (hyd_pressure_out1 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_1_5)));
+							(hyd_pressure_out1 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_1_5)));
 							
 				guarantee "(AlternateBrakeSystem) Pair 2,6: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							true -> (hyd_pressure_out2 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_2_6)));
+							(hyd_pressure_out2 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_2_6)));
 							
 				guarantee "(AlternateBrakeSystem) Pair 3,7: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							true -> (hyd_pressure_out3 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_3_7)));
+							(hyd_pressure_out3 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_3_7)));
 							
 				guarantee "(AlternateBrakeSystem) Pair 4,8: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
+							(hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
 							
 --				guarantee "(AlternateBrakeSystem) Hyd out 1 bounded" : 
 --					true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
@@ -153,16 +153,14 @@ with Base_Types;
 							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
 							to the hyd pressure in." :
 							
-							true -> (
 								if ((hyd_pressure_in = 0) or antiskid_cmd) then (hyd_pressure_out = 0)
-									else (hyd_pressure_out = hyd_pressure_in)
-								);
+									else (hyd_pressure_out = hyd_pressure_in and hyd_pressure_out > 0) ; 
 							
 							
 --							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
 --								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
 			
-				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 1);			
+				guarantee "(AntiskidShutoff) Output from 0 to 10" : (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);			
 			
 				-- used for nondeterministic range in fault analysis
 				eq low : int = 0;

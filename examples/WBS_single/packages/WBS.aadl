@@ -51,8 +51,8 @@ with sensor;
 	
 		annex agree {**
 			assume "(WBS) Hydraulic supply and ground speed is bounded from 0 to 10 inclusive." :
-					(hyd_supply1 > -1 and hyd_supply1 < 11) and (hyd_supply2 > -1 and hyd_supply2 < 11)
-					and (ground_speed > -1 and ground_speed < 11);
+					(hyd_supply1 >= 0 and hyd_supply1 <= 10) and (hyd_supply2 >= 0 and hyd_supply2 <= 10)
+					and (ground_speed >= 0 and ground_speed <= 10);
 					
 		-- Properties
 		-- All power is supplied
@@ -77,6 +77,7 @@ with sensor;
 	
 	system implementation WBS.inst
 		subcomponents
+			-- phys_sys : system PhysicalSystem::PhysicalSystem.inst;
 			phys_sys : system PhysicalSystem::PhysicalSystem.inst;
 			ctrl_sys : system ControlSystem::ControlSystem.inst;
 			
