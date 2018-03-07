@@ -125,7 +125,7 @@ with Base_Types;
 			
 			lemma "Metervalve pressure input from 0 to 10 inclusive" : true -> (mv1.hyd_pressure_in >= 0 and mv1.hyd_pressure_in <= 10);
 			
-			lemma "(AntiskidShutoff) Output from 0 to 10" : true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 1);	
+			lemma "(AntiskidShutoff) Output from 0 to 10" : true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);	
 		**};
 			
 	end AlternateBrakeSystem.inst;
@@ -162,7 +162,7 @@ with Base_Types;
 --							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
 --								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
 			
-				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 1);			
+				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);			
 			
 				-- used for nondeterministic range in fault analysis
 				eq low : int = 0;
