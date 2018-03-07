@@ -1,0 +1,141 @@
+package MonitorSystem
+public
+with Base_Types;
+
+	system MonitorSystem
+		features
+			-- Inputs
+			power : in data port Base_Types::Boolean; 
+			ground_speed : in data port Base_Types::Integer;
+			
+			elec_pedal_pos_L : in data port Base_Types::Boolean;
+			elec_pedal_pos_R : in data port Base_Types::Boolean; 
+			
+			wheel_rolling_1 : in data port Base_Types::Boolean;
+			wheel_rolling_2 : in data port Base_Types::Boolean;  
+			wheel_rolling_3 : in data port Base_Types::Boolean;
+			wheel_rolling_4 : in data port Base_Types::Boolean;
+			wheel_rolling_5 : in data port Base_Types::Boolean; 
+			wheel_rolling_6 : in data port Base_Types::Boolean;
+			wheel_rolling_7 : in data port Base_Types::Boolean;
+			wheel_rolling_8 : in data port Base_Types::Boolean;
+			
+			brake_as_cmd_1 : in data port Base_Types::Boolean;
+			brake_as_cmd_2 : in data port Base_Types::Boolean;
+			brake_as_cmd_3 : in data port Base_Types::Boolean;
+			brake_as_cmd_4 : in data port Base_Types::Boolean;
+			brake_as_cmd_5 : in data port Base_Types::Boolean;
+			brake_as_cmd_6 : in data port Base_Types::Boolean;
+			brake_as_cmd_7 : in data port Base_Types::Boolean;
+			brake_as_cmd_8 : in data port Base_Types::Boolean;
+			
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean; 
+			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
+			-- Output
+			bscu_validity : out data port Base_Types::Boolean;
+		
+		annex agree {** 
+			
+			assume "(MonitorSystem) Ground speed always greater than zero." : 
+					(ground_speed >= 0) and (ground_speed <= 10);
+			
+--			guarantee "(CommandSystem) Wheel 1: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
+--						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0))	
+--									<=> brake_as_cmd_1);
+			
+			assume "Brake as cmd 1" : true -> ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) = brake_as_cmd_1);
+--			assume "Brase as cmd 2" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) = brake_as_cmd_2);
+--			assume "Brase as cmd 3" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) = brake_as_cmd_3);
+--			assume "Brase as cmd 4" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) = brake_as_cmd_4);
+--			assume "Brase as cmd 5" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) = brake_as_cmd_5);
+--			assume "Brase as cmd 6" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) = brake_as_cmd_6);
+--			assume "Brase as cmd 7" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) = brake_as_cmd_7);
+--			assume "Brase as cmd 8" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) = brake_as_cmd_8);
+			
+--			guarantee "(CommandSystem) Pair 1,5: Create alternate commands based on power, grond speed and wheel rolling status" :
+--				true -> as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_1 or not wheel_rolling_5));
+			
+--			assume "Antiskid cmd pair 1,5" : ((power and SPEED and (not PAIR_ROLL_15)) = as_cmd_pair_1_5);
+--			assume "Antiskid cmd pair 2,6" : ((power and SPEED and (not PAIR_ROLL_26)) = as_cmd_pair_2_6);
+--			assume "Antiskid cmd pair 3,7" : ((power and SPEED and (not PAIR_ROLL_37)) = as_cmd_pair_3_7);
+--			assume "Antiskid cmd pair 4,8" : ((power and SPEED and (not PAIR_ROLL_48)) = as_cmd_pair_4_8);
+			
+			-- bscu_validity_norm_guarantee := (TRUE ->  
+			--	G (bscu_validity <-> 
+			--	
+			--	((((((((((((power  
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_1) | ground_speed = 0)) <-> brake_as_cmd_1))
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_2) | ground_speed = 0)) <-> brake_as_cmd_2)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_3) | ground_speed = 0)) <-> brake_as_cmd_3)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_4) | ground_speed = 0)) <-> brake_as_cmd_4)) 
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_5) | ground_speed = 0)) <-> brake_as_cmd_5)) 
+			--				& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_6) | ground_speed = 0)) <-> brake_as_cmd_6)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_7) | ground_speed = 0)) <-> brake_as_cmd_7)) 
+			--				& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_8) | ground_speed = 0)) <-> brake_as_cmd_8)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_1 | !wheel_rolling_5)) <-> as_cmd_pair_1_5)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_2 | !wheel_rolling_6)) <-> as_cmd_pair_2_6)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_3 | !wheel_rolling_7)) <-> as_cmd_pair_3_7)) 
+			--				& ((ground_speed > 0 & (!wheel_rolling_4 | !wheel_rolling_8)) <-> as_cmd_pair_4_8)))));
+			
+			-- BSCU Validity
+			property SPEED = ground_speed > 0;
+			property PAIR_ROLL_15 = wheel_rolling_1 and wheel_rolling_5;
+			property PAIR_ROLL_26 = wheel_rolling_2 and wheel_rolling_6;
+			property PAIR_ROLL_37 = wheel_rolling_3 and wheel_rolling_7;
+			property PAIR_ROLL_48 = wheel_rolling_4 and wheel_rolling_8;
+			
+			guarantee "(MonitorSystem) 1 BSCU valid contract." : 
+					true -> (bscu_validity <=>
+						  (power) 
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) <=> brake_as_cmd_3)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) <=> brake_as_cmd_4)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) <=> brake_as_cmd_5)
+					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7)
+					  and ((elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8))
+					  and ((SPEED and (not PAIR_ROLL_15)) <=> as_cmd_pair_1_5)
+					  and ((SPEED and (not PAIR_ROLL_26)) <=> as_cmd_pair_2_6)
+					  and ((SPEED and (not PAIR_ROLL_37)) <=> as_cmd_pair_3_7)
+					  and ((SPEED and (not PAIR_ROLL_48)) <=> as_cmd_pair_4_8);
+		
+--			guarantee "bscu valid" :	true -> (bscu_validity <=> 
+--						(power 
+--						and brake_as_cmd_1
+--						and brake_as_cmd_2
+--						and brake_as_cmd_3
+--						and brake_as_cmd_4
+--						and brake_as_cmd_5
+--						and brake_as_cmd_6
+--						and brake_as_cmd_7
+--						and brake_as_cmd_8
+--						and as_cmd_pair_1_5
+--						and as_cmd_pair_2_6
+--						and as_cmd_pair_3_7
+--						and as_cmd_pair_4_8));
+				  
+			
+			guarantee "(MonitorSystem) If we have no power, bscu is not valid":
+					true -> (not power => not bscu_validity);
+										
+		**}	;
+		
+		annex safety {**
+			fault MonitorSystem_ErroneousData "(MonitorSystem) Inverted boolean fault: sys validity incorrect." : faults.inverted_fail {
+				inputs: val_in <- bscu_validity; 
+				outputs: bscu_validity <- val_out;    
+        		probability: 8.0E-7 ;
+				duration: permanent;
+			}
+			
+		**};
+	end MonitorSystem;
+	
+	system implementation MonitorSystem.inst
+		
+	end MonitorSystem.inst;
+end MonitorSystem;

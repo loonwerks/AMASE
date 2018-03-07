@@ -1,0 +1,28 @@
+package faults
+public
+annex agree {**	
+
+	node fail_to(val_in: int, alt_val: int, trigger: bool) returns (val_out: int); 
+	let
+	   val_out = if (trigger) then alt_val else val_in;
+	tel;
+ 
+ 	node inverted_fail(val_in: bool, trigger: bool) returns (val_out:bool);
+	let
+	  val_out = if trigger then not(val_in) else val_in;
+	tel;
+
+	node no_data_fail(val_in : bool, trigger: bool) returns (val_out: bool);
+	let
+		val_out = if trigger then (val_in) else not(val_in);
+	tel;
+	
+	node fail_to_bool(val_in: bool, alt_val: bool, trigger: bool) returns (val_out: bool); 
+	let
+	   val_out = if (trigger) then alt_val else val_in;
+	tel;
+
+**};	
+	
+end faults;
+

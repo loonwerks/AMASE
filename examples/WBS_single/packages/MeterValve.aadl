@@ -1,0 +1,70 @@
+package MeterValve
+public
+with Base_Types;
+
+	system MeterValve
+		features
+			-- Inputs
+			elec_cmd : in data port Base_Types::Boolean;
+			mech_cmd : in data port Base_Types::Boolean;
+			hyd_pressure_in : in data port Base_Types::Integer;
+			
+			-- Outputs
+			hyd_pressure_out : out data port Base_Types::Integer;
+			
+			
+			-- FOR AGREE:
+			-- all mech commands coming in are false in wbs_arch4
+			
+		annex agree {**
+				
+				--assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
+				-- apply_command_norm_guarantee := (TRUE ->  G (((elec_cmd | mech_cmd) & hyd_pressure_in > 0) <-> hyd_pressure_out > 0));
+				
+				guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
+				 we have either electrical or mechanical command and positive pressure." :
+					true -> (((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);
+				
+				eq low : int = 0;
+				eq high : int = 10;
+				eq rangeval : int;	
+		**};
+		annex safety {**
+			fault MeterValve_FailedOpen "(MeterValve) Stuck open fault.": faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+			fault MeterValve_FailedClosed "(MeterValve) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+			fault MeterValve_FailedLastPosition "(MeterValve) Stuck at last position fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+			fault MeterValve_FailedRandomPosition "(MeterValve) Stuck at nondeterministic fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+	**};
+	end MeterValve;
+	
+	system implementation MeterValve.inst
+		annex agree {**
+			assert(low <= rangeval and rangeval <= high);
+		**};
+	end MeterValve.inst;
+end MeterValve;
