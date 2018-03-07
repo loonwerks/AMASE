@@ -209,11 +209,4 @@ with Base_Types;
 	end AntiskidShutoffValve;
 	
 	
-	system implementation AntiskidShutoffValve.inst
-	
-		annex agree{**
-			assert(low <= rangeval and rangeval <= high);
-		**};
-	end AntiskidShutoffValve.inst;
-	
 end AlternateBrakeSystem;

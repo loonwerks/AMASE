@@ -62,9 +62,4 @@ with Base_Types;
 	**};
 	end MeterValve;
 	
-	system implementation MeterValve.inst
-		annex agree {**
-			assert(low <= rangeval and rangeval <= high);
-		**};
-	end MeterValve.inst;
 end MeterValve;
