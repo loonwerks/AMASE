@@ -1,0 +1,159 @@
+package NormalBrakeSystem
+public
+with MeterValve;
+with Base_Types;
+
+	system NormalBrakeSystem
+		features
+			-- Inputs
+			brake_as_cmd1 : in data port Base_Types::Boolean;
+			brake_as_cmd2 : in data port Base_Types::Boolean;
+			brake_as_cmd3 : in data port Base_Types::Boolean;
+			brake_as_cmd4 : in data port Base_Types::Boolean;
+			brake_as_cmd5 : in data port Base_Types::Boolean;
+			brake_as_cmd6 : in data port Base_Types::Boolean;
+			brake_as_cmd7 : in data port Base_Types::Boolean;
+			brake_as_cmd8 : in data port Base_Types::Boolean;
+			
+			hyd_pressure_in : in data port Base_Types::Integer;
+			
+			false_to_mv : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			hyd_pressure_out1 : out data port Base_Types::Integer;
+			hyd_pressure_out2 : out data port Base_Types::Integer;
+			hyd_pressure_out3 : out data port Base_Types::Integer;
+			hyd_pressure_out4 : out data port Base_Types::Integer;
+			hyd_pressure_out5 : out data port Base_Types::Integer;
+			hyd_pressure_out6 : out data port Base_Types::Integer;
+			hyd_pressure_out7 : out data port Base_Types::Integer;
+			hyd_pressure_out8 : out data port Base_Types::Integer;
+		
+			
+		
+		annex agree {**
+			
+			assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+			
+			assume "False is passed to meter valves for mech_cmd" :
+				true -> (false_to_mv = false);
+			
+			-- apply_command_1_norm_guarantee := (TRUE ->  G ((brake_as_cmd_1 & hyd_pressure_in > 0) <-> hyd_pressure_out_1 > 0));
+			guarantee "(NormalBrakeSys) (W1) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+						(brake_as_cmd1 and hyd_pressure_in > 0) <=> hyd_pressure_out1 > 0;
+							
+--			guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
+--				 we have either electrical or mechanical command and positive pressure." :
+--					true -> (((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);				
+							
+			guarantee "(NormalBrakeSys) (W2) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd2 and hyd_pressure_in > 0) <=> hyd_pressure_out2 > 0);
+			
+			guarantee "(NormalBrakeSys) (W3) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd3 and hyd_pressure_in > 0) <=> hyd_pressure_out3 > 0);
+			
+			guarantee "(NormalBrakeSys) (W4) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd4 and hyd_pressure_in > 0) <=> hyd_pressure_out4 > 0);
+			
+			guarantee "(NormalBrakeSys) (W5) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd5 and hyd_pressure_in > 0) <=> hyd_pressure_out5 > 0);
+			
+			guarantee "(NormalBrakeSys) (W6) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd6 and hyd_pressure_in > 0) <=> hyd_pressure_out6 > 0);
+			
+			guarantee "(NormalBrakeSys) (W7) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd7 and hyd_pressure_in > 0) <=> hyd_pressure_out7 > 0);
+			
+			guarantee "(NormalBrakeSys) (W8) Hydraulic pressure out is positive if and only if
+						brake_as_cmd input is true and hyd pressure in is positive." :
+							((brake_as_cmd8 and hyd_pressure_in > 0) <=> hyd_pressure_out8 > 0);
+											
+			 
+--			 guarantee "(NormalBrakeSys) Pressure out 1 bounded." : true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 2 bounded." : true -> (hyd_pressure_out2 <= 10 and hyd_pressure_out2 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 3 bounded." : true -> (hyd_pressure_out3 <= 10 and hyd_pressure_out3 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 4 bounded." : true -> (hyd_pressure_out4 <= 10 and hyd_pressure_out4 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 5 bounded." : true -> (hyd_pressure_out5 <= 10 and hyd_pressure_out5 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 6 bounded." : true -> (hyd_pressure_out6 <= 10 and hyd_pressure_out6 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 7 bounded." : true -> (hyd_pressure_out7 <= 10 and hyd_pressure_out7 >= 0);
+--			 guarantee "(NormalBrakeSys) Pressure out 8 bounded." : true -> (hyd_pressure_out8 <= 10 and hyd_pressure_out8 >= 0);
+			 
+		**};
+	end NormalBrakeSystem;
+	
+	system implementation NormalBrakeSystem.inst
+		subcomponents
+			mv1 : system MeterValve::MeterValve;
+			mv2 : system MeterValve::MeterValve;
+			mv3 : system MeterValve::MeterValve;
+			mv4 : system MeterValve::MeterValve;
+			mv5 : system MeterValve::MeterValve;
+			mv6 : system MeterValve::MeterValve;
+			mv7 : system MeterValve::MeterValve;
+			mv8 : system MeterValve::MeterValve;
+			
+		connections
+			-- hyd pressure to all meter valves
+			pressure_1 : port hyd_pressure_in -> mv1.hyd_pressure_in;
+			pressure_2 : port hyd_pressure_in -> mv2.hyd_pressure_in;
+			pressure_3 : port hyd_pressure_in -> mv3.hyd_pressure_in;
+			pressure_4 : port hyd_pressure_in -> mv4.hyd_pressure_in;
+			pressure_5 : port hyd_pressure_in -> mv5.hyd_pressure_in;
+			pressure_6 : port hyd_pressure_in -> mv6.hyd_pressure_in;
+			pressure_7 : port hyd_pressure_in -> mv7.hyd_pressure_in;
+			pressure_8 : port hyd_pressure_in -> mv8.hyd_pressure_in;
+			
+			-- antiskid commands to mv
+			as_to_mv_1 : port brake_as_cmd1 -> mv1.elec_cmd;
+			as_to_mv_2 : port brake_as_cmd2 -> mv2.elec_cmd;
+			as_to_mv_3 : port brake_as_cmd3 -> mv3.elec_cmd;
+			as_to_mv_4 : port brake_as_cmd4 -> mv4.elec_cmd;
+			as_to_mv_5 : port brake_as_cmd5 -> mv5.elec_cmd;
+			as_to_mv_6 : port brake_as_cmd6 -> mv6.elec_cmd;
+			as_to_mv_7 : port brake_as_cmd7 -> mv7.elec_cmd;
+			as_to_mv_8 : port brake_as_cmd8 -> mv8.elec_cmd;
+			
+			-- mech cmd in meter valves is always false for normal system
+			false_to_mv_1 : port false_to_mv -> mv1.mech_cmd;
+			false_to_mv_2 : port false_to_mv -> mv2.mech_cmd;
+			false_to_mv_3 : port false_to_mv -> mv3.mech_cmd;
+			false_to_mv_4 : port false_to_mv -> mv4.mech_cmd;
+			false_to_mv_5 : port false_to_mv -> mv5.mech_cmd;
+			false_to_mv_6 : port false_to_mv -> mv6.mech_cmd;
+			false_to_mv_7 : port false_to_mv -> mv7.mech_cmd;
+			false_to_mv_8 : port false_to_mv -> mv8.mech_cmd;
+			
+			-- Meter valve pressure out
+			press_out_1 : port mv1.hyd_pressure_out -> hyd_pressure_out1;
+			press_out_2 : port mv2.hyd_pressure_out -> hyd_pressure_out2;
+			press_out_3 : port mv3.hyd_pressure_out -> hyd_pressure_out3;
+			press_out_4 : port mv4.hyd_pressure_out -> hyd_pressure_out4;
+			press_out_5 : port mv5.hyd_pressure_out -> hyd_pressure_out5;
+			press_out_6 : port mv6.hyd_pressure_out -> hyd_pressure_out6;
+			press_out_7 : port mv7.hyd_pressure_out -> hyd_pressure_out7;
+			press_out_8 : port mv8.hyd_pressure_out -> hyd_pressure_out8; 
+			
+		annex agree {**
+			
+			
+			
+--			lemma "(MeterValve) 1 Hydraulic pressure out is positive if and only if
+--				 we have either electrical or mechanical command and positive pressure." :
+--					true -> (((mv1.elec_cmd or mv1.mech_cmd) and mv1.hyd_pressure_in > 0) <=> mv1.hyd_pressure_out > 0);
+--					
+--			lemma "(MeterValve) 2 Hydraulic pressure out is positive if and only if
+--				 we have either electrical or mechanical command and positive pressure." :
+--					true -> (((brake_as_cmd1 or mv1.mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out1 > 0);
+			
+			
+		**};
+			
+	end NormalBrakeSystem.inst;
+end NormalBrakeSystem;

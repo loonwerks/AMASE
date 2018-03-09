@@ -1,0 +1,73 @@
+package SelectorValve
+public
+with Base_Types;
+	system SelectorValve
+		features
+			-- Inputs
+			green_select_in : in data port Base_Types::Integer;
+			blue_select_in : in data port Base_Types::Integer;
+			system_validity : in data port Base_Types::Boolean;
+				
+			-- Outputs
+			green_select_out : out data port Base_Types::Integer;
+			blue_select_out : out data port Base_Types::Integer;
+			 
+			
+		annex agree {**
+			
+			assume "Pressure input from 0 to 10 inclusive" : 
+					true -> ((green_select_in >= 0 and green_select_in <= 10)
+					and (blue_select_in >= 0 and blue_select_in <= 10));
+			
+			-- select_circuit_norm_guarantee := (TRUE -> (( G 
+			--   ((green_select_in > 0 & system_validity) -> (green_select_out > 0 & blue_select_out = 0)) 
+			--    &  G (((green_select_in = 0 | !system_validity) & blue_select_in > 0) -> (green_select_out = 0 & blue_select_out > 0))
+			--    &  G (((green_select_in = 0 | !system_validity) & blue_select_in = 0) -> (green_select_out = 0 & blue_select_out = 0))));
+			
+			
+			property GREENLINE = ((green_select_in > 0 and system_validity) => (green_select_out > 0 and blue_select_out = 0));
+			property BLUELINE = ((green_select_in = 0 or not system_validity) and blue_select_in > 0) => (green_select_out = 0 and blue_select_out > 0);
+			property NEITHER = ((green_select_in = 0 or not system_validity) and blue_select_in = 0) => (green_select_out = 0 and blue_select_out = 0);
+			
+			
+			guarantee "selectorvalve" : GREENLINE and BLUELINE and NEITHER ; 
+			
+--					guarantee "(SelectorValve) The green line is selected under valid system and positive green pressure. 
+--						The blue line is selected under invalid system or no green pressure and positive blue pressure.
+--						Neither are selected in any other case." :
+--							if (green_select_in > 0 and system_validity) then (green_select_out = green_select_in and blue_select_out = 0)
+--							
+--							else if ((green_select_in = 0 or not system_validity) and blue_select_in > 0) 
+--										then  (green_select_out = 0 and blue_select_in = blue_select_out)
+--							else (green_select_out = 0 and blue_select_out = 0);
+			
+			guarantee "(SelectorValve) Output is bounded from 0 to 10" :
+				((green_select_out >= 0 and green_select_out <= 10)
+					and (blue_select_out >= 0 and blue_select_out <= 10));
+			
+			
+		**};
+		
+		
+		annex safety {**
+			fault SelectorValve_FailedLastPosition "(SelectorValve) Stuck at last position (blue line) fault." : faults.fail_to {
+				inputs: val_in <- blue_select_out, alt_val <- pre(blue_select_out); 
+				outputs: blue_select_out <- val_out;    
+        		probability: 1.0E-5 ;
+				duration: permanent;
+			}
+			
+			fault SelectorValve_FailedLastPosition "(SelectorValve) Stuck at last position (green line) fault." : faults.fail_to {
+				inputs: val_in <- green_select_out, alt_val <- pre(green_select_out); 
+				outputs: green_select_out <- val_out;    
+        		probability: 1.0E-5 ;
+				duration: permanent;
+			}
+		**};
+		
+	end SelectorValve;
+	
+	system implementation SelectorValve.inst
+		
+	end SelectorValve.inst;
+end SelectorValve;

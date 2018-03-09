@@ -51,8 +51,8 @@ with sensor;
 	
 		annex agree {**
 			assume "(WBS) Hydraulic supply and ground speed is bounded from 0 to 10 inclusive." :
-					(hyd_supply1 > -1 and hyd_supply1 < 11) and (hyd_supply2 > -1 and hyd_supply2 < 11)
-					and (ground_speed > -1 and ground_speed < 11);
+					(hyd_supply1 >= 0 and hyd_supply1 <= 10) and (hyd_supply2 >= 0 and hyd_supply2 <= 10)
+					and (ground_speed >= 0 and ground_speed <= 10);
 					
 		-- Properties
 		-- All power is supplied
@@ -77,6 +77,7 @@ with sensor;
 	
 	system implementation WBS.inst
 		subcomponents
+			-- phys_sys : system PhysicalSystem::PhysicalSystem.inst;
 			phys_sys : system PhysicalSystem::PhysicalSystem.inst;
 			ctrl_sys : system ControlSystem::ControlSystem.inst;
 			
@@ -206,17 +207,16 @@ with sensor;
 	
 	
 	annex agree {**
-			
-		lemma "Test" : true -> (not (POWER and HYD_PRESSURE_MAX));
-			
 		-- AIR6110:
 		-- Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff
 
---		lemma "(WBS) Inadvertent braking of wheel 1: If all power and hydraulic pressure is supplied, then
---					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
---					or wheel is not rolling." :
+		lemma "(WBS) Inadvertent braking of wheel 1: If all power and hydraulic pressure is supplied, then
+					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+					or wheel is not rolling." :
 --					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL))));
---		
+--					true -> not (POWER and HYD_PRESSURE_MAX) ;
+					true -> not (power1 and (hyd_supply1 = 10));
+					
 --		lemma "(WBS) Inadvertent braking of wheel 2: If all power and hydraulic pressure is supplied, then
 --					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 --					or wheel is not rolling." :
@@ -251,7 +251,7 @@ with sensor;
 --					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 --					or wheel is not rolling." :
 --					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL))));
---	 
+--	
 --		
 --		-- AIR 6110
 --		-- Asymmetrical loss of wheel braking coupled with loss of rudder or nose wheel steering 
@@ -284,8 +284,6 @@ with sensor;
 		
 	**};
    annex safety{**
-	  --analyze : max 1 fault
-	  analyze : probability 1.0E-7
 	  analyze : max 1 fault
 	  -- probability 5.0E-7
    **};
