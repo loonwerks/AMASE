@@ -1,0 +1,68 @@
+package SwitchGate
+public
+with Base_Types;
+
+	system SwitchGate
+		features
+			-- Inputs
+			cmd_in_1 : in data port Base_Types::Boolean;
+			cmd_in_2 : in data port Base_Types::Boolean;
+			validity1 : in data port Base_Types::Boolean;
+			validity2 : in data port Base_Types::Boolean;
+			
+			-- Outputs
+			cmd_out : out data port Base_Types::Boolean;
+			
+			-- Enumerated type {pos1, no_output, pos2} state is local variable (to AGREE perhaps?)
+			
+			annex agree {**
+				
+				--switch_behavior_norm_guarantee := (TRUE -> (( G 
+				-- 		(validity_1 -> (cmd_out <-> cmd_in_1)) 
+				-- 		&  G ((!validity_1 & validity_2) -> (cmd_out <-> cmd_in_2))) 
+				-- 		&  G ((!validity_1 & !validity_2) -> cmd_out = FALSE)));
+				
+				guarantee "(SwitchGate) If channel 1 is valid, then cmd_out is equivalent to cmd_in_1 (from channel 1).
+						  If channel 2 is valid and not channel 1, then cmd_out is equivalent to cmd_in_2 (from channel 2).
+						  And if neither channel is valid, then cmd_out is false." :
+						  true -> 
+						  	(
+--						  		(validity1 => (cmd_out <=> cmd_in_1))
+--						  	and ((not validity1 and validity2) => (cmd_out <=> cmd_in_2))
+--						  	and ((not validity1 and not validity2) => (cmd_out <=> false))
+
+							if (validity1) then (cmd_out = cmd_in_1)
+								else (if (validity2) then (cmd_out = cmd_in_2) else (cmd_out = false))
+							
+						  	
+						  );
+				
+				
+				
+			**};
+		annex safety {**
+			fault SwitchGate_FailedIntermediatePosition "(SwitchGate) Inverted boolean fault: channel selected is incorrect." : faults.inverted_fail {
+				inputs: val_in <- cmd_out; 
+				outputs: cmd_out <- val_out;    
+        		probability: 6.5E-7 ;
+				duration: permanent;
+			}
+			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults.fail_to_bool {
+				inputs: val_in <- cmd_out, alt_val <- pre(cmd_out); 
+				outputs: cmd_out <- val_out;    
+        		probability: 1.3E-5 ;
+				duration: permanent;
+			}
+			-- ---------------------------------------------------------------------------	
+  		    -- MWW: HACK!
+  		    analyze : max 1 fault
+			-- MWW: END HACK!
+			-- ---------------------------------------------------------------------------	
+		**};		
+	end SwitchGate;	
+	
+	system implementation SwitchGate.inst
+		
+	end SwitchGate.inst;
+
+end SwitchGate;

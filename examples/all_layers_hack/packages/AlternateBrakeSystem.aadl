@@ -1,0 +1,225 @@
+package AlternateBrakeSystem 
+public
+with MeterValve;
+with Base_Types;
+
+	system AlternateBrakeSystem
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer; 
+			mech_pedal_pos_L : in data port Base_Types::Boolean;
+			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean; 
+			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
+			false_to_mv : in data port Base_Types::Boolean;
+			
+			-- Outputs (to meter valves and antiskid shutoff valves)
+			hyd_pressure_out1 : out data port Base_Types::Integer;
+			hyd_pressure_out2 : out data port Base_Types::Integer;
+			hyd_pressure_out3 : out data port Base_Types::Integer;
+			hyd_pressure_out4 : out data port Base_Types::Integer;
+			
+			annex agree {**
+				
+				assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
+				assume "False is passed to meter valves for elec_cmd" :
+					true -> (false_to_mv = false);
+					
+				-- apply_command_3_norm_guarantee := 
+				--		(TRUE ->  G (((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & hyd_pressure_in > 0) <-> hyd_pressure_out_3 > 0));
+				guarantee "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out1 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_1_5)));
+							
+				guarantee "(AlternateBrakeSystem) Pair 2,6: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out2 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_2_6)));
+							
+				guarantee "(AlternateBrakeSystem) Pair 3,7: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out3 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_3_7)));
+							
+				guarantee "(AlternateBrakeSystem) Pair 4,8: The hyd pressure output is positive if and only if
+							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
+							
+--				guarantee "(AlternateBrakeSystem) Hyd out 1 bounded" : 
+--					true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 2 bounded" : 
+--					true -> (hyd_pressure_out2 <= 10 and hyd_pressure_out2 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 3 bounded" : 
+--					true -> (hyd_pressure_out3 <= 10 and hyd_pressure_out3 >= 0);
+--				guarantee "(AlternateBrakeSystem) Hyd out 4 bounded" : 
+--					true -> (hyd_pressure_out4 <= 10 and hyd_pressure_out4 >= 0);
+					
+					
+			**};
+			
+	end AlternateBrakeSystem;
+	
+	system implementation AlternateBrakeSystem.inst
+		subcomponents
+			mv1 : system MeterValve::MeterValve;
+			mv2 : system MeterValve::MeterValve;
+			mv3 : system MeterValve::MeterValve;
+			mv4 : system MeterValve::MeterValve;
+			antiskid_shutoff_valve_1 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_2 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_3 : system AntiskidShutoffValve;
+			antiskid_shutoff_valve_4 : system AntiskidShutoffValve;
+			
+		connections
+			-- To as_shutoff valves
+			antiskid_cmd_to_1_5 : port as_cmd_pair_1_5 -> antiskid_shutoff_valve_1.antiskid_cmd;
+			antiskid_cmd_to_2_6 : port as_cmd_pair_2_6 -> antiskid_shutoff_valve_2.antiskid_cmd;
+			antiskid_cmd_to_3_7 : port as_cmd_pair_3_7 -> antiskid_shutoff_valve_3.antiskid_cmd;
+			antiskid_cmd_to_4_8 : port as_cmd_pair_4_8 -> antiskid_shutoff_valve_4.antiskid_cmd;
+			
+			-- Pressure to shutoff valves
+			antiskid_pressure_1 : port hyd_pressure_in -> antiskid_shutoff_valve_1.hyd_pressure_in;
+			antiskid_pressure_2 : port hyd_pressure_in -> antiskid_shutoff_valve_2.hyd_pressure_in;
+			antiskid_pressure_3 : port hyd_pressure_in -> antiskid_shutoff_valve_3.hyd_pressure_in;
+			antiskid_pressure_4 : port hyd_pressure_in -> antiskid_shutoff_valve_4.hyd_pressure_in;
+			
+			-- Pedal pos to meter valves
+			pedal_pos_to_mv1_L : port mech_pedal_pos_L -> mv1.mech_cmd;
+			pedal_pos_to_mv2_L : port mech_pedal_pos_L -> mv2.mech_cmd;
+			pedal_pos_to_mv3_R : port mech_pedal_pos_R -> mv3.mech_cmd;
+			pedal_pos_to_mv4_R : port mech_pedal_pos_R -> mv4.mech_cmd;
+			
+			-- pressure to mvs
+			pressure_to_mv_1 : port antiskid_shutoff_valve_1.hyd_pressure_out -> mv1.hyd_pressure_in;
+			pressure_to_mv_2 : port antiskid_shutoff_valve_2.hyd_pressure_out -> mv2.hyd_pressure_in;
+			pressure_to_mv_3 : port antiskid_shutoff_valve_3.hyd_pressure_out -> mv3.hyd_pressure_in;
+			pressure_to_mv_4 : port antiskid_shutoff_valve_4.hyd_pressure_out -> mv4.hyd_pressure_in;
+			
+			-- Outputs
+			hyd_press_out_1 : port mv1.hyd_pressure_out -> hyd_pressure_out1;
+			hyd_press_out_2 : port mv2.hyd_pressure_out -> hyd_pressure_out2;
+			hyd_press_out_3 : port mv3.hyd_pressure_out -> hyd_pressure_out3;
+			hyd_press_out_4 : port mv4.hyd_pressure_out -> hyd_pressure_out4;
+			
+			-- elec cmd in meter valves is always false for alt system
+			false_to_mv_1 : port false_to_mv -> mv1.elec_cmd;
+			false_to_mv_2 : port false_to_mv -> mv2.elec_cmd;
+			false_to_mv_3 : port false_to_mv -> mv3.elec_cmd;
+			false_to_mv_4 : port false_to_mv -> mv4.elec_cmd;
+			
+			
+		annex agree {**
+			
+			lemma "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
+							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
+							to the hyd pressure in." :
+							
+							true -> (
+								if ((antiskid_shutoff_valve_1.hyd_pressure_in = 0) or antiskid_shutoff_valve_1.antiskid_cmd) then (antiskid_shutoff_valve_1.hyd_pressure_out = 0)
+									else (antiskid_shutoff_valve_1.hyd_pressure_out = antiskid_shutoff_valve_1.hyd_pressure_in)
+								);
+			
+			lemma "Output on as comp": true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);
+			
+			lemma "Metervalve pressure input from 0 to 10 inclusive" : true -> (mv1.hyd_pressure_in >= 0 and mv1.hyd_pressure_in <= 10);
+			
+			lemma "(AntiskidShutoff) Output from 0 to 10" : true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);	
+		**};
+			
+	end AlternateBrakeSystem.inst;
+	
+	
+	system AntiskidShutoffValve
+		features
+			-- Inputs (from alternate system)
+			antiskid_cmd : in data port Base_Types::Boolean;
+			hyd_pressure_in : in data port Base_Types::Integer;
+			
+			-- Outputs 
+			-- pressure out goes to meter valve
+			hyd_pressure_out : out data port Base_Types::Integer;
+			
+			annex agree {**
+				
+				--assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
+				-- apply_command_norm_guarantee := (TRUE -> 
+				-- 		( G ((hyd_pressure_in = 0 | as_cmd) -> hyd_pressure_out = 0) 
+				--	   &  G ((hyd_pressure_in > 0 & !as_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in))
+				
+				guarantee "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
+							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
+							to the hyd pressure in." :
+							
+							true -> (
+								if ((hyd_pressure_in = 0) or antiskid_cmd) then (hyd_pressure_out = 0)
+									else (hyd_pressure_out = hyd_pressure_in)
+								);
+							
+							
+--							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
+--								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
+			
+				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);			
+			
+				-- used for nondeterministic range in fault analysis
+				eq low : int = 0;
+				eq high : int = 10;
+				eq rangeval : int;
+				
+				
+			
+			**};
+			
+			
+			
+			
+		annex safety {**
+			-- ---------------------------------------------------------------------------	
+  		    -- MWW: HACK!
+  		    analyze : max 1 fault
+			-- MWW: END HACK!
+			-- ---------------------------------------------------------------------------	
+
+			fault AntiskidShutoffValve_FailedOpen "(AntiskidShutoff) Stuck open fault.": faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+			fault AntiskidShutoffValve_FailedClosed "(AntiskidShutoff) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+			fault AntiskidShutoffValve_FailedLastPosition "(AntiskidShutoff) Stuck at last position fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+			fault AntiskidShutoffValve_FailedRandomPosition "(AntiskidShutoff) Stuck at nondeterministic fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+	**};		
+	end AntiskidShutoffValve;
+	
+	
+	system implementation AntiskidShutoffValve.inst
+	
+		annex agree{**
+			assert(low <= rangeval and rangeval <= high);
+		**};
+	end AntiskidShutoffValve.inst;
+	
+end AlternateBrakeSystem;
