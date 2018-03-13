@@ -92,17 +92,17 @@ system OSAS_Sys
     	--some guarantees in FCC verificaiton invalid
     	--Question: how could the second and third fault cancel each other
     	--if max of 1 fault can be triggered in the system?
-		fault "AILL OUT STUCK TO VAL": FAULTS.aill_out_fail_to_val {
+		fault AILL_stuck_val"AILL OUT STUCK TO VAL": FAULTS.aill_out_fail_to_val {
 			inputs: val_in <- acts_out,  alt_val <- 15000.0;   
 			outputs: acts_out <- val_out;    
 			duration: permanent;
 		}
-		fault "AILL PERSISTENT FAIL": FAULTS.persistent_aill_fail{	
+		fault AILL_persistent_fail "AILL PERSISTENT FAIL": FAULTS.persistent_aill_fail{	
 			inputs: val_in <- acts_fail;   
 			outputs: acts_fail <- val_out;    
 			duration: permanent;
 		}
-		fault "AILL INVERT FAIL": FAULTS.invert_OSAS_S_120_AILL_fail{		
+		fault AILL_invert_fail "AILL INVERT FAIL": FAULTS.invert_OSAS_S_120_AILL_fail{		
 			inputs: act <- acts_out, act_ret <- acts_ret, acts_fail <- acts_fail; 
 			outputs: acts_fail <- val_out;    
 			duration: permanent;

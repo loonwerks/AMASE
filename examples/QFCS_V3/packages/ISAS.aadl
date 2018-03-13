@@ -259,7 +259,7 @@ system ISAS_Sys
      **}; 
            
      annex safety {**
-		fault "PERSISTENT VAL1 FAIL": FAULTS.persistent_val1_fail {
+		fault VAL1_persistent_fail "PERSISTENT VAL1 FAIL": FAULTS.persistent_val1_fail {
 			inputs: val_in <- elevators_failed_update;   
 			outputs: elevators_failed_update <- val_out;    
 			duration: permanent;
