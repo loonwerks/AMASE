@@ -30,11 +30,6 @@ with Base_Types;
 		-- Should there also be a fault associated with the pressure display? I don't think
 		-- this value has any bearing on the system behavior, so it may not matter.
 		annex safety {**
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
 			
 			fault Accumulator_FailedNoPressure "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
 				inputs: val_in <- reserve_out, alt_val <- 0; 

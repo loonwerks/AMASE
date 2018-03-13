@@ -53,11 +53,6 @@ with Base_Types;
         		probability: 1.3E-5 ;
 				duration: permanent;
 			}
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
 		**};		
 	end SwitchGate;	
 	

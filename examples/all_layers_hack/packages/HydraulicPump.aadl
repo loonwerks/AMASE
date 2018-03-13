@@ -37,11 +37,6 @@ with Base_Types;
         		probability: 3.0E-5 ;
 				duration: permanent;
 			}
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
 			
 		**};
 	end HydraulicPump;

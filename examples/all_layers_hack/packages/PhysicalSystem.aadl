@@ -256,13 +256,6 @@ with ShutoffValve;
 				true -> (not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ground_speed > 0));  
 							
 		**};
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
-		-- MWW: END HACK!
-		-- ---------------------------------------------------------------------------	
-		**}	;
 	
 	end PhysicalSystem;
 	
@@ -524,6 +517,13 @@ with ShutoffValve;
 			assert (alt_sys.false_to_mv = false); 
 		
 		
+		**}	;
+		annex safety {**
+		-- ---------------------------------------------------------------------------	
+	    -- MWW: HACK!
+	    analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
 		**}	;
 			
 	end PhysicalSystem.inst; 

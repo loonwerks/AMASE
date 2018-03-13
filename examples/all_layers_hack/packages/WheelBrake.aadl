@@ -36,13 +36,6 @@ with Base_Types;
 				
 			**};
 			
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
-		-- MWW: END HACK!
-		-- ---------------------------------------------------------------------------	
-		**}	;
 	end WheelBrake;
 	
 	system implementation WheelBrake.inst
@@ -69,6 +62,13 @@ with Base_Types;
 			-- Braking force
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
 			
+		annex safety {**
+		-- ---------------------------------------------------------------------------	
+	    -- MWW: HACK!
+	    analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 	end WheelBrake.inst;
 	
 

@@ -211,13 +211,6 @@ with Base_Types;
 
 			**};
 				
-			annex safety {**
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
-			**}	;
 	end ControlSystem;
 	
 	system implementation ControlSystem.inst 
@@ -288,6 +281,13 @@ with Base_Types;
 	
 		    
 		**};
+		annex safety {**
+		-- ---------------------------------------------------------------------------	
+	    -- MWW: HACK!
+	    analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 	end ControlSystem.inst;
 
 end ControlSystem;

@@ -131,11 +131,6 @@ with Base_Types;
         		probability: 8.0E-7 ;
 				duration: permanent;
 			}
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
 			
 		**};
 	end MonitorSystem;

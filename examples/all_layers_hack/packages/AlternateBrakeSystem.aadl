@@ -127,6 +127,14 @@ with Base_Types;
 			
 			lemma "(AntiskidShutoff) Output from 0 to 10" : true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);	
 		**};
+
+		annex safety {**
+		-- ---------------------------------------------------------------------------	
+	    -- MWW: HACK!
+	    analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 			
 	end AlternateBrakeSystem.inst;
 	

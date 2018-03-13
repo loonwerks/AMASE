@@ -43,11 +43,6 @@ with Base_Types;
         		probability: 5.0E-6 ;
 				duration: permanent;
 			}
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
 		**};
 
 	end ShutoffValve;

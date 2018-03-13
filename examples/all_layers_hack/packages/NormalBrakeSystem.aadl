@@ -94,13 +94,6 @@ with Base_Types;
 --			 guarantee "(NormalBrakeSys) Pressure out 8 bounded." : true -> (hyd_pressure_out8 <= 10 and hyd_pressure_out8 >= 0);
 			 
 		**};
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
-		-- MWW: END HACK!
-		-- ---------------------------------------------------------------------------	
-		**}	;
 	end NormalBrakeSystem;
 	
 	system implementation NormalBrakeSystem.inst
@@ -170,5 +163,12 @@ with Base_Types;
 			
 		**};
 			
+		annex safety {**
+		-- ---------------------------------------------------------------------------	
+	    -- MWW: HACK!
+	    analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 	end NormalBrakeSystem.inst;
 end NormalBrakeSystem;

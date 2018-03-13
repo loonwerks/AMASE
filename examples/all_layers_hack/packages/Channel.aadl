@@ -218,6 +218,14 @@ with MonitorSystem;
 				true -> (not power => not monitor_sys.bscu_validity);
 			
 		**};
-			
+
+		annex safety {**
+		-- ---------------------------------------------------------------------------	
+	    -- MWW: HACK!
+	    analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
+
 	end Channel.inst;
 end Channel;
