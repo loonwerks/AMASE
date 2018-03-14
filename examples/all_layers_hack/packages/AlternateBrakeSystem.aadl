@@ -46,17 +46,7 @@ with Base_Types;
 				guarantee "(AlternateBrakeSystem) Pair 4,8: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
 							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
-							
---				guarantee "(AlternateBrakeSystem) Hyd out 1 bounded" : 
---					true -> (hyd_pressure_out1 <= 10 and hyd_pressure_out1 >= 0);
---				guarantee "(AlternateBrakeSystem) Hyd out 2 bounded" : 
---					true -> (hyd_pressure_out2 <= 10 and hyd_pressure_out2 >= 0);
---				guarantee "(AlternateBrakeSystem) Hyd out 3 bounded" : 
---					true -> (hyd_pressure_out3 <= 10 and hyd_pressure_out3 >= 0);
---				guarantee "(AlternateBrakeSystem) Hyd out 4 bounded" : 
---					true -> (hyd_pressure_out4 <= 10 and hyd_pressure_out4 >= 0);
-					
-					
+				
 			**};
 			
 	end AlternateBrakeSystem;
@@ -109,24 +99,6 @@ with Base_Types;
 			false_to_mv_3 : port false_to_mv -> mv3.elec_cmd;
 			false_to_mv_4 : port false_to_mv -> mv4.elec_cmd;
 			
-			
-		annex agree {**
-			
-			lemma "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
-							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
-							to the hyd pressure in." :
-							
-							true -> (
-								if ((antiskid_shutoff_valve_1.hyd_pressure_in = 0) or antiskid_shutoff_valve_1.antiskid_cmd) then (antiskid_shutoff_valve_1.hyd_pressure_out = 0)
-									else (antiskid_shutoff_valve_1.hyd_pressure_out = antiskid_shutoff_valve_1.hyd_pressure_in)
-								);
-			
-			lemma "Output on as comp": true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);
-			
-			lemma "Metervalve pressure input from 0 to 10 inclusive" : true -> (mv1.hyd_pressure_in >= 0 and mv1.hyd_pressure_in <= 10);
-			
-			lemma "(AntiskidShutoff) Output from 0 to 10" : true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);	
-		**};
 
 		annex safety {**
 		-- ---------------------------------------------------------------------------	
@@ -151,12 +123,6 @@ with Base_Types;
 			
 			annex agree {**
 				
-				--assume "Pressure input from 0 to 10 inclusive" : (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
-				
-				-- apply_command_norm_guarantee := (TRUE -> 
-				-- 		( G ((hyd_pressure_in = 0 | as_cmd) -> hyd_pressure_out = 0) 
-				--	   &  G ((hyd_pressure_in > 0 & !as_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in))
-				
 				guarantee "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
 							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
 							to the hyd pressure in." :
@@ -166,18 +132,12 @@ with Base_Types;
 									else (hyd_pressure_out = hyd_pressure_in)
 								);
 							
-							
---							true -> ((((hyd_pressure_in = 0) or antiskid_cmd) => hyd_pressure_out = 0)
---								and ((hyd_pressure_in > 0 and (not antiskid_cmd)) => (hyd_pressure_out > 0 and (hyd_pressure_out = hyd_pressure_in))));				
-			
 				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);			
 			
 				-- used for nondeterministic range in fault analysis
 				eq low : int = 0;
 				eq high : int = 10;
 				eq rangeval : int;
-				
-				
 			
 			**};
 			

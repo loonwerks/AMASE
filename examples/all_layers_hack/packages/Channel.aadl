@@ -40,25 +40,7 @@ with MonitorSystem;
 			annex agree {**
 				assume "(ChannelSystem) Ground speed always greater than zero." : 
 					(ground_speed >= 0) and (ground_speed <= 10);
-				
---				guarantee "Brake as cmd 1" : (power and (elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) = brake_as_cmd_1);
---				assume "Brase as cmd 2" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) = brake_as_cmd_2);
---				assume "Brase as cmd 3" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_3) or (not SPEED))) = brake_as_cmd_3);
---				assume "Brase as cmd 4" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_4) or (not SPEED))) = brake_as_cmd_4);
---				assume "Brase as cmd 5" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_5) or (not SPEED))) = brake_as_cmd_5);
---				assume "Brase as cmd 6" : ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_6) or (not SPEED))) = brake_as_cmd_6);
---				assume "Brase as cmd 7" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_7) or (not SPEED))) = brake_as_cmd_7);
---				assume "Brase as cmd 8" : ((power and elec_pedal_pos_R and ((SPEED and wheel_rolling_8) or (not SPEED))) = brake_as_cmd_8);
---				assume "Antiskid cmd pair 1,5" : ((power and SPEED and (PAIR_NOT_ROLLING_15)) = as_cmd_pair_1_5);
---				assume "Antiskid cmd pair 2,6" : ((power and SPEED and (PAIR_NOT_ROLLING_26)) = as_cmd_pair_2_6);
---				assume "Antiskid cmd pair 3,7" : ((power and SPEED and (PAIR_NOT_ROLLING_37)) = as_cmd_pair_3_7);
---				assume "Antiskid cmd pair 4,8" : ((power and SPEED and (PAIR_NOT_ROLLING_48)) = as_cmd_pair_4_8);
-				
---				guarantee "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
---						  if and only if antiskid is commanded to the pair." :
---						  true -> (((system_validity and (ground_speed > 0)) and (not wheel_rolling_1 or not wheel_rolling_5)) <=>  as_cmd_pair_1_5);
---				
-									
+			
 				-- Properties 
 				property SPEED = ground_speed > 0;
 				-- When one of the wheels in a pair is not rolling
@@ -74,8 +56,6 @@ with MonitorSystem;
 				--	command_creation_alternate_3_norm_guarantee := 
 				--	(TRUE ->  G 
 					--  ((         (power & ground_speed > 0) & (!wheel_rolling_3 | !wheel_rolling_7)) <-> as_cmd_pair_3_7)
-			
-				
 				-- Antiskid command equivalence
 				guarantee "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
@@ -128,7 +108,7 @@ with MonitorSystem;
 		
 				
 				
-				-- If there is no power coming in, our validity should be false... Right?!
+				-- If there is no power coming in, channel validity should be false... 
 				guarantee "(Channel) If there is no power source, validity should be false." :
 						true -> (not power => not system_validity);	
 				
@@ -203,21 +183,6 @@ with MonitorSystem;
 			command_wheel_rolling_7 : port wheel_rolling_7 -> command_sys.wheel_rolling_7;
 			command_wheel_rolling_8 : port wheel_rolling_8 -> command_sys.wheel_rolling_8;
 		
-		annex agree {**
-     		lemma "Brake as cmd 1" : true -> ((power and elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) = brake_as_cmd_1);
-			lemma "Cmd sys output = mon sys input" : command_sys.brake_as_cmd_1 = monitor_sys.brake_as_cmd_1;
-			lemma "Cmd sys input = mon sys input" : (command_sys.power  = monitor_sys.power);
-			
---			guarantee "(CommandSystem) Wheel 1: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
---						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0))	
---									<=> brake_as_cmd_1);
-			
---			lemma "Brake as cmd 1" : true -> ((command_sys.power and command_sys.elec_pedal_pos_L and ((command_sys.ground_speed > 0 and command_sys.wheel_rolling_1) or (not (command_sys.ground_speed > 0)))) = command_sys.brake_as_cmd_1);
-			
-			lemma "BSCU valid depends partly on power." : 
-				true -> (not power => not monitor_sys.bscu_validity);
-			
-		**};
 
 		annex safety {**
 		-- ---------------------------------------------------------------------------	

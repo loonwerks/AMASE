@@ -68,10 +68,7 @@ with Base_Types;
 				property BRAKE_AS_COMMANDED_26 = brake_as_cmd_2 and brake_as_cmd_6;
 				property BRAKE_AS_COMMANDED_37 = brake_as_cmd_3 and brake_as_cmd_7;
 				property BRAKE_AS_COMMANDED_48 = brake_as_cmd_4 and brake_as_cmd_8;				
-				
-				
-				
-								
+							
 				-- expected_behavior_as_cmd_pair_4_8_norm_guarantee := 
  				--	TRUE ->  G 
 				--		(((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)) -> as_cmd_pair_4_8) 
@@ -108,54 +105,6 @@ with Base_Types;
 							and (VALIDPAIR_37 => not BRAKE_AS_COMMANDED_37)
 							and (VALIDPAIR_48 => not BRAKE_AS_COMMANDED_48));
 				
-				
-				--	system_validity_norm_guarantee := 
-				--	TRUE ->  G 
-				--		system_validity 
-				--		<-> (((((((((((
-				--		((power_1 | power_2) 
-				--		& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_1) | ground_speed = 0)) <-> brake_as_cmd_1)) 
-				--		& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_2) | ground_speed = 0)) <-> brake_as_cmd_2)) 
-				--		& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_3) | ground_speed = 0)) <-> brake_as_cmd_3)) 
-				--		& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_4) | ground_speed = 0)) <-> brake_as_cmd_4)) 
-				--		& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_5) | ground_speed = 0)) <-> brake_as_cmd_5)) 
-				--		& ((electrical_pedal_pos_L & ((ground_speed > 0 & wheel_rolling_6) | ground_speed = 0)) <-> brake_as_cmd_6)) 
-				--		& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_7) | ground_speed = 0)) <-> brake_as_cmd_7)) 
-				--		& ((electrical_pedal_pos_R & ((ground_speed > 0 & wheel_rolling_8) | ground_speed = 0)) <-> brake_as_cmd_8)) 
-				--		& ((ground_speed > 0 & (!wheel_rolling_1 | !wheel_rolling_5)) <-> as_cmd_pair_1_5)) 
-				--		& ((ground_speed > 0 & (!wheel_rolling_2 | !wheel_rolling_6)) <-> as_cmd_pair_2_6)) 
-				--		& ((ground_speed > 0 & (!wheel_rolling_3 | !wheel_rolling_7)) <-> as_cmd_pair_3_7)) 
-				--		& ((ground_speed > 0 & (!wheel_rolling_4 | !wheel_rolling_8)) <-> as_cmd_pair_4_8));
-		
-				-- true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8)
-				
-				
-				
---				guarantee "(ctrl system) System validity: System is valid if and only if: power is supplied, antiskid commanded to wheel
---							is valid in all cases, and brake antiskid is valid in all cases." :
---							true -> (system_validity <=> 
---									((power_1 or power_2) 
---									and brake_as_cmd_1 
---									and brake_as_cmd_2 
---									and brake_as_cmd_3 
---									and brake_as_cmd_4 
---									and brake_as_cmd_5 
---									and brake_as_cmd_6 
---									and brake_as_cmd_7 
---									and brake_as_cmd_8
---									and as_cmd_pair_1_5 
---									and as_cmd_pair_2_6 
---									and as_cmd_pair_3_7 
---									and as_cmd_pair_4_8));
-				
-				
-				
-				--	brake_as_cmd_excludes_as_cmd_norm_guarantee := 
-				--	(TRUE -> ((( G 
-				--		(((brake_as_cmd_1 & brake_as_cmd_5) & system_validity) -> !as_cmd_pair_1_5) 
-				--	&  G (((brake_as_cmd_2 & brake_as_cmd_6) & system_validity) -> !as_cmd_pair_2_6)) 
-				--	&  G (((brake_as_cmd_3 & brake_as_cmd_7) & system_validity) -> !as_cmd_pair_3_7)) 
-				--	&  G (((brake_as_cmd_4 & brake_as_cmd_8) & system_validity) -> !as_cmd_pair_4_8)));
 				
 				guarantee "(ctrl system) If system is valid and we have brake antiskid commanded at each wheel, 
 							then we do not use the antiskid backup command." :
@@ -201,14 +150,7 @@ with Base_Types;
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 8): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
-				
-				 
-
-
---guarantee " (Channel) Brake antiskid command behavior (wheel 1): Brake antiskid is commanded to the wheel only when 
---							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
---							true -> (((power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1);
-
+			
 			**};
 				
 	end ControlSystem;
@@ -251,36 +193,6 @@ with Base_Types;
 			power1_to_bscu : port power_1 -> bscu.power_1;
 			power2_to_bscu : port power_2 -> bscu.power_2;
 			
-		annex agree {**
-			lemma "(ctrl system) 1 Expected antiskid behavior brake cmd 1:" :
-						  true -> (((system_validity and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1);
-						  
-			lemma "(ctrl system) 2 Expected antiskid behavior brake cmd 1:" :
-						  true -> (((system_validity and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2);
-		
-		
---			lemma "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
---							we have power, ground speed is positive, and one of the two wheels is not rolling." :
---							true -> (power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
---		
---		
---			lemma "bscu valid" :	true -> (system_validity <=> 
---						(power 
---						and brake_as_cmd_1
---						and brake_as_cmd_2 
---						and brake_as_cmd_3
---						and brake_as_cmd_4
---						and brake_as_cmd_5
---						and brake_as_cmd_6
---						and brake_as_cmd_7
---						and brake_as_cmd_8
---						and as_cmd_pair_1_5
---						and as_cmd_pair_2_6
---						and as_cmd_pair_3_7
---						and as_cmd_pair_4_8));
-	
-		    
-		**};
 		annex safety {**
 		-- ---------------------------------------------------------------------------	
 	    -- MWW: HACK!

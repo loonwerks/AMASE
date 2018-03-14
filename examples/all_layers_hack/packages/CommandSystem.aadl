@@ -86,9 +86,6 @@ with Base_Types;
 						true -> ((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_8) or ground_speed = 0))	
 									<=> brake_as_cmd_8);
 			
-						
-			
-			
 		**};
 		
 	end CommandSystem;
@@ -147,13 +144,7 @@ with Base_Types;
 			
 			wheel_4_roll : port wheel_rolling_4 -> w4_w8_cmd_sys.wheel_rolling_1;
 			wheel_8_roll : port wheel_rolling_8 -> w4_w8_cmd_sys.wheel_rolling_2;
-			
---			annex agree {**
---				property AS_CMD_OUT = ((power and ground_speed > 0) and (not wheel_rolling_1 or not wheel_rolling_5)) <=> w1_w5_cmd_sys.as_cmd_out;
---				
-----				lemma "antiskid command: " : true -> (AS_CMD_OUT); 
---				
---			**};
+	
 			
 		annex safety {**
 		-- ---------------------------------------------------------------------------	
