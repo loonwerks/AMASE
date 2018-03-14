@@ -409,111 +409,16 @@ with ShutoffValve;
 		
 		
 		annex agree {**
-			
-			-- Hyd pumps
---			
---			lemma "(HydraulicPump) Blue hyd pressure out first step" :
---						(blue_hyd_pump.hyd_pressure_out = 0) -> true;
---			
---			lemma "(HydraulicPump) Green hyd pressure out first step" :
---						(green_hyd_pump.hyd_pressure_out = 0) -> true;
---			
---			lemma "(BlueHydraulicPump) If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
---						true -> (
---							if (blue_hyd_pump.power and blue_hyd_pump.hyd_supply > 0) then (blue_hyd_pump.hyd_pressure_out = blue_hyd_pump.hyd_supply)
---								else (blue_hyd_pump.hyd_pressure_out = 0)
---						);
---			
---			lemma "(GreenHydraulicPump) If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
---						true -> (
---							if (green_hyd_pump.power and green_hyd_pump.hyd_supply > 0) then (green_hyd_pump.hyd_pressure_out = green_hyd_pump.hyd_supply)
---								else (green_hyd_pump.hyd_pressure_out = 0)
---						);
---		
---			-- Accumulator
---				
---			lemma "Testing pressure into accumulator" :
---				true -> (
---					(green_hyd_pump.hyd_pressure_out >= 0) and (green_hyd_pump.hyd_pressure_out <= 10)
---				);
---		
---
---			lemma "(Accumulator) The reserve out pressure is positive if and only if the circuit pressure value is zero.":
---						true -> (accumulator.reserve_out > 0 <=> accumulator.circuit_pressure_value = 0);
---
---			lemma "(Accumulator) Reserve out is always between 0 and 10" : 
---				true -> (accumulator.reserve_out <= 10 and accumulator.reserve_out >= 0);
---
---
---			-- Shutoff valve
---	
---			lemma "(ShutoffValve) Positive pressure out occurs whenever pressure in is positive and system is valid. 
---						Zero pressure out occurs whenever hyd pressure in is zero or system is not valid." :
---						true -> (if(shutoff_valve.hyd_pressure_in > 0 and shutoff_valve.system_validity) then (shutoff_valve.hyd_pressure_out = shutoff_valve.hyd_pressure_in)
---								else (shutoff_valve.hyd_pressure_out = 0));
---	
---			lemma "Shutoff input comes from green pump" :
---				true -> (green_hyd_pump.hyd_pressure_out = shutoff_valve.hyd_pressure_in);
---	
---		
---			lemma "Shutoff output goes to selector" :
---				true -> ((shutoff_valve.hyd_pressure_out = green_pressure_in_selec_valve) and (selector_valve.green_select_in = shutoff_valve.hyd_pressure_out));
---		
---		
---			
---			lemma "Validity to shutoff" : true -> (system_validity = shutoff_valve.system_validity);
---		
---		
---		
---			lemma "Shutoff pressure range" : true -> (shutoff_valve.hyd_pressure_in >= 0 and shutoff_valve.hyd_pressure_in <= 10);
---		
---		
---		
---			-- Addition gate
---		
---			lemma "Input to add gate" : true -> ((blue_hyd_pump.hyd_pressure_out = add_gate_hyd_pressure.in_1) and (accumulator.reserve_out = add_gate_hyd_pressure.in_2));
---		
---		
---			-- Selector valve
---		
---			lemma "(SelectorValve) The green line is selected under valid system and positive green pressure. 
---						The blue line is selected under invalid system or no green pressure and positive blue pressure.
---						Neither are selected in any other case." :
---						true -> (
---							if (selector_valve.green_select_in > 0 and selector_valve.system_validity) then (selector_valve.green_select_out > 0 and selector_valve.blue_select_out = 0)
---							
---							else if ((selector_valve.green_select_in = 0 or not system_validity) and selector_valve.blue_select_in > 0)  
---										then  (selector_valve.green_select_out = 0 and selector_valve.blue_select_out > 0)
---							else (selector_valve.green_select_out = 0 and selector_valve.blue_select_out = 0)
---										
---							
---							);
---		
---		
---			lemma "(SelectorValve) Output is bounded from 0 to 10" :
---				true -> ((selector_valve.green_select_out >= 0 and selector_valve.green_select_out <= 10)
---					and (selector_valve.blue_select_out >= 0 and selector_valve.blue_select_out <= 10));
---		
---			-- NBS
---		
---			lemma "(NormalBrakeSys) (W1) Hydraulic pressure out is positive if and only if
---						brake_as_cmd input is true and hyd pressure in is positive." :
---						true -> (
---							((normal_sys.brake_as_cmd1 and normal_sys.hyd_pressure_in > 0) <=> normal_sys.hyd_pressure_out1 > 0)) ;
---		
---		
---			lemma "(NBS) Pressure out of selector is pressure into NBS" :
---				true -> (selector_valve.green_select_out = normal_sys.hyd_pressure_in);
-		
+	
 			assert (normal_sys.false_to_mv = false);
 		
 			
 			-- ABS
 		
-			lemma "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
-							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							true -> (alt_sys.hyd_pressure_out1 > 0 <=> (alt_sys.mech_pedal_pos_L and alt_sys.hyd_pressure_in > 0 and (not alt_sys.as_cmd_pair_1_5)));
-		
+--			lemma "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
+--							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
+--							true -> (alt_sys.hyd_pressure_out1 > 0 <=> (alt_sys.mech_pedal_pos_L and alt_sys.hyd_pressure_in > 0 and (not alt_sys.as_cmd_pair_1_5)));
+--		
 			assert (alt_sys.false_to_mv = false); 
 		
 		
