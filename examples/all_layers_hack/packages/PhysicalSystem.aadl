@@ -410,15 +410,8 @@ with ShutoffValve;
 		
 		annex agree {**
 	
+			-- DO NOT REMOVE THESE!!!
 			assert (normal_sys.false_to_mv = false);
-		
-			
-			-- ABS
-		
---			lemma "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
---							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
---							true -> (alt_sys.hyd_pressure_out1 > 0 <=> (alt_sys.mech_pedal_pos_L and alt_sys.hyd_pressure_in > 0 and (not alt_sys.as_cmd_pair_1_5)));
---		
 			assert (alt_sys.false_to_mv = false); 
 		
 		

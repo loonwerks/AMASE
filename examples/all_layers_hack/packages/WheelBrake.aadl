@@ -12,22 +12,6 @@ with Base_Types;
 			
 			annex agree {**
 				
---				assume "(WheelBrake) Normal hyd pressure in is always bounded between 0 and 10 inclusive." :
---					true -> 
---					((normal_hyd_pressure_in <= 10) and (normal_hyd_pressure_in >= 0));
-				
-				
---				assume "(WheelBrake) Alt hyd pressure in is always bounded between 0 and 10 inclusive." :
---					true -> 
---					((alt_hyd_pressure_in <= 10) and (alt_hyd_pressure_in >= 0));
-				
-				-- Added guarantee that brake force is between 0 to 10 inclusive
---				guarantee "(WheelBrake) Braking force is always from 0 to 10 inclusive." :
---						true -> (brake_force <= 10 and brake_force >= 0);
-				
-				--  supply_braking_force_norm_guarantee := (TRUE ->  
-				--       G (braking_force > 0 <-> (normal_hyd_pressure_in > 0 | alternate_hyd_pressure_in > 0))
-				
 				guarantee "(WheelBrake) braking force is positive if and only if
 							either normal or alternate pressure is positive." :
 							true -> (brake_force > 0 <=> (normal_hyd_pressure_in > 0 or alt_hyd_pressure_in > 0));			
@@ -81,10 +65,6 @@ with Base_Types;
 			
 			annex agree {**
 				
---				assume "(HydraulicFuse) Hyd pressure in is always bounded between 0 and 10 inclusive." :
---					true -> 
---					((hyd_pressure_in <= 10) and (hyd_pressure_in >= 0));
-				
 				--  fuse_behavior_norm_guarantee := (TRUE ->  G hyd_pressure_out = hyd_pressure_in);
 				guarantee "(HydraulicFuse) hydraulic pressure in equals hydraulic pressure out." :
 							true -> (hyd_pressure_in = hyd_pressure_out);
@@ -114,12 +94,7 @@ with Base_Types;
 			
 			annex agree {**
 				
---				assume "(HydraulicPiston) Hyd pressure in is always bounded between 0 and 10 inclusive." :
---					true -> 
---					((hyd_pressure_in <= 10) and (hyd_pressure_in >= 0));
-					
 				--  create_force_norm_guarantee := (TRUE ->  G hyd_pressure_in = force_out);
-
 				guarantee "(HydraulicPiston) hydraulic pressure in equals force out." :
 							true -> (hyd_pressure_in = force_out);
 			**};
@@ -156,20 +131,16 @@ with Base_Types;
 			
 			annex agree {**
 				
---				assume "(BrakeActuator) Force in is always bounded between 0 and 10 inclusive." :
---					true -> 
---					((normal_force_in <= 10) and (normal_force_in >= 0) and (alternate_force_in <= 10) and (alternate_force_in >= 0));
-				
 				-- Added guarantee: brake force is always either normal or alternate force value
 				guarantee "(BrakeActuator) Brake force is equivalent to either alternate or normal force in." :
 							true -> (braking_force = alternate_force_in) or (braking_force = normal_force_in);
 					
 				-- transform_force_norm_guarantee := (TRUE ->  G ((normal_force_in > 0 | alternate_force_in > 0) <-> braking_force > 0));
- 
-				guarantee "(BrakeActuator) Braking force is positive if and only if
+	 			guarantee "(BrakeActuator) Braking force is positive if and only if
 							normal force or alternate force is positive." :
 							true -> (braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));
 			**};
+			
 		annex safety {**
 			fault BrakeActuator_FailedFullOff "(BrakeActuator) Stuck closed fault." : faults.fail_to {
 				inputs: val_in <- braking_force, alt_val <- 0; 
