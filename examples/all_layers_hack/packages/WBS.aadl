@@ -212,10 +212,12 @@ with sensor;
 		-- AIR6110:
 		-- Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff
 
-		lemma "(WBS) Inadvertent braking of wheel 1: If all power and hydraulic pressure is supplied, then
+		lemma "(WBS) Inadvertent braking of wheel 1: If power and max hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => 
+						((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL)))
+					);
 		
 		lemma "(WBS) Inadvertent braking of wheel 2: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
@@ -250,7 +252,9 @@ with sensor;
 		lemma "(WBS) Inadvertent braking of wheel 8: If all power and hydraulic pressure is supplied, then
 					either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 					or wheel is not rolling." :
-					true -> ((POWER and HYD_PRESSURE_MAX) => ((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL))));
+					true -> ((POWER and HYD_PRESSURE_MAX) => 
+						((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL)))
+					);
 	 
 		
 		-- AIR 6110
