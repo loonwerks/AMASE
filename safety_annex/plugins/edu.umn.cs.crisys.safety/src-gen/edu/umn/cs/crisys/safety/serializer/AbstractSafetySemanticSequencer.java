@@ -4,6 +4,7 @@
 package edu.umn.cs.crisys.safety.serializer;
 
 import com.google.inject.Inject;
+import com.rockwellcollins.atc.agree.agree.AADLEnumerator;
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
 import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
@@ -238,6 +239,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			}
 		else if (epackage == AgreePackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
+			case AgreePackage.AADL_ENUMERATOR:
+				sequence_TermExpr(context, (AADLEnumerator) semanticObject); 
+				return; 
 			case AgreePackage.AGREE_CONTRACT:
 				sequence_AgreeContract(context, (AgreeContract) semanticObject); 
 				return; 

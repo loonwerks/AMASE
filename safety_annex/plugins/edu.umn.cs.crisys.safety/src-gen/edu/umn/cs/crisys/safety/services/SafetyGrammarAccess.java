@@ -2193,6 +2193,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	| {ThisExpr} 'this' ('.' subThis=NestedDotID)?
 	//	| {FloorCast} 'floor' '(' expr=Expr ')'
 	//	| {RealCast} 'real' '(' expr=Expr ')'
+	//	| {AADLEnumerator} 'enum' '(' enumType=NestedDotID ',' value=ID ')'
 	//	| '(' Expr ')';
 	public AgreeGrammarAccess.TermExprElements getTermExprAccess() {
 		return gaAgree.getTermExprAccess();
