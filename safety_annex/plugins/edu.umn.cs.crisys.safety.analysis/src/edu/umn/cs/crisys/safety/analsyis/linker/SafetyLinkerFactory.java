@@ -7,7 +7,6 @@ import java.util.Queue;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
@@ -56,37 +55,37 @@ public class SafetyLinkerFactory {
 			throw new AgreeException("Error Instantiating model");
 		}
 	}
-	
+
 	public SafetyLinkerFactory(ComponentImplementation ci, boolean monolithicAnalysis, boolean allLayers) {
 		this.si = getSysInstance(ci);
 		this.monolithicAnalysis = monolithicAnalysis;
 
 		// check for AGREE Annex
-		
+
         ComponentType sysType = AgreeUtils.getInstanceType(si);
         EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(sysType,
                 AgreePackage.eINSTANCE.getAgreeContractSubclause());
-        
+
         annexSubClauses.addAll(AnnexUtil.getAllAnnexSubclauses(sysType,
                 SafetyPackage.eINSTANCE.getSafetyContractSubclause()));
-        
+
         EList agreeSubclauses = AnnexUtil.getAllAnnexSubclauses(sysType, AgreePackage.eINSTANCE.getAgreeContractSubclause());
-       
+
         EList safetySubclauses = AnnexUtil.getAllAnnexSubclauses(sysType, SafetyPackage.eINSTANCE.getSafetyContractSubclause());
         EClass agreetest = AgreePackage.eINSTANCE.getAgreeContractSubclause();
         EClass test = SafetyPackage.eINSTANCE.getSafetyContractSubclause();
-        
-        
+
+
 //        EList<AnnexSubclause> safetySubclause = AnnexUtil.getAllAnnexSubclauses(sysType,
 //                SafetyPackage.eINSTANCE.getSafetyContractSubclause());
-        
-        
+
+
         int size = annexSubClauses.size();
         if (annexSubClauses.size() == 0) {
             throw new SafetyException(
                     "There is no AGREE annex or Safety annex in the '" + sysType.getName() + "' system type.");
         }
-        
+
         if(annexSubClauses.size() == 3){
         	throw new SafetyException(
         			"There must be both an AGREE annex and a Safety annex in the '" + sysType.getName() + "' system type.");
@@ -103,14 +102,14 @@ public class SafetyLinkerFactory {
             result = wrapper;
 		}
 	}
-	
+
 	// Get analysis results, agree linker, and jkind queue
 	public AnalysisResult getAnalysisResult() { return result; }
 	public AgreeResultsLinker getLinker() { return linker; }
 	public Queue<JKindResult> getWorkQueue() { return queue; }
-	
+
 	// Routines for actually building the verification results...
-	
+
     private void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
         AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, monolithicAnalysis);
         Program program;
@@ -121,19 +120,19 @@ public class SafetyLinkerFactory {
 
     protected AnalysisResult createVerification(String resultName, ComponentInstance compInst, Program lustreProgram, AgreeProgram agreeProgram) {
 
-    	// Renaming: organizes things between jkind and agree results? 
-		AgreeRenaming agreeRenaming = new AgreeRenaming(); 
+    	// Renaming: organizes things between jkind and agree results?
+		AgreeRenaming agreeRenaming = new AgreeRenaming();
 		AgreeLayout layout = new AgreeLayout();
-		RenamingVisitor.addRenamings(lustreProgram, agreeRenaming, layout);
+		RenamingVisitor.addRenamings(lustreProgram, agreeRenaming, compInst, layout);
 		SafetyRenaming renaming = new SafetyRenaming(agreeRenaming, agreeRenaming.getRefMap());
         Node mainNode = lustreProgram.getMainNode();
-        
+
         if (mainNode == null) {
             throw new AgreeException("Could not find main lustre node after translation");
         }
 
         List<String> properties = new ArrayList<>();
-        
+
         JKindResult result;
         result = new JKindResult(resultName, properties, renaming);
         queue.add(result);
@@ -149,7 +148,7 @@ public class SafetyLinkerFactory {
         linker.setLog(result, AgreeLogger.getLog());
         linker.setRenaming(result, renaming);
 
-        // Print the jkind result 
+        // Print the jkind result
         //System.out.println(result);
         //System.out.println(agreeProgram);
         //System.out.println(lustreProgram);
