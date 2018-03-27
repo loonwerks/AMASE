@@ -144,7 +144,16 @@ with Base_Types;
 			
 			
 			
-		annex safety {**
+		
+	end AntiskidShutoffValve;
+	
+	
+	system implementation AntiskidShutoffValve.inst
+	
+		annex agree{**
+			assert(low <= rangeval and rangeval <= high);
+		**};
+				annex safety {**
 			-- ---------------------------------------------------------------------------	
   		    -- MWW: HACK!
   		    analyze : max 1 fault
@@ -179,15 +188,7 @@ with Base_Types;
 				duration: permanent;
 			}
 			
-	**};		
-	end AntiskidShutoffValve;
-	
-	
-	system implementation AntiskidShutoffValve.inst
-	
-		annex agree{**
-			assert(low <= rangeval and rangeval <= high);
-		**};
+	**};
 	end AntiskidShutoffValve.inst;
 	
 end AlternateBrakeSystem;
