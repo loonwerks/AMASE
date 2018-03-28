@@ -290,8 +290,8 @@ with sensor;
    annex safety{**
 	  --analyze : max 1 fault
 	  -- analyze : probability 1.0E-7
-	  analyze : max 1 fault
-	  -- probability 5.0E-7
+	  --analyze : max 1 fault
+	  analyze : probability 5.0E-7
    **};
 end WBS.inst;
 
