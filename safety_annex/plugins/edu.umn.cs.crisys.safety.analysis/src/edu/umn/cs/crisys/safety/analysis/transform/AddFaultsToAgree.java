@@ -17,16 +17,16 @@ import jkind.api.results.AnalysisResult;
 public class AddFaultsToAgree implements AgreeAutomater {
 
 	private static boolean transformFlag = false;
-	
-	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor(); 
 
-	
+	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
+
+
 	/* For each AgreeNode:
 	 * ! 1. Find the set of "faulty" outputs. Ensure that only one fault occurs per output
 	 * (test: print them & verify)
-	 * 		We need to map "faulty" outputs as they are define in the error 
-	 * 		annex to their names in AGREE. 
-	 * 
+	 * 		We need to map "faulty" outputs as they are define in the error
+	 * 		annex to their names in AGREE.
+	 *
 	 * ! 2. For each of these outputs define a "nominal" value
 	 * (test: print updated AST)
 	 * ! 3. For each property involving a faulty output, replace the faulty output id with the
@@ -42,22 +42,22 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * (test: print updated AST)
 	 *
 	 * For the top-level node:
-	 * 	
+	 *
 	 * ! 1. For each subcomponent node
 		For each subcomponent fault (depth-first)
 			0. Perform a traversal to find all the node/fault pairs
-			1a. Define an unconstrained local eq. to represent each fault-event 
-			1b. Define a constrained local eq. to assign fault-active value depending on 
+			1a. Define an unconstrained local eq. to represent each fault-event
+			1b. Define a constrained local eq. to assign fault-active value depending on
 				fault duration in node.
-			1c. Assign subcomponent fault input to fault-active eq with assertions (yay!) 
+			1c. Assign subcomponent fault input to fault-active eq with assertions (yay!)
 	            (test: print updated AST)
 		! 2. Assign faults-active equation to sum of all fault-active values
 			(test: print updated AST)
-		3. Assert that this value is <= 1 (FOR NOW!)	
+		3. Assert that this value is <= 1 (FOR NOW!)
 			(test: print updated AST)
 		4. Use shiny new fault annex to perform safety analysis
 			(test: analysis results)
-	 
+
 
 
 	 */
@@ -78,15 +78,15 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 
 		// System.out.println("Ta da!");
-		
+
 		faultVisitor = new AddFaultsToNodeVisitor();
-		
+
 		try{
 			program = faultVisitor.visit(program);
 			AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 			pp.visit(program);
 			System.out.println("Initial printing");
-			System.out.println(pp.toString()); 
+			System.out.println(pp.toString());
 		}
 		catch (Throwable t) {
 			System.out.println("Something went wrong during safety analysis: " + t.toString());
@@ -95,7 +95,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			System.out.println("completed performing safety analysis transformation");
 			System.out.println("...and we're done!");
 		}
-				
+
 		return program;
 	}
 
@@ -122,28 +122,29 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	/*
 	 * (non-Javadoc)
 	 * @see com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater#rename(com.rockwellcollins.atc.agree.analysis.AgreeRenaming)
-	 * 
+	 *
 	 *  (1) Gets the fault Lustre names and renames them as the explanatory text
-	 *  associated with that fault statement. 
+	 *  associated with that fault statement.
 	 *  (2) Add to reference map: Lustre fault -> FaultStatementImpl
-	 *  
+	 *
 	 */
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
 		Map<Fault, List<String>> mapFaultToLustreName = faultVisitor.getFaultToLustreNameMap();
-		 
+
 		for(Fault key : mapFaultToLustreName.keySet()) {
-			
+
 			// Add to explicit renames map
 			for(String name : mapFaultToLustreName.get(key)) {
-				renaming.addExplicitRename(name, key.explanitoryText);
+				renaming.addExplicitRename(name,
+						key.explanitoryText + " (" + mapFaultToLustreName.get(key) + ", " + key.id + ")");
 				// Add to reference map
 				renaming.addToRefMap(name, key.faultStatement);
-			}	
+			}
 		}
 		return renaming;
 	}
-	
+
 
 
 	@Override
@@ -153,16 +154,22 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	}
 
 	// @Override
+	@Override
 	public AgreeLayout transformLayout(AgreeLayout layout) {
-		
+
 		Map<Fault, String> mapFaultToPath = faultVisitor.getMapFaultToPath();
 		for(Fault key : mapFaultToPath.keySet()) {
-			layout.addElement(mapFaultToPath.get(key), key.explanitoryText, SigType.INPUT);
+			layout.addElement(mapFaultToPath.get(key),
+					key.explanitoryText + " (" + mapFaultToPath.get(key) + ", " + key.id + ")",
+					SigType.OUTPUT);
+			layout.addElement(mapFaultToPath.get(key),
+					key.explanitoryText + " (" + mapFaultToPath.get(key) + ", " + key.id + ")",
+					SigType.INPUT);
 		}
 		return layout;
 	}
 
 
 
-	
+
 }
