@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: edu.umn.cs.crisys.safety.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: edu.umn.cs.crisys.safety,
- edu.umn.cs.crisys.safety.ide,
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
