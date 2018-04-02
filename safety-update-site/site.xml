@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201804021547.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201804021547"/>
+	<category-def name="edu.umn.cs.crisys.safety" label="Safety Annex">
+      <description>
+         Tools developed under the AMASE project
+      </description>
+   </category-def>
 </site>
