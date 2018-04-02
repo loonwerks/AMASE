@@ -160,17 +160,40 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 		Map<Fault, String> mapFaultToPath = faultVisitor.getMapFaultToPath();
 		for(Fault key : mapFaultToPath.keySet()) {
-			layout.addElement(mapFaultToPath.get(key),
-					key.explanitoryText + " (" + mapFaultToPath.get(key) + ", " + key.id + ")",
-					SigType.OUTPUT);
-			layout.addElement(mapFaultToPath.get(key),
-					key.explanitoryText + " (" + mapFaultToPath.get(key) + ", " + key.id + ")",
+
+			// To add an element to the layout, the path
+			// is required. This full path is stored in the fault.
+			// First, construct the path in dot form.
+			// Then find the corresponding key in the layout map.
+			// Add this fault explanitory text to the value (array list)
+			// associated with that key.
+
+			layout.addElement(pathToString(key.path), key.explanitoryText + " (" + key.id + ")",
 					SigType.INPUT);
+
+			layout.addElement(mapFaultToPath.get(key),
+					key.explanitoryText + " (" + mapFaultToPath.get(key) + ", " + key.id + ")", SigType.INPUT);
+
 		}
 		return layout;
 	}
 
+	// Takes in list of strings corresponding to a path
+	// and returns path in dot form:
+	// list = [a, b, c]
+	// return string = a.b.c
+	public String pathToString(List<String> list) {
 
+		String path = "";
+		for (int i = 0; i < list.size(); i++) {
+			if (i == 0) {
+				path += list.get(i);
+			} else {
+				path += "." + list.get(i);
+			}
+		}
+		return path;
+	}
 
 
 }
