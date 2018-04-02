@@ -467,6 +467,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		List<Fault> faults = new ArrayList<>();
 
+		// reset fault count for the new Agree Node
+		FaultASTBuilder.resetFaultCounter();
+
 		for (SpecStatement s : specs) {
 			if (s instanceof FaultStatement) {
 				FaultStatement fs = (FaultStatement) s;
@@ -595,14 +598,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/*
-	 * 1. For each subcomponent node For each subcomponent fault (depth-first) 0.
-	 * Perform a traversal to find all the node/fault pairs 1a. Define an
-	 * unconstrained local eq. to represent each fault-event 1b. Define a
-	 * constrained local eq. to assign fault-active value depending on fault
-	 * duration in node. 1c. Assign subcomponent fault input to fault-active eq with
-	 * assertions (yay!) (test: print updated AST) 2. Assign faults-active equation
-	 * to sum of all fault-active values (test: print updated AST) 3. Assert that
-	 * this value is <= 1 (FOR NOW!) (test: print updated AST) 4. Use shiny new
+	 * 1. For each subcomponent node For each subcomponent fault (depth-first)
+	 * 0.Perform a traversal to find all the node/fault pairs
+	 * 1a. Define an unconstrained local eq. to represent each fault-event
+	 * 1b. Define a constrained local eq. to assign fault-active value depending on fault
+	 * duration in node.
+	 * 1c. Assign subcomponent fault input to fault-active eq with
+	 * assertions (yay!) (test: print updated AST)
+	 * 2. Assign faults-active equation
+	 * to sum of all fault-active values (test: print updated AST)
+	 * 3. Assert that
+	 * this value is <= 1 (FOR NOW!) (test: print updated AST)
+	 * 4. Use shiny new
 	 * fault annex to perform safety analysis (test: analysis results)
 	 */
 
@@ -818,9 +825,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/*****************************************************************
-	 * 
+	 *
 	 * # of occurrence-based fault calculations
-	 * 
+	 *
 	 ******************************************************************/
 
 	public Expr createSumExpr(Expr cond) {
@@ -908,9 +915,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/*****************************************************************
-	 * 
+	 *
 	 * probability-based fault calculations
-	 * 
+	 *
 	 ******************************************************************/
 	class FaultProbability implements Comparable<FaultProbability> {
 		public double probability;
@@ -929,6 +936,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			return Double.compare(-probability, -o.probability);
 		}
 
+		@Override
 		public String toString() {
 			return "(" + probability + ", " + faultName + ")";
 		}
@@ -957,6 +965,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			return Double.compare(-probability, -o.probability);
 		}
 
+		@Override
 		public String toString() {
 			return "(" + probability + ", " + elements.toString() + " )";
 		}
