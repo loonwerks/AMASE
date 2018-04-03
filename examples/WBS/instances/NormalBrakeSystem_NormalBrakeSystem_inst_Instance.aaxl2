@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="ASCII"?>
+<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="NormalBrakeSystem_inst_Instance" category="system">
+  <featureInstance name="brake_as_cmd1">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd2">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd3">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd4">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd5">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd6">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd7">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+  </featureInstance>
+  <featureInstance name="brake_as_cmd8">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_in">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+  </featureInstance>
+  <featureInstance name="false_to_mv">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.9"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out1" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.10"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out2" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.11"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out3" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.12"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out4" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.13"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out5" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.14"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out6" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.15"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out7" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.16"/>
+  </featureInstance>
+  <featureInstance name="hyd_pressure_out8" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.17"/>
+  </featureInstance>
+  <componentInstance name="mv1" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv2" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv3" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv4" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv5" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv6" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.5"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv7" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.6"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <componentInstance name="mv8" category="system">
+    <featureInstance name="elec_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="mech_cmd">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_in">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="hyd_pressure_out" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/MeterValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.7"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/MeterValve.aadl#MeterValve.MeterValve"/>
+  </componentInstance>
+  <connectionInstance name="brake_as_cmd1 -> mv1.elec_cmd" kind="portConnection" destination="//@componentInstance.0/@featureInstance.0" source="//@featureInstance.0">
+    <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.0/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.8"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd2 -> mv2.elec_cmd" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@featureInstance.1">
+    <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.1/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.9"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd3 -> mv3.elec_cmd" kind="portConnection" destination="//@componentInstance.2/@featureInstance.0" source="//@featureInstance.2">
+    <connectionReference context="/" source="//@featureInstance.2" destination="//@componentInstance.2/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.10"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd4 -> mv4.elec_cmd" kind="portConnection" destination="//@componentInstance.3/@featureInstance.0" source="//@featureInstance.3">
+    <connectionReference context="/" source="//@featureInstance.3" destination="//@componentInstance.3/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.11"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd5 -> mv5.elec_cmd" kind="portConnection" destination="//@componentInstance.4/@featureInstance.0" source="//@featureInstance.4">
+    <connectionReference context="/" source="//@featureInstance.4" destination="//@componentInstance.4/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.12"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd6 -> mv6.elec_cmd" kind="portConnection" destination="//@componentInstance.5/@featureInstance.0" source="//@featureInstance.5">
+    <connectionReference context="/" source="//@featureInstance.5" destination="//@componentInstance.5/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.13"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd7 -> mv7.elec_cmd" kind="portConnection" destination="//@componentInstance.6/@featureInstance.0" source="//@featureInstance.6">
+    <connectionReference context="/" source="//@featureInstance.6" destination="//@componentInstance.6/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.14"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="brake_as_cmd8 -> mv8.elec_cmd" kind="portConnection" destination="//@componentInstance.7/@featureInstance.0" source="//@featureInstance.7">
+    <connectionReference context="/" source="//@featureInstance.7" destination="//@componentInstance.7/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.15"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv1.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.0/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.0/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv2.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.1/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.1/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv3.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.2/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.2/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv4.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.3/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.3/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv5.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.4/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.4/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv6.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.5/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.5/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv7.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.6/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.6/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.6"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="hyd_pressure_in -> mv8.hyd_pressure_in" kind="portConnection" destination="//@componentInstance.7/@featureInstance.2" source="//@featureInstance.8">
+    <connectionReference context="/" source="//@featureInstance.8" destination="//@componentInstance.7/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.7"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv1.mech_cmd" kind="portConnection" destination="//@componentInstance.0/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.0/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.16"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv2.mech_cmd" kind="portConnection" destination="//@componentInstance.1/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.1/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.17"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv3.mech_cmd" kind="portConnection" destination="//@componentInstance.2/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.2/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.18"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv4.mech_cmd" kind="portConnection" destination="//@componentInstance.3/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.3/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.19"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv5.mech_cmd" kind="portConnection" destination="//@componentInstance.4/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.4/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.20"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv6.mech_cmd" kind="portConnection" destination="//@componentInstance.5/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.5/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.21"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv7.mech_cmd" kind="portConnection" destination="//@componentInstance.6/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.6/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.22"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="false_to_mv -> mv8.mech_cmd" kind="portConnection" destination="//@componentInstance.7/@featureInstance.1" source="//@featureInstance.9">
+    <connectionReference context="/" source="//@featureInstance.9" destination="//@componentInstance.7/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.23"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv1.hyd_pressure_out -> hyd_pressure_out1" kind="portConnection" destination="//@featureInstance.10" source="//@componentInstance.0/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.3" destination="//@featureInstance.10">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.24"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv2.hyd_pressure_out -> hyd_pressure_out2" kind="portConnection" destination="//@featureInstance.11" source="//@componentInstance.1/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.3" destination="//@featureInstance.11">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.25"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv3.hyd_pressure_out -> hyd_pressure_out3" kind="portConnection" destination="//@featureInstance.12" source="//@componentInstance.2/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.3" destination="//@featureInstance.12">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.26"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv4.hyd_pressure_out -> hyd_pressure_out4" kind="portConnection" destination="//@featureInstance.13" source="//@componentInstance.3/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.3" destination="//@featureInstance.13">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.27"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv5.hyd_pressure_out -> hyd_pressure_out5" kind="portConnection" destination="//@featureInstance.14" source="//@componentInstance.4/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.4/@featureInstance.3" destination="//@featureInstance.14">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.28"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv6.hyd_pressure_out -> hyd_pressure_out6" kind="portConnection" destination="//@featureInstance.15" source="//@componentInstance.5/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.5/@featureInstance.3" destination="//@featureInstance.15">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.29"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv7.hyd_pressure_out -> hyd_pressure_out7" kind="portConnection" destination="//@featureInstance.16" source="//@componentInstance.6/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.6/@featureInstance.3" destination="//@featureInstance.16">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.30"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="mv8.hyd_pressure_out -> hyd_pressure_out8" kind="portConnection" destination="//@featureInstance.17" source="//@componentInstance.7/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.7/@featureInstance.3" destination="//@featureInstance.17">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/NormalBrakeSystem.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.31"/>
+    </connectionReference>
+  </connectionInstance>
+  <systemOperationMode name="No Modes"/>
+  <componentImplementation xsi:type="aadl2:SystemImplementation" href="../packages/NormalBrakeSystem.aadl#NormalBrakeSystem.NormalBrakeSystem.inst"/>
+</instance:SystemInstance>
