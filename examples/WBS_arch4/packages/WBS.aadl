@@ -256,7 +256,7 @@ with sensor;
 						((mechanical_pedal_pos_R or (not SPEED) or (wheel_braking_force8 <= 0) or (not W8ROLL)))
 					);
 	 
-		
+		 
 		-- AIR 6110
 		-- Asymmetrical loss of wheel braking coupled with loss of rudder or nose wheel steering 
 		-- during landing shall be less than 5E-7 per flight. 
