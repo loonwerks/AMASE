@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201804021547.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201804021547"/>
-	<category-def name="edu.umn.cs.crisys.safety" label="Safety Annex">
+	<category-def name="edu.umn.cs.crisys.safety" label="Safety Annex: model-based safety analysis tools">
       <description>
-         Tools developed under the AMASE project
+         Tools developed under the AMASE project: 
+         The Safety Annex for the Architecture Analysis and Design Language (AADL) 
+         provides the ability to reason about faults and faulty component behaviors in AADL models. 
+         In the Safety Annex approach, we use formal assume-guarantee contracts to define the 
+         nominal behavior of system components. The nominal model is then verified using the 
+         Assume Guarantee Reasoning Environment (AGREE). The Safety Annex provides a way to 
+         weave faults into the nominal system model and analyze the behavior of the system in 
+         the presence of faults. The Safety Annex also provides a library of common fault node 
+         definitions that is customizable to the needs of system and safety engineers. 
       </description>
    </category-def>
 </site>
