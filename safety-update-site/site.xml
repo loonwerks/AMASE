@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201804021547.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201804021547"/>
-	<category-def name="edu.umn.cs.crisys.safety" label="Safety Annex: model-based safety analysis tools">
+   <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201804021547.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201804021547">
+	    <category name="edu.umn.cs.crisys.safety"/>
+   </feature>
+   <category-def name="edu.umn.cs.crisys.safety" label="Safety Annex: model-based safety analysis tools">
       <description>
          Tools developed under the AMASE project: 
          The Safety Annex for the Architecture Analysis and Design Language (AADL) 
