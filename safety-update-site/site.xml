@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201804021547.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201804021547">
-	    <category name="edu.umn.cs.crisys.safety"/>
+   <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201804070935.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201804070935">
+      <category name="edu.umn.cs.crisys.safety"/>
    </feature>
    <category-def name="edu.umn.cs.crisys.safety" label="Safety Annex: model-based safety analysis tools">
       <description>
@@ -13,7 +13,7 @@
          Assume Guarantee Reasoning Environment (AGREE). The Safety Annex provides a way to 
          weave faults into the nominal system model and analyze the behavior of the system in 
          the presence of faults. The Safety Annex also provides a library of common fault node 
-         definitions that is customizable to the needs of system and safety engineers. 
+         definitions that is customizable to the needs of system and safety engineers.
       </description>
    </category-def>
 </site>
