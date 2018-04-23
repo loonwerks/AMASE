@@ -1,0 +1,18 @@
+package Pump
+public
+with Base_Types;
+
+	system Pump
+		features
+			-- {start, stop, none}
+			command : in data port Base_Types::Integer;
+			-- {steam_cavities, normal, solid}
+			coolant_status : in data port Base_Types::Integer;
+			
+			-- {pumping, stopped, shaking, broken}
+			status : out data port Base_Types::Integer;
+			
+	end Pump;
+	
+	
+end Pump;

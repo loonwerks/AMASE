@@ -1,0 +1,33 @@
+package Secondary
+public
+with Base_Types;
+with ParallelPump;
+with Circuit;
+
+	system Secondary
+		features
+			command : in data port Base_Types::Integer;
+			circuit_temp_high : in data port Base_Types::Integer;
+			circuit_temp_low : out data port Base_Types::Integer;
+			
+	end Secondary;
+	
+	system implementation Secondary.impl
+		subcomponents
+			pump2 : system ParallelPump::ParallelPump;
+			circuit2 : system Circuit::Circuit;
+			
+		connections
+			cmd_to_pumps : port command -> pump2.command;
+			
+			-- Pump status from parallel pump 2 to circuit 2
+			pump_status2 : port pump2.status -> circuit2.pump_status;
+			
+			-- Circuit coolant status to pumps
+			coolant_to_pumps : port circuit2.coolant_status -> pump2.coolant_status;
+			
+			-- High temp to circuit 2
+			circuit1_to_circuit2 : port circuit_temp_high -> circuit2.temp_input_high;
+		
+	end Secondary.impl;	
+end Secondary;

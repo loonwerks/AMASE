@@ -1,0 +1,14 @@
+package Valve
+public
+with Base_Types;
+
+	system Valve
+		features
+			-- {open, close, none}
+			command : in data port Base_Types::Integer;
+			
+			-- {open, closed}
+			status : out data port Base_Types::Integer;
+			
+	end Valve;	
+end Valve;

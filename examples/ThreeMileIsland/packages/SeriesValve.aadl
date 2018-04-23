@@ -1,0 +1,33 @@
+package SeriesValve
+public
+with Base_Types;
+with Valve;
+
+	system SeriesValve
+		features
+			-- Input from main TMI: {open, close, none}
+			porv_cmd : in data port Base_Types::Integer;
+			block_cmd : in data port Base_Types::Integer;
+			
+			-- {open, close, none}
+			porv_status : in data port Base_Types::Integer;
+			-- {open, close, none}
+			block_status : in data port Base_Types::Integer;
+			
+			-- {open, close, none}
+			status : out data port Base_Types::Integer;
+			
+	end SeriesValve;
+	
+	
+	system implementation SeriesValve.impl
+		subcomponents
+			porv : system Valve::Valve;
+			block : system Valve::Valve;
+		
+		connections
+			command_to_porv : port porv_cmd -> porv.command;
+			command_to_block : port block_cmd -> block.command;
+			
+	end SeriesValve.impl;	
+end SeriesValve;

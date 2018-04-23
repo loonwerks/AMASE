@@ -1,0 +1,55 @@
+package TMI
+public
+with Base_Types;
+with Reactor;
+with SeriesValve;
+with ParallelPump;
+with Primary;
+with Tank;
+with Secondary;
+
+	system TMI
+		features
+			rods_command : in data port Base_Types::Integer;
+			porv_command : in data port Base_Types::Integer;
+			block_command : in data port Base_Types::Integer;
+			tank_command : in data port Base_Types::Integer;
+			command1 : in data port Base_Types::Integer;
+			command2 : in data port Base_Types::Integer;
+	end TMI;
+	
+	system implementation TMI.impl
+		subcomponents
+			reactor : system Reactor::Reactor;
+			seriesValves : system SeriesValve::SeriesValve;
+			tank : system Tank::Tank;
+			primary : system Primary::Primary;
+			secondary : system Secondary::Secondary;
+			
+		connections
+			-- To reactor
+			cmd_to_reactor : port rods_command -> reactor.rods_command;
+			cool_level_to_reactor : port primary.coolant_level -> reactor.coolant_level;
+			low_temp_to_reactor : port primary.temp_out_low -> reactor.coolant_temperature;
+			
+			-- To series valve
+			porv_cmd_to_seriesvalve : port porv_command -> seriesValves.porv_cmd;
+			block_cmd_to_seriesvalve : port block_command -> seriesvalves.block_cmd;
+			
+			-- To parallel pumps
+			command1_to_pumps : port command1 -> primary.command;
+			command2_to_pumps : port command2 -> secondary.command;
+			
+			-- To tank
+			cmd_to_tank : port tank_command -> tank.command;
+			
+			-- To Circuit
+			tank_to_circut : port tank.output -> primary.tank_output;
+			valve_to_circuit : port seriesValves.status -> primary.valve_output;
+			reactor_to_circuit : port reactor.output_temp -> primary.reactor_output;
+			circuits_connection_temp_low : port secondary.circuit_temp_low -> primary.circuit_temp_low;
+			circuits_connection_temp_high : port primary.circuit_temp_high -> secondary.circuit_temp_high;
+			
+	end TMI.impl;
+	
+end TMI;
