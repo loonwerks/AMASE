@@ -57,10 +57,10 @@ annex agree {**
 	tel;
 	
 	
-	node pressure_fail_to(val_in: common::pressure.i, alt_val: real, trigger: bool) returns (val_out: common::pressure.i); 
-	let
-	   val_out = if (trigger) then common::pressure.i {val = alt_val} else val_in;
-	tel;
+--	node pressure_fail_to(val_in: common::pressure.i, alt_val: real, trigger: bool) returns (val_out: common::pressure.i); 
+--	let
+--	   val_out = if (trigger) then common::pressure.i {val = alt_val} else val_in;
+--	tel;
 
 	
 **};	
