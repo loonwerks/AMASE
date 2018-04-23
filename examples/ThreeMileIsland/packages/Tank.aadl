@@ -1,0 +1,15 @@
+package Tank
+public
+with Base_Types;
+
+	system Tank
+		features
+			-- {stop, inject}
+			command : in data port Base_Types::Integer;
+			
+			-- {open, closed} <- valve status
+			output : out data port Base_Types::Integer;
+			
+	end Tank;
+		
+end Tank;

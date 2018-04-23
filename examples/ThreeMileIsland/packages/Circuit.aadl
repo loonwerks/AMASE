@@ -1,0 +1,20 @@
+package Circuit
+public
+with Base_Types;
+
+	system Circuit
+		features
+			pump_status : in data port Base_Types::Integer;
+			input_valve_status : in data port Base_Types::Integer;
+			output_valve_status : in data port Base_Types::Integer;
+			temp_input_low : in data port Base_Types::Integer;
+			temp_input_high : in data port Base_Types::Integer;
+			
+			temp_output_low : out data port Base_Types::Integer;
+			temp_output_high : out data port Base_Types::Integer;
+			coolant_level : out data port Base_Types::Integer;
+			coolant_status : out data port Base_Types::Integer;
+	end Circuit;
+	
+	
+end Circuit;

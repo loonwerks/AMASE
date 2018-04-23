@@ -1,0 +1,45 @@
+package ParallelPump
+public
+with Base_Types;
+with Pump;
+
+	system ParallelPump
+		features
+			-- Input from main TMI: command for pump: {start, stop, none}
+			command : in data port Base_Types::Integer;
+			
+			-- Coolant status from circuit
+			coolant_status : in data port Base_Types::Integer; 
+			
+			-- {pumping, stopped, shaking, broken}
+			pumpA_status : out data port Base_Types::Integer;
+			-- {pumping, stopped, shaking, broken}
+			pumpB_status : out data port Base_Types::Integer;
+			
+			-- {pumping, stopped, shaking, broken}
+			status : out data port Base_Types::Integer;
+			
+	end ParallelPump;
+	
+	
+	system implementation ParallelPump.impl
+		subcomponents
+			pumpA : system Pump::Pump;
+			pumpB : system Pump::Pump;
+		
+		connections
+			-- Commands to pumps
+			cmd1_to_pump : port command -> pumpA.command;
+			cmd2_to_pump : port command -> pumpB.command;
+			
+			-- Input from pumps
+			pumpA_out : port pumpA.status -> pumpA_status;
+			pumpB_out : port pumpB.status -> pumpB_status;
+			
+			-- Coolant to pumps
+			coolant_to_pumpA : port coolant_status -> pumpA.coolant_status;
+			coolant_to_pumpB : port coolant_status -> pumpB.coolant_status;
+			
+			
+	end ParallelPump.impl;
+end ParallelPump;

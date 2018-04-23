@@ -1,0 +1,48 @@
+package Primary
+public
+with Base_Types;
+with ParallelPump;
+with Circuit;
+
+	system Primary
+		features
+			command : in data port Base_Types::Integer;
+			tank_output : in data port Base_Types::Integer;
+			valve_output : in data port Base_Types::Integer;
+			reactor_output : in data port Base_Types::Integer;
+			circuit_temp_low : in data port Base_Types::Integer;
+			
+			circuit_temp_high : out data port Base_Types::Integer;
+			coolant_level : out data port Base_Types::Integer;
+			temp_out_low : out data port Base_Types::Integer;
+			
+			
+			 
+	end Primary;
+	
+	system implementation Primary.impl
+		subcomponents
+			pump1 : system ParallelPump::ParallelPump;
+			circuit1 : system Circuit::Circuit;
+			
+		connections
+			cmd_to_pumps : port command -> pump1.command;
+			
+			-- Pump status from parallel pump 1 to circuit 1
+			pump_status1 : port pump1.status -> circuit1.pump_status;
+		
+			-- Circuit coolant status to pumps
+			coolant_to_pumps : port circuit1.coolant_status -> pump1.coolant_status;
+			
+			-- Circuit1 coolant level to primary coolant level
+			cool_level : port circuit1.coolant_level -> coolant_level;
+			
+			-- tank output to circuit
+			tank_to_circuit : port tank_output -> circuit1.input_valve_status;
+			-- valve to circuit
+			valve_to_circuit : port valve_output -> circuit1.output_valve_status;
+			reactor_temp_to_circuit : port reactor_output -> circuit1.output_valve_status;
+			circuit2_to_circuit1 : port circuit_temp_low -> circuit1.temp_input_low;
+		
+	end Primary.impl;
+end Primary;
