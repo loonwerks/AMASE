@@ -1,15 +1,75 @@
 package Tank
 public
 with Base_Types;
+with Pump;
+with Valve;
+with datatypes;
 
 	system Tank
 		features
-			-- {stop, inject}
+			-- {stop, inject} (operator command)
 			command : in data port Base_Types::Integer;
-			
-			-- {open, closed} <- valve status
+			status_to_pump : in data port Base_Types::Integer;
+			command_to_pump : in data port Base_Types::Integer;
+			command_to_valve : in data port Base_Types::Integer;
+			-- {open, closed} <- valve status (output)
 			output : out data port Base_Types::Integer;
+			status_from_pump : out data port Base_Types::Integer;
+			status_from_valve : out data port Base_Types::Integer;
+		
+		annex agree {**
+			
+			-- Transform operator command into pump command
+			eq Pump_command : int = 
+				if (command = datatypes.TANK_STOP)
+					then (datatypes.MAIN_STOP)
+				else if (command = datatypes.TANK_INJECT)
+					then (datatypes.MAIN_START)
+				else (datatypes.MAIN_NONE);
+			
+			-- Transform operator command into valve command
+			eq Valve_command : int = 
+				if (command = datatypes.TANK_STOP)
+					then (datatypes.VALVE_CLOSED)
+				else if (command = datatypes.TANK_INJECT)
+					then (datatypes.VALVE_OPEN)
+				else (datatypes.VALVE_NONE);
+			
+			-- Transform valve and pump output into valve output
+			eq Output_transform : int = 
+				if ((status_from_pump = datatypes.PUMPING) 
+						and (status_from_valve = datatypes.VALVE_OPEN))
+					then (datatypes.VALVE_OPEN)
+				else (datatypes.VALVE_CLOSED);
+			
+			guarantee "Pump command transformation" : 
+				command_to_pump = Pump_command;
+				
+			guarantee "Valve command transformation" :
+				command_to_valve = Valve_command;
+				
+			guarantee "Output command" :
+				output = Output_transform;
+		**};
 			
 	end Tank;
+	
+	system implementation Tank.impl
+		subcomponents
+			pump : system Pump::Pump;
+			valve : system Valve::Valve;
+			
+		connections
+			-- Communications with pump and valve
+			pumpcommand : port command_to_pump -> pump.command;
+			coolantstatus : port status_to_pump -> pump.coolant_status;
+			valvecommand : port command_to_valve -> valve.command;
+			pumpstatus : port pump.status -> status_from_pump;
+			valvestatus : port valve.status -> status_from_valve;
+			
+		annex agree {**
+			assert(status_to_pump = datatypes.NORMAL);
+		**};
+	end Tank.impl;
 		
 end Tank;

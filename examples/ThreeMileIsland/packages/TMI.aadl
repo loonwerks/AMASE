@@ -46,7 +46,7 @@ with Secondary;
 			-- To Circuit
 			tank_to_circut : port tank.output -> primary.tank_output;
 			valve_to_circuit : port seriesValves.status -> primary.valve_output;
-			reactor_to_circuit : port reactor.output_temp -> primary.reactor_output;
+			reactor_to_circuit : port reactor.output_temp -> primary.reactor_output_temp;
 			circuits_connection_temp_low : port secondary.circuit_temp_low -> primary.circuit_temp_low;
 			circuits_connection_temp_high : port primary.circuit_temp_high -> secondary.circuit_temp_high;
 			

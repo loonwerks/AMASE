@@ -1,0 +1,42 @@
+package datatypes
+public
+
+	annex agree {**
+		
+		-- Main command status constants for state machine
+		const MAIN_START : int = 1;
+		const MAIN_STOP : int = 2;
+		const MAIN_NONE : int = 3;
+		
+		-- Pump status constants for state machine
+		const PUMPING : int = 1;
+		const STOPPED : int = 2;
+		const SHAKING : int = 3;
+		const BROKEN : int = 4;
+		
+		
+		-- Valve status constants for state machine
+		const VALVE_OPEN : int = 1;
+		const VALVE_CLOSED : int = 2;
+		const VALVE_NONE : int = 3;
+		
+		
+		-- Tank status constants for state machine
+		const TANK_STOP : int = 1;
+		const TANK_INJECT : int = 2;
+		
+		
+		-- Coolant status constants for state machine
+		const STEAM_CAVITIES : int = 1;
+		const NORMAL : int = 2;
+		const SOLID : int = 3;
+		
+		-- Reactor rods status constants for state machine
+		const EXTRACTED : int = 1;
+		const PARTIALLY_EXTRACTED : int = 2;
+		const INSERTED : int = 3;
+		
+		
+	**};
+		
+end datatypes;

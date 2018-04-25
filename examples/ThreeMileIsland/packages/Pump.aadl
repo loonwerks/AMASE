@@ -1,6 +1,7 @@
 package Pump
 public
 with Base_Types;
+with datatypes;
 
 	system Pump
 		features
@@ -11,8 +12,52 @@ with Base_Types;
 			
 			-- {pumping, stopped, shaking, broken}
 			status : out data port Base_Types::Integer;
+		
+		annex agree {**
+			 
+			eq Previous_status : int = prev(status, datatypes.PUMPING);
+			eq Current_status : int;
+			eq T_pumping_to_shaking : bool = (Previous_status = datatypes.PUMPING) 
+						and (coolant_status = datatypes.STEAM_CAVITIES);
+			eq T_shaking_to_broken : bool = (Previous_status = datatypes.SHAKING);
+			eq T_not_broken_to_stopped : bool = 
+				(command = datatypes.MAIN_STOP) and (not (Current_status = datatypes.BROKEN));
+			eq T_not_broken_to_pumping : bool = 
+				(command = datatypes.MAIN_START) and (not (Current_status = datatypes.BROKEN));	
+			
+			eq Some_transition : bool = T_pumping_to_shaking or T_shaking_to_broken
+					or T_not_broken_to_stopped or T_not_broken_to_pumping;
+			
+			guarantee "Current status range" : 
+				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
+			
+			guarantee "Shaking status" : 
+				(T_pumping_to_shaking) => (Current_status = datatypes.SHAKING);
+				
+			guarantee "Broken status" : 
+				(T_shaking_to_broken) => (Current_status = datatypes.BROKEN);
+				
+			guarantee "Stopped status" : 
+				(T_not_broken_to_stopped) => (Current_status = datatypes.STOPPED);
+				
+			guarantee "Pumping status" : 
+				(T_not_broken_to_pumping) => (Current_status = datatypes.PUMPING);
+			
+			guarantee "No status change, no new output" : 
+				not (Some_transition) => (Current_status = Previous_status);
+			
+			guarantee "Output status" : 
+				if ((Current_status = datatypes.PUMPING) or (Current_status = datatypes.SHAKING)) 
+					then (status = datatypes.PUMPING)
+				else (status = Current_status); 
+			
+			
+			
+			
+			
+		**};
 			
 	end Pump;
-	
+
 	
 end Pump;
