@@ -16,6 +16,15 @@ with Valve;
 			
 			-- {open, close, none}
 			status : out data port Base_Types::Integer;
+		
+		annex agree {**
+			
+			guarantee "Output status is open if both valves are open." :
+				if (porv_status = datatypes.VALVE_OPEN) 
+					then (status = block_status)
+				else (status = porv_status);
+			
+		**};
 			
 	end SeriesValve;
 	

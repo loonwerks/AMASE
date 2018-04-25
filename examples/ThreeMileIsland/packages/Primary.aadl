@@ -9,7 +9,7 @@ with Circuit;
 			command : in data port Base_Types::Integer;
 			tank_output : in data port Base_Types::Integer;
 			valve_output : in data port Base_Types::Integer;
-			reactor_output : in data port Base_Types::Integer;
+			reactor_output_temp : in data port Base_Types::Integer;
 			circuit_temp_low : in data port Base_Types::Integer;
 			
 			circuit_temp_high : out data port Base_Types::Integer;
@@ -41,7 +41,7 @@ with Circuit;
 			tank_to_circuit : port tank_output -> circuit1.input_valve_status;
 			-- valve to circuit
 			valve_to_circuit : port valve_output -> circuit1.output_valve_status;
-			reactor_temp_to_circuit : port reactor_output -> circuit1.output_valve_status;
+			reactor_temp_to_circuit : port reactor_output_temp -> circuit1.output_valve_status;
 			circuit2_to_circuit1 : port circuit_temp_low -> circuit1.temp_input_low;
 		
 	end Primary.impl;

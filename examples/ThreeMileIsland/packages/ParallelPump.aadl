@@ -18,6 +18,37 @@ with Pump;
 			
 			-- {pumping, stopped, shaking, broken}
 			status : out data port Base_Types::Integer;
+		
+		annex agree {**
+			
+			eq Previous_status : int = prev(status, datatypes.PUMPING);
+			eq Current_status : int;
+			eq T_pumpA_broken_to_B : bool = (pumpA_status = datatypes.BROKEN);
+			eq T_pumpB_broken_to_A : bool = (pumpB_status = datatypes.BROKEN);
+			eq T_pumpA_stopped_to_B : bool = (pumpA_status = datatypes.STOPPED);
+			eq T_pumpB_stopped_to_A : bool = (pumpB_status = datatypes.STOPPED);
+			
+			eq Some_transition : bool = T_pumpA_broken_to_B or T_pumpB_broken_to_A
+					or T_pumpA_stopped_to_B or T_pumpB_stopped_to_A;
+			
+			guarantee "Current status range" : 
+				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
+			
+			guarantee "Switch to pumpB status" : 
+				(T_pumpA_broken_to_B or T_pumpA_stopped_to_B) 
+					=> (Current_status = pumpB_status);
+					
+			guarantee "Switch to pumpA status" : 
+				(T_pumpB_broken_to_A or T_pumpB_stopped_to_A) 
+					=> (Current_status = pumpA_status);
+				
+			guarantee "No status change, no new output" : 
+				not (Some_transition) => (Current_status = Previous_status);
+			
+			guarantee "Output status" : 
+				(status = Current_status); 
+			
+		**};
 			
 	end ParallelPump;
 	
