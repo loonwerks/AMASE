@@ -3,7 +3,6 @@ public
 with Base_Types;
 with Reactor;
 with SeriesValve;
-with ParallelPump;
 with Primary;
 with Tank;
 with Secondary;
@@ -16,6 +15,8 @@ with Secondary;
 			tank_command : in data port Base_Types::Integer;
 			command1 : in data port Base_Types::Integer;
 			command2 : in data port Base_Types::Integer;
+			
+			melted_reactor : out data port Base_Types::Boolean;
 	end TMI;
 	
 	system implementation TMI.impl
@@ -49,6 +50,14 @@ with Secondary;
 			reactor_to_circuit : port reactor.output_temp -> primary.reactor_output_temp;
 			circuits_connection_temp_low : port secondary.circuit_temp_low -> primary.circuit_temp_low;
 			circuits_connection_temp_high : port primary.circuit_temp_high -> secondary.circuit_temp_high;
+			
+			melted : port reactor.melted -> melted_reactor;
+		
+		annex agree {**
+			
+			
+			
+		**};
 			
 	end TMI.impl;
 	
