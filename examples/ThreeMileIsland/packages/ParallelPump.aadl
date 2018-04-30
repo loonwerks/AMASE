@@ -33,7 +33,7 @@ with Pump;
 			
 			guarantee "Current status range" : 
 				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
-			
+			 
 			guarantee "Switch to pumpB status" : 
 				(T_pumpA_broken_to_B or T_pumpA_stopped_to_B) 
 					=> (Current_status = pumpB_status);

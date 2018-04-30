@@ -6,6 +6,7 @@ with Circuit;
 
 	system Secondary
 		features
+			-- Main Command2: {start, stop, none}
 			command : in data port Base_Types::Integer;
 			circuit_temp_high : in data port Base_Types::Integer;
 			circuit_temp_low : out data port Base_Types::Integer;
