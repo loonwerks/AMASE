@@ -24,6 +24,7 @@ public
 		-- Tank status constants for state machine
 		const TANK_STOP : int = 1;
 		const TANK_INJECT : int = 2;
+		const TANK_NONE : int = 3;
 		
 		
 		-- Coolant status constants for state machine

@@ -39,7 +39,7 @@ with Base_Types;
 						and (output_valve_status = datatypes.VALVE_OPEN))
 				or ((input_valve_status = datatypes.VALVE_CLOSED) 
 						and (output_valve_status = datatypes.VALVE_CLOSED));
-			
+			  
 			-- If input valve is open, increase the level
 			eq T_increase_coolant_level : bool = 
 				((input_valve_status = datatypes.VALVE_OPEN) 
@@ -157,6 +157,9 @@ with Base_Types;
 			guarantee "Coolant status output" :
 				(coolant_status = Current_coolant_status);	
 				
+			
+			
+					
 				
 		**};
 	end Circuit;

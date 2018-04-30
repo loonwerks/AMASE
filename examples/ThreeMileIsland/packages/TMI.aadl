@@ -6,17 +6,44 @@ with SeriesValve;
 with Primary;
 with Tank;
 with Secondary;
+with datatypes;
 
 	system TMI
 		features
+			-- Rods commands: {insert, partially_insert, extract, none}
 			rods_command : in data port Base_Types::Integer;
+			-- Valve commands: {open, close, none}
 			porv_command : in data port Base_Types::Integer;
 			block_command : in data port Base_Types::Integer;
+			-- Tank commands: {stop, inject, none}
 			tank_command : in data port Base_Types::Integer;
+			-- Commands: {start, stop, none}
 			command1 : in data port Base_Types::Integer;
 			command2 : in data port Base_Types::Integer;
 			
 			melted_reactor : out data port Base_Types::Boolean;
+			
+		annex agree {**
+			assume "Range for porv commands." :
+				(porv_command >= datatypes.VALVE_OPEN) and (porv_command <= datatypes.VALVE_NONE);
+				
+			assume "Range for block commands." :
+				(block_command >= datatypes.VALVE_OPEN) and (block_command <= datatypes.VALVE_NONE);
+		
+			assume "Range for rods commands." :
+				(rods_command >= datatypes.EXTRACTED) and (rods_command <= datatypes.INSERTED);
+				
+			assume "Range for tank commands." :
+				(tank_command >= datatypes.TANK_STOP) and (tank_command <= datatypes.TANK_NONE);
+			
+			assume "Range for main commands." :
+				(command1 >= datatypes.MAIN_START) and (command1 <= datatypes.MAIN_NONE) and
+				(command2 >= datatypes.MAIN_START) and (command2 <= datatypes.MAIN_NONE);
+		
+		
+			
+		
+		**};
 	end TMI;
 	
 	system implementation TMI.impl
@@ -55,8 +82,70 @@ with Secondary;
 		
 		annex agree {**
 			
+			-- The model of the plant is stable (because the coolant level imposes 
+			--that the core_status is 3) if do not mess with it (no drain, 
+			--no injection of fluid, etc etc), the core reactor remains at 
+			--nominal power  AG(reactor.core_status = 3)  
+			--We can drain the circuit, if we want we need to: 
+			--open porv and block valve, keep the input tank valve 
+			--closed (all conditions necessary... try and remove one if you want 
+			--to see how you can save the plant
+			lemma "As long as the porv and block commands are open, 
+					then eventually the coolant_level in circuit is at 1." :
+					((porv_command = datatypes.VALVE_OPEN) and (block_command = datatypes.VALVE_OPEN))
+						=> (primary.coolant_level = 1);
 			
+		
+			-- It is never true that the reactor is melted.
+			lemma "Reactor is not melted." :
+				(not melted_reactor);
 			
+			  
+			  
+			  
+			  
+			  
+			lemma "Transform tank_stop command into pump stop command" :
+				tank.T_stop_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_STOP);
+				
+			lemma "Transform tank_inject command into pump start command" :
+				tank.T_inject_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_START);
+				
+			lemma "Transform tank_none command into pump none command" :
+				tank.T_none_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_NONE);
+			
+			lemma "If no transition occurs, keep previous pump command" :
+				(not tank.Some_transition) => (tank.Current_cmd_pump = tank.Previous_cmd);
+			 
+			lemma "Output status (pump command)" :
+				tank.Current_cmd_pump = tank.command_to_pump;
+		
+		
+			------------------- OUPTUT ----------------------------
+			lemma "Transform valve and pump output into valve output." :
+				if (tank.T_status_open_pumping_cmd) 
+					then (tank.Current_cmd_output = datatypes.VALVE_OPEN)
+				else (tank.Current_cmd_output = datatypes.VALVE_CLOSED);
+				
+			lemma "Valve output matches state machine" : 
+				(tank.output = tank.Current_cmd_output);
+			
+			------------ VALVES --------------------
+			lemma "Transform stop command into valve closed command" :
+				tank.T_stop_to_pump_cmd => (tank.Current_cmd_valve = datatypes.MAIN_STOP);
+				
+			lemma "Transform inject command into valve open command" :
+				tank.T_inject_to_pump_cmd => (tank.Current_cmd_valve = datatypes.MAIN_START);
+				
+			lemma "Transform none command into valve none command" :
+				tank.T_none_to_pump_cmd => (tank.Current_cmd_valve = datatypes.MAIN_NONE);
+			
+			lemma "If no transition occurs, keep previous valve command" :
+				(not tank.Some_transition) => (tank.Current_cmd_valve = tank.Previous_cmd);
+			
+			lemma "Output status (valve command)" :
+				tank.Current_cmd_valve = tank.command_to_valve;
+		
 		**};
 			
 	end TMI.impl;
