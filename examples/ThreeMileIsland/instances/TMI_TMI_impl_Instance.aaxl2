@@ -400,6 +400,18 @@
       </ownedPropertyAssociation>
       <feature xsi:type="aadl2:DataPort" href="../packages/Primary.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
     </featureInstance>
+    <featureInstance name="pump_status" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/Primary.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+    </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
     <index>0</index>
     <classifier xsi:type="aadl2:SystemType" href="../packages/Primary.aadl#Primary.Primary"/>

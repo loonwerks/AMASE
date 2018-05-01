@@ -11,7 +11,7 @@ with datatypes;
 			coolant_status : in data port Base_Types::Integer;
 			
 			-- {pumping, stopped, shaking, broken}
-			status : out data port Base_Types::Integer;
+			status : out data port Base_Types::Integer; 
 		
 		annex agree {**
 			 
@@ -51,7 +51,8 @@ with datatypes;
 					then (status = datatypes.PUMPING)
 				else (status = Current_status); 
 			
-			
+			guarantee "Status range" : 
+				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
 			
 			
 			
