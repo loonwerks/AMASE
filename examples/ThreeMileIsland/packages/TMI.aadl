@@ -89,20 +89,42 @@ with datatypes;
 			--We can drain the circuit, if we want we need to: 
 			--open porv and block valve, keep the input tank valve 
 			--closed (all conditions necessary... try and remove one if you want 
-			--to see how you can save the plant
+			--to see how you can save the plant)
+			
+			-- Liveness property: need to do the fancy counter stuff.
+			
+			const BOUND1 : int = 5;
+			
+			eq counter_af1 : int = 0 ->
+				if (primary.coolant_level = 1) 
+					then 0
+				else pre(counter_af1)+1;
+				
+			eq AF_property_coolantlevel : bool = ((porv_command = datatypes.VALVE_OPEN) and (block_command = datatypes.VALVE_OPEN)) 
+					=> (counter_af1 < BOUND1);
+			
+			
 			lemma "As long as the porv and block commands are open, 
 					then eventually the coolant_level in circuit is at 1." :
-					((porv_command = datatypes.VALVE_OPEN) and (block_command = datatypes.VALVE_OPEN))
-						=> (primary.coolant_level = 1);
+					AF_property_coolantlevel;
 			
 		
-			-- It is never true that the reactor is melted.
-			lemma "Reactor is not melted." :
-				(not melted_reactor);
+			  
+			--   AG( (primary.pump_status = datatypes.BROKEN) => AF (reactor.output_temp = 5))
+			-- To encode liveness property, need counter and some bound. This bound is
+			-- found through trial and error.
+			const BOUND2 : int = 5;
 			
-			  
-			  
-			  
+			eq counter_af2 : int = 0 ->
+				if (reactor.output_temp = 5) 
+					then 0
+				else pre(counter_af2)+1;
+				
+			eq AF_property_brokenpumps : bool = (primary.pump_status = datatypes.BROKEN) => (counter_af2 < BOUND2);
+			
+			lemma "Both pumps broken imply that eventually the reactor output temp is 5" :
+				AF_property_brokenpumps;	
+			
 			  
 			  
 			lemma "Transform tank_stop command into pump stop command" :
@@ -146,6 +168,39 @@ with datatypes;
 			lemma "Output status (valve command)" :
 				tank.Current_cmd_valve = tank.command_to_valve;
 		
+		
+			----------------- SeriesValves ------------------------
+			lemma "Output status is open if both valves are open." :
+				if (seriesValves.porv_status = datatypes.VALVE_OPEN) 
+					then (seriesValves.status = seriesValves.block_status)
+				else (seriesValves.status = seriesValves.porv_status); 
+		
+		
+			----------------- Reactor ------------------------	
+			lemma "Core status is inert (1)" : 
+				(reactor.T_core_status_to_inert) => (reactor.Current_core_status = reactor.CORE_INERT);
+				
+			lemma "Core status is low (2)" : 
+				(reactor.T_core_status_to_low) => (reactor.Current_core_status = reactor.CORE_LOW);
+			
+			lemma "Core status is normal (3)" : 
+				(reactor.T_core_status_to_normal) => (reactor.Current_core_status = reactor.CORE_NORMAL);
+			
+			lemma "Core status is hot (4)" : 
+				(reactor.T_core_status_to_hot) => (reactor.Current_core_status = reactor.CORE_HOT); 
+				
+			lemma "Core status is very hot (5)" :
+				(reactor.T_core_status_to_very_hot) => (reactor.Current_core_status = reactor.CORE_VERY_HOT); 
+			
+			lemma "No status change, no new output" : 
+				not (reactor.Some_transition) => (reactor.Current_core_status = reactor.Previous_status);
+			
+			lemma "Output status" : (reactor.Current_core_status = reactor.output_temp);
+			
+			lemma "Melted status" : (reactor.Melted_status = reactor.melted);
+			
+			
+			
 		**};
 			
 	end TMI.impl;

@@ -48,6 +48,9 @@ with Pump;
 			guarantee "Output status" : 
 				(status = Current_status); 
 			
+			guarantee "Status range" : 
+				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
+			
 		**};
 			
 	end ParallelPump;

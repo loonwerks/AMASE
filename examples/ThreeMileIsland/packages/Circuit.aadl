@@ -156,9 +156,12 @@ with Base_Types;
 			
 			guarantee "Coolant status output" :
 				(coolant_status = Current_coolant_status);	
-				
 			
+			guarantee "Current coolant level bounded" :
+				(Current_coolant_level >= 0) and (Current_coolant_level <= 10);	
 			
+			guarantee "Coolant level bounded" :
+				(coolant_level >= 0) and (coolant_level <= 10);
 					
 				
 		**};

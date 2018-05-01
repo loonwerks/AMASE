@@ -87,7 +87,7 @@ with datatypes;
 				(not Some_transition) => (Current_cmd_pump = Previous_cmd);
 			
 			guarantee "Output status (pump command)" :
-				Current_cmd_pump = command_to_pump; 
+				Current_cmd_pump = command_to_pump;  
 				
 			
 

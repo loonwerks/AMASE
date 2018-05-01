@@ -23,8 +23,12 @@ with Circuit;
 			coolant_level : out data port Base_Types::Integer;
 			-- Temp at the exit of the cold point {1,,,5}
 			temp_out_low : out data port Base_Types::Integer;
+			-- Pump status (need to see if both pumps are broken.)
+			pump_status : out data port Base_Types::Integer;
 			
 		annex agree {**
+			
+			
 			
 			-- When  both porv and block commands are OPEN, then the valve_output
 			-- is open. 
@@ -53,8 +57,12 @@ with Circuit;
 						=> (coolant_level < 10));
 			
 			
+			guarantee "Pump status is bounded." :
+				(pump_status >= datatypes.PUMPING) and (pump_status <= datatypes.BROKEN);
 			
 			
+			guarantee "Coolant level bounded" :
+				(coolant_level >= 0) and (coolant_level <= 10);
 		**}	;
 			 
 	end Primary;
@@ -82,6 +90,8 @@ with Circuit;
 			valve_to_circuit : port valve_output -> circuit1.output_valve_status;
 			reactor_temp_to_circuit : port reactor_output_temp -> circuit1.temp_input_high;
 			circuit2_to_circuit1 : port circuit_temp_low -> circuit1.temp_input_low;
+			
+			pumpStatus : port pump1.status -> pump_status;
 		
 		annex agree {**
 			lemma "Current status range" : 
@@ -95,7 +105,7 @@ with Circuit;
 				(pump1.T_pumpB_broken_to_A or pump1.T_pumpB_stopped_to_A) 
 					=> (pump1.Current_status = pump1.pumpA_status);
 				
-			lemma "No status change, no new output *(pump)" :  
+			lemma "No status change, no new output *(pump)" :   
 				not (pump1.Some_transition) => (pump1.Current_status = pump1.Previous_status);
 			
 			lemma "Output status" : 
