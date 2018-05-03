@@ -37,6 +37,12 @@ public
 		const PARTIALLY_EXTRACTED : int = 2;
 		const INSERTED : int = 3;
 		
+		-- Node used to check if pump remains broken
+		node pump_once_broken(pump_status: int) returns (pump_is_broke: bool); 
+		let
+			pump_is_broke = (pump_status = 4) or (false -> pre(pump_status = 4));
+		tel;
+		
 		
 	**};
 		

@@ -27,6 +27,8 @@ with datatypes;
 			
 			eq Some_transition : bool = T_pumping_to_shaking or T_shaking_to_broken
 					or T_not_broken_to_stopped or T_not_broken_to_pumping;
+					
+			eq T_broken_remains_broken : bool = (Previous_status = datatypes.BROKEN);
 			
 			guarantee "Current status range" : 
 				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
@@ -36,6 +38,9 @@ with datatypes;
 				
 			guarantee "Broken status" : 
 				(T_shaking_to_broken) => (Current_status = datatypes.BROKEN);
+				
+			guarantee "Pump remains broken once it breaks." :
+				(T_broken_remains_broken) => (Current_status = datatypes.BROKEN);
 				
 			guarantee "Stopped status" : 
 				(T_not_broken_to_stopped) => (Current_status = datatypes.STOPPED);

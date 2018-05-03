@@ -72,6 +72,9 @@ with datatypes;
 			
 			guarantee "Output status (valve command)" :
 				Current_cmd_valve = command_to_valve;
+				
+			guarantee "Command to valve bounded:" :
+				(command_to_valve >= datatypes.MAIN_START) and (command_to_valve <= datatypes.MAIN_NONE);
 			
 			------------------ PUMP -----------------------------------
 			guarantee "Transform tank_stop command into pump stop command" :
@@ -90,7 +93,8 @@ with datatypes;
 				Current_cmd_pump = command_to_pump;  
 				
 			
-
+			guarantee "Command to pump bounded:" :
+				(command_to_pump >= datatypes.MAIN_START) and (command_to_pump <= datatypes.MAIN_NONE);	
 --			
 
 			
@@ -120,13 +124,16 @@ with datatypes;
 			valvestatus : port valve.status -> status_from_valve;
 			
 		annex agree {**
-			assert(status_to_pump = datatypes.NORMAL);
+			assert(status_to_pump = datatypes.NORMAL); 
 			
 			----------------------------------------------------------------------------
 			-- Valve
 			----------------------------------------------------------------------------
 			lemma "Current status range" : 
 				(valve.Current_status >= datatypes.VALVE_OPEN) and (valve.Current_status <= datatypes.VALVE_CLOSED);
+				
+			lemma "Status range" : 
+				(valve.status >= datatypes.VALVE_OPEN) and (valve.status <= datatypes.VALVE_CLOSED);
 			
 			lemma "Open status" : 
 				(valve.T_close_to_open or valve.Remain_open) => (valve.Current_status = datatypes.VALVE_OPEN);
