@@ -98,11 +98,11 @@ with Circuit;
 				(pump1.Current_status >= datatypes.PUMPING) and (pump1.Current_status <= datatypes.BROKEN);
 			
 			lemma "Switch to pumpB status" : 
-				(pump1.T_pumpA_broken_to_B or pump1.T_pumpA_stopped_to_B) 
+				((pump1.T_pumpA_broken_to_B or pump1.T_pumpA_stopped_to_B) and (not pump1.T_both_pumps_broken)) 
 					=> (pump1.Current_status = pump1.pumpB_status);
-					
+					 
 			lemma "Switch to pumpA status" : 
-				(pump1.T_pumpB_broken_to_A or pump1.T_pumpB_stopped_to_A) 
+				((pump1.T_pumpB_broken_to_A or pump1.T_pumpB_stopped_to_A) and (not pump1.T_both_pumps_broken))
 					=> (pump1.Current_status = pump1.pumpA_status);
 				
 			lemma "No status change, no new output *(pump)" :   
@@ -110,7 +110,9 @@ with Circuit;
 			
 			lemma "Output status" : 
 				(pump1.status = pump1.Current_status);	
-			
+			 
+			lemma "When both pumps break, they remain broken." :
+				(pump1.T_both_pumps_broken) => (pump1.status = datatypes.BROKEN);
 			------------------------------------------------------------------------------------
 			-- Circuit
 			-------------------------------------------------------------------------------------

@@ -31,16 +31,21 @@ with Pump;
 			eq Some_transition : bool = T_pumpA_broken_to_B or T_pumpB_broken_to_A
 					or T_pumpA_stopped_to_B or T_pumpB_stopped_to_A;
 			
+			eq T_both_pumps_broken : bool = (pumpA_status = datatypes.BROKEN) and (pumpB_status = datatypes.BROKEN);
+			
 			guarantee "Current status range" : 
 				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
 			 
 			guarantee "Switch to pumpB status" : 
-				(T_pumpA_broken_to_B or T_pumpA_stopped_to_B) 
+				((T_pumpA_broken_to_B or T_pumpA_stopped_to_B) and (not T_both_pumps_broken))
 					=> (Current_status = pumpB_status);
 					
 			guarantee "Switch to pumpA status" : 
-				(T_pumpB_broken_to_A or T_pumpB_stopped_to_A) 
+				((T_pumpB_broken_to_A or T_pumpB_stopped_to_A) and (not T_both_pumps_broken)) 
 					=> (Current_status = pumpA_status);
+					
+			guarantee "When both pumps break, they remain broken." :
+				(T_both_pumps_broken) => (Current_status = datatypes.BROKEN);
 				
 			guarantee "No status change, no new output" : 
 				not (Some_transition) => (Current_status = Previous_status);
@@ -74,6 +79,35 @@ with Pump;
 			coolant_to_pumpA : port coolant_status -> pumpA.coolant_status;
 			coolant_to_pumpB : port coolant_status -> pumpB.coolant_status;
 			
+		annex agree {**
+			lemma "Current status range" : 
+				(pumpA.Current_status >= datatypes.PUMPING) and (pumpA.Current_status <= datatypes.BROKEN);
 			
+			lemma "Shaking status" : 
+				(pumpA.T_pumping_to_shaking) => (pumpA.Current_status = datatypes.SHAKING);
+				
+			lemma "Broken status" : 
+				(pumpA.T_shaking_to_broken) => (pumpA.Current_status = datatypes.BROKEN);
+				
+			lemma "Pump remains broken once it breaks." :
+				(pumpA.T_broken_remains_broken) => (pumpA.Current_status = datatypes.BROKEN);
+				
+			lemma "Stopped status" : 
+				(pumpA.T_not_broken_to_stopped) => (pumpA.Current_status = datatypes.STOPPED);
+				
+			lemma "Pumping status" : 
+				(pumpA.T_not_broken_to_pumping) => (pumpA.Current_status = datatypes.PUMPING);
+			
+			lemma "No status change, no new output" : 
+				not (pumpA.Some_transition) => (pumpA.Current_status = pumpA.Previous_status);
+			
+			lemma "Output status" : 
+				if ((pumpA.Current_status = datatypes.PUMPING) or (pumpA.Current_status = datatypes.SHAKING)) 
+					then (pumpA.status = datatypes.PUMPING)
+				else (pumpA.status = pumpA.Current_status); 
+			
+			lemma "Status range" : 
+				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.BROKEN);
+		**};	
 	end ParallelPump.impl;
 end ParallelPump;

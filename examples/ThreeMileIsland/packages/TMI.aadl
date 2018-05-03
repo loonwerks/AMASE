@@ -63,7 +63,7 @@ with datatypes;
 			-- To series valve
 			porv_cmd_to_seriesvalve : port porv_command -> seriesValves.porv_cmd;
 			block_cmd_to_seriesvalve : port block_command -> seriesvalves.block_cmd;
-			
+			 
 			-- To parallel pumps
 			command1_to_pumps : port command1 -> primary.command;
 			command2_to_pumps : port command2 -> secondary.command;
@@ -119,13 +119,17 @@ with datatypes;
 				if (reactor.output_temp = 5) 
 					then 0
 				else pre(counter_af2)+1;
+			
+			eq both_pumps_remain_broken : bool = false -> (datatypes.pump_once_broken(primary.pump_status)
+					=> (primary.pump_status = datatypes.BROKEN)); 
 				
-			eq AF_property_brokenpumps : bool = (primary.pump_status = datatypes.BROKEN) => (counter_af2 < BOUND2);
+			eq AF_property_brokenpumps : bool = (both_pumps_remain_broken) => (counter_af2 < BOUND2);
 			
 			lemma "Both pumps broken imply that eventually the reactor output temp is 5" :
 				AF_property_brokenpumps;	
 			
-			  
+			lemma "When both pumps break, they remain broken." :
+				(false -> (pre(primary.pump_status) = datatypes.BROKEN)) => (primary.pump_status = datatypes.BROKEN); 
 			  
 			lemma "Transform tank_stop command into pump stop command" :
 				tank.T_stop_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_STOP);
@@ -171,9 +175,9 @@ with datatypes;
 		
 			----------------- SeriesValves ------------------------
 			lemma "Output status is open if both valves are open." :
-				if (seriesValves.porv_status = datatypes.VALVE_OPEN) 
-					then (seriesValves.status = seriesValves.block_status)
-				else (seriesValves.status = seriesValves.porv_status); 
+				if (seriesValves.porv_cmd = datatypes.VALVE_OPEN) 
+					then (seriesValves.status = seriesValves.block_cmd)
+				else (seriesValves.status = seriesValves.porv_cmd); 
 		
 		
 			----------------- Reactor ------------------------	
@@ -200,7 +204,13 @@ with datatypes;
 			lemma "Melted status" : (reactor.Melted_status = reactor.melted);
 			
 			
+			-------------------- Tank ----------------------------
 			
+			lemma "Command to valve bounded:" :
+				(tank.command_to_valve >= datatypes.MAIN_START) and (tank.command_to_valve <= datatypes.MAIN_NONE);
+				
+			lemma "Command to pump bounded:" :
+				(tank.command_to_pump >= datatypes.MAIN_START) and (tank.command_to_pump <= datatypes.MAIN_NONE);
 		**};
 			
 	end TMI.impl;

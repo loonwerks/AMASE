@@ -174,30 +174,6 @@
       </ownedPropertyAssociation>
       <feature xsi:type="aadl2:DataPort" href="../packages/SeriesValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
     </featureInstance>
-    <featureInstance name="porv_status">
-      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
-        <ownedValue>
-          <ownedValue xsi:type="aadl2:NamedValue">
-            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
-          </ownedValue>
-        </ownedValue>
-        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
-      </ownedPropertyAssociation>
-      <feature xsi:type="aadl2:DataPort" href="../packages/SeriesValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
-    </featureInstance>
-    <featureInstance name="block_status">
-      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
-        <ownedValue>
-          <ownedValue xsi:type="aadl2:NamedValue">
-            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
-          </ownedValue>
-        </ownedValue>
-        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
-      </ownedPropertyAssociation>
-      <feature xsi:type="aadl2:DataPort" href="../packages/SeriesValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
-    </featureInstance>
     <featureInstance name="status" direction="out">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
         <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
@@ -208,7 +184,7 @@
         </ownedValue>
         <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
       </ownedPropertyAssociation>
-      <feature xsi:type="aadl2:DataPort" href="../packages/SeriesValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+      <feature xsi:type="aadl2:DataPort" href="../packages/SeriesValve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
     <index>0</index>
@@ -497,8 +473,8 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.13"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="seriesValves.status -> primary.valve_output" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.2" source="//@componentInstance.1/@featureInstance.4">
-    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.4" destination="//@componentInstance.3/@featureInstance.2">
+  <connectionInstance name="seriesValves.status -> primary.valve_output" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.2" source="//@componentInstance.1/@featureInstance.2">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.2" destination="//@componentInstance.3/@featureInstance.2">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.9"/>
     </connectionReference>
   </connectionInstance>
