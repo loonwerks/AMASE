@@ -23,13 +23,13 @@ with Pump;
 			
 			eq Previous_status : int = prev(status, datatypes.PUMPING);
 			eq Current_status : int;
-			eq T_pumpA_broken_to_B : bool = (pumpA_status = datatypes.BROKEN);
-			eq T_pumpB_broken_to_A : bool = (pumpB_status = datatypes.BROKEN);
-			eq T_pumpA_stopped_to_B : bool = (pumpA_status = datatypes.STOPPED);
-			eq T_pumpB_stopped_to_A : bool = (pumpB_status = datatypes.STOPPED);
+			eq T_pumpA_broken_to_B : bool = false ->(pumpA_status = datatypes.BROKEN);
+			eq T_pumpB_broken_to_A : bool = false ->(pumpB_status = datatypes.BROKEN);
+			eq T_pumpA_stopped_to_B : bool = false ->(pumpA_status = datatypes.STOPPED);
+			eq T_pumpB_stopped_to_A : bool = false ->(pumpB_status = datatypes.STOPPED);
 			
 			eq Some_transition : bool = T_pumpA_broken_to_B or T_pumpB_broken_to_A
-					or T_pumpA_stopped_to_B or T_pumpB_stopped_to_A;
+					or T_pumpA_stopped_to_B or T_pumpB_stopped_to_A or T_both_pumps_broken;
 			
 			eq T_both_pumps_broken : bool = (pumpA_status = datatypes.BROKEN) and (pumpB_status = datatypes.BROKEN);
 			
@@ -44,7 +44,7 @@ with Pump;
 				((T_pumpB_broken_to_A or T_pumpB_stopped_to_A) and (not T_both_pumps_broken)) 
 					=> (Current_status = pumpA_status);
 					
-			guarantee "When both pumps break, they remain broken." :
+			guarantee "When both pumps break, they are broken." :
 				(T_both_pumps_broken) => (Current_status = datatypes.BROKEN);
 				
 			guarantee "No status change, no new output" : 
@@ -56,6 +56,13 @@ with Pump;
 			guarantee "Status range" : 
 				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
 			
+			
+			guarantee "When pump A breaks, it stays broken." :
+				(false -> (pre(pumpA_status) = datatypes.BROKEN)) => (pumpA_status = datatypes.BROKEN);
+			
+			guarantee "When pump B breaks, it stays broken." :
+				(false -> (pre(pumpB_status) = datatypes.BROKEN)) => (pumpB_status = datatypes.BROKEN);	
+				--(false -> (pre(primary.pump_status) = datatypes.BROKEN)) => (primary.pump_status = datatypes.BROKEN);
 		**};
 			
 	end ParallelPump;
@@ -89,7 +96,7 @@ with Pump;
 			lemma "Broken status" : 
 				(pumpA.T_shaking_to_broken) => (pumpA.Current_status = datatypes.BROKEN);
 				
-			lemma "Pump remains broken once it breaks." :
+			lemma "Pump breaks." :
 				(pumpA.T_broken_remains_broken) => (pumpA.Current_status = datatypes.BROKEN);
 				
 			lemma "Stopped status" : 
@@ -108,6 +115,13 @@ with Pump;
 			
 			lemma "Status range" : 
 				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.BROKEN);
+				
+			lemma "Pump A remains broken":
+				(false -> (pre(pumpA_status) = datatypes.BROKEN)) => (pumpA_status = datatypes.BROKEN);
+				
+			lemma "Pump B remains broken":
+				(false -> (pre(pumpB_status) = datatypes.BROKEN)) => (pumpB_status = datatypes.BROKEN);
+				
 		**};	
 	end ParallelPump.impl;
 end ParallelPump;

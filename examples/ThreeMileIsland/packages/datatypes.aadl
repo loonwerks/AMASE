@@ -34,7 +34,7 @@ public
 		
 		-- Reactor rods status constants for state machine
 		const EXTRACTED : int = 1;
-		const PARTIALLY_EXTRACTED : int = 2;
+		const PARTIALLY_INSERTED : int = 2;
 		const INSERTED : int = 3;
 		
 		-- Node used to check if pump remains broken
@@ -43,6 +43,16 @@ public
 			pump_is_broke = (pump_status = 4) or (false -> pre(pump_status = 4));
 		tel;
 		
+		
+		node move(variable: int, value: int) returns (new_var: int);
+		let
+			new_var = if (variable < value) 
+						then (variable+1)
+					  else if (variable > value)
+					  		  then (variable-1)
+					  else
+					  	variable;
+		tel;
 		
 	**};
 		

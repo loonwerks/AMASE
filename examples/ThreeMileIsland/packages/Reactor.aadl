@@ -27,56 +27,62 @@ with datatypes;
 			const CORE_NORMAL : int = 3;
 			const CORE_HOT : int = 4;
 			const CORE_VERY_HOT : int = 5;
-			
+			 
 			-- Core status transitions
 			eq Current_core_status : int;
 			eq Core_status_init : int = CORE_NORMAL;
 			eq Previous_status : int = prev(Current_core_status, Core_status_init);
 			
-			-- Rods are either inserted partially or fully
-			eq T_core_status_to_inert : bool = (rods_command = datatypes.INSERTED);
-			eq T_core_status_to_low : bool = (rods_command = datatypes.PARTIALLY_EXTRACTED);
+			eq T_rods_inserted : bool = false -> (rods_command = datatypes.INSERTED);
+			eq T_rods_partially_inserted : bool = false -> (rods_command = datatypes.PARTIALLY_INSERTED);
+			eq T_rods_extracted : bool = false -> (rods_command = datatypes.EXTRACTED);
 			
-			-- Now the rods are extracted. 
-			-- We check the coolant level. If it is "adequate" and the coolant is 
-			-- "ok" then it keeps the core_status at the same temp
-			-- but never lower than 3.
-			eq Rods_extracted : bool = 
-				((rods_command = datatypes.EXTRACTED) or (rods_command = datatypes.PARTIALLY_EXTRACTED));
-			eq T_core_status_to_normal : bool = (coolant_level > 3) and Rods_extracted;
-			-- Any increase in the coolant temp does not increase the core status.
-			-- It just keeps it as it is.
-			eq T_core_status_to_hot : bool = (coolant_level = 3) and Rods_extracted;
-			-- If the coolant level is low, then the temp increases
-			eq T_core_status_to_very_hot : bool = (coolant_level < 3) and Rods_extracted;
-			 
-			eq Some_transition : bool = T_core_status_to_inert or T_core_status_to_low 
-					or T_core_status_to_normal or T_core_status_to_hot
-					or T_core_status_to_very_hot; 
+			eq Some_transition : bool = T_rods_inserted or T_rods_partially_inserted or T_rods_extracted;
 			
-			eq Melted_status : bool = (Current_core_status = CORE_VERY_HOT) and (coolant_level = 1);
+			eq Melted_status : bool = false -> ((Current_core_status = CORE_VERY_HOT) and (coolant_level = 1));
 			
-			guarantee "Core status is inert (1)" : 
-				(T_core_status_to_inert) => (Current_core_status = CORE_INERT);
+			----------------------------------------------------------------------------------------------
+			guarantee "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
+				(T_rods_inserted) => (Current_core_status = datatypes.move(Previous_status, 1));
+			----------------------------------------------------------------------------------------------
+			
+			guarantee "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
+				(T_rods_partially_inserted) => (Current_core_status = datatypes.move(Previous_status, 2));
+			
+			
+			guarantee "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
+				(T_rods_extracted and (coolant_level >= 3) and (coolant_temperature < 3)) => (Current_core_status = datatypes.move(Previous_status, 3));
 				
-			guarantee "Core status is low (2)" : 
-				(T_core_status_to_low) => (Current_core_status = CORE_LOW);
 			
-			guarantee "Core status is normal (3)" : 
-				(T_core_status_to_normal) => (Current_core_status = CORE_NORMAL);
-			
-			guarantee "Core status is hot (4)" :
-				(T_core_status_to_hot) => (Current_core_status = CORE_HOT); 
+			guarantee "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
+				(T_rods_extracted and (coolant_level >= 3) and (coolant_temperature >= 3)) => (Current_core_status = Previous_status);
 				
-			guarantee "Core status is very hot (5)" :
-				(T_core_status_to_very_hot) => (Current_core_status = CORE_VERY_HOT); 
 			
-			guarantee "No status change, no new output" : 
-				not (Some_transition) => (Current_core_status = Previous_status);
+			---------------------------------------------------------------------------------------------------	
+			guarantee "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
+				(T_rods_extracted and (coolant_level < 3)) => (Current_core_status = datatypes.move(Previous_status, 5));
+			---------------------------------------------------------------------------------------------------
 			
-			guarantee "Output status" : (Current_core_status = output_temp);
+			guarantee "Datatypes move core status one step" :
+				(datatypes.move(Current_core_status, 5) = (Current_core_status + 1))
+				or (datatypes.move(Current_core_status, 5) = (Current_core_status - 1))
+				or (datatypes.move(Current_core_status, 5) = (Current_core_status)); 
+			
+			guarantee "If no transition occurs, status remains the same." :
+				(not (Some_transition)) => (Current_core_status = Previous_status);
+				
+			guarantee "Core status link to local Current_core_status" :
+				output_temp = Current_core_status;
+			
 			
 			guarantee "Melted status" : (Melted_status = melted);
+			
+			
+			guarantee "Output temp bounded" :
+				(output_temp >= 0) and (output_temp <= 5);
+				
+			guarantee "Inital output temp value" :
+				(output_temp = CORE_NORMAL) -> true; 
 		**};
 			
 	end Reactor;

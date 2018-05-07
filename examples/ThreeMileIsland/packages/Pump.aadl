@@ -39,7 +39,7 @@ with datatypes;
 			guarantee "Broken status" : 
 				(T_shaking_to_broken) => (Current_status = datatypes.BROKEN);
 				
-			guarantee "Pump remains broken once it breaks." :
+			guarantee "Pump breaks." :
 				(T_broken_remains_broken) => (Current_status = datatypes.BROKEN);
 				
 			guarantee "Stopped status" : 
@@ -59,7 +59,11 @@ with datatypes;
 			guarantee "Status range" : 
 				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
 			
+			guarantee "Pump breaks." :
+				(T_broken_remains_broken) => (Current_status = datatypes.BROKEN);
 			
+			guarantee "Pump remains broken":
+				(false -> (pre(status) = datatypes.BROKEN)) => (status = datatypes.BROKEN);
 			
 		**};
 			

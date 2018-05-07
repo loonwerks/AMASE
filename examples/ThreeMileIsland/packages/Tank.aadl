@@ -42,13 +42,10 @@ with datatypes;
 			eq T_status_open_pumping_cmd : bool = 
 					(status_from_pump = datatypes.PUMPING) and (status_from_valve = datatypes.VALVE_OPEN);
 			
---			eq Output_transform : int = 
---				if ((status_from_pump = datatypes.PUMPING) 
---						and (status_from_valve = datatypes.VALVE_OPEN))
---					then (datatypes.VALVE_OPEN)
---				else (datatypes.VALVE_CLOSED);
 			
 			------------------- OUPTUT ----------------------------
+			
+			-- If pump is pumping and valve is open, output is open, else it's closed
 			guarantee "Transform valve and pump output into valve output." :
 				if (T_status_open_pumping_cmd) 
 					then (Current_cmd_output = datatypes.VALVE_OPEN)
@@ -56,6 +53,9 @@ with datatypes;
 				
 			guarantee "Valve output matches state machine" :
 				(output = Current_cmd_output);
+				
+			guarantee "Output bounded:" :
+				(output >= datatypes.MAIN_START) and (output <= datatypes.MAIN_NONE);
 			
 			------------ VALVES --------------------
 			guarantee "Transform stop command into valve closed command" :

@@ -82,6 +82,17 @@ with datatypes;
 		
 		annex agree {**
 			
+			lemma "Inital coolant level value" :
+				(primary.coolant_level = 5) -> true;
+			
+			-- Top level hazard: The reactor melts.
+			-- In order for the reactor to be melted, we need:
+			-- reactor.output_temp = CORE_VERY_HOT (5) AND primary.coolant_level = 1
+			lemma "Reactor does not melt." :
+				not melted_reactor; 
+			
+			
+			
 			-- The model of the plant is stable (because the coolant level imposes 
 			--that the core_status is 3) if do not mess with it (no drain, 
 			--no injection of fluid, etc etc), the core reactor remains at 
@@ -104,9 +115,9 @@ with datatypes;
 					=> (counter_af1 < BOUND1);
 			
 			
-			lemma "As long as the porv and block commands are open, 
-					then eventually the coolant_level in circuit is at 1." :
-					AF_property_coolantlevel;
+--			lemma "As long as the porv and block commands are open, 
+--					then eventually the coolant_level in circuit is at 1." :
+--					AF_property_coolantlevel;
 			
 		
 			  
@@ -125,15 +136,20 @@ with datatypes;
 				
 			eq AF_property_brokenpumps : bool = (both_pumps_remain_broken) => (counter_af2 < BOUND2);
 			
-			lemma "Both pumps broken imply that eventually the reactor output temp is 5" :
-				AF_property_brokenpumps;	
-			
+--			lemma "Both pumps broken imply that eventually the reactor output temp is 5" :
+--				AF_property_brokenpumps;	
+--			
 			lemma "When both pumps break, they remain broken." :
 				(false -> (pre(primary.pump_status) = datatypes.BROKEN)) => (primary.pump_status = datatypes.BROKEN); 
+			
+			
+			
+			
+			 --------------------------- TANK ---------------------------------
 			  
 			lemma "Transform tank_stop command into pump stop command" :
 				tank.T_stop_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_STOP);
-				
+				 
 			lemma "Transform tank_inject command into pump start command" :
 				tank.T_inject_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_START);
 				
@@ -181,28 +197,39 @@ with datatypes;
 		
 		
 			----------------- Reactor ------------------------	
-			lemma "Core status is inert (1)" : 
-				(reactor.T_core_status_to_inert) => (reactor.Current_core_status = reactor.CORE_INERT);
+			lemma "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
+				(reactor.T_rods_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 1));
 				
-			lemma "Core status is low (2)" : 
-				(reactor.T_core_status_to_low) => (reactor.Current_core_status = reactor.CORE_LOW);
+			lemma "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
+				(reactor.T_rods_partially_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 2));
 			
-			lemma "Core status is normal (3)" : 
-				(reactor.T_core_status_to_normal) => (reactor.Current_core_status = reactor.CORE_NORMAL);
-			
-			lemma "Core status is hot (4)" : 
-				(reactor.T_core_status_to_hot) => (reactor.Current_core_status = reactor.CORE_HOT); 
 				
-			lemma "Core status is very hot (5)" :
-				(reactor.T_core_status_to_very_hot) => (reactor.Current_core_status = reactor.CORE_VERY_HOT); 
+			lemma "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
+				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature < 3)) 
+					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 3));
+				
 			
-			lemma "No status change, no new output" : 
-				not (reactor.Some_transition) => (reactor.Current_core_status = reactor.Previous_status);
+			lemma "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
+				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature >= 3)) 
+					=> (reactor.Current_core_status = reactor.Previous_status);
+				
 			
-			lemma "Output status" : (reactor.Current_core_status = reactor.output_temp);
+				
+			lemma "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
+				(reactor.T_rods_extracted and (reactor.coolant_level < 3)) 
+					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 5));
 			
-			lemma "Melted status" : (reactor.Melted_status = reactor.melted);
+			lemma "If no transition occurs, status remains the same." :
+				(not (reactor.Some_transition)) => (reactor.Current_core_status = reactor.Previous_status);
+				
+			lemma "Core status link to local Current_core_status" :
+				reactor.output_temp = reactor.Current_core_status;
 			
+			lemma "Inital output temp value" :
+				(reactor.output_temp = reactor.CORE_NORMAL) -> true;
+				
+			lemma "Output temp bounded" :
+				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
 			
 			-------------------- Tank ----------------------------
 			
@@ -211,6 +238,13 @@ with datatypes;
 				
 			lemma "Command to pump bounded:" :
 				(tank.command_to_pump >= datatypes.MAIN_START) and (tank.command_to_pump <= datatypes.MAIN_NONE);
+		
+		
+			lemma "Coolant temperature bounded" :
+				(primary.circuit_temp_low >= 0) and (primary.circuit_temp_low <= 10)
+				and (primary.circuit_temp_high >= 0) and (primary.circuit_temp_high <= 10)
+				and (primary.temp_out_low >= 0) and (primary.temp_out_low <= 5);
+		
 		**};
 			
 	end TMI.impl;
