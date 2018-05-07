@@ -50,6 +50,9 @@ with datatypes;
 			guarantee "Output status" : 
 				(status = Current_status); 
 			
+			guarantee "Status range" : 
+				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED);
+			
 		**};
 			
 	end Valve;
