@@ -3,7 +3,7 @@ public
 with Base_Types;
 with datatypes;
 
-	system Reactor
+	system Reactor 
 		features
 			-- insertion of rods
 			-- {extracted, partially_inserted, inserted}
@@ -20,6 +20,11 @@ with datatypes;
 			melted : out data port Base_Types::Boolean;
 		
 		annex agree {**
+			
+			assume "Datatypes move coolant temp one step" :
+				(datatypes.move(coolant_level, 10) = (coolant_level + 1))
+				or (datatypes.move(coolant_level, 10) = (coolant_level - 1))
+				or (datatypes.move(coolant_level, coolant_level) = (coolant_level)); 
 			
 			-- Reactor core status values
 			const CORE_INERT : int = 1;
@@ -65,8 +70,8 @@ with datatypes;
 			
 			guarantee "Datatypes move core status one step" :
 				(datatypes.move(Current_core_status, 5) = (Current_core_status + 1))
-				or (datatypes.move(Current_core_status, 5) = (Current_core_status - 1))
-				or (datatypes.move(Current_core_status, 5) = (Current_core_status)); 
+				or (datatypes.move(Current_core_status, 0) = (Current_core_status - 1))
+				or (datatypes.move(Current_core_status, Current_core_status) = (Current_core_status));  
 			
 			guarantee "If no transition occurs, status remains the same." :
 				(not (Some_transition)) => (Current_core_status = Previous_status);

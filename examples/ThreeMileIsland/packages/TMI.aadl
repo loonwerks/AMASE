@@ -12,9 +12,9 @@ with datatypes;
 		features
 			-- Rods commands: {insert, partially_insert, extract, none}
 			rods_command : in data port Base_Types::Integer;
-			-- Valve commands: {open, close, none}
+			-- Valve commands: {open, close}
 			porv_command : in data port Base_Types::Integer;
-			block_command : in data port Base_Types::Integer;
+			block_command : in data port Base_Types::Integer; 
 			-- Tank commands: {stop, inject, none}
 			tank_command : in data port Base_Types::Integer;
 			-- Commands: {start, stop, none}
@@ -25,10 +25,10 @@ with datatypes;
 			
 		annex agree {**
 			assume "Range for porv commands." :
-				(porv_command >= datatypes.VALVE_OPEN) and (porv_command <= datatypes.VALVE_NONE);
+				(porv_command >= datatypes.VALVE_OPEN) and (porv_command <= datatypes.VALVE_CLOSED);
 				
 			assume "Range for block commands." :
-				(block_command >= datatypes.VALVE_OPEN) and (block_command <= datatypes.VALVE_NONE);
+				(block_command >= datatypes.VALVE_OPEN) and (block_command <= datatypes.VALVE_CLOSED);
 		
 			assume "Range for rods commands." :
 				(rods_command >= datatypes.EXTRACTED) and (rods_command <= datatypes.INSERTED);
@@ -40,33 +40,34 @@ with datatypes;
 				(command1 >= datatypes.MAIN_START) and (command1 <= datatypes.MAIN_NONE) and
 				(command2 >= datatypes.MAIN_START) and (command2 <= datatypes.MAIN_NONE);
 		
-		
+			assume "Initial tank command" :
+				(tank_command = datatypes.TANK_INJECT) -> true;
 			
 		
 		**};
 	end TMI;
 	
-	system implementation TMI.impl
-		subcomponents
-			reactor : system Reactor::Reactor;
+	system implementation TMI.impl  
+		subcomponents 
+			reactor : system Reactor::Reactor; 
 			seriesValves : system SeriesValve::SeriesValve;
 			tank : system Tank::Tank;
-			primary : system Primary::Primary;
-			secondary : system Secondary::Secondary;
+			primary : system Primary::Primary.impl;
+			secondary : system Secondary::Secondary.impl;
 			
 		connections
-			-- To reactor
-			cmd_to_reactor : port rods_command -> reactor.rods_command;
+			-- To reactor 
+			cmd_to_reactor : port rods_command -> reactor.rods_command; 
 			cool_level_to_reactor : port primary.coolant_level -> reactor.coolant_level;
 			low_temp_to_reactor : port primary.temp_out_low -> reactor.coolant_temperature;
 			
 			-- To series valve
 			porv_cmd_to_seriesvalve : port porv_command -> seriesValves.porv_cmd;
-			block_cmd_to_seriesvalve : port block_command -> seriesvalves.block_cmd;
+			block_cmd_to_seriesvalve : port block_command -> seriesValves.block_cmd;
 			 
 			-- To parallel pumps
 			command1_to_pumps : port command1 -> primary.command;
-			command2_to_pumps : port command2 -> secondary.command;
+			command2_to_pumps : port command2 -> secondary.command; 
 			
 			-- To tank
 			cmd_to_tank : port tank_command -> tank.command;
@@ -82,15 +83,29 @@ with datatypes;
 		
 		annex agree {**
 			
-			lemma "Inital coolant level value" :
-				(primary.coolant_level = 5) -> true;
+			
+			lemma "Inital coolant level value" : 
+				(primary.coolant_level = 5) -> true; 
+			
+			lemma "Datatypes move coolant level one step" :
+				(datatypes.move(primary.coolant_level, 10) = (primary.coolant_level + 1))
+				or (datatypes.move(primary.coolant_level, 0) = (primary.coolant_level - 1))
+				or (datatypes.move(primary.coolant_level, primary.coolant_level) = (primary.coolant_level));
+			 
+			-- Playing around with some nominal behavior to prevent melting reactor. 
+--			lemma "If coolant level is low (2) and is decreasing, send inject command to tank and close
+--					porv and block valves." :
+--						((prev(primary.coolant_level,5) > primary.coolant_level) and (primary.coolant_level = 2))
+--							=> 
+--						((porv_command = datatypes.VALVE_CLOSED) and (tank_command = datatypes.TANK_INJECT));
+			
 			
 			-- Top level hazard: The reactor melts.
 			-- In order for the reactor to be melted, we need:
 			-- reactor.output_temp = CORE_VERY_HOT (5) AND primary.coolant_level = 1
 			lemma "Reactor does not melt." :
 				not melted_reactor; 
-			
+			 
 			
 			
 			-- The model of the plant is stable (because the coolant level imposes 
@@ -120,30 +135,6 @@ with datatypes;
 --					AF_property_coolantlevel;
 			
 		
-			  
-			--   AG( (primary.pump_status = datatypes.BROKEN) => AF (reactor.output_temp = 5))
-			-- To encode liveness property, need counter and some bound. This bound is
-			-- found through trial and error.
-			const BOUND2 : int = 5;
-			
-			eq counter_af2 : int = 0 ->
-				if (reactor.output_temp = 5) 
-					then 0
-				else pre(counter_af2)+1;
-			
-			eq both_pumps_remain_broken : bool = false -> (datatypes.pump_once_broken(primary.pump_status)
-					=> (primary.pump_status = datatypes.BROKEN)); 
-				
-			eq AF_property_brokenpumps : bool = (both_pumps_remain_broken) => (counter_af2 < BOUND2);
-			
---			lemma "Both pumps broken imply that eventually the reactor output temp is 5" :
---				AF_property_brokenpumps;	
---			
-			lemma "When both pumps break, they remain broken." :
-				(false -> (pre(primary.pump_status) = datatypes.BROKEN)) => (primary.pump_status = datatypes.BROKEN); 
-			
-			
-			
 			
 			 --------------------------- TANK ---------------------------------
 			  
@@ -174,13 +165,10 @@ with datatypes;
 			
 			------------ VALVES --------------------
 			lemma "Transform stop command into valve closed command" :
-				tank.T_stop_to_pump_cmd => (tank.Current_cmd_valve = datatypes.MAIN_STOP);
+				tank.T_stop_to_pump_cmd => (tank.Current_cmd_valve = datatypes.VALVE_CLOSED);
 				
 			lemma "Transform inject command into valve open command" :
-				tank.T_inject_to_pump_cmd => (tank.Current_cmd_valve = datatypes.MAIN_START);
-				
-			lemma "Transform none command into valve none command" :
-				tank.T_none_to_pump_cmd => (tank.Current_cmd_valve = datatypes.MAIN_NONE);
+				tank.T_inject_to_pump_cmd => (tank.Current_cmd_valve = datatypes.VALVE_OPEN);
 			
 			lemma "If no transition occurs, keep previous valve command" :
 				(not tank.Some_transition) => (tank.Current_cmd_valve = tank.Previous_cmd);
@@ -226,8 +214,8 @@ with datatypes;
 				reactor.output_temp = reactor.Current_core_status;
 			
 			lemma "Inital output temp value" :
-				(reactor.output_temp = reactor.CORE_NORMAL) -> true;
-				
+				(reactor.output_temp = reactor.CORE_NORMAL) -> true; 
+				 
 			lemma "Output temp bounded" :
 				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
 			
@@ -239,11 +227,6 @@ with datatypes;
 			lemma "Command to pump bounded:" :
 				(tank.command_to_pump >= datatypes.MAIN_START) and (tank.command_to_pump <= datatypes.MAIN_NONE);
 		
-		
-			lemma "Coolant temperature bounded" :
-				(primary.circuit_temp_low >= 0) and (primary.circuit_temp_low <= 10)
-				and (primary.circuit_temp_high >= 0) and (primary.circuit_temp_high <= 10)
-				and (primary.temp_out_low >= 0) and (primary.temp_out_low <= 5);
 		
 		**};
 			

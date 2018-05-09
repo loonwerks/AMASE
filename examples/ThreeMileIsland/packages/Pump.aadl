@@ -10,60 +10,43 @@ with datatypes;
 			-- {steam_cavities, normal, solid}
 			coolant_status : in data port Base_Types::Integer;
 			
-			-- {pumping, stopped, shaking, broken}
+			-- {pumping, stopped, shaking}
 			status : out data port Base_Types::Integer; 
 		
 		annex agree {**
-			 
-			eq Previous_status : int = prev(status, datatypes.PUMPING);
-			eq Current_status : int;
-			eq T_pumping_to_shaking : bool = (Previous_status = datatypes.PUMPING) 
-						and (coolant_status = datatypes.STEAM_CAVITIES);
-			eq T_shaking_to_broken : bool = (Previous_status = datatypes.SHAKING);
-			eq T_not_broken_to_stopped : bool = 
-				(command = datatypes.MAIN_STOP) and (not (Current_status = datatypes.BROKEN));
-			eq T_not_broken_to_pumping : bool = 
-				(command = datatypes.MAIN_START) and (not (Current_status = datatypes.BROKEN));	
 			
-			eq Some_transition : bool = T_pumping_to_shaking or T_shaking_to_broken
-					or T_not_broken_to_stopped or T_not_broken_to_pumping;
-					
-			eq T_broken_remains_broken : bool = (Previous_status = datatypes.BROKEN);
-			
-			guarantee "Current status range" : 
-				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
-			
-			guarantee "Shaking status" : 
-				(T_pumping_to_shaking) => (Current_status = datatypes.SHAKING);
+			assume "Command input is bounded." :
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE);
 				
-			guarantee "Broken status" : 
-				(T_shaking_to_broken) => (Current_status = datatypes.BROKEN);
+			assume "Coolant status input is bounded." :
+				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
+			
 				
-			guarantee "Pump breaks." :
-				(T_broken_remains_broken) => (Current_status = datatypes.BROKEN);
+			guarantee "Initial status of pump is pumping." :
+				(status = datatypes.PUMPING) -> true;
 				
-			guarantee "Stopped status" : 
-				(T_not_broken_to_stopped) => (Current_status = datatypes.STOPPED);
+			guarantee "Command to start pumping." :
+				(((command = datatypes.MAIN_START) and (not (coolant_status = datatypes.STEAM_CAVITIES)))) 
+					=> (status = datatypes.PUMPING);
 				
-			guarantee "Pumping status" : 
-				(T_not_broken_to_pumping) => (Current_status = datatypes.PUMPING);
+			guarantee "Command to stop pumping." :
+				(command = datatypes.MAIN_STOP) => (status = datatypes.STOPPED);
+				
+			guarantee "Switch to shaking status." :
+				((pre(status) = datatypes.PUMPING) and (coolant_status = datatypes.STEAM_CAVITIES)) 
+					=> (status = datatypes.SHAKING);
+				
+			guarantee "In all other cases, no transition occurs." :
+				(command = datatypes.MAIN_NONE) => (status = pre(status));
+
+				
+			guarantee "Bounds on status" :
+				(status >= datatypes.PUMPING) and (status <= datatypes.SHAKING); 
 			
-			guarantee "No status change, no new output" : 
-				not (Some_transition) => (Current_status = Previous_status);
 			
-			guarantee "Output status" : 
-				if ((Current_status = datatypes.PUMPING) or (Current_status = datatypes.SHAKING)) 
-					then (status = datatypes.PUMPING)
-				else (status = Current_status); 
-			
-			guarantee "Status range" : 
-				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
-			
-			guarantee "Pump breaks." :
-				(T_broken_remains_broken) => (Current_status = datatypes.BROKEN);
-			
-			guarantee "Pump remains broken":
-				(false -> (pre(status) = datatypes.BROKEN)) => (status = datatypes.BROKEN);
+			guarantee "Initial status of pump is pumping." :
+				(status = datatypes.PUMPING) -> true;
+		
 			
 		**};
 			

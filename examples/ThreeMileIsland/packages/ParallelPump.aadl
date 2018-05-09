@@ -11,58 +11,54 @@ with Pump;
 			-- Coolant status from circuit
 			coolant_status : in data port Base_Types::Integer; 
 			
-			-- {pumping, stopped, shaking, broken}
+			-- {pumping, stopped, shaking}
 			pumpA_status : out data port Base_Types::Integer;
-			-- {pumping, stopped, shaking, broken}
+			-- {pumping, stopped, shaking}
 			pumpB_status : out data port Base_Types::Integer;
 			
-			-- {pumping, stopped, shaking, broken}
-			status : out data port Base_Types::Integer;
+			-- {pumping, stopped, shaking}
+			status : out data port Base_Types::Integer; 
 		
 		annex agree {**
-			
-			eq Previous_status : int = prev(status, datatypes.PUMPING);
-			eq Current_status : int;
-			eq T_pumpA_broken_to_B : bool = false ->(pumpA_status = datatypes.BROKEN);
-			eq T_pumpB_broken_to_A : bool = false ->(pumpB_status = datatypes.BROKEN);
-			eq T_pumpA_stopped_to_B : bool = false ->(pumpA_status = datatypes.STOPPED);
-			eq T_pumpB_stopped_to_A : bool = false ->(pumpB_status = datatypes.STOPPED);
-			
-			eq Some_transition : bool = T_pumpA_broken_to_B or T_pumpB_broken_to_A
-					or T_pumpA_stopped_to_B or T_pumpB_stopped_to_A or T_both_pumps_broken;
-			
-			eq T_both_pumps_broken : bool = (pumpA_status = datatypes.BROKEN) and (pumpB_status = datatypes.BROKEN);
-			
-			guarantee "Current status range" : 
-				(Current_status >= datatypes.PUMPING) and (Current_status <= datatypes.BROKEN);
 			 
-			guarantee "Switch to pumpB status" : 
-				((T_pumpA_broken_to_B or T_pumpA_stopped_to_B) and (not T_both_pumps_broken))
-					=> (Current_status = pumpB_status);
-					
-			guarantee "Switch to pumpA status" : 
-				((T_pumpB_broken_to_A or T_pumpB_stopped_to_A) and (not T_both_pumps_broken)) 
-					=> (Current_status = pumpA_status);
-					
-			guarantee "When both pumps break, they are broken." :
-				(T_both_pumps_broken) => (Current_status = datatypes.BROKEN);
+			assume "Command input is bounded." :
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE); 
 				
-			guarantee "No status change, no new output" : 
-				not (Some_transition) => (Current_status = Previous_status);
-			
-			guarantee "Output status" : 
-				(status = Current_status); 
-			
-			guarantee "Status range" : 
-				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
+			assume "Coolant status input is bounded." :
+				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
+				
+--			assume "Pump status input is bounded." :
+--				(pumpA_status >= datatypes.STEAM_CAVITIES) and (pumpA_status <= datatypes.SOLID)
+--				and (pumpB_status >= datatypes.STEAM_CAVITIES) and (pumpB_status <= datatypes.SOLID);
 			
 			
-			guarantee "When pump A breaks, it stays broken." :
-				(false -> (pre(pumpA_status) = datatypes.BROKEN)) => (pumpA_status = datatypes.BROKEN);
+			eq pumpa_status : int = pumpA_status;
+			eq pumpb_status : int = pumpB_status;
 			
-			guarantee "When pump B breaks, it stays broken." :
-				(false -> (pre(pumpB_status) = datatypes.BROKEN)) => (pumpB_status = datatypes.BROKEN);	
-				--(false -> (pre(primary.pump_status) = datatypes.BROKEN)) => (primary.pump_status = datatypes.BROKEN);
+--			assign status = if (pumpa_status = datatypes.SHAKING) 
+--								then (pumpb_status)
+--							else pumpa_status;
+			
+			-- We switch from pump A output to pump B output when pumpA shows signs of 
+			-- shaking. This occurs when we were pumping but steam cavities appear
+			-- in the coolant. 
+			guarantee "Initial status output is pumping." :
+				(status = datatypes.PUMPING) -> true;
+				
+			guarantee "Begin using pumpB when pumpA begins to shake." :
+				(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_NONE))
+				and (pumpA_status = datatypes.SHAKING)) 
+					=> (status = pumpB_status);
+					
+			guarantee "In all other cases, use status from pumpA." :
+				not(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_NONE))
+					and (pumpA_status = datatypes.SHAKING)) 
+						=> (status = pumpA_status);
+				
+			guarantee "Output is bounded" :
+				(status >= datatypes.PUMPING) and (status <= datatypes.SHAKING);
+
+			
 		**};
 			
 	end ParallelPump;
@@ -87,40 +83,31 @@ with Pump;
 			coolant_to_pumpB : port coolant_status -> pumpB.coolant_status;
 			
 		annex agree {**
-			lemma "Current status range" : 
-				(pumpA.Current_status >= datatypes.PUMPING) and (pumpA.Current_status <= datatypes.BROKEN);
 			
-			lemma "Shaking status" : 
-				(pumpA.T_pumping_to_shaking) => (pumpA.Current_status = datatypes.SHAKING);
-				
-			lemma "Broken status" : 
-				(pumpA.T_shaking_to_broken) => (pumpA.Current_status = datatypes.BROKEN);
-				
-			lemma "Pump breaks." :
-				(pumpA.T_broken_remains_broken) => (pumpA.Current_status = datatypes.BROKEN);
-				
-			lemma "Stopped status" : 
-				(pumpA.T_not_broken_to_stopped) => (pumpA.Current_status = datatypes.STOPPED);
-				
-			lemma "Pumping status" : 
-				(pumpA.T_not_broken_to_pumping) => (pumpA.Current_status = datatypes.PUMPING);
+			assign status = if (pumpa_status = datatypes.SHAKING) 
+								then (pumpb_status)
+							else pumpa_status;	
 			
-			lemma "No status change, no new output" : 
-				not (pumpA.Some_transition) => (pumpA.Current_status = pumpA.Previous_status);
-			
-			lemma "Output status" : 
-				if ((pumpA.Current_status = datatypes.PUMPING) or (pumpA.Current_status = datatypes.SHAKING)) 
-					then (pumpA.status = datatypes.PUMPING)
-				else (pumpA.status = pumpA.Current_status); 
-			
-			lemma "Status range" : 
-				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.BROKEN);
+			lemma "Initial status of pump is pumping." :
+				(pumpA.status = datatypes.PUMPING) -> true;
 				
-			lemma "Pump A remains broken":
-				(false -> (pre(pumpA_status) = datatypes.BROKEN)) => (pumpA_status = datatypes.BROKEN);
+			lemma "Command to start pumping." :
+				(((pumpA.command = datatypes.MAIN_START) and (not (pumpA.coolant_status = datatypes.STEAM_CAVITIES)))) 
+					=> (pumpA.status = datatypes.PUMPING);
 				
-			lemma "Pump B remains broken":
-				(false -> (pre(pumpB_status) = datatypes.BROKEN)) => (pumpB_status = datatypes.BROKEN);
+			lemma "Command to stop pumping." :
+				(pumpA.command = datatypes.MAIN_STOP) => (pumpA.status = datatypes.STOPPED);
+				
+			lemma "Switch to shaking status." :
+				((pre(pumpA.status) = datatypes.PUMPING) and (pumpA.coolant_status = datatypes.STEAM_CAVITIES)) 
+					=> (pumpA.status = datatypes.SHAKING);
+				
+			lemma "In all other cases, no transition occurs." :
+				(pumpA.command = datatypes.MAIN_NONE) => (pumpA.status = pre(pumpA.status));
+				 
+			lemma "Bounds on status" :
+				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.SHAKING);
+			
 				
 		**};	
 	end ParallelPump.impl;
