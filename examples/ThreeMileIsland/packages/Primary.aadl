@@ -10,7 +10,7 @@ with Circuit;
 			command : in data port Base_Types::Integer;
 			-- {open, closed} <- valve status (output)
 			tank_output : in data port Base_Types::Integer;
-			-- Series Valves status: {open, close, none}
+			-- Series Valves status: {open, close}
 			valve_output : in data port Base_Types::Integer;
 			-- Temp of reactor
 			-- {1,..,5} = {inert, low, normal, hot, very hot}
@@ -28,7 +28,8 @@ with Circuit;
 			
 		annex agree {**
 			
-			
+			assume "Command input is bounded." : 
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE);
 			
 			-- When  both porv and block commands are OPEN, then the valve_output
 			-- is open. 
@@ -58,34 +59,49 @@ with Circuit;
 			
 			
 			guarantee "Pump status is bounded." :
-				(pump_status >= datatypes.PUMPING) and (pump_status <= datatypes.BROKEN);
+				(pump_status >= datatypes.PUMPING) and (pump_status <= datatypes.SHAKING);
 			
 			
 			guarantee "Coolant level bounded" :
 				(coolant_level >= 0) and (coolant_level <= 10);
-		
-			guarantee "Coolant temperature bounded" :
-				(circuit_temp_low >= 0) and (circuit_temp_low <= 10)
-				and (circuit_temp_high >= 0) and (circuit_temp_high <= 10)
-				and (temp_out_low >= 0) and (temp_out_low <= 5);
 			
-			guarantee "When pump breaks, it stays broken." :
-				(false -> (pre(pump_status) = datatypes.BROKEN)) => (pump_status = datatypes.BROKEN);	
 		
 			guarantee "Inital coolant level value" :
 				(coolant_level = 5) -> true; 
 		
+			guarantee "Datatypes move coolant temp one step" :
+				(datatypes.move(coolant_level, 10) = (coolant_level + 1))
+				or (datatypes.move(coolant_level, 10) = (coolant_level - 1))
+				or (datatypes.move(coolant_level, coolant_level) = (coolant_level)); 
+				
+				
+			guarantee "Coolant remains at the same level." :
+				(((tank_output = datatypes.VALVE_OPEN) and (valve_output = datatypes.VALVE_OPEN))
+				or ((tank_output = datatypes.VALVE_CLOSED) and (valve_output = datatypes.VALVE_CLOSED)))
+					=> (coolant_level = prev(coolant_level,5));
+				
+			guarantee "If input valve is open (tank) and output valve is closed (valve), increase
+						coolant level." :
+						((tank_output = datatypes.VALVE_OPEN) and (valve_output = datatypes.VALVE_CLOSED))
+							=> (coolant_level = datatypes.move(prev(coolant_level,5), 10));
+							
+			guarantee "If input valve is closed (tank) and output valve is open (valve), decrease
+						coolant level." :
+						((tank_output = datatypes.VALVE_CLOSED) and (valve_output = datatypes.VALVE_OPEN))
+							=> (coolant_level = datatypes.move(prev(coolant_level,5), 0));
+							
+ 
 		**}	;
 			  
 	end Primary;
 	
-	system implementation Primary.impl
+	system implementation Primary.impl  
 		subcomponents
-			pump1 : system ParallelPump::ParallelPump;
+			pump1 : system ParallelPump::ParallelPump.impl; 
 			circuit1 : system Circuit::Circuit;
 			
 		connections
-			cmd_to_pumps : port command -> pump1.command;
+			cmd_to_pumps : port command -> pump1.command; 
 			
 			-- Pump status from parallel pump 1 to circuit 1
 			pump_status1 : port pump1.status -> circuit1.pump_status;
@@ -105,83 +121,79 @@ with Circuit;
 			
 			pumpStatus : port pump1.status -> pump_status;
 		
-		annex agree {**
+		annex agree {** 
 			
 			lemma "Inital coolant level value" :
 				(circuit1.coolant_level = 5) -> true;	
 			
-			lemma "Current status range" : 
-				(pump1.Current_status >= datatypes.PUMPING) and (pump1.Current_status <= datatypes.BROKEN);
+--			lemma "Current status range" : 
+--				(pump1.Current_status >= datatypes.PUMPING) and (pump1.Current_status <= datatypes.SHAKING);
+--			
+--			lemma "Initial status output is pumping." : 
+--				(pump1.Current_status = datatypes.PUMPING) -> true;
+--				
+--			lemma "Begin using pumpB when pumpA begins to shake." :
+--				(pump1.T_from_pumpA_to_pumpB) => (pump1.Current_status = pump1.pumpB_status);
+--					
+--			lemma "In all other cases, use status from pumpA." :
+--				not(pump1.T_from_pumpA_to_pumpB) => (pump1.Current_status = pump1.pumpA_status);
+--				
+--			lemma "Output is linked to this state machine (Current_status)" :
+--				(pump1.status = pump1.Current_status);
 			
-			lemma "Switch to pumpB status" : 
-				((pump1.T_pumpA_broken_to_B or pump1.T_pumpA_stopped_to_B) and (not pump1.T_both_pumps_broken)) 
-					=> (pump1.Current_status = pump1.pumpB_status);
-					  
-			lemma "Switch to pumpA status" : 
-				((pump1.T_pumpB_broken_to_A or pump1.T_pumpB_stopped_to_A) and (not pump1.T_both_pumps_broken))
-					=> (pump1.Current_status = pump1.pumpA_status);
-				
-			lemma "No status change, no new output *(pump)" :   
-				not (pump1.Some_transition) => (pump1.Current_status = pump1.Previous_status);
-			
-			lemma "Output status" : 
-				(pump1.status = pump1.Current_status);	
-			 
-			lemma "When pump A breaks, it stays broken." :
-				(false -> (pre(pump1.pumpA_status) = datatypes.BROKEN)) => (pump1.pumpA_status = datatypes.BROKEN);
-			
-			lemma "When pump B breaks, it stays broken." :
-				(false -> (pre(pump1.pumpB_status) = datatypes.BROKEN)) => (pump1.pumpB_status = datatypes.BROKEN);
-				
-			lemma "When pump 1 breaks, it stays broken." :
-				(false -> (pre(pump1.status) = datatypes.BROKEN)) => (pump1.status = datatypes.BROKEN);	
+			lemma "Output is bounded" : 
+				(pump1.status >= datatypes.PUMPING) and (pump1.status <= datatypes.SHAKING);
 			------------------------------------------------------------------------------------
 			-- Circuit
 			-------------------------------------------------------------------------------------
 			-- Coolant level guarantees
-			lemma "Coolant level remains constant" :
+			lemma "Coolant level remains constant" : 
 				(circuit1.T_coolant_remains_same_level) 
 					=> (circuit1.Current_coolant_level = circuit1.Previous_coolant_level);
 			
 			lemma "Coolant level increases" : 
 				(circuit1.T_increase_coolant_level)
 					=> (circuit1.Current_coolant_level = datatypes.move(circuit1.Previous_coolant_level, 10));
+			 
 			
 			lemma "Coolant level decreases" : 
 				(circuit1.T_decrease_coolant_level)
-					=> (circuit1.Current_coolant_level = datatypes.move(circuit1.Previous_coolant_level, 1));
+					=> (circuit1.Current_coolant_level = datatypes.move(circuit1.Previous_coolant_level, 0)); 
 			
 			lemma "No status change, no new output" : 
 				not (circuit1.Some_coolant_level_transition) => (circuit1.Current_coolant_level = circuit1.Previous_coolant_level);
 			
 			
+			lemma "Datatypes move coolant temp one step" :
+				(datatypes.move(circuit1.Current_coolant_level, 5) = (circuit1.Current_coolant_level + 1))
+				or (datatypes.move(circuit1.Current_coolant_level, 5) = (circuit1.Current_coolant_level - 1))
+				or (datatypes.move(circuit1.Current_coolant_level, 5) = (circuit1.Current_coolant_level)); 
 			
-			
-			-- Temp_output_low guarantees
-			lemma "Temp output low equals input low" :
-				(circuit1.T_temp_output_low_to_input_low) => (circuit1.temp_input_low = circuit1.Current_temp_output_low);
-			
-			lemma "Temp output low equals input high" :
-				(circuit1.T_temp_output_low_to_input_high) => (circuit1.temp_input_low = circuit1.Current_temp_output_high);
-			
-			lemma "No status change for temp_output_low, no new output" : 
-				not (circuit1.Some_temp_out_low_transition) => (circuit1.Current_temp_output_low = circuit1.Previous_temp_output_low);
-			
-			lemma "Temp output low status" : 
-				(circuit1.temp_output_low = circuit1.Current_temp_output_low);
-			
-			-- Temp_output_high guarantees
-			lemma "Temp output high equals input low" :
-				(circuit1.T_temp_output_high_to_input_low) => (circuit1.temp_input_high = circuit1.Current_temp_output_low);
-			
-			lemma "Temp output high equals input high" :
-				(circuit1.T_temp_output_high_to_input_high) => (circuit1.temp_input_high = circuit1.Current_temp_output_high);
-			
-			lemma "No status change for temp_output_high, no new output" : 
-				not (circuit1.Some_temp_out_high_transition) => (circuit1.Current_temp_output_high = circuit1.Previous_temp_output_high);
-			
-			lemma "Temp output high status" :  
-				(circuit1.temp_output_high = circuit1.Current_temp_output_high);
+--			-- Temp_output_low guarantees
+--			lemma "Temp output low equals input low" :
+--				(circuit1.T_temp_output_low_to_input_low) => (circuit1.temp_input_low = circuit1.Current_temp_output_low);
+--			 
+--			lemma "Temp output low equals input high" :
+--				(circuit1.T_temp_output_low_to_input_high) => (circuit1.temp_input_low = circuit1.Current_temp_output_high);
+--			
+--			lemma "No status change for temp_output_low, no new output" : 
+--				not (circuit1.Some_temp_out_low_transition) => (circuit1.Current_temp_output_low = circuit1.Previous_temp_output_low);
+--			
+--			lemma "Temp output low status" : 
+--				(circuit1.temp_output_low = circuit1.Current_temp_output_low);
+--			
+--			-- Temp_output_high guarantees
+--			lemma "Temp output high equals input low" :
+--				(circuit1.T_temp_output_high_to_input_low) => (circuit1.temp_input_high = circuit1.Current_temp_output_low);
+--			
+--			lemma "Temp output high equals input high" :
+--				(circuit1.T_temp_output_high_to_input_high) => (circuit1.temp_input_high = circuit1.Current_temp_output_high);
+--			
+--			lemma "No status change for temp_output_high, no new output" : 
+--				not (circuit1.Some_temp_out_high_transition) => (circuit1.Current_temp_output_high = circuit1.Previous_temp_output_high);
+--			
+--			lemma "Temp output high status" :  
+--				(circuit1.temp_output_high = circuit1.Current_temp_output_high);
 				
 				
 			-- Coolant Status
@@ -193,10 +205,7 @@ with Circuit;
 			
 			lemma "Coolant status output" :
 				(circuit1.coolant_status = circuit1.Current_coolant_status);	
-			
-			lemma "Coolant temperature bounded" :
-				(circuit1.temp_output_high >= 0) and (circuit1.temp_output_high <= 5)
-				and (circuit1.temp_output_low >= 0) and (circuit1.temp_output_low <= 5);	
+				
 		**};
 		
 	end Primary.impl;

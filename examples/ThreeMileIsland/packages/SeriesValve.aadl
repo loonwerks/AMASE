@@ -5,40 +5,45 @@ with Valve;
 
 	system SeriesValve
 		features
-			-- Input from main TMI: {open, close, none}
+			-- Input from main TMI: {open, close}
 			porv_cmd : in data port Base_Types::Integer;
 			block_cmd : in data port Base_Types::Integer;
 			
 			
-			-- {open, close, none}
+			-- {open, close}
 			status : out data port Base_Types::Integer;
 		
 		annex agree {**
 			assume "Range for porv commands." :
-				(porv_cmd >= datatypes.VALVE_OPEN) and (porv_cmd <= datatypes.VALVE_NONE);
+				(porv_cmd >= datatypes.VALVE_OPEN) and (porv_cmd <= datatypes.VALVE_CLOSED);
 				
 			assume "Range for block commands." :
-				(block_cmd >= datatypes.VALVE_OPEN) and (block_cmd <= datatypes.VALVE_NONE);
+				(block_cmd >= datatypes.VALVE_OPEN) and (block_cmd <= datatypes.VALVE_CLOSED);
 				
 				
 			guarantee "Output status is open if both valves are open." :
 				if (porv_cmd = datatypes.VALVE_OPEN) 
 					then (status = block_cmd)
 				else (status = porv_cmd);
+				
+			guarantee "Initially, output is open." :
+				(status = datatypes.VALVE_OPEN) -> true;
 			
+			guarantee "Output status bounded." :
+				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED);
 		**};
 			
 	end SeriesValve;
 	
 	
-	system implementation SeriesValve.impl
-		subcomponents
-			porv : system Valve::Valve;
-			block : system Valve::Valve;
-		
-		connections
-			command_to_porv : port porv_cmd -> porv.command;
-			command_to_block : port block_cmd -> block.command;
-			
-	end SeriesValve.impl;	
+--	system implementation SeriesValve.impl
+--		subcomponents
+--			porv : system Valve::Valve;
+--			block : system Valve::Valve;
+--		
+--		connections
+--			command_to_porv : port porv_cmd -> porv.command;
+--			command_to_block : port block_cmd -> block.command;
+--			
+--	end SeriesValve.impl;	
 end SeriesValve;

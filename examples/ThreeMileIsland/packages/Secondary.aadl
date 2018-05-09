@@ -10,7 +10,12 @@ with Circuit;
 			command : in data port Base_Types::Integer;
 			circuit_temp_high : in data port Base_Types::Integer;
 			circuit_temp_low : out data port Base_Types::Integer;
+		annex agree {**
 			
+			guarantee "Temp passing through is bounded." :
+				(circuit_temp_low >= 0) and (circuit_temp_low <= 10);
+			
+		**}	;
 	end Secondary;
 	
 	system implementation Secondary.impl
