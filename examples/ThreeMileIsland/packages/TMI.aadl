@@ -70,7 +70,7 @@ with datatypes;
 			command2_to_pumps : port command2 -> secondary.command; 
 			
 			-- To tank
-			cmd_to_tank : port tank_command -> tank.command;
+			cmd_to_tank : port tank_command -> tank.command;  
 			
 			-- To Circuit
 			tank_to_circut : port tank.output -> primary.tank_output;
