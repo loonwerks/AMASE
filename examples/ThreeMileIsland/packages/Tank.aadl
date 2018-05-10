@@ -3,6 +3,7 @@ public
 with Base_Types;
 with Pump;
 with Valve;
+with TankControl;
 with datatypes;
 
 	system Tank
@@ -11,105 +12,26 @@ with datatypes;
 			command : in data port Base_Types::Integer;
 			-- coolant status {steam_cavities, normal, solid}
 			status_to_pump : in data port Base_Types::Integer;
-			-- main command {start, stop, none}
-			command_to_pump : in data port Base_Types::Integer;
-			-- valve command: {open, close}
-			command_to_valve : in data port Base_Types::Integer;
 			
 			-- {open, closed} <- valve status (output)
 			output : out data port Base_Types::Integer;
-			-- pump status: {pumping, stopped, shaking}
-			status_from_pump : out data port Base_Types::Integer;
-			-- valve status : {open, closed}
-			status_from_valve : out data port Base_Types::Integer;
 		
 		annex agree {**
 
 			assume "Command input is bounded." :
-				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE); 
-			
-			assume "Command to pump bounded:" :
-				(command_to_pump >= datatypes.MAIN_START) and (command_to_pump <= datatypes.MAIN_NONE);
-			
-			assume "Command to valve bounded:" :
-				(command_to_valve >= datatypes.VALVE_OPEN) and (command_to_valve <= datatypes.VALVE_CLOSED);
+				(command >= datatypes.TANK_STOP) and (command <= datatypes.TANK_NONE); 
+				
+				
 				
 			assume "Status to pump bounded:" :
 				(status_to_pump >= datatypes.STEAM_CAVITIES) and (status_to_pump <= datatypes.SOLID);
-				
-			-- Transform operator command into pump command
-			eq Current_cmd_pump : int;
-			eq Current_cmd_valve : int;
-			eq Current_cmd_output : int;
-			eq Previous_cmd : int = prev(command, datatypes.TANK_NONE);
 			
-			eq T_stop_to_pump_cmd : bool = (command = datatypes.TANK_STOP);
-			eq T_inject_to_pump_cmd : bool = (command = datatypes.TANK_INJECT);
-			eq T_none_to_pump_cmd : bool = (command = datatypes.TANK_NONE);
-			
-			eq Some_transition : bool = T_stop_to_pump_cmd or T_inject_to_pump_cmd or T_none_to_pump_cmd;
-			
-			-- Transform operator command into valve command
-			eq T_stop_to_valve_cmd : bool = (command = datatypes.TANK_STOP);
-			eq T_inject_to_valve_cmd : bool = (command = datatypes.TANK_INJECT);
-			eq T_none_to_valve_cmd : bool = (command = datatypes.TANK_NONE);
-			eq Some_valve_transition : bool = T_stop_to_valve_cmd or T_inject_to_valve_cmd or T_none_to_valve_cmd;
-			
-			
-			-- Transform valve and pump output into valve output
-			eq T_status_open_pumping_cmd : bool = 
-					(status_from_pump = datatypes.PUMPING) and (status_from_valve = datatypes.VALVE_OPEN);
-			
-			
-			------------------- OUPTUT ----------------------------
-			
-			-- If pump is pumping and valve is open, output is open, else it's closed
-			guarantee "Transform valve and pump output into valve output." :
-				if ((status_from_pump = datatypes.PUMPING) and (status_from_valve = datatypes.VALVE_OPEN)) 
-					then (output = datatypes.VALVE_OPEN)
-				else (output = datatypes.VALVE_CLOSED);
 				
 			guarantee "Output bounded:" :
 				(output >= datatypes.VALVE_OPEN) and (output <= datatypes.VALVE_CLOSED); 
 			
 			guarantee "Initally, output is open." :
 				(output = datatypes.VALVE_OPEN) -> true;
-			
-			------------ VALVES --------------------
-			guarantee "Transform stop command into valve closed command" :
-				T_stop_to_pump_cmd => (Current_cmd_valve = datatypes.VALVE_CLOSED);
-				
-			guarantee "Transform inject command into valve open command" :
-				T_inject_to_pump_cmd => (Current_cmd_valve = datatypes.VALVE_OPEN);
-			
-			guarantee "If no transition occurs, keep previous valve command" :
-				(not Some_transition) => (Current_cmd_valve = Previous_cmd);
-			
-			guarantee "Output status (valve command)" :
-				Current_cmd_valve = command_to_valve;
-				
---			guarantee "Command to valve bounded:" :
---				(command_to_valve >= datatypes.VALVE_OPEN) and (command_to_valve <= datatypes.VALVE_CLOSED); 
-			
-			------------------ PUMP -----------------------------------
-			guarantee "Transform tank_stop command into pump stop command" :
-				T_stop_to_pump_cmd => (Current_cmd_pump = datatypes.MAIN_STOP);
-				
-			guarantee "Transform tank_inject command into pump start command" :
-				T_inject_to_pump_cmd => (Current_cmd_pump = datatypes.MAIN_START);
-				
-			guarantee "Transform tank_none command into pump none command" :
-				T_none_to_pump_cmd => (Current_cmd_pump = datatypes.MAIN_NONE);
-			
-			guarantee "If no transition occurs, keep previous pump command" :
-				(not Some_transition) => (Current_cmd_pump = Previous_cmd);
-			
-			guarantee "Output status (pump command)" :
-				Current_cmd_pump = command_to_pump;  
-				
-			
-				
-
 			
 		**};
 			
@@ -118,42 +40,111 @@ with datatypes;
 	system implementation Tank.impl  
 		subcomponents
 			pump : system Pump::Pump;
-			valve : system Valve::Valve;
+			--valve : system Valve::Valve;
+			control : system TankControl::TankControl;
 			
 		connections
-			-- Communications with pump and valve
-			pumpcommand : port command_to_pump -> pump.command;
 			coolantstatus : port status_to_pump -> pump.coolant_status;
-			valvecommand : port command_to_valve -> valve.command;
+			
+			control_out_to_tank : port control.output_to_tank -> output;
+			
+			--control_out_to_valve : port control.output_to_valve -> valve.command;
+			control_out_to_pump : port control.output_to_pump -> pump.command;
+			
+			--pumpstatus_to_control : port pump.status -> control.status_from_pump;
+			--valvestatus_to_control : port valve.status -> control.status_from_valve;
+			command_to_control : port command -> control.command;
 			
 		annex agree {**
 			assert(status_to_pump = datatypes.NORMAL); 
-			
-			----------------------------------------------------------------------------
-			-- Valve
-			----------------------------------------------------------------------------
-			lemma "Current status range" : 
-				(valve.Current_status >= datatypes.VALVE_OPEN) and (valve.Current_status <= datatypes.VALVE_CLOSED);
-				
-			lemma "Status range" : 
-				(valve.status >= datatypes.VALVE_OPEN) and (valve.status <= datatypes.VALVE_CLOSED);
-			
-			lemma "Open status" : 
-				(valve.T_close_to_open or valve.Remain_open) => (valve.Current_status = datatypes.VALVE_OPEN);
-				 
-			
-			lemma "Closed status" :
-				(valve.T_open_to_close or valve.Remain_closed) => (valve.Current_status = datatypes.VALVE_CLOSED);	
-			
-			lemma "No status change, no new output" : 
-				not (valve.Some_transition) => (valve.Current_status = valve.Previous_status);
-			
-			lemma "Output status" : 
-				(valve.status = valve.Current_status); 
-			
-			------------------------------------------------------------------------------
-			-- Pump
-			-------------------------------------------------------------------------------
+--			----------------------------------------------------------------------------
+--			-- Valve
+--			----------------------------------------------------------------------------
+--			lemma "Current valve status range" :  
+--				(valve.Current_status >= datatypes.VALVE_OPEN) and (valve.Current_status <= datatypes.VALVE_CLOSED);
+--				
+--			lemma "Valve status range" : 
+--				(valve.status >= datatypes.VALVE_OPEN) and (valve.status <= datatypes.VALVE_CLOSED);
+--			
+--			lemma "Open valve status" : 
+--				(valve.T_close_to_open or valve.Remain_open) => (valve.Current_status = datatypes.VALVE_OPEN);
+--				 
+--			
+--			lemma "Closed valve status" :
+--				(valve.T_open_to_close or valve.Remain_closed) => (valve.Current_status = datatypes.VALVE_CLOSED);	
+--			
+--			lemma "No valve status change, no new output" : 
+--				not (valve.Some_transition) => (valve.Current_status = valve.Previous_status);
+--			
+--			lemma "Output valve status" : 
+--				(valve.status = valve.Current_status); 
+--			
+--			------------------------------------------------------------------------------
+--			-- Pump
+--			-------------------------------------------------------------------------------
+--			lemma "Initial status of pump is pumping." :
+--				(pump.status = datatypes.PUMPING) -> true;
+--				
+--			lemma "Command to start pumping." :
+--				(((pump.command = datatypes.MAIN_START) and (not (pump.coolant_status = datatypes.STEAM_CAVITIES)))) 
+--					=> (pump.status = datatypes.PUMPING);
+--				
+--			lemma "Command to stop pumping." :
+--				(pump.command = datatypes.MAIN_STOP) => (pump.status = datatypes.STOPPED);
+--				
+--			lemma "Switch to shaking status." :
+--				((pre(pump.status) = datatypes.PUMPING) and (pump.coolant_status = datatypes.STEAM_CAVITIES)) 
+--					=> (pump.status = datatypes.SHAKING);
+--				
+--			lemma "In all other cases, no transition occurs." :
+--				(pump.command = datatypes.MAIN_NONE) => (pump.status = pre(pump.status));
+--
+--				
+--			lemma "Bounds on pump status" :
+--				(pump.status >= datatypes.PUMPING) and (pump.status <= datatypes.SHAKING); 
+--			
+--				
+--			-----------------------------------
+--			--------------- Tank output
+--			
+--			lemma "Initially, output to tank is open." :
+--				(control.output_to_tank = datatypes.VALVE_OPEN) -> true;
+--				
+--			-- If pump is pumping and valve is open, output is open, else it's closed
+--			lemma "Transform valve and pump output into Tank output." :
+--				if ((control.status_from_pump = datatypes.PUMPING) and (control.status_from_valve = datatypes.VALVE_OPEN)) 
+--					then (control.output_to_tank = datatypes.VALVE_OPEN)
+--				else (control.output_to_tank = datatypes.VALVE_CLOSED);
+--			
+--			lemma "Output to tank bounded:" :
+--				(control.output_to_tank >= datatypes.VALVE_OPEN) and (control.output_to_tank <= datatypes.VALVE_CLOSED); 
+--			
+--			
+--			------------------------ Valve output
+--			lemma "Transform tank stop command to valve closed." :
+--				(control.command = datatypes.TANK_STOP) => (control.output_to_valve = datatypes.VALVE_CLOSED);
+--				
+--			lemma "Transform tank inject command to valve open." :
+--				(control.command = datatypes.TANK_INJECT) => (control.output_to_valve = datatypes.VALVE_OPEN);
+--				
+--			lemma "Transform tank none command to valve previous state." :
+--				(control.command = datatypes.TANK_NONE) => (control.output_to_valve = prev(control.output_to_valve, datatypes.VALVE_OPEN));
+--				
+--			lemma "Output to valve bounded:" :
+--				(control.output_to_valve >= datatypes.VALVE_OPEN) and (control.output_to_valve <= datatypes.VALVE_CLOSED);
+--				
+--			------------------------ Pump output
+--			lemma "Transform tank stop command to pump stop." :
+--				(control.command = datatypes.TANK_STOP) => (control.output_to_pump = datatypes.MAIN_STOP);
+--				
+--			lemma "Transform tank inject command to pump start." :
+--				(control.command = datatypes.TANK_INJECT) => (control.output_to_pump = datatypes.MAIN_START);
+--				
+--			lemma "Transform tank none command to pump previous state." :
+--				(control.command = datatypes.TANK_NONE) => (control.output_to_pump = prev(control.output_to_pump, datatypes.MAIN_START));
+--			
+--			lemma "Output to pump bounded:" :
+--				(control.output_to_pump >= datatypes.TANK_STOP) and (control.output_to_pump <= datatypes.TANK_NONE);
 			
 		**};
 	end Tank.impl;
