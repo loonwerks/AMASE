@@ -6,7 +6,6 @@ public
 		-- Main command status constants for state machine
 		const MAIN_START : int = 1;
 		const MAIN_STOP : int = 2;
-		const MAIN_NONE : int = 3;
 		
 		-- Pump status constants for state machine
 		const PUMPING : int = 1;
@@ -20,9 +19,9 @@ public
 		
 		
 		-- Tank status constants for state machine
-		const TANK_STOP : int = 1;
-		const TANK_INJECT : int = 2;
-		const TANK_NONE : int = 3;
+		const TANK_INJECT : int = 1;
+		const TANK_STOP : int = 2;
+		
 		
 		
 		-- Coolant status constants for state machine

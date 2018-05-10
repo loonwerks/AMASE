@@ -4,24 +4,21 @@ with Base_Types;
 
 	system TankControl
 		features
-			-- {stop, inject, none} (operator command)
+			-- {inject, none} (operator command)
 			command : in data port Base_Types::Integer; 
-			-- pump status: {pumping, stopped, shaking}
-			--status_from_pump : in data port Base_Types::Integer;
-			-- valve status : {open, closed}
-			--status_from_valve : in data port Base_Types::Integer;
+			
 			
 			-- Output flows to tank
 			output_to_tank : out data port Base_Types::Integer;
 			-- Output to valve
-			--output_to_valve : out data port Base_Types::Integer;
+			output_to_valve : out data port Base_Types::Integer;
 			-- Output to pump
 			output_to_pump : out data port Base_Types::Integer;
 			
 		annex agree {**
 			
 			assume "Command input is bounded." :
-				(command >= datatypes.TANK_STOP) and (command <= datatypes.TANK_NONE);
+				(command >= datatypes.TANK_INJECT) and (command <= datatypes.TANK_STOP);
 				
 --			assume "Valve status range" : 
 --				(status_from_valve >= datatypes.VALVE_OPEN) and (status_from_valve <= datatypes.VALVE_CLOSED);
@@ -44,18 +41,15 @@ with Base_Types;
 				(output_to_tank >= datatypes.VALVE_OPEN) and (output_to_tank <= datatypes.VALVE_CLOSED); 
 --			
 --			
---			------------------------ Valve output
---			guarantee "Transform tank stop command to valve closed." :
---				(command = datatypes.TANK_STOP) => (output_to_valve = datatypes.VALVE_CLOSED);
---				
---			guarantee "Transform tank inject command to valve open." :
---				(command = datatypes.TANK_INJECT) => (output_to_valve = datatypes.VALVE_OPEN);
---				
---			guarantee "Transform tank none command to valve previous state." :
---				(command = datatypes.TANK_NONE) => (output_to_valve = prev(output_to_valve, datatypes.VALVE_OPEN));
---				
---			guarantee "Output to valve bounded:" :
---				(output_to_valve >= datatypes.VALVE_OPEN) and (output_to_valve <= datatypes.VALVE_CLOSED);
+			------------------------ Valve output
+			guarantee "Transform tank stop command to valve closed." :
+				(command = datatypes.TANK_STOP) => (output_to_valve = datatypes.VALVE_CLOSED);
+				
+			guarantee "Transform tank inject command to valve open." :
+				(command = datatypes.TANK_INJECT) => (output_to_valve = datatypes.VALVE_OPEN);
+				
+			guarantee "Output to valve bounded:" :
+				(output_to_valve >= datatypes.VALVE_OPEN) and (output_to_valve <= datatypes.VALVE_CLOSED);
 				
 			------------------------ Pump output
 			guarantee "Transform tank stop command to pump stop." :
@@ -64,11 +58,8 @@ with Base_Types;
 			guarantee "Transform tank inject command to pump start." :
 				(command = datatypes.TANK_INJECT) => (output_to_pump = datatypes.MAIN_START);
 				
-			guarantee "Transform tank none command to pump previous state." :
-				(command = datatypes.TANK_NONE) => (output_to_pump = prev(output_to_pump, datatypes.MAIN_START));
-			
 			guarantee "Output to pump bounded:" :
-				(output_to_pump >= datatypes.TANK_STOP) and (output_to_pump <= datatypes.TANK_NONE);
+				(output_to_pump >= datatypes.TANK_INJECT) and (output_to_pump <= datatypes.TANK_STOP);
 				
 					
 		**};

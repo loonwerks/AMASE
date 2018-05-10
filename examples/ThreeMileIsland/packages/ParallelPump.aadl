@@ -5,7 +5,7 @@ with Pump;
 
 	system ParallelPump
 		features
-			-- Input from main TMI: command for pump: {start, stop, none}
+			-- Input from main TMI: command for pump: {start, stop}
 			command : in data port Base_Types::Integer;
 			
 			-- Coolant status from circuit
@@ -22,7 +22,7 @@ with Pump;
 		annex agree {**
 			 
 			assume "Command input is bounded." :
-				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE); 
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP); 
 				
 			assume "Coolant status input is bounded." :
 				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
@@ -46,12 +46,12 @@ with Pump;
 				(status = datatypes.PUMPING) -> true;
 				
 			guarantee "Begin using pumpB when pumpA begins to shake." :
-				(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_NONE))
+				(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_STOP))
 				and (pumpA_status = datatypes.SHAKING)) 
 					=> (status = pumpB_status);
 					
 			guarantee "In all other cases, use status from pumpA." :
-				not(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_NONE))
+				not(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_STOP))
 					and (pumpA_status = datatypes.SHAKING)) 
 						=> (status = pumpA_status);
 				
@@ -102,9 +102,6 @@ with Pump;
 				((pre(pumpA.status) = datatypes.PUMPING) and (pumpA.coolant_status = datatypes.STEAM_CAVITIES)) 
 					=> (pumpA.status = datatypes.SHAKING);
 				
-			lemma "In all other cases, no transition occurs." :
-				(pumpA.command = datatypes.MAIN_NONE) => (pumpA.status = pre(pumpA.status));
-				 
 			lemma "Bounds on status" :
 				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.SHAKING);
 			

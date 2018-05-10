@@ -15,9 +15,9 @@ with datatypes;
 			-- Valve commands: {open, close}
 			porv_command : in data port Base_Types::Integer;
 			block_command : in data port Base_Types::Integer; 
-			-- Tank commands: {stop, inject, none}
+			-- Tank commands: {inject, none}
 			tank_command : in data port Base_Types::Integer;
-			-- Commands: {start, stop, none}
+			-- Commands: {start, stop}
 			command1 : in data port Base_Types::Integer;
 			command2 : in data port Base_Types::Integer;
 			
@@ -34,11 +34,11 @@ with datatypes;
 				(rods_command >= datatypes.EXTRACTED) and (rods_command <= datatypes.INSERTED);
 				
 			assume "Range for tank commands." :
-				(tank_command >= datatypes.TANK_STOP) and (tank_command <= datatypes.TANK_NONE);
+				(tank_command >= datatypes.TANK_INJECT) and (tank_command <= datatypes.TANK_STOP);
 			
 			assume "Range for main commands." :
-				(command1 >= datatypes.MAIN_START) and (command1 <= datatypes.MAIN_NONE) and
-				(command2 >= datatypes.MAIN_START) and (command2 <= datatypes.MAIN_NONE);
+				(command1 >= datatypes.MAIN_START) and (command1 <= datatypes.MAIN_STOP) and
+				(command2 >= datatypes.MAIN_START) and (command2 <= datatypes.MAIN_STOP);
 		
 			assume "Initial tank command" :
 				(tank_command = datatypes.TANK_INJECT) -> true;
