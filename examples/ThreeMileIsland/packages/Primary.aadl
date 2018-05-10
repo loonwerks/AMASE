@@ -90,8 +90,6 @@ with Circuit;
 						((tank_output = datatypes.VALVE_CLOSED) and (valve_output = datatypes.VALVE_OPEN))
 							=> (coolant_level = datatypes.move(prev(coolant_level,5), 0));
 							
--- 			guarantee "Temperature bounded" :
---				(circuit_temp_high >= 0) and (circuit_temp_high <= 10);
 		**}	;
 			  
 	end Primary;

@@ -82,100 +82,14 @@ with datatypes;
 			melted : port reactor.melted -> melted_reactor;
 		
 		annex agree {**
-			
-			
-			lemma "Inital coolant level value" : 
-				(primary.coolant_level = 5) -> true; 
-			
-			lemma "Datatypes move coolant level one step" :
-				(datatypes.move(primary.coolant_level, 10) = (primary.coolant_level + 1))
-				or (datatypes.move(primary.coolant_level, 0) = (primary.coolant_level - 1))
-				or (datatypes.move(primary.coolant_level, primary.coolant_level) = (primary.coolant_level));
-			 
-			-- Playing around with some nominal behavior to prevent melting reactor. 
---			lemma "If coolant level is low (2) and is decreasing, send inject command to tank and close
---					porv and block valves." :
---						((prev(primary.coolant_level,5) > primary.coolant_level) and (primary.coolant_level = 2))
---							=> 
---						((porv_command = datatypes.VALVE_CLOSED) and (tank_command = datatypes.TANK_INJECT));
-			
-			
+		
 			-- Top level hazard: The reactor melts.
 			-- In order for the reactor to be melted, we need:
 			-- reactor.output_temp = CORE_VERY_HOT (5) AND primary.coolant_level = 1
 			lemma "Reactor does not melt." :
 				not melted_reactor; 
 			 
-			
-			
-			-- The model of the plant is stable (because the coolant level imposes 
-			--that the core_status is 3) if do not mess with it (no drain, 
-			--no injection of fluid, etc etc), the core reactor remains at 
-			--nominal power  AG(reactor.core_status = 3)  
-			--We can drain the circuit, if we want we need to: 
-			--open porv and block valve, keep the input tank valve 
-			--closed (all conditions necessary... try and remove one if you want 
-			--to see how you can save the plant)
-			
-			-- Liveness property: need to do the fancy counter stuff.
-			
-			const BOUND1 : int = 5;
-			
-			eq counter_af1 : int = 0 ->
-				if (primary.coolant_level = 1) 
-					then 0
-				else pre(counter_af1)+1;
-				
-			eq AF_property_coolantlevel : bool = ((porv_command = datatypes.VALVE_OPEN) and (block_command = datatypes.VALVE_OPEN)) 
-					=> (counter_af1 < BOUND1);
-			
-			
---			lemma "As long as the porv and block commands are open, 
---					then eventually the coolant_level in circuit is at 1." :
---					AF_property_coolantlevel;
-			
 		
-			
-			 --------------------------- TANK ---------------------------------
-			  
---			lemma "Transform tank_stop command into pump stop command" :
---				tank.T_stop_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_STOP);
---				 
---			lemma "Transform tank_inject command into pump start command" :
---				tank.T_inject_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_START);
---				
---			lemma "Transform tank_none command into pump none command" :
---				tank.T_none_to_pump_cmd => (tank.Current_cmd_pump = datatypes.MAIN_NONE);
---			
---			lemma "If no transition occurs, keep previous pump command" :
---				(not tank.Some_transition) => (tank.Current_cmd_pump = tank.Previous_cmd);
---			 
---			lemma "Output status (pump command)" :
---				tank.Current_cmd_pump = tank.command_to_pump;
---		
---		
---			------------------- OUPTUT ----------------------------
---			lemma "Transform valve and pump output into valve output." :
---				if (tank.T_status_open_pumping_cmd) 
---					then (tank.Current_cmd_output = datatypes.VALVE_OPEN)
---				else (tank.Current_cmd_output = datatypes.VALVE_CLOSED);
---				
---			lemma "Valve output matches state machine" : 
---				(tank.output = tank.Current_cmd_output);
---			
---			------------ VALVES --------------------
---			lemma "Transform stop command into valve closed command" :
---				tank.T_stop_to_pump_cmd => (tank.Current_cmd_valve = datatypes.VALVE_CLOSED);
---				
---			lemma "Transform inject command into valve open command" :
---				tank.T_inject_to_pump_cmd => (tank.Current_cmd_valve = datatypes.VALVE_OPEN);
---			
---			lemma "If no transition occurs, keep previous valve command" :
---				(not tank.Some_transition) => (tank.Current_cmd_valve = tank.Previous_cmd);
---			
---			lemma "Output status (valve command)" :
---				tank.Current_cmd_valve = tank.command_to_valve;
---		
 		
 			----------------- SeriesValves ------------------------
 			lemma "Output status is open if both valves are open." :
@@ -183,6 +97,14 @@ with datatypes;
 					then (seriesValves.status = seriesValves.block_cmd)
 				else (seriesValves.status = seriesValves.porv_cmd); 
 		
+		
+			------------------------------------------------------------
+			-- Testing coolant level
+			
+			lemma "Datatypes move coolant level one step" :
+				(datatypes.move(primary.coolant_level, 10) = (primary.coolant_level + 1))
+				or (datatypes.move(primary.coolant_level, 0) = (primary.coolant_level - 1))
+				or (datatypes.move(primary.coolant_level, primary.coolant_level) = (primary.coolant_level));
 		
 			----------------- Reactor ------------------------	
 			lemma "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
@@ -218,15 +140,7 @@ with datatypes;
 				 
 			lemma "Output temp bounded" :
 				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
-			
-			-------------------- Tank ----------------------------
-			
---			lemma "Command to valve bounded:" :
---				(tank.command_to_valve >= datatypes.MAIN_START) and (tank.command_to_valve <= datatypes.MAIN_NONE);
---				
---			lemma "Command to pump bounded:" :
---				(tank.command_to_pump >= datatypes.MAIN_START) and (tank.command_to_pump <= datatypes.MAIN_NONE);
-		
+	
 		
 		**};
 			
