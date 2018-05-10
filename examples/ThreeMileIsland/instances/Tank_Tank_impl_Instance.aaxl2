@@ -24,30 +24,6 @@
     </ownedPropertyAssociation>
     <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
   </featureInstance>
-  <featureInstance name="command_to_pump">
-    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
-      <ownedValue>
-        <ownedValue xsi:type="aadl2:NamedValue">
-          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
-        </ownedValue>
-      </ownedValue>
-      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
-    </ownedPropertyAssociation>
-    <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
-  </featureInstance>
-  <featureInstance name="command_to_valve">
-    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
-      <ownedValue>
-        <ownedValue xsi:type="aadl2:NamedValue">
-          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
-        </ownedValue>
-      </ownedValue>
-      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
-    </ownedPropertyAssociation>
-    <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
-  </featureInstance>
   <featureInstance name="output" direction="out">
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
@@ -58,31 +34,7 @@
       </ownedValue>
       <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
     </ownedPropertyAssociation>
-    <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
-  </featureInstance>
-  <featureInstance name="status_from_pump" direction="out">
-    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
-      <ownedValue>
-        <ownedValue xsi:type="aadl2:NamedValue">
-          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
-        </ownedValue>
-      </ownedValue>
-      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
-    </ownedPropertyAssociation>
-    <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
-  </featureInstance>
-  <featureInstance name="status_from_valve" direction="out">
-    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
-      <ownedValue>
-        <ownedValue xsi:type="aadl2:NamedValue">
-          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
-        </ownedValue>
-      </ownedValue>
-      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
-    </ownedPropertyAssociation>
-    <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+    <feature xsi:type="aadl2:DataPort" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
   </featureInstance>
   <componentInstance name="pump" category="system">
     <featureInstance name="command">
@@ -125,7 +77,7 @@
     <index>0</index>
     <classifier xsi:type="aadl2:SystemType" href="../packages/Pump.aadl#Pump.Pump"/>
   </componentInstance>
-  <componentInstance name="valve" category="system">
+  <componentInstance name="control" category="system">
     <featureInstance name="command">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
         <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
@@ -136,9 +88,9 @@
         </ownedValue>
         <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
       </ownedPropertyAssociation>
-      <feature xsi:type="aadl2:DataPort" href="../packages/Valve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+      <feature xsi:type="aadl2:DataPort" href="../packages/TankControl.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
     </featureInstance>
-    <featureInstance name="status" direction="out">
+    <featureInstance name="output_to_tank" direction="out">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
         <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
         <ownedValue>
@@ -148,35 +100,42 @@
         </ownedValue>
         <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
       </ownedPropertyAssociation>
-      <feature xsi:type="aadl2:DataPort" href="../packages/Valve.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+      <feature xsi:type="aadl2:DataPort" href="../packages/TankControl.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="output_to_pump" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/TankControl.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
     <index>0</index>
-    <classifier xsi:type="aadl2:SystemType" href="../packages/Valve.aadl#Valve.Valve"/>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/TankControl.aadl#TankControl.TankControl"/>
   </componentInstance>
-  <connectionInstance name="status_to_pump -> pump.coolant_status" kind="portConnection" destination="//@componentInstance.0/@featureInstance.1" source="//@featureInstance.1">
-    <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.0/@featureInstance.1">
-      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
-    </connectionReference>
-  </connectionInstance>
-  <connectionInstance name="command_to_pump -> pump.command" kind="portConnection" destination="//@componentInstance.0/@featureInstance.0" source="//@featureInstance.2">
-    <connectionReference context="/" source="//@featureInstance.2" destination="//@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
-    </connectionReference>
-  </connectionInstance>
-  <connectionInstance name="command_to_valve -> valve.command" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@featureInstance.3">
-    <connectionReference context="/" source="//@featureInstance.3" destination="//@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
-    </connectionReference>
-  </connectionInstance>
-  <connectionInstance name="pump.status -> status_from_pump" kind="portConnection" destination="//@featureInstance.5" source="//@componentInstance.0/@featureInstance.2">
-    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.2" destination="//@featureInstance.5">
+  <connectionInstance name="command -> control.command" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@featureInstance.0">
+    <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.1/@featureInstance.0">
       <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="valve.status -> status_from_valve" kind="portConnection" destination="//@featureInstance.6" source="//@componentInstance.1/@featureInstance.1">
-    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.1" destination="//@featureInstance.6">
-      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
+  <connectionInstance name="status_to_pump -> pump.coolant_status" kind="portConnection" destination="//@componentInstance.0/@featureInstance.1" source="//@featureInstance.1">
+    <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.0/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="control.output_to_tank -> output" kind="portConnection" destination="//@featureInstance.2" source="//@componentInstance.1/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.1" destination="//@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="control.output_to_pump -> pump.command" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.0" source="//@componentInstance.1/@featureInstance.2">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.2" destination="//@componentInstance.0/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/Tank.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
   </connectionInstance>
   <systemOperationMode name="No Modes"/>

@@ -16,7 +16,7 @@ with datatypes;
 		annex agree {**
 			
 			assume "Command input is bounded." :
-				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE);
+				(command >= datatypes.TANK_STOP) and (command <= datatypes.TANK_NONE);
 				
 			assume "Coolant status input is bounded." :
 				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
