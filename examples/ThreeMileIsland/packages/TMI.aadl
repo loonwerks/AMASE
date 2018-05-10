@@ -49,9 +49,9 @@ with datatypes;
 	
 	system implementation TMI.impl  
 		subcomponents 
-			reactor : system Reactor::Reactor; 
+			reactor : system Reactor::Reactor;  
 			seriesValves : system SeriesValve::SeriesValve;
-			tank : system Tank::Tank;
+			tank : system Tank::Tank.impl;
 			primary : system Primary::Primary.impl;
 			secondary : system Secondary::Secondary.impl;
 			
