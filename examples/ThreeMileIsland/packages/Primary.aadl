@@ -6,7 +6,7 @@ with Circuit;
 
 	system Primary
 		features
-			-- Main Command1: {start, stop, none}
+			-- Main Command1: {start, stop}
 			command : in data port Base_Types::Integer;
 			-- {open, closed} <- valve status (output)
 			tank_output : in data port Base_Types::Integer;
@@ -29,7 +29,7 @@ with Circuit;
 		annex agree {**
 			
 			assume "Command input is bounded." : 
-				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_NONE);
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP);
 			
 			-- When  both porv and block commands are OPEN, then the valve_output
 			-- is open. 

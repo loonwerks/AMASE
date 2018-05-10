@@ -8,7 +8,7 @@ with datatypes;
 
 	system Tank
 		features
-			-- {stop, inject, none} (operator command)
+			-- {inject, stop} (operator command)
 			command : in data port Base_Types::Integer;
 			-- coolant status {steam_cavities, normal, solid}
 			status_to_pump : in data port Base_Types::Integer;
@@ -19,7 +19,7 @@ with datatypes;
 		annex agree {**
 
 			assume "Command input is bounded." :
-				(command >= datatypes.TANK_STOP) and (command <= datatypes.TANK_NONE); 
+				(command >= datatypes.TANK_INJECT) and (command <= datatypes.TANK_STOP); 
 				
 				
 				
@@ -40,19 +40,18 @@ with datatypes;
 	system implementation Tank.impl  
 		subcomponents
 			pump : system Pump::Pump;
-			--valve : system Valve::Valve;
+			valve : system Valve::Valve;
 			control : system TankControl::TankControl;
-			
+			 
 		connections
 			coolantstatus : port status_to_pump -> pump.coolant_status;
 			
 			control_out_to_tank : port control.output_to_tank -> output;
 			
-			--control_out_to_valve : port control.output_to_valve -> valve.command;
+			control_out_to_valve : port control.output_to_valve -> valve.command;
 			control_out_to_pump : port control.output_to_pump -> pump.command;
 			
-			--pumpstatus_to_control : port pump.status -> control.status_from_pump;
-			--valvestatus_to_control : port valve.status -> control.status_from_valve;
+			
 			command_to_control : port command -> control.command;
 			
 		annex agree {**
