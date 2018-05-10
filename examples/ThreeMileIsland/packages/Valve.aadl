@@ -36,7 +36,6 @@ with datatypes;
 			guarantee "Open status" : 
 				(T_close_to_open or Remain_open) => (Current_status = datatypes.VALVE_OPEN);
 				
-			
 			guarantee "Closed status" :
 				(T_open_to_close or Remain_closed) => (Current_status = datatypes.VALVE_CLOSED);	
 			

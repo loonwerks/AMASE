@@ -20,22 +20,19 @@ with Base_Types;
 			assume "Command input is bounded." :
 				(command >= datatypes.TANK_INJECT) and (command <= datatypes.TANK_STOP);
 				
---			assume "Valve status range" : 
---				(status_from_valve >= datatypes.VALVE_OPEN) and (status_from_valve <= datatypes.VALVE_CLOSED);
-				
---			assume "Pump status range" : 
---				(status_from_pump >= datatypes.PUMPING) and (status_from_pump <= datatypes.SHAKING);
 			
 			--------------- Tank output
 			
 			guarantee "Initially, output to tank is open." :
 				(output_to_tank = datatypes.VALVE_OPEN) -> true;
 				
-			-- If pump is pumping and valve is open, output is open, else it's closed
---			guarantee "Transform valve and pump output into Tank output." :
---				if ((status_from_pump = datatypes.PUMPING) and (status_from_valve = datatypes.VALVE_OPEN)) 
---					then (output_to_tank = datatypes.VALVE_OPEN) 
---				else (output_to_tank = datatypes.VALVE_CLOSED);
+			-- If pump is pumping and valve is open, output is open, else it's closed.
+			-- In order for the pump to be pumping and valve to be open, we need
+			-- an inject command. This guarantee is simplified from the original NuSMV model.
+			guarantee "Transform valve and pump output into Tank output." :
+				if (command = datatypes.TANK_INJECT) 
+					then (output_to_tank = datatypes.VALVE_OPEN) 
+				else (output_to_tank = datatypes.VALVE_CLOSED);
 			
 			guarantee "Output to tank bounded:" :
 				(output_to_tank >= datatypes.VALVE_OPEN) and (output_to_tank <= datatypes.VALVE_CLOSED); 

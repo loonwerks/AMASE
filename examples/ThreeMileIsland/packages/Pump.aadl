@@ -36,10 +36,8 @@ with datatypes;
 				((pre(status) = datatypes.PUMPING) and (coolant_status = datatypes.STEAM_CAVITIES)) 
 					=> (status = datatypes.SHAKING);
 				
-				
 			guarantee "Bounds on status" :
 				(status >= datatypes.PUMPING) and (status <= datatypes.SHAKING); 
-			
 			
 			guarantee "Initial status of pump is pumping." :
 				(status = datatypes.PUMPING) -> true;
