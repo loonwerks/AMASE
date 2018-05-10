@@ -21,9 +21,9 @@ with datatypes;
 			assume "Command input is bounded." :
 				(command >= datatypes.TANK_INJECT) and (command <= datatypes.TANK_STOP);  
 				
-			assume "Status to pump bounded:" :
-				(status_to_pump >= datatypes.STEAM_CAVITIES) and (status_to_pump <= datatypes.SOLID);
-			
+--			assume "Status to pump bounded:" :
+--				(status_to_pump >= datatypes.STEAM_CAVITIES) and (status_to_pump <= datatypes.SOLID);
+--			
 			guarantee "Output bounded:" :
 				(output >= datatypes.VALVE_OPEN) and (output <= datatypes.VALVE_CLOSED); 
 			

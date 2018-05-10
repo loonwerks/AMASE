@@ -20,7 +20,6 @@ with Valve;
 			assume "Range for block commands." :
 				(block_cmd >= datatypes.VALVE_OPEN) and (block_cmd <= datatypes.VALVE_CLOSED);
 				
-				
 			guarantee "Output status is open if both valves are open." :
 				if (porv_cmd = datatypes.VALVE_OPEN) 
 					then (status = block_cmd)
@@ -34,16 +33,5 @@ with Valve;
 		**};
 			
 	end SeriesValve;
-	
-	
---	system implementation SeriesValve.impl
---		subcomponents
---			porv : system Valve::Valve;
---			block : system Valve::Valve;
---		
---		connections
---			command_to_porv : port porv_cmd -> porv.command;
---			command_to_block : port block_cmd -> block.command;
---			
---	end SeriesValve.impl;	
+		
 end SeriesValve;
