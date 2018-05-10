@@ -15,11 +15,6 @@ with Circuit;
 			assume "Command input is bounded." :
 				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP);
 			
---			assume "Incoming temp is bounded." :
---				(circuit_temp_high >= 0) and (circuit_temp_high <= 10);
-			
---			guarantee "Temp passing through is bounded." :
---				(circuit_temp_low >= 0) and (circuit_temp_low <= 10);
 			
 		**}	;
 	end Secondary;
