@@ -44,6 +44,12 @@ with datatypes;
 				(tank_command = datatypes.TANK_INJECT) -> true;
 			
 		
+			-- If the plant operation is not constrained, then it is possible to 
+			-- achieve melting of the reactor. We must specify a set of hypotheses in 
+			-- order to control the way the plants nominal behavior occurs.
+			assume "Command 1 and 2 are not both STOP" :
+				(not (command1 = datatypes.MAIN_STOP)) and (not (command2 = datatypes.MAIN_STOP));
+		
 		**};
 	end TMI;
 	
@@ -83,13 +89,29 @@ with datatypes;
 		
 		annex agree {**
 		
+			-- If the plant operation is not constrained, then it is possible to 
+			-- achieve melting of the reactor. We must specify a set of hypotheses in 
+			-- order to control the way the plants nominal behavior occurs.
+			assert "Porv command is open implies that the temperature output. 
+					If coolant level drops below 4, then close the porv valve." :
+				(porv_command = datatypes.VALVE_OPEN) <=> (primary.temp_out_low >= 4)
+				and (primary.coolant_level <= 3) => (porv_command = datatypes.VALVE_CLOSED);
+				
+	---------------------------------------------------------------------------------------------------
+	---------------------- TOP LEVEL LEMMAS -----------------------------------------------------------		
 			-- Top level hazard: The reactor melts.
 			-- In order for the reactor to be melted, we need:
 			-- reactor.output_temp = CORE_VERY_HOT (5) AND primary.coolant_level = 1
 			lemma "Reactor does not melt." :
 				not melted_reactor; 
 			 
-		
+			-- If we have commanded the tank to inject and the coolant level
+			-- is greater than 2, then the coolant level remains at >= 2.
+			lemma "If tank command is INJECT and coolant level is > 2, then
+					coolant level does not drop below 2." :
+				((tank_command = datatypes.TANK_INJECT) and (primary.coolant_level > 2))
+					=> (primary.coolant_level >= 2);
+	---------------------------------------------------------------------------------------------------
 		
 			----------------- SeriesValves ------------------------
 			lemma "Output status is open if both valves are open." :

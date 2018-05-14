@@ -5,7 +5,7 @@ with datatypes;
 
 	system Reactor 
 		features
-			-- insertion of rods
+			-- insertion of rods 
 			-- {extracted, partially_inserted, inserted}
 			rods_command : in data port Base_Types::Integer;
 			-- How much coolant is present in reactor
@@ -22,7 +22,7 @@ with datatypes;
 		annex agree {**
 			
 			assume "Datatypes move coolant temp one step" :
-				(datatypes.move(coolant_level, 10) = (coolant_level + 1))
+				(datatypes.move(coolant_level, 10) = (coolant_level + 1)) 
 				or (datatypes.move(coolant_level, 10) = (coolant_level - 1))
 				or (datatypes.move(coolant_level, coolant_level) = (coolant_level)); 
 			
