@@ -22,6 +22,8 @@ with datatypes;
 			command2 : in data port Base_Types::Integer;
 			
 			melted_reactor : out data port Base_Types::Boolean;
+			coolant : out data port Base_Types::Integer;
+			temperature: out data port Base_Types::Integer;
 			
 		annex agree {**
 			assume "Range for porv commands." :
@@ -50,7 +52,17 @@ with datatypes;
 			assume "Command 1 and 2 are not both STOP" :
 				(not (command1 = datatypes.MAIN_STOP)) and (not (command2 = datatypes.MAIN_STOP));
 		
-		**};
+		
+			assume "If porv command is open then the primary out low temp must be 
+					>= 4 in the next step." :
+				(prev(porv_command, datatypes.VALVE_OPEN) = datatypes.VALVE_OPEN)
+					=> (temperature >= 4);
+					
+			assume "If coolant level drops below 4, then we close the porv valve in the 
+					next step" :
+				(prev(coolant, 5) <= 3) => (porv_command = datatypes.VALVE_CLOSED);
+		
+		**}; 
 	end TMI;
 	
 	system implementation TMI.impl  
@@ -86,16 +98,11 @@ with datatypes;
 			circuits_connection_temp_high : port primary.circuit_temp_high -> secondary.circuit_temp_high;
 			
 			melted : port reactor.melted -> melted_reactor;
+			temp : port primary.temp_out_low -> temperature;
+			coolantlevel : port primary.coolant_level -> coolant;
 		
 		annex agree {**
 		
-			-- If the plant operation is not constrained, then it is possible to 
-			-- achieve melting of the reactor. We must specify a set of hypotheses in 
-			-- order to control the way the plants nominal behavior occurs.
-			assert "Porv command is open implies that the temperature output. 
-					If coolant level drops below 4, then close the porv valve." :
-				(porv_command = datatypes.VALVE_OPEN) <=> (primary.temp_out_low >= 4)
-				and (primary.coolant_level <= 3) => (porv_command = datatypes.VALVE_CLOSED);
 				
 	---------------------------------------------------------------------------------------------------
 	---------------------- TOP LEVEL LEMMAS -----------------------------------------------------------		
