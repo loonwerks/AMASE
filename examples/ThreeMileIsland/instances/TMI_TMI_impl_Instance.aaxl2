@@ -84,6 +84,30 @@
     </ownedPropertyAssociation>
     <feature xsi:type="aadl2:DataPort" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
   </featureInstance>
+  <featureInstance name="coolant" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+  </featureInstance>
+  <featureInstance name="temperature" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.6"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+  </featureInstance>
   <componentInstance name="reactor" category="system">
     <featureInstance name="rods_command">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -1085,12 +1109,25 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
   </connectionInstance>
+  <connectionInstance name="primary.temp_out_low -> temperature" kind="portConnection" destination="//@featureInstance.8" source="//@componentInstance.3/@featureInstance.7">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.7" destination="//@featureInstance.8">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.14"/>
+    </connectionReference>
+  </connectionInstance>
   <connectionInstance name="primary.circuit1.coolant_level -> reactor.coolant_level" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.1" source="//@componentInstance.3/@componentInstance.1/@featureInstance.7">
     <connectionReference context="//@componentInstance.3" source="//@componentInstance.3/@componentInstance.1/@featureInstance.7" destination="//@componentInstance.3/@featureInstance.6">
       <connection xsi:type="aadl2:PortConnection" href="../packages/Primary.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
     </connectionReference>
     <connectionReference context="/" source="//@componentInstance.3/@featureInstance.6" destination="//@componentInstance.0/@featureInstance.1">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="primary.circuit1.coolant_level -> coolant" kind="portConnection" destination="//@featureInstance.7" source="//@componentInstance.3/@componentInstance.1/@featureInstance.7">
+    <connectionReference context="//@componentInstance.3" source="//@componentInstance.3/@componentInstance.1/@featureInstance.7" destination="//@componentInstance.3/@featureInstance.6">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/Primary.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
+    </connectionReference>
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.6" destination="//@featureInstance.7">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TMI.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.15"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="secondary.circuit_temp_low -> primary.circuit1.temp_input_low" complete="true" kind="portConnection" destination="//@componentInstance.3/@componentInstance.1/@featureInstance.3" source="//@componentInstance.4/@featureInstance.2">
