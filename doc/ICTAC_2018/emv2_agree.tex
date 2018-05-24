@@ -7,7 +7,7 @@ As seen in Figure~\ref{fig:comparison_with_EMV2}, a simplified WBS system takes 
 
 In an EMV2 approach, all faults have to be explicitly propagated through each component (e.g., applying fault types on the out ports) in order for a component to have an impact on the rest of the system. The fault types are descriptive in that they cannot be processed directly by any behavioral analysis; the meaning of the fault types have to be explicitly interpreted in the form of data to be analyzed. Consequently, there is no behavioral analysis on the EMV2 model. At the system level, the tool can aggregate the fault flow and propagation information from different components to compose an overall fault flow diagram or fault tree.
 
-In the Safety Annex approach, no separate or explicit propagation is done for the faults through the components. The behavioral propagation (e.g., how inputs are passed to the outputs) are modeled in AGREE disregard normal or faulty inputs.
+In the Safety Annex approach, no separate or explicit propagation through the components is done for the faults; all behavioral propagations (e.g., how inputs are passed to the outputs) are modeled in AGREE no matter the inputs are normal or faulty. Users can apply formal behavioral analysis on the model and verify if system level properties hold with or without the presence of faults.
 
 \begin{figure}[h!]
 	\vspace{-0.19in}
