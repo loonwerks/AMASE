@@ -1,39 +1,22 @@
-\subsection{Comparing with EMV2 Modeling}
-\label{subsec:comparison_with_EMV2}
-In this section, we use a few examples from the WBS system to illustrate the differences in Safety Annex and EMV2 modeling. The AADL and EMV2 code examples are adapted from ~\cite{WBS_EMV2_Example}.
+\section{Example}
+\label{sec:comparison_with_EMV2}
 
-Below is the AADL component for the command function unit of the Braking and Steering Control Unit (BSCU) in the WBS system, and the error propagations and component error behavior specified in EMV2:
+To illustrate some of the key differences between our approach and approaches that explicitly enumerate and propagate faults such as the AADL Error Model Annex, Version 2 (EMV2)~\cite{EMV2}, we use a simplified example based on the Wheel Brake System (WBS) adapted from ~\cite{WBS_EMV2_Example}.
 
-\begin{figure}[h!]
-	\hspace*{-4cm}
-\vspace{-0.5in} 
-\begin{center}
-	\includegraphics[clip,width=1.1\textwidth]{images/bscu_cmd_comp.pdf}
-	%\vspace{-0.19in}
-	\end{center}
-\vspace{-0.4in}
-\end{figure}
+As seen in Figure~\ref{fig:comparison_with_EMV2}, a simplified WBS system takes the output signal from the Pedal component, passes through the Sensor and the Braking System Control Unit (BSC) components, and generates a pressure output from the Valve component to apply to the Wheels. To assist explanation in a modeling setting, we use the general term "fault" to denote all component errors, hardware failures, and system faults captured by both approaches.
 
-As seen in the EMV2 example, the error propagations are specified for the input and output signals, and the component error behavior describes how the component transitions to a failed state and what output errors can be propagated in that state.
+In an EMV2 approach, all faults have to be explicitly propagated through each component (e.g., applying fault types on the out ports) in order for a component to have an impact on the rest of the system. The fault types are descriptive in that they cannot be processed directly by any behavioral analysis; the meaning of the fault types have to be explicitly interpreted in the form of data to be analyzed. Consequently, there is no behavioral analysis on the EMV2 model. At the system level, the tool can aggregate the fault flow and propagation information from different components to compose an overall fault flow diagram or fault tree.
 
-Different from EMV2, the Safety Annex approach utilizes AGREE for the nominal behavior, as well as the propagations (no matter nominal or faulty). Therefore, error propagations are specified for the output signals in the Safety Annex; no error propagations for the input signals need to be explicitly specified. Furthermore, all error behaviors have to be concretely represented in terms of how they affect the output data flow, so that they can be analyzed by the back-end analysis engine. For example, adding the {\em service\_mode} element to the {\em pedalvalue} output signal of the {\em pedal} component in AADL to model the ``No Service'' error, and adding the {\em presence} element to the {\em skid} and {\em brake} output signals of the {\em command} component in AADL to model the ``No Value'' error.
-
-Below shows an example in AGREE capturing the relationship between the {\em service\_mode} element of the {\em pedalvalue} input signal and the {\em presence} element of the {\em skid} and {\em brake} output signals:
+In the Safety Annex approach, no separate or explicit propagation is done for the faults through the components. The behavioral propagation (e.g., how inputs are passed to the outputs) are modeled in AGREE disregard normal or faulty inputs.
 
 \begin{figure}[h!]
-	\hspace*{-4cm}
-	\vspace{-0.3in} 
-	\begin{center}
-		\includegraphics[width=1.0\textwidth]{images/cmd_input_agree.pdf}
-		%\vspace{-0.19in}
-	\end{center}
-	\vspace{-3.3in}
+	\vspace{-0.19in}
+	\centering
+	\includegraphics[trim=0 9 0 5,clip,width=0.85\textwidth]{images/Visio-Comparison_with_EMV2.pdf}
+	%\vspace{0.4in}
+	\caption{Differences between Safety Annex and EMV2}
+	\label{fig:comparison_with_EMV2}
 \end{figure}
-
-
-
-
-
 
  
 
