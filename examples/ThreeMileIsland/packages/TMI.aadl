@@ -142,17 +142,13 @@ with datatypes;
 			lemma "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
 				(reactor.T_rods_partially_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 2));
 			
-				
 			lemma "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
 				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature < 3)) 
 					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 3));
 				
-			
 			lemma "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
 				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature >= 3)) 
 					=> (reactor.Current_core_status = reactor.Previous_status);
-				
-			
 				
 			lemma "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
 				(reactor.T_rods_extracted and (reactor.coolant_level < 3)) 
@@ -170,7 +166,6 @@ with datatypes;
 			lemma "Output temp bounded" :
 				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
 	
-		
 		**};
 			
 	end TMI.impl;
