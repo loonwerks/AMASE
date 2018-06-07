@@ -150,7 +150,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	@Override
 	public AnalysisResult transformResult(AnalysisResult res) {
-		// TODO Auto-generated method stub
+		System.out.println("RESULT ++++++++++++++++++++++++++");
 		return res;
 	}
 
