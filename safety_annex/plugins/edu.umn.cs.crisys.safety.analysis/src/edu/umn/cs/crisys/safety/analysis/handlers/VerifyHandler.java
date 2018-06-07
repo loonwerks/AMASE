@@ -34,7 +34,7 @@ public class VerifyHandler extends AadlHandler {
 	public Object execute(ExecutionEvent event) {
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
-		AddFaultsToAgree.setTransformFlag(item.getSelection());
+		AddFaultsToAgree.setTransformFlag(item);
 
 		return null;
 	}
