@@ -252,17 +252,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					f.faultStatement);
 			nb.addLocalEquation(eq);
 
-			// CHANGE THIS!
-			// for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
-			// String lhsId = this.createFaultNodeEqId(f.id, outMap.getKey());
-			// nb.addAssertion(
-			// new AgreeStatement("",
-			// new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
-			// f.faultStatement));
-			// }
-			//
-			//
-			//
 		}
 		// Binding happens HERE and is based on the map faultyVarsExpr.
 		// Create an equality between the id and a nested WITH expression for each expr
