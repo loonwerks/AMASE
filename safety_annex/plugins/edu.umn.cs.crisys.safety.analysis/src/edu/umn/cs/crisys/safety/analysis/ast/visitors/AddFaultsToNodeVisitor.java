@@ -24,6 +24,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
+import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.analysis.transform.BaseFault;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
@@ -169,6 +170,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// empty path to pass to top level node fault
 			// node id used as the path to pass to sub level node fault
 			addTopLevelFaultDeclarations(node, nb);
+
+			// This checks if we are doing max faults or probability behavior.
+			// It will add the assertion to Lustre representing the required behavior.
+			// If we want to generate the fault tree, this method changes in order
+			// to not add assertions but instead add the IVC commands.
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		}
 
@@ -768,7 +774,31 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (Fault f : faults) {
 			String base = addPathDelimiters(f.path, f.id);
 			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
-			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
+
+			// Here is where fault indep variables are added to lustre.
+			// For fault tree generation, this must be added locally,
+			// assigned to false, and given the --%IVC command.
+			if (AddFaultsToAgree.getTransformFlag() == 1) {
+				// If transform flag is 1, that means we are doing the max/prob analysis
+				nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
+
+			} else {
+				// If transform flag is 2, then we want to generate fault tree.
+				// In this case, we add the indep as a local var.
+				AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL,
+						f.faultStatement);
+				nb.addLocal(newVar);
+
+				// Then equate this to false
+				IdExpr idExpr = new IdExpr(newVar.id);
+//				nb.addAssertion(
+//						new AgreeStatement("", new BinaryExpr(idExpr, BinaryOp.EQUAL, new BoolExpr(false)), topNode.reference));
+
+				AgreeEquation ae = new AgreeEquation(idExpr, new BoolExpr(false), null);
+				nb.addLocalEquation(ae);
+			}
+
+			// Add dependent as per usual.
 			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(base), NamedType.BOOL, f.faultStatement));
 
 			// add to lustre fault map with the explanatory text (string given for fault
@@ -1103,6 +1133,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
+	// This will add max fault behavior or probability behavior depending on what is
+	// entered in the top level annex.
+	// If the user chooses the menu item for fault tree generation, we wish to
+	// not add the assertions for the max/prob behavior, but instead add in the
+	// IVC commands.
 	public void addTopLevelFaultOccurrenceConstraints(AnalysisBehavior ab, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
 
