@@ -1,0 +1,53 @@
+digraph G {
+rankdir=BT 
+layout = dot
+splines = true
+overlap = false
+sep ="+10, +10"
+esep ="+8, +8"
+outputorder=edgesfirst
+node [shape=plain]
+
+10 [label=< 
+  <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+  <TR><TD border="0">   </TD>
+    <TD PORT="8"> C123 out3 range </TD>
+    <TD border="0">   </TD>
+    <TD PORT="9"> C123 out3 value </TD>
+    <TD border="0">   </TD>
+  </TR>
+  <TR> <TD ROWSPAN="6" COLSPAN="5"> <BR/>C123_w_fault<BR/> </TD> </TR>
+  <TR> <TD border="0"> </TD> </TR>
+  <TR><TD PORT="6"> C1 out1 negation fault </TD></TR>
+  <TR> <TD border="0"> </TD></TR>
+  <TR><TD PORT="7"> C2 out2 fail to zero fault </TD></TR>
+  <TR> <TD border="0"> </TD></TR>
+  </TABLE>>];
+
+5 [label=< 
+  <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+  <TR><TD border="0">   </TD>
+    <TD PORT="3"> C0123 out0 range </TD>
+    <TD border="0">   </TD>
+    <TD PORT="4"> C0123 out0 value </TD>
+    <TD border="0">   </TD>
+  </TR>
+  <TR> <TD ROWSPAN="4" COLSPAN="5"> <BR/>C0123<BR/> </TD> </TR>
+  <TR> <TD border="0"> </TD> </TR>
+  <TR><TD PORT="2"> C0 out0 fail to one fault </TD></TR>
+  <TR> <TD border="0"> </TD></TR>
+  <TR><TD border="0">   </TD>
+    <TD PORT="0"> C123 out3 range </TD>
+  <TD border="0">   </TD>
+    <TD PORT="1"> C123 out3 value </TD>
+  <TD border="0">   </TD>
+  </TR>
+  </TABLE>>];
+
+10:8 -> 5:0 ;
+5:1 -> 5:4 [color="red"];
+10:9 -> 5:1 [color="red"];
+5:2 -> 5:4 [color="red"];
+10:7 -> 10:9 [color="red"];
+10:6 -> 10:9 [color="red"];
+}
