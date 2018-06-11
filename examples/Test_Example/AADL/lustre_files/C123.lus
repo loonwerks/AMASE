@@ -1,0 +1,203 @@
+type Base_Types__Boolean = bool;
+type Base_Types__Unsigned = int;
+type Base_Types__Unsigned_64 = int;
+type Base_Types__Unsigned_32 = int;
+type Base_Types__Unsigned_16 = int;
+type Base_Types__Unsigned_8 = int;
+type Base_Types__Integer = int;
+type Base_Types__Integer_64 = int;
+type Base_Types__Integer_32 = int;
+type Base_Types__Integer_16 = int;
+type Base_Types__Integer_8 = int;
+type Base_Types__Float = real;
+type Base_Types__Float_32 = real;
+type Base_Types__Float_64 = real;
+
+node _TOP__C1(
+  __ASSUME__HIST : bool;
+  __ASSUME0 : bool;
+  in1 : Base_Types__Integer;
+  time : real;
+  out1 : Base_Types__Integer
+) returns (
+  __ASSERT : bool
+);
+var
+  __GUARANTEE0 : bool;
+let
+  __GUARANTEE0 = (out1 = in1);
+
+  __ASSERT = (true and ((__ASSUME__HIST => (__GUARANTEE0 and true)) and ((__ASSUME0 = ((in1 > 0) and (in1 < 10))) and true)));
+
+  --%IVC __GUARANTEE0;
+
+tel;
+
+node _TOP__C2(
+  __ASSUME__HIST : bool;
+  __ASSUME0 : bool;
+  in2 : Base_Types__Integer;
+  time : real;
+  out2 : Base_Types__Integer
+) returns (
+  __ASSERT : bool
+);
+var
+  __GUARANTEE0 : bool;
+let
+  __GUARANTEE0 = (out2 = in2);
+
+  __ASSERT = (true and ((__ASSUME__HIST => (__GUARANTEE0 and true)) and ((__ASSUME0 = ((in2 > 0) and (in2 < 10))) and true)));
+
+  --%IVC __GUARANTEE0;
+
+tel;
+
+node _TOP__C3(
+  __ASSUME__HIST : bool;
+  in13 : Base_Types__Integer;
+  in23 : Base_Types__Integer;
+  time : real;
+  out3 : Base_Types__Integer
+) returns (
+  __ASSERT : bool
+);
+var
+  __GUARANTEE0 : bool;
+let
+  __GUARANTEE0 = (out3 = (in13 + in23));
+
+  __ASSERT = (true and ((__ASSUME__HIST => (__GUARANTEE0 and true)) and true));
+
+  --%IVC __GUARANTEE0;
+
+tel;
+
+node main(
+  C1__out1 : Base_Types__Integer;
+  C1____ASSUME0 : bool;
+  C1____ASSUME__HIST : bool;
+  C2__out2 : Base_Types__Integer;
+  C2____ASSUME0 : bool;
+  C2____ASSUME__HIST : bool;
+  C3__out3 : Base_Types__Integer;
+  C3____ASSUME__HIST : bool;
+  out3 : Base_Types__Integer;
+  C1__in1 : Base_Types__Integer;
+  C1__time : real;
+  C2__in2 : Base_Types__Integer;
+  C2__time : real;
+  C3__in13 : Base_Types__Integer;
+  C3__in23 : Base_Types__Integer;
+  C3__time : real;
+  in1 : Base_Types__Integer;
+  in2 : Base_Types__Integer;
+  time : real
+) returns (
+
+);
+var
+  __ASSUME0 : bool;
+  __ASSUME1 : bool;
+  __ASSUME__HIST : bool;
+  __GUARANTEE0 : bool;
+  __GUARANTEE1 : bool;
+let
+  --%MAIN;
+  __ASSUME0 = ((in1 > 0) and (in1 < 10));
+
+  __ASSUME1 = ((in2 > 0) and (in2 < 10));
+
+  __ASSUME__HIST = (C3____ASSUME__HIST and (C2____ASSUME__HIST and (C1____ASSUME__HIST and true)));
+
+  __GUARANTEE0 = ((out3 > 0) and (out3 < 20));
+
+  __GUARANTEE1 = (out3 = (in1 + in2));
+
+  assert __ASSUME0;
+
+  assert __ASSUME1;
+
+  assert (time = C1__time);
+
+  assert _TOP__C1(C1____ASSUME__HIST, C1____ASSUME0, C1__in1, C1__time, C1__out1);
+
+  assert (C1____ASSUME__HIST = __HIST((C1____ASSUME0 and true)));
+
+  assert (time = C2__time);
+
+  assert _TOP__C2(C2____ASSUME__HIST, C2____ASSUME0, C2__in2, C2__time, C2__out2);
+
+  assert (C2____ASSUME__HIST = __HIST((C2____ASSUME0 and true)));
+
+  assert (time = C3__time);
+
+  assert _TOP__C3(C3____ASSUME__HIST, C3__in13, C3__in23, C3__time, C3__out3);
+
+  assert (C3____ASSUME__HIST = __HIST(true));
+
+  assert (in1 = C1__in1);
+
+  assert (in2 = C2__in2);
+
+  assert (C3__out3 = out3);
+
+  assert (C1__out1 = C3__in13);
+
+  assert (C2__out2 = C3__in23);
+
+  assert true;
+
+  assert (((time = 0.0) -> (time > (pre time))) and (true -> (time = ((pre time) + (time - (pre time))))));
+
+  --%PROPERTY C1____ASSUME0;
+  --%PROPERTY C2____ASSUME0;
+  --%PROPERTY __ASSUME__HIST;
+  --%PROPERTY __GUARANTEE0;
+  --%PROPERTY __GUARANTEE1;
+
+  --%IVC __ASSUME0, __ASSUME1;
+
+tel;
+
+node __HIST(
+  input : bool
+) returns (
+  hist : bool
+);
+let
+  hist = (input -> ((pre hist) and input));
+
+tel;
+
+node __MinPos(
+  a : real;
+  b : real
+) returns (
+  ret : real
+);
+let
+  ret = (if (a <= 0.0) then b else (if (b <= 0.0) then a else (if (a <= b) then a else b)));
+
+tel;
+
+node __Rise(
+  input : bool
+) returns (
+  output : bool
+);
+let
+  output = (input -> ((pre (not input)) and input));
+
+tel;
+
+node __Fall(
+  input : bool
+) returns (
+  output : bool
+);
+let
+  output = ((not input) -> ((pre input) and (not input)));
+
+tel;
+
