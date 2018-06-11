@@ -784,8 +784,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 				// --------------------------------------------------------------------------------------------
 				// TESTING IVC ADDITION TO LUSTRE
-				nb.setSafetyFlag(true);
-				nb.addSafetyIVC(this.createFaultIndependentActiveId(base));
+//				nb.setSafetyFlag(true);
+//				nb.addSafetyIVC(this.createFaultIndependentActiveId(base));
 
 
 
