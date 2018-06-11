@@ -4,6 +4,8 @@ package edu.umn.cs.crisys.safety.analysis.transform;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.widgets.MenuItem;
+
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout.SigType;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
@@ -16,7 +18,7 @@ import jkind.api.results.AnalysisResult;
 
 public class AddFaultsToAgree implements AgreeAutomater {
 
-	private static boolean transformFlag = false;
+	private static int transformFlag = 0;
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -73,7 +75,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	public AgreeProgram transform(AgreeProgram program) {
 
 		// check to make sure we are supposed to transform program
-		if (!AddFaultsToAgree.getTransformFlag()) {
+		if (AddFaultsToAgree.getTransformFlag() == 0) {
 			return program;
 		}
 
@@ -82,11 +84,26 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		faultVisitor = new AddFaultsToNodeVisitor();
 
 		try{
-			program = faultVisitor.visit(program);
-			AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
-			pp.visit(program);
-			System.out.println("Initial printing");
-			System.out.println(pp.toString());
+
+			switch (transformFlag) {
+			case 1:
+			case 2:
+				program = faultVisitor.visit(program);
+				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
+				pp.visit(program);
+				System.out.println("Initial printing");
+				System.out.println(pp.toString());
+				break;
+			default:
+				return program;
+			}
+			/*
+			 * program = faultVisitor.visit(program);
+			 * AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
+			 * pp.visit(program);
+			 * System.out.println("Initial printing");
+			 * System.out.println(pp.toString());
+			 */
 		}
 		catch (Throwable t) {
 			System.out.println("Something went wrong during safety analysis: " + t.toString());
@@ -101,12 +118,32 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	/*
 	 * setTransformFlag:
+	 *
 	 * @param none
+	 *
 	 * @return none
-	 * Sets the transform flag to true.
+	 * Sets the transform flag to int value:
+	 * 0 -> No SA performed
+	 * 1 -> SA selected
+	 * 2 -> SOTERIA model generation selected
 	 */
-	public static void setTransformFlag(boolean flag) {
-		transformFlag = flag;
+	public static void setTransformFlag(MenuItem item) {
+
+		// If item.getSelection is false, nothing is selected --> 0
+		// If item.getSelection is true, either safety analysis or SOTERIA is selected:
+		// Get string of menu item:
+		// If string is Safety analysis --> 1
+		// If string is SOTERIA --> 2
+		if (!item.getSelection()) {
+			transformFlag = 0;
+		} else {
+			String text = item.getText();
+			if (text.contains("Safety Analysis")) {
+				transformFlag = 1;
+			} else {
+				transformFlag = 2;
+			}
+		}
 	}
 
 	/*
@@ -115,7 +152,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * @return boolean flag
 	 * Returns the value of the flag.
 	 */
-	public static boolean getTransformFlag(){
+	public static int getTransformFlag() {
 		return transformFlag;
 	}
 
@@ -150,7 +187,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	@Override
 	public AnalysisResult transformResult(AnalysisResult res) {
-		// TODO Auto-generated method stub
+		System.out.println("RESULT ++++++++++++++++++++++++++");
 		return res;
 	}
 
