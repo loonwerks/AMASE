@@ -84,7 +84,7 @@ public
 			C1_to_C3: port C1.out1 -> C3.in13;
 			C2_to_C3: port C2.out2 -> C3.in23;
 		annex safety {**
-      		analyze : max 0 fault
+      		analyze : max 3 fault
    		**};
 	end C123.impl;
 	

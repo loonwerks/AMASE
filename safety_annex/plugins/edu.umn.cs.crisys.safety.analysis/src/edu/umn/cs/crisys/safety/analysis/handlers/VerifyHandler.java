@@ -39,61 +39,6 @@ public class VerifyHandler extends AadlHandler {
 		return null;
 	}
 
-	// @Override
-	/*
-	 * protected final IStatus runJob(Element root, IProgressMonitor monitor) {
-	 *
-	 * this.isActive = !this.isActive;
-	 * Event selEvent = (Event) event.getTrigger();
-	 * MenuItem item = (MenuItem) selEvent.widget;
-	 *
-	 * System.Out.Println(item.getSelection());
-	 * return Status.OK_STATUS;
-	 *
-	 * // return new Status(IStatus.OK, Activator.PLUGIN_ID, 0, messages, e);
-	 * // Make sure selected component implementation
-	 * if (!(root instanceof ComponentImplementation)) {
-	 * return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Must select an AADL Component Implementation");
-	 * }
-	 *
-	 * // Set root
-	 * setRoot(root);
-	 *
-	 * // Check for annexes here
-	 * ComponentImplementation ci = (ComponentImplementation) root;
-	 * EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(ci,
-	 * AgreePackage.eINSTANCE.getAgreeContractSubclause());
-	 *
-	 * annexSubClauses.addAll(AnnexUtil.getAllAnnexSubclauses(ci,
-	 * SafetyPackage.eINSTANCE.getSafetyContractSubclause()));
-	 *
-	 * // If no annexes found, output error.
-	 * if (annexSubClauses.size() == 0) {
-	 * throw new SafetyException(
-	 * "There is no AGREE annex or Safety annex in the '" + ci.getName() + "' system type.");
-	 * }
-	 *
-	 * // If only one annex found, output error.
-	 * if(annexSubClauses.size() == 1){
-	 * throw new SafetyException(
-	 * "There must be both an AGREE annex and a Safety annex in the '" + ci.getName() + "' system type.");
-	 * }
-	 *
-	 * // Set transform flag to true
-	 * // Set SafetyPackage to the current instance of the package
-	 * try {
-	 * TransformAgree.setTransformFlag(true);
-	 * return Status.OK_STATUS;
-	 *
-	 * } catch (Throwable e) {
-	 * String messages = getNestedMessages(e);
-	 * return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, messages, e);
-	 * }
-	 *
-	 * }
-	 */
-
-
 
 
 	/*
