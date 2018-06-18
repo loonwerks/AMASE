@@ -2,191 +2,95 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-	<extension point="org.eclipse.ui.views">
+   <extension
+         point="org.eclipse.ui.commands">
       <category
-            id="edu.umn.cs.crisys.safety.analysis.analysis"
-            name="Safety Analysis">
+            name="Safety Analysis"
+            id="edu.umn.cs.crisys.safety.analysis.commands.category">
       </category>
-        <view
-              category="com.rockwellcollins.atc.agree.analysis"
-              class="com.rockwellcollins.atc.agree.analysis.views.AgreeResultsView"
-              icon="icons/layers.png"
-              id="com.rockwellcollins.atc.agree.analysis.views.agreeResultsView"
-              name="AGREE Results"/>
+      <command
+            name="Perform Safety Analysis during AGREE Verification"
+            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+            id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
+      </command>
+      <!-- New command for menu item (Soteria) -->
+      <command
+            name="Generate SOTERIA model during AGREE Verification"
+            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+            id="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand">
+      </command>
    </extension>
-
-	<extension point="org.eclipse.ui.commands">
-      <category
-            id="edu.umn.cs.crisys.safety.analysis.commands"
-            name="Commands related to Safety Analysis">
-      </category> 
-	  <command categoryId="edu.umn.cs.crisys.safety.analysis.commands"
-           description="Perform monolithic safety analysis (max # faults or probabilistic)"
-           id="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
-           name="Max Faults or Probabilistic">
-     </command>
-     <command
-           categoryId="edu.umn.cs.crisys.safety.analysis.commands"
-           description="Generate Soteria model for compositional analysis"
-           id="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
-           name="Generate Soteria Model for Compositional Analysis">
-     </command>
-     </extension>
-
-
-
-
-
-	<extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="edu.umn.cs.crisys.safety.analysis.menus.main"
-               label="Safety Analysis"
-               mnemonic="g">
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
-                  icon="icons/layer.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyMonolithicCommand"
-                  mnemonic="m"
-                  style="radio">
-            </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
-                  icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyCompositionalCommand"
-                  mnemonic="c"
-                  style="radio">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="edu.umn.cs.crisys.safety.analysis.toolbars.main">
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
-                  icon="icons/layer.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyMonolithicCommand"
-                  style="radio">
-            </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
-                  icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyCompositionalCommand"
-                  style="radio">
-            </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.osate.xtext.aadl2.ui.outline?after=additions">
-         <menu
-               id="edu.umn.cs.crisys.safety.analysis.popups.main"
-               label="Safety Analysis"
-               mnemonic="s">
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
-                  icon="icons/layer.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyMonolithicCommand"
-                  mnemonic="m"
-                  style="radio">
-            </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
-                  icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyCompositionalCommand"
-                  mnemonic="c"
-                  style="radio">
-            </command>
-         </menu>
-      </menuContribution>
-
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:#TextEditorContext?after=additions">
-         <menu
-               id="edu.umn.cs.crisys.safety.analysis.popups.texteditor"
-               label="Safety Analysis"
-               mnemonic="s">          
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
-                  icon="icons/layer.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyMonolithicCommand"
-                  mnemonic="s"
-                  style="radio">
-            </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
-                  icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyCompositionalCommand"
-                  mnemonic="a"
-                  style="radio">
-            </command>
-   <visibleWhen
-         checkEnabled="false">
-      <reference
-            definitionId="org.osate.xtext.aadl2.Aadl2.Editor.opened">
-      </reference>
-   </visibleWhen>
-         </menu>
-      </menuContribution>
-	</extension>
-
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
       </handler>
       <!-- New handler for menu item (Soteria) -->
       <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
       <!-- New key for menu item (Soteria) -->
       <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
             contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+7"
+            sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
    </extension>
-
-
-
-
-
-
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="AGREE"
+               mnemonic="g"
+               id="com.rockwellcollins.atc.agree.analysis.menus.main">
+           <separator
+                 name="com.rockwellcollins.atc.safety.separator1"
+              visible="true">
+           </separator>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+                  mnemonic="S"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
+                  style="radio">
+            </command>
+            <!-- New command for menu item -->
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
+                  mnemonic="f"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.soteriaCommand"
+                  style="radio">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyToolbar">
+               id="edu.umn.cs.crisys.safety.analysis.toolbars.sampleToolbar">
             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyMonolithicCommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
                   icon="icons/sample.gif"
                   tooltip="Safety analysis results are generating."
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyMonolithicCommand">
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyAnalysisCommand">
             </command>
+            <!-- New command for menu item -->
             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyCompositionalCommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
                   icon="icons/sample.gif"
                   tooltip="SOTERIA model is generating."
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyCompositionalCommand">
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.soteriaCommand">
             </command>
          </toolbar>
       </menuContribution>
