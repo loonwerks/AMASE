@@ -174,8 +174,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// This checks if we are doing max faults or probability behavior.
 			// It will add the assertion to Lustre representing the required behavior.
 			// If we want to generate the fault tree, this method changes in order
-			// to not add assertions but instead add the IVC commands.
-			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
+			// to not add assertions regarding behavior (i.e. no assertion about
+			// max # faults).
+			if (AddFaultsToAgree.getTransformFlag() == 1) {
+				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
+			}
 		}
 
 		node = nb.build();
@@ -782,13 +785,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// If transform flag is 1, that means we are doing the max/prob analysis
 				nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
 
-				// --------------------------------------------------------------------------------------------
-				// TESTING IVC ADDITION TO LUSTRE
-//				nb.setSafetyFlag(true);
-//				nb.addSafetyIVC(this.createFaultIndependentActiveId(base));
-
-
-
 			} else {
 				// If transform flag is 2, then we want to generate fault tree.
 				// In this case, we add the indep as a local var.
@@ -800,6 +796,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				IdExpr idExpr = new IdExpr(newVar.id);
 				AgreeEquation ae = new AgreeEquation(idExpr, new BoolExpr(false), null);
 				nb.addLocalEquation(ae);
+//-----------------------------------------------------------------------------------------------
+				// Add independent fault as ivc element
+				nb.addIvcElement(this.createFaultIndependentActiveId(base));
+//-----------------------------------------------------------------------------------------------
 			}
 
 			// Add dependent as per usual.
