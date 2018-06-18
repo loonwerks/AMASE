@@ -138,10 +138,12 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			transformFlag = 0;
 		} else {
 			String text = item.getText();
-			if (text.contains("Safety Analysis")) {
+			if (text.contains("Max Faults or Probabilistic")) {
 				transformFlag = 1;
-			} else {
+			} else if (text.contains("Generate Soteria Model for Compositional Analysis")) {
 				transformFlag = 2;
+			} else {
+				transformFlag = 0;
 			}
 		}
 	}
