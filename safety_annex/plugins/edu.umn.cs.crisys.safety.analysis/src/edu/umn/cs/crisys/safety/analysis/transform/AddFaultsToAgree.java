@@ -79,8 +79,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			return program;
 		}
 
-		// System.out.println("Ta da!");
-
 		faultVisitor = new AddFaultsToNodeVisitor();
 
 		try{
@@ -138,9 +136,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			transformFlag = 0;
 		} else {
 			String text = item.getText();
-			if (text.contains("Max Faults or Probabilistic")) {
+			if (text.contains("Safety Analysis")) {
 				transformFlag = 1;
-			} else if (text.contains("Generate Soteria Model for Compositional Analysis")) {
+			} else if (text.contains("Generate SOTERIA model")) {
 				transformFlag = 2;
 			} else {
 				transformFlag = 0;
