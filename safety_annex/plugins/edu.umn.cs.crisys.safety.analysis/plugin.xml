@@ -29,7 +29,7 @@
       <!-- New handler for menu item (Soteria) -->
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
+            class="edu.umn.cs.crisys.safety.analysis.handlers.SafetyAnalysisVerifyHandler">
       </handler>
    </extension>
    <extension
