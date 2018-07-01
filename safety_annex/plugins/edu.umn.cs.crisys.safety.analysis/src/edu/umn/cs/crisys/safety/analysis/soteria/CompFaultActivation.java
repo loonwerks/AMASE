@@ -2,7 +2,7 @@ package edu.umn.cs.crisys.safety.analysis.soteria;
 
 import jkind.Assert;
 
-public class CompFaultActivation extends SoteriaFormulaElement {
+public class CompFaultActivation implements SoteriaFormulaElem {
 	public final String faultName;
 
 	public CompFaultActivation(String faultName) {

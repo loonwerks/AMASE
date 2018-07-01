@@ -57,6 +57,7 @@ import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder;
 
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import jkind.JKindException;
 import jkind.api.JKindApi;
@@ -207,7 +208,10 @@ public class SoteriaGenHandler extends VerifyHandler {
 					queue.remove().cancel();
 				}
 
-				walkthroughResults(result);
+				// generate soteria model from the result
+				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
+				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result);
+				System.out.println(soteriaModel.toString());
 
 				deactivateTerminateHandlers();
 				enableRerunHandler(root);
@@ -226,27 +230,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 
 		return super.execute(event);
-	}
-
-	private void walkthroughResults(AnalysisResult result) {
-		System.out.println("test@@@");
-		// get current verification result
-		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
-		// if one layer, the curResult is JKindResult for the current component verified
-		if (curResult instanceof JKindResult) {
-			// build Soteria component for the current component
-		}
-		// if multiple layers
-		// the first is JKindResult for the current layer
-		// since we skip consistency check in safety analysis
-		// the rest ones are CompositeAnanalysisResult, one for each subcomponent verified
-		else if (curResult instanceof CompositeAnalysisResult) {
-			// recursively call walkthroughResults
-			walkthroughResults(curResult);
-
-		} else {
-			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
-		}
 	}
 
 	/*
