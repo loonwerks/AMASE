@@ -5,7 +5,7 @@ import java.util.List;
 
 import jkind.Assert;
 
-public class SoteriaComponent {
+public class SoteriaComp {
 
 	public final String componentName;
 	public final String faultString = "contract violation";
@@ -17,7 +17,7 @@ public class SoteriaComponent {
 
 	public List<String> ports = new ArrayList<>();
 
-	public SoteriaComponent(String componentName) {
+	public SoteriaComp(String componentName) {
 		Assert.isNotNull(componentName);
 		this.componentName = componentName;
 		this.faults.add(faultString);
