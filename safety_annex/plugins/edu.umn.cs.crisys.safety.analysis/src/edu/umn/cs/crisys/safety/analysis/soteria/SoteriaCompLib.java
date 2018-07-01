@@ -13,4 +13,8 @@ public class SoteriaCompLib {
 		comps.add(comp);
 	}
 
+	public void reset() {
+		comps.clear();
+	}
+
 }

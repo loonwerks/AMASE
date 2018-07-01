@@ -36,7 +36,7 @@ public class SoteriaComp {
 	}
 
 	public void addSoteriaFormula(String propertyName, ArrayList<String> ivcSet) {
-		ArrayList<SoteriaFormulaElement> formulaBody = new ArrayList<SoteriaFormulaElement>();
+		ArrayList<SoteriaFormulaElem> formulaBody = new ArrayList<SoteriaFormulaElem>();
 		for (String ivcElement : ivcSet) {
 			if (ivcElement.startsWith("__fault")) {
 				// TODO: get the fault name for that fault activation variable in ivcElement

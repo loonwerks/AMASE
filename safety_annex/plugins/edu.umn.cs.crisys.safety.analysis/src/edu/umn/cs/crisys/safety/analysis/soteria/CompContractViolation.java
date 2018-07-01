@@ -3,7 +3,7 @@ package edu.umn.cs.crisys.safety.analysis.soteria;
 import jkind.Assert;
 
 
-public class CompContractViolation extends SoteriaFormulaElement {
+public class CompContractViolation implements SoteriaFormulaElem {
 	public final String contractString;
 
 	public CompContractViolation(String contractString) {
