@@ -69,7 +69,7 @@ import jkind.api.results.JRealizabilityResult;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
 
-public class SafetyAnalysisVerifyHandler extends VerifyHandler {
+public class SoteriaGenHandler extends VerifyHandler {
 
 	private static Element root = null;
 	private static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
@@ -230,18 +230,23 @@ public class SafetyAnalysisVerifyHandler extends VerifyHandler {
 
 	private void walkthroughResults(AnalysisResult result) {
 		System.out.println("test@@@");
-		// get first verification result
-		AnalysisResult firstResult = ((CompositeAnalysisResult) result).getChildren().get(0);
-		// if verify single layer
-		if (firstResult instanceof JKindResult) {
-		} else if (firstResult instanceof CompositeAnalysisResult) {
+		// get current verification result
+		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
+		// if one layer, the curResult is JKindResult for the current component verified
+		if (curResult instanceof JKindResult) {
+			// build Soteria component for the current component
+		}
+		// if multiple layers
+		// the first is JKindResult for the current layer
+		// since we skip consistency check in safety analysis
+		// the rest ones are CompositeAnanalysisResult, one for each subcomponent verified
+		else if (curResult instanceof CompositeAnalysisResult) {
+			// recursively call walkthroughResults
+			walkthroughResults(curResult);
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
 		}
-		// if verify all layers, it's CompositeAnalysisResult
-		// get the current layer result from the first child which is JKindResult
-		// get the subcomponent results from the last few children, each one is either a CompositeAnalysisResult
 	}
 
 	/*
@@ -285,7 +290,7 @@ public class SafetyAnalysisVerifyHandler extends VerifyHandler {
 	 * @return void
 	 */
 	public static void setRoot(Element root) {
-		SafetyAnalysisVerifyHandler.root = root;
+		SoteriaGenHandler.root = root;
 	}
 
 	/*
@@ -297,24 +302,21 @@ public class SafetyAnalysisVerifyHandler extends VerifyHandler {
 	 * be used in transformAgree in order to access the safety annex.
 	 */
 	public static Element getRoot() {
-		return SafetyAnalysisVerifyHandler.root;
+		return SoteriaGenHandler.root;
 	}
 
 	@Override
 	protected boolean isRecursive() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	protected boolean isMonolithic() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected boolean isRealizability() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -465,10 +467,10 @@ public class SafetyAnalysisVerifyHandler extends VerifyHandler {
 
 		wrapper.addChild(
 				createVerification("Contract Guarantees", si, program, agreeProgram, AnalysisType.AssumeGuarantee));
-		for (Pair<String, Program> consistencyAnalysis : consistencies) {
-			wrapper.addChild(createVerification(consistencyAnalysis.getFirst(), si, consistencyAnalysis.getSecond(),
-					agreeProgram, AnalysisType.Consistency));
-		}
+//		for (Pair<String, Program> consistencyAnalysis : consistencies) {
+//			wrapper.addChild(createVerification(consistencyAnalysis.getFirst(), si, consistencyAnalysis.getSecond(),
+//					agreeProgram, AnalysisType.Consistency));
+//		}
 	}
 
 	void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming, String prefix,
@@ -512,7 +514,7 @@ public class SafetyAnalysisVerifyHandler extends VerifyHandler {
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			IHandlerService handlerService = getHandlerService();
 			rerunActivation = handlerService.activateHandler(RERUN_ID,
-					new RerunHandler(root, SafetyAnalysisVerifyHandler.this));
+					new RerunHandler(root, SoteriaGenHandler.this));
 		});
 	}
 
