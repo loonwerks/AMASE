@@ -7,6 +7,7 @@ import jkind.Assert;
 
 public class SoteriaFormula extends SoteriaAst {
 	public final String propertyName;
+	public final String propertyFaultString = "contract violation";
 	public ArrayList<SoteriaFormulaElem> formulaBody = new ArrayList<SoteriaFormulaElem>();
 
 	public SoteriaFormula(String propertyName, ArrayList<SoteriaFormulaElem> formulaBody) {
