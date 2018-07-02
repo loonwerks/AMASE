@@ -3,9 +3,10 @@ package edu.umn.cs.crisys.safety.analysis.soteria;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaAstVisitor;
 import jkind.Assert;
 
-public class SoteriaComp {
+public class SoteriaComp extends SoteriaAst {
 
 	public final String componentName;
 	public final String faultString = "contract violation";
@@ -47,6 +48,11 @@ public class SoteriaComp {
 			}
 		}
 		formulas.add(new SoteriaFormula(propertyName, formulaBody));
+	}
+
+	@Override
+	public <T> T accept(SoteriaAstVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }
