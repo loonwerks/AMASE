@@ -12,7 +12,6 @@ public class SoteriaComp extends SoteriaAst {
 	public final String faultString = "contract violation";
 	public List<String> inputFlows = new ArrayList<>();
 	public List<String> outputFlows = new ArrayList<>();
-	public List<String> faults = new ArrayList<>();
 	public List<SoteriaFault> basicEvents = new ArrayList<SoteriaFault>();
 	public List<SoteriaFormula> formulas = new ArrayList<SoteriaFormula>();
 
@@ -21,7 +20,6 @@ public class SoteriaComp extends SoteriaAst {
 	public SoteriaComp(String componentName) {
 		Assert.isNotNull(componentName);
 		this.componentName = componentName;
-		this.faults.add(faultString);
 	}
 
 	public void addInput(String input) {

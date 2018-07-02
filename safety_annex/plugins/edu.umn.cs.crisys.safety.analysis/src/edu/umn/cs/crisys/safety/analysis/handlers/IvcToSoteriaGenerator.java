@@ -13,13 +13,11 @@ public class IvcToSoteriaGenerator {
 	SoteriaCompLib soteriaCompLib = new SoteriaCompLib();
 
 	public SoteriaModel generateModel(AnalysisResult result) {
-
 		walkthroughResults(result);
-		return new SoteriaModel();
+		return new SoteriaModel(soteriaCompLib);
 	}
 
 	private void walkthroughResults(AnalysisResult result) {
-		System.out.println("walk through results for soteria model gen @@@");
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
 		// if one layer, the curResult is JKindResult for the current component verified

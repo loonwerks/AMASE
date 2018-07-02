@@ -27,26 +27,110 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(SoteriaFormula soteriaFormula) {
-		// TODO Auto-generated method stub
+	public Void visit(SoteriaFormula formula) {
+		write("(");
+		write("[\"" + formula.propertyName + "\"; " + "\"" + formula.propertyFaultString + "\"],");
+		newline();
+		// write each formula element
+		write(")");
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaFault soteriaFault) {
-		// TODO Auto-generated method stub
+	public Void visit(SoteriaFault fault) {
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaComp soteriaComp) {
-		// TODO Auto-generated method stub
+	public Void visit(SoteriaComp comp) {
+		write("{");
+		write("name = \"" + comp.componentName + "\";");
+		newline();
+		write("faults = [\""+ comp.faultString+ "\"];");
+		newline();
+		write("input_flows = [");
+		// write each input
+		boolean multipleElem = false;
+		for (String input : comp.inputFlows) {
+			if (multipleElem) {
+				write("; ");
+			}
+			write("\"" + input + "\"");
+			multipleElem = true;
+		}
+		write("];");
+		newline();
+		write("basic_events = [");
+		multipleElem = false;
+		// write each basic event name
+		for (SoteriaFault fault : comp.basicEvents) {
+			if (multipleElem) {
+				write("; ");
+			}
+			write("\"" + fault.faultName + "\"");
+			multipleElem = true;
+		}
+		write("];");
+		newline();
+		write("event_info = [");
+		multipleElem = false;
+		// write each basic event failure rate and exposure time
+		for (SoteriaFault fault : comp.basicEvents) {
+			if (multipleElem) {
+				write("; ");
+			}
+			write("(" + fault.failureRate + ", " + fault.exposureTime + ")");
+			multipleElem = true;
+		}
+		write("];");
+		newline();
+		write("output_flows = [");
+		// write each output
+		multipleElem = false;
+		for (String output : comp.outputFlows) {
+			if (multipleElem) {
+				write("; ");
+			}
+			write("\"" + output + "\"");
+			multipleElem = true;
+		}
+		write("];");
+		newline();
+		write("formulas = [");
+		newline();
+		// write each formula
+		multipleElem = false;
+		for (SoteriaFormula formula : comp.formulas) {
+			if (multipleElem) {
+				write("; ");
+			}
+			formula.accept(this);
+			multipleElem = true;
+		}
+		write("]");
+		newline();
+		write("}");
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaCompLib soteriaCompLib) {
-		// TODO Auto-generated method stub
+	public Void visit(SoteriaCompLib compLib) {
+		write(compLib.commentStr);
+		newline();
+		write("let " + compLib.compLibName + " = ");
+		newline();
+		write("  [");
+		newline();
+		boolean multipleElem = false;
+		// write each component
+		for (SoteriaComp comp : compLib.comps) {
+			if (multipleElem) {
+				write("; ");
+			}
+			comp.accept(this);
+			multipleElem = true;
+		}
+		write("];;");
 		return null;
 	}
 
@@ -63,10 +147,10 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(SoteriaModel soteriaModel) {
-		write("#use \"top.ml\";;");
+	public Void visit(SoteriaModel model) {
+		write(model.includeStr);
 		newline();
-		write("(* ----- COMPONENT LIBRARY ----- *)");
+		model.soteriaCompLib.accept(this);
 		newline();
 		return null;
 	}
