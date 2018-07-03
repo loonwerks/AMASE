@@ -395,8 +395,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 	private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
 		CompositeAnalysisResult result = new CompositeAnalysisResult("Verification for " + name);
-		// different from AGREE
-		// for verify all layers, add a property to verify if it's not the lowest level
 		if (containsAGREEAnnex(ci)) {
 			wrapVerificationResult(ci, result);
 			ComponentImplementation compImpl = AgreeUtils.getInstanceImplementation(ci);
