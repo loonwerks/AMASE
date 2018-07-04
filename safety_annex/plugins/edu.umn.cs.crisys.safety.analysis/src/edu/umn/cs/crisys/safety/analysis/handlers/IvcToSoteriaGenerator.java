@@ -29,6 +29,12 @@ public class IvcToSoteriaGenerator {
 	private void walkthroughResults(AnalysisResult result, SoteriaComp comp) {
 		// if one layer, the curResult is JKindResult for the current component verified
 		if (result instanceof JKindResult) {
+			// for each propertyResult
+			// if it's a guarantee, add it as an output to the soteria comp
+			// add all its ivc elements to the input flows (sans duplicates)
+			// TODO: update to handle a list of ivc sets when ready
+			// add a formula for the guarantee and its ivc elements
+			// TODO: update to add mivc sets to the fomrula when ready
 			for (PropertyResult propertyResult : ((JKindResult) result).getPropertyResults()) {
 				System.out.println("property name: "+propertyResult.getName());
 //				if(propertyResult.getName().contains("guarantee")){
@@ -39,10 +45,6 @@ public class IvcToSoteriaGenerator {
 //				}
 			}
 		}
-		// if multiple layers
-		// the first is JKindResult for the current layer
-		// since we skip consistency check in safety analysis
-		// the rest ones are CompositeAnanalysisResult, one for each subcomponent verified
 		else if (result instanceof CompositeAnalysisResult) {
 			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
 				// recursively call walkthroughResults
