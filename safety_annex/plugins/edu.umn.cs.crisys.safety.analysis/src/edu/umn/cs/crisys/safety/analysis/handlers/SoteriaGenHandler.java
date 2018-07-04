@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.xtext.util.Pair;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
@@ -396,7 +395,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 	private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
 		CompositeAnalysisResult result = new CompositeAnalysisResult("Verification for " + name);
-
 		if (containsAGREEAnnex(ci)) {
 			wrapVerificationResult(ci, result);
 			ComponentImplementation compImpl = AgreeUtils.getInstanceImplementation(ci);
@@ -446,7 +444,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 		} else {
 			program = LustreAstBuilder.getAssumeGuaranteeLustreProgram(agreeProgram);
 		}
-		List<Pair<String, Program>> consistencies = LustreAstBuilder.getConsistencyChecks(agreeProgram);
+		// List<Pair<String, Program>> consistencies = LustreAstBuilder.getConsistencyChecks(agreeProgram);
 
 		wrapper.addChild(
 				createVerification("Contract Guarantees", si, program, agreeProgram, AnalysisType.AssumeGuarantee));
