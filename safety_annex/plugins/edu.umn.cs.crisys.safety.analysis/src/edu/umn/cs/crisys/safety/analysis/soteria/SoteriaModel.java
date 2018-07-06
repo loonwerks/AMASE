@@ -1,16 +1,14 @@
 package edu.umn.cs.crisys.safety.analysis.soteria;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaAstVisitor;
-import jkind.Assert;
 
 public class SoteriaModel extends SoteriaAst {
 
-	public final SoteriaCompLib soteriaCompLib;
+	public SoteriaCompLib soteriaCompLib;
 	public final String includeStr = "#use \"top.ml\";;";
 
-	public SoteriaModel(SoteriaCompLib compLib) {
-		Assert.isNotNull(compLib);
-		this.soteriaCompLib = compLib;
+	public SoteriaModel() {
+		soteriaCompLib = new SoteriaCompLib();
 	}
 
 	@Override

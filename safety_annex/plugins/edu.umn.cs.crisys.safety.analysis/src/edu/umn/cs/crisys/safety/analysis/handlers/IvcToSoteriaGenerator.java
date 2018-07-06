@@ -20,21 +20,17 @@ import jkind.results.ValidProperty;
 
 public class IvcToSoteriaGenerator {
 	SoteriaCompLib soteriaCompLib = new SoteriaCompLib();
+	SoteriaModel model = new SoteriaModel();
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
-		// get component name
-		String compName = curResult.getName().replaceFirst("Verification for ", "").replaceFirst(".impl", "");
-		// build Soteria component for the current component
-		// get current component name
-		SoteriaComp curComp = new SoteriaComp(compName);
-		walkthroughResults(curResult, curComp, linker);
-		soteriaCompLib.addComp(curComp);
-		return new SoteriaModel(soteriaCompLib);
+		walkthroughResults(curResult, null, linker);
+		return model;
 	}
 
-	private void walkthroughResults(AnalysisResult result, SoteriaComp comp, AgreeResultsLinker linker) {
+	private void walkthroughResults(AnalysisResult result, SoteriaComp comp,
+			AgreeResultsLinker linker) {
 
 		// if one layer, the curResult is JKindResult for the current component verified
 		if (result instanceof JKindResult) {
@@ -81,10 +77,16 @@ public class IvcToSoteriaGenerator {
 			}
 		}
 		else if (result instanceof CompositeAnalysisResult) {
+			// get component name
+			String compName = result.getName().replaceFirst("Verification for ", "").replaceFirst(".impl", "");
+			// build Soteria model for the current component
+			// get current component name
+			SoteriaComp curComp = new SoteriaComp(compName);
 			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
 				// recursively call walkthroughResults
-				walkthroughResults(curResult, comp, linker);
+				walkthroughResults(curResult, curComp, linker);
 			}
+			soteriaCompLib.addComp(curComp);
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
