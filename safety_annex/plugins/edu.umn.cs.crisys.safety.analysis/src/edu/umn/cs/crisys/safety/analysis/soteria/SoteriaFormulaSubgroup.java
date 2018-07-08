@@ -6,7 +6,7 @@ import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaAstVisitor;
 import jkind.Assert;
 
 public class SoteriaFormulaSubgroup extends SoteriaAst {
-	public ArrayList<SoteriaFormulaElem> formulaSubGroup = new ArrayList<SoteriaFormulaElem>();
+	public ArrayList<SoteriaFormulaElem> elmeList = new ArrayList<SoteriaFormulaElem>();
 	public final String propertyName;
 
 	public SoteriaFormulaSubgroup(String propertyName) {
@@ -15,7 +15,7 @@ public class SoteriaFormulaSubgroup extends SoteriaAst {
 	}
 
 	public void addFormulaElem(SoteriaFormulaElem elem) {
-		formulaSubGroup.add(elem);
+		elmeList.add(elem);
 	}
 
 	@Override

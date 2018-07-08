@@ -54,7 +54,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("{");
 		write("name = \"" + comp.componentName + "\";");
 		newline();
-		write("faults = [\""+ comp.faultString+ "\"];");
+		write("faults = [\"" + comp.faultString + "\"];");
 		newline();
 		write("input_flows = [");
 		// write each input
@@ -170,20 +170,24 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 
 	@Override
 	public Void visit(SoteriaFormulaSubgroup subgroup) {
-		write("Or[");
-		boolean multipleElem = false;
-		// write each element
-		for (SoteriaFormulaElem elem : subgroup.formulaSubGroup) {
-			if (multipleElem) {
-				write("; ");
-				newline();
+		// use disjunction if more than one element
+		if (subgroup.elmeList.size() == 1) {
+			subgroup.elmeList.get(0).accept(this);
+		} else {
+			write("Or[");
+			boolean multipleElem = false;
+			// write each element
+			for (SoteriaFormulaElem elem : subgroup.elmeList) {
+				if (multipleElem) {
+					write("; ");
+					newline();
+				}
+				elem.accept(this);
+				multipleElem = true;
 			}
-			elem.accept(this);
-			multipleElem = true;
+			write("]");
 		}
-		write("]");
 		return null;
 	}
 
 }
-

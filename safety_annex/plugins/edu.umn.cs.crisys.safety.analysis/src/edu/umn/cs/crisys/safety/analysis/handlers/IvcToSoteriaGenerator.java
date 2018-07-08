@@ -29,22 +29,22 @@ public class IvcToSoteriaGenerator {
 		return model;
 	}
 
-	private void walkthroughResults(AnalysisResult result, SoteriaComp comp,
-			AgreeResultsLinker linker) {
+	private void walkthroughResults(AnalysisResult result, SoteriaComp comp, AgreeResultsLinker linker) {
 
 		// if one layer, the curResult is JKindResult for the current component verified
 		if (result instanceof JKindResult) {
 			// for each propertyResult
 			for (PropertyResult propertyResult : ((JKindResult) result).getPropertyResults()) {
 				String propertyName = propertyResult.getName();
-				System.out.println("property name: "+propertyName);
-				//if it's not an assumption, then it's a guarantee
-				if(!propertyName.contains("assume") &&  !propertyName.contains("Assumptions")) {
-					//if it's a valid guarantee
+				System.out.println("property name: " + propertyName);
+				// if it's not an assumption, then it's a guarantee
+				if (!propertyName.contains("assume") && !propertyName.contains("Assumptions")) {
+					// if it's a valid guarantee
 					if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
-						//add property as an output to the soteria map
+						// add property as an output to the soteria map
 						comp.addOutput(propertyName);
 						ValidProperty property = (ValidProperty) propertyResult.getProperty();
+						SoteriaFormula formula = new SoteriaFormula(propertyName);
 						Renaming renaming = linker.getRenaming(result);
 						if (renaming instanceof AgreeRenaming) {
 							// TODO: when mivc is in place, update to handle a list of ivc sets
@@ -66,17 +66,17 @@ public class IvcToSoteriaGenerator {
 									formulaSubgroup.addFormulaElem(contractViolation);
 								}
 							}
-							SoteriaFormula formula = new SoteriaFormula(propertyName);
-							formula.addFormulaSubgroup(formulaSubgroup);
-							comp.addFormula(propertyName, formula);
+							if (!formulaSubgroup.elmeList.isEmpty()) {
+								formula.addFormulaSubgroup(formulaSubgroup);
+								comp.addFormula(propertyName, formula);
+							}
 						} else {
 							throw new AgreeException("Not AGREE Renaming");
 						}
 					}
 				}
 			}
-		}
-		else if (result instanceof CompositeAnalysisResult) {
+		} else if (result instanceof CompositeAnalysisResult) {
 			// get component name
 			String compName = result.getName().replaceFirst("Verification for ", "").replaceFirst(".impl", "");
 			// build Soteria model for the current component
