@@ -163,7 +163,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	public Void visit(SoteriaModel model) {
 		write(model.includeStr);
 		newline();
-		model.soteriaCompLib.accept(this);
+		model.compLib.accept(this);
 		newline();
 		return null;
 	}
