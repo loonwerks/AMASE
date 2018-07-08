@@ -19,13 +19,13 @@ import jkind.api.results.Renaming;
 import jkind.results.ValidProperty;
 
 public class IvcToSoteriaGenerator {
-	SoteriaCompLib soteriaCompLib = new SoteriaCompLib();
-	SoteriaModel model = new SoteriaModel();
+	SoteriaCompLib compLib = new SoteriaCompLib();
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
 		walkthroughResults(curResult, null, linker);
+		SoteriaModel model = new SoteriaModel(compLib);
 		return model;
 	}
 
@@ -86,7 +86,7 @@ public class IvcToSoteriaGenerator {
 				// recursively call walkthroughResults
 				walkthroughResults(curResult, curComp, linker);
 			}
-			soteriaCompLib.addComp(curComp);
+			compLib.addComp(curComp);
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
