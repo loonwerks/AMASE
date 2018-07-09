@@ -1,0 +1,173 @@
+package TMI
+public
+with Base_Types;
+with Reactor;
+with SeriesValve;
+with Primary;
+with Tank;
+with Secondary;
+with datatypes;
+
+	system TMI
+		features
+			-- Rods commands: {insert, partially_insert, extract, none}
+			rods_command : in data port Base_Types::Integer;
+			-- Valve commands: {open, close}
+			porv_command : in data port Base_Types::Integer;
+			block_command : in data port Base_Types::Integer; 
+			-- Tank commands: {inject, none}
+			tank_command : in data port Base_Types::Integer;
+			-- Commands: {start, stop}
+			command1 : in data port Base_Types::Integer;
+			command2 : in data port Base_Types::Integer;
+			
+			melted_reactor : out data port Base_Types::Boolean;
+			coolant : out data port Base_Types::Integer;
+			temperature: out data port Base_Types::Integer;
+			
+		annex agree {**
+			assume "Range for porv commands." :
+				(porv_command >= datatypes.VALVE_OPEN) and (porv_command <= datatypes.VALVE_CLOSED);
+				
+			assume "Range for block commands." :
+				(block_command >= datatypes.VALVE_OPEN) and (block_command <= datatypes.VALVE_CLOSED);
+		
+			assume "Range for rods commands." :
+				(rods_command >= datatypes.EXTRACTED) and (rods_command <= datatypes.INSERTED);
+				
+			assume "Range for tank commands." :
+				(tank_command >= datatypes.TANK_INJECT) and (tank_command <= datatypes.TANK_STOP);
+			
+			assume "Range for main commands." :
+				(command1 >= datatypes.MAIN_START) and (command1 <= datatypes.MAIN_STOP) and
+				(command2 >= datatypes.MAIN_START) and (command2 <= datatypes.MAIN_STOP);
+		
+			assume "Initial tank command" :
+				(tank_command = datatypes.TANK_INJECT) -> true;
+			
+		
+			-- If the plant operation is not constrained, then it is possible to 
+			-- achieve melting of the reactor. We must specify a set of hypotheses in 
+			-- order to control the way the plants nominal behavior occurs.
+			assume "Command 1 and 2 are not both STOP" :
+				(not (command1 = datatypes.MAIN_STOP)) and (not (command2 = datatypes.MAIN_STOP));
+		
+		
+			assume "If porv command is open then the primary out low temp must be 
+					>= 4 in the next step." :
+				(prev(porv_command, datatypes.VALVE_OPEN) = datatypes.VALVE_OPEN)
+					=> (temperature >= 4);
+					
+			assume "If coolant level drops below 4, then we close the porv valve in the 
+					next step" :
+				(prev(coolant, 5) <= 3) => (porv_command = datatypes.VALVE_CLOSED);
+		
+		**}; 
+	end TMI;
+	
+	system implementation TMI.impl  
+		subcomponents 
+			reactor : system Reactor::Reactor;  
+			seriesValves : system SeriesValve::SeriesValve;
+			tank : system Tank::Tank.impl;
+			primary : system Primary::Primary.impl;
+			secondary : system Secondary::Secondary.impl;
+			
+		connections
+			-- To reactor 
+			cmd_to_reactor : port rods_command -> reactor.rods_command; 
+			cool_level_to_reactor : port primary.coolant_level -> reactor.coolant_level;
+			low_temp_to_reactor : port primary.temp_out_low -> reactor.coolant_temperature;
+			
+			-- To series valve
+			porv_cmd_to_seriesvalve : port porv_command -> seriesValves.porv_cmd;
+			block_cmd_to_seriesvalve : port block_command -> seriesValves.block_cmd;
+			 
+			-- To parallel pumps
+			command1_to_pumps : port command1 -> primary.command;
+			command2_to_pumps : port command2 -> secondary.command; 
+			
+			-- To tank
+			cmd_to_tank : port tank_command -> tank.command;  
+			
+			-- To Circuit
+			tank_to_circut : port tank.output -> primary.tank_output;
+			valve_to_circuit : port seriesValves.status -> primary.valve_output;
+			reactor_to_circuit : port reactor.output_temp -> primary.reactor_output_temp;
+			circuits_connection_temp_low : port secondary.circuit_temp_low -> primary.circuit_temp_low;
+			circuits_connection_temp_high : port primary.circuit_temp_high -> secondary.circuit_temp_high;
+			
+			melted : port reactor.melted -> melted_reactor;
+			temp : port primary.temp_out_low -> temperature;
+			coolantlevel : port primary.coolant_level -> coolant;
+		
+		annex agree {**
+		
+				
+	---------------------------------------------------------------------------------------------------
+	---------------------- TOP LEVEL LEMMAS -----------------------------------------------------------		
+			-- Top level hazard: The reactor melts.
+			-- In order for the reactor to be melted, we need:
+			-- reactor.output_temp = CORE_VERY_HOT (5) AND primary.coolant_level = 1
+			lemma "Reactor does not melt." :
+				not melted_reactor; 
+			 
+			-- If we have commanded the tank to inject and the coolant level
+			-- is greater than 2, then the coolant level remains at >= 2.
+			lemma "If tank command is INJECT and coolant level is > 2, then
+					coolant level does not drop below 2." :
+				((tank_command = datatypes.TANK_INJECT) and (primary.coolant_level > 2))
+					=> (primary.coolant_level >= 2);
+	---------------------------------------------------------------------------------------------------
+		
+			----------------- SeriesValves ------------------------
+			lemma "Output status is open if both valves are open." :
+				if (seriesValves.porv_cmd = datatypes.VALVE_OPEN) 
+					then (seriesValves.status = seriesValves.block_cmd)
+				else (seriesValves.status = seriesValves.porv_cmd); 
+		
+		
+			------------------------------------------------------------
+			-- Testing coolant level
+			
+			lemma "Datatypes move coolant level one step" :
+				(datatypes.move(primary.coolant_level, 10) = (primary.coolant_level + 1))
+				or (datatypes.move(primary.coolant_level, 0) = (primary.coolant_level - 1))
+				or (datatypes.move(primary.coolant_level, primary.coolant_level) = (primary.coolant_level));
+		
+			----------------- Reactor ------------------------	
+			lemma "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
+				(reactor.T_rods_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 1));
+				
+			lemma "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
+				(reactor.T_rods_partially_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 2));
+			
+			lemma "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
+				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature < 3)) 
+					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 3));
+				
+			lemma "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
+				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature >= 3)) 
+					=> (reactor.Current_core_status = reactor.Previous_status);
+				
+			lemma "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
+				(reactor.T_rods_extracted and (reactor.coolant_level < 3)) 
+					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 5));
+			
+			lemma "If no transition occurs, status remains the same." :
+				(not (reactor.Some_transition)) => (reactor.Current_core_status = reactor.Previous_status);
+				
+			lemma "Core status link to local Current_core_status" :
+				reactor.output_temp = reactor.Current_core_status;
+			
+			lemma "Inital output temp value" :
+				(reactor.output_temp = reactor.CORE_NORMAL) -> true; 
+				 
+			lemma "Output temp bounded" :
+				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
+	
+		**};
+			
+	end TMI.impl;
+	
+end TMI;

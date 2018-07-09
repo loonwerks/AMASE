@@ -1,0 +1,111 @@
+package ParallelPump
+public
+with Base_Types;
+with Pump;
+
+	system ParallelPump
+		features
+			-- Input from main TMI: command for pump: {start, stop}
+			command : in data port Base_Types::Integer;
+			
+			-- Coolant status from circuit
+			coolant_status : in data port Base_Types::Integer; 
+			
+			-- {pumping, stopped, shaking}
+			pumpA_status : out data port Base_Types::Integer;
+			-- {pumping, stopped, shaking}
+			pumpB_status : out data port Base_Types::Integer;
+			
+			-- {pumping, stopped, shaking}
+			status : out data port Base_Types::Integer; 
+		
+		annex agree {**
+			 
+			assume "Command input is bounded." :
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP); 
+				
+			assume "Coolant status input is bounded." :
+				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
+				
+--			assume "Pump status input is bounded." :
+--				(pumpA_status >= datatypes.STEAM_CAVITIES) and (pumpA_status <= datatypes.SOLID)
+--				and (pumpB_status >= datatypes.STEAM_CAVITIES) and (pumpB_status <= datatypes.SOLID);
+			
+			
+			eq pumpa_status : int = pumpA_status;
+			eq pumpb_status : int = pumpB_status;
+			
+--			assign status = if (pumpa_status = datatypes.SHAKING) 
+--								then (pumpb_status)
+--							else pumpa_status;
+			
+			-- We switch from pump A output to pump B output when pumpA shows signs of 
+			-- shaking. This occurs when we were pumping but steam cavities appear
+			-- in the coolant. 
+			guarantee "Initial status output is pumping." :
+				(status = datatypes.PUMPING) -> true;
+				
+			guarantee "Begin using pumpB when pumpA begins to shake." :
+				(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_STOP))
+				and (pumpA_status = datatypes.SHAKING)) 
+					=> (status = pumpB_status);
+					
+			guarantee "In all other cases, use status from pumpA." :
+				not(((command = datatypes.MAIN_START) or (command = datatypes.MAIN_STOP))
+					and (pumpA_status = datatypes.SHAKING)) 
+						=> (status = pumpA_status);
+				
+			guarantee "Output is bounded" :
+				(status >= datatypes.PUMPING) and (status <= datatypes.SHAKING);
+
+			
+		**};
+			
+	end ParallelPump;
+	
+	
+	system implementation ParallelPump.impl
+		subcomponents
+			pumpA : system Pump::Pump;
+			pumpB : system Pump::Pump;
+		
+		connections
+			-- Commands to pumps
+			cmd1_to_pump : port command -> pumpA.command;
+			cmd2_to_pump : port command -> pumpB.command;
+			
+			-- Input from pumps
+			pumpA_out : port pumpA.status -> pumpA_status;
+			pumpB_out : port pumpB.status -> pumpB_status;
+			
+			-- Coolant to pumps
+			coolant_to_pumpA : port coolant_status -> pumpA.coolant_status;
+			coolant_to_pumpB : port coolant_status -> pumpB.coolant_status;
+			
+		annex agree {**
+			
+			assign status = if (pumpa_status = datatypes.SHAKING) 
+								then (pumpb_status)
+							else pumpa_status;	
+			
+			lemma "Initial status of pump is pumping." :
+				(pumpA.status = datatypes.PUMPING) -> true;
+				
+			lemma "Command to start pumping." :
+				(((pumpA.command = datatypes.MAIN_START) and (not (pumpA.coolant_status = datatypes.STEAM_CAVITIES)))) 
+					=> (pumpA.status = datatypes.PUMPING);
+				
+			lemma "Command to stop pumping." :
+				(pumpA.command = datatypes.MAIN_STOP) => (pumpA.status = datatypes.STOPPED);
+				
+			lemma "Switch to shaking status." :
+				((pre(pumpA.status) = datatypes.PUMPING) and (pumpA.coolant_status = datatypes.STEAM_CAVITIES)) 
+					=> (pumpA.status = datatypes.SHAKING);
+				
+			lemma "Bounds on status" :
+				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.SHAKING);
+			
+				
+		**};	
+	end ParallelPump.impl;
+end ParallelPump;
