@@ -1,0 +1,158 @@
+package Circuit
+public
+with Base_Types;
+
+	system Circuit
+		features
+			-- Status of the pump connected to the circuit
+			pump_status : in data port Base_Types::Integer;
+			-- If open, coolant is injected in the circuit
+			-- Comes from tank output
+			input_valve_status : in data port Base_Types::Integer;
+			-- If open, coolant is drained from the circuit
+			-- Comes from seriesValves.output
+			-- (If both porv and block valves open, status is open, 
+			-- else its closed)
+			output_valve_status : in data port Base_Types::Integer;
+			-- Temp at the cold point 
+			temp_input_low : in data port Base_Types::Integer;
+			-- Temp at the hot point
+			-- reactor output temp
+			temp_input_high : in data port Base_Types::Integer;
+			
+			-- Temp at the exit of the cold point {1,,,5}
+			temp_output_low : out data port Base_Types::Integer;
+			-- Temp at the exit of the hot point {1,..,5}
+			temp_output_high : out data port Base_Types::Integer;
+			-- Level of coolant {1,...,10}
+			coolant_level : out data port Base_Types::Integer;
+			-- Status of coolant {steam_cavities, normal, solid}
+			coolant_status : out data port Base_Types::Integer;
+			
+		annex agree {**
+		
+			-------------------------------------------------------------------------------------- 
+			-- Coolant level state machine
+			const Coolant_level_init : int = 5;
+			
+			eq Current_coolant_level : int;
+			eq Previous_coolant_level : int = prev(Current_coolant_level, Coolant_level_init);
+			
+			-- Of both the input and output valves are both open or both closed, 
+			-- the level remains the same.
+			eq T_coolant_remains_same_level : bool = 
+				((input_valve_status = datatypes.VALVE_OPEN) 
+						and (output_valve_status = datatypes.VALVE_OPEN))
+				or ((input_valve_status = datatypes.VALVE_CLOSED)  
+						and (output_valve_status = datatypes.VALVE_CLOSED));
+			  
+			-- If input valve is open, increase the level
+			eq T_increase_coolant_level : bool = 
+				false -> ((input_valve_status = datatypes.VALVE_OPEN) 
+					and (output_valve_status = datatypes.VALVE_CLOSED));
+			
+			-- If output valve is open, decrease the level
+			eq T_decrease_coolant_level : bool = 
+				false -> ((input_valve_status = datatypes.VALVE_CLOSED) 
+					and (output_valve_status = datatypes.VALVE_OPEN));
+					
+			eq Some_coolant_level_transition : bool = T_coolant_remains_same_level or T_increase_coolant_level
+					or T_decrease_coolant_level;		
+			
+			--------------------------------------------------------------------------------------
+			-- Coolant level guarantees
+			guarantee "Coolant level remains constant" :
+				((input_valve_status = datatypes.VALVE_OPEN) 
+						and (output_valve_status = datatypes.VALVE_OPEN))
+				or ((input_valve_status = datatypes.VALVE_CLOSED)  
+						and (output_valve_status = datatypes.VALVE_CLOSED)) 
+					=> (Current_coolant_level = Previous_coolant_level);
+			
+			guarantee "Coolant level increases" : 
+				((input_valve_status = datatypes.VALVE_OPEN) 
+					and (output_valve_status = datatypes.VALVE_CLOSED))
+					=> (Current_coolant_level = datatypes.move(Previous_coolant_level, 10));
+			
+			guarantee "Coolant level decreases" : 
+				((input_valve_status = datatypes.VALVE_CLOSED) 
+					and (output_valve_status = datatypes.VALVE_OPEN))
+					=> (Current_coolant_level = datatypes.move(Previous_coolant_level, 0));
+			
+			guarantee "No status change, no new output" : 
+				not (Some_coolant_level_transition) => (Current_coolant_level = Previous_coolant_level);
+			
+			guarantee "Coolant level equals Current_coolant_level" :
+				coolant_level = Current_coolant_level;
+			
+			guarantee "Current coolant level bounded" :
+				(Current_coolant_level >= 0) and (Current_coolant_level <= 10);	
+			
+			guarantee "Coolant level bounded" :
+				(coolant_level >= 0) and (coolant_level <= 10);
+				
+				
+			--------------------------------------------------------------------------------------
+			-- Temp output low guarantees
+			guarantee "Initial value of temp output low is 2" :
+				(temp_output_low = 2) -> true;
+				
+			guarantee "If pump is pumping, then input low temp equals output low temp." :
+				(pump_status = datatypes.PUMPING) => (temp_input_low = temp_output_low);
+			
+			guarantee "If pump is not pumping, then output low temp equals input high temp." :
+				not(pump_status = datatypes.PUMPING) => (temp_input_low = temp_output_high);
+			 
+			guarantee "Temp output low bounded" : 
+				(temp_output_low >= 0) and (temp_output_low <= 10); 
+		
+			--------------------------------------------------------------------------------------
+			---------- Temp output high guarantees
+			guarantee "Initially, temp output high equals 2" :
+				(temp_output_high = 2) -> true;
+				
+			guarantee "If pump is pumping, then temp output high equals temp input high." :
+				(pump_status = datatypes.PUMPING) => (temp_input_high = temp_output_high);
+			
+			guarantee "If pump is not pumping, then output low temp equals input high temp." :
+				not(pump_status = datatypes.PUMPING) => (temp_input_low = temp_output_high);
+
+			guarantee "Temp output high bounded" : 
+				(temp_output_high >= 0) and (temp_output_high <= 10);
+				
+			--------------------------------------------------------------------------------------				
+			-- Coolant status state machine
+			eq Coolant_status_init : int = datatypes.NORMAL;
+			eq Current_coolant_status : int;
+			eq Previous_coolant_status : int = prev(Current_coolant_status, Coolant_status_init);
+			
+			eq T_coolant_status_to_solid : bool = 
+				false -> (coolant_level = 10);
+				
+			eq T_coolant_status_to_steam_cavities : bool = 
+				false -> ((coolant_level <= 2)
+					and ((temp_output_low = 5) or (temp_output_high= 5))); 
+			 
+			eq Some_coolant_status_transition : bool =
+				T_coolant_status_to_solid or T_coolant_status_to_steam_cavities;
+				
+			--------------------------------------------------------------------------------------
+			-- Coolant status guarantees
+			guarantee "Coolant status is solid" :
+				(T_coolant_status_to_solid) => (Current_coolant_status = datatypes.SOLID);
+				
+			guarantee "Coolant status is steam cavities" :
+				(T_coolant_status_to_steam_cavities) => (Current_coolant_status = datatypes.STEAM_CAVITIES);
+			
+			guarantee "Coolant status output" :
+				(coolant_status = Current_coolant_status);	
+			
+			guarantee "Current coolant status bounded" :
+				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
+--			
+--					 
+				
+		**};
+	end Circuit;
+	
+	
+end Circuit;

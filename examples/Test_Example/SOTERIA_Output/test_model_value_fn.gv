@@ -1,0 +1,45 @@
+digraph G {
+rankdir=BT 
+layout = dot
+splines = true
+overlap = false
+sep ="+10, +10"
+esep ="+8, +8"
+outputorder=edgesfirst
+node [shape=plain]
+
+7 [label=< 
+  <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+  <TR><TD border="0">   </TD>
+    <TD PORT="5"> C123 out3 range </TD>
+    <TD border="0">   </TD>
+    <TD PORT="6"> C123 out3 value </TD>
+    <TD border="0">   </TD>
+  </TR>
+  <TR> <TD ROWSPAN="3" COLSPAN="5"> <BR/>C123_w_fault<BR/> </TD> </TR>
+  <TR> <TD border="0"> </TD> </TR>
+  <TR> <TD border="0"> </TD> </TR>
+  </TABLE>>];
+
+4 [label=< 
+  <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+  <TR><TD border="0">   </TD>
+    <TD PORT="2"> C0123 out0 range </TD>
+    <TD border="0">   </TD>
+    <TD PORT="3"> C0123 out0 value </TD>
+    <TD border="0">   </TD>
+  </TR>
+  <TR> <TD ROWSPAN="3" COLSPAN="5"> <BR/>C0123<BR/> </TD> </TR>
+  <TR> <TD border="0"> </TD> </TR>
+  <TR> <TD border="0"> </TD> </TR>
+  <TR><TD border="0">   </TD>
+    <TD PORT="0"> C123 out3 range </TD>
+  <TD border="0">   </TD>
+    <TD PORT="1"> C123 out3 value </TD>
+  <TD border="0">   </TD>
+  </TR>
+  </TABLE>>];
+
+7:5 -> 4:0 ;
+7:6 -> 4:1 ;
+}

@@ -1,0 +1,59 @@
+package Valve
+public
+with Base_Types;
+with datatypes;
+
+	system Valve
+		features
+			-- {open, close}
+			command : in data port Base_Types::Integer;
+			
+			-- {open, closed}
+			status : out data port Base_Types::Integer;
+	
+		annex agree {**
+			 
+			eq Previous_status : int = prev(status, datatypes.VALVE_CLOSED);
+			eq Current_status : int;
+			
+			eq T_close_to_open : bool = (Previous_status = datatypes.VALVE_CLOSED) 
+					and (command = datatypes.VALVE_OPEN);
+			
+			eq Remain_open : bool = ((Previous_status = datatypes.VALVE_OPEN) 
+					and (command = datatypes.VALVE_OPEN));	
+					
+			eq T_open_to_close : bool = (Previous_status = datatypes.VALVE_OPEN) 
+					and (command = datatypes.VALVE_CLOSED);	
+					
+			eq Remain_closed : bool = ((Previous_status = datatypes.VALVE_CLOSED) 
+					and (command = datatypes.VALVE_CLOSED));
+			
+			eq Some_transition : bool = T_close_to_open or T_open_to_close or Remain_open or Remain_closed;
+			
+			guarantee "Current status range" : 
+				(Current_status >= datatypes.VALVE_OPEN) and (Current_status <= datatypes.VALVE_CLOSED);
+			
+			guarantee "Open status" : 
+				(T_close_to_open or Remain_open) => (Current_status = datatypes.VALVE_OPEN);
+				
+			guarantee "Closed status" :
+				(T_open_to_close or Remain_closed) => (Current_status = datatypes.VALVE_CLOSED);	
+			
+			guarantee "No status change, no new output" : 
+				not (Some_transition) => (Current_status = Previous_status);
+			
+			guarantee "Output status" : 
+				(status = Current_status); 
+			
+			guarantee "Status range" : 
+				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED);
+			
+			guarantee "Initially, open." :
+				(status = datatypes.VALVE_OPEN) -> true;
+			
+		**};
+			
+	end Valve;
+	
+		
+end Valve;
