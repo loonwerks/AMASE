@@ -5,12 +5,12 @@ import jkind.Assert;
 
 public class SoteriaModel extends SoteriaAst {
 
-	public final SoteriaCompLib soteriaCompLib;
+	public SoteriaCompLib compLib;
 	public final String includeStr = "#use \"top.ml\";;";
 
 	public SoteriaModel(SoteriaCompLib compLib) {
 		Assert.isNotNull(compLib);
-		this.soteriaCompLib = compLib;
+		this.compLib = compLib;
 	}
 
 	@Override

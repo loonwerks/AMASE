@@ -6,6 +6,7 @@ import jkind.Assert;
 
 public class CompContractViolation extends SoteriaFormulaElem {
 	public final String contractString;
+	public final String contractViolationFaultStr = "contract violation";
 
 	public CompContractViolation(String contractString) {
 		Assert.isNotNull(contractString);

@@ -1,11 +1,15 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
+import java.util.Map;
+
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormulaElem;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormulaSubgroup;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
 
 public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
@@ -31,7 +35,11 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("(");
 		write("[\"" + formula.propertyName + "\"; " + "\"" + formula.propertyFaultString + "\"],");
 		newline();
-		// write each formula element
+		// TODO: if multiple groups, use conjunction to connect the groups
+		if (formula.formulaBody.size() == 1) {
+			SoteriaFormulaSubgroup subgroup = formula.formulaBody.get(0);
+			subgroup.accept(this);
+		}
 		write(")");
 		return null;
 	}
@@ -46,7 +54,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("{");
 		write("name = \"" + comp.componentName + "\";");
 		newline();
-		write("faults = [\""+ comp.faultString+ "\"];");
+		write("faults = [\"" + comp.faultString + "\"];");
 		newline();
 		write("input_flows = [");
 		// write each input
@@ -100,10 +108,12 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		newline();
 		// write each formula
 		multipleElem = false;
-		for (SoteriaFormula formula : comp.formulas) {
+		for (Map.Entry<String, SoteriaFormula> entry : comp.formulas.entrySet()) {
 			if (multipleElem) {
 				write("; ");
+				newline();
 			}
+			SoteriaFormula formula = entry.getValue();
 			formula.accept(this);
 			multipleElem = true;
 		}
@@ -126,6 +136,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		for (SoteriaComp comp : compLib.comps) {
 			if (multipleElem) {
 				write("; ");
+				newline();
 			}
 			comp.accept(this);
 			multipleElem = true;
@@ -135,14 +146,16 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(CompContractViolation compContractViolation) {
-		// TODO Auto-generated method stub
+	public Void visit(CompContractViolation violation) {
+		write("F[" + "\"" + violation.contractString + "\"; ");
+		write("\"" + violation.contractViolationFaultStr + "\"");
+		write("]");
 		return null;
 	}
 
 	@Override
-	public Void visit(CompFaultActivation compFaultActivation) {
-		// TODO Auto-generated method stub
+	public Void visit(CompFaultActivation activation) {
+		write("F[" + "\"" + activation.faultName + "\"]");
 		return null;
 	}
 
@@ -150,10 +163,31 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	public Void visit(SoteriaModel model) {
 		write(model.includeStr);
 		newline();
-		model.soteriaCompLib.accept(this);
+		model.compLib.accept(this);
 		newline();
 		return null;
 	}
 
-}
+	@Override
+	public Void visit(SoteriaFormulaSubgroup subgroup) {
+		// use disjunction if more than one element
+		if (subgroup.elmeList.size() == 1) {
+			subgroup.elmeList.get(0).accept(this);
+		} else {
+			write("Or[");
+			boolean multipleElem = false;
+			// write each element
+			for (SoteriaFormulaElem elem : subgroup.elmeList) {
+				if (multipleElem) {
+					write("; ");
+					newline();
+				}
+				elem.accept(this);
+				multipleElem = true;
+			}
+			write("]");
+		}
+		return null;
+	}
 
+}
