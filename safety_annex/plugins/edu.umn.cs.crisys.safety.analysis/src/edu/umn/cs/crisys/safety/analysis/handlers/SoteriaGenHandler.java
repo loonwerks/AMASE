@@ -55,6 +55,7 @@ import com.rockwellcollins.atc.agree.analysis.lustre.visitors.RenamingVisitor;
 import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder;
+import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
@@ -143,7 +144,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 				result = wrapper;
 			}
 			showView(result, linker);
-			return doAnalysis(root, monitor, result);
+			return doAnalysis(root, monitor, result, linker);
 		} catch (Throwable e) {
 			String messages = getNestedMessages(e);
 			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, messages, e);
@@ -153,7 +154,8 @@ public class SoteriaGenHandler extends VerifyHandler {
 	}
 
 	// The following method is copied and modified from AGREE VerifyHandler
-	private IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor, AnalysisResult result) {
+	private IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor, AnalysisResult result,
+			AgreeResultsLinker linker) {
 
 		Thread analysisThread = new Thread() {
 			@Override
@@ -209,7 +211,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 				// generate soteria model from the result
 				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
-				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result);
+				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
 				System.out.println(soteriaModel.toString());
 
 				deactivateTerminateHandlers();

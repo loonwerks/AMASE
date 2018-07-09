@@ -155,6 +155,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		node = super.visit(node);
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
+		// Change this nodes flag to reflect fault tree generation or not.
+		if (AddFaultsToAgree.getTransformFlag() == 2) {
+			nb.setFaultTreeFlag(true);
+		}
 		addNominalVars(node, nb);
 		addFaultInputs(faults, nb);
 		addHWFaultInputs(hwFaults, nb);
@@ -182,7 +186,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 
 		node = nb.build();
-
 		faultyVarsExpr = parentFaultyVarsExpr;
 		return node;
 	}
@@ -192,10 +195,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// (faultPath)
 		// Create new nominal variables for each pair (root.path).
 		for (String faultyId : faultyVarsExpr.keySet()) {
-
 			AgreeVar out = findVar(node.outputs, (faultyId));
 			nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
-
 		}
 	}
 
@@ -256,16 +257,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// MWW: added 1/20/2018
 				f.outputParamToActualMap.put(v.id, actual);
 			}
-
 			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
 					f.faultStatement);
 			nb.addLocalEquation(eq);
-
 		}
 		// Binding happens HERE and is based on the map faultyVarsExpr.
 		// Create an equality between the id and a nested WITH expression for each expr
 		// in the list.
-
 		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
 			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
 
@@ -318,7 +316,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Expr faultToActual(Fault f, Expr ex) {
 		// Match pair.ex -> key of faultOutputMap
 		// If this expression is not in map, return exception message
-
 		String outputName = f.faultOutputMap.get(ex);
 		if (outputName == null) {
 			new Exception("Cannot find expression in mapping: faultToActual (AddFaultsToNodeVisitor class)");
@@ -333,13 +330,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
 		HashMap<String, String> theMap = new HashMap<>();
 		for (AgreeVar eqVar : eqVars) {
-			// ComponentInstance ci = eqVar.compInst;
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
-
-			// System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-			// System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id,
-			// name));
-			// System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}
@@ -784,22 +775,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (AddFaultsToAgree.getTransformFlag() == 1) {
 				// If transform flag is 1, that means we are doing the max/prob analysis
 				nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
-
 			} else {
 				// If transform flag is 2, then we want to generate fault tree.
 				// In this case, we add the indep as a local var.
 				AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL,
 						f.faultStatement);
+				// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).
 				nb.addLocal(newVar);
 
 				// Then equate this to false
 				IdExpr idExpr = new IdExpr(newVar.id);
 				AgreeEquation ae = new AgreeEquation(idExpr, new BoolExpr(false), null);
+				// And add as a local equation
 				nb.addLocalEquation(ae);
-//-----------------------------------------------------------------------------------------------
 				// Add independent fault as ivc element
 				nb.addIvcElement(this.createFaultIndependentActiveId(base));
-//-----------------------------------------------------------------------------------------------
 			}
 
 			// Add dependent as per usual.
