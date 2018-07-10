@@ -54,11 +54,12 @@ public class IvcToSoteriaGenerator {
 								System.out.println("ivcElem: " + ivcElem);
 								// add each ivc element to component inputs (sans duplicate)
 								String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
-								comp.addInput(refStr);
+								comp.addInput(refStr.replace("fault: ", ""));
 								// add each ivc element to formulaSubgroup
-								if (refStr.startsWith("__fault")) {
+								if (refStr.startsWith("fault: ")) {
 									// TODO: get the fault name for that fault activation variable in ivcElement
-									CompFaultActivation faultActivation = new CompFaultActivation(refStr);
+									CompFaultActivation faultActivation = new CompFaultActivation(
+											refStr.replace("fault: ", ""));
 									formulaSubgroup.addFormulaElem(faultActivation);
 								} else {
 									// TODO: get the component guarantee name for the contract name in ivcElement

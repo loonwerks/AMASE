@@ -225,6 +225,13 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 				// Add to reference map
 				renaming.addToRefMap(name, key.faultStatement);
+
+				// Add to supportRenames
+				renaming.addSupportRename(name, name);
+
+				// Add to supportRefString
+				renaming.addSupportRefString(name, "fault: " + key.explanitoryText);
+
 			}
 		}
 		return renaming;
