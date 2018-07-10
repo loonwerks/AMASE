@@ -227,10 +227,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 				renaming.addToRefMap(name, key.faultStatement);
 
 				// Add to supportRenames
-				renaming.addSupportRename(name, key.explanitoryText);
+				renaming.addSupportRename(name, name);
 
 				// Add to supportRefString
-				renaming.addSupportRefString(name, key.explanitoryText);
+				renaming.addSupportRefString(name, "fault: " + key.explanitoryText);
 
 			}
 		}
