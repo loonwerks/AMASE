@@ -112,9 +112,7 @@ Email: Darren.Cofer@rockwellcollins.com}
 \maketitle
 
 \begin{abstract}
-This paper describes a new methodology with tool support for model-based safety analysis. It is implemented as a {\em Safety Annex} for the Architecture Analysis and Design Language (AADL). The Safety Annex provides the ability to describe faults and faulty component behaviors in AADL models. In contrast to previous AADL-based approaches, the Safety Annex leverages a formal description of the nominal system behavior to propagate faults in the system. This approach ensures consistency with the rest of the system development process and simplifies the work of safety engineers. The language for describing faults is extensible and allows safety engineers to weave various types of faults into the nominal system model. The Safety Annex supports the injection of faults into component level outputs, and the resulting behavior of the system can be analyzed using model checking through the Assume-Guarantee Reasoning Environment (AGREE).
-
-
+Risk and fault analysis is an important activity used to ensure that critical software systems operate in an expected way. As critical systems become larger, the methods used to perform both formal verification and fault analysis require scalable algorithms. Compositional verification uses the idea that the correctness of a system may be determined from the correctness of its components. This has shown to be an efficient way of verifying system safety properties. A prominant artifact of fault analysis is a fault tree: a graphical representation of the failure modes of a critical system. In this paper, we describe a new approach in which fault trees can be automatically generated for a system model using compositional reasoning and formal verification techniques. We describe the technique of generating these safety artifacts, prove that our approach is sound, and describe its implementation in the Osate tool suite for AADL. We then present experiments in which we benchmark our approach in terms of scalability and the artifacts produced. 
 \end{abstract}
 
 \input{introduction}
