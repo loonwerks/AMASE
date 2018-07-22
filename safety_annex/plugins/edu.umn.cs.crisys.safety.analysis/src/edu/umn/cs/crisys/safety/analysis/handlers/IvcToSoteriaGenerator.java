@@ -35,7 +35,7 @@ public class IvcToSoteriaGenerator {
 		// create component instances for the base model
 		model.createCompInst();
 		// create component connections for the base model
-		// create a model for each top level fault
+		model.createConnections();
 		return model;
 	}
 
@@ -55,7 +55,8 @@ public class IvcToSoteriaGenerator {
 						comp.addOutput(propertyName);
 						// add property violation as a top level fault to the model
 						if (!isLowerLevel) {
-							CompContractViolation contractViolation = new CompContractViolation(propertyName);
+							CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
+									propertyName);
 							model.addTopLevelFault(contractViolation);
 						}
 						ValidProperty property = (ValidProperty) propertyResult.getProperty();
@@ -72,7 +73,7 @@ public class IvcToSoteriaGenerator {
 									// TODO: get the fault name for that fault activation variable in ivcElement
 									String faultName = refStr.replace("fault: ", "");
 									CompFaultActivation faultActivation = new CompFaultActivation(
-											faultName);
+											comp.componentName, faultName);
 									formulaSubgroup.addFormulaElem(faultActivation);
 									// if ivcElem is not yet in basicEvents
 									if (!comp.basicEvents.containsKey(ivcElem)) {
@@ -95,7 +96,8 @@ public class IvcToSoteriaGenerator {
 								} else {
 									// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
 									comp.addInput(refStr);
-									CompContractViolation contractViolation = new CompContractViolation(refStr);
+									CompContractViolation contractViolation = new CompContractViolation(
+											comp.componentName, refStr);
 									formulaSubgroup.addFormulaElem(contractViolation);
 								}
 							}

@@ -5,11 +5,14 @@ import jkind.Assert;
 
 
 public class CompContractViolation extends SoteriaFormulaElem {
+	public final String compName;
 	public final String contractString;
 	public final String contractViolationFaultStr = "contract violation";
 
-	public CompContractViolation(String contractString) {
+	public CompContractViolation(String compName, String contractString) {
+		Assert.isNotNull(compName);
 		Assert.isNotNull(contractString);
+		this.compName = compName;
 		this.contractString = contractString;
 	}
 
