@@ -5,6 +5,7 @@ import java.util.Map;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompInst;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
@@ -187,6 +188,12 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 			}
 			write("]");
 		}
+		return null;
+	}
+
+	@Override
+	public Void visit(SoteriaCompInst soteriaCompInst) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

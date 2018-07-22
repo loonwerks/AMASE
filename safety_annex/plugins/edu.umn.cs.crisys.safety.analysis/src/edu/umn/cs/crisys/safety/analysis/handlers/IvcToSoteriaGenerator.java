@@ -24,12 +24,18 @@ import jkind.results.ValidProperty;
 
 public class IvcToSoteriaGenerator {
 	SoteriaCompLib compLib = new SoteriaCompLib();
+	SoteriaModel model = new SoteriaModel();
+	boolean isLowerLevel = false;
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
 		walkthroughResults(curResult, null, linker);
-		SoteriaModel model = new SoteriaModel(compLib);
+		model.addCompLib(compLib);
+		// create component instances for the base model
+		model.createCompInst();
+		// create component connections for the base model
+		// create a model for each top level fault
 		return model;
 	}
 
@@ -47,6 +53,11 @@ public class IvcToSoteriaGenerator {
 					if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
 						// add property as an output to the soteria map
 						comp.addOutput(propertyName);
+						// add property violation as a top level fault to the model
+						if (!isLowerLevel) {
+							CompContractViolation contractViolation = new CompContractViolation(propertyName);
+							model.addTopLevelFault(contractViolation);
+						}
 						ValidProperty property = (ValidProperty) propertyResult.getProperty();
 						SoteriaFormula formula = new SoteriaFormula(propertyName);
 						Renaming renaming = linker.getRenaming(result);
@@ -107,6 +118,10 @@ public class IvcToSoteriaGenerator {
 			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
 				// recursively call walkthroughResults
 				walkthroughResults(curResult, curComp, linker);
+				// only the first result contains the top level properties
+				if (!isLowerLevel) {
+					isLowerLevel = true;
+				}
 			}
 			compLib.addComp(curComp);
 
