@@ -71,7 +71,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("basic_events = [");
 		multipleElem = false;
 		// write each basic event name
-		for (SoteriaFault fault : comp.basicEvents) {
+		for (SoteriaFault fault : comp.basicEvents.values()) {
 			if (multipleElem) {
 				write("; ");
 			}
@@ -83,7 +83,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("event_info = [");
 		multipleElem = false;
 		// write each basic event failure rate and exposure time
-		for (SoteriaFault fault : comp.basicEvents) {
+		for (SoteriaFault fault : comp.basicEvents.values()) {
 			if (multipleElem) {
 				write("; ");
 			}

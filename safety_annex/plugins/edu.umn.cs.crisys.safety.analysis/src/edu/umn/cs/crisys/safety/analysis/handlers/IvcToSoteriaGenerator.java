@@ -8,9 +8,13 @@ import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormulaSubgroup;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl;
+import edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl;
 import jkind.api.results.AnalysisResult;
 import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
@@ -51,18 +55,35 @@ public class IvcToSoteriaGenerator {
 							// and update the formula to handle conjunction of different ivc sets
 							SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
 							for (String ivcElem : property.getIvc()) {
-								System.out.println("ivcElem: " + ivcElem);
-								// add each ivc element to component inputs (sans duplicate)
 								String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
-								comp.addInput(refStr.replace("fault: ", ""));
 								// add each ivc element to formulaSubgroup
 								if (refStr.startsWith("fault: ")) {
 									// TODO: get the fault name for that fault activation variable in ivcElement
+									String faultName = refStr.replace("fault: ", "");
 									CompFaultActivation faultActivation = new CompFaultActivation(
-											refStr.replace("fault: ", ""));
+											faultName);
 									formulaSubgroup.addFormulaElem(faultActivation);
+									// if ivcElem is not yet in basicEvents
+									if (!comp.basicEvents.containsKey(ivcElem)) {
+										FaultStatementImpl faultStmtImpl = (FaultStatementImpl) ((AgreeRenaming) renaming)
+												.getRefMap().get(faultName);
+										for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
+											if (faultSub instanceof ProbabilityStatementImpl) {
+												String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
+												float failureProb = Float.parseFloat(probStr);
+												// TODO: need to have component specify failure rate and exposure time in the future
+												// currently treat exposure time as (float) 1.0
+												// and treat the failure probability from the fault statement as the failure rate
+												SoteriaFault basicEvent = new SoteriaFault(faultName, failureProb,
+														(float) 1.0);
+												comp.addBasicEvent(ivcElem, basicEvent);
+											}
+										}
+									}
+
 								} else {
-									// TODO: get the component guarantee name for the contract name in ivcElement
+									// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
+									comp.addInput(refStr);
 									CompContractViolation contractViolation = new CompContractViolation(refStr);
 									formulaSubgroup.addFormulaElem(contractViolation);
 								}
