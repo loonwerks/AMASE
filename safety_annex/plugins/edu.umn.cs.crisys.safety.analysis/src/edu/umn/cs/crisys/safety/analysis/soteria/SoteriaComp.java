@@ -17,8 +17,9 @@ public class SoteriaComp extends SoteriaAst {
 	// public List<String> outputFlows = new ArrayList<>();
 	public HashSet<String> outputFlows = new HashSet<String>();
 	// public List<SoteriaFault> basicEvents = new ArrayList<SoteriaFault>();
-	public HashSet<SoteriaFault> basicEvents = new HashSet<SoteriaFault>();
+	// public HashSet<SoteriaFault> basicEvents = new HashSet<SoteriaFault>();
 	// public List<SoteriaFormula> formulas = new ArrayList<SoteriaFormula>();
+	public HashMap<String, SoteriaFault> basicEvents = new HashMap<>();
 	public HashMap<String, SoteriaFormula> formulas = new HashMap<String, SoteriaFormula>();
 
 	public List<String> ports = new ArrayList<>();
@@ -36,8 +37,8 @@ public class SoteriaComp extends SoteriaAst {
 		outputFlows.add(output);
 	}
 
-	public void addBasicEvent(SoteriaFault basicEvent) {
-		basicEvents.add(basicEvent);
+	public void addBasicEvent(String uniqueFaultName, SoteriaFault basicEvent) {
+		basicEvents.put(uniqueFaultName, basicEvent);
 	}
 
 	// TODO: update to support mivc
