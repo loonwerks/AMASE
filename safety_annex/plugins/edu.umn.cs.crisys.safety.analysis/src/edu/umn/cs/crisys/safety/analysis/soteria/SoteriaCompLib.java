@@ -7,7 +7,6 @@ import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaAstVisitor;
 
 public class SoteriaCompLib extends SoteriaAst {
 	public List<SoteriaComp> comps = new ArrayList<SoteriaComp>();
-	public final String commentStr = "(* ----- COMPONENT LIBRARY ----- *)";
 	public final String compLibName = "comp_library";
 
 	public SoteriaCompLib() {
