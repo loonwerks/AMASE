@@ -8,9 +8,13 @@ import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormulaSubgroup;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl;
+import edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl;
 import jkind.api.results.AnalysisResult;
 import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
@@ -20,12 +24,18 @@ import jkind.results.ValidProperty;
 
 public class IvcToSoteriaGenerator {
 	SoteriaCompLib compLib = new SoteriaCompLib();
+	SoteriaModel model = new SoteriaModel();
+	boolean isLowerLevel = false;
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
 		walkthroughResults(curResult, null, linker);
-		SoteriaModel model = new SoteriaModel(compLib);
+		model.addCompLib(compLib);
+		// create component instances for the base model
+		model.createCompInst();
+		// create component connections for the base model
+		model.createConnections();
 		return model;
 	}
 
@@ -43,6 +53,12 @@ public class IvcToSoteriaGenerator {
 					if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
 						// add property as an output to the soteria map
 						comp.addOutput(propertyName);
+						// add property violation as a top level fault to the model
+						if (!isLowerLevel) {
+							CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
+									propertyName);
+							model.addTopLevelFault(contractViolation);
+						}
 						ValidProperty property = (ValidProperty) propertyResult.getProperty();
 						SoteriaFormula formula = new SoteriaFormula(propertyName);
 						Renaming renaming = linker.getRenaming(result);
@@ -51,19 +67,37 @@ public class IvcToSoteriaGenerator {
 							// and update the formula to handle conjunction of different ivc sets
 							SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
 							for (String ivcElem : property.getIvc()) {
-								System.out.println("ivcElem: " + ivcElem);
-								// add each ivc element to component inputs (sans duplicate)
 								String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
-								comp.addInput(refStr.replace("fault: ", ""));
 								// add each ivc element to formulaSubgroup
 								if (refStr.startsWith("fault: ")) {
 									// TODO: get the fault name for that fault activation variable in ivcElement
+									String faultName = refStr.replace("fault: ", "");
 									CompFaultActivation faultActivation = new CompFaultActivation(
-											refStr.replace("fault: ", ""));
+											comp.componentName, faultName);
 									formulaSubgroup.addFormulaElem(faultActivation);
+									// if ivcElem is not yet in basicEvents
+									if (!comp.basicEvents.containsKey(ivcElem)) {
+										FaultStatementImpl faultStmtImpl = (FaultStatementImpl) ((AgreeRenaming) renaming)
+												.getRefMap().get(faultName);
+										for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
+											if (faultSub instanceof ProbabilityStatementImpl) {
+												String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
+												float failureProb = Float.parseFloat(probStr);
+												// TODO: need to have component specify failure rate and exposure time in the future
+												// currently treat exposure time as (float) 1.0
+												// and treat the failure probability from the fault statement as the failure rate
+												SoteriaFault basicEvent = new SoteriaFault(faultName, failureProb,
+														(float) 1.0);
+												comp.addBasicEvent(ivcElem, basicEvent);
+											}
+										}
+									}
+
 								} else {
-									// TODO: get the component guarantee name for the contract name in ivcElement
-									CompContractViolation contractViolation = new CompContractViolation(refStr);
+									// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
+									comp.addInput(refStr);
+									CompContractViolation contractViolation = new CompContractViolation(
+											comp.componentName, refStr);
 									formulaSubgroup.addFormulaElem(contractViolation);
 								}
 							}
@@ -86,6 +120,10 @@ public class IvcToSoteriaGenerator {
 			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
 				// recursively call walkthroughResults
 				walkthroughResults(curResult, curComp, linker);
+				// only the first result contains the top level properties
+				if (!isLowerLevel) {
+					isLowerLevel = true;
+				}
 			}
 			compLib.addComp(curComp);
 
