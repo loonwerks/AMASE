@@ -1,5 +1,16 @@
 \section{Background}
 
+\subsection{Fault Tree Analysis} A Fault Tree (FT) is a directed acyclic graph whose leaves model component failures and whose gates model failure propagation. The system failure under examination is the root of the tree and is called the Top Level Event (TLE). The Basic Events (BE) are the events that can occur in the system which lead to the TLE and in the graphical model, these correspond to the leaves. Figure~\ref{fig:introFT} shows a simple example of a fault tree based on SAE ARP4761~\cite{SAE:ARP4761} Figure 2. In this example, the top level event corresponds to an aircraft losing all wheel braking. In order for this event to occur, all of the basic events must occur. This is seen through the use of the AND gate below the top level event. The leaves represent the basic events of the system and in the case of this fault tree, these three events are also the minimum cut set for this top level event. 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=8cm]{images/introFT2.pdf}
+\caption{A simple fault tree} \label{fig:introFT}
+\end{center}
+\end{figure}
+
+There are two main types of FTA that we differentiate here as \textit{qualitative} analysis and \textit{quantitative} analysis. In qualitative analysis, the structure of the fault tree is considered and \textit{cut sets} are a way to indicate which combinations of component failures will cause the system to fail. On the other hand, in quantitative analysis the probability of the TLE is calculated given the probability of occurance of the basic events. It is important to point out the assumption of independence between basic events during these probabilistic calculations. \\
+
 We provide here a brief description of AADL, AGREE, and the SOTERIA tools and languages as background for the reader.
 
 \subsection{Architecture Analysis and Design Language}
