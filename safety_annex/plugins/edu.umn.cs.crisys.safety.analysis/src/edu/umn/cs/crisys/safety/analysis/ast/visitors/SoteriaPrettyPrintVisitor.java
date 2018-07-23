@@ -5,6 +5,8 @@ import java.util.Map;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompConnection;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompInst;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
@@ -71,7 +73,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("basic_events = [");
 		multipleElem = false;
 		// write each basic event name
-		for (SoteriaFault fault : comp.basicEvents) {
+		for (SoteriaFault fault : comp.basicEvents.values()) {
 			if (multipleElem) {
 				write("; ");
 			}
@@ -83,7 +85,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("event_info = [");
 		multipleElem = false;
 		// write each basic event failure rate and exposure time
-		for (SoteriaFault fault : comp.basicEvents) {
+		for (SoteriaFault fault : comp.basicEvents.values()) {
 			if (multipleElem) {
 				write("; ");
 			}
@@ -165,6 +167,50 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		newline();
 		model.compLib.accept(this);
 		newline();
+		// create a model for each top level fault
+		String firstModelName = null;
+		for (CompContractViolation topLevelFault : model.topLevelFaults) {
+			String modelName = "model_" + topLevelFault.contractString.replace(" ", "_");
+			newline();
+			write("let " + modelName + " = ");
+			newline();
+			// write instances and connections declarations in the first model
+			if (firstModelName == null) {
+				firstModelName = modelName;
+				write("{instances = ");
+				newline();
+				write("[");
+				for (SoteriaCompInst compInst : model.compInstList) {
+					compInst.accept(this);
+				}
+				write("];");
+				newline();
+				write("connections = ");
+				newline();
+				write("[");
+				for (SoteriaCompConnection connection : model.connectionList) {
+					connection.accept(this);
+				}
+				write("];");
+				newline();
+			}
+			// create references to the instances and connections declarations in subsequent models
+			else {
+				write("{instances = " + firstModelName + ".instances;");
+				newline();
+				write("connections=" + firstModelName + ".connections;");
+				newline();
+			}
+			//write top level fault for the model
+			write("top_fault = (");
+			write("\"" + topLevelFault.compName + "\", ");
+			write("F[\"" + topLevelFault.contractString + "\"; ");
+			write("\"" + topLevelFault.contractViolationFaultStr + "\"]");
+			write(")");
+			write("} ;;");
+			newline();
+		}
+
 		return null;
 	}
 
@@ -187,6 +233,23 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 			}
 			write("]");
 		}
+		return null;
+	}
+
+	@Override
+	public Void visit(SoteriaCompInst compInst) {
+		write("makeInstance " + "\"" + compInst.instanceName + "\" ");
+		write("\"" + compInst.componentName + "\"" + "();");
+		newline();
+		return null;
+	}
+
+	@Override
+	public Void visit(SoteriaCompConnection connection) {
+		write("((\"" + connection.destCompName + "\", ");
+		write("\"" + connection.destCompContract + "\"),");
+		write("(\"" + connection.srcCompName + "\", ");
+		write("\"" + connection.srcCompContract + "\")); ");
 		return null;
 	}
 

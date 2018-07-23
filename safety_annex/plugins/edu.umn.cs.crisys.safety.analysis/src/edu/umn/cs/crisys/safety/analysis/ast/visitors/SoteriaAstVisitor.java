@@ -3,6 +3,8 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompConnection;
+import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompInst;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
@@ -26,4 +28,8 @@ public interface SoteriaAstVisitor<T> {
 	public T visit(SoteriaModel soteriaModel);
 
 	public T visit(SoteriaFormulaSubgroup soteriaFormulaSubgroup);
+
+	public T visit(SoteriaCompInst soteriaCompInst);
+
+	public T visit(SoteriaCompConnection soteriaCompConnection);
 }
