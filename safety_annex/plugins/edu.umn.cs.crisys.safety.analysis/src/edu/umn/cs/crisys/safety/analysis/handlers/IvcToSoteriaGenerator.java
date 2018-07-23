@@ -71,7 +71,7 @@ public class IvcToSoteriaGenerator {
 								// add each ivc element to formulaSubgroup
 								if (refStr.startsWith("fault: ")) {
 									// TODO: get the fault name for that fault activation variable in ivcElement
-									String faultName = refStr.replace("fault: ", "");
+									String faultName = refStr.replaceFirst("fault: ", "");
 									CompFaultActivation faultActivation = new CompFaultActivation(
 											comp.componentName, faultName);
 									formulaSubgroup.addFormulaElem(faultActivation);
