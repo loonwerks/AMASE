@@ -48,6 +48,7 @@ The graph formed by $\langle E, I \rangle$ is a directed acyclic graph with a un
 
 The interpretation of the TLE $t$ is written as $\pi_F(S,t) = \pi_F(S)$. If the failure of $S$ causes the TLE to occur, we write $\pi_F(S) = 1$. 
 
+\subsection{Qualitative analysis}
 Cut sets and minimal cut sets provide information about the vulnerabilities of a system in terms of its basic events. A \textit{cut set} is a set of components that together can cause a system to fail. A \textit{minimal cut set} is a cut set which contains the minimum number of basic events required in order to cause the TLE to occur. More formally, these are defined as follows. 
 
 \textit{Definition 5: Cut Set:} $C \subseteq BE$ is a cut set of FT F if $\pi_F(C) = 1$. \\
@@ -61,6 +62,24 @@ Given the formalisms defined previously, we show that finding the minimal IVCs i
 \textit{Proof}: Let $T = \{f_1, f_2, ..., f_n\}$ be the set of model elements corresponding to faults for the components and let $P_{tle}$ be the top level event (TLE). By the definition for IVC, we know that $S \subseteq T$ is an IVC for $(I, T) \vdash P_{tle}$ iff $(I, S) \vdash P_{tle}$. 
 In this case, we can quickly see that $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
 Since $S$ is minimal IVC, it follows that $\pi_F(M) = 0$ for any $M \subset S$ and hence the set of minimal IVCs is equivalent to the set of MCSs. 
+
+\subsection{Quantitative analysis}
+\danielle{I am going to really mess up notation for the moment and use the usual P for probability function. This messes up notation because I used it earlier to be a state predicate. I will change the predicate P later on since it makes the most sense to keep P as a probability function.}\\
+
+Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). The next section describes probability theory and provides a description of how we use these definitions in order to calculate the probability of the TLE. These definitions are based on the ones given in~\cite{RuijtersSurvey}.\\
+
+\danielle{I will add the probability formalisms here later. For now, I just want to clarify my findings regarding the proof that Mike was talking about yesterday.}\\
+Assume events occur independently. \\
+
+Or gate: \\
+Probability is defined as follows: \\
+$P(A \lor B) = P(A) + P(B) - P(A \land B)$. \\
+Assume that the probability of events A, B is quite small (this is called the Rare Event Approximation). Then the term $P(A \land B)$ will also be quite small and hence is an "error term". If we drop this term from the calculations, we end up with the approximated probability being: $P(A) + P(B) \geq P(A) + P(B) - P(A \land B)$. \\
+
+And gate: \\
+With the calculations of the and gate, this is where independence is really required. Using Bayes Rule, we have $P(A \land B) = P(B)P(A|B) = P(A)P(B|A)$ for conditionally dependent events and $P(A \land B) = P(B)P(A)$ for independent events. If we assume independence when the events are NOT independent, in the worst case scenario, we get something like $B$ is completely dependent on $A$. Therefore $P(B|A) = 1$ and $P(A \land B) = P(B) \geq P(B)P(A)$. Not a conservative estimation. In the case of dependence, joint probability values would be required (acommon cause analysis).  \\
+
+\danielle{Any other kind of gate uses combinations of these rules. These are not proofs that I made, I just looked at the logic of the operations. I am not sure how much we want to include in the paper. I assume a description is necessary, but a proof? No, this isn't a proof... This is just following definitions down a short little jaunt in the woods.}
 
 
 
