@@ -1,5 +1,9 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
 import org.osate.annexsupport.AnnexUtil;
+import org.osate.ui.dialogs.Dialog;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
@@ -87,6 +92,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 	};
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see edu.umn.cs.crisys.safety.analysis.handlers.AadlHandler#runJob(org.osate.aadl2.Element, org.eclipse.core.runtime.IProgressMonitor)
 	 *
 	 * Check for component implementation, two annexes in that implementation, save
@@ -212,7 +218,18 @@ public class SoteriaGenHandler extends VerifyHandler {
 				// generate soteria model from the result
 				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
 				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
-				System.out.println(soteriaModel.toString());
+				// print to temporary file
+				// TODO: create SOTERIA folder in the model file path to create files in that folder
+				try {
+					File file = File.createTempFile("soteria", ".ml");
+					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+					bw.write(soteriaModel.toString());
+					bw.close();
+					org.eclipse.swt.program.Program.launch(file.toString());
+				} catch (IOException e) {
+					Dialog.showError("Unable to open file", e.getMessage());
+					e.printStackTrace();
+				}
 
 				deactivateTerminateHandlers();
 				enableRerunHandler(root);
@@ -222,7 +239,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		analysisThread.start();
 		return Status.OK_STATUS;
 	}
-
 
 	@Override
 	public Object execute(ExecutionEvent event) {
@@ -476,8 +492,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		}
 	}
 
-
-
 	private void activateTerminateHandlers(final IProgressMonitor globalMonitor) {
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			terminateActivation = handlerService.activateHandler(TERMINATE_ID, new TerminateHandler(monitorRef));
@@ -496,8 +510,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private void enableRerunHandler(final Element root) {
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			IHandlerService handlerService = getHandlerService();
-			rerunActivation = handlerService.activateHandler(RERUN_ID,
-					new RerunHandler(root, SoteriaGenHandler.this));
+			rerunActivation = handlerService.activateHandler(RERUN_ID, new RerunHandler(root, SoteriaGenHandler.this));
 		});
 	}
 
