@@ -1,5 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
+import java.util.HashMap;
+
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
@@ -26,6 +28,7 @@ public class IvcToSoteriaGenerator {
 	SoteriaCompLib compLib = new SoteriaCompLib();
 	SoteriaModel model = new SoteriaModel();
 	boolean isLowerLevel = false;
+	public HashMap<UniqueID, UniqueID> idMap = new HashMap<>();
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
@@ -40,29 +43,29 @@ public class IvcToSoteriaGenerator {
 	}
 
 	private void walkthroughResults(AnalysisResult result, SoteriaComp comp, AgreeResultsLinker linker) {
-
 		// if one layer, the curResult is JKindResult for the current component verified
 		if (result instanceof JKindResult) {
-			// for each propertyResult
-			for (PropertyResult propertyResult : ((JKindResult) result).getPropertyResults()) {
-				String propertyName = propertyResult.getName();
-				System.out.println("property name: " + propertyName);
-				// if it's not an assumption, then it's a guarantee
-				if (!propertyName.contains("assume") && !propertyName.contains("Assumptions")) {
-					// if it's a valid guarantee
-					if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
-						// add property as an output to the soteria map
-						comp.addOutput(propertyName);
-						// add property violation as a top level fault to the model
-						if (!isLowerLevel) {
-							CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
-									propertyName);
-							model.addTopLevelFault(contractViolation);
-						}
-						ValidProperty property = (ValidProperty) propertyResult.getProperty();
-						SoteriaFormula formula = new SoteriaFormula(propertyName);
-						Renaming renaming = linker.getRenaming(result);
-						if (renaming instanceof AgreeRenaming) {
+			Renaming renaming = linker.getRenaming(result);
+			if (renaming instanceof AgreeRenaming) {
+				// for each propertyResult
+				for (PropertyResult propertyResult : ((JKindResult) result).getPropertyResults()) {
+					// get property name
+					String propertyName = updateName(propertyResult.getName());
+					// if it's not an assumption, then it's a guarantee
+					if (!propertyName.contains("assume") && !propertyName.contains("Assumptions")) {
+						// if it's a valid guarantee
+						if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
+							// add property as an output to the soteria map
+							comp.addOutput(propertyName);
+							// add property violation as a top level fault to the model
+							if (!isLowerLevel) {
+								CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
+										propertyName);
+								model.addTopLevelFault(contractViolation);
+							}
+							ValidProperty property = (ValidProperty) propertyResult.getProperty();
+							SoteriaFormula formula = new SoteriaFormula(propertyName);
+
 							// TODO: when mivc is in place, update to handle a list of ivc sets
 							// and update the formula to handle conjunction of different ivc sets
 							SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
@@ -72,8 +75,8 @@ public class IvcToSoteriaGenerator {
 								if (refStr.startsWith("fault: ")) {
 									// TODO: get the fault name for that fault activation variable in ivcElement
 									String faultName = refStr.replaceFirst("fault: ", "");
-									CompFaultActivation faultActivation = new CompFaultActivation(
-											comp.componentName, faultName);
+									CompFaultActivation faultActivation = new CompFaultActivation(comp.componentName,
+											updateName(faultName));
 									formulaSubgroup.addFormulaElem(faultActivation);
 									// if ivcElem is not yet in basicEvents
 									if (!comp.basicEvents.containsKey(ivcElem)) {
@@ -86,7 +89,8 @@ public class IvcToSoteriaGenerator {
 												// TODO: need to have component specify failure rate and exposure time in the future
 												// currently treat exposure time as (float) 1.0
 												// and treat the failure probability from the fault statement as the failure rate
-												SoteriaFault basicEvent = new SoteriaFault(faultName, failureProb,
+												SoteriaFault basicEvent = new SoteriaFault(updateName(faultName),
+														failureProb,
 														(float) 1.0);
 												comp.addBasicEvent(ivcElem, basicEvent);
 											}
@@ -95,9 +99,9 @@ public class IvcToSoteriaGenerator {
 
 								} else {
 									// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
-									comp.addInput(refStr);
+									comp.addInput(updateName(refStr));
 									CompContractViolation contractViolation = new CompContractViolation(
-											comp.componentName, refStr);
+											comp.componentName, updateName(refStr));
 									formulaSubgroup.addFormulaElem(contractViolation);
 								}
 							}
@@ -130,6 +134,47 @@ public class IvcToSoteriaGenerator {
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
 		}
+	}
+
+	public String updateName(String name) {
+		String updatedName = null;
+		String nameToCheck = null;
+		int varIndex = 0;
+		UniqueID originalNameId = new UniqueID(name);
+		// first check if the original name and recordId tuple is already in the keys of the map
+		// if yes, retrieve the updated name from its value
+		if (idMap.containsKey(originalNameId)) {
+			updatedName = idMap.get(originalNameId).id;
+		}
+		// if not, update the name
+		else {
+			// replace all non-alphanumeric characters with empty strings
+			// remove leading _
+			// replace sequence of underscore with one underscore
+			updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "").replaceAll("\\_+", "_");
+			// check if the name is longer than 31 characters
+			// if yes, truncate it to 31 characters
+			if (updatedName.length() > 31) {
+				updatedName = updatedName.substring(0, 31);
+			}
+			nameToCheck = updatedName;
+			// check if the updated name and recordId tuple is in the map values
+			// if yes, update the name further so it's unique from existing values
+			while (idMap.containsValue(new UniqueID(nameToCheck))) {
+				varIndex++;
+				// make sure the updated name is not longer than 63 characters
+				int indexLength = String.valueOf(varIndex).length();
+				if ((updatedName.length() + indexLength) > 63) {
+					updatedName = updatedName.substring(0, (63 - indexLength));
+				}
+				nameToCheck = updatedName + "_" + varIndex;
+			}
+			updatedName = nameToCheck;
+			// add a new entry into the map
+			idMap.put(originalNameId, new UniqueID(updatedName));
+		}
+
+		return updatedName;
 	}
 
 }
