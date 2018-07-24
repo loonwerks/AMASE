@@ -272,11 +272,11 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	private void preAnalysesVisualizations(String modelName, String compLibName) {
 		writeln("(* ----- PRE ANALYSES MODEL VISUALIZATIONS ----- *)");
 		write("dot_gen_show_ph_file ~rend:\"pdf\" " + modelName + " ");
-		writeln("\"" + modelName + "_ph.gv\";;");
+		writeln("\"" + modelName + "_physical.gv\";;");
 		write("dot_gen_show_funct_file ~rend:\"pdf\" " + compLibName + " " + modelName + " ");
-		writeln("\"" + modelName + "_fn.gv\";;");
+		writeln("\"" + modelName + "_functional.gv\";;");
 		write("dot_gen_show_fault_file ~rend:\"pdf\" " + compLibName + " " + modelName + " ");
-		writeln("\"" + modelName + "_fa.gv\";;");
+		writeln("\"" + modelName + "_fault_propagation.gv\";;");
 		newline();
 	}
 
@@ -288,9 +288,9 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		writeln("probErrorCut " + mdlFTName + ";;");
 		// fault tree visualization
 		write("dot_gen_show_direct_tree_file ");
-		writeln("\"" + modelName + "_dftree.gv\" " + mdlFTName + " ;;");
+		writeln("\"" + modelName + "_direct_ftree.gv\" " + mdlFTName + " ;;");
 		write("dot_gen_show_tree_file ");
-		writeln("\"" + modelName + "_ftree.gv\" " + mdlFTName + " ;;");
+		writeln("\"" + modelName + "_optimized_ftree.gv\" " + mdlFTName + " ;;");
 		newline();
 	}
 
