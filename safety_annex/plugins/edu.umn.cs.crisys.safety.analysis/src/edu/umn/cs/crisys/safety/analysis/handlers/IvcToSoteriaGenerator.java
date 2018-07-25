@@ -152,20 +152,20 @@ public class IvcToSoteriaGenerator {
 			// remove leading _
 			// replace sequence of underscore with one underscore
 			updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "").replaceAll("\\_+", "_");
-			// check if the name is longer than 31 characters
-			// if yes, truncate it to 31 characters
-			if (updatedName.length() > 31) {
-				updatedName = updatedName.substring(0, 31);
+			// check if the name is longer than 48 characters
+			// if yes, truncate it to 48 characters
+			if (updatedName.length() > 48) {
+				updatedName = updatedName.substring(0, 48);
 			}
 			nameToCheck = updatedName;
 			// check if the updated name and recordId tuple is in the map values
 			// if yes, update the name further so it's unique from existing values
 			while (idMap.containsValue(new UniqueID(nameToCheck))) {
 				varIndex++;
-				// make sure the updated name is not longer than 63 characters
+				// make sure the updated name is not longer than 48 characters
 				int indexLength = String.valueOf(varIndex).length();
-				if ((updatedName.length() + indexLength) > 63) {
-					updatedName = updatedName.substring(0, (63 - indexLength));
+				if ((updatedName.length() + indexLength) > 48) {
+					updatedName = updatedName.substring(0, (48 - indexLength));
 				}
 				nameToCheck = updatedName + "_" + varIndex;
 			}
