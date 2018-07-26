@@ -1,72 +1,71 @@
 \section{Methodology}
-
-The details of implementation and formalisms. 
-
-\subsection{Preliminaries}
-
-\subsubsection{Inductive Validity Cores}
 Given a complex model, it is often useful to extract traceability information related to the proof, in other words, which portions of the model were necessary to construct the proof. To this end, an algorithm was developed that efficiently computes the \textit{inductive validity cores} (IVC) within a model necessary for the proofs of safety properties for sequential systems \cite{DBLP:journals/corr/GhassabaniGW16}. 
 
+\subsection{Preliminaries}
 Given a state space $S$, a transition system $(I,T)$ consists of the initial state predicate $I : S \rightarrow \{0,1\}$ and a transition step predicate $T : S \times S \rightarrow \{0,1\}$. Reachability for $(I,T)$ is defined as the smallest predicate $R : S \rightarrow \{0,1\}$ which satisfies the following formulas:
 \begin{center}
 $\forall s. I(s) \Rightarrow R(s)$\\
 $\forall s, s' .  R \land T(s,s') \Rightarrow R(s')$\\
 \end{center}
-A safety property $P : S \to \{0,1\}$ is a state predicate. A safety property $P$ holds on a transition system $(I,T)$ if it holds on all reachable states. More formally, $\forall s . R(s) \Rightarrow P(s)$. When this is the case, we write $(I,T) \vdash P$. Following Ghassabani, et. al. \cite{DBLP:journals/corr/GhassabaniGW16}, we formalize IVCs as follows.
+A safety property $\mathcal{P} : S \to \{0,1\}$ is a state predicate. A safety property $\mathcal{P}$ holds on a transition system $(I,T)$ if it holds on all reachable states. More formally, $\forall s . R(s) \Rightarrow \mathcal{P}(s)$. When this is the case, we write $(I,T) \vdash\mathcal{P}$. Following Ghassabani, et. al. \cite{DBLP:journals/corr/GhassabaniGW16}, we formalize IVCs as follows.\\
 
-\danielle{Find the correct way to add definitions, lemmas, etc. to this format.}\\
-\textit{Definition 1: Inductive Validity Core:} Let $(I,T)$ be a transition system and let $P$ be a safety property with $(I,T) \vdash P$. Then $S \subseteq T$ is an \textit{inductive validity core} for $(I,T) \vdash P$ iff $(I,S) \vdash P$.  \\
+\begin{definition}Inductive Validity Core\\
+ Let $(I,T)$ be a transition system and let $\mathcal{P}$ be a safety property with $(I,T) \vdash \mathcal{P}$. Then $S \subseteq T$ is an \textit{inductive validity core} for $(I,T) \vdash \mathcal{P}$ iff $(I,S) \vdash\mathcal{P}$.  \\
+\end{definition}
 
-\textit{Definition 1: Minimal Inductive Validity Core:} An inductive validity core $S$ for $(I,T) \vdash P$ is minimal iff $! \exists S' . S' \subset S \ni (I,S') \vdash P$. \\
+\begin{definition}Minimal Inductive Validity Core\\
+An inductive validity core $S$ for $(I,T) \vdash \mathcal{P}$ is minimal iff $! \exists S' . S' \subset S \ni (I,S') \vdash \mathcal{P}$. \\
+\end{definition}
 
-\subsubsection{Fault Trees}
-A fault tree is a directed acyclic graph (DAG) consisting of the node types \textit{events} and \textit{gates}. An event is an occurance within the system, typically the failure of a subsystem down to an individual component. Events can be grouped into \textit{basic events} (BEs), which occur independently, and \textit{intermediate events} which occur dependently and are caused by one or more other events. The event at the top of the tree, the \textit{top level event} (TLE), is the event being analyzed. This event models the failure of the system (or subsystem) under consideration. The gates represent how failures propagate through the system and how failures in subsystems can cause system wide failures. The following gates are often used in fault trees but this list is not comprehensive. \\
-\textbf{AND} Output occurs if all of the input events occur.\\
-\textbf{OR} Output occurs if any of the input events occur.\\
+A fault tree is a directed acyclic graph (DAG) consisting of the node types \textit{events} and \textit{gates}. An event is an occurance within the system, typically the failure of a subsystem down to an individual component. Events can be grouped into \textit{basic events} (BEs), which occur independently, and \textit{intermediate events} which occur dependently and are caused by one or more other events. The event at the top of the tree, the \textit{top level event} (TLE), is the event being analyzed. This event models the failure of the system (or subsystem) under consideration. The gates represent how failures propagate through the system and how failures in subsystems can cause system wide failures. The two main logic symbols used are the Boolean logic AND-gates and OR-gates.
+An AND-gate is used when the undesired top level event can only occur when all the lower conditions are true. The OR-gate is used when the undesired event can occur if any one or more of the next lower conditions is true. This is not a comprehensive list of gate types, but we focus our attention on these two common gate types.\\
 
-\danielle{There are obviously other forms of gates in fault trees (XOR, VOTING, INHIBIT, etc). I can define all of the gates that the Soteria model will be generating. That seems to make the most sense. Unless it really doesnät matter all that much. We can discuss.}\\
+To formalize a fault tree (FT), we use $GateTypes = \{And, Or\}$. Following Ruijters, et. al. \cite{RuijtersSurvey}, we formalize FT as follows. \\
 
-To formalize a fault tree (FT), we use $GateTypes = \{And, Or\}$. Following Ruijters, et. al. \cite{RuijtersSurvey}, we formalize FT as follows. 
-
-\textit{Definition 3: Fault Tree:} A FT is a 4-tuple $F = \langle BE, G, T, I \rangle$ consisting of the following components. 
+\begin{definition}Fault Tree\\ 
+A FT is a 4-tuple $F = \langle BE, G, T, I \rangle$ consisting of the following components. 
 \begin{itemize}
 \item BE is the set of basic events
 \item G is the set of gates with $BE \cap G = \emptyset$. We write $E = BE \cup G$ for the set of elements.
 \item $T: G \to GateTypes$ is a function that describes the type of each gate.
 \item $I: G \to P(E)$ describes the inputs of each gate. We require that $I(G) \neq \emptyset$.
 \end{itemize}
+\end{definition}
 
-The graph formed by $\langle E, I \rangle$ is a directed acyclic graph with a unique root $TLE$ which is reachable from all nodes. 
+The graph formed by $\langle E, I \rangle$ is a directed acyclic graph with a unique root $TLE$ which is reachable from all nodes. \\
 
-\textit{Definition 4: Semantics of a Fault Tree:} The semantics of FT F is a function $\pi_F : P(BE) \times E \vdash \{0,1\}$ where $\pi_F(S, e)$ indicates whether $e$ fails given the set $S$ of failed BEs. It is defined as follows. 
-
+\begin{definition}Semantics of a Fault Tree\\  
+The semantics of FT F is a function $\pi_F : \mathcal{P}(BE) \times E \vdash \{0,1\}$ where $\pi_F(S, e)$ indicates whether $e$ fails given the set $S$ of failed BEs. It is defined as follows. 
 \begin{itemize}
 \item For $e \in BE$, $\pi_F(S,e) = e \in S$.
 \item For $g \in G$ and $T(g) = And$, let\\ $\pi_F(S,g) = \land_{x \in I(g)} \pi_F(S, x)$
-\item For $g \in G$ and $T(g) = Or$, let\\ $\pi_F(S,g) = \lor_{x \in I(g)} \pi_F(S, x)$ 
+\item For $g \in G$ and $T(g) = Or$, let\\ $\pi_F(S,g) = \lor_{x \in I(g)} \pi_F(S, x)$ \\
 \end{itemize}
+\end{definition}
 
 The interpretation of the TLE $t$ is written as $\pi_F(S,t) = \pi_F(S)$. If the failure of $S$ causes the TLE to occur, we write $\pi_F(S) = 1$. 
 
-\subsection{Qualitative analysis}
-Cut sets and minimal cut sets provide information about the vulnerabilities of a system in terms of its basic events. A \textit{cut set} is a set of components that together can cause a system to fail. A \textit{minimal cut set} is a cut set which contains the minimum number of basic events required in order to cause the TLE to occur. More formally, these are defined as follows. 
+ In qualitative analysis, cut sets and minimal cut sets provide information about the vulnerabilities of a system in terms of its basic events. A \textit{cut set} is a set of components that together can cause a system to fail. A \textit{minimal cut set} is a cut set which contains the minimum number of basic events required in order to cause the TLE to occur. More formally, these are defined as follows. \\
 
-\textit{Definition 5: Cut Set:} $C \subseteq BE$ is a cut set of FT F if $\pi_F(C) = 1$. \\
+\begin{definition}Cut Set\\   
+ $C \subseteq BE$ is a cut set of FT F if $\pi_F(C) = 1$. \\
+\end{definition}
 
-\textit{Definition 6: Minimal Cut Set:} $C \subseteq BE$ is a MCS if $\pi_F(C) = 1 \land \forall C' \subset C. \pi_F(C') = 0$. In other words, a minimal cut set (MCS) is a cut set of which no subset is a cut set. 
+\begin{definition}Minimal Cut Set\\    
+$C \subseteq BE$ is a MCS if $\pi_F(C) = 1 \land \forall C' \subset C. \pi_F(C') = 0$. In other words, a minimal cut set (MCS) is a cut set of which no subset is a cut set. \\
+\end{definition}
 
-\danielle{Can I say finding ALL min IVCs is the same as finding ALL MCSs? I have to make sure.}\\
 Given the formalisms defined previously, we show that finding the minimal IVCs is equivalent to finding the MCS. \\
 
-\textit{Theorem 1: Finding all minimal IVCs is equivalent to finding the set of all MCSs}:\\
-\textit{Proof}: Let $T = \{f_1, f_2, ..., f_n\}$ be the set of model elements corresponding to faults for the components and let $P_{tle}$ be the top level event (TLE). By the definition for IVC, we know that $S \subseteq T$ is an IVC for $(I, T) \vdash P_{tle}$ iff $(I, S) \vdash P_{tle}$. 
+\begin{theorem} Finding all minimal IVCs is equivalent to finding the set of all MCSs\\
+\begin{proof} Let $T = \{f_1, f_2, ..., f_n\}$ be the set of model elements corresponding to faults for the components and let $\mathcal{P}_{tle}$ be the top level event (TLE). By the definition for IVC, we know that $S \subseteq T$ is an IVC for $(I, T) \vdash \mathcal{P}_{tle}$ iff $(I, S) \vdash \mathcal{P}_{tle}$. 
 In this case, we can quickly see that $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
 Since $S$ is minimal IVC, it follows that $\pi_F(M) = 0$ for any $M \subset S$ and hence the set of minimal IVCs is equivalent to the set of MCSs. 
+\end{proof}
+\end{theorem}
 
 \subsection{Quantitative analysis}
-\danielle{I am going to really mess up notation for the moment and use the usual P for probability function. This messes up notation because I used it earlier to be a state predicate. I will change the predicate P later on since it makes the most sense to keep P as a probability function.}\\
-
-Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). The next section describes probability theory and provides a description of how we use these definitions in order to calculate the probability of the TLE. These definitions are based on the ones given in~\cite{RuijtersSurvey}.\\
+Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). This value is of interest because in certain critical systems, the top level properties must be proved safe within a certain probabilistic threshold~\cite{SAE:ARP4761}. The next section describes probability theory and provides a description of how they are used to calculate the probability of the TLE. These definitions are based on the ones given in~\cite{RuijtersSurvey}.\\
 
 \danielle{I will add the probability formalisms here later. For now, I just want to clarify my findings regarding the proof that Mike was talking about yesterday.}\\
 Assume events occur independently. \\
@@ -74,7 +73,7 @@ Assume events occur independently. \\
 Or gate: \\
 Probability is defined as follows: \\
 $P(A \lor B) = P(A) + P(B) - P(A \land B)$. \\
-Assume that the probability of events A, B is quite small (this is called the Rare Event Approximation). Then the term $P(A \land B)$ will also be quite small and hence is an "error term". If we drop this term from the calculations, we end up with the approximated probability being: $P(A) + P(B) \geq P(A) + P(B) - P(A \land B)$. \\ This is clearly a conservative estimate. \danielle{It is also shown in the Fault Tree Handbook that this error is less than 0.1 I believe. I will have to review that again, but there is a bound on this error that has been previously proven.}
+Assume that the probability of events A, B is quite small (this is called the Rare Event Approximation). Then the term $P(A \land B)$ will also be quite small and hence is an ``error term". If we drop this term from the calculations, we end up with the approximated probability being: $P(A) + P(B) \geq P(A) + P(B) - P(A \land B)$. \\ This is clearly a conservative estimate. \danielle{It is also shown in the Fault Tree Handbook that this error is less than 0.1 I believe. I will have to review that again, but there is a bound on this error that has been previously proven.}
 
 And gate: \\
 With the calculations of the and gate, this is where independence is really required. Using Bayes Rule, we have $P(A \land B) = P(B)P(A|B) = P(A)P(B|A)$ for conditionally dependent events and $P(A \land B) = P(B)P(A)$ for independent events. If we assume independence when the events are NOT independent, in the worst case scenario, we get something like $B$ is completely dependent on $A$. Therefore $P(B|A) = 1$ and $P(A \land B) = P(B) \geq P(B)P(A)$. Not a conservative estimation. In the case of dependence, joint probability values would be required (acommon cause analysis).  \\
