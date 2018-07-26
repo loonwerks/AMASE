@@ -281,11 +281,14 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	}
 
 	private void modelAnalysesAndVisualization(String modelName, String compLibName) {
+		writeln("(* ----- CUTSET WITH PROBABILITIES ----- *)");
 		String mdlFTName = modelName + "_ftree";
 		// model analyses
 		writeln("let " + mdlFTName + " = model_to_ftree " + compLibName + " " + modelName + ";;");
 		writeln("probErrorCutImp " + mdlFTName + ";;");
 		writeln("probErrorCut " + mdlFTName + ";;");
+		newline();
+		writeln("(* ----- FAULT TREE VISUALIZATIONS ----- *)");
 		// fault tree visualization
 		write("dot_gen_show_direct_tree_file ");
 		writeln("\"" + modelName + "_direct_ftree.gv\" " + mdlFTName + " ;;");
