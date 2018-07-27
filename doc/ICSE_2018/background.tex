@@ -1,27 +1,13 @@
 \section{Background}
-
 This section provides a high level description of the pieces of the puzzle necessary in order to understand our approach. We describe the relevant algorithms and tools in order to make the later formalisms fit into the full picture. 
-
-\subsection{Fault Tree Analysis} A Fault Tree (FT) is a directed acyclic graph whose leaves model component failures and whose gates model failure propagation. The system failure under examination is the root of the tree and is called the Top Level Event (TLE). The Basic Events (BE) are the events that can occur in the system which lead to the TLE and in the graphical model, these correspond to the leaves. Figure~\ref{fig:introFT} shows a simple example of a fault tree based on SAE ARP4761~\cite{SAE:ARP4761}. In this example, the top level event corresponds to an aircraft losing all wheel braking. In order for this event to occur, all of the basic events must occur. This is seen through the use of the AND gate below the top level event. The gates in the fault tree describe how failures propagate through the system. Each gate has one output and one or more inputs. In Figure~\ref{fig:introFT}, the AND gate has three inputs and one output. The leaves of the tree represent the basic events of the system and in the case of this fault tree, these three events are also the \textit{minimum cut set} for this top level event. The minimal cut set is the minimum set of basic events that must occur together in order to cause the TLE to occur. Finding these sets is important to FTA and has been an active area of interest in the research community since fault trees were first described in Bell Labs in 1961~\cite{historyFTA}. 
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=8cm]{images/introFT2.pdf}
-\caption{A simple fault tree} \label{fig:introFT}
-\end{center}
-\end{figure}
-
-There are two main types of FTA that we differentiate here as \textit{qualitative} analysis and \textit{quantitative} analysis. In qualitative analysis, the structure of the fault tree is considered and the cut sets are a way to indicate which combinations of component failures will cause the system to fail. On the other hand, in quantitative analysis the probability of the TLE is calculated given the probability of occurance of the basic events. 
-
-The formal definition of a fault tree is provided in section III and more details regarding quantitative and qualitative FTA is explained there as well. 
 
 \subsection{Inductive Validity Cores}
 
 Given a complex model, it is often useful to extract traceability information related to the proof, in other words, which portions of the model were necessary to construct the proof. An algorithm was introduced by Ghassabani, et. al. to provide Inductive Validity Cores (IVCs) as a way to determine which model elements are necessary for the inductive proofs of the safety properties for sequential systems~\cite{GhassabaniGW16}. Given a safety property of the system, a model checker can be invoked in order to construct a proof of the property. The IVC generation algorithm can extract traceability information from that proof process and return the model elements required in order to prove the property. A short time later, this algorithm was refined in order to produce the minimal set of such IVC elements~\cite{Ghassabani2017EfficientGO}. 
 
-This algorithm is of interest to us in generating compositional fault trees for the following reason. By letting the safety property of interest be our top level event, we can utilize the algorithm to find the set of minimal IVCs which will tell us the minimal model elements necessary to prove this top level event. In other words, we will know the minimal set of events required in order to cause the occurance of the top level event. 
+This algorithm is of interest to us for the following reason. By letting the negation of the safety property of interest be our top level event, we can utilize the algorithm to find the set of minimal IVCs which will tell us the minimal model elements (including faults) necessary to prove that this top level event occurs. In other words, we will know the minimal set of events required in order to cause the occurance of the top level event. These model elements consist of the active faults present in the system and the contracts of components that were effected by the presence of the fault. This gives a trace of how the fault propagates through system components and how the software behaves in the presence of the faults. 
 
-In section III, we show the formal definitions of IVCs and show their relation to minimal cut sets in formal detail. \\
+In section III, we show the formal definitions of IVCs in detail. \\
 
 Our approach utilizes a few tools in order to generate the artifacts of interest and a brief background will be helpful. and hence the rest of the background section consists of a brief description of AADL, AGREE, and the SOTERIA tools and languages. 
 
@@ -29,6 +15,8 @@ Our approach utilizes a few tools in order to generate the artifacts of interest
 We are using the Architectural Analysis and Design Language (AADL)~\cite{FeilerModelBasedEngineering2012} to construct system architecture models.  AADL is an SAE International standard that defines a language and provides a unifying framework for describing the system architecture for ``performance-critical, embedded, real-time systems''~\cite{AADL_Standard}. From its conception, AADL has been designed for the design and construction of avionics systems.  Rather than being merely descriptive, AADL models can be made specific enough to support system-level code generation.  Thus, results from analyses conducted, including the new safety analysis proposed here, correspond to the system that will be built from the model.  
 
 An AADL model describes a system in terms of a hierarchy of components and their interconnections, where each component can either represent a logical entity (e.g., application software functions, data) or a physical entity (e.g., buses, processors). An AADL model can be extended with language annexes to provide a richer set of modeling elements for various system design and analysis needs (e.g., performance-related characteristics, configuration settings, dynamic behaviors). The language definition is sufficiently rigorous to support formal analysis tools that allow for early phase error/fault detection.
+
+\subsection{Compositional Analysis} Compositional analysis of systems was introduced in order to address the scalability of model checking large software systems. Monolithic verification and compositional verification are two ways that mathematical verification of component properties can be performed. In monolithic analysis, the model is flattened and the top level properties are proved using only the leaf level contracts of the components. On the other hand, the analysis can be performed compositionally following the architecture hierarchy such that analysis at a higher level is based on the components at the next lower level.  When compared to monolithic analysis (i.e., analysis of the flattened model composed of all components), the compositional approach allows the analysis to scale to much larger systems~\cite{NFM2012:CoGaMiWhLaLu}. 
 
 \subsection{Assume Guarantee Reasoning Environment}
 The Assume Guarantee Reasoning Environment (AGREE) is a tool for formal analysis of behaviors in AADL models~\cite{NFM2012:CoGaMiWhLaLu}.  It is implemented as an AADL annex and annotates AADL components with formal behavioral contracts. Each component's contracts can include assumptions and guarantees about the component's inputs and outputs respectively, as well as predicates describing how the state of the component evolves over time.
@@ -49,4 +37,17 @@ The Safe and Optimal Techniques Enabling Recovery, Integrity, and Assurance (SOT
 \end{center}
 \end{figure}
 
-The general outline of our process is as follows and is shown in Figure~\ref{fig:processFTA} (Note: the fault tree shown in Figure~\ref{fig:processFTA} is generic and the text is irrelevant). The AADL system model is annotated with behavioral contracts using AGREE and then extended with faults using the Safety Annex. These three things together make the extended system model as shown in the figure. The extended system model is given to the JKind model checker~\cite{2017arXiv171201222G} which outputs the minimal sets of IVC elements. These IVC elements and the extended system model is given to the SOTERIA tool whose output is the graphical fault tree representation of the input. 
+\subsection{Fault Tree Analysis} A Fault Tree (FT) is a directed acyclic graph whose leaves model component failures and whose gates model failure propagation. The system failure under examination is the root of the tree and is called the Top Level Event (TLE). The Basic Events (BE) are the events that can occur in the system which lead to the TLE and in the graphical model, these correspond to the leaves. Figure~\ref{fig:introFT} shows a simple example of a fault tree based on SAE ARP4761~\cite{SAE:ARP4761}. In this example, the top level event corresponds to an aircraft losing all wheel braking. In order for this event to occur, all of the basic events must occur. This is seen through the use of the AND gate below the top level event. The gates in the fault tree describe how failures propagate through the system. Each gate has one output and one or more inputs. In Figure~\ref{fig:introFT}, the AND gate has three inputs and one output. The leaves of the tree represent the basic events of the system and in the case of this fault tree, these three events are also the \textit{minimum cut set} for this top level event. The minimal cut set is the minimum set of basic events that must occur together in order to cause the TLE to occur. Finding these sets is important to FTA and has been an active area of interest in the research community since fault trees were first described in Bell Labs in 1961~\cite{historyFTA}. 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=8cm]{images/introFT2.pdf}
+\caption{A simple fault tree} \label{fig:introFT}
+\end{center}
+\end{figure}
+
+There are two main types of FTA that we differentiate here as \textit{qualitative} analysis and \textit{quantitative} analysis. In qualitative analysis, the structure of the fault tree is considered and the cut sets are a way to indicate which combinations of component failures will cause the system to fail. On the other hand, in quantitative analysis the probability of the TLE is calculated given the probability of occurance of the basic events. 
+
+The formal definition of a fault tree is provided in section III and more details regarding quantitative and qualitative FTA is explained there as well. 
+
+The general outline of our process is as follows and is shown in Figure~\ref{fig:processFTA} (Note: the fault tree shown in Figure~\ref{fig:processFTA} is generic and the text is irrelevant). The AADL system model is annotated with behavioral contracts using AGREE and then extended with faults using the Safety Annex. These three things together make the extended system model as shown in the figure. The extended system model is given to the JKind model checker~\cite{2017arXiv171201222G} which outputs the minimal sets of IVC elements for each layer of the architecture. These IVC elements and pertinant details of the extended system model is given to the SOTERIA tool whose output is the graphical fault tree representation of the input. 
