@@ -39,21 +39,21 @@ public class SafetyUtil {
 		NamedElement defNameSub;
 
 		defName = faultStatement.getFaultDefName();
-		
+
 		while(defName.getSub() != null){
 			defName = defName.getSub();
 		}
-				
+
 		defNameSub = defName.getBase();
-		
+
 		if (!(defNameSub instanceof NodeDefExpr)) {
 			throw new IllegalArgumentException("Fault definition name must be an instance of NodeDefExpr."
 					+" It is: "+defNameSub.getFullName()+".");
 		}
-		
+
 		return (NodeDefExpr)defNameSub;
 	}
-	
+
 	/*
 	 * getSafetyAnnex
 	 *
@@ -77,7 +77,7 @@ public class SafetyUtil {
 		if (!isTop && comp instanceof ComponentImplementation) {
 			comp = ((ComponentImplementation)comp).getType();
 		} else if (isTop && node.compInst instanceof SystemInstanceImpl) {
-			comp = ((SystemInstanceImpl)node.compInst).getComponentImplementation(); 
+			comp = ((SystemInstanceImpl)node.compInst).getComponentImplementation();
 		}
 
 
@@ -102,7 +102,7 @@ public class SafetyUtil {
 		}
 		return subclauses;
 	}
-	
+
 	public static List<SpecStatement> collapseAnnexes(List<SafetyContractSubclause> annexes) {
 		List<SpecStatement> allSpecs = new ArrayList<>();
 
@@ -125,7 +125,7 @@ public class SafetyUtil {
 		}
 		return null;
 	}
-	
+
 	public static Node findNode(String fnName, List<Node> nodes) {
 		for (Node node : nodes) {
 			if (node.id.equals(fnName)) {
@@ -133,30 +133,36 @@ public class SafetyUtil {
 			}
 		}
 		return null;
-		
+
 	}
-	
+
 	public static Expr createNestedUpdateExpr(Expr path, Expr repl) {
 		if(path instanceof IdExpr) {
 			return repl;
 		}
-		else if(path instanceof RecordAccessExpr) {
+		// Should this be instanceof RecordAccessExpr or RecordUpdateExpr?
+		// Must have cases for each.
+		else if (path instanceof RecordAccessExpr) {
 			RecordAccessExpr rae = (RecordAccessExpr) path;
 			// Base Case
-			if(rae.record instanceof IdExpr) {
+			if ((rae.record instanceof IdExpr) || (rae.record instanceof RecordUpdateExpr)) {
 				return new RecordUpdateExpr(rae.record, rae.field, repl);
-			} 
+			}
+			// Test
+			// else if (rae.record instanceof RecordUpdateExpr) {
+			// return rae.record;
+			// }
 			// Recursive Case
 			else {
 				return createNestedUpdateExpr(rae.record, new RecordUpdateExpr(rae.record, rae.field, repl));
 			}
-			
+
 		}else if(path instanceof ArrayAccessExpr){
 			ArrayAccessExpr aae = (ArrayAccessExpr) path;
 			// Base Case
 			if(aae.array instanceof IdExpr) {
 				return new ArrayUpdateExpr(aae.array, aae.index, repl);
-			} 
+			}
 			// Recursive Case
 			else {
 				return createNestedUpdateExpr(aae.array, new ArrayUpdateExpr(aae.array, aae.index, repl));
