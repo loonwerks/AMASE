@@ -196,6 +196,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Create new nominal variables for each pair (root.path).
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			AgreeVar out = findVar(node.outputs, (faultyId));
+			if (out == null) {
+				throw new SafetyException("A fault defined for " + node.id + "has a connection"
+						+ " that is not a valid output for this component.");
+			}
 			nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
 		}
 	}
@@ -253,18 +257,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
 				nb.addLocal(actual);
 				lhs.add(new IdExpr(lhsId));
+				System.out.println("added " + lhsId + " to input list.\n");
 
 				// MWW: added 1/20/2018
 				f.outputParamToActualMap.put(v.id, actual);
 			}
+
 			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
 					f.faultStatement);
 			nb.addLocalEquation(eq);
+
 		}
+
 		// Binding happens HERE and is based on the map faultyVarsExpr.
 		// Create an equality between the id and a nested WITH expression for each expr
 		// in the list.
 		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
+
 			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
 
 			// Create nominal id name with key from this map
@@ -287,6 +296,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
 					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
 		}
+
 	}
 
 	/*
