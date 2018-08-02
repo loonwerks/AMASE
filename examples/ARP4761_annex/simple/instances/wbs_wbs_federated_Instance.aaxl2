@@ -17,7 +17,7 @@
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../wbs.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedSystemSubcomponent.0"/>
     <index>0</index>
-    <classifier xsi:type="aadl2:SystemImplementation" href="../pedals.aadl#pedals.pedals.generic"/>
+    <classifier xsi:type="aadl2:SystemType" href="../pedals.aadl#pedals.pedals"/>
   </componentInstance>
   <componentInstance name="power" category="system">
     <featureInstance name="line1" category="busAccess" direction="in out">
@@ -52,7 +52,7 @@
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../wbs.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedSystemSubcomponent.2"/>
     <index>0</index>
-    <classifier xsi:type="aadl2:SystemImplementation" href="../pump.aadl#pump.pump.i"/>
+    <classifier xsi:type="aadl2:SystemType" href="../pump.aadl#pump.pump"/>
   </componentInstance>
   <componentInstance name="green_pump" category="system">
     <featureInstance name="pressure_output" direction="out">
@@ -60,7 +60,7 @@
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../wbs.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedSystemSubcomponent.3"/>
     <index>0</index>
-    <classifier xsi:type="aadl2:SystemImplementation" href="../pump.aadl#pump.pump.i"/>
+    <classifier xsi:type="aadl2:SystemType" href="../pump.aadl#pump.pump"/>
   </componentInstance>
   <componentInstance name="accumulator" category="system">
     <featureInstance name="pressure_output" direction="out">
@@ -68,7 +68,7 @@
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../wbs.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedSystemSubcomponent.4"/>
     <index>0</index>
-    <classifier xsi:type="aadl2:SystemImplementation" href="../pump.aadl#pump.pump.i"/>
+    <classifier xsi:type="aadl2:SystemType" href="../pump.aadl#pump.pump"/>
   </componentInstance>
   <componentInstance name="bscu" category="system">
     <featureInstance name="pwr1" category="busAccess" direction="in out">
@@ -486,7 +486,7 @@
     </featureInstance>
     <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../wbs.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedSystemSubcomponent.10"/>
     <index>0</index>
-    <classifier xsi:type="aadl2:SystemImplementation" href="../wheel.aadl#wheel.wheel_two_inputs.i"/>
+    <classifier xsi:type="aadl2:SystemType" href="../wheel.aadl#wheel.wheel_two_inputs"/>
   </componentInstance>
   <componentInstance name="accumulator_valve" category="system">
     <featureInstance name="blue_input">
