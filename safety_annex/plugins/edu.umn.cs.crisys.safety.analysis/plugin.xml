@@ -64,14 +64,14 @@
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
                   mnemonic="S"
                   id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
-                  style="radio">
+                  style="toggle">
             </command>
             <!-- New command for menu item -->
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
                   mnemonic="f"
                   id="edu.umn.cs.crisys.safety.analysis.menus.soteriaCommand"
-                  style="radio">
+                  style="toggle">
             </command>
          </menu>
       </menuContribution>
