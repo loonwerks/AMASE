@@ -6,6 +6,7 @@ import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
@@ -109,6 +110,9 @@ public class IvcToSoteriaGenerator {
 								formula.addFormulaSubgroup(formulaSubgroup);
 								comp.addFormula(propertyName, formula);
 							}
+						} else {
+							throw new SafetyException("One of the properties is invalid. The nominal model"
+									+ " must have valid properties.");
 						}
 					}
 				}
