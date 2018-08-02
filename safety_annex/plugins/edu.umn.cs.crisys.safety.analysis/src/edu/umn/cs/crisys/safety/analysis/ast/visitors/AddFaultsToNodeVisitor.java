@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
@@ -180,7 +181,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// If we want to generate the fault tree, this method changes in order
 			// to not add assertions regarding behavior (i.e. no assertion about
 			// max # faults).
-			if (AddFaultsToAgree.getTransformFlag() == 1) {
+			if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
 				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 			}
 		}
@@ -497,9 +498,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	public AnalysisBehavior gatherTopLevelFaultCount(AgreeNode node) {
+
+		// Make sure this is the top node. We do not need to check
+		// top level fault analysis information if we are not at the top node.
+		// Because of the way Agree performs its analysis, at any given comopositional
+		// run, the 'top node' is the containing component for that analysis run. this is not
+		// the true top node, so we check to see if we have a system instance implementation.
+		// This is the actual top node.
+		if (!(node.compInst instanceof SystemInstanceImpl)) {
+			return null;
+		}
+
 		AnalysisBehavior ab = null;
 		boolean found = false;
-
 		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, true));
 
 		for (SpecStatement s : specs) {
