@@ -168,7 +168,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		if (isTop) {
 			topNode = node;
-			AnalysisBehavior maxFaults = this.gatherTopLevelFaultCount(node);
+			AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
 			// gather path information for the faults (for creating names later)
 			collectFaultPath(node, new ArrayList<>());
 			this.gatherFaultPropagation(node);
@@ -497,7 +497,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return hwFaults;
 	}
 
-	public AnalysisBehavior gatherTopLevelFaultCount(AgreeNode node) {
+	public AnalysisBehavior gatherTopLevelFaultAnalysis(AgreeNode node) {
 
 		// Make sure this is the top node. We do not need to check
 		// top level fault analysis information if we are not at the top node.
