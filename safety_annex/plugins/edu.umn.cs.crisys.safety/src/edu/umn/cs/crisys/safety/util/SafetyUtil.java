@@ -139,19 +139,12 @@ public class SafetyUtil {
 	public static Expr createNestedUpdateExpr(Expr path, Expr repl) {
 		if(path instanceof IdExpr) {
 			return repl;
-		}
-		// Should this be instanceof RecordAccessExpr or RecordUpdateExpr?
-		// Must have cases for each.
-		else if (path instanceof RecordAccessExpr) {
+		} else if (path instanceof RecordAccessExpr) {
 			RecordAccessExpr rae = (RecordAccessExpr) path;
-			// Base Case
+			// Base Case: Must have both IdExpr or RecordUpdateExpr here.
 			if ((rae.record instanceof IdExpr) || (rae.record instanceof RecordUpdateExpr)) {
 				return new RecordUpdateExpr(rae.record, rae.field, repl);
 			}
-			// Test
-			// else if (rae.record instanceof RecordUpdateExpr) {
-			// return rae.record;
-			// }
 			// Recursive Case
 			else {
 				return createNestedUpdateExpr(rae.record, new RecordUpdateExpr(rae.record, rae.field, repl));
