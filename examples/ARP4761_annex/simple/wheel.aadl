@@ -95,7 +95,4 @@ annex agree {**
 
 end wheel_two_inputs;
 
-system implementation wheel_two_inputs.i
-end wheel_two_inputs.i;
-
 end wheel;
