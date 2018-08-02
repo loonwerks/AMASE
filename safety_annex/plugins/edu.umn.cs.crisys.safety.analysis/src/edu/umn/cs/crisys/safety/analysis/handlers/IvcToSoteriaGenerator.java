@@ -109,11 +109,11 @@ public class IvcToSoteriaGenerator {
 								formula.addFormulaSubgroup(formulaSubgroup);
 								comp.addFormula(propertyName, formula);
 							}
-						} else {
-							throw new AgreeException("Not AGREE Renaming");
 						}
 					}
 				}
+			} else {
+				throw new AgreeException("Not AGREE Renaming");
 			}
 		} else if (result instanceof CompositeAnalysisResult) {
 			// get component name
