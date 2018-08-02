@@ -246,7 +246,14 @@ public class SoteriaGenHandler extends VerifyHandler {
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
 
-		return super.execute(event);
+		// If the transform flag is 2, then the user selected
+		// 'Generate SOTERIA model' option and we should execute event.
+		// Else, return null.
+		if (AddFaultsToAgree.getTransformFlag() == 2) {
+			return super.execute(event);
+		} else {
+			return null;
+		}
 	}
 
 	/*
