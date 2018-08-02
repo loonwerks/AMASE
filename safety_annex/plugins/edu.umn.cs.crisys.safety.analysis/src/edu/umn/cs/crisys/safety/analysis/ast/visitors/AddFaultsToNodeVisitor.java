@@ -181,6 +181,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// If we want to generate the fault tree, this method changes in order
 			// to not add assertions regarding behavior (i.e. no assertion about
 			// max # faults).
+			// The reason that the maxFault nullity check is here is because when we
+			// are not at a top node (SystemInstanceImpl), we do not care about the
+			// top level analysis constraints and hence maxFaults (the return value
+			// from gatherTopLevelFaultAnalysis) is null.
 			if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
 				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 			}
