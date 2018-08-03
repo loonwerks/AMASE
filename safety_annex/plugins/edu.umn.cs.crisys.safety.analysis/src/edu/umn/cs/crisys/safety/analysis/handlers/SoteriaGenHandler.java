@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -118,6 +120,16 @@ public class SoteriaGenHandler extends VerifyHandler {
 		handlerService = getWindow().getService(IHandlerService.class);
 
 		try {
+			// Option pane window reminding user to run compositional analysis on model first.
+			// The user can exit out of fault analysis if desired or continue.
+			// If return value is 0, user selected OK and wants to run analysis.
+			// If -1, user closed window and if 1 user canceled operation.
+			int n = showCompositionalAnalysisReminder();
+
+			if (n != 0) {
+				return Status.OK_STATUS;
+			}
+
 			SystemInstance si = getSysInstance(root, implUtil);
 
 			AnalysisResult result;
@@ -524,4 +536,21 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
 	}
+
+	/*
+	 * Pop up box for users who select fault tree generation.
+	 * This is a reminder to run compositional analysis on nominal model
+	 * before doing this analysis.
+	 */
+	private int showCompositionalAnalysisReminder() {
+
+		int n = JOptionPane.showConfirmDialog(null,
+				"When performing fault tree analysis, we assume that the nominal model\n has been "
+						+ "verified compositionally (AGREE: Verify All Layers).\n"
+						+ "Select OK to continue with the safety analysis \n or CANCEL to end the process.",
+				"Compositional verification requirement", JOptionPane.OK_CANCEL_OPTION);
+
+		return n;
+	}
+
 }
