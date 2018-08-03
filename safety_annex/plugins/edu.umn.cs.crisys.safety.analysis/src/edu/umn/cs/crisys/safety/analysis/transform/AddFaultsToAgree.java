@@ -136,8 +136,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 				program = faultVisitor.visit(program);
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
-				System.out.println("Initial printing");
-				System.out.println(pp.toString());
 				break;
 			default:
 				return program;
@@ -145,10 +143,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 		catch (Throwable t) {
 			System.out.println("Something went wrong during safety analysis: " + t.toString());
-		}
-		finally {
-			System.out.println("completed performing safety analysis transformation");
-			System.out.println("...and we're done!");
+
 		}
 
 		return program;

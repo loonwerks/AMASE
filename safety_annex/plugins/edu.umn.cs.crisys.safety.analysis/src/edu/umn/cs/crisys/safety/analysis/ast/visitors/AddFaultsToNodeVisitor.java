@@ -144,7 +144,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faults = renameFaultEqs(faults);
 
 		if (faultMap.containsKey(node.compInst) || hwfaultMap.containsKey(node.compInst)) {
-			System.out.println("Node: " + node.id + " has already been visited!");
 			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
 		}
 		faultMap.put(node.compInst, faults);
@@ -259,7 +258,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
 				nb.addLocal(actual);
 				lhs.add(new IdExpr(lhsId));
-				System.out.println("added " + lhsId + " to input list.\n");
 				f.outputParamToActualMap.put(v.id, actual);
 			}
 			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
@@ -1029,8 +1027,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (elementProbabilities.isEmpty()) {
 			return;
 		}
-
-		System.out.println("elementProbabilities: " + elementProbabilities);
 
 		// remove elements from list that are too unlikely & add remaining elements to
 		// 'good' set.
