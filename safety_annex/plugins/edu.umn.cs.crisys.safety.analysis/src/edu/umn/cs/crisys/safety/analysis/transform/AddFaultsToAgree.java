@@ -142,13 +142,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			default:
 				return program;
 			}
-			/*
-			 * program = faultVisitor.visit(program);
-			 * AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
-			 * pp.visit(program);
-			 * System.out.println("Initial printing");
-			 * System.out.println(pp.toString());
-			 */
 		}
 		catch (Throwable t) {
 			System.out.println("Something went wrong during safety analysis: " + t.toString());
@@ -217,31 +210,23 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		Map<Fault, List<String>> mapFaultToLustreName = faultVisitor.getFaultToLustreNameMap();
 
 		for(Fault key : mapFaultToLustreName.keySet()) {
-
 			// Add to explicit renames map
 			for(String name : mapFaultToLustreName.get(key)) {
 				renaming.addExplicitRename(name,
 						key.explanitoryText + " (" + key.id + ")");
-
 				// Add to reference map
 				renaming.addToRefMap(name, key.faultStatement);
-
 				// Add to supportRenames
 				renaming.addSupportRename(name, name);
-
 				// Add to supportRefString
 				renaming.addSupportRefString(name, "fault: " + key.explanitoryText + " (" + key.id + ")");
-
 			}
 		}
 		return renaming;
 	}
 
-
-
 	@Override
 	public AnalysisResult transformResult(AnalysisResult res) {
-		System.out.println("RESULT ++++++++++++++++++++++++++");
 		return res;
 	}
 
@@ -258,13 +243,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			// Then find the corresponding key in the layout map.
 			// Add this fault explanitory text to the value (array list)
 			// associated with that key.
-
 			layout.addElement(pathToString(key.path), key.explanitoryText + " (" + key.id + ")",
 					SigType.INPUT);
-
 			layout.addElement(mapFaultToPath.get(key),
 					key.explanitoryText + " (" + mapFaultToPath.get(key) + ", " + key.id + ")", SigType.INPUT);
-
 		}
 		return layout;
 	}

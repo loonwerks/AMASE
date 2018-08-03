@@ -90,7 +90,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<Fault, String> mapFaultToPath = new HashMap<>();
 
 	// Per node data structures: must be stored when visiting new node
-
 	// This maps id to a pair consisting of the expression with the fault associated
 	// with that
 	// id and expression.
@@ -241,10 +240,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				actual = new IdExpr(createFaultNodeInputId(f.id));
 			} else {
 				actual = f.faultInputMap.get(vd.id);
-
 				// do any name conversions on the stored expression.
 				actual = actual.accept(this);
-
 				if (actual == null) {
 					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
 				}
@@ -263,15 +260,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				nb.addLocal(actual);
 				lhs.add(new IdExpr(lhsId));
 				System.out.println("added " + lhsId + " to input list.\n");
-
-				// MWW: added 1/20/2018
 				f.outputParamToActualMap.put(v.id, actual);
 			}
-
 			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
 					f.faultStatement);
 			nb.addLocalEquation(eq);
-
 		}
 
 		// Binding happens HERE and is based on the map faultyVarsExpr.
@@ -280,7 +273,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
 
 			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
-
 			// Create nominal id name with key from this map
 			String nomId = createNominalId(lhsWithStmtName);
 			// base is the root of the WITH expression.
@@ -288,7 +280,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 			// Go through pairs of the list and create with statements.
 			for (Pair pair : list) {
-
 				// base : replace the expression with nominal expression
 				// repl : go from the fault to the actual
 				// toAssign: createNestedUpdateExpr using base, repl
@@ -296,12 +287,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Expr repl = faultToActual(pair.f, pair.ex);
 				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 			}
-
 			// create new assertion expression : id = ((nominal_id with p1 := f1) with ...)
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
 					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
 		}
-
 	}
 
 	/*
@@ -339,7 +328,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
 		// Create IdExpr out of actual string
 		return new IdExpr(actual.id);
-
 	}
 
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
@@ -434,7 +422,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			list.add(pair);
 			faultyVarsExpr.put(id, list);
 		}
-
 	}
 
 	public String createFaultEventId(String base) {
@@ -470,7 +457,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
 
 		List<Fault> faults = new ArrayList<>();
-
 		// reset fault count for the new Agree Node
 		FaultASTBuilder.resetFaultCounter();
 
@@ -560,9 +546,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 			}
 		}
-
 		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
-
 		for (ComponentInstance compInst : compInsts) {
 			if (compInst.getName().equals(compPath.getBase().getName())) {
 				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
@@ -571,10 +555,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 						return hwfault;
 					}
 				}
-
 			}
 		}
-
 		throw new SafetyException("Unable to identify fault for " + faultName + "@" + compPath.getBase().getName());
 	}
 
@@ -652,7 +634,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		IdExpr independentlyActiveExpr = new IdExpr(this.createFaultIndependentActiveId(nameBase));
 		IdExpr dependentlyActiveExpr = new IdExpr(this.createFaultDependentActiveId(nameBase));
 		IdExpr independentEventExpr = new IdExpr(this.createFaultEventId(nameBase));
-
 		List<Expr> faultExprs = new ArrayList<>();
 		// collect the list of source faults in the propagations
 		// whose target fault is the current fault
@@ -662,7 +643,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// create a disjunction of the source faults as the triggering event
 		// for the dependent fault
 		Expr dependentEventExpr = buildFaultDisjunctionExpr(faultExprs, 0);
-
 		Expr assertIndependentExpr;
 		Expr assertDependentExpr;
 
@@ -730,7 +710,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (String str : path) {
 			mapFaultToPath.put(f, str);
 		}
-
 		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL,
 				new BinaryExpr(new IdExpr(indepentlyActiveVarId), BinaryOp.OR, new IdExpr(depentlyActiveVarId)));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
@@ -880,7 +859,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			String base = addPathDelimiters(path, f.id);
 			sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(base))));
 		}
-
 		for (AgreeNode n : currentNode.subNodes) {
 			List<String> ext = new ArrayList<>(path);
 			ext.add(n.id);
@@ -1091,7 +1069,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 			}
 		}
-		System.out.println("Fault hypothesis: " + faultCombinationsAboveThreshold);
 
 		// Now faultCombinationsAboveThreshold contains all the valid fault combinations
 		// of the independently active faults
@@ -1145,8 +1122,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			Expr local = getNoFaultProposition(goodElements);
 			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
 		}
-
-		System.out.println("Probabilistic Fault Hypothesis is: " + faultHypothesis.toString());
 
 		// Add this fault hypothesis as an assertion.
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
