@@ -2,6 +2,8 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
@@ -111,6 +113,13 @@ public class IvcToSoteriaGenerator {
 								comp.addFormula(propertyName, formula);
 							}
 						} else {
+
+							JOptionPane.showMessageDialog(null,
+									"One of the properties is invalid. The nominal model must have valid properties."
+											+ " The invalid property is shown in the AGREE results pane.",
+									"Safety Analysis Error",
+									JOptionPane.ERROR_MESSAGE);
+
 							throw new SafetyException("One of the properties is invalid. The nominal model"
 									+ " must have valid properties.");
 						}
