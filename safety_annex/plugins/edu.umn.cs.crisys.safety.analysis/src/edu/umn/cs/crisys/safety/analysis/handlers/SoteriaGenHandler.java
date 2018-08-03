@@ -128,6 +128,11 @@ public class SoteriaGenHandler extends VerifyHandler {
 				return Status.OK_STATUS;
 			}
 
+			// Output reminder that analysis is underway, but it might take a while.
+			JOptionPane.showMessageDialog(null,
+					"Fault analysis is underway. \n Depending on how large the model is,\n it could take some time.",
+					"Fault Analysis Message", JOptionPane.PLAIN_MESSAGE);
+
 			SystemInstance si = getSysInstance(root, implUtil);
 
 			AnalysisResult result;
