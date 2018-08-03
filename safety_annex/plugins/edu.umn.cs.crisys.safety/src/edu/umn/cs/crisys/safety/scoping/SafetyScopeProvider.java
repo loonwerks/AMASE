@@ -224,7 +224,6 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 		} else {
 			return Scopes.scopeFor(components, getScope(ctx.eContainer(), ref));
 		}
-
 	}
 
 	IScope scope_NamedElement(Arg ctx, EReference ref) {
@@ -245,7 +244,6 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 			container = refs.get(0); // figure out what this type this portion
 			// of the nest id is so we can figure out
 			// what we could possibly link to
-
 			if (container instanceof ThreadSubcomponent) {
 				container = ((ThreadSubcomponent) container).getComponentType();
 			} else if (container instanceof Subcomponent) {
@@ -303,7 +301,6 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 
 		} else if (container instanceof RecordType || container instanceof RecordExpr) {
 
-//			while (!(container instanceof AgreeContract) && !(container instanceof NodeDefExpr)) {
 			while (!(container instanceof AgreeContract)) {
 				container = container.eContainer();
 			}
@@ -311,14 +308,6 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 			if (container instanceof AgreeContract) {
 				Set<Element> specs = getAllElementsFromSpecs(((AgreeContract) container).getSpecs());
 				result.addAll(specs);
-//			} else {
-//				if (!(container instanceof NodeDefExpr)) {
-//					throw new AgreeScopingException("container should be an AgreeContract or a NodeDefExpr");
-//				}
-//				result.addAll(((NodeDefExpr) container).getArgs());
-//				if (((NodeDefExpr) container).getNodeBody() != null) {
-//					result.addAll(((NodeDefExpr) container).getNodeBody().getLocs());
-//				}
 			}
 
 			while (!(container instanceof AadlPackage)) {
@@ -330,21 +319,12 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 
 		} else if (container instanceof RecordUpdateExpr) {
 
-//			while (!(container instanceof AgreeContract) && !(container instanceof NodeDefExpr)) {
 			while (!(container instanceof AgreeContract)) {
 				container = container.eContainer();
 			}
 			if (container instanceof AgreeContract) {
 				Set<Element> specs = getAllElementsFromSpecs(((AgreeContract) container).getSpecs());
 				result.addAll(specs);
-//			} else {
-//				if (!(container instanceof NodeDefExpr)) {
-//					throw new AgreeScopingException("container should be an AgreeContract or a NodeDefExpr");
-//				}
-//				result.addAll(((NodeDefExpr) container).getArgs());
-//				if (((NodeDefExpr) container).getNodeBody() != null) {
-//					result.addAll(((NodeDefExpr) container).getNodeBody().getLocs());
-//				}
 			}
 
 			while (!(container instanceof ComponentClassifier) && !(container instanceof AadlPackage)) {
@@ -392,20 +372,6 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 					result.add(el);
 				}
 			}
-//		} else if (container instanceof NodeDefExpr) {
-//			result.addAll(((NodeDefExpr) container).getArgs());
-//			if (((NodeDefExpr) container).getNodeBody() != null) {
-//				result.addAll(((NodeDefExpr) container).getNodeBody().getLocs());
-//			}
-//			// also add other nodes from the annex
-//			while (!(container instanceof AgreeContract)) {
-//				container = container.eContainer();
-//			}
-//			for (SpecStatement spec : ((AgreeContract) container).getSpecs()) {
-//				if (spec instanceof NodeDefExpr) {
-//					result.add(spec);
-//				}
-//			}
 		} else {
 
 			if (container instanceof AgreeContractLibrary) {
@@ -421,42 +387,6 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 
 		return result;
 	}
-
-//	private void addEnums(EObject container, Set<Element> result, EReference ref) {
-//		Type type = null;
-//		if (container instanceof ConstStatement || container instanceof EqStatement
-//				|| container instanceof AssignStatement || container instanceof InputStatement) {
-//			if (container instanceof ConstStatement) {
-//				type = ((ConstStatement) container).getType();
-//			} else if (container instanceof AssignStatement && ref.getName() != "base") {
-//				NestedDotID typeId = ((AssignStatement) container).getId();
-//				container = typeId.getBase();
-//			}
-//			if (container instanceof EqStatement || container instanceof InputStatement) {
-//				EList<Arg> lhs;
-//				if (container instanceof EqStatement) {
-//					lhs = ((EqStatement) container).getLhs();
-//				} else {
-//					lhs = ((InputStatement) container).getLhs();
-//				}
-//				if (lhs.size() == 1) {
-//					Arg arg = lhs.get(0);
-//					type = arg.getType();
-//				}
-//			}
-//
-//			if (type instanceof RecordType) {
-//				NestedDotID typeId = ((RecordType) type).getRecord();
-//				while (typeId.getSub() != null) {
-//					typeId = typeId.getSub();
-//				}
-//				NamedElement typeName = typeId.getBase();
-//				if (typeName instanceof EnumStatement) {
-//					result.addAll(((EnumStatement) typeName).getEnums());
-//				}
-//			}
-//		}
-//	}
 
 	private void getAllAgreeElements(Set<Element> result, Classifier component) {
 		for (AnnexSubclause subclause : AnnexUtil.getAllAnnexSubclauses(component,

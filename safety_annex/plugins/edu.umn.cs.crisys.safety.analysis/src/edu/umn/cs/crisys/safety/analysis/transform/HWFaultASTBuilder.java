@@ -1,48 +1,16 @@
 package edu.umn.cs.crisys.safety.analysis.transform;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
-
-import com.rockwellcollins.atc.agree.agree.Arg;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
-import com.rockwellcollins.atc.agree.analysis.AgreeTypeUtils;
-import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
-import edu.umn.cs.crisys.safety.safety.EqValue;
-import edu.umn.cs.crisys.safety.safety.FaultStatement;
-import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
-import edu.umn.cs.crisys.safety.safety.InputStatement;
-import edu.umn.cs.crisys.safety.safety.Interval;
-import edu.umn.cs.crisys.safety.safety.IntervalEq;
-import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
-import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
-import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
-import edu.umn.cs.crisys.safety.safety.RangeEq;
-import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
-import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
-import edu.umn.cs.crisys.safety.util.SafetyUtil;
-import jkind.lustre.BinaryExpr;
-import jkind.lustre.BinaryOp;
-import jkind.lustre.Expr;
-import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
-import jkind.lustre.RecordAccessExpr;
-import jkind.lustre.TupleExpr;
-import jkind.lustre.VarDecl;
 
 public class HWFaultASTBuilder {
 
@@ -93,7 +61,6 @@ public class HWFaultASTBuilder {
 	public String mkUniqueHWFaultId(HWFaultStatement hwfstmt) {
 		faultCounter++; 
 		String elem = this.agreeNode.id + "__" + "hwfault_" + faultCounter;
-		System.out.println("Constructed hw fault: " + elem);
 		return elem;
 	}
 	
