@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -119,14 +117,14 @@ public class SoteriaGenHandler extends VerifyHandler {
 			// The user can exit out of fault analysis if desired or continue.
 			// If return value is 0, user selected OK and wants to run analysis.
 			// If -1, user closed window and if 1 user canceled operation.
-			if (showCompositionalAnalysisReminder() != 0) {
-				return Status.OK_STATUS;
-			}
-
-			// Output reminder that analysis is underway, but it might take a while.
-			JOptionPane.showMessageDialog(null,
-					"Fault analysis is underway. \n Depending on how large the model is,\n it could take some time.",
-					"Fault Analysis Message", JOptionPane.PLAIN_MESSAGE);
+//			if (showCompositionalAnalysisReminder() != 0) {
+//				return Status.OK_STATUS;
+//			}
+//
+//			// Output reminder that analysis is underway, but it might take a while.
+//			JOptionPane.showMessageDialog(null,
+//					"Fault analysis is underway. \n Depending on how large the model is,\n it could take some time.",
+//					"Fault Analysis Message", JOptionPane.PLAIN_MESSAGE);
 
 			SystemInstance si = getSysInstance(root, implUtil);
 
@@ -535,15 +533,15 @@ public class SoteriaGenHandler extends VerifyHandler {
 	 * This is a reminder to run compositional analysis on nominal model
 	 * before doing this analysis.
 	 */
-	private int showCompositionalAnalysisReminder() {
-
-		int n = JOptionPane.showConfirmDialog(null,
-				"When performing fault tree analysis, we assume that the nominal model\n has been "
-						+ "verified compositionally (AGREE: Verify All Layers).\n"
-						+ "Select OK to continue with the safety analysis \n or CANCEL to end the process.",
-				"Compositional verification requirement", JOptionPane.OK_CANCEL_OPTION);
-
-		return n;
-	}
+//	private int showCompositionalAnalysisReminder() {
+//
+//		int n = JOptionPane.showConfirmDialog(null,
+//				"When performing fault tree analysis, we assume that the nominal model\n has been "
+//						+ "verified compositionally (AGREE: Verify All Layers).\n"
+//						+ "Select OK to continue with the safety analysis \n or CANCEL to end the process.",
+//				"Compositional verification requirement", JOptionPane.OK_CANCEL_OPTION);
+//
+//		return n;
+//	}
 
 }
