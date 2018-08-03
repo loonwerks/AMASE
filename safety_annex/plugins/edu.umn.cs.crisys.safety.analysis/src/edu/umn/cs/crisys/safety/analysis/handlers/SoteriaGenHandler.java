@@ -101,11 +101,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 	 * the safety package instance, and set the transform agree flag.
 	 */
 
-//	@Override
-//	protected final IStatus runJob(Element root, IProgressMonitor monitor) {
-//		System.out.println("test@");
-//		return Status.OK_STATUS;
-//	}
 
 	@Override
 	protected IStatus runJob(Element root, IProgressMonitor monitor) {
@@ -397,7 +392,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		linker.setLog(result, AgreeLogger.getLog());
 		linker.setRenaming(result, renaming);
 
-		// System.out.println(program);
 		return result;
 
 	}
@@ -484,14 +478,10 @@ public class SoteriaGenHandler extends VerifyHandler {
 		} else {
 			program = LustreAstBuilder.getAssumeGuaranteeLustreProgram(agreeProgram);
 		}
-		// List<Pair<String, Program>> consistencies = LustreAstBuilder.getConsistencyChecks(agreeProgram);
 
 		wrapper.addChild(
 				createVerification("Contract Guarantees", si, program, agreeProgram, AnalysisType.AssumeGuarantee));
-//		for (Pair<String, Program> consistencyAnalysis : consistencies) {
-//			wrapper.addChild(createVerification(consistencyAnalysis.getFirst(), si, consistencyAnalysis.getSecond(),
-//					agreeProgram, AnalysisType.Consistency));
-//		}
+
 	}
 
 	void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming, String prefix,
