@@ -124,9 +124,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 			// The user can exit out of fault analysis if desired or continue.
 			// If return value is 0, user selected OK and wants to run analysis.
 			// If -1, user closed window and if 1 user canceled operation.
-			int n = showCompositionalAnalysisReminder();
-
-			if (n != 0) {
+			if (showCompositionalAnalysisReminder() != 0) {
 				return Status.OK_STATUS;
 			}
 
