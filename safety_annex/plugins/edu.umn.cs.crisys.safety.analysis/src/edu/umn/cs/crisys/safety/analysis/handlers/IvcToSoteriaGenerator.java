@@ -112,16 +112,25 @@ public class IvcToSoteriaGenerator {
 								formula.addFormulaSubgroup(formulaSubgroup);
 								comp.addFormula(propertyName, formula);
 							}
-						} else {
+						} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
 
 							JOptionPane.showMessageDialog(null,
-									"One of the properties is invalid. The nominal model must have valid properties."
-											+ " The invalid property is shown in the AGREE results pane.",
+									"One of the properties was canceled in the process of model checking."
+											+ " Rerun this analysis to proceed.",
+									"Safety Analysis Error", JOptionPane.ERROR_MESSAGE);
+
+							throw new SafetyException(
+									"One of the properties was canceled in the process of model checking."
+											+ " Rerun this analysis to proceed.");
+						} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
+							JOptionPane.showMessageDialog(null,
+									"One of the properties is invalid. The model must be valid using AGREE Verify All Layers."
+											+ " The invalid property is shown in the AGREE console.",
 									"Safety Analysis Error",
 									JOptionPane.ERROR_MESSAGE);
 
-							throw new SafetyException("One of the properties is invalid. The nominal model"
-									+ " must have valid properties.");
+							throw new SafetyException(
+									"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
 						}
 					}
 				}
