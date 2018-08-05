@@ -99,11 +99,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 	 * the safety package instance, and set the transform agree flag.
 	 */
 
-//	@Override
-//	protected final IStatus runJob(Element root, IProgressMonitor monitor) {
-//		System.out.println("test@");
-//		return Status.OK_STATUS;
-//	}
 
 	@Override
 	protected IStatus runJob(Element root, IProgressMonitor monitor) {
@@ -118,6 +113,19 @@ public class SoteriaGenHandler extends VerifyHandler {
 		handlerService = getWindow().getService(IHandlerService.class);
 
 		try {
+			// Option pane window reminding user to run compositional analysis on model first.
+			// The user can exit out of fault analysis if desired or continue.
+			// If return value is 0, user selected OK and wants to run analysis.
+			// If -1, user closed window and if 1 user canceled operation.
+//			if (showCompositionalAnalysisReminder() != 0) {
+//				return Status.OK_STATUS;
+//			}
+//
+//			// Output reminder that analysis is underway, but it might take a while.
+//			JOptionPane.showMessageDialog(null,
+//					"Fault analysis is underway. \n Depending on how large the model is,\n it could take some time.",
+//					"Fault Analysis Message", JOptionPane.PLAIN_MESSAGE);
+
 			SystemInstance si = getSysInstance(root, implUtil);
 
 			AnalysisResult result;
@@ -246,7 +254,14 @@ public class SoteriaGenHandler extends VerifyHandler {
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
 
-		return super.execute(event);
+		// If the transform flag is 2, then the user selected
+		// 'Generate SOTERIA model' option and we should execute event.
+		// Else, return null.
+		if (AddFaultsToAgree.getTransformFlag() == 2) {
+			return super.execute(event);
+		} else {
+			return null;
+		}
 	}
 
 	/*
@@ -375,7 +390,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		linker.setLog(result, AgreeLogger.getLog());
 		linker.setRenaming(result, renaming);
 
-		// System.out.println(program);
 		return result;
 
 	}
@@ -462,14 +476,10 @@ public class SoteriaGenHandler extends VerifyHandler {
 		} else {
 			program = LustreAstBuilder.getAssumeGuaranteeLustreProgram(agreeProgram);
 		}
-		// List<Pair<String, Program>> consistencies = LustreAstBuilder.getConsistencyChecks(agreeProgram);
 
 		wrapper.addChild(
 				createVerification("Contract Guarantees", si, program, agreeProgram, AnalysisType.AssumeGuarantee));
-//		for (Pair<String, Program> consistencyAnalysis : consistencies) {
-//			wrapper.addChild(createVerification(consistencyAnalysis.getFirst(), si, consistencyAnalysis.getSecond(),
-//					agreeProgram, AnalysisType.Consistency));
-//		}
+
 	}
 
 	void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming, String prefix,
@@ -517,4 +527,21 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
 	}
+
+	/*
+	 * Pop up box for users who select fault tree generation.
+	 * This is a reminder to run compositional analysis on nominal model
+	 * before doing this analysis.
+	 */
+//	private int showCompositionalAnalysisReminder() {
+//
+//		int n = JOptionPane.showConfirmDialog(null,
+//				"When performing fault tree analysis, we assume that the nominal model\n has been "
+//						+ "verified compositionally (AGREE: Verify All Layers).\n"
+//						+ "Select OK to continue with the safety analysis \n or CANCEL to end the process.",
+//				"Compositional verification requirement", JOptionPane.OK_CANCEL_OPTION);
+//
+//		return n;
+//	}
+
 }

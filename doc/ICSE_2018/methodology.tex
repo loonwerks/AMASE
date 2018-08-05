@@ -58,9 +58,11 @@ $C \subseteq BE$ is a MCS if $\pi_F(C) = 1 \land \forall C' \subset C. \pi_F(C')
 Given the formalisms defined previously, we show that finding the minimal IVCs is equivalent to finding the MCS. \\
 
 \begin{theorem} Finding all minimal IVCs is equivalent to finding the set of all MCSs\\
-\begin{proof} Let $T = \{f_1, f_2, ..., f_n\}$ be the set of model elements corresponding to faults for the components and let $\mathcal{P}_{tle}$ be the top level event (TLE). By the definition for IVC, we know that $S \subseteq T$ is an IVC for $(I, T) \vdash \mathcal{P}_{tle}$ iff $(I, S) \vdash \mathcal{P}_{tle}$. 
-In this case, we can quickly see that $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
-Since $S$ is minimal IVC, it follows that $\pi_F(M) = 0$ for any $M \subset S$ and hence the set of minimal IVCs is equivalent to the set of MCSs. 
+
+\begin{proof} 
+Let $T = \{f_1, f_2, ..., f_n\}$ be the set of model elements corresponding to faults for the components and let $\mathcal{P}_{tle}$ be the top level event (TLE). By the definition for IVC, we know that $S \subseteq T$ is an IVC for $(I, T) \vdash \mathcal{P}_{tle}$ iff $(I, S) \vdash \mathcal{P}_{tle}$. 
+In this case, $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
+Since $S$ is minimal IVC, for any $M \subset S$, $(I, M) \doesnotentail \mathcal{P}_{tle}$. Hence it follows that $\pi_F(M) = 0$ for any $M \subset S$.
 \end{proof}
 \end{theorem}
 

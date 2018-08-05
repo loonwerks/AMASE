@@ -75,11 +75,6 @@ public class SafetyLinkerFactory {
         EClass agreetest = AgreePackage.eINSTANCE.getAgreeContractSubclause();
         EClass test = SafetyPackage.eINSTANCE.getSafetyContractSubclause();
 
-
-//        EList<AnnexSubclause> safetySubclause = AnnexUtil.getAllAnnexSubclauses(sysType,
-//                SafetyPackage.eINSTANCE.getSafetyContractSubclause());
-
-
         int size = annexSubClauses.size();
         if (annexSubClauses.size() == 0) {
             throw new SafetyException(
@@ -109,7 +104,6 @@ public class SafetyLinkerFactory {
 	public Queue<JKindResult> getWorkQueue() { return queue; }
 
 	// Routines for actually building the verification results...
-
     private void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
         AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, monolithicAnalysis);
         Program program;
@@ -148,10 +142,6 @@ public class SafetyLinkerFactory {
         linker.setLog(result, AgreeLogger.getLog());
         linker.setRenaming(result, renaming);
 
-        // Print the jkind result
-        //System.out.println(result);
-        //System.out.println(agreeProgram);
-        //System.out.println(lustreProgram);
         return result;
 
     }
