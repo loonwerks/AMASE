@@ -57,11 +57,11 @@ import com.rockwellcollins.atc.agree.analysis.handlers.RerunHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.TerminateHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler;
 import com.rockwellcollins.atc.agree.analysis.lustre.visitors.RenamingVisitor;
-import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
+import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import jkind.JKindException;
@@ -181,14 +181,14 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 					if (api instanceof JKindApi) {
 						String resultName = result.getName();
-						String adviceFileName = rerunAdviceMap.get(resultName);
-						if (adviceFileName == null) {
-							adviceFileName = "agree_advice" + adviceCount++;
-							rerunAdviceMap.put(resultName, adviceFileName);
-						} else {
-							((JKindApi) api).setReadAdviceFile(adviceFileName);
-						}
-						((JKindApi) api).setWriteAdviceFile(adviceFileName);
+//						String adviceFileName = rerunAdviceMap.get(resultName);
+//						if (adviceFileName == null) {
+//							adviceFileName = "agree_advice" + adviceCount++;
+//							rerunAdviceMap.put(resultName, adviceFileName);
+//						} else {
+//							((JKindApi) api).setReadAdviceFile(adviceFileName);
+//						}
+//						((JKindApi) api).setWriteAdviceFile(adviceFileName);
 					}
 
 					try {
