@@ -2,8 +2,6 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
@@ -52,87 +50,7 @@ public class IvcToSoteriaGenerator {
 			if (renaming instanceof AgreeRenaming) {
 				// for each propertyResult
 				for (PropertyResult propertyResult : ((JKindResult) result).getPropertyResults()) {
-					// get property name
-					String propertyName = updateName(propertyResult.getName());
-					// if it's not an assumption, then it's a guarantee
-					if (!propertyName.contains("assume") && !propertyName.contains("Assumptions")) {
-						// if it's a valid guarantee
-						if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
-							// add property as an output to the soteria map
-							comp.addOutput(propertyName);
-							// add property violation as a top level fault to the model
-							if (!isLowerLevel) {
-								CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
-										propertyName);
-								model.addTopLevelFault(contractViolation);
-							}
-							ValidProperty property = (ValidProperty) propertyResult.getProperty();
-							SoteriaFormula formula = new SoteriaFormula(propertyName);
-
-							// TODO: when mivc is in place, update to handle a list of ivc sets
-							// and update the formula to handle conjunction of different ivc sets
-							SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
-							for (String ivcElem : property.getIvc()) {
-								String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
-								// add each ivc element to formulaSubgroup
-								if (refStr.startsWith("fault: ")) {
-									// TODO: get the fault name for that fault activation variable in ivcElement
-									String faultName = refStr.replaceFirst("fault: ", "");
-									CompFaultActivation faultActivation = new CompFaultActivation(comp.componentName,
-											updateName(faultName));
-									formulaSubgroup.addFormulaElem(faultActivation);
-									// if ivcElem is not yet in basicEvents
-									if (!comp.basicEvents.containsKey(ivcElem)) {
-										FaultStatementImpl faultStmtImpl = (FaultStatementImpl) ((AgreeRenaming) renaming)
-												.getRefMap().get(faultName);
-										for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
-											if (faultSub instanceof ProbabilityStatementImpl) {
-												String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
-												float failureProb = Float.parseFloat(probStr);
-												// TODO: need to have component specify failure rate and exposure time in the future
-												// currently treat exposure time as (float) 1.0
-												// and treat the failure probability from the fault statement as the failure rate
-												SoteriaFault basicEvent = new SoteriaFault(updateName(faultName),
-														failureProb,
-														(float) 1.0);
-												comp.addBasicEvent(ivcElem, basicEvent);
-											}
-										}
-									}
-
-								} else {
-									// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
-									comp.addInput(updateName(refStr));
-									CompContractViolation contractViolation = new CompContractViolation(
-											comp.componentName, updateName(refStr));
-									formulaSubgroup.addFormulaElem(contractViolation);
-								}
-							}
-							if (!formulaSubgroup.elmeList.isEmpty()) {
-								formula.addFormulaSubgroup(formulaSubgroup);
-								comp.addFormula(propertyName, formula);
-							}
-						} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
-
-							JOptionPane.showMessageDialog(null,
-									"One of the properties was canceled in the process of model checking."
-											+ " Rerun this analysis to proceed.",
-									"Safety Analysis Error", JOptionPane.ERROR_MESSAGE);
-
-							throw new SafetyException(
-									"One of the properties was canceled in the process of model checking."
-											+ " Rerun this analysis to proceed.");
-						} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
-							JOptionPane.showMessageDialog(null,
-									"One of the properties is invalid. The model must be valid using AGREE Verify All Layers."
-											+ " The invalid property is shown in the AGREE console.",
-									"Safety Analysis Error",
-									JOptionPane.ERROR_MESSAGE);
-
-							throw new SafetyException(
-									"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
-						}
-					}
+					extractPropertyResult(comp, renaming, propertyResult);
 				}
 			} else {
 				throw new AgreeException("Not AGREE Renaming");
@@ -155,6 +73,90 @@ public class IvcToSoteriaGenerator {
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
+		}
+	}
+
+	private void extractPropertyResult(SoteriaComp comp, Renaming renaming, PropertyResult propertyResult) {
+		// get property name
+		String propertyName = updateName(propertyResult.getName());
+		// if it's not an assumption, then it's a guarantee
+		if (!propertyName.contains("assume") && !propertyName.contains("Assumptions")) {
+			// if it's a valid guarantee
+			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
+				// add property as an output to the soteria map
+				comp.addOutput(propertyName);
+				// add property violation as a top level fault to the model
+				if (!isLowerLevel) {
+					CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
+							propertyName);
+					model.addTopLevelFault(contractViolation);
+				}
+				ValidProperty property = (ValidProperty) propertyResult.getProperty();
+				SoteriaFormula formula = new SoteriaFormula(propertyName);
+
+				// TODO: when mivc is in place, update to handle a list of ivc sets
+				// and update the formula to handle conjunction of different ivc sets
+				SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
+				for (String ivcElem : property.getIvc()) {
+					extractIvcSets(comp, renaming, formulaSubgroup, ivcElem);
+				}
+				if (!formulaSubgroup.elmeList.isEmpty()) {
+					formula.addFormulaSubgroup(formulaSubgroup);
+					comp.addFormula(propertyName, formula);
+				}
+			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
+
+//				JOptionPane.showMessageDialog(null,
+//						"One of the properties was canceled in the process of model checking."
+//								+ " Rerun this analysis to proceed.",
+//						"Safety Analysis Error", JOptionPane.ERROR_MESSAGE);
+
+				throw new SafetyException("One of the properties was canceled in the process of model checking."
+						+ " Rerun this analysis to proceed.");
+			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
+//				JOptionPane.showMessageDialog(null,
+//						"One of the properties is invalid. The model must be valid using AGREE Verify All Layers."
+//								+ " The invalid property is shown in the AGREE console.",
+//						"Safety Analysis Error",
+//						JOptionPane.ERROR_MESSAGE);
+
+				throw new SafetyException(
+						"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
+			}
+		}
+	}
+
+	private void extractIvcSets(SoteriaComp comp, Renaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
+			String ivcElem) {
+		String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
+		// add each ivc element to formulaSubgroup
+		if (refStr.startsWith("fault: ")) {
+			// TODO: get the fault name for that fault activation variable in ivcElement
+			String faultName = refStr.replaceFirst("fault: ", "");
+			CompFaultActivation faultActivation = new CompFaultActivation(comp.componentName, updateName(faultName));
+			formulaSubgroup.addFormulaElem(faultActivation);
+			// if ivcElem is not yet in basicEvents
+			if (!comp.basicEvents.containsKey(ivcElem)) {
+				FaultStatementImpl faultStmtImpl = (FaultStatementImpl) ((AgreeRenaming) renaming).getRefMap()
+						.get(faultName);
+				for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
+					if (faultSub instanceof ProbabilityStatementImpl) {
+						String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
+						float failureProb = Float.parseFloat(probStr);
+						// TODO: need to have component specify failure rate and exposure time in the future
+						// currently treat exposure time as (float) 1.0
+						// and treat the failure probability from the fault statement as the failure rate
+						SoteriaFault basicEvent = new SoteriaFault(updateName(faultName), failureProb, (float) 1.0);
+						comp.addBasicEvent(ivcElem, basicEvent);
+					}
+				}
+			}
+
+		} else {
+			// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
+			comp.addInput(updateName(refStr));
+			CompContractViolation contractViolation = new CompContractViolation(comp.componentName, updateName(refStr));
+			formulaSubgroup.addFormulaElem(contractViolation);
 		}
 	}
 
