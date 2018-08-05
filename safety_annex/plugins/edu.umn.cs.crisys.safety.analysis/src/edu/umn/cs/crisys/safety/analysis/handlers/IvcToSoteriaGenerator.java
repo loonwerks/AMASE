@@ -2,10 +2,13 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
@@ -109,11 +112,30 @@ public class IvcToSoteriaGenerator {
 								formula.addFormulaSubgroup(formulaSubgroup);
 								comp.addFormula(propertyName, formula);
 							}
-						} else {
-							throw new AgreeException("Not AGREE Renaming");
+						} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
+
+							JOptionPane.showMessageDialog(null,
+									"One of the properties was canceled in the process of model checking."
+											+ " Rerun this analysis to proceed.",
+									"Safety Analysis Error", JOptionPane.ERROR_MESSAGE);
+
+							throw new SafetyException(
+									"One of the properties was canceled in the process of model checking."
+											+ " Rerun this analysis to proceed.");
+						} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
+							JOptionPane.showMessageDialog(null,
+									"One of the properties is invalid. The model must be valid using AGREE Verify All Layers."
+											+ " The invalid property is shown in the AGREE console.",
+									"Safety Analysis Error",
+									JOptionPane.ERROR_MESSAGE);
+
+							throw new SafetyException(
+									"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
 						}
 					}
 				}
+			} else {
+				throw new AgreeException("Not AGREE Renaming");
 			}
 		} else if (result instanceof CompositeAnalysisResult) {
 			// get component name
