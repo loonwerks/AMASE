@@ -1,6 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
@@ -96,12 +97,15 @@ public class IvcToSoteriaGenerator {
 
 				// TODO: when mivc is in place, update to handle a list of ivc sets
 				// and update the formula to handle conjunction of different ivc sets
-				SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
-				for (String ivcElem : property.getIvc()) {
-					extractIvcSets(comp, renaming, formulaSubgroup, ivcElem);
+
+				for (List<String> ivcSet : property.getIvcSets()) {
+					SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
+					extractIvcSets(comp, renaming, formulaSubgroup, ivcSet);
+					if (!formulaSubgroup.elmeList.isEmpty()) {
+						formula.addFormulaSubgroup(formulaSubgroup);
+					}
 				}
-				if (!formulaSubgroup.elmeList.isEmpty()) {
-					formula.addFormulaSubgroup(formulaSubgroup);
+				if (!formula.formulaBody.isEmpty()) {
 					comp.addFormula(propertyName, formula);
 				}
 			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
@@ -127,6 +131,13 @@ public class IvcToSoteriaGenerator {
 	}
 
 	private void extractIvcSets(SoteriaComp comp, Renaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
+			List<String> ivcSet) {
+		for (String ivcElem : ivcSet) {
+			extractIvcElem(comp, renaming, formulaSubgroup, ivcElem);
+		}
+	}
+
+	private void extractIvcElem(SoteriaComp comp, Renaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
 			String ivcElem) {
 		String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
 		// add each ivc element to formulaSubgroup

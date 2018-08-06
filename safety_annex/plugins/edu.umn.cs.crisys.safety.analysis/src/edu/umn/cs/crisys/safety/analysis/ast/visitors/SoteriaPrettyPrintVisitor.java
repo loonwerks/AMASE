@@ -41,14 +41,51 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 	public Void visit(SoteriaFormula formula) {
 		write("(");
 		writeln("[\"" + formula.propertyName + "\"; " + "\"" + formula.propertyFaultString + "\"],");
-		// TODO: if multiple groups, use conjunction to connect the groups
-		if (formula.formulaBody.size() == 1) {
+
+		int size = formula.formulaBody.size();
+		if (size == 1) {
 			SoteriaFormulaSubgroup subgroup = formula.formulaBody.get(0);
 			subgroup.accept(this);
 		}
+		else if (size > 1) {
+			// if multiple groups, use conjunction to connect the groups
+			write("And[");
+			boolean multipleElem = false;
+			// write each element
+			for (SoteriaFormulaSubgroup subgroup : formula.formulaBody) {
+				if (multipleElem) {
+					writeln("; ");
+				}
+				subgroup.accept(this);
+				multipleElem = true;
+			}
+			write("]");
+		}
+
 		write(")");
 		return null;
 	}
+
+//	@Override
+//	public Void visit(SoteriaFormulaSubgroup subgroup) {
+//		// use disjunction if more than one element
+//		if (subgroup.elmeList.size() == 1) {
+//			subgroup.elmeList.get(0).accept(this);
+//		} else {
+//			write("Or[");
+//			boolean multipleElem = false;
+//			// write each element
+//			for (SoteriaFormulaElem elem : subgroup.elmeList) {
+//				if (multipleElem) {
+//					writeln("; ");
+//				}
+//				elem.accept(this);
+//				multipleElem = true;
+//			}
+//			write("]");
+//		}
+//		return null;
+//	}
 
 	@Override
 	public Void visit(SoteriaFault fault) {
@@ -213,10 +250,11 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 
 	@Override
 	public Void visit(SoteriaFormulaSubgroup subgroup) {
+		int size = subgroup.elmeList.size();
 		// use disjunction if more than one element
-		if (subgroup.elmeList.size() == 1) {
+		if (size == 1) {
 			subgroup.elmeList.get(0).accept(this);
-		} else {
+		} else if (size > 1) {
 			write("Or[");
 			boolean multipleElem = false;
 			// write each element
