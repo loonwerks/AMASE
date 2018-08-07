@@ -3,7 +3,7 @@
 To demonstrate the effectiveness of this approach and compare to state of the art existing tools, we describe two case studies.
 
 \subsection{Wheel Brake System}
-The Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110} is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate scalability of our tools and compare results with other studies, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. We refer readers to this publication for diagrams of the full arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A simplified diagram taken from ARP4761 is shown in Figure~\ref{fig:wbs_arp4761}. 
+The Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110} is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate scalability of our tools and compare results with other studies, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15,mattareiThesis}. We refer readers to this publication for diagrams of the full arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A simplified diagram taken from ARP4761 is shown in Figure~\ref{fig:wbs_arp4761}. 
 
 \begin{figure}[h]
 \begin{center}
@@ -21,5 +21,33 @@ In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit.
 
 The last mode of operation of the WBS is the \textit{emergency} mode. This is supported by the blue circuit but operates if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode.
 
-The model contains 30 different kinds of components, 169 component instances, a model depth of 5 hierarchical levels.  The model includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  There are a total of 33 different fault types and 141 fault instances within the model.  The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels. An example property is to ensure no inadvertent braking of each of the 8 wheels.  This means that if all power and hydraulic pressure is supplied (i.e., braking is commanded), then either the aircraft is stopped (ground speed is zero), or the mechanical pedal is pressed, or brake force is zero, or the wheel is not rolling.
+The model size and statistics are described in Table~\ref{fig:arch_table}. 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=8cm]{images/arch_table.png}
+\caption{Model Statistics} \label{fig:arch_table}
+\end{center}
+\end{figure}
+
+\subsubsection{System Safety Properties}
+The AIR6110 document contains a set of safety requirements on the expected probability of an unwanted occurance of event, e.g. `'the loss of all wheel braking shall be extremely remote.'' The case study performed using xSAP/NuSMV~\cite{mattareiThesis, DBLP:conf/cav/BozzanoCPJKPRT15} focused on these safety requirements that are outlined in AIR6110. The detailed tech report of the xSAP/NuSMV model of the WBS can be found in~\cite{air6110TechReport}.
+
+\textbf{S18-WBS-R-0321} \textit{Never loss of all wheel braking.}
+
+\textbf{S18-WBS-R-0322-left} \textit{Never asymmetrical loss of wheel braking (left side).}
+
+\textbf{S18-WBS-R-0322-right} \textit{Never asymmetrical loss of wheel braking (right side).}
+
+\textbf{S18-WBS-0323} \textit{Never inadvertent braking with all wheels locked.}
+
+\textbf{S18-WBS-R-0324} \textit{Never inadvertent braking of all wheels.}
+
+\textbf{S18-WBS-R-0325-wheel1...8} \textit{Never inadvertent braking of one wheel without locking (wheels 1-8).} 
+
+\textbf{Braking implies cmd w1...8} \textit{If system is braking, then pilot has commanded braking (wheels 1-8).} 
+
+\textbf{Cmd implies braking w1...8} \textit{If pilot commands braking, then system is braking (wheels 1-8).} 
+
+These requirements violations are the top level events (TLE) for the fault tree computations. 
 
