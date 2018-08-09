@@ -53,4 +53,7 @@ These requirements violations are the top level events (TLE) for the fault tree 
 
 
 \subsubsection{Qualitative analysis comparison}
+In qualitative analysis, we are interested in the Minimal Cut Sets (MCS), their cardinalities, and the time of computation. Previous work produced hierarchical fault trees for all top level properties without bounds on the cardinality of cut sets or fault restrictions. They performed the hierarchical fault tree generation using OCRA~\cite{6693137} and implemented two procedures to generate the fault trees from the model. the algorithms were either based on existing Binary Decision Diagram (BDD) procedures or a combination of BDD with Bounded Model Checking (BMC). The BMC and BDD approach first computes the MCSs up to some specific depth using BMC and then performs a BDD algorithm to generate the rest of the MCSs. The full description of these procedures and findings can be found here~\cite{10.1007/978-3-319-11936-6-7, mattareiThesis}. 
+
 \subsubsection{Quantitative analysis comparison}
+For quantitative analysis, the main calculation of interest is: what is the probability of a TLE occuring? Given a set of MCSs and probabilities for leaf level faults (BEs), the computation of this TLE probability is possible using the techniques described in section III. Previous work has used this technique of TLE probabilistic computation when the MCSs were able to be computed. The TLE probabilities were approximated in the events of timeouts. 
