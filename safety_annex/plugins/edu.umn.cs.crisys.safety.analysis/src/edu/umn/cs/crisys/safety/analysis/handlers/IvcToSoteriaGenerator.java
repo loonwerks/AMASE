@@ -1,6 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
@@ -31,7 +32,8 @@ public class IvcToSoteriaGenerator {
 	SoteriaModel model = new SoteriaModel();
 	boolean isLowerLevel = false;
 	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
-	public HashMap<UniqueID, UniqueID> compIdMap = new HashMap<>();
+//	public HashMap<UniqueID, UniqueID> compIdMap = new HashMap<>();
+	public HashSet<String> compNameSet = new HashSet<>();
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
@@ -61,21 +63,24 @@ public class IvcToSoteriaGenerator {
 			// get component name
 			String compName = result.getName().replaceFirst("Verification for ", "");
 			if (compName.contains(".")) {
-				compName = compName.substring(0, compName.lastIndexOf('.'));
+				compName = compName.replaceAll("\\.", "_");
+				// compName = compName.substring(0, compName.lastIndexOf('.'));
 			}
-			compName = updateCompName(compName);
-			// build Soteria model for the current component
-			// get current component name
-			SoteriaComp curComp = new SoteriaComp(compName);
-			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
-				// recursively call walkthroughResults
-				walkthroughResults(curResult, curComp, linker);
-				// only the first result contains the top level properties
-				if (!isLowerLevel) {
-					isLowerLevel = true;
+			if (!compNameSet.contains(compName)) {
+				compNameSet.add(compName);
+				// build Soteria model for the current component
+				// get current component name
+				SoteriaComp curComp = new SoteriaComp(compName);
+				for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
+					// recursively call walkthroughResults
+					walkthroughResults(curResult, curComp, linker);
+					// only the first result contains the top level properties
+					if (!isLowerLevel) {
+						isLowerLevel = true;
+					}
 				}
+				compLib.addComp(curComp);
 			}
-			compLib.addComp(curComp);
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
@@ -202,26 +207,38 @@ public class IvcToSoteriaGenerator {
 		return updatedName;
 	}
 
-	public String updateCompName(String name) {
-		String updatedName = name;
-		String nameToCheck = updatedName;
-		int varIndex = 0;
-		UniqueID originalNameId = new UniqueID(name);
-		// first check if the original name is already in the keys of the map
-		// if yes, need to create a new name
-		if (compIdMap.containsKey(originalNameId)) {
-			// check if the updated name is in the map values
-			// if yes, update the name further so it's unique from existing values
-			while (compIdMap.containsValue(new UniqueID(nameToCheck))) {
-				varIndex++;
-				nameToCheck = updatedName + "_" + varIndex;
-			}
-			updatedName = nameToCheck;
-			// add a new entry into the map
-			compIdMap.put(originalNameId, new UniqueID(updatedName));
-		}
-
-		return updatedName;
-	}
+//	public boolean checkCompName(String name) {
+//		UniqueID originalNameId = new UniqueID(name);
+//		// first check if the original name is already in the keys of the map
+//		// if yes, need to create a new name
+//		if (compNameSet.contains(originalNameId)) {
+//			return true;
+//		} else {
+//			compIdMap.put(originalNameId, new UniqueID(updatedName));
+//			return false;
+//		}
+//	}
+//
+//	public String updateCompName(String name) {
+//		String updatedName = name;
+//		String nameToCheck = updatedName;
+//		int varIndex = 0;
+//		UniqueID originalNameId = new UniqueID(name);
+//		// first check if the original name is already in the keys of the map
+//		// if yes, need to create a new name
+//		if (compIdMap.containsKey(originalNameId)) {
+//			// check if the updated name is in the map values
+//			// if yes, update the name further so it's unique from existing values
+//			while (compIdMap.containsValue(new UniqueID(nameToCheck))) {
+//				varIndex++;
+//				nameToCheck = updatedName + "_" + varIndex;
+//			}
+//			updatedName = nameToCheck;
+//			// add a new entry into the map
+//			compIdMap.put(originalNameId, new UniqueID(updatedName));
+//		}
+//
+//		return updatedName;
+//	}
 
 }
