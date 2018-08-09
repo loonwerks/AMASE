@@ -328,9 +328,9 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		newline();
 		writeln("(* ----- FAULT TREE VISUALIZATIONS ----- *)");
 		// fault tree visualization
-		write("dot_gen_show_direct_tree_file ");
+		write("dot_gen_show_direct_tree_file ~rend:\"pdf\" ");
 		writeln("\"" + modelName + "_direct_ftree.gv\" " + mdlFTName + " ;;");
-		write("dot_gen_show_tree_file ");
+		write("dot_gen_show_tree_file ~rend:\"pdf\" ");
 		writeln("\"" + modelName + "_optimized_ftree.gv\" " + mdlFTName + " ;;");
 		newline();
 	}
