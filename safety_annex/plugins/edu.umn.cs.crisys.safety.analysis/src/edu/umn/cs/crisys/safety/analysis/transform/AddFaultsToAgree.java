@@ -214,7 +214,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 				// Add to supportRenames
 				renaming.addSupportRename(name, name);
 				// Add to supportRefString
-				renaming.addSupportRefString(name, "fault: " + key.explanitoryText + " (" + key.id + ")");
+				renaming.addSupportRefString(name, key.explanitoryText + " (" + key.id + ")");
 			}
 		}
 		return renaming;

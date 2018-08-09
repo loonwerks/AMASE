@@ -51,7 +51,7 @@ public class IvcToSoteriaGenerator {
 			if (renaming instanceof AgreeRenaming) {
 				// for each propertyResult
 				for (PropertyResult propertyResult : ((JKindResult) result).getPropertyResults()) {
-					extractPropertyResult(comp, renaming, propertyResult);
+					extractPropertyResult(comp, (AgreeRenaming) renaming, propertyResult);
 				}
 			} else {
 				throw new AgreeException("Not AGREE Renaming");
@@ -77,11 +77,13 @@ public class IvcToSoteriaGenerator {
 		}
 	}
 
-	private void extractPropertyResult(SoteriaComp comp, Renaming renaming, PropertyResult propertyResult) {
-		// get property name
-		String propertyName = updateName(propertyResult.getName());
-		// if it's not an assumption, then it's a guarantee
-		if (!propertyName.contains("assume") && !propertyName.contains("Assumptions")) {
+	private void extractPropertyResult(SoteriaComp comp, AgreeRenaming renaming, PropertyResult propertyResult) {
+		// get original property name
+		String origPropertyName = propertyResult.getName();
+		String lustreName = renaming.getLustreNameFromAgreeVar(origPropertyName);
+		String propertyName = updateName(comp.componentName + "_" + lustreName);
+		// if it is a guarantee
+		if (lustreName.startsWith("__GUARANTEE")) {
 			// if it's a valid guarantee
 			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
 				// add property as an output to the soteria map
@@ -94,10 +96,7 @@ public class IvcToSoteriaGenerator {
 				}
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 				SoteriaFormula formula = new SoteriaFormula(propertyName);
-
-				// TODO: when mivc is in place, update to handle a list of ivc sets
-				// and update the formula to handle conjunction of different ivc sets
-
+				// handle multiple ivc sets
 				for (List<String> ivcSet : property.getIvcSets()) {
 					SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
 					extractIvcSets(comp, renaming, formulaSubgroup, ivcSet);
@@ -130,51 +129,56 @@ public class IvcToSoteriaGenerator {
 		}
 	}
 
-	private void extractIvcSets(SoteriaComp comp, Renaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
+	private void extractIvcSets(SoteriaComp comp, AgreeRenaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
 			List<String> ivcSet) {
 		for (String ivcElem : ivcSet) {
 			extractIvcElem(comp, renaming, formulaSubgroup, ivcElem);
 		}
 	}
 
-	private void extractIvcElem(SoteriaComp comp, Renaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
+	private void extractIvcElem(SoteriaComp comp, AgreeRenaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
 			String ivcElem) {
-		String refStr = ((AgreeRenaming) renaming).getSupportRefString(ivcElem);
+		String ivcElemName = updateName(ivcElem);
 		// add each ivc element to formulaSubgroup
-		if (refStr.startsWith("fault: ")) {
-			// TODO: get the fault name for that fault activation variable in ivcElement
-			String faultName = refStr.replaceFirst("fault: ", "");
-			CompFaultActivation faultActivation = new CompFaultActivation(comp.componentName, updateName(faultName));
-			formulaSubgroup.addFormulaElem(faultActivation);
-			// if ivcElem is not yet in basicEvents
-			if (!comp.basicEvents.containsKey(ivcElem)) {
-				FaultStatementImpl faultStmtImpl = (FaultStatementImpl) ((AgreeRenaming) renaming).getRefMap()
-						.get(faultName);
-				for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
-					if (faultSub instanceof ProbabilityStatementImpl) {
-						String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
-						float failureProb = Float.parseFloat(probStr);
-						// TODO: need to have component specify failure rate and exposure time in the future
-						// currently treat exposure time as (float) 1.0
-						// and treat the failure probability from the fault statement as the failure rate
-						SoteriaFault basicEvent = new SoteriaFault(updateName(faultName), failureProb, (float) 1.0);
-						comp.addBasicEvent(ivcElem, basicEvent);
-					}
+		if (ivcElem.startsWith("__fault")) {
+			String refStr = renaming.getSupportRefString(ivcElem);
+			extractFaultIvcElem(comp, renaming, formulaSubgroup, ivcElemName, refStr);
+		} else {
+			extractContractIvcElem(comp, formulaSubgroup, ivcElemName);
+		}
+	}
+
+	private void extractContractIvcElem(SoteriaComp comp, SoteriaFormulaSubgroup formulaSubgroup, String propertyName) {
+		// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
+		comp.addInput(propertyName);
+		CompContractViolation contractViolation = new CompContractViolation(comp.componentName, propertyName);
+		formulaSubgroup.addFormulaElem(contractViolation);
+	}
+
+	private void extractFaultIvcElem(SoteriaComp comp, AgreeRenaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
+			String faultName, String faultRefName) {
+		// get the fault name for that fault activation variable in ivcElement
+		CompFaultActivation faultActivation = new CompFaultActivation(comp.componentName, faultName);
+		formulaSubgroup.addFormulaElem(faultActivation);
+		// if ivcElem is not yet in basicEvents
+		if (!comp.basicEvents.containsKey(faultName)) {
+			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(faultRefName);
+			for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
+				if (faultSub instanceof ProbabilityStatementImpl) {
+					String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
+					float failureProb = Float.parseFloat(probStr);
+					// TODO: need to have component specify failure rate and exposure time in the future
+					// currently treat exposure time as (float) 1.0
+					// and treat the failure probability from the fault statement as the failure rate
+					SoteriaFault basicEvent = new SoteriaFault(updateName(faultName), failureProb, (float) 1.0);
+					comp.addBasicEvent(faultName, basicEvent);
 				}
 			}
-
-		} else {
-			// add each ivc element that are verified contracts from subsequent layer to component inputs (sans duplicate)
-			comp.addInput(updateName(refStr));
-			CompContractViolation contractViolation = new CompContractViolation(comp.componentName, updateName(refStr));
-			formulaSubgroup.addFormulaElem(contractViolation);
 		}
 	}
 
 	public String updateName(String name) {
 		String updatedName = null;
-		String nameToCheck = null;
-		int varIndex = 0;
 		UniqueID originalNameId = new UniqueID(name);
 		// first check if the original name and recordId tuple is already in the keys of the map
 		// if yes, retrieve the updated name from its value
@@ -183,28 +187,9 @@ public class IvcToSoteriaGenerator {
 		}
 		// if not, update the name
 		else {
-			// replace all non-alphanumeric characters with empty strings
+			// replace all non-alphanumeric characters with "_"
 			// remove leading _
-			// replace sequence of underscore with one underscore
-			updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "").replaceAll("\\_+", "_");
-			// check if the name is longer than 48 characters
-			// if yes, truncate it to 48 characters
-			if (updatedName.length() > 48) {
-				updatedName = updatedName.substring(0, 48);
-			}
-			nameToCheck = updatedName;
-			// check if the updated name and recordId tuple is in the map values
-			// if yes, update the name further so it's unique from existing values
-			while (idMap.containsValue(new UniqueID(nameToCheck))) {
-				varIndex++;
-				// make sure the updated name is not longer than 48 characters
-				int indexLength = String.valueOf(varIndex).length();
-				if ((updatedName.length() + indexLength) > 48) {
-					updatedName = updatedName.substring(0, (48 - indexLength));
-				}
-				nameToCheck = updatedName + "_" + varIndex;
-			}
-			updatedName = nameToCheck;
+			updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "");
 			// add a new entry into the map
 			idMap.put(originalNameId, new UniqueID(updatedName));
 		}
