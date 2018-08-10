@@ -1,6 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
@@ -30,7 +31,9 @@ public class IvcToSoteriaGenerator {
 	SoteriaCompLib compLib = new SoteriaCompLib();
 	SoteriaModel model = new SoteriaModel();
 	boolean isLowerLevel = false;
-	public HashMap<UniqueID, UniqueID> idMap = new HashMap<>();
+	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
+//	public HashMap<UniqueID, UniqueID> compIdMap = new HashMap<>();
+	public HashSet<String> compNameSet = new HashSet<>();
 
 	public SoteriaModel generateModel(AnalysisResult result, AgreeResultsLinker linker) {
 		// get current verification result
@@ -58,19 +61,26 @@ public class IvcToSoteriaGenerator {
 			}
 		} else if (result instanceof CompositeAnalysisResult) {
 			// get component name
-			String compName = result.getName().replaceFirst("Verification for ", "").replaceFirst(".impl", "");
-			// build Soteria model for the current component
-			// get current component name
-			SoteriaComp curComp = new SoteriaComp(compName);
-			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
-				// recursively call walkthroughResults
-				walkthroughResults(curResult, curComp, linker);
-				// only the first result contains the top level properties
-				if (!isLowerLevel) {
-					isLowerLevel = true;
-				}
+			String compName = result.getName().replaceFirst("Verification for ", "");
+			if (compName.contains(".")) {
+				compName = compName.replaceAll("\\.", "_");
+				// compName = compName.substring(0, compName.lastIndexOf('.'));
 			}
-			compLib.addComp(curComp);
+			if (!compNameSet.contains(compName)) {
+				compNameSet.add(compName);
+				// build Soteria model for the current component
+				// get current component name
+				SoteriaComp curComp = new SoteriaComp(compName);
+				for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
+					// recursively call walkthroughResults
+					walkthroughResults(curResult, curComp, linker);
+					// only the first result contains the top level properties
+					if (!isLowerLevel) {
+						isLowerLevel = true;
+					}
+				}
+				compLib.addComp(curComp);
+			}
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
@@ -81,7 +91,7 @@ public class IvcToSoteriaGenerator {
 		// get original property name
 		String origPropertyName = propertyResult.getName();
 		String lustreName = renaming.getLustreNameFromAgreeVar(origPropertyName);
-		String propertyName = updateName(comp.componentName + "_" + lustreName);
+		String propertyName = updateElemName(comp.componentName + "_" + lustreName);
 		// if it is a guarantee
 		if (lustreName.startsWith("__GUARANTEE")) {
 			// if it's a valid guarantee
@@ -138,7 +148,7 @@ public class IvcToSoteriaGenerator {
 
 	private void extractIvcElem(SoteriaComp comp, AgreeRenaming renaming, SoteriaFormulaSubgroup formulaSubgroup,
 			String ivcElem) {
-		String ivcElemName = updateName(ivcElem);
+		String ivcElemName = updateElemName(ivcElem);
 		// add each ivc element to formulaSubgroup
 		if (ivcElem.startsWith("__fault")) {
 			String refStr = renaming.getSupportRefString(ivcElem);
@@ -170,20 +180,20 @@ public class IvcToSoteriaGenerator {
 					// TODO: need to have component specify failure rate and exposure time in the future
 					// currently treat exposure time as (float) 1.0
 					// and treat the failure probability from the fault statement as the failure rate
-					SoteriaFault basicEvent = new SoteriaFault(updateName(faultName), failureProb, (float) 1.0);
+					SoteriaFault basicEvent = new SoteriaFault(updateElemName(faultName), failureProb, (float) 1.0);
 					comp.addBasicEvent(faultName, basicEvent);
 				}
 			}
 		}
 	}
 
-	public String updateName(String name) {
+	public String updateElemName(String name) {
 		String updatedName = null;
 		UniqueID originalNameId = new UniqueID(name);
-		// first check if the original name and recordId tuple is already in the keys of the map
+		// first check if the original name is already in the keys of the map
 		// if yes, retrieve the updated name from its value
-		if (idMap.containsKey(originalNameId)) {
-			updatedName = idMap.get(originalNameId).id;
+		if (elemIdMap.containsKey(originalNameId)) {
+			updatedName = elemIdMap.get(originalNameId).id;
 		}
 		// if not, update the name
 		else {
@@ -191,10 +201,44 @@ public class IvcToSoteriaGenerator {
 			// remove leading _
 			updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "");
 			// add a new entry into the map
-			idMap.put(originalNameId, new UniqueID(updatedName));
+			elemIdMap.put(originalNameId, new UniqueID(updatedName));
 		}
 
 		return updatedName;
 	}
+
+//	public boolean checkCompName(String name) {
+//		UniqueID originalNameId = new UniqueID(name);
+//		// first check if the original name is already in the keys of the map
+//		// if yes, need to create a new name
+//		if (compNameSet.contains(originalNameId)) {
+//			return true;
+//		} else {
+//			compIdMap.put(originalNameId, new UniqueID(updatedName));
+//			return false;
+//		}
+//	}
+//
+//	public String updateCompName(String name) {
+//		String updatedName = name;
+//		String nameToCheck = updatedName;
+//		int varIndex = 0;
+//		UniqueID originalNameId = new UniqueID(name);
+//		// first check if the original name is already in the keys of the map
+//		// if yes, need to create a new name
+//		if (compIdMap.containsKey(originalNameId)) {
+//			// check if the updated name is in the map values
+//			// if yes, update the name further so it's unique from existing values
+//			while (compIdMap.containsValue(new UniqueID(nameToCheck))) {
+//				varIndex++;
+//				nameToCheck = updatedName + "_" + varIndex;
+//			}
+//			updatedName = nameToCheck;
+//			// add a new entry into the map
+//			compIdMap.put(originalNameId, new UniqueID(updatedName));
+//		}
+//
+//		return updatedName;
+//	}
 
 }
