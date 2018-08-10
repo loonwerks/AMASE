@@ -1,4 +1,6 @@
 \section{Methodology}
+In our description leading up to the generation of compositional fault trees, we must first define important aspects of this procedure. We begin by informally describing compositional reasoning. The idea is to partition the formal analysis of a system architecture into verification tasks that correspond into the decomposition of the architecture. A component contract is an assume-guarantee pair. Intuitively, the meaning of a pair is 'if the assumption is true, then the component will ensure that the guarantee is true.' The components of a system are organized hierarchically and the proofs begin at the leaf level. Each layer of the architecture is viewed a system. For any given layer, the proof consists of demonstrating that the system guarantee is provable given the behavior of its subcomponents and the system assumptions. This proof is performed one layer at a time from the leaf level up to the top level of the system~\cite{NFM2012:CoGaMiWhLaLu}. 
+
 Given a complex model, it is often useful to extract traceability information related to the proof, in other words, which portions of the model were necessary to construct the proof. To this end, an algorithm was developed that efficiently computes the \textit{inductive validity cores} (IVC) within a model necessary for the proofs of safety properties for sequential systems \cite{DBLP:journals/corr/GhassabaniGW16}. 
 
 \subsection{Preliminaries}
@@ -57,30 +59,27 @@ $C \subseteq BE$ is a MCS if $\pi_F(C) = 1 \land \forall C' \subset C. \pi_F(C')
 
 Given the formalisms defined previously, we show that finding the minimal IVCs is equivalent to finding the MCS. \\
 
-\begin{theorem} Finding all minimal IVCs is equivalent to finding the set of all MCSs\\
+\begin{theorem} Finding all minimal IVCs in a compositional verification problem is equivalent to finding the set of all MCSs \\
 
 \begin{proof} 
-Let $T = \{f_1, f_2, ..., f_n\}$ be the set of model elements corresponding to faults for the components and let $\mathcal{P}_{tle}$ be the top level event (TLE). By the definition for IVC, we know that $S \subseteq T$ is an IVC for $(I, T) \vdash \mathcal{P}_{tle}$ iff $(I, S) \vdash \mathcal{P}_{tle}$. 
+Assume that the system is composed of $n$ components and let $\mathcal{P}_{tle} = \mathcal{P}_n$ be the top level event and likewise $\mathcal{P}_{i}$ corresponds to the properties at the $i{th}$ level of the system. 
+\textit{Base Case}:
+We begin at the leaf level of the system where $T_1 = F_1$ is the set of model elements corresponding to faults for the leaf level components. By the definition for IVC, we know that $S_1 \subseteq T_1$ is an IVC for $(I, T_1) \vdash \mathcal{P}_{1}$ iff $(I, S_1) \vdash \mathcal{P}_{1}$.
 In this case, $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
-Since $S$ is minimal IVC, for any $M \subset S$, $(I, M) \doesnotentail \mathcal{P}_{tle}$. Hence it follows that $\pi_F(M) = 0$ for any $M \subset S$.
+Since $S_1$ is minimal IVC, for any $M_1 \subset S_1$, $(I, M_1) \doesnotentail \mathcal{P}_{1}$. Hence it follows that $\pi_F(M_1) = 0$ for any $M_1 \subset S_1$.
+
+\textit{Induction Case}:
+Let $T_{n} = F_{n} \cup G_{n}$ where $F_{n}$ is the set of faults corresponding to the components at level ${n}$ and $G_{n}$ is the set of guarantees of those components. Assume $S_{n} \subseteq T_{n}$ is the set of minimal IVCs. Then we know that $(I, S_{n}) \vdash \mathcal{P}_{n}$ and hence $\pi_F(S_{n}) = 1$. We also know since $S_{n}$ is minimal, for any $M_{n} \subset S_{n}$, $(I, M_{n}) \doesnotentail \mathcal{P}_{n}$. Hence it follows that $\pi_F(M_{n}) = 0$ for any $M_{n} \subset S_{n}$ and $S_{n}$ is the minimal cut set for $\mathcal{P}_{tle} = \mathcal{P}_n$.
+
 \end{proof}
 \end{theorem}
 
+ 
+
+
+
 \subsection{Quantitative analysis}
-Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). This value is of interest because in certain critical systems, the top level properties must be proved safe within a certain probabilistic threshold~\cite{SAE:ARP4761}. The next section describes probability theory and provides a description of how they are used to calculate the probability of the TLE. These definitions are based on the ones given in~\cite{RuijtersSurvey}.\\
-
-\danielle{I will add the probability formalisms here later. For now, I just want to clarify my findings regarding the proof that Mike was talking about yesterday.}\\
-Assume events occur independently. \\
-
-Or gate: \\
-Probability is defined as follows: \\
-$P(A \lor B) = P(A) + P(B) - P(A \land B)$. \\
-Assume that the probability of events A, B is quite small (this is called the Rare Event Approximation). Then the term $P(A \land B)$ will also be quite small and hence is an ``error term". If we drop this term from the calculations, we end up with the approximated probability being: $P(A) + P(B) \geq P(A) + P(B) - P(A \land B)$. \\ This is clearly a conservative estimate. \danielle{It is also shown in the Fault Tree Handbook that this error is less than 0.1 I believe. I will have to review that again, but there is a bound on this error that has been previously proven.}
-
-And gate: \\
-With the calculations of the and gate, this is where independence is really required. Using Bayes Rule, we have $P(A \land B) = P(B)P(A|B) = P(A)P(B|A)$ for conditionally dependent events and $P(A \land B) = P(B)P(A)$ for independent events. If we assume independence when the events are NOT independent, in the worst case scenario, we get something like $B$ is completely dependent on $A$. Therefore $P(B|A) = 1$ and $P(A \land B) = P(B) \geq P(B)P(A)$. Not a conservative estimation. In the case of dependence, joint probability values would be required (acommon cause analysis).  \\
-
-\danielle{Any other kind of gate uses combinations of these rules. These are not proofs that I made, I just looked at the logic of the operations. I am not sure how much we want to include in the paper. I assume a description is necessary, but a proof? No, this isn't a proof... This is just following definitions down a short little jaunt in the woods.}
+Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). This value is of interest because in certain critical systems, the top level properties must be proved safe within a certain probabilistic threshold~\cite{SAE:ARP4761}. Given the set of MCSs and the probabilities of occurrance associated with them, the probability of the TLE can be easily calculated using a variety of algorithms~\cite{RuijtersSurvey}. The bottleneck in this computation is the calculation of the MCSs. The quantitative analysis utilized in the SOTERIA tool is based on known methods of probabilistic computation~\cite{SOTERIAproject} and the techniques are well described in SAE ARP4761~\cite{SAE:ARP4761} as well as other pertinant literature~\cite{RuijtersSurvey}. The computation of the MCSs and the Lustre model with contracts, faults, and fault probabilities is automatically translated into the SOTERIA model and the quantitative analysis is performed using these methods. 
 
 
 
