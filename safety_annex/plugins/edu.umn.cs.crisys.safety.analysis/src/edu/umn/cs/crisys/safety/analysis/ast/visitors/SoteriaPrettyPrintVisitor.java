@@ -54,7 +54,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 			// write each element
 			for (SoteriaFormulaSubgroup subgroup : formula.formulaBody) {
 				if (multipleElem) {
-					writeln("; ");
+					writeln(";");
 				}
 				subgroup.accept(this);
 				multipleElem = true;
@@ -65,27 +65,6 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write(")");
 		return null;
 	}
-
-//	@Override
-//	public Void visit(SoteriaFormulaSubgroup subgroup) {
-//		// use disjunction if more than one element
-//		if (subgroup.elmeList.size() == 1) {
-//			subgroup.elmeList.get(0).accept(this);
-//		} else {
-//			write("Or[");
-//			boolean multipleElem = false;
-//			// write each element
-//			for (SoteriaFormulaElem elem : subgroup.elmeList) {
-//				if (multipleElem) {
-//					writeln("; ");
-//				}
-//				elem.accept(this);
-//				multipleElem = true;
-//			}
-//			write("]");
-//		}
-//		return null;
-//	}
 
 	@Override
 	public Void visit(SoteriaFault fault) {
@@ -102,7 +81,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		boolean multipleElem = false;
 		for (String input : comp.inputFlows) {
 			if (multipleElem) {
-				write("; ");
+				writeln(";");
 			}
 			write("\"" + input + "\"");
 			multipleElem = true;
@@ -113,7 +92,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		// write each basic event name
 		for (SoteriaFault fault : comp.basicEvents.values()) {
 			if (multipleElem) {
-				write("; ");
+				writeln(";");
 			}
 			write("\"" + fault.faultName + "\"");
 			multipleElem = true;
@@ -124,7 +103,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		// write each basic event failure rate and exposure time
 		for (SoteriaFault fault : comp.basicEvents.values()) {
 			if (multipleElem) {
-				write("; ");
+				writeln(";");
 			}
 			write("(" + fault.failureRate + ", " + fault.exposureTime + ")");
 			multipleElem = true;
@@ -135,7 +114,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		multipleElem = false;
 		for (String output : comp.outputFlows) {
 			if (multipleElem) {
-				write("; ");
+				writeln(";");
 			}
 			write("\"" + output + "\"");
 			multipleElem = true;
@@ -146,7 +125,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		multipleElem = false;
 		for (Map.Entry<String, SoteriaFormula> entry : comp.formulas.entrySet()) {
 			if (multipleElem) {
-				writeln("; ");
+				writeln(";");
 			}
 			SoteriaFormula formula = entry.getValue();
 			formula.accept(this);
@@ -167,7 +146,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		// write each component
 		for (SoteriaComp comp : compLib.comps) {
 			if (multipleElem) {
-				writeln("; ");
+				writeln(";");
 				newline();
 			}
 			comp.accept(this);
@@ -282,7 +261,7 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		write("((\"" + connection.destCompName + "\", ");
 		write("\"" + connection.destCompContract + "\"),");
 		write("(\"" + connection.srcCompName + "\", ");
-		write("\"" + connection.srcCompContract + "\")); ");
+		write("\"" + connection.srcCompContract + "\"));\n");
 		return null;
 	}
 
