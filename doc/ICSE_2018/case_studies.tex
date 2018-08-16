@@ -3,7 +3,7 @@
 To demonstrate the effectiveness of this approach and compare to state of the art existing tools, we describe two case studies.
 
 \subsection{Wheel Brake System}
-The Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110} is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate scalability of our tools and compare results with other studies, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15,mattareiThesis}. We refer readers to this publication for diagrams of the full arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A simplified diagram taken from ARP4761 is shown in Figure~\ref{fig:wbs_arp4761}. 
+The Wheel Brake System (WBS) described in AIR6110 is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp,AIR6110}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate scalability of our tools and compare results with other studies, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15,mattareiThesis}. We refer readers to this publication for diagrams of the full arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. A simplified diagram taken from ARP4761 is shown in Figure~\ref{fig:wbs_arp4761}. 
 
 \begin{figure}[h]
 \begin{center}
@@ -21,17 +21,42 @@ In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit.
 
 The last mode of operation of the WBS is the \textit{emergency} mode. This is supported by the blue circuit but operates if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode.
 
-The model size and statistics are described in Table~\ref{fig:arch_table}. 
+The model size and statistics are described in Table~\ref{tab:model_stats}. 
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=8cm]{images/arch_table.pdf}
-\caption{Model Statistics} \label{fig:arch_table}
-\end{center}
-\end{figure}
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[width=\columnwidth]{images/arch_table.pdf}
+%\vspace{-17.0em}
+%\caption{Model Statistics} \label{fig:arch_table}
+%\end{center}
+%\end{figure}
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|r|r} % <-- Changed to S here.
+      \hline
+      \multirow{2}{*}{Architecture} & Total component types & 30\\ % <-- Combining 2 rows with arbitrary with (*) and content 12
+      & Leaf component types & 20\\ 
+      & Total component instances & 169\\ 
+      & Leaf component instances & 143\\ 
+      & Max depth & 5\\ 
+      \hline
+      \multirow{2}{*}{Nominal Contracts} & No. of assumptions & 17\\ % <-- Combining 2 rows with arbitrary with (*) and content 12
+      & No. of guarantees & 113\\ 
+      & No. of System level properties & 29\\ 
+      \hline
+      \multirow{2}{*}{Fault Model} & Total fault nodes & 33\\ % <-- Combining 2 rows with arbitrary with (*) and content 12
+      & No. of faults in instance & 141\\ 
+      \hline
+    \end{tabular}
+    \vspace{1em}
+    \caption{Model Statistics}
+    \label{tab:model_stats}
+  \end{center}
+\end{table}
 
 \subsubsection{System Safety Properties}
-The AIR6110 document contains a set of safety requirements on the expected probability of an unwanted occurance of event, e.g. `'the loss of all wheel braking shall be extremely remote.'' The case study performed using xSAP/NuSMV~\cite{mattareiThesis, DBLP:conf/cav/BozzanoCPJKPRT15} focused on these safety requirements that are outlined in AIR6110. The detailed tech report of the xSAP/NuSMV model of the WBS can be found in~\cite{air6110TechReport}.
+The AIR6110 document contains a set of safety requirements on the expected probability of an unwanted occurance of event, e.g. `'the loss of all wheel braking shall be extremely remote.'' The case study performed using xSAP/NuSMV focused on these safety requirements that are outlined in AIR6110~\cite{mattareiThesis, DBLP:conf/cav/BozzanoCPJKPRT15}. The detailed tech report of the xSAP/NuSMV model of the WBS is also available~\cite{air6110TechReport}.
 
 \textbf{S18-WBS-R-0321} \textit{Never loss of all wheel braking.}
 
@@ -53,7 +78,7 @@ These requirements violations are the top level events (TLE) for the fault tree 
 
 
 \subsubsection{Qualitative analysis comparison}
-In qualitative analysis, we are interested in the Minimal Cut Sets (MCS), their cardinalities, and the time of computation. Previous work produced hierarchical fault trees for all top level properties without bounds on the cardinality of cut sets or fault restrictions. They performed the hierarchical fault tree generation using OCRA~\cite{6693137} and implemented two procedures to generate the fault trees from the model. the algorithms were either based on existing Binary Decision Diagram (BDD) procedures or a combination of BDD with Bounded Model Checking (BMC). The BMC and BDD approach first computes the MCSs up to some specific depth using BMC and then performs a BDD algorithm to generate the rest of the MCSs. The full description of these procedures and findings can be found here~\cite{10.1007/978-3-319-11936-6-7, mattareiThesis}. 
+In qualitative analysis, we are interested in the Minimal Cut Sets (MCS), their cardinalities, and the time of computation. Previous work produced hierarchical fault trees for all top level properties without bounds on the cardinality of cut sets or fault restrictions. They performed the hierarchical fault tree generation and implemented two procedures to generate the fault trees from the model. the algorithms were either based on existing Binary Decision Diagram (BDD) procedures or a combination of BDD with Bounded Model Checking (BMC). The BMC and BDD approach first computes the MCSs up to some specific depth using BMC and then performs a BDD algorithm to generate the rest of the MCSs~\cite{10.1007/978-3-319-11936-6-7, mattareiThesis}. 
 
 \subsubsection{Quantitative analysis comparison}
 For quantitative analysis, the main calculation of interest is: what is the probability of a TLE occuring? Given a set of MCSs and probabilities for leaf level faults (BEs), the computation of this TLE probability is possible using the techniques described in section III. Previous work has used this technique of TLE probabilistic computation when the MCSs were able to be computed. The TLE probabilities were approximated in the events of timeouts. 
