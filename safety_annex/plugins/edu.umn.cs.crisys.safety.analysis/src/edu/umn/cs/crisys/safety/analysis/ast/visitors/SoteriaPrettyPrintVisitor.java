@@ -220,7 +220,10 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 			// create pre-analyses model visualizations
 			preAnalysesVisualizations(modelName, compLibName);
 			// model analyses
-			modelAnalysesAndVisualization(modelName, compLibName);
+			// TODO: uncomment the following after further investigation
+			// with regard to why soteria model_to_ftree not able to handle more than
+			// 5 conjunctions in a formula
+			// modelAnalysesAndVisualization(modelName, compLibName);
 			// create post-analyses model visualizations
 		}
 

@@ -63,6 +63,7 @@ import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
+import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import jkind.JKindException;
 import jkind.api.JKindApi;
@@ -98,7 +99,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 	 * Check for component implementation, two annexes in that implementation, save
 	 * the safety package instance, and set the transform agree flag.
 	 */
-
 
 	@Override
 	protected IStatus runJob(Element root, IProgressMonitor monitor) {
@@ -226,12 +226,26 @@ public class SoteriaGenHandler extends VerifyHandler {
 				// generate soteria model from the result
 				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
 				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
-				// print to temporary file
-				// TODO: create SOTERIA folder in the model file path to create files in that folder
 				try {
-					File file = File.createTempFile("soteria", ".ml");
+					File file = File.createTempFile("soteriaMdl_", ".ml");
 					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 					bw.write(soteriaModel.toString());
+					bw.close();
+					org.eclipse.swt.program.Program.launch(file.toString());
+				} catch (IOException e) {
+					Dialog.showError("Unable to open file", e.getMessage());
+					e.printStackTrace();
+				}
+
+				// generate soteria fault tree from the result
+
+				IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
+				SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
+
+				try {
+					File file = File.createTempFile("soteriaFT_", ".ml");
+					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+					bw.write(soteriaFT.toString());
 					bw.close();
 					org.eclipse.swt.program.Program.launch(file.toString());
 				} catch (IOException e) {
