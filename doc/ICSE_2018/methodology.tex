@@ -1,7 +1,5 @@
 \section{Methodology}
-In our description leading up to the generation of compositional fault trees, we must first define important aspects of this procedure. We begin by informally describing compositional reasoning. The idea is to partition the formal analysis of a system architecture into verification tasks that correspond into the decomposition of the architecture. A component contract is an assume-guarantee pair. Intuitively, the meaning of a pair is 'if the assumption is true, then the component will ensure that the guarantee is true.' The components of a system are organized hierarchically and the proofs begin at the leaf level. Each layer of the architecture is viewed a system. For any given layer, the proof consists of demonstrating that the system guarantee is provable given the behavior of its subcomponents and the system assumptions. This proof is performed one layer at a time from the leaf level up to the top level of the system~\cite{NFM2012:CoGaMiWhLaLu}. 
-
-Given a complex model, it is often useful to extract traceability information related to the proof, in other words, which portions of the model were necessary to construct the proof. To this end, an algorithm was developed that efficiently computes the \textit{inductive validity cores} (IVC) within a model necessary for the proofs of safety properties for sequential systems \cite{DBLP:journals/corr/GhassabaniGW16}. 
+In our description leading up to the generation of compositional fault trees, we must first define important aspects of this procedure. 
 
 \subsection{Preliminaries}
 Given a state space $S$, a transition system $(I,T)$ consists of the initial state predicate $I : S \rightarrow \{0,1\}$ and a transition step predicate $T : S \times S \rightarrow \{0,1\}$. Reachability for $(I,T)$ is defined as the smallest predicate $R : S \rightarrow \{0,1\}$ which satisfies the following formulas:
@@ -19,10 +17,9 @@ A safety property $\mathcal{P} : S \to \{0,1\}$ is a state predicate. A safety p
 An inductive validity core $S$ for $(I,T) \vdash \mathcal{P}$ is minimal iff $! \exists S' . S' \subset S \ni (I,S') \vdash \mathcal{P}$. \\
 \end{definition}
 
-A fault tree is a directed acyclic graph (DAG) consisting of the node types \textit{events} and \textit{gates}. An event is an occurance within the system, typically the failure of a subsystem down to an individual component. Events can be grouped into \textit{basic events} (BEs), which occur independently, and \textit{intermediate events} which occur dependently and are caused by one or more other events. The event at the top of the tree, the \textit{top level event} (TLE), is the event being analyzed. This event models the failure of the system (or subsystem) under consideration. The gates represent how failures propagate through the system and how failures in subsystems can cause system wide failures. The two main logic symbols used are the Boolean logic AND-gates and OR-gates.
-An AND-gate is used when the undesired top level event can only occur when all the lower conditions are true. The OR-gate is used when the undesired event can occur if any one or more of the next lower conditions is true. This is not a comprehensive list of gate types, but we focus our attention on these two common gate types.\\
+Intuitively, this can be understood as the minimal set of elements such that the safety property $\mathcal{P}$ is proved. \\
 
-To formalize a fault tree (FT), we use $GateTypes = \{And, Or\}$. Following Ruijters, et. al. \cite{RuijtersSurvey}, we formalize FT as follows. \\
+To formalize a fault tree, FT, we use $GateTypes = \{And, Or\}$. Following Ruijters, et. al. \cite{RuijtersSurvey}, we formalize FT as follows. \\
 
 \begin{definition}Fault Tree\\ 
 A FT is a 4-tuple $F = \langle BE, G, T, I \rangle$ consisting of the following components. 
@@ -47,7 +44,7 @@ The semantics of FT F is a function $\pi_F : \mathcal{P}(BE) \times E \vdash \{0
 
 The interpretation of the TLE $t$ is written as $\pi_F(S,t) = \pi_F(S)$. If the failure of $S$ causes the TLE to occur, we write $\pi_F(S) = 1$. 
 
- In qualitative analysis, cut sets and minimal cut sets provide information about the vulnerabilities of a system in terms of its basic events. A \textit{cut set} is a set of components that together can cause a system to fail. A \textit{minimal cut set} is a cut set which contains the minimum number of basic events required in order to cause the TLE to occur. More formally, these are defined as follows. \\
+In qualitative analysis, cut sets and minimal cut sets provide information about the vulnerabilities of a system in terms of its basic events. A \textit{cut set} is a set of components that together can cause a system to fail. A \textit{minimal cut set} is a cut set which contains the minimum number of basic events required in order to cause the TLE to occur. More formally, these are defined as follows. \\
 
 \begin{definition}Cut Set\\   
  $C \subseteq BE$ is a cut set of FT F if $\pi_F(C) = 1$. \\
@@ -79,7 +76,7 @@ Let $T_{n} = F_{n} \cup G_{n}$ where $F_{n}$ is the set of faults corresponding 
 
 
 \subsection{Quantitative analysis}
-Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). This value is of interest because in certain critical systems, the top level properties must be proved safe within a certain probabilistic threshold~\cite{SAE:ARP4761}. Given the set of MCSs and the probabilities of occurrance associated with them, the probability of the TLE can be easily calculated using a variety of algorithms~\cite{RuijtersSurvey}. The bottleneck in this computation is the calculation of the MCSs. The quantitative analysis utilized in the SOTERIA tool is based on known methods of probabilistic computation~\cite{SOTERIAproject} and the techniques are well described in SAE ARP4761~\cite{SAE:ARP4761} as well as other pertinant literature~\cite{RuijtersSurvey}. The computation of the MCSs and the Lustre model with contracts, faults, and fault probabilities is automatically translated into the SOTERIA model and the quantitative analysis is performed using these methods. 
+Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). This value is of interest because in certain critical systems, the top level properties must be proved safe within a certain probabilistic threshold~\cite{SAE:ARP4761}. Given the set of MCSs and the probabilities of occurrance associated with them, the probability of the TLE can be calculated using a variety of algorithms~\cite{RuijtersSurvey}. The bottleneck in this computation is the calculation of the MCSs. The quantitative analysis utilized in the SOTERIA tool is based on known methods of probabilistic computation and the techniques are well described in SAE ARP4761 as well as other pertinant literature~\cite{RuijtersSurvey, SOTERIAproject,SAE:ARP4761}. The computation of the MCSs and the Lustre model with contracts, faults, and fault probabilities is automatically translated into the SOTERIA model and the quantitative analysis is performed using these methods. 
 
 
 
