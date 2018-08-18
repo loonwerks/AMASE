@@ -101,10 +101,10 @@ public class SoteriaFTPrettyPrintVisitor implements SoteriaFTAstVisitor<Void> {
 			multipleElem = true;
 		}
 		writeln("    ];;");
-		// print its child nodes
-		for (SoteriaFTNode childNode : orNode.childNodes.values()) {
-			childNode.accept(this);
-		}
+//		 print its child nodes
+//		for (SoteriaFTNode childNode : orNode.childNodes.values()) {
+//			childNode.accept(this);
+//		}
 		return null;
 	}
 
@@ -121,10 +121,10 @@ public class SoteriaFTPrettyPrintVisitor implements SoteriaFTAstVisitor<Void> {
 			multipleElem = true;
 		}
 		writeln("    ];;");
-		// print its child nodes
-		for (SoteriaFTNode childNode : andNode.childNodes.values()) {
-			childNode.accept(this);
-		}
+//		// print its child nodes
+//		for (SoteriaFTNode childNode : andNode.childNodes.values()) {
+//			childNode.accept(this);
+//		}
 		return null;
 	}
 

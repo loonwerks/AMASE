@@ -115,6 +115,7 @@ public class IvcToSoteriaFTGenerator {
 						SoteriaFTOrNode ivcSetNode = new SoteriaFTOrNode(ivcSetNodeName);
 						extractIvcSets(compName, renaming, ivcSetNode, ivcSet);
 						propertyNode.addChildNode(ivcSetNodeName, ivcSetNode);
+						soteriaFT.addIntermediateNode(ivcSetNodeName, ivcSetNode);
 					}
 					if (!isLowerLevel) {
 						soteriaFT.addRootNode(propertyName, propertyNode);
@@ -153,12 +154,13 @@ public class IvcToSoteriaFTGenerator {
 	}
 
 	private void extractContractIvcElem(String compName, SoteriaFTOrNode ivcSetNode, String propertyName) {
+		SoteriaFTNonLeafNode nonLeafNode;
 		if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
-			SoteriaFTNonLeafNode nonLeafNode = new SoteriaFTNonLeafNode(propertyName);
+			nonLeafNode = new SoteriaFTNonLeafNode(propertyName);
 		} else {
-			SoteriaFTNonLeafNode nonLeafNode = soteriaFT.intermediateNodes.get(propertyName);
-			ivcSetNode.addChildNode(propertyName, nonLeafNode);
+			nonLeafNode = soteriaFT.intermediateNodes.get(propertyName);
 		}
+		ivcSetNode.addChildNode(propertyName, nonLeafNode);
 	}
 
 	private void extractFaultIvcElem(String compName, AgreeRenaming renaming, SoteriaFTOrNode ivcSetNode,
@@ -187,6 +189,10 @@ public class IvcToSoteriaFTGenerator {
 
 	}
 
+	public static String decapitalizeString(String string) {
+		return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+	}
+
 	public String updateElemName(String name) {
 		String updatedName = null;
 		UniqueID originalNameId = new UniqueID(name);
@@ -200,6 +206,8 @@ public class IvcToSoteriaFTGenerator {
 			// replace all non-alphanumeric characters with "_"
 			// remove leading _
 			updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "");
+			// start with lower case letter for names as otherwise ocaml flags error for variable declarations
+			updatedName = Character.toLowerCase(updatedName.charAt(0)) + updatedName.substring(1);
 			// add a new entry into the map
 			elemIdMap.put(originalNameId, new UniqueID(updatedName));
 		}
