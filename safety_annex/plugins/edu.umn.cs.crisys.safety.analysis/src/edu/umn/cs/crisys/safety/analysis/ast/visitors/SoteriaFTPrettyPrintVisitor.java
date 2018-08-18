@@ -40,7 +40,7 @@ public class SoteriaFTPrettyPrintVisitor implements SoteriaFTAstVisitor<Void> {
 			leaf.accept(this);
 		}
 		// print non leaf nodes
-		for (SoteriaFTNonLeafNode nonLeaf : ft.intermediateNodes.values()) {
+		for (SoteriaFTNonLeafNode nonLeaf : ft.sortedIntermediateNodes) {
 			nonLeaf.accept(this);
 		}
 		//compute cutsets and probabilities for each root node
@@ -90,30 +90,21 @@ public class SoteriaFTPrettyPrintVisitor implements SoteriaFTAstVisitor<Void> {
 
 	@Override
 	public Void visit(SoteriaFTOrNode orNode) {
-		writeln("let " + orNode.propertyName + " = ");
-		writeln(orNode.nodeOpStr + " [");
-		boolean multipleElem = false;
-		for (SoteriaFTNode node : orNode.childNodes.values()) {
-			if (multipleElem) {
-				writeln(";");
-			}
-			write(node.nodeName);
-			multipleElem = true;
-		}
-		writeln("    ];;");
-//		 print its child nodes
-//		for (SoteriaFTNode childNode : orNode.childNodes.values()) {
-//			childNode.accept(this);
-//		}
+		printNonLeafNode(orNode.nodeOpStr, orNode);
 		return null;
 	}
 
 	@Override
 	public Void visit(SoteriaFTAndNode andNode) {
-		writeln("let " + andNode.propertyName + " = ");
-		writeln(andNode.nodeOpStr + " [");
+		printNonLeafNode(andNode.nodeOpStr, andNode);
+		return null;
+	}
+
+	private void printNonLeafNode(String nodeOpStr, SoteriaFTNonLeafNode nonLeaf) {
+		writeln("let " + nonLeaf.propertyName + " = ");
+		writeln(nodeOpStr + " [");
 		boolean multipleElem = false;
-		for (SoteriaFTNode node : andNode.childNodes.values()) {
+		for (SoteriaFTNode node : nonLeaf.childNodes.values()) {
 			if (multipleElem) {
 				writeln(";");
 			}
@@ -121,11 +112,6 @@ public class SoteriaFTPrettyPrintVisitor implements SoteriaFTAstVisitor<Void> {
 			multipleElem = true;
 		}
 		writeln("    ];;");
-//		// print its child nodes
-//		for (SoteriaFTNode childNode : andNode.childNodes.values()) {
-//			childNode.accept(this);
-//		}
-		return null;
 	}
 
 }

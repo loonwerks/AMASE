@@ -34,6 +34,11 @@ public class IvcToSoteriaFTGenerator {
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
 		walkthroughResults(curResult, null, linker);
+		// some node's child nodes were added before those child nodes obtained their own child nodes
+		// fix those discrepancies in the traverse
+		soteriaFT.updateChildNodes();
+		// sort through intermediate nodes to declare before use
+		soteriaFT.sortIntermediateNodes();
 		return soteriaFT;
 	}
 
@@ -109,13 +114,14 @@ public class IvcToSoteriaFTGenerator {
 				}
 
 				if (isNewNode) {
+					int index = 0;
 					for (List<String> ivcSet : property.getIvcSets()) {
-						int index = 0;
 						String ivcSetNodeName = propertyName + "_" + Integer.toString(index);
 						SoteriaFTOrNode ivcSetNode = new SoteriaFTOrNode(ivcSetNodeName);
 						extractIvcSets(compName, renaming, ivcSetNode, ivcSet);
 						propertyNode.addChildNode(ivcSetNodeName, ivcSetNode);
 						soteriaFT.addIntermediateNode(ivcSetNodeName, ivcSetNode);
+						index++;
 					}
 					if (!isLowerLevel) {
 						soteriaFT.addRootNode(propertyName, propertyNode);
@@ -157,9 +163,12 @@ public class IvcToSoteriaFTGenerator {
 		SoteriaFTNonLeafNode nonLeafNode;
 		if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
 			nonLeafNode = new SoteriaFTNonLeafNode(propertyName);
+			soteriaFT.addIntermediateNode(propertyName, nonLeafNode);
 		} else {
 			nonLeafNode = soteriaFT.intermediateNodes.get(propertyName);
 		}
+		// note: a SoteriaFTNonLeafNode added here as a child node could be updated later with its own child node
+		// will walk through all nodes again to fix the discrepancy
 		ivcSetNode.addChildNode(propertyName, nonLeafNode);
 	}
 
