@@ -60,10 +60,10 @@ public class IvcToSoteriaFTGenerator {
 			if (curCompName.contains(".")) {
 				curCompName = curCompName.replaceAll("\\.", "_");
 			}
-			if (!compNameSet.contains(curCompName)) {
-				compNameSet.add(curCompName);
+			// if (!compNameSet.contains(curCompName)) {
+			// compNameSet.add(curCompName);
 				// build Soteria model for the current component
-				// get current component name
+			// get currenret component name
 				for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
 					// recursively call walkthroughResults
 					walkthroughResults(curResult, curCompName, linker);
@@ -72,7 +72,7 @@ public class IvcToSoteriaFTGenerator {
 						isLowerLevel = true;
 					}
 				}
-			}
+			// }
 
 		} else {
 			throw new AgreeException("Not JKindResult or CompositeAnalysisResult");
@@ -174,8 +174,10 @@ public class IvcToSoteriaFTGenerator {
 
 	private void extractFaultIvcElem(String compName, AgreeRenaming renaming, SoteriaFTOrNode ivcSetNode,
 			String faultName, String faultRefName) {
+		// differentiate same fault definitions activated in subcomponents of different parent components
+		String updatedFaultName = updateElemName(compName + "_" + faultName);
 		// if ivcElem is not yet in leaf nodes
-		if (!soteriaFT.leafNodes.containsKey(faultName)) {
+		if (!soteriaFT.leafNodes.containsKey(updatedFaultName)) {
 			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(faultRefName);
 			for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
 				if (faultSub instanceof ProbabilityStatementImpl) {
@@ -184,16 +186,15 @@ public class IvcToSoteriaFTGenerator {
 					// TODO: need to have component specify failure rate and exposure time in the future
 					// currently treat exposure time as (float) 1.0
 					// and treat the failure probability from the fault statement as the failure rate
-					String updatedFaultName = updateElemName(faultName);
 					SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, failureProb,
 							(float) 1.0);
-					soteriaFT.addLeafNode(faultName, ftLeafNode);
+					soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
 					ivcSetNode.addChildNode(updatedFaultName, ftLeafNode);
 				}
 			}
 		} else {
-			SoteriaFTLeafNode leafNode = soteriaFT.leafNodes.get(faultName);
-			ivcSetNode.addChildNode(faultName, leafNode);
+			SoteriaFTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
+			ivcSetNode.addChildNode(updatedFaultName, leafNode);
 		}
 
 	}
