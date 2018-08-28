@@ -2,6 +2,7 @@ package ParallelPump
 public
 with Base_Types;
 with Pump;
+with faults;
 
 	system ParallelPump
 		features
@@ -60,6 +61,17 @@ with Pump;
 
 			
 		**};
+		
+	annex safety {**
+		fault pump_stuck_on_broken_fault "In pump: pump stopped.": faults.fail_to_int {
+			eq stopped_value : int = datatypes.STOPPED;
+			inputs: val_in <- status, 
+					alt_val <- stopped_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}		
+	**};
 			
 	end ParallelPump;
 	
@@ -106,6 +118,8 @@ with Pump;
 				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.SHAKING);
 			
 				
-		**};	
+		**};
+		
+		
 	end ParallelPump.impl;
 end ParallelPump;

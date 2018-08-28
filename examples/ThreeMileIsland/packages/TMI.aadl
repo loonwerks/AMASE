@@ -57,7 +57,7 @@ with datatypes;
 					>= 4 in the next step." :
 				(prev(porv_command, datatypes.VALVE_OPEN) = datatypes.VALVE_OPEN)
 					=> (temperature >= 4);
-					
+					 
 			assume "If coolant level drops below 4, then we close the porv valve in the 
 					next step" :
 				(prev(coolant, 5) <= 3) => (porv_command = datatypes.VALVE_CLOSED);
@@ -112,61 +112,66 @@ with datatypes;
 			lemma "Reactor does not melt." :
 				not melted_reactor; 
 			 
-			-- If we have commanded the tank to inject and the coolant level
-			-- is greater than 2, then the coolant level remains at >= 2.
-			lemma "If tank command is INJECT and coolant level is > 2, then
-					coolant level does not drop below 2." :
-				((tank_command = datatypes.TANK_INJECT) and (primary.coolant_level > 2))
-					=> (primary.coolant_level >= 2);
-	---------------------------------------------------------------------------------------------------
-		
-			----------------- SeriesValves ------------------------
-			lemma "Output status is open if both valves are open." :
-				if (seriesValves.porv_cmd = datatypes.VALVE_OPEN) 
-					then (seriesValves.status = seriesValves.block_cmd)
-				else (seriesValves.status = seriesValves.porv_cmd); 
-		
-		
-			------------------------------------------------------------
-			-- Testing coolant level
-			
-			lemma "Datatypes move coolant level one step" :
-				(datatypes.move(primary.coolant_level, 10) = (primary.coolant_level + 1))
-				or (datatypes.move(primary.coolant_level, 0) = (primary.coolant_level - 1))
-				or (datatypes.move(primary.coolant_level, primary.coolant_level) = (primary.coolant_level));
-		
-			----------------- Reactor ------------------------	
-			lemma "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
-				(reactor.T_rods_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 1));
-				
-			lemma "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
-				(reactor.T_rods_partially_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 2));
-			
-			lemma "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
-				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature < 3)) 
-					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 3));
-				
-			lemma "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
-				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature >= 3)) 
-					=> (reactor.Current_core_status = reactor.Previous_status);
-				
-			lemma "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
-				(reactor.T_rods_extracted and (reactor.coolant_level < 3)) 
-					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 5));
-			
-			lemma "If no transition occurs, status remains the same." :
-				(not (reactor.Some_transition)) => (reactor.Current_core_status = reactor.Previous_status);
-				
-			lemma "Core status link to local Current_core_status" :
-				reactor.output_temp = reactor.Current_core_status;
-			
-			lemma "Inital output temp value" :
-				(reactor.output_temp = reactor.CORE_NORMAL) -> true; 
-				 
-			lemma "Output temp bounded" :
-				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
+--			-- If we have commanded the tank to inject and the coolant level
+--			-- is greater than 2, then the coolant level remains at >= 2.
+--			lemma "If tank command is INJECT and coolant level is > 2, then
+--					coolant level does not drop below 2." :
+--				((tank_command = datatypes.TANK_INJECT) and (primary.coolant_level > 2))
+--					=> (primary.coolant_level >= 2);
+--	---------------------------------------------------------------------------------------------------
+--		
+--			----------------- SeriesValves ------------------------
+--			lemma "Output status is open if both valves are open." :
+--				if (seriesValves.porv_cmd = datatypes.VALVE_OPEN) 
+--					then (seriesValves.status = seriesValves.block_cmd)
+--				else (seriesValves.status = seriesValves.porv_cmd); 
+--		
+--		
+--			------------------------------------------------------------
+--			-- Testing coolant level
+--			
+--			lemma "Datatypes move coolant level one step" :
+--				(datatypes.move(primary.coolant_level, 10) = (primary.coolant_level + 1))
+--				or (datatypes.move(primary.coolant_level, 0) = (primary.coolant_level - 1))
+--				or (datatypes.move(primary.coolant_level, primary.coolant_level) = (primary.coolant_level));
+--		
+--			----------------- Reactor ------------------------	
+--			lemma "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
+--				(reactor.T_rods_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 1));
+--				
+--			lemma "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
+--				(reactor.T_rods_partially_inserted) => (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 2));
+--			
+--			lemma "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
+--				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature < 3)) 
+--					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 3));
+--				
+--			lemma "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
+--				(reactor.T_rods_extracted and (reactor.coolant_level >= 3) and (reactor.coolant_temperature >= 3)) 
+--					=> (reactor.Current_core_status = reactor.Previous_status);
+--				
+--			lemma "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
+--				(reactor.T_rods_extracted and (reactor.coolant_level < 3)) 
+--					=> (reactor.Current_core_status = datatypes.move(reactor.Previous_status, 5));
+--			
+--			lemma "If no transition occurs, status remains the same." :
+--				(not (reactor.Some_transition)) => (reactor.Current_core_status = reactor.Previous_status);
+--				
+--			lemma "Core status link to local Current_core_status" :
+--				reactor.output_temp = reactor.Current_core_status;
+--			
+--			lemma "Inital output temp value" :
+--				(reactor.output_temp = reactor.CORE_NORMAL) -> true; 
+--				 
+--			lemma "Output temp bounded" :
+--				(reactor.output_temp >= 0) and (reactor.output_temp <= 5);
 	
 		**};
+		
+		annex safety{**
+	  		--analyze : max 5 fault
+	  		analyze : probability 1.0E-1
+        **};
 			
 	end TMI.impl;
 	

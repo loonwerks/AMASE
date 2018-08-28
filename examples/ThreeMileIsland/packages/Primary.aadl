@@ -5,7 +5,7 @@ with ParallelPump;
 with Circuit;
 
 	system Primary
-		features
+		features 
 			-- Main Command1: {start, stop}
 			command : in data port Base_Types::Integer;
 			-- {open, closed} <- valve status (output)
