@@ -31,6 +31,26 @@ with Valve;
 			guarantee "Output status bounded." :
 				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED);
 		**};
+		
+	annex safety {**
+		fault valve_stuck_open_fault "In valve: valve stuck open.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_OPEN;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+		
+		fault valve_stuck_closed_fault "In valve: valve stuck closed.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_CLOSED;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+	**};
 			
 	end SeriesValve;
 		

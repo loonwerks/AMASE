@@ -15,7 +15,8 @@ with Circuit;
 			assume "Command input is bounded." :
 				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP);
 			
-			
+--			guarantee "Command input is bounded." :
+--				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP); 
 		**}	;
 	end Secondary;
 	
@@ -40,6 +41,9 @@ with Circuit;
 			assert(circuit2.input_valve_status = datatypes.VALVE_CLOSED);
 			assert(circuit2.output_valve_status = datatypes.VALVE_CLOSED);
 			assert(circuit2.temp_input_low = 2);
+			
+			
+			
 		**};
 		
 	end Secondary.impl;	
