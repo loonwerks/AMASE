@@ -20,7 +20,9 @@ with Base_Types;
 			-- reactor output temp
 			temp_input_high : in data port Base_Types::Integer;
 			
+			
 			-- Temp at the exit of the cold point {1,,,5}
+			-- Sent to primary
 			temp_output_low : out data port Base_Types::Integer;
 			-- Temp at the exit of the hot point {1,..,5}
 			temp_output_high : out data port Base_Types::Integer;

@@ -5,7 +5,7 @@ with datatypes;
 
 	system Valve
 		features
-			-- {open, close}
+			-- {open, closed}
 			command : in data port Base_Types::Integer;
 			
 			-- {open, closed}
@@ -13,46 +13,43 @@ with datatypes;
 	
 		annex agree {**
 			 
-			eq Previous_status : int = prev(status, datatypes.VALVE_CLOSED);
-			eq Current_status : int;
+			assume "Command input is bounded." :
+				(command >= datatypes.VALVE_OPEN) and (command <= datatypes.VALVE_CLOSED);
+			 
+			-- Initial status is closed
+			guarantee "Initial status is closed" :
+				(status = datatypes.VALVE_CLOSED) -> true; 
 			
-			eq T_close_to_open : bool = (Previous_status = datatypes.VALVE_CLOSED) 
-					and (command = datatypes.VALVE_OPEN);
 			
-			eq Remain_open : bool = ((Previous_status = datatypes.VALVE_OPEN) 
-					and (command = datatypes.VALVE_OPEN));	
-					
-			eq T_open_to_close : bool = (Previous_status = datatypes.VALVE_OPEN) 
-					and (command = datatypes.VALVE_CLOSED);	
-					
-			eq Remain_closed : bool = ((Previous_status = datatypes.VALVE_CLOSED) 
-					and (command = datatypes.VALVE_CLOSED));
-			
-			eq Some_transition : bool = T_close_to_open or T_open_to_close or Remain_open or Remain_closed;
-			
-			guarantee "Current status range" : 
-				(Current_status >= datatypes.VALVE_OPEN) and (Current_status <= datatypes.VALVE_CLOSED);
-			
-			guarantee "Open status" : 
-				(T_close_to_open or Remain_open) => (Current_status = datatypes.VALVE_OPEN);
-				
-			guarantee "Closed status" :
-				(T_open_to_close or Remain_closed) => (Current_status = datatypes.VALVE_CLOSED);	
-			
-			guarantee "No status change, no new output" : 
-				not (Some_transition) => (Current_status = Previous_status);
-			
-			guarantee "Output status" : 
-				(status = Current_status); 
-			
-			guarantee "Status range" : 
-				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED);
-			
-			guarantee "Initially, open." :
-				(status = datatypes.VALVE_OPEN) -> true;
+			-- If command is open, open valve. If command is closed, then close valve.
+			guarantee "If command is open, open valve. If command is closed, then close valve." :
+				if (command = datatypes.VALVE_OPEN) 
+					then (status = datatypes.VALVE_OPEN)
+				else (status = datatypes.VALVE_CLOSED);
+			 
+			guarantee "Output status is bounded." :
+				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED); 
 			
 		**};
-			
+	annex safety {**
+		fault valve_stuck_open_fault "In valve: valve stuck open.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_OPEN;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+		
+		fault valve_stuck_closed_fault "In valve: valve stuck closed.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_CLOSED;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+	**};	
 	end Valve;
 	
 		
