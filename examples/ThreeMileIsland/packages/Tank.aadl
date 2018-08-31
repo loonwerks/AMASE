@@ -38,9 +38,6 @@ with datatypes;
 			assume "Valve command is bounded." :
 				(valve_cmd >= datatypes.VALVE_OPEN) and (valve_cmd <= datatypes.VALVE_CLOSED); 
 			
-			
-			
-			
 			-- Bounds and initial status of tank
 			guarantee "Tank output bounded:" :
 				(output >= datatypes.VALVE_OPEN) and (output <= datatypes.VALVE_CLOSED); 
