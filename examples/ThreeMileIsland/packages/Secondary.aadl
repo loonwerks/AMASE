@@ -6,9 +6,12 @@ with Circuit;
 
 	system Secondary
 		features
-			-- Main Command2: {start, stop}
+			-- Main Command2: {start, stop} (for Parallel pump component)
 			command : in data port Base_Types::Integer;
+			-- Get temp of fluid from primary circuit
 			circuit_temp_high : in data port Base_Types::Integer;
+			
+			-- Output temp of fluid to primary circuit
 			circuit_temp_low : out data port Base_Types::Integer;
 		annex agree {**
 			
