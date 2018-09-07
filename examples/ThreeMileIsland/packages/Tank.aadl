@@ -3,7 +3,6 @@ public
 with Base_Types;
 with Pump;
 with Valve;
-with TankControl;
 with datatypes;
 
 	system Tank
@@ -11,7 +10,15 @@ with datatypes;
 			-- {inject, stop} (operator command)
 			command : in data port Base_Types::Integer;
 			-- coolant status {steam_cavities, normal, solid}
-			status_to_pump : in data port Base_Types::Integer;
+			coolant_status : in data port Base_Types::Integer;
+			
+			-- Commands sent to subcomponents
+			valve_cmd : in data port Base_Types::Integer;
+			pump_cmd : in data port Base_Types::Integer;
+			
+			-- Status from subcomponents
+			valve_status : out data port Base_Types::Integer;
+			pump_status: out data port Base_Types::Integer;
 			
 			-- {open, closed} <- valve status (output)
 			output : out data port Base_Types::Integer;
@@ -20,72 +27,111 @@ with datatypes;
 
 			assume "Command input is bounded." :
 				(command >= datatypes.TANK_INJECT) and (command <= datatypes.TANK_STOP);  
-				
---			assume "Status to pump bounded:" :
---				(status_to_pump >= datatypes.STEAM_CAVITIES) and (status_to_pump <= datatypes.SOLID);
---			
-			guarantee "Output bounded:" :
+			
+			assume "Coolant status input is bounded." :
+				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
+			
+			-- Pump status is always bounded.
+			assume "Bounds on pump command" :
+				(pump_cmd >= datatypes.MAIN_START) and (pump_cmd <= datatypes.MAIN_STOP);
+			
+			assume "Valve command is bounded." :
+				(valve_cmd >= datatypes.VALVE_OPEN) and (valve_cmd <= datatypes.VALVE_CLOSED); 
+			
+			-- Bounds and initial status of tank
+			guarantee "Tank output bounded:" :
 				(output >= datatypes.VALVE_OPEN) and (output <= datatypes.VALVE_CLOSED); 
 			
 			guarantee "Initally, output is open." :
 				(output = datatypes.VALVE_OPEN) -> true;
 			
-		**};
+			-- Transform command for the pump
+			guarantee "If command is to stop, then stop the pump. If command is to inject, then start the pump." :
+				if (command = datatypes.TANK_STOP) 
+					then (pump_cmd = datatypes.MAIN_START)
+				else (pump_cmd = datatypes.MAIN_STOP);
 			
+			-- Transform command for the valve
+			guarantee "If command is to stop, then close the valve. If command is to inject, then open the valve." :
+				if (command = datatypes.TANK_STOP) 
+					then (valve_cmd = datatypes.VALVE_CLOSED)
+				else (valve_cmd = datatypes.VALVE_OPEN);
+		
+		    -- Transform status of valve and pump into output of valve
+		    guarantee "If pump is pumping and valve is open, then output status is open. Else closed." :
+		    	if ((pump_status = datatypes.PUMPING) and (valve_status = datatypes.VALVE_OPEN))
+		    		then (output = datatypes.VALVE_OPEN)
+		    	else (output = datatypes.VALVE_CLOSED);
+		
+		**};
+	
 	end Tank;
 	
 	system implementation Tank.impl  
 		subcomponents
 			pump : system Pump::Pump;
 			valve : system Valve::Valve;
-			control : system TankControl::TankControl;
 			 
 		connections
-			coolantstatus : port status_to_pump -> pump.coolant_status;
-			control_out_to_tank : port control.output_to_tank -> output;
-			control_out_to_valve : port control.output_to_valve -> valve.command;
-			control_out_to_pump : port control.output_to_pump -> pump.command;
-			command_to_control : port command -> control.command;
+			-- Coolant status to pump (always normal for the tank's pump)
+			coolantstatus : port coolant_status -> pump.coolant_status;
+			valvestatus : port valve.status -> valve_status;
+			pumpstatus : port pump.status-> pump_status;
+			valvecmd : port valve_cmd -> valve.command;
+			pumpcmd : port pump_cmd -> pump.command;
+			
 			
 		annex agree {**
-			assert(status_to_pump = datatypes.NORMAL); 
---			----------------------------------------------------------------------------
---			-- Valve
---			----------------------------------------------------------------------------
-			lemma "Transform tank stop command to valve closed." :
-				(control.command = datatypes.TANK_STOP) => (control.output_to_valve = datatypes.VALVE_CLOSED);
-				
-			lemma "Transform tank inject command to valve open." :
-				(control.command = datatypes.TANK_INJECT) => (control.output_to_valve = datatypes.VALVE_OPEN);
-				
-			lemma "Output to valve bounded:" :
-				(control.output_to_valve >= datatypes.VALVE_OPEN) and (control.output_to_valve <= datatypes.VALVE_CLOSED);
-				
-			------------------------ Pump output
-			lemma "Transform tank stop command to pump stop." :
-				(control.command = datatypes.TANK_STOP) => (control.output_to_pump = datatypes.MAIN_STOP);
-				
-			lemma "Transform tank inject command to pump start." :
-				(control.command = datatypes.TANK_INJECT) => (control.output_to_pump = datatypes.MAIN_START);
-				
-			lemma "Output to pump bounded:" :
-				(control.output_to_pump >= datatypes.TANK_INJECT) and (control.output_to_pump <= datatypes.TANK_STOP);
---			-----------------------------------
---			--------------- Tank output
-			lemma "Initially, output to tank is open." :
-				(control.output_to_tank = datatypes.VALVE_OPEN) -> true;
-				
-			-- If pump is pumping and valve is open, output is open, else it's closed.
-			-- In order for the pump to be pumping and valve to be open, we need
-			-- an inject command. This guarantee is simplified from the original NuSMV model.
-			lemma "Transform valve and pump output into Tank output." :
-				if (control.command = datatypes.TANK_INJECT) 
-					then (control.output_to_tank = datatypes.VALVE_OPEN) 
-				else (control.output_to_tank = datatypes.VALVE_CLOSED);
+			-- In the tank, we assume coolant status is always normal.
+			assert(coolant_status = datatypes.NORMAL); 
 			
-			lemma "Output to tank bounded:" :
-				(control.output_to_tank >= datatypes.VALVE_OPEN) and (control.output_to_tank <= datatypes.VALVE_CLOSED);
+			------------------------------------------------------ PUMP
+			-- Initial state is pumping
+			lemma "Initial status of pump is pumping." :
+				(pump.status = datatypes.PUMPING) -> true;
 			
+			-- If the pump is  broken, it stays broken.
+			lemma "If the pump is broken, it stays broken." :
+				(pre(pump.status) = datatypes.BROKEN) => (pump.status = datatypes.BROKEN);
+			
+			-- Pump is shaking when it is pumping with steam cavities in the coolant. 	
+--			lemma "Switch to shaking status." :
+--				((pre(pump.status) = datatypes.PUMPING) and (prev(pump.coolant_status,1)  = datatypes.STEAM_CAVITIES)) 
+--					=> (pump.status = datatypes.SHAKING);
+			
+			-- If in the previous step, the pump is shaking, it is now broken.
+			lemma "If in the previous step, the pump is shaking, it is now broken." :
+				(pre(pump.status) = datatypes.SHAKING) => (pump.status <= datatypes.BROKEN);
+			
+			-- If we have command to pump and we do not have steam cavities, then we are pumping.	
+--			lemma "If we have command to pump and we do not have steam cavities, then we are pumping." :
+--				(((pump.command = datatypes.MAIN_START) and (not (pump.coolant_status = datatypes.STEAM_CAVITIES)))) 
+--					=> (pump.status = datatypes.PUMPING);
+			
+			-- Command comes in to stop pumping, we stop in the next step.	
+			lemma "Command to stop pumping." :
+				((pump.command = datatypes.MAIN_STOP) and not(pre(pump.status) = datatypes.BROKEN))  => (pump.status = datatypes.STOPPED);
+			
+			-- Command comes in to start pumping, we stop in the next step.	
+			lemma "Command to start pumping." :
+				((pump.command = datatypes.MAIN_START) and not(pre(pump.status) = datatypes.BROKEN))  => (pump.status = datatypes.PUMPING);
+			
+			-- Output is always bounded.
+			lemma "Bounds on status" :
+				(pump.status >= datatypes.PUMPING) and (pump.status <= datatypes.BROKEN);		
+		
+			----------------------------------------------- VALVE
+			-- Initial status is closed
+			lemma "Initial status is closed" :
+				(valve.status = datatypes.VALVE_CLOSED) -> true; 
+			
+			
+			-- If command is open, open valve. If command is closed, then close valve.
+			lemma "If command is open, open valve. If command is closed, then close valve." :
+				if (valve.command = datatypes.VALVE_OPEN) 
+					then (valve.status = datatypes.VALVE_OPEN)
+				else (valve.status = datatypes.VALVE_CLOSED);
+		
 		**};
 	end Tank.impl;
 		

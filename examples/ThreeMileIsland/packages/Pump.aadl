@@ -6,6 +6,7 @@ with datatypes;
 	system Pump
 		features
 			-- {start, stop, none}
+			-- Command originally from top level TMI 
 			command : in data port Base_Types::Integer;
 			-- {steam_cavities, normal, solid}
 			coolant_status : in data port Base_Types::Integer;
@@ -16,35 +17,58 @@ with datatypes;
 		annex agree {**
 			
 			assume "Command input is bounded." :
-				(command >= datatypes.TANK_INJECT) and (command <= datatypes.TANK_STOP);
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP);
 				
 			assume "Coolant status input is bounded." :
 				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
 			
-				
+			-- Initial state is pumping
 			guarantee "Initial status of pump is pumping." :
 				(status = datatypes.PUMPING) -> true;
-				
-			guarantee "Command to start pumping." :
+			
+			-- If the pump is  broken, it stays broken.
+			guarantee "If the pump is broken, it stays broken." :
+				(pre(status) = datatypes.BROKEN) => (status = datatypes.BROKEN);
+			
+			-- Pump is shaking when it is pumping with steam cavities in the coolant. 	
+			guarantee "Switch to shaking status." :
+				((pre(status) = datatypes.PUMPING) and (prev(coolant_status,1)  = datatypes.STEAM_CAVITIES)) 
+					=> (status = datatypes.SHAKING);
+			
+			-- If in the previous step, the pump is shaking, it is now broken.
+			guarantee "If in the previous step, the pump is shaking, it is now broken." :
+				(pre(status) = datatypes.SHAKING) => (status <= datatypes.BROKEN);
+			
+			-- If we have command to pump and we do not have steam cavities, then we are pumping.	
+			guarantee "If we have command to pump and we do not have steam cavities, then we are pumping." :
 				(((command = datatypes.MAIN_START) and (not (coolant_status = datatypes.STEAM_CAVITIES)))) 
 					=> (status = datatypes.PUMPING);
-				
-			guarantee "Command to stop pumping." :
-				(command = datatypes.MAIN_STOP) => (status = datatypes.STOPPED);
-				
-			guarantee "Switch to shaking status." :
-				((pre(status) = datatypes.PUMPING) and (coolant_status = datatypes.STEAM_CAVITIES)) 
-					=> (status = datatypes.SHAKING);
-				
-			guarantee "Bounds on status" :
-				(status >= datatypes.PUMPING) and (status <= datatypes.SHAKING); 
 			
-			guarantee "Initial status of pump is pumping." :
-				(status = datatypes.PUMPING) -> true;
-		
+			-- Command comes in to stop pumping, we stop in the next step.	
+			guarantee "Command to stop pumping." :
+				((command = datatypes.MAIN_STOP) and not(pre(status) = datatypes.BROKEN))  => (status = datatypes.STOPPED);
+			
+			-- Command comes in to start pumping, we stop in the next step.	
+			guarantee "Command to start pumping." :
+				((command = datatypes.MAIN_START) and not(pre(status) = datatypes.BROKEN))  => (status = datatypes.PUMPING);
+			
+			-- Output is always bounded.
+			guarantee "Bounds on status" :
+				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN); 
+			
+			-- Whether we are pumping or shaking, in both cases, the status should say we are pumping.
 			
 		**};
-			
+	annex safety {**
+		fault pump_stuck_on_broken_fault "In pump: pump stopped.": faults.fail_to_int {
+			eq stopped_value : int = datatypes.STOPPED;
+			inputs: val_in <- status, 
+					alt_val <- stopped_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}		
+	**};		
 	end Pump;
 
 	

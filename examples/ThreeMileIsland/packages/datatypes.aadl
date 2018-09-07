@@ -11,6 +11,7 @@ public
 		const PUMPING : int = 1;
 		const STOPPED : int = 2;
 		const SHAKING : int = 3;
+		const BROKEN  : int = 4;
 		
 		
 		-- Valve status constants for state machine
