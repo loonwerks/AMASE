@@ -438,15 +438,15 @@ with sensor;
 			
 		lemma "(cmd=>braking8) Wheel 8 cmd implies braking" :
 						true -> ((NORMAL8 or ALTERNATE8) => wheel_braking_force8 > 0);
-	
+--	
 	
 		
 	**};
    annex safety{**
 	  --analyze : max 1 fault
-	  -- analyze : probability 1.0E-7
+	  analyze : probability 1.0E-7
 	  --analyze : max 1 fault
-	  analyze : probability 5.0E-7
+	  --analyze : probability 5.0E-7
    **};
 end WBS.inst;
 
