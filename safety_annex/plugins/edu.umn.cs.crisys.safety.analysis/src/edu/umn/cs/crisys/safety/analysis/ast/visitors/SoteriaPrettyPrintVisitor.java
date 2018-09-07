@@ -147,7 +147,6 @@ public class SoteriaPrettyPrintVisitor implements SoteriaAstVisitor<Void> {
 		for (SoteriaComp comp : compLib.comps) {
 			if (multipleElem) {
 				writeln(";");
-				newline();
 			}
 			comp.accept(this);
 			multipleElem = true;
