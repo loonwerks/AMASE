@@ -1,33 +1,16 @@
  \section{Case Studies}
-\label{sec:case_study}
-To demonstrate the effectiveness of the Safety Annex, we describe two case studies.
+\label{sec:case_study} 
+In Model Based Safety Engineering, the model is developed using a systems engineering language or tool. At this point, a fault model can be developed based on the components of the system under consideration. In order to demonstrate the fault modeling capabilities of the Safety Annex in Section~\ref{sec:fault_modeling}, this section sets the foundation by describing a system with a variety of complex subcomponents. 
 
-
-
-\iffalse
-\subsection{Simple Wheel Brake System}
-The Wheel Brake System (WBS) described in ARP4761 has been used as a case study for safety analysis, formal verification, and contract based design in numerous studies. In order to show scalability compare results with other tools and studies, the AADL model of the WBS used in~\cite{Stewart17:IMBSA} was enhanced using as a guide the NuSMV ARCH4 model as described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. This version of the WBS model was chosen due to the complexity of the model and because this model addresses required safety concerns (for description of these concerns, see~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}). Due to the added complexity of this WBS system, a short description of the subcomponents and behavior is necessary.
-
-\subsubsection{Simple WBS architecture description}
-The highest level model component is the WBS. It consists of the Braking System Control Unit (BSCU), green and blue hydraulic pressure lines (supplied by the green and blue hydraulic pumps respectively), a selector which selects between normal operating mode and alternate operating mode, and the wheel system.
-
-There are three operating modes of the WBS. In \textit{normal} mode, the system uses the \textit{green} hydraulic circuit. In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit.  If the BSCU detects lack of pressure from the green line or one of its command units are invalid, then the system switches into alternate mode. The last mode of operation of the WBS is the \textit{emergency} mode. This is supported by the blue circuit but operates if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode.  Antiskid braking commands receive data from the BSCU that will determine if skidding is found at the wheel and handle accordingly.
-
-In the simplified WBS model, there is one wheel that receives pressure from either the green or blue line. This wheel provides feedback to the BSCU providing information about the pressure supplied.
-
-To evaluate the effectiveness of the Safety Annex, we updated the simple WBS model~\cite{Stewart17:IMBSA} to specify faulty component behaviors. The components' nominal  and faulty behaviors are modeled separately. At the top-level AADL component, the fault hypothesis was specified as the maximum number of faults that can be active at any time. The AGREE contracts at the top-level component were verified using AGREE, with the ``Perform Safety Analysis'' option selected. This signals the tool to weave the nominal and faulty behaviors into one augmented AGREE model before feeding to the model checker.
-
-In this example, the top level contract ``Pedal pressed and no skid implies brake pressure applied'' was verified in the presence of at most one fault active during execution.  However, it was shown to be invalid when more than one fault was allowed. The counterexample indicated that both Selector's outputs failed to non-deterministic values due to the faults introduced.
-\fi
-
+\begin{figure}[h!]
+	\centering
+	\includegraphics[trim=0 9 0 5,clip,width=\textwidth]{images/wbs_arch.pdf}
+	\caption{Wheel Brake System}
+	\label{fig:wbs}
+\end{figure} 
 
 \subsection{Wheel Brake System}
-%original in the case study:
-%The Wheel Brake System (WBS) described in ARP4761 has been used as a case study for safety analysis, formal verification, and contract based design in numerous studies. In order to show scalability compare results with other tools and studies, the AADL model of the WBS used in~\cite{Stewart17:IMBSA} was enhanced using as a guide the NuSMV ARCH4 model as described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. This version of the WBS model was chosen due to the complexity of the model and because this model addresses required safety concerns (for description of these concerns, see~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}). Due to the added complexity of this WBS system, we provide a short description of the subcomponents and behavior.
-%from related work:
-%The Wheel Brake System (WBS) described in ARP4761~\cite{SAE:ARP4761} has been used in the past as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Stewart17:IMBSA, propBasedProofSys, Joshi05:SafeComp, NasaRep:MBSA-Aug05} The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to show scalability and compare results with other studies, an AADL version of the WBS was designed based off of arch4wbs NuSMV model described in previous work~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. This model was chosen due to the number of subcomponents in the system and the complexity of behavior captured in the NuSMV model.
-
-The Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110} is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate scalability of our tools and compare results with other studies, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. We refer readers to this publication for diagrams of the arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}.   
+The Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110} is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate a complex fault modeling process, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. We refer readers to this publication for diagrams of the arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}.   
 
 \subsubsection{WBS architecture description}
 The WBS is composed of two main parts: the control system and the physical system. The control system electronically controls the physical system and contains a redundant Braking System Control Unit (BSCU) in case of failure. The physical system consists of the hydraulic circuits running from hydraulic pumps to wheel brakes. This is what provides braking force to each of the 8 wheels of the aircraft.
@@ -38,70 +21,19 @@ In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit.
 
 The last mode of operation of the WBS is the \textit{emergency} mode. This is supported by the blue circuit but operates if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode.
 
-The model contains 30 different kinds of components, 169 component instances, a model depth of 5 hierarchical levels.  The model includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  There are a total of 33 different fault types and 141 fault instances within the model.  The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels. %\janet{AGREE validates that each component's assumptions are either met by guarantees from another component or system level assumptions. System level assumptions are to be validated manually by system engineers.}
+The model contains 30 different kinds of components, 169 component instances, a model depth of 5 hierarchical levels.  The model includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  There are a total of 33 different fault types and 141 fault instances within the model.  The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels. 
 
-%All assumptions were validated by the AGREE tool (i.e., a component's assumptions are either met by guarantees from another component or assumptions from the top level). %All guarantees were validated by the AGREE tool for the nominal model. Some guarantees for the fault model were invalid (please see the next section for details).
-
-%\mike{An example property would be very useful here!}
 An example property is to ensure no inadvertent braking of each of the 8 wheels.  This means that if all power and hydraulic pressure is supplied (i.e., braking is commanded), then either the aircraft is stopped (ground speed is zero), or the mechanical pedal is pressed, or brake force is zero, or the wheel is not rolling.
 
 
-\subsubsection{Fault Analysis of WBS using Safety Annex}
-
-\iffalse
-%After the verification was completed, we defined faults equivalent to those described in the xSAP model for the NuSMV WBS system in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}.
-
-\begin{figure}[h!]
-	\vspace{-0.17in}
-	\begin{center}
-		%\includegraphics[trim=0 330 150 0,clip,width=1.0\textwidth]{images/pump_fault.png}
-		\includegraphics[trim=0 435 0 90,clip,width=1.0\textwidth]{images/arch_table.pdf}
-		\caption{Modeling, Verification, and Fault Analysis Metrics}
- 		\label{fig:metrics}
-	\end{center}
-	\vspace{-0.40in}
-\end{figure}
-\fi
 
 
-Fault analysis on the top level WBS system was performed on the 11 top-level properties using two fault hypotheses.  In the first case, we allow at most one fault, and in the second we allow combinations of faults that exceed the acceptable probability for the top-level hazard defined in AIR6110.
-
-%original version
-%We examine scalability by looking at analysis times for both compositional verification, where the verification task is split into layers to be analyzed separately, and monolithic verification, where the entire system is analyzed in one pass.  When considering the nominal system behavior (no faults), the total time required for analysis using compositional verification is 2 minutes 38 seconds, and the time for monolithic analysis is 30 seconds.  This nominal model is too small to gain significant benefit from compositional analysis.  However, when we consider faulty behavior, when given a single-fault hypothesis, the total time for compositional analysis is 2 minutes 37 seconds, and monolithic analysis did not finish after 42 minutes (ended due to out of memory error), clearly demonstrating the value of compositional analysis for more complex models.  Similarly, for probabilistic analysis, the compositional time is 2 minutes 38 seconds and the monolithic time is 3 minutes 31 seconds.
-
-%first updated version
-%We examine scalability by looking at analysis times for both compositional verification, where the verification task is split into layers to be analyzed separately, and monolithic verification, where the entire system is analyzed in one pass.  When considering the nominal system behavior (no faults), the total time required for analysis using compositional verification is 2 minutes 5 seconds, and the time for monolithic analysis is 26 seconds.  This nominal model is too small to gain significant benefit from compositional analysis.  However, when we consider faulty behavior, when given a single-fault hypothesis, the total time for compositional analysis is 2 minutes 6 seconds, and monolithic analysis was not able to determine all results after 3 minutes 35 seconds (ended due to out of memory error), clearly demonstrating the value of compositional analysis for more complex models.  Similarly, for probabilistic analysis, the compositional time is 2 minutes 6 seconds and the monolithic time is 4 minutes. Note that for probabilistic analysis, we use compositional analysis to examine counterexamples for invalid properties, but rely on monolithic analysis to confirm valid properties, as the tool support for aggregated probabilities in compositional setting has not yet been implemented.
-
-We use this model to demonstrate the benefits of formal fault analysis and to show the scalability of our tools.  We applied both {\em monolithic} analysis, in which the entire model is flattened and analyzed at once, and also {\em compositional} analysis, where each architectural layer is analyzed hierarchically.
-For the fault-free ``nominal'' system model, monolithic analysis requires 21 seconds, whereas compositional analysis requires 1 minute and 53 seconds.  Although the compositional time is longer, each sub-problem completes in less than 5 seconds.  The additional time for compositional analysis is  due to the start-up overhead to invoke the JKind model checker many times for individual layers.  On the other hand, when examining the model under a single-fault hypothesis, compositional analysis requires 2 minutes 6 seconds, while monolithic analysis did not terminate after 60 minutes.
-
-For probabilistic fault hypotheses, we are currently developing a sound approach for composition with respect to the top-level fault probability, but our current tool requires monolithic analysis.  In this case, given a probabilistic fault hypothesis of $5*10^{-7}$, monolithic analysis requires 3 minutes 25 seconds.
-
-During our analysis, we discovered that most properties were verified, but the \textit{Inadvertent braking at the wheel} properties are not resilient to a single fault nor do they meet the desired $10^{-9}$ fault threshold for probabilistic analysis.  In our model (as in the NuSMV model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}), there is a single pedal position sensor for the brake pedal.  If this sensor fails, it can command braking without a pilot request.  Given the {\em counterexample} returned by the tools, it is straightforward to diagnose the fault conditions that lead to property failure.
-
-This counterexample can be used to further analyze the system design.  For our model, there are several possible reasons for failure: it could be that redundant sensors are required on the pedals (here we note that the architecture of the pedal assembly is not discussed in AIR6110), or that the phase of flight is sufficiently short that we need to adjust our pedal failure rate to match this phase of flight, rather than normalizing the failure rate to per-flight-hour.  It is straightforward and computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. As indicated in Figure~\ref{fig:interaction_with_FTA}, the sync and update between the preliminary system FTA and the architecture/analysis model continues until the system safety property is satisfied with the desired fault tolerance and failure probability achieved.
-
-%In terms of the safety analysis process, this corresponds with an update in the preliminary system FTA which will eventually change the system FTA and impact SSA results.\mike{keep last sentence?}
-
-%Mike: with regard to the safety process sentence at the end of the WBS case study, he thinks that we can keep that sentence, but update it to mention that we can iteratively run analysis if we don't achieve the desired fault tolerance for single failure or achieve the desired probability
 
 
-\subsection{Quad-Redundant Flight Control System}
-We have also used the Safety Annex to examine more complex fault types, such as asymmetric (or {\em Byzantine}) faults.  A Byzantine fault presents different symptoms to different observers, so that they may disagree regarding whether a fault is present.
-We extended the Quad-Redundant Flight Control System (QFCS) example~\cite{QFCS15:backes} to model and analyze various types of faulty behaviors. Faulty behaviors were introduced to analyze the response of the system to multiple faults, and to evaluate fault mitigation logic in the model. As expected, the QFCS system-level properties failed when unhandled faulty behaviors were introduced.
 
-We also used the Safety Annex to explore more complicated faults at the system level on a simplified QFCS model with cross-channel communication between its Flight Control Computers.
 
-\begin{itemize}
-	\item Byzantine faults~\cite{Driscoll-Byzantine-Fault} were simulated by creating one-to-one connections from the source to multiple observers so that disagreements could be introduced by injecting faults on individual outputs. The system level property ``at most one flight control computer in command'' was falsified in one second in the presence of Byzantine faults on the baseline model. The same property was verified in three seconds on an extended model with a Byzantine fault handling protocol added.  System designers can use this approach to verify if a system design is resilient to Byzantine faults, examine vulnerabilities, and determine if a mitigation mechanism works.
 
-%original wording:	
-	% A system-level property failed due to the fault on the baseline model, but did not fail on the model with Byzantine fault handling protocol added. Using the Safety Annex like this can test a system's vulnerability to Byzantine faults and verify mitigation mechanisms.
-	
-	\item Dependent faults were modeled by first injecting failures to the cross-channel data link (CCDL) bus (physical layer), and faults to the flight control computer (FCC) outputs (logical layer), then specifying fault propagations in the top level system implementation (where the data connections between FCC outputs were bound to the CCDL bus subcomponents). The fault propagation indicates that one CCDL bus failure can trigger all FCC output faults. With the fault hypothesis that allows a maximum of one fault active during execution, the system level property ``not all FCCs fail at the same time'' was falsified in one second.
-	
-%original wording:
-%Dependent faults were modeled by injecting failures to hardware components (physical layer), and faults to software components (logical layer) that are bound to the hardware components, then specifying fault propagations at the QFCS system level to indicate that the software faults are dependent on the hardware failures. 	
-\end{itemize}
 
-%\mike{Results?} \janet{updated the last two paragraphs}
+
+
+
