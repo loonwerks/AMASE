@@ -12,7 +12,7 @@ In Model Based Safety Engineering, the model is developed using a systems engine
 \subsection{Wheel Brake System}
 The Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110} is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex used a simplified model of the WBS~\cite{Stewart17:IMBSA}. In order to demonstrate a complex fault modeling process, we constructed a functionally and structurally equivalent AADL version of one of the most complex WBS NuSMV/xSAP models (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}. We refer readers to this publication for diagrams of the arch4wbs model~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}.   
 
-\subsubsection{WBS architecture description}
+\subsubsection{WBS Architecture Description}
 The WBS is composed of two main parts: the control system and the physical system. The control system electronically controls the physical system and contains a redundant channel of the Braking System Control Unit (BSCU) in case of failure. It also commands antiskid braking in case of skidding on the ground. The physical system consists of the hydraulic circuits running from hydraulic pumps to wheel brakes as well as valves that control the hydraulic fluid flow. This is what provides braking force to each of the 8 wheels of the aircraft. For simplicity's sake, Figure~\ref{fig:wbs} displays only two of the 8 wheels. The wheels are all mechanically braked in pairs (one pair per landing gear). 
 
 There are three operating modes in the WBS model. In \textit{normal} mode, the system uses the \textit{green} hydraulic circuit. The normal system is composed of the green hydraulic pump and one meter valve per each of the 8 wheels. Each of the 8 meter valves are controlled through electronic commands coming from the active channel of the BSCU. These signals provide brake commands as well as antiskid commands for each of the wheels. The braking command is determined through a sensor on the pilot pedal position and is labeled as \textit{Left/Right Pedal Sensor} in Figure~\ref{fig:wbs}. The antiskid command is calculated based on information regarding ground speed and wheel rolling status (determined by the \textit{Wheel Sensors}). 
@@ -21,11 +21,14 @@ In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit.
 
 The last mode of operation of the WBS is the \textit{emergency} mode. This is supported by the alternate (blue) circuit but only operates if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode.
 
-The system model contains 30 different kinds of components, 169 component instances, and a model depth of 5 hierarchical levels.  The system model includes one top-level assumption and  29 top-level system properties, with 113 contracts allocated to subcomponents.  
+The system model contains 30 different kinds of components, 169 component instances, and a model depth of 5 hierarchical levels. 
+
+\subsubsection{WBS Behavioral Model Description}
+The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110~\cite{AIR6110}. The top level system properties are given by the requirements and safety objectives given in AIR6110. All of the subcomponent contracts support these system safety objectives by constraining subcomponent output behavior. The nominal system model includes 29 top-level system properties with 113 supporting subcomponent contracts. 
 
 %There are a total of 33 different fault types and 141 fault instances within the model.  The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels. 
 
-An example property is to ensure no inadvertent braking of each of the 8 wheels.  This means that if all power and hydraulic pressure is supplied (i.e., braking is commanded), then either the aircraft is stopped (ground speed is zero), or the mechanical pedal is pressed, or brake force is zero, or the wheel is not rolling.
+%An example top-level property is to ensure that there is no inadvertent braking of the wheels.  This means that if power and hydraulic pressure is supplied (i.e., braking is commanded), then one of the following must be true: the mechanical pedal is pressed, brake force is zero, or the wheel is not rolling.
 
 
 
