@@ -28,12 +28,12 @@ with Base_Types;
 			}
 			
 			
-			fault SensorPedalPosition_NoData "(SensorPedalPosition) No Data fault." : faults.no_data_fail {
-				inputs: val_in <- elec_pedal_pos; 
-				outputs: elec_pedal_pos <- val_out;    
-        		probability: 5.0E-6 ;
-				duration: permanent;
-			}
+--			fault SensorPedalPosition_NoData "(SensorPedalPosition) No Data fault." : faults.no_data_fail {
+--				inputs: val_in <- elec_pedal_pos; 
+--				outputs: elec_pedal_pos <- val_out;    
+--        		probability: 5.0E-6 ;
+--				duration: permanent;
+--			}
 		**};
 	end SensorPedalPosition;
 	
@@ -74,12 +74,12 @@ with Base_Types;
 			}
 			
 			
-			fault Sensor_NoData "(Sensor) No Data fault." : faults.no_data_fail {
-				inputs: val_in <- wheel_rolling; 
-				outputs: wheel_rolling <- val_out;    
-        		probability: 5.0E-6 ;
-				duration: permanent;
-			}
+--			fault Sensor_NoData "(Sensor) No Data fault." : faults.no_data_fail {
+--				inputs: val_in <- wheel_rolling; 
+--				outputs: wheel_rolling <- val_out;    
+--        		probability: 5.0E-6 ;
+--				duration: permanent;
+--			}
 		**};
 	end Sensor;
 	
