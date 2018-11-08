@@ -100,13 +100,6 @@ with Base_Types;
 			false_to_mv_4 : port false_to_mv -> mv4.elec_cmd;
 			
 
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
-		-- MWW: END HACK!
-		-- ---------------------------------------------------------------------------	
-		**}	;
 			
 	end AlternateBrakeSystem.inst;
 	
@@ -153,12 +146,9 @@ with Base_Types;
 		annex agree{**
 			assert(low <= rangeval and rangeval <= high);
 		**};
-				annex safety {**
-			-- ---------------------------------------------------------------------------	
-  		    -- MWW: HACK!
-  		    analyze : max 1 fault
-			-- MWW: END HACK!
-			-- ---------------------------------------------------------------------------	
+		
+		annex safety {**
+			
 
 			fault AntiskidShutoffValve_FailedOpen "(AntiskidShutoff) Stuck open fault.": faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
