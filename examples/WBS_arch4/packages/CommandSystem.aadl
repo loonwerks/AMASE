@@ -148,4 +148,11 @@ with Base_Types;
 		
 	end CommandSystem.inst;
 	
+	
+	annex safety{**
+	
+		analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 end CommandSystem;
