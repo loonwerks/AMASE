@@ -238,6 +238,11 @@ with Base_Types;
 		
 	
 	end BSCU.inst;
-
+	annex safety{**
+	
+		analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 	
 end bscu;

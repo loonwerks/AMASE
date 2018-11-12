@@ -48,7 +48,12 @@ with Base_Types;
 			
 		
 	end WheelBrake.inst;
+	annex safety{**
 	
+		analyze : max 1 fault
+		-- MWW: END HACK!
+		-- ---------------------------------------------------------------------------	
+		**}	;
 
 	system HydraulicFuse
 		features
@@ -74,9 +79,7 @@ with Base_Types;
 		**};		
 	end HydraulicFuse;
 	
-	system implementation HydraulicFuse.inst
-		
-	end HydraulicFuse.inst;
+
 	
 	
 	system HydraulicPiston
@@ -110,9 +113,6 @@ with Base_Types;
 		**};		
 	end HydraulicPiston;
 	
-	system implementation HydraulicPiston.inst
-		
-	end HydraulicPiston.inst;
 	
 	system BrakeActuator
 		features
@@ -151,8 +151,6 @@ with Base_Types;
 		**};		
 	end BrakeActuator;
 	
-	system implementation BrakeActuator.inst
-		
-	end BrakeActuator.inst;
+	
 	
 end WheelBrake;

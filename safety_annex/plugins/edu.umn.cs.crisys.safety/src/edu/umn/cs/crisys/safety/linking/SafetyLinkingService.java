@@ -48,7 +48,7 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 	public SafetyLinkingService() {
         super();
     }
-	
+
 	@Override
     public List<EObject> getLinkedObjects(EObject context, EReference reference, INode node)
             throws IllegalNodeException {
@@ -75,7 +75,7 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 
             //EObject e = findClassifier(context, reference, name);
         	EObject e = getIndexedObject(context, reference, name);
-        	
+
             //hack to fix some strange linking behavior by osate
             if(e instanceof DataType){
             	e = null;
@@ -165,4 +165,5 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 
         return null;
     }
+
 }
