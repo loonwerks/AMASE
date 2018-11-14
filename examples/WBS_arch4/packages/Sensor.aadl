@@ -19,16 +19,16 @@ with Base_Types;
 				
 		**};
 			
---		annex safety {**
---			fault SensorPedalPosition_ErroneousData "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
---				inputs: val_in <- elec_pedal_pos; 
---				outputs: elec_pedal_pos <- val_out;    
---        		probability: 5.0E-6 ;
---				duration: permanent;
---			}
---			
---		
---		**};
+		annex safety {**
+			fault SensorPedalPosition_ErroneousData "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
+				inputs: val_in <- elec_pedal_pos; 
+				outputs: elec_pedal_pos <- val_out;    
+        		probability: 5.0E-6 ;
+				duration: permanent;
+			}
+			
+		
+		**};
 	end SensorPedalPosition;
 	
 	system implementation SensorPedalPosition.inst
