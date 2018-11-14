@@ -26,9 +26,16 @@ The system model contains 30 different kinds of components, 169 component instan
 \subsubsection{WBS Behavioral Model Description}
 The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110~\cite{AIR6110}. The top level system properties are given by the requirements and safety objectives given in AIR6110. All of the subcomponent contracts support these system safety objectives by constraining subcomponent output behavior. The nominal system model includes 29 top-level system properties with 113 supporting subcomponent contracts. 
 
-%There are a total of 33 different fault types and 141 fault instances within the model.  The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels. 
+Based on descriptions provided in AIR6110, the Functional Hazard Assessment (FHA) revealed a number of top level properties for the system. We will focus on one in the following sections in order to illustrate the use of the Safety Annex in fault modeling and how the behavioral propagation of faults can affect the top level safety properties of a system. 
 
-%An example top-level property is to ensure that there is no inadvertent braking of the wheels.  This means that if power and hydraulic pressure is supplied (i.e., braking is commanded), then one of the following must be true: the mechanical pedal is pressed, brake force is zero, or the wheel is not rolling.
+One of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. Due to the catastrophic classification of this hazard, this is a property we chose for illustrative purposes. 
+
+\danielle{Note: I will go through one property first and if we want to add another, we can do so later.}
+
+This property can be broken down as follows. In order for no inadvertent braking to occur, there needs to be a series of things that occur in the system simultaneously. The system is provided with both power and hydraulic pressure and the pilot has not commanded braking (by pressing the pedal). At the same time, the ground is moving (the plane is not stopped), there is braking force at the wheel, and the wheel is rolling. \danielle{Why is the wheel rolling?} When all of these things happen together, this is inadvertant braking. Naturally, the safety property states this as \textit{not} all of these things occurring together. 
+
+In the behavioral model, the lower level guarantees of the components serve to support the top level property. For example, in this property we have the following lower level component contracts that ensure that these behaviors of the system cannot occur simultaneously.
+\danielle{Add description of the lower level supporting contracts.}
 
 
 
