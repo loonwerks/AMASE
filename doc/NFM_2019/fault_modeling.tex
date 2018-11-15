@@ -1,39 +1,93 @@
 \section{Fault Modeling and the Safety Annex}
 \label{sec:fault_modeling}
 
-%\subsection{Why do we need fault modelling?}
- %A safety critical system is a system whose safety cannot be shown solely by test, whose logic is difficult to comprehend without the aid of analytical tools, and whose failure can directly or indirectly cause significant loss of life or property. Guaranteeing safety and reliability of safety critical systems is mandatory and the process that guides it is highly standardized and controlled~\cite{RTCA:StdC,SAE:ARP4761}. ARP4761, the Guidelines and Methods for Conducting Safety Assessment Process on Civil Airborne Systems and Equipment,  identifies systematic means in order to show compliance with certification standards~\cite{SAE:ARP4761}.
-
-%A Preliminary System Safety Assessment (PSSA) is a systematic evaluation of the system architecture to determine safety related design requirements of system components. This assessment is conducted at multiple stages of system, component, and hardware/software design. When the PSSA is completed and the system component safety requirements are determined, the components are implemented and a System Safety Assessment (SSA) can occur. The SSA is a comprehensive evaluation of the implemented system to show that safety requirements defined in the PSSA are in fact satisfied. 
-
-%A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the integrity of the outputs and the availability of the system. The safety engineers then use the acquired understanding to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. The remainder of this section focuses on the first stage in this process: fault modelling. 
-
-%To determine how failures could cause failure conditions, individual component failure modes must be known as well as their propagation through the system. Fault behaviors tend to be complex and varied even in a simple system component. Consider for example a simple mechanical valve component whose nominal behavior is to regulate the outgoing pressure based on a position command. The fault behaviors of this valve can be varied. They can include behaviors like the valve getting stuck open, closed, or at a partially open position. Other failure modes might be possible depending on the manufacture specifications of the physical valve. In practice, prior to performing the safety assessment of a system, the safety engineers are equipped with domain knowledge about the system, but do not necessarily have detailed knowledge of how the system functions are designed. Due to the complexity of safety critical systems, the fault modelling process is error prone and time intensive.
-
-%What the Safety Annex helps to provide throughout an assessment process is the ability to examine and define failure modes (the ways in which a component or system can fail) for individual components (mechanical and digital) and then utilize behavioral propagation to determine whether these failures can cause violations of the safety requirements to occur. This can assist in understanding the system under development as well as how certain component errors contribute to the system safety requirements. 
-
 \subsection{Features needed for fault modelling}
 It is assumed that an AADL model of the nominal system specifies the hardware, software, and mechanical components of the system and their interconnections. This model is annotated with behavioral contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu}. The nominal model behavioral requirements are verified using inductive model checking through AGREE~\cite{2017arXiv171201222G}. At this point, the fault modelling can commence. 
 
-The usage of the terms error, failure, and fault are defined in ARP4754A and are described here for ease of understanding~\cite{SAE:ARP4754A}. A \textit{failure} is an event that occurs when the delivered service of a system deviates from correct behavior. A service of a system is a sequence of the system's external states. This deviation from correct behavior is called an \textit{error}. The cause of an error is a \textit{fault}. Faults can be \textit{active} or \textit{dormant}. A fault is active when it causes an error to occur, else it is dormant. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms throughout this description. 
+%The usage of the terms error, failure, and fault are defined in ARP4754A and are described here for ease of understanding~\cite{SAE:ARP4754A}. A \textit{failure} is an event that occurs when the delivered service of a system deviates from correct behavior. A service of a system is a sequence of the system's external states. This deviation from correct behavior is called an \textit{error}. The cause of an error is a \textit{fault}. Faults can be \textit{active} or \textit{dormant}. A fault is active when it causes an error to occur, else it is dormant. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms throughout this description. 
 
-When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. 
+When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component~\cite{SAE:ARP4754A}. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. 
 
 Many of these modes can be determined through domain knowledge and other modes are specified through the manufacturer of a given mechanical or digital component. Once the faults and failure modes are determined, the safety engineer must determine the consequence of this component failure on connected components, components that are physically located nearby, or on the system as a whole. Given that many safety critical systems are quite complex, this propagation process can be error prone and time consuming.
 
-In the following subsections, we walk through an example to illustrate how a safety engineer can use the Safety Annex to perform these assessments and see how an active fault may or may not cause failure of a component as well as watch the propagation of a failed component through the behavior of the system model without the need for explicit failure propagation.
+In the following subsections, we walk through examples of component failure modes to illustrate how a safety engineer can use the Safety Annex to perform these assessments and see how an active fault may or may not cause failure of a component as well as watch the propagation of a failed component through the behavior of the system model without the need for explicit failure propagation.
 
-\subsection{Failure modes}
-Ideas: \\
-- Mechanical component (valve, pump) WBS is easy for this example.\\
-- Digital component (sensor?) WBS is easy for this example.\\
-- Hardware component (processor) : Active fault on processor triggers SW faults on the SW running on this processor. There are no HW components modelled in the WBS. We can either add something to the model with HW fault propagation, or we can utilize what exists in the simplified WBS to illustrate. Although, looking through the simplified WBS, I am unclear on how these HW fault propagations are any better/different than what already exists in behavioral propagation.\\
+\subsection{Failure modes of a digital component}
+
+Once the system level functions and results of the FHA have been determined, these are used to guide the architecture development of the system. This process normally starts early in the development life cycle and is quite iterative in nature~\cite{AIR6110}. Following the example described in Section~\ref{sec:case_study} and outlined in AIR6110, we describe the process of integrating this fault modeling process into the iterative processes given in AIR6110. 
+
+In the AADL system model and the AGREE behavioral model, we have the component structures and behaviors (properties) defined for the system subcomponents. Assuming that the nominal model holds, i.e. in the absence of faults, the system behavior is sound, it is of interest to see how the presence of faults affect the overall system functionality. To determine this information, a safety engineer must determine what possible faults could be present in the given components of the system. 
+
+The WBS model contains a wide variety of components ranging from digital to mechanical. Using the Safety Annex, it is possible to capture a variety of fault descriptions for these components. As described in Section~\ref{sec:case_study}, one of the components important to the property \textit{Inadvertant braking}, is the pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then proceeds in commanding hydraulic pressure to the wheels. 
+
+\begin{figure}[h!]
+	\hspace*{-2cm}
+	\vspace{-0.5in} 
+	\begin{center}
+		\includegraphics[trim=0 640 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/sensorPedalAADL.pdf}
+		\caption{An AADL System Type: The Pedal Sensor}
+		\label{fig:sensor}
+	\end{center}
+	%\vspace{-0.4in}
+\end{figure}
+
+ In Figure~\ref{fig:sensor}, the AADL system component is shown with a contract on the output of this component. The sensor has only one input: the mechanical pedal position and one output: the electrical pedal position. The property that governs the behavior of the component is that the mechanical position should always equal the electronic position. This is an example of the nominal system model in AADL with behaviors defined in AGREE. 
+
+\begin{figure}[h!]
+	\hspace*{-2cm}
+	\vspace{-0.5in} 
+	\begin{center}
+		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/sensorPedalFault.pdf}
+		\caption{The Safety Annex for the Pedal Sensor}
+		\label{fig:sensorFault}
+	\end{center}
+	%\vspace{-0.4in}
+\end{figure}
+
+This sensor has a known fault which can invert the signal read and pass along an incorrect value. This fault is known to occur with probability $5.0e-6$. In Figure~\ref{fig:sensorFault}, the Safety Annex definition for this particular fault is shown. The faults are defined using a library of fault nodes (in this case, \textit{inverted\_fail}) and when the fault is triggered, the output of the component is converted into its failure value. 
+
+\iffalse
+
+The \textit{fault statement} consists of a unique description string, the fault node definition name, and a series of \textit{fault subcomponent} statements. \\
+\textbf{Inputs} in a fault statement are the parameters of the fault node definition. In the example above, \textit{val\_in} and \textit{alt\_val} are the two input parameters of the fault node. These are linked to the output from the Pump component (\textit{pressure\_output.val}), and \textit{alt\_value}, a fail to value of zero. When the analysis is run, these values are passed into the fault node definition.\\
+\textbf{Outputs} of the fault definition correspond to the outputs of the fault node. The fault output statement links the component output (\textit{pressure\_output.val}) with the fault node output (\textit{val\_out}). If the fault is triggered, the nominal value of \textit{pressure\_output.val} is overridden by the failure value output by the fault node. Faulty outputs can take deterministic or non-deterministic values. \\
+\textbf{Probability} (optional) describes the probability of a fault occurrence.\\
+\textbf{Duration} describes the duration of the fault; currently the Safety Annex supports transient and permanent faults.\\
+
+\fi
+
+\subsection{Error propagation of the pedal sensor failure}
+
+When this particular fault is active in the system, we can run the analysis to see how it propagates through the system. The classification of the top level safety property is catastrophic and carries a probability threshold of $1.0e-9$. Upon running the fault analysis in the toolset, a counterexample is provided for this top level property given the fault definition provided in Figure~\ref{fig:sensorFault}. Since the probability of this fault occuring on the sensor is higher than that of the top level property, it is of interest. 
+
+Through the counterexample display we can trace the behavior of the system when this particular fault is active. The mechanical pedal is not pressed, but this failure causes the sensor subcomponent to report to the BSCU that it was pressed. The active BSCU channel uses this value in order to command braking, determine validity of the channel and control the antiskid behavior of the aircraft. The BSCU carries on with its normal behavior assuming that the pedal was pressed and the state of the system is as follows: braking is not commanded and power is supplied throughout the system. The ground is moving, there is braking force at the wheels, and the wheel is rolling. Taken together this clearly disproves the top level contract that inadvertant braking at a given wheel does not occur. Thus the safety analyst of this system can recognize that some set of precautions are required for the pedal sensor component. 
+
+\subsection{Failure modes of a mechanical component}
+In the WBS there are a number of mechanical components which include valves, pumps, and wheels. When finding the failure modes of, for example, a valve, we must be aware of the ways a valve can fail. It can be stuck completely open, stuck closed, or somewhere in between. Of course this ``somewhere in between'' value could be the previous position of the valve or it could be a nondeterministic value between open and closed. For the valves in the WBS all of these possible faults can be defined through the use of separate fault statements (a complete fault statement is defined in Figure~\ref{fig:sensorFault}). 
+
+%\subsection{Error propagation of the selector valve component failure}
+
+\subsection{Hardware failure modes} 
+There is another set of possible failures in a system that are difficult to capture with the fault definitions previously discussed. As described in Section~\ref{subsec:comparison_with_EMV2}, explicit fault propagation is something that currently exists in EMV2 for AADL, but there are cases when the occurrence of an event can cause a chain reaction and trigger other faults to occur. For example, the pumps are stored in the same physical location and a fire breaks out in that room. Or a processor overheats which causes an adjacent processor to do the same. It is desirable to model these faults and one must be able to identify which component failures are activated due to the unfortunate occurrance. To this end, the Safety Annex has the ability to define what is called a Hardware fault and the user then must define which component faults are triggered by this one active fault. 
+
+As an example, consider if the green hydraulic pump and the blue pump are stored adjacent and something happens to cause the blue pump to explode. The effect of this mishap causes the blue pump to no longer output pressure and it triggers the adjacent pump to do the same.  
 
 
-\subsection{Error propagation}
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+\iffalse
 
 
 \danielle{Leaving the rest of this for now so that I can easily pull from it if need be.}
@@ -200,3 +254,5 @@ MBSA section 6.2 shows a complex MBSA example
 
 Give a detailed description of how fault tree is related to the AMASE nominal and faulty model, and the results from the AMASE verificaiton is relayed/fed bak to the fault tree
 \end{comment}
+
+\fi
