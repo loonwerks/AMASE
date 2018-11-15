@@ -1,6 +1,16 @@
 \section{Future Work and Conclusion}
 
-We have developed an extension to the AADL language with tool support for formal analysis of system safety properties in the presence of faults. Faulty behavior is specified as an extension of the nominal model, allowing safety analysis and system implementation to be driven from a single common model. This new Safety Annex leverages the AADL structural model and nominal behavioral specification (using the AGREE annex) to propagate faulty component behaviors without the need to add separate propagation specifications to the model.   Next steps will include extensions to automate injection of Byzantine faults as well as automatic generation of fault trees.  For more details on the tool, models, and approach, see the technical report~\cite{SATechReport}. To access the tool plugin, users manual, or models, see the repository~\cite{SAGithub}. 
+Currently, the Safety Annex only supports monolithic analysis with respect to probabilistic analysis. Compositional fault analysis is of interest for the following reasons. 
+\begin{itemize}
+\item Scalability of compositional analysis~\cite{NFM2012:CoGaMiWhLaLu, hilt2013:MuWhRaHe}.
+\item Given fault probabilities, what is the top level threshold for the system?
+\item Compositional fault tree generation that reflects the fault model, the system architecture, and the system behavior.
+\item What is the maximum number of active faults that a system can tolerate and what are those faults?
+\end{itemize}
+
+To this end University of Minnesota and Rockwell Collins have been focusing on recent developments in model checking in order to perform compositional fault analysis and generate these artifacts of interest. 
+
+In this research, an extension to the AADL language has been developed with tool support for formal analysis of system safety properties in the presence of faults. Faulty behavior is specified as an extension of the nominal model, allowing safety analysis and system implementation to be driven from a single common model. This new Safety Annex leverages the AADL structural model and nominal behavioral specification (using the AGREE annex) to propagate faulty component behaviors without the need to add separate propagation specifications to the model.   Next steps will include extensions to automate injection of Byzantine faults as well as automatic generation of fault trees.  For more details on the tool, models, and approach, see the technical report~\cite{SATechReport}. To access the tool plugin, users manual, or models, see the repository~\cite{SAGithub}. 
 
 \vspace{2 mm}
 \noindent {\bf Acknowledgments.} This research was funded by NASA contract NNL16AB07T and the University of Minnesota College of Science and Engineering Graduate Fellowship.
