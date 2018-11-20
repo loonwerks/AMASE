@@ -10,13 +10,13 @@ When conducting the safety assessment and examining the individual subcomponents
 
 Many of these modes can be determined through domain knowledge and other modes are specified through the manufacturer of a given mechanical or digital component. Once the faults and failure modes are determined, the safety engineer must determine the consequence of this component failure on connected components, components that are physically located nearby, or on the system as a whole. Given that many safety critical systems are quite complex, this propagation process can be error prone and time consuming.
 
-In the following subsections, we walk through examples of component failure modes to illustrate how a safety engineer can use the Safety Annex to perform these assessments and see how an active fault may or may not cause failure of a component as well as watch the propagation of a failed component through the behavior of the system model without the need for explicit failure propagation.
-
-\subsection{Failure modes of a digital component}
+In the following subsections, we walk through examples of component failure modes to illustrate how a safety engineer can use the Safety Annex to perform these assessments and see how an active fault may or may not cause failure of a component.
 
 Once the system level functions and results of the FHA have been determined, these are used to guide the architecture development of the system. This process normally starts early in the development life cycle and is quite iterative in nature~\cite{AIR6110}. Following the example described in Section~\ref{sec:case_study} and outlined in AIR6110, we describe the process of integrating this fault modeling process into the iterative processes given in AIR6110. 
 
 In the AADL system model and the AGREE behavioral model, we have the component structures and behaviors (properties) defined for the system subcomponents. Assuming that the nominal model holds, i.e. in the absence of faults, the system behavior is sound, it is of interest to see how the presence of faults affect the overall system functionality. To determine this information, a safety engineer must determine what possible faults could be present in the given components of the system. 
+
+\subsection{Failure modes of a digital component}
 
 The WBS model contains a wide variety of components ranging from digital to mechanical. Using the Safety Annex, it is possible to capture a variety of fault descriptions for these components. As described in Section~\ref{sec:case_study}, one of the components important to the property \textit{Inadvertant braking}, is the pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then proceeds in commanding hydraulic pressure to the wheels. 
 
@@ -65,7 +65,6 @@ Through the counterexample display we can trace the behavior of the system when 
 \subsection{Failure modes of a mechanical component}
 In the WBS there are a number of mechanical components which include valves, pumps, and wheels. When finding the failure modes of, for example, a valve, we must be aware of the ways a valve can fail. It can be stuck completely open, stuck closed, or somewhere in between. Of course this ``somewhere in between'' value could be the previous position of the valve or it could be a nondeterministic value between open and closed. For the valves in the WBS all of these possible faults can be defined through the use of separate fault statements (a complete fault statement is defined in Figure~\ref{fig:sensorFault}). 
 
-%\subsection{Error propagation of the selector valve component failure}
 
 \subsection{Hardware failure modes} 
 There is another set of possible failures in a system that are difficult to capture with the fault definitions previously discussed. As described in Section~\ref{subsec:comparison_with_EMV2}, explicit fault propagation is something that currently exists in EMV2 for AADL, but there are cases when the occurrence of an event can cause a chain reaction and trigger other faults to occur. For example, the pumps are stored in the same physical location and a fire breaks out in that room. Or a processor overheats which causes an adjacent processor to do the same. It is desirable to model these faults and one must be able to identify which component failures are activated due to the unfortunate occurrance. To this end, the Safety Annex has the ability to define what is called a Hardware fault and the user then must define which component faults are triggered by this one active fault. 
