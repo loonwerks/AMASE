@@ -1,7 +1,12 @@
 \section{Analysis of the Fault Model}
 \label{sec:fault_analysis}
 
+A  benefit of utilizing the AGREE behavioral annex is the ability to perform both monolithic and compositional analysis on the nominal model. For fault analysis, we separate these analyses into two distinct actions and describe them here.
 
+\subsection{Monolithic}
+When monolithic analysis is performed, the architectural model is flattened in order to perform the analysis. This type of analysis is required to perform probabilistic fault analysis as described in previous sections. A top level threshold is given in the top level system implementation and each subcomponent failure is given a probability of occurrance. To perform this analysis, it is assumed that the faults occur independently and possible combinations of faults are analyzed  by the model checker. If the probability of such combination of faults is less than the designated top level threshold, these faults may be activated and the behavioral effects can be seen through a counterexample.  
 
+\subsection{Compositional}
+In compositional analysis, the analysis proceeds in a top down fashion. To prove the top level properties, the contracts in the layer directly beneath the top level are used to perform the proof. The analysis proceeds in this manner. Currently it is possible to assign a maximum number of faults to a layer of the architecture. When this number of faults is constrained, it occurs during the analysis of that layer. This means that it is clear which of the guarantees of that layer are violated by the active faults, but we have not yet added the ability to propagate this information up to higher layers in the architecture. This type of analysis is helpful to see weaknesses in a given component or layer of the system, but the reflection of these active faults is not displayed system wide.
 
 
