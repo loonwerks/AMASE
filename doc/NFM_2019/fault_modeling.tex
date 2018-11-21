@@ -1,6 +1,14 @@
 \section{Fault Modeling and the Safety Annex}
 \label{sec:fault_modeling}
 
+\janet{Consider the use of the terms "error" "failure" "fault" in this section to be consistent with the ones in ARP4754A or ARP4761, as they have specific meanings to safety engineers.
+From Mike Peterson:
+Hardware has errors and failures - call it Type 1
+Software has errors - call it Type 2
+Equipment (functions/systems) that have faults and possibly failures as a result of Type 1 or Type 2 occurrences.}
+
+\janet{Also consider revising sub-section headings to be consistent with the style used in other sections, e.g., capitalize each main word.}
+
 \subsection{Features needed for fault modelling}
 It is assumed that an AADL model of the nominal system specifies the hardware, software, and mechanical components of the system and their interconnections. This model is annotated with behavioral contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu}. The nominal model behavioral requirements are verified using inductive model checking through AGREE~\cite{2017arXiv171201222G}. At this point, the fault modelling can commence. 
 
