@@ -1,5 +1,5 @@
  \section{Motivating Example}
- \janet{It was not clear what safety analysis needs were motivated from this WBS example and addressed by our approach. Consider more emphasis on the info that would motivate our approach, less on general description of this example. For example, info such as 29 top level properties, 113 supporting contracts, by themselves alone don't show why we need our approach, but behavioral properties/requirements may.} 
+ \janet{J's comments: It was not clear what safety analysis needs were motivated from this WBS example and addressed by our approach. Consider more emphasis on the info that would motivate our approach, less on general description of this example. For example, info such as 29 top level properties, 113 supporting contracts, by themselves alone don't show why we need our approach, but behavioral properties/requirements may.} 
  
 \label{sec:case_study} 
 In Model Based Safety Engineering, the model is developed using a systems engineering language or tool. At this point, a fault model can be developed based on the components of the system under consideration. In order to demonstrate the fault modeling capabilities of the Safety Annex in Section~\ref{sec:fault_modeling}, this section sets the foundation by describing a system with a variety of complex subcomponents. 
@@ -35,7 +35,7 @@ One of the failure conditions described in AIR6110 is \textit{Inadvertent wheel 
 This property can be broken down as follows. In order for no inadvertent braking to occur, there needs to be a series of things that occur in the system simultaneously. The system is provided with both power and hydraulic pressure and the pilot has not commanded braking (by pressing the pedal). At the same time, the ground is moving (the plane is not stopped), there is braking force at the wheel, and the wheel is rolling. When all of these things happen together, this is inadvertant braking. Naturally, the safety property states this as all of these things do \textit{not} occur together. 
 
 In the behavioral model, the lower level guarantees of the components serve to support the top level property. For example, in this property we have the following lower level component contracts that ensure that these behaviors of the system cannot occur simultaneously.
-\janet{The ''following lower level component contracts'' were not described.} 
+\janet{J's comment: The ''following lower level component contracts'' were not described.} 
 
 
 
