@@ -64,7 +64,7 @@ In complex systems, it can be difficult to determine the effects of HW faults on
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
-	\vspace{-0.4in} 
+	\vspace{-0.3in} 
 	\begin{center}
 		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/hw_fault_green_pump.pdf}
 		\caption{Hardware fault for the green pump}
@@ -73,9 +73,9 @@ In complex systems, it can be difficult to determine the effects of HW faults on
 	\vspace{-0.3in}
 \end{figure}
 
-As an example, we will look yet again at the WBS. Assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft. This particular aircraft was in flight when the zombie apocolypse began and unfortunately a few of the passengers were among the undead. The chaos leading up to the pump compartment accident is unnecessary to illustrate hardware fault modeling, so it is sufficient to say that due to this series of events, an explosion took place in said compartment. The green (normal) hydraulic pump took the force of the explosion and when it exploded, the shrapnel flew into the blue (alternate) pump and it became from then on unoperable. 
+As an example, we will look yet again at the WBS. Assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft. This particular aircraft was in flight when the zombie apocolypse began and unfortunately a few of the passengers were among the undead. The description of the chaos leading up to the pump compartment accident is unnecessary in order to illustrate hardware fault modeling. It is sufficient to say that due to this series of events, an explosion took place in said compartment. The green (normal) hydraulic pump took the force of the explosion and when it exploded, the shrapnel flew into the blue (alternate) pump and it became from then on unoperable. 
 
-The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement. Notice that these pumps need not be connected through a data port in order to specify this propagation. Furthermore, the probability of occurance can be given. This specifies the probability of the HW fault activation. If this HW fault is activated, the probability of propagation is 100\%. (Note: This value in this example does not reflect the probability of a zombie apocolypse, but rather some unforseen event leading to the destruction of the pumps, i.e. fire, water damage, explosion, bullet, etc.)  
+The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement. Notice that these pumps need not be connected through a data port in order to specify this propagation, they need only to be located in the same area of the aircraft. Furthermore, the probability of occurance can be given. This specifies the probability of the HW fault activation. If this HW fault is activated, the probability of propagation is 100\%. (Note: This value in this example does not reflect the probability of a zombie apocolypse, but rather some unforseen event leading to the destruction of the pumps, i.e. fire, water damage, explosion, bullet, etc.)  
 
 
 
