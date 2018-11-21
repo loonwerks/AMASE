@@ -22,26 +22,26 @@ The WBS model contains a wide variety of components ranging from digital to mech
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
-	\vspace{-0.5in} 
+	\vspace{-0.4in} 
 	\begin{center}
-		\includegraphics[trim=0 640 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/sensorPedalAADL.pdf}
+		\includegraphics[trim=0 640 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/system_sensor.pdf}
 		\caption{An AADL System Type: The Pedal Sensor}
 		\label{fig:sensor}
 	\end{center}
-	%\vspace{-0.4in}
+	\vspace{-0.3in}
 \end{figure}
 
  In Figure~\ref{fig:sensor}, the AADL system component is shown with a contract on the output of this component. The sensor has only one input: the mechanical pedal position and one output: the electrical pedal position. The property that governs the behavior of the component is that the mechanical position should always equal the electronic position. This is an example of the nominal system model in AADL with behaviors defined in AGREE. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
-	\vspace{-0.5in} 
+	\vspace{-0.4in} 
 	\begin{center}
-		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/sensorPedalFault.pdf}
+		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/safetyannex_sensorfault.pdf}
 		\caption{The Safety Annex for the Pedal Sensor}
 		\label{fig:sensorFault}
 	\end{center}
-	%\vspace{-0.4in}
+	\vspace{-0.3in}
 \end{figure}
 
 This sensor has a known fault which can invert the signal read and pass along an incorrect value. This fault is known to occur with probability $5.0e-6$. In Figure~\ref{fig:sensorFault}, the Safety Annex definition for this particular fault is shown. The faults are defined using a library of fault nodes (in this case, \textit{inverted\_fail}) and when the fault is triggered, the output of the component is converted into its failure value. 
@@ -67,9 +67,30 @@ In the WBS there are a number of mechanical components which include valves, pum
 
 
 \subsection{Hardware failure modes} 
-There is another set of possible failures in a system that are difficult to capture with the fault definitions previously discussed. As described in Section~\ref{subsec:comparison_with_EMV2}, explicit fault propagation is something that currently exists in EMV2 for AADL, but there are cases when the occurrence of an event can cause a chain reaction and trigger other faults to occur. For example, the pumps are stored in the same physical location and a fire breaks out in that room. Or a processor overheats which causes an adjacent processor to do the same. It is desirable to model these faults and one must be able to identify which component failures are activated due to the unfortunate occurrance. To this end, the Safety Annex has the ability to define what is called a Hardware fault and the user then must define which component faults are triggered by this one active fault. 
+As described in Section~\ref{subsec:comparison_with_EMV2}, explicit fault propagation is something that currently exists in EMV2 for AADL and the mode of fault analysis presented in this paper is behavioral fault propagation. But there is another set of possible failures in a system that are difficult to capture with the fault definitions previously discussed. Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearly, such as overheating, fire in the containment location, or a stray bullet during a zombie attack. 
 
-As an example, consider if the green hydraulic pump and the blue pump are stored adjacent and something happens to cause the blue pump to explode. The effect of this mishap causes the blue pump to no longer output pressure and it triggers the adjacent pump to do the same.  
+To better model HW dependent faults, a fault model element is introduced for HW components called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. Users specify dependencies between the HW component faults and faults that are defined in other components, either HW or SW. The hardware fault then acts as a trigger for dependent faults. 
+
+In complex systems, it can be difficult to determine the effects of HW faults on SW functions. By utilizing a simple propagation from the faulty HW component to the SW components that rely on it, the behavior and outputs of the affected SW functions can be realized. 
+
+\begin{figure}[h!]
+	\hspace*{-2cm}
+	\vspace{-0.4in} 
+	\begin{center}
+		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/hw_fault_green_pump.pdf}
+		\caption{Hardware fault for the green pump}
+		\label{fig:hwFault}
+	\end{center}
+	\vspace{-0.3in}
+\end{figure}
+
+As an example, we will look yet again at the WBS. Assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft. This particular aircraft was in flight when the zombie apocolypse began and unfortunately a few of the passengers were among the undead. The chaos leading up to the pump compartment accident is unnecessary to illustrate hardware fault modeling, so it is sufficient to say that due to this series of events, an explosion took place in said compartment. The green (normal) hydraulic pump took the force of the explosion and when it exploded, the shrapnel flew into the blue (alternate) pump and it became from then on unoperable. 
+
+The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement. Notice that these pumps need not be connected through a data port in order to specify this propagation. Furthermore, the probability of occurance can be given. This specifies the probability of the HW fault activation. If this HW fault is activated, the probability of propagation is 100\%. (Note: This value in this example does not reflect the probability of a zombie apocolypse, but rather some unforseen event leading to the destruction of the pumps, i.e. fire, water damage, explosion, bullet, etc.)  
+
+
+
+
 
 
 
