@@ -7,14 +7,12 @@ Hardware has errors and failures - call it Type 1
 Software has errors - call it Type 2
 Equipment (functions/systems) that have faults and possibly failures as a result of Type 1 or Type 2 occurrences.}
 
-\janet{Also consider revising sub-section titles to be consistent with the style used in other sections, e.g., capitalize each main word.}
+\danielle{I double checked the definitions I provide in this section for error, fault, and failure. They do correspond with the defs in ARP documents. I do not however make the distinctions between type 1 and 2. If we want to add this in, we can, but I just combed through the section and edited the parts where I did use the wrong term. We will need to proof read this section a few times I think... }
 
 \subsection{Features Needed for Fault Modeling}
 It is assumed that an AADL model of the nominal system specifies the hardware, software, and mechanical components of the system and their interconnections. This model is annotated with behavioral contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu}. The nominal model behavioral requirements are verified using inductive model checking through AGREE~\cite{2017arXiv171201222G}. At this point, the fault modelling can commence. 
 
 When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component~\cite{SAE:ARP4754A}. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms (error, failure, fault) throughout this description.
-
-\danielle{D's comment: when the previous paragraph was written, I checked through the ARP definitions and described them accordingly. I will try and catch all of my mistakes in the following sections. We will probably have to proof read this section a few times. It is slightly confusing using these three terms correctly and at the same time using the generic term ``fault'' as in the safety annex node definition.}
 
 Many of these modes can be determined through domain knowledge and other modes are specified through the manufacturer of a given mechanical or digital component. Once the faults and failure modes are determined, the safety engineer must determine the consequence of this component failure on connected components, components that are physically located nearby, and on the system as a whole. Given that many safety critical systems are quite complex, this propagation process can be error prone and time consuming.
 
