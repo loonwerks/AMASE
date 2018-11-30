@@ -2,34 +2,23 @@
 \label{sec:intro}
 
 
-System safety analysis techniques are crucial in the development life cycle of highly integrated/complex aircraft systems and are used to show compliance with certification requirements. A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use this information to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. Acquiring knowledge about the components and overall system behavior is typically a time consuming and error prone process.
+System safety analysis techniques are crucial in the development life cycle of highly integrated/complex aircraft systems and are used to show compliance with certification requirements. A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use this information to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. Acquiring knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior is typically a time consuming and involved process.
 
-To help solve this problem, researchers and industry practitioners have turned to Model-based System Engineering (MBSE). Models have been shown to be an effective way to help engineers capture, understand and analyze complex systems. Previous work has been done showing the benefits of leveraging the system model in the safety analysis process~\cite{Joshi05:SafeComp,Joshi07:Hase,Joshi05:Dasc,DBLP:conf/cav/BozzanoCPJKPRT15}. Using a Model-Based Safety Analysis (MBSA) approach allows an analyst to weave a fault model into the entire MBSE process while preserving the separation of a system model and a fault model.
+To help solve this problem, researchers and industry practitioners have turned to the use of models. Models have been shown to be an effective way to help engineers capture, understand and analyze complex systems. Previous work has been done showing the benefits of leveraging the system model in the safety analysis process~\cite{Joshi05:SafeComp,Joshi07:Hase,Joshi05:Dasc,DBLP:conf/cav/BozzanoCPJKPRT15}.
 
-During this safety analysis process, it is important to reason about faults and how faulty component behaviors can impact the overall system behavior. In order to address the problem of understanding the model and complex system, it is advantageous to provide an automated analysis framework that allows for various types of fault definitions, propagations, and modelling options. 
+%In order to effectively assist safety engineers to acquire the knowledge on software application behaviors and assess their effects on the overall behavior of the system, the models should allow system designers to capture the expected behaviors of the software application and the expected behavioral propagations among different components/application in the system; and allow safety engineers to leverage the same model provided by system designers, capture failure modes for individual components, and automatically assess the effects to the overall system through the behavioral propagations built in the existing model.
+
+During this safety analysis process, it is important to reason about faults and how faulty component behaviors can impact the overall system behavior. In order to address the problem of understanding the model and complex system, it is advantageous to provide an automated analysis framework that allows for various types of fault definitions, propagations, and modeling options. 
 
 This paper introduces a tool that provides a solution to these problems: the Safety Annex for the system engineering language called Architecture Analysis and Design Language (AADL), a widely used SAE Standard design language for MBSE applications~\cite{AADL_Standard}. Given a system model in AADL and a behavioral model developed in the Assume Guarantee Reasoning Environment (AGREE)~\cite{NFM2012:CoGaMiWhLaLu}, the Safety Annex is a fault modelling tool that utilizes model checking in order to analyze the behavior of a system in the presence of faults. The Safety Annex allows safety engineers to leverage existing models from system development for conducting assessment. 
 
 Throughout this paper we show that the Safety Annex allows both implicit and explicit failure propagation which gives richer fault modeling capabilities than comparable tools. It is also shown how behavioral information regarding the active faults, the component properties and the overall system behavior when faults are active are provided. We demonstrate that the toolset (AADL, AGREE, and Safety Annex) captures behaviors of both the nominal model (absence of faults) and the faulty model in a cleanly separated and yet analyzable fashion. This serves to preserve the system model for the systems engineering process and simultaneously be able to see their combined effect on the system behavior. 
 
 
+ %Using a Model-Based Safety Analysis (MBSA) approach allows safety engineers to weave a fault model into the entire MBSE process while preserving the separation of a system model and a fault model.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+%To help solve this problem, researchers and industry practitioners have turned to Model-based System Engineering (MBSE). Models have been shown to be an effective way to help engineers capture, understand and analyze complex systems. Previous work has been done showing the benefits of leveraging the system model in the safety analysis process~\cite{Joshi05:SafeComp,Joshi07:Hase,Joshi05:Dasc,DBLP:conf/cav/BozzanoCPJKPRT15}. Using a Model-Based Safety Analysis (MBSA) approach allows an analyst \janet{use the term ``safety engineer'' only or both ``safety engineer'' and ``safety analyst''?} to weave a fault model into the entire MBSE process while preserving the separation of a system model and a fault model.
 
 
 \iffalse
