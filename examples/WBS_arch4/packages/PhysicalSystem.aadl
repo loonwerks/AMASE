@@ -416,6 +416,13 @@ with ShutoffValve;
 		
 		
 		**}	;
+		annex safety{**
+	  		analyze : max 1 fault
+	  		--analyze : probability 1.0E-7
+	  
+	  		propagate_from: {Pump_Catastrophe@green_hyd_pump} to {HydPump_FailedOff@blue_hyd_pump};
+	  
+   **};
 	end PhysicalSystem.inst; 
 
 
