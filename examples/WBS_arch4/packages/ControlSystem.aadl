@@ -195,5 +195,11 @@ with Base_Types;
 			
 	
 	end ControlSystem.inst;
+	
+	annex safety{**
+	  	analyze : max 1 fault
+	  	--analyze : probability 1.0E-7
+	  
+   **};
 
 end ControlSystem;
