@@ -14,11 +14,11 @@
             id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
       </command>
       <!-- New command for menu item (Soteria) -->
-      <command
-            name="Generate SOTERIA model during AGREE Verification"
-            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
-            id="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand">
-      </command>
+ <!--     <command
+           name="Generate SOTERIA model during AGREE Verification"
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           id="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand">
+     </command> -->
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -27,10 +27,10 @@
             class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
       </handler>
       <!-- New handler for menu item (Soteria) -->
-      <handler
+ <!--     <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.SoteriaGenHandler">
-      </handler>
+      </handler> -->
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -41,12 +41,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
       <!-- New key for menu item (Soteria) -->
-      <key
+ <!--     <key
             commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </key>
+      </key> -->
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -67,12 +67,12 @@
                   style="toggle">
             </command>
             <!-- New command for menu item -->
-            <command
+ <!--           <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
                   mnemonic="f"
                   id="edu.umn.cs.crisys.safety.analysis.menus.soteriaCommand"
                   style="toggle">
-            </command>
+            </command>-->
          </menu>
       </menuContribution>
       <menuContribution
@@ -86,12 +86,12 @@
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyAnalysisCommand">
             </command>
             <!-- New command for menu item -->
-            <command
+<!--            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
                   icon="icons/sample.gif"
                   tooltip="SOTERIA model is generating."
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.soteriaCommand">
-            </command>
+            </command> -->
          </toolbar>
       </menuContribution>
    </extension>

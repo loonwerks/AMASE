@@ -47,11 +47,11 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 
 	protected PropertiesProposalProvider getLinkingService() {
 		if (propPropProv == null) {
-			propPropProv = (PropertiesProposalProvider) injector.getInstance(SafetyProposalProvider.class);
+			propPropProv = injector.getInstance(SafetyProposalProvider.class);
 		}
 		return propPropProv;
 	}
-	
+
 	protected EObjectAtOffsetHelper getOffsetHelper() {
 		if(offsetHelper == null){
 			offsetHelper = injector.getInstance(EObjectAtOffsetHelper.class);
@@ -75,25 +75,25 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 			XtextResource resource = (XtextResource)annexSub.eResource();
 			grammerObject = helper.resolveContainedElementAt(resource, offset);
 		}
-		
+
 		List<String> results = new ArrayList<>();
 		if(grammerObject instanceof NestedDotID){
 			results.addAll(getNestedDotIDCandidates((NestedDotID)grammerObject));
 		}
-		
+
 		return results;
 	}
-	
+
 	private List<String> getNestedDotIDCandidates(AadlPackage aadlPackage) {
-		
+
 		SafetyContract contract = null;
 		List<String> results = new ArrayList<>();
 		for (AnnexLibrary annex :  AnnexUtil.getAllActualAnnexLibraries(aadlPackage, SafetyPackage.eINSTANCE.getSafetyContractLibrary())) {
-            if (annex instanceof SafetyLibrary) { 
+            if (annex instanceof SafetyLibrary) {
             	contract = (SafetyContract) ((SafetyContractLibrary) annex).getContract();
             }
         }
-		
+
 		if(contract != null){
 			for(SpecStatement spec : contract.getSpecs()){
 				if(spec instanceof ConstStatement){
@@ -102,13 +102,13 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 			}
 
 		}
-		
+
 		return results;
 	}
-	
+
 	private List<String> getNestedDotIDCandidates(NamedElement namedEl) {
 		List<String> results = new ArrayList<>();
-		
+
 		List<NamedElement> namedEls = new ArrayList<NamedElement>();
 		if(namedEl instanceof ComponentImplementation){
 			namedEls.addAll(((ComponentImplementation) namedEl).getAllSubcomponents());
@@ -120,15 +120,15 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 		}
 		return results;
 	}
-	
+
 	private List<String> getNestedDotIDCandidates(NestedDotID id) {
-		
+
 		NamedElement base = id.getBase();
 		NamedElement namedEl = null;
-		
+
 		if(base instanceof Arg){
 			Type type = ((Arg) base).getType();
-			NestedDotID elID = ((RecordType) type).getRecord();
+			NestedDotID elID = (NestedDotID) ((RecordType) type).getRecord();
     		namedEl = elID.getBase();
 		}else if(base instanceof DataPort){
 			namedEl = ((DataPort) base).getDataFeatureClassifier();
@@ -139,7 +139,7 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 		}else{
 			return new ArrayList<>();
 		}
-		
+
 		return getNestedDotIDCandidates(namedEl);
 	}
 

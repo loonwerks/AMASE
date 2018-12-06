@@ -117,7 +117,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	 *     (rule start) (ambiguity) 'timefall' '(' id=NestedDotID
 	 *     (rule start) (ambiguity) 'timeof' '(' id=NestedDotID
 	 *     (rule start) (ambiguity) 'timerise' '(' id=NestedDotID
-	 *     (rule start) (ambiguity) base=[NamedElement|QCPREF]
+	 *     (rule start) (ambiguity) base=[NamedElement|EID]
 	 *     (rule start) (ambiguity) op='-'
 	 *     (rule start) (ambiguity) op='not'
 	 *     (rule start) (ambiguity) val=BooleanLiteral
@@ -165,7 +165,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	
 	/**
 	 * Ambiguous syntax:
-	 *     'occur' | 'occurs'
+	 *     'occurs' | 'occur'
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     effect=Expr (ambiguity) 'during' interval=TimeInterval

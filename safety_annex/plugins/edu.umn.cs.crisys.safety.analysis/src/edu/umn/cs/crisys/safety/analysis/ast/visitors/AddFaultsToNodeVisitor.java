@@ -154,9 +154,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
-		if (AddFaultsToAgree.getTransformFlag() == 2) {
-			nb.setFaultTreeFlag(true);
-		}
+//		if (AddFaultsToAgree.getTransformFlag() == 2) {
+//			nb.setFaultTreeFlag(true);
+//		}
 		addNominalVars(node, nb);
 		addFaultInputs(faults, nb);
 		addHWFaultInputs(hwFaults, nb);
@@ -777,22 +777,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (AddFaultsToAgree.getTransformFlag() == 1) {
 				// If transform flag is 1, that means we are doing the max/prob analysis
 				nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
-			} else {
-				// If transform flag is 2, then we want to generate fault tree.
-				// In this case, we add the indep as a local var.
-				AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL,
-						f.faultStatement);
-				// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).
-				nb.addLocal(newVar);
-
-				// Then equate this to false
-				IdExpr idExpr = new IdExpr(newVar.id);
-				AgreeEquation ae = new AgreeEquation(idExpr, new BoolExpr(false), null);
-				// And add as a local equation
-				nb.addLocalEquation(ae);
-				// Add independent fault as ivc element
-				nb.addIvcElement(this.createFaultIndependentActiveId(base));
 			}
+//			else {
+//				// If transform flag is 2, then we want to generate fault tree.
+//				// In this case, we add the indep as a local var.
+//				AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL,
+//						f.faultStatement);
+//				// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).
+//				nb.addLocal(newVar);
+//
+//				// Then equate this to false
+//				IdExpr idExpr = new IdExpr(newVar.id);
+//				AgreeEquation ae = new AgreeEquation(idExpr, new BoolExpr(false), null);
+//				// And add as a local equation
+//				nb.addLocalEquation(ae);
+//				// Add independent fault as ivc element
+//				nb.addIvcElement(this.createFaultIndependentActiveId(base));
+//			}
 
 			// Add dependent as per usual.
 			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(base), NamedType.BOOL, f.faultStatement));
