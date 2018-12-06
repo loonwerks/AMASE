@@ -28,10 +28,10 @@ public class PreferencesUtil {
 		if (prefs.getBoolean(PreferenceConstants.PREF_DEBUG)) {
 			api.setApiDebug();
 		}
-		if (api instanceof JKindApi) {
-			((JKindApi) api).setAllIvcs();
-			((JKindApi) api).setAllIvcsJkindTimeout(100);
-		}
+//		if (api instanceof JKindApi) {
+//			((JKindApi) api).setAllIvcs();
+//			((JKindApi) api).setAllIvcsJkindTimeout(100);
+//		}
 
 		return api;
 	}
