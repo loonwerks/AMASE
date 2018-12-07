@@ -1,0 +1,94 @@
+package Reactor
+public	
+with Base_Types;
+with datatypes;
+
+	system Reactor 
+		features
+			-- insertion of rods 
+			-- {extracted, partially_inserted, inserted}
+			rods_command : in data port Base_Types::Integer;
+			-- How much coolant is present in reactor
+			coolant_level : in data port Base_Types::Integer;
+			-- Temperature of coolant
+			coolant_temperature : in data port Base_Types::Integer;
+			
+			-- Temp of reactor
+			-- {1,..,5} = {inert, low, normal, hot, very hot}
+			output_temp : out data port Base_Types::Integer;
+			-- True if core is melted
+			melted : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			assume "Datatypes move coolant temp one step" :
+				(datatypes.move(coolant_level, 10) = (coolant_level + 1)) 
+				or (datatypes.move(coolant_level, 10) = (coolant_level - 1))
+				or (datatypes.move(coolant_level, coolant_level) = (coolant_level)); 
+			
+			-- Reactor core status values
+			const CORE_INERT : int = 1;
+			const CORE_LOW : int = 2;
+			const CORE_NORMAL : int = 3;
+			const CORE_HOT : int = 4;
+			const CORE_VERY_HOT : int = 5;
+			 
+			-- Core status transitions
+			eq Current_core_status : int;
+			eq Core_status_init : int = CORE_NORMAL;
+			eq Previous_status : int = prev(Current_core_status, Core_status_init);
+			
+			eq T_rods_inserted : bool = false -> (rods_command = datatypes.INSERTED);
+			eq T_rods_partially_inserted : bool = false -> (rods_command = datatypes.PARTIALLY_INSERTED);
+			eq T_rods_extracted : bool = false -> (rods_command = datatypes.EXTRACTED);
+			
+			eq Some_transition : bool = T_rods_inserted or T_rods_partially_inserted or T_rods_extracted;
+			
+			eq Melted_status : bool = false -> ((Current_core_status = CORE_VERY_HOT) and (coolant_level = 1));
+			
+			----------------------------------------------------------------------------------------------
+			guarantee "Rods inserted implies that the core status begins moving towards 1 (INERT)" :
+				(T_rods_inserted) => (Current_core_status = datatypes.move(Previous_status, 1));
+			----------------------------------------------------------------------------------------------
+			
+			guarantee "Rods partially inserted implies that the core status begins moving towards 2 (LOW)" :
+				(T_rods_partially_inserted) => (Current_core_status = datatypes.move(Previous_status, 2));
+			
+			
+			guarantee "Rods extracted, high coolant level, and low coolant temp implies that core status moves to NORMAL (3)" :
+				(T_rods_extracted and (coolant_level >= 3) and (coolant_temperature < 3)) => (Current_core_status = datatypes.move(Previous_status, 3));
+				
+			
+			guarantee "Rods extracted, high coolant level, and high coolant temp implies that core status remains constant" :
+				(T_rods_extracted and (coolant_level >= 3) and (coolant_temperature >= 3)) => (Current_core_status = Previous_status);
+				
+			
+			---------------------------------------------------------------------------------------------------	
+			guarantee "Rods extracted, low coolant level implies that core status moves to VERY_HOT (5)" :
+				(T_rods_extracted and (coolant_level < 3)) => (Current_core_status = datatypes.move(Previous_status, 5));
+			---------------------------------------------------------------------------------------------------
+			
+			guarantee "Datatypes move core status one step" :
+				(datatypes.move(Current_core_status, 5) = (Current_core_status + 1))
+				or (datatypes.move(Current_core_status, 0) = (Current_core_status - 1))
+				or (datatypes.move(Current_core_status, Current_core_status) = (Current_core_status));  
+			
+			guarantee "If no transition occurs, status remains the same." :
+				(not (Some_transition)) => (Current_core_status = Previous_status);
+				
+			guarantee "Core status link to local Current_core_status" :
+				output_temp = Current_core_status;
+			
+			
+			guarantee "Melted status" : (Melted_status = melted);
+			
+			
+			guarantee "Output temp bounded" :
+				(output_temp >= 0) and (output_temp <= 5);
+				
+			guarantee "Inital output temp value" :
+				(output_temp = CORE_NORMAL) -> true; 
+		**};
+			
+	end Reactor;
+end Reactor;

@@ -18,43 +18,31 @@ public class TransformAgreeProgram implements AgreeAutomater{
 	List<AgreeNode> agreeNodes;
 	List<Type> globalTypes;
 	List<Node> lustreNodes;
-	
+
 	@Override
 	public AgreeProgram transform(AgreeProgram program) {
-		
 		topNode = program.topNode;
 		agreeNodes = program.agreeNodes;
-		
-		
-		// for each node in program: 
-		//   connect to safety annex info?
-		
-		
 		return program;
 	}
 
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
-		
-		
-		
 		return renaming;
 	}
 
 	@Override
 	public AnalysisResult transformResult(AnalysisResult res) {
-		// TODO Auto-generated method stub
 		return res;
 	}
 
-//	@Override
+	@Override
 	public AgreeLayout transformLayout(AgreeLayout layout) {
-		// TODO Auto-generated method stub
 		return layout;
 	}
-	
-	
-	
-	
+
+
+
+
 
 }

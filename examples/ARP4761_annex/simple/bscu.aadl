@@ -99,9 +99,9 @@ features
 		-- Not sure if I can do this without using some
 		-- notion of prestate... if pre(input1)=true then result = false...  
 		guarantee "If input1 is true, result is false. Else result is true" : true ->
-		     (pre(input1) = true => result = false) or (pre(input1) = false => 
-		     	    result = true
-		     ) ;	
+		     if (pre(input1) = true) 
+		     	then (result = false) 
+			 else (result = true);	
 	**}	;
 
 	annex safety {**
@@ -128,7 +128,7 @@ annex AGREE{**
 	
 	-- If input is zero, select_alternate_accumulator is true
 	guarantee "if input is zero (pressure found at the wheel), output select_alternate to accumulator as true" :
-	      (wheel_pressure.val <= 0.0) => select_alt_accumulator = true;
+	      (wheel_pressure.val <= 0.0) => (select_alt_accumulator = true);
 	
 **};
 end select_accumulator_valve;
@@ -158,7 +158,7 @@ features
 		      	    => wheel_pressure.val > 0.0))); 
 		
 		guarantee "Pedals pressed and no skid and normal implies pressure commanded" : 
-			pedals_pressed and (not skid_active)  =>
+			(pedals_pressed and (not skid_active))  =>
 				commanded_pressure; 
 				 
 		guarantee "Alternate pressure and normal pressure don't occur simultaneously." : 
@@ -237,6 +237,21 @@ properties
 	Actual_Processor_Binding => (reference (platform.cpu1)) applies to sub1.mon;
 	Actual_Processor_Binding => (reference (platform.cpu2)) applies to sub2.cmd;
 	Actual_Processor_Binding => (reference (platform.cpu2)) applies to sub2.mon;	
+
+	annex AGREE {**
+		-- select alternate contract 
+		lemma "If input1 is true, result is false. Else result is true" : true ->
+		     if (pre(select.input1) = true) 
+		     	then (select.result = false) 
+			 else (select.result = true);
+			 
+		-- select accumulator contract
+		lemma "if input is zero (pressure found at the wheel), output select_alternate to accumulator as true" :
+	      (select_accumulator.wheel_pressure.val <= 0.0) => (select_accumulator.select_alt_accumulator = true);
+	
+		
+	
+	**}	;
 
 end bscu.federated;
 
