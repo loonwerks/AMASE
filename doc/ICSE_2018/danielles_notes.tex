@@ -1,0 +1,51 @@
+\subsection{Danielles Notes}
+
+\subsubsection{Constraint systems}
+Consider a constraint system $C$ as an ordered set of $n$ constraints $\{C_1,C_2,...,C_n\}$ over a set of variables. Each constraint restricts the allowed assignments to the variables in some way. We need a way to determine for any subset $S \subseteq C$, whether $S$ is \textit{satisfiable} (SAT) meaning there exists an allowable assignment for all $C_i \in S$ or \textit{unsatisfiable} (UNSAT) meaning no such assignment exists. 
+
+Some useful subsets of unsatisfiable constraint systems with particular properties:
+\begin{itemize}
+\item \textit{Minimal Unsatisfiable Subset} (MUS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ $\ni$ $M$ is UNSAT and $\forall c \in M : M / \{c\}$ is SAT. An MUS is the minimal explanation of the systems unsatisfiability. 
+ 
+\item \textit{Maximal Satisfiable Subset} (MSS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ $\ni$ $M$ is SAT and $\forall c \in M : M \cup \{c\}$ is UNSAT.
+
+\item \textit{Minimal Correction Set} (MCS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ $\ni$ $C / M$ is SAT and $\forall S \subset M : C / M$ is UNSAT. The removal fromk $C$ corrects the infeasibility. 
+
+\end{itemize}
+
+Notes: MSS and MCS are complementary: any MSS of $C$ is the complement (relative to $C$) of some MCS and vice versa. This provides two ways of encoding the same information. MCSs used more often in practice because MCS is smaller than its complement. The goal of MUS/MSS enumeration algorithms given some constraint system $C$ is the exploration of the power set of the constraints $P(C)$. 
+\begin{itemize}
+\item Every subset of $C$ is either SAT or UNSAT.
+
+\item If a subset is SAT, then every subset is SAT. 
+
+\item If a subset is UNSAT, then every superset is UNSAT. 
+
+\end{itemize}
+
+\subsubsection{IVC approach}
+Formulate the model into a boolean problem called transition relation. \\
+Assert negation of the safety property.\\
+Ask solver if both of these are satisfiable together.\\
+
+If the solver returns UNSAT, then it is impossible to satisfy the negation of the safety property so a request is made for the MUSs : the minimal explaination for infeasability. These are traced back to the model elements and hence these are the model elements necessary for the proof of the safety property. 
+
+\subsubsection{Minimal cut sets and fault trees}
+Top level event occurs if one of the MCSs occur. Hence the MCSs are connected to the TLE through an OR gate. This corresponds to the probabilistic operation:\\
+
+$P(A \cup B) = P(A) + P(B) - P(A \cap B)$\\
+
+Since failure probabilities on fault trees tend to be small, $P(A \cap B)$ becomes an error term and the output of the OR gate can be conservatively approximated using the assumption that the inputs are mutually exclusive events. They are not in reality since a basic event can be shared between MCSs, but it is a safe approximation to make. This type of dependency is called  \textit{positive dependency} and gives a more conservative estimate for the probability of occurance of the TLE. 
+
+An MCS contains the combination of basic events which together lead to the occurance of the TLE. Thus the basic events are connected through an AND gate. This corresponds to the operation: \\
+
+$P(A \cap B) = P(A)P(B)$\\
+
+So in a more formal way: 
+The probability of the TLE is given by:\\
+
+$P_{tle}(t) \leq \Sigma_{j=1}^k [\hat{P}_j(t)]$ \\
+
+where $\hat{P}_j(t)$ is the failure probability of the MCS $M_j$ : \\
+
+$\hat{P}_j(t) = \Pi_{i \in M_j} b_i(t)$ for basic events $b_i \in M_j$. 

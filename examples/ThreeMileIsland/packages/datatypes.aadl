@@ -1,0 +1,57 @@
+package datatypes
+public
+
+	annex agree {**
+		
+		-- Main command status constants for state machine
+		const MAIN_START : int = 1;
+		const MAIN_STOP : int = 2;
+		
+		-- Pump status constants for state machine
+		const PUMPING : int = 1;
+		const STOPPED : int = 2;
+		const SHAKING : int = 3;
+		const BROKEN  : int = 4;
+		
+		
+		-- Valve status constants for state machine
+		const VALVE_OPEN : int = 1;
+		const VALVE_CLOSED : int = 2;
+		
+		
+		-- Tank status constants for state machine
+		const TANK_INJECT : int = 1;
+		const TANK_STOP : int = 2;
+		
+		
+		
+		-- Coolant status constants for state machine
+		const STEAM_CAVITIES : int = 1;
+		const NORMAL : int = 2;
+		const SOLID : int = 3;
+		
+		-- Reactor rods status constants for state machine
+		const EXTRACTED : int = 1;
+		const PARTIALLY_INSERTED : int = 2;
+		const INSERTED : int = 3;
+		
+		-- Node used to check if pump remains broken
+		node pump_once_broken(pump_status: int) returns (pump_is_broke: bool); 
+		let
+			pump_is_broke = (pump_status = 4) or (false -> pre(pump_status = 4));
+		tel;
+		
+		
+		node move(variable: int, value: int) returns (new_var: int);
+		let
+			new_var = if (variable < value) 
+						then (variable+1)
+					  else if (variable > value)
+					  		  then (variable-1)
+					  else
+					  	variable;
+		tel;
+		
+	**};
+		
+end datatypes;

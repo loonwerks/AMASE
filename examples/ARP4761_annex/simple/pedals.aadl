@@ -28,7 +28,4 @@ features
 
 end pedals;
 
-system implementation pedals.generic
-end pedals.generic;
-
 end pedals;

@@ -46,15 +46,14 @@ with Base_Types;
 			-- Braking force
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
 			
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
+		
+	end WheelBrake.inst;
+	annex safety{**
+	
+		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;
-	end WheelBrake.inst;
-	
 
 	system HydraulicFuse
 		features
@@ -80,9 +79,7 @@ with Base_Types;
 		**};		
 	end HydraulicFuse;
 	
-	system implementation HydraulicFuse.inst
-		
-	end HydraulicFuse.inst;
+
 	
 	
 	system HydraulicPiston
@@ -116,9 +113,6 @@ with Base_Types;
 		**};		
 	end HydraulicPiston;
 	
-	system implementation HydraulicPiston.inst
-		
-	end HydraulicPiston.inst;
 	
 	system BrakeActuator
 		features
@@ -157,8 +151,6 @@ with Base_Types;
 		**};		
 	end BrakeActuator;
 	
-	system implementation BrakeActuator.inst
-		
-	end BrakeActuator.inst;
+	
 	
 end WheelBrake;
