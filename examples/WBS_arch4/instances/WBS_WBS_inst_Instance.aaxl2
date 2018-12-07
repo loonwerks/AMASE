@@ -2342,7 +2342,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2354,7 +2354,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -2400,7 +2400,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2412,7 +2412,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -2429,7 +2429,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2441,7 +2441,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2453,7 +2453,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -2560,7 +2560,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2572,7 +2572,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -2618,7 +2618,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2630,7 +2630,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -2647,7 +2647,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2659,7 +2659,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2671,7 +2671,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -2778,7 +2778,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2790,7 +2790,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -2836,7 +2836,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2848,7 +2848,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -2865,7 +2865,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2877,7 +2877,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -2889,7 +2889,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -2996,7 +2996,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3008,7 +3008,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -3054,7 +3054,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3066,7 +3066,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -3083,7 +3083,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3095,7 +3095,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3107,7 +3107,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -3214,7 +3214,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3226,7 +3226,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -3272,7 +3272,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3284,7 +3284,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -3301,7 +3301,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3313,7 +3313,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3325,7 +3325,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -3432,7 +3432,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3444,7 +3444,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -3490,7 +3490,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3502,7 +3502,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -3519,7 +3519,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3531,7 +3531,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3543,7 +3543,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -3650,7 +3650,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3662,7 +3662,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -3708,7 +3708,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3720,7 +3720,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -3737,7 +3737,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3749,7 +3749,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3761,7 +3761,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>
@@ -3868,7 +3868,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3880,7 +3880,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
         <index>0</index>
@@ -3926,7 +3926,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="force_out" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3938,7 +3938,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.3/@ownedDataPort.1"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
         <index>0</index>
@@ -3955,7 +3955,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
         </featureInstance>
         <featureInstance name="alternate_force_in">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3967,7 +3967,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
         </featureInstance>
         <featureInstance name="braking_force" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
@@ -3979,7 +3979,7 @@
             </ownedValue>
             <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
-          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+          <feature xsi:type="aadl2:DataPort" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
         </featureInstance>
         <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/WheelBrake.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
         <index>0</index>

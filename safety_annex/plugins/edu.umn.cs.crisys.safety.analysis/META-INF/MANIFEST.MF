@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.ui,
  org.osate.annexsupport;bundle-version="1.0.0",
  com.rockwellcollins.atc.agree;bundle-version="2.0.0",
  com.rockwellcollins.atc.agree.analysis;bundle-version="2.0.0",
- edu.uah.rsesc.aadlsimulator.agree;bundle-version="0.1.0";resolution:=optional
+ edu.uah.rsesc.aadlsimulator.agree;bundle-version="0.1.0";resolution:=optional,
+ com.rockwellcollins.atc.z3;bundle-version="4.7.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.rockwellcollins.atc.agree.agree,
@@ -33,6 +34,7 @@ Import-Package: com.rockwellcollins.atc.agree.agree,
  com.rockwellcollins.atc.agree.analysis.translation,
  com.rockwellcollins.atc.agree.analysis.views,
  edu.umn.cs.crisys.safety.safety,
+ edu.umn.cs.crisys.safety.safety.impl,
  edu.umn.cs.crisys.safety.safety.util,
  edu.umn.cs.crisys.safety.util,
  jkind.lustre,
@@ -48,5 +50,6 @@ Import-Package: com.rockwellcollins.atc.agree.agree,
  org.osate.aadl2.instantiation,
  org.osate.annexsupport,
  org.osate.ui.dialogs
+Export-Package: edu.umn.cs.crisys.safety.analysis.transform
 
 

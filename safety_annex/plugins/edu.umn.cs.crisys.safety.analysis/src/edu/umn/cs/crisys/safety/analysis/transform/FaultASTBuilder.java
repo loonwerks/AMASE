@@ -103,7 +103,6 @@ public class FaultASTBuilder {
 			// translating expression HERE.
 			Expr result = builder.doSwitch(input.getNom_conn().get(i));
 			fault.faultInputMap.put(param, result);
-			// System.out.println("Fault node input: " + param + " is assigned " + result.toString());
 		}
 	}
 
@@ -237,7 +236,6 @@ public class FaultASTBuilder {
 	public String mkUniqueFaultId(FaultStatement fstmt) {
 		faultCounter++;
 		String elem = this.agreeNode.id + "__" + "fault_" + faultCounter;
-		System.out.println("Constructed fault: " + elem);
 		return elem;
 	}
 

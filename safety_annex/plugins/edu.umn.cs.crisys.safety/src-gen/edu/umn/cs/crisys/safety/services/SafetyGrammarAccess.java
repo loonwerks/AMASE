@@ -1660,6 +1660,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//NamedElement aadl2::NamedElement:
 	//	Arg
+	//	| NamedSpecStatement
 	//	| FnDefExpr
 	//	| PropertyStatement
 	//	| ConstStatement
@@ -1723,6 +1724,19 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getAgreeContractRule() {
 		return getAgreeContractAccess().getRule();
+	}
+
+	//NamedSpecStatement:
+	//	{AssumeStatement} 'assume' name=ID? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+	//	| {GuaranteeStatement} 'guarantee' name=ID? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+	//	| {AssertStatement} 'assert' (name=ID? str=STRING ':')? (expr=Expr | pattern=PatternStatement) ';'
+	//	| {LemmaStatement} 'lemma' name=ID? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';';
+	public AgreeGrammarAccess.NamedSpecStatementElements getNamedSpecStatementAccess() {
+		return gaAgree.getNamedSpecStatementAccess();
+	}
+	
+	public ParserRule getNamedSpecStatementRule() {
+		return getNamedSpecStatementAccess().getRule();
 	}
 
 	////The following are patterns from the CESAR RSL
@@ -1993,7 +2007,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//Type:
 	//	{PrimType} string=primTypes ('[' lowNeg='-'? rangeLow=(INTEGER_LIT | REAL_LIT) ',' highNeg='-'?
 	//	rangeHigh=(INTEGER_LIT | REAL_LIT) ']')?
-	//	| {RecordType} record=NestedDotID;
+	//	| {RecordType} record=TypeID;
 	public AgreeGrammarAccess.TypeElements getTypeAccess() {
 		return gaAgree.getTypeAccess();
 	}
@@ -2204,9 +2218,10 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ComplexExpr:
-	//	NestedDotID (=> ({FnCallExpr.fn=current} '(') (args+=Expr (',' args+=Expr)*)? ')'
-	//	| => ({RecordExpr.record=current} '{' args+=[aadl2::NamedElement] '=') argExpr+=Expr (';' args+=[aadl2::NamedElement]
-	//	'=' argExpr+=Expr)* '}')?;
+	//	TypeID
+	//	=> ({RecordExpr.record=current} '{' args+=[aadl2::NamedElement] '=') argExpr+=Expr (';' args+=[aadl2::NamedElement]
+	//	'=' argExpr+=Expr)* '}'
+	//	| NestedDotID (=> ({FnCallExpr.fn=current} '(') (args+=Expr (',' args+=Expr)*)? ')')?;
 	public AgreeGrammarAccess.ComplexExprElements getComplexExprAccess() {
 		return gaAgree.getComplexExprAccess();
 	}
@@ -2216,7 +2231,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//NestedDotID:
-	//	base=[aadl2::NamedElement|QCPREF] => ('.' (tag=ReservedVarTag | sub=NestedDotID))?;
+	//	base=[aadl2::NamedElement|EID] => ('.' (tag=ReservedVarTag | sub=NestedDotID))?;
 	public AgreeGrammarAccess.NestedDotIDElements getNestedDotIDAccess() {
 		return gaAgree.getNestedDotIDAccess();
 	}
@@ -2225,15 +2240,34 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getNestedDotIDAccess().getRule();
 	}
 
+	//TypeID:
+	//	base=[aadl2::NamedElement|QCPREF];
+	public AgreeGrammarAccess.TypeIDElements getTypeIDAccess() {
+		return gaAgree.getTypeIDAccess();
+	}
+	
+	public ParserRule getTypeIDRule() {
+		return getTypeIDAccess().getRule();
+	}
+
 	//QCPREF:
-	//	=> (ID '::') ID => ('.' ID)?
-	//	| ID;
+	//	(ID '::')? ID ('.' ID)?;
 	public AgreeGrammarAccess.QCPREFElements getQCPREFAccess() {
 		return gaAgree.getQCPREFAccess();
 	}
 	
 	public ParserRule getQCPREFRule() {
 		return getQCPREFAccess().getRule();
+	}
+
+	//EID:
+	//	(ID '::')? ID;
+	public AgreeGrammarAccess.EIDElements getEIDAccess() {
+		return gaAgree.getEIDAccess();
+	}
+	
+	public ParserRule getEIDRule() {
+		return getEIDAccess().getRule();
 	}
 
 	//ReservedVarTag:

@@ -1,0 +1,53 @@
+package Secondary
+public
+with Base_Types;
+with ParallelPump;
+with Circuit;
+
+	system Secondary
+		features
+			-- Main Command2: {start, stop} (for Parallel pump component)
+			command : in data port Base_Types::Integer;
+			-- Get temp of fluid from primary circuit
+			circuit_temp_high : in data port Base_Types::Integer;
+			
+			-- Output temp of fluid to primary circuit
+			circuit_temp_low : out data port Base_Types::Integer;
+		annex agree {**
+			
+			assume "Command input is bounded." :
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP);
+			
+--			guarantee "Command input is bounded." :
+--				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP); 
+		**}	;
+	end Secondary;
+	
+	system implementation Secondary.impl
+		subcomponents
+			pump2 : system ParallelPump::ParallelPump;
+			circuit2 : system Circuit::Circuit;
+			
+		connections
+			cmd_to_pumps : port command -> pump2.command;
+			
+			-- Pump status from parallel pump 2 to circuit 2
+			pump_status2 : port pump2.status -> circuit2.pump_status;
+			
+			-- Circuit coolant status to pumps
+			coolant_to_pumps : port circuit2.coolant_status -> pump2.coolant_status;
+			
+			-- High temp to circuit 2
+			circuit1_to_circuit2 : port circuit_temp_high -> circuit2.temp_input_high;
+		
+		annex agree{**
+			assert(circuit2.input_valve_status = datatypes.VALVE_CLOSED);
+			assert(circuit2.output_valve_status = datatypes.VALVE_CLOSED);
+			assert(circuit2.temp_input_low = 2);
+			
+			
+			
+		**};
+		
+	end Secondary.impl;	
+end Secondary;

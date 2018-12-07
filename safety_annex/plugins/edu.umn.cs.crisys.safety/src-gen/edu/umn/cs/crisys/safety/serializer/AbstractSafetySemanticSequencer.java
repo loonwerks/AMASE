@@ -11,7 +11,9 @@ import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.agree.AlwaysStatement;
 import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.AssertStatement;
 import com.rockwellcollins.atc.agree.agree.AssignStatement;
+import com.rockwellcollins.atc.agree.agree.AssumeStatement;
 import com.rockwellcollins.atc.agree.agree.AsynchStatement;
 import com.rockwellcollins.atc.agree.agree.BinaryExpr;
 import com.rockwellcollins.atc.agree.agree.BoolLitExpr;
@@ -25,11 +27,13 @@ import com.rockwellcollins.atc.agree.agree.FloorCast;
 import com.rockwellcollins.atc.agree.agree.FnCallExpr;
 import com.rockwellcollins.atc.agree.agree.FnDefExpr;
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
+import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 import com.rockwellcollins.atc.agree.agree.IfThenElseExpr;
 import com.rockwellcollins.atc.agree.agree.InputStatement;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.LatchedExpr;
 import com.rockwellcollins.atc.agree.agree.LatchedStatement;
+import com.rockwellcollins.atc.agree.agree.LemmaStatement;
 import com.rockwellcollins.atc.agree.agree.LibraryFnDefExpr;
 import com.rockwellcollins.atc.agree.agree.LinearizationDefExpr;
 import com.rockwellcollins.atc.agree.agree.LinearizationInterval;
@@ -62,6 +66,7 @@ import com.rockwellcollins.atc.agree.agree.TimeExpr;
 import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
+import com.rockwellcollins.atc.agree.agree.TypeID;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.agree.WhenHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WhenOccursStatment;
@@ -257,8 +262,14 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.ARG:
 				sequence_Arg(context, (Arg) semanticObject); 
 				return; 
+			case AgreePackage.ASSERT_STATEMENT:
+				sequence_NamedSpecStatement(context, (AssertStatement) semanticObject); 
+				return; 
 			case AgreePackage.ASSIGN_STATEMENT:
 				sequence_AssignStatement(context, (AssignStatement) semanticObject); 
+				return; 
+			case AgreePackage.ASSUME_STATEMENT:
+				sequence_NamedSpecStatement(context, (AssumeStatement) semanticObject); 
 				return; 
 			case AgreePackage.ASYNCH_STATEMENT:
 				sequence_SynchStatement(context, (AsynchStatement) semanticObject); 
@@ -299,6 +310,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.GET_PROPERTY_EXPR:
 				sequence_PreDefFnExpr(context, (GetPropertyExpr) semanticObject); 
 				return; 
+			case AgreePackage.GUARANTEE_STATEMENT:
+				sequence_NamedSpecStatement(context, (GuaranteeStatement) semanticObject); 
+				return; 
 			case AgreePackage.IF_THEN_ELSE_EXPR:
 				sequence_IfThenElseExpr(context, (IfThenElseExpr) semanticObject); 
 				return; 
@@ -313,6 +327,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case AgreePackage.LATCHED_STATEMENT:
 				sequence_SynchStatement(context, (LatchedStatement) semanticObject); 
+				return; 
+			case AgreePackage.LEMMA_STATEMENT:
+				sequence_NamedSpecStatement(context, (LemmaStatement) semanticObject); 
 				return; 
 			case AgreePackage.LIBRARY_FN_DEF_EXPR:
 				sequence_LibraryFnDefExpr(context, (LibraryFnDefExpr) semanticObject); 
@@ -409,6 +426,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case AgreePackage.TIME_RISE_EXPR:
 				sequence_TermExpr(context, (TimeRiseExpr) semanticObject); 
+				return; 
+			case AgreePackage.TYPE_ID:
+				sequence_TypeID(context, (TypeID) semanticObject); 
 				return; 
 			case AgreePackage.UNARY_EXPR:
 				sequence_UnaryExpr(context, (UnaryExpr) semanticObject); 
