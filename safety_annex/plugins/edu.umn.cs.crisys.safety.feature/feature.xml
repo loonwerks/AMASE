@@ -14,7 +14,7 @@
          Assume Guarantee Reasoning Environment (AGREE). The Safety Annex provides a way to 
          weave faults into the nominal system model and analyze the behavior of the system in 
          the presence of faults. The Safety Annex also provides a library of common fault node 
-         definitions that is customizable to the needs of system and safety engineers. 
+         definitions that is customizable to the needs of system and safety engineers.
    </description>
 
    <copyright>
@@ -70,6 +70,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    <plugin
          id="edu.umn.cs.crisys.safety.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.rockwellcollins.atc.z3"
          download-size="0"
          install-size="0"
          version="0.0.0"
