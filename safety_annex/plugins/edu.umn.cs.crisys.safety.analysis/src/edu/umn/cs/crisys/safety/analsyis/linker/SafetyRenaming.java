@@ -52,19 +52,6 @@ public class SafetyRenaming extends Renaming{
 	public String rename(String original) {
 
 		String result = null; 
- 
-//		if (isPropertyName(original)) {
-//			// Only want the test case number
-//			String testNumber = original.replace(GenerateUfcObligationsVisitor.TRAP_PROP_PREFIX, "");
-//			result = "Test Case " + testNumber + " ["+ agreeName(original) + "] for condition [" + conditionName(original) +  "]";
-//			
-//		} 
-//		else {
-//			result = agreeRenaming.rename(original);
-//		}
-		
-		// Removed Ufc obligation call - will be making our own changes to the program eventually. 
-		// No need for this here at this time.
 		result = agreeRenaming.rename(original);
 		return result;
 	}

@@ -1,0 +1,87 @@
+package SeriesValve
+public
+with Base_Types;
+with Valve;
+
+	system SeriesValve
+		features
+			-- Input from main TMI: {open, close}
+			porv_cmd : in data port Base_Types::Integer;
+			block_cmd : in data port Base_Types::Integer;
+			
+			porv_valve_status : out data port Base_Types::Integer;
+			block_valve_status : out data port Base_Types::Integer;
+			
+			-- {open, close}
+			status : out data port Base_Types::Integer;
+		
+		annex agree {**
+			assume "Range for porv commands." :
+				(porv_cmd >= datatypes.VALVE_OPEN) and (porv_cmd <= datatypes.VALVE_CLOSED);
+				
+			assume "Range for block commands." :
+				(block_cmd >= datatypes.VALVE_OPEN) and (block_cmd <= datatypes.VALVE_CLOSED);
+				
+			guarantee "Output status is open if both valves are open." :
+				if (porv_cmd = datatypes.VALVE_OPEN) 
+					then (status = block_cmd)
+				else (status = porv_cmd);
+				
+			guarantee "Initially, output is open." :
+				(status = datatypes.VALVE_OPEN) -> true;
+			
+			guarantee "Output status bounded." :
+				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED);
+		**};
+		
+	annex safety {**
+		fault valve_stuck_open_fault "In series valve: valve stuck open.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_OPEN;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+		
+		fault valve_stuck_closed_fault "In series valve: valve stuck closed.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_CLOSED;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+	**};
+			
+	end SeriesValve;
+	
+	system implementation SeriesValve.impl
+		subcomponents
+			valve_porv : system Valve::Valve;
+			valve_block : system Valve::Valve;
+			
+		connections
+			porv : port porv_cmd -> valve_porv.command;
+			block : port block_cmd -> valve_block.command;
+			p_status : port valve_porv.status -> porv_valve_status;
+			b_status : port valve_block.status -> block_valve_status;
+		
+		annex agree {**
+			
+			-- Initial status is closed
+			lemma "Initial status is closed" :
+				(valve_porv.status = datatypes.VALVE_CLOSED) -> true; 
+			
+			
+			-- If command is open, open valve. If command is closed, then close valve.
+			lemma "If command is open, open valve. If command is closed, then close valve." :
+				if (valve_porv.command = datatypes.VALVE_OPEN) 
+					then (valve_porv.status = datatypes.VALVE_OPEN)
+				else (valve_porv.status = datatypes.VALVE_CLOSED);
+			
+		**};
+			
+	end SeriesValve.impl;
+		
+end SeriesValve;

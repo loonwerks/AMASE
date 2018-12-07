@@ -24,6 +24,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
+import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.analysis.transform.BaseFault;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
@@ -88,7 +89,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<Fault, String> mapFaultToPath = new HashMap<>();
 
 	// Per node data structures: must be stored when visiting new node
-
 	// This maps id to a pair consisting of the expression with the fault associated
 	// with that
 	// id and expression.
@@ -143,7 +143,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faults = renameFaultEqs(faults);
 
 		if (faultMap.containsKey(node.compInst) || hwfaultMap.containsKey(node.compInst)) {
-			System.out.println("Node: " + node.id + " has already been visited!");
 			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
 		}
 		faultMap.put(node.compInst, faults);
@@ -154,6 +153,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		node = super.visit(node);
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
+		// Change this nodes flag to reflect fault tree generation or not.
+//		if (AddFaultsToAgree.getTransformFlag() == 2) {
+//			nb.setFaultTreeFlag(true);
+//		}
 		addNominalVars(node, nb);
 		addFaultInputs(faults, nb);
 		addHWFaultInputs(hwFaults, nb);
@@ -162,18 +165,30 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		if (isTop) {
 			topNode = node;
-			AnalysisBehavior maxFaults = this.gatherTopLevelFaultCount(node);
+			AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
 			// gather path information for the faults (for creating names later)
 			collectFaultPath(node, new ArrayList<>());
 			this.gatherFaultPropagation(node);
 			// empty path to pass to top level node fault
 			// node id used as the path to pass to sub level node fault
 			addTopLevelFaultDeclarations(node, nb);
-			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
+
+			// This checks if we are doing max faults or probability behavior.
+			// It will add the assertion to Lustre representing the required behavior.
+			// If we want to generate the fault tree, this method changes in order
+			// to not add assertions regarding behavior (i.e. no assertion about
+			// max # faults).
+			// The reason that the maxFault nullity check is here is because when we
+			// are not at a top node (SystemInstanceImpl), we do not care about the
+			// top level analysis constraints and hence maxFaults (the return value
+			// from gatherTopLevelFaultAnalysis) is null.
+			// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
+			if (AddFaultsToAgree.getTransformFlag() == 1) {
+				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
+			}
 		}
 
 		node = nb.build();
-
 		faultyVarsExpr = parentFaultyVarsExpr;
 		return node;
 	}
@@ -183,10 +198,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// (faultPath)
 		// Create new nominal variables for each pair (root.path).
 		for (String faultyId : faultyVarsExpr.keySet()) {
-
 			AgreeVar out = findVar(node.outputs, (faultyId));
+			if (out == null) {
+				throw new SafetyException("A fault defined for " + node.id + "has a connection"
+						+ " that is not a valid output for this component.");
+			}
 			nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
-
 		}
 	}
 
@@ -222,10 +239,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				actual = new IdExpr(createFaultNodeInputId(f.id));
 			} else {
 				actual = f.faultInputMap.get(vd.id);
-
 				// do any name conversions on the stored expression.
 				actual = actual.accept(this);
-
 				if (actual == null) {
 					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
 				}
@@ -243,34 +258,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
 				nb.addLocal(actual);
 				lhs.add(new IdExpr(lhsId));
-
-				// MWW: added 1/20/2018
 				f.outputParamToActualMap.put(v.id, actual);
 			}
-
 			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
 					f.faultStatement);
 			nb.addLocalEquation(eq);
-
-			// CHANGE THIS!
-			// for(Map.Entry<String, Expr> outMap: f.faultOutputMap.entrySet()) {
-			// String lhsId = this.createFaultNodeEqId(f.id, outMap.getKey());
-			// nb.addAssertion(
-			// new AgreeStatement("",
-			// new BinaryExpr(new IdExpr(lhsId), BinaryOp.EQUAL, outMap.getValue()),
-			// f.faultStatement));
-			// }
-			//
-			//
-			//
 		}
+
 		// Binding happens HERE and is based on the map faultyVarsExpr.
 		// Create an equality between the id and a nested WITH expression for each expr
 		// in the list.
-
 		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
-			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
 
+			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
 			// Create nominal id name with key from this map
 			String nomId = createNominalId(lhsWithStmtName);
 			// base is the root of the WITH expression.
@@ -278,7 +278,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 			// Go through pairs of the list and create with statements.
 			for (Pair pair : list) {
-
 				// base : replace the expression with nominal expression
 				// repl : go from the fault to the actual
 				// toAssign: createNestedUpdateExpr using base, repl
@@ -286,7 +285,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Expr repl = faultToActual(pair.f, pair.ex);
 				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 			}
-
 			// create new assertion expression : id = ((nominal_id with p1 := f1) with ...)
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
 					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
@@ -320,7 +318,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Expr faultToActual(Fault f, Expr ex) {
 		// Match pair.ex -> key of faultOutputMap
 		// If this expression is not in map, return exception message
-
 		String outputName = f.faultOutputMap.get(ex);
 		if (outputName == null) {
 			new Exception("Cannot find expression in mapping: faultToActual (AddFaultsToNodeVisitor class)");
@@ -329,19 +326,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
 		// Create IdExpr out of actual string
 		return new IdExpr(actual.id);
-
 	}
 
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
 		HashMap<String, String> theMap = new HashMap<>();
 		for (AgreeVar eqVar : eqVars) {
-			// ComponentInstance ci = eqVar.compInst;
 			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
-
-			// System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-			// System.out.println("Key : value = "+name + " : "+createFaultEqId(f.id,
-			// name));
-			// System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 		return theMap;
 	}
@@ -430,7 +420,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			list.add(pair);
 			faultyVarsExpr.put(id, list);
 		}
-
 	}
 
 	public String createFaultEventId(String base) {
@@ -466,7 +455,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
 
 		List<Fault> faults = new ArrayList<>();
-
 		// reset fault count for the new Agree Node
 		FaultASTBuilder.resetFaultCounter();
 
@@ -497,10 +485,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return hwFaults;
 	}
 
-	public AnalysisBehavior gatherTopLevelFaultCount(AgreeNode node) {
+	public AnalysisBehavior gatherTopLevelFaultAnalysis(AgreeNode node) {
+
+//		// Make sure this is the top node. We do not need to check
+//		// top level fault analysis information if we are not at the top node.
+//		// Because of the way Agree performs its analysis, at any given comopositional
+//		// run, the 'top node' is the containing component for that analysis run. this is not
+//		// the true top node, so we check to see if we have a system instance implementation.
+//		// This is the actual top node.
+//		if (!(node.compInst instanceof SystemInstanceImpl)) {
+//			return null;
+//		}
+
 		AnalysisBehavior ab = null;
 		boolean found = false;
-
 		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, true));
 
 		for (SpecStatement s : specs) {
@@ -546,9 +544,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 			}
 		}
-
 		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
-
 		for (ComponentInstance compInst : compInsts) {
 			if (compInst.getName().equals(compPath.getBase().getName())) {
 				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
@@ -557,10 +553,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 						return hwfault;
 					}
 				}
-
 			}
 		}
-
 		throw new SafetyException("Unable to identify fault for " + faultName + "@" + compPath.getBase().getName());
 	}
 
@@ -638,7 +632,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		IdExpr independentlyActiveExpr = new IdExpr(this.createFaultIndependentActiveId(nameBase));
 		IdExpr dependentlyActiveExpr = new IdExpr(this.createFaultDependentActiveId(nameBase));
 		IdExpr independentEventExpr = new IdExpr(this.createFaultEventId(nameBase));
-
 		List<Expr> faultExprs = new ArrayList<>();
 		// collect the list of source faults in the propagations
 		// whose target fault is the current fault
@@ -648,7 +641,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// create a disjunction of the source faults as the triggering event
 		// for the dependent fault
 		Expr dependentEventExpr = buildFaultDisjunctionExpr(faultExprs, 0);
-
 		Expr assertIndependentExpr;
 		Expr assertDependentExpr;
 
@@ -716,7 +708,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (String str : path) {
 			mapFaultToPath.put(f, str);
 		}
-
 		Expr equate = new BinaryExpr(new IdExpr(interfaceVarId), BinaryOp.EQUAL,
 				new BinaryExpr(new IdExpr(indepentlyActiveVarId), BinaryOp.OR, new IdExpr(depentlyActiveVarId)));
 		builder.addAssertion(new AgreeStatement("", equate, f.faultStatement));
@@ -779,7 +770,32 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (Fault f : faults) {
 			String base = addPathDelimiters(f.path, f.id);
 			nb.addInput(new AgreeVar(this.createFaultEventId(base), NamedType.BOOL, f.faultStatement));
-			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
+
+			// Here is where fault indep variables are added to lustre.
+			// For fault tree generation, this must be added locally,
+			// assigned to false, and given the --%IVC command.
+			if (AddFaultsToAgree.getTransformFlag() == 1) {
+				// If transform flag is 1, that means we are doing the max/prob analysis
+				nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
+			}
+//			else {
+//				// If transform flag is 2, then we want to generate fault tree.
+//				// In this case, we add the indep as a local var.
+//				AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL,
+//						f.faultStatement);
+//				// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).
+//				nb.addLocal(newVar);
+//
+//				// Then equate this to false
+//				IdExpr idExpr = new IdExpr(newVar.id);
+//				AgreeEquation ae = new AgreeEquation(idExpr, new BoolExpr(false), null);
+//				// And add as a local equation
+//				nb.addLocalEquation(ae);
+//				// Add independent fault as ivc element
+//				nb.addIvcElement(this.createFaultIndependentActiveId(base));
+//			}
+
+			// Add dependent as per usual.
 			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(base), NamedType.BOOL, f.faultStatement));
 
 			// add to lustre fault map with the explanatory text (string given for fault
@@ -842,7 +858,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			String base = addPathDelimiters(path, f.id);
 			sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(base))));
 		}
-
 		for (AgreeNode n : currentNode.subNodes) {
 			List<String> ext = new ArrayList<>(path);
 			ext.add(n.id);
@@ -1014,8 +1029,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			return;
 		}
 
-		System.out.println("elementProbabilities: " + elementProbabilities);
-
 		// remove elements from list that are too unlikely & add remaining elements to
 		// 'good' set.
 		ArrayList<FaultProbability> remainder = new ArrayList<>(elementProbabilities);
@@ -1053,7 +1066,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 			}
 		}
-		System.out.println("Fault hypothesis: " + faultCombinationsAboveThreshold);
 
 		// Now faultCombinationsAboveThreshold contains all the valid fault combinations
 		// of the independently active faults
@@ -1108,12 +1120,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
 		}
 
-		System.out.println("Probabilistic Fault Hypothesis is: " + faultHypothesis.toString());
-
 		// Add this fault hypothesis as an assertion.
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
+	// This will add max fault behavior or probability behavior depending on what is
+	// entered in the top level annex.
+	// If the user chooses the menu item for fault tree generation, we wish to
+	// not add the assertions for the max/prob behavior, but instead add in the
+	// IVC commands.
 	public void addTopLevelFaultOccurrenceConstraints(AnalysisBehavior ab, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
 

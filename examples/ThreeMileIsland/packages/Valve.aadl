@@ -1,0 +1,56 @@
+package Valve
+public
+with Base_Types;
+with datatypes;
+
+	system Valve
+		features
+			-- {open, closed}
+			command : in data port Base_Types::Integer;
+			
+			-- {open, closed}
+			status : out data port Base_Types::Integer;
+	
+		annex agree {**
+			 
+			assume "Command input is bounded." :
+				(command >= datatypes.VALVE_OPEN) and (command <= datatypes.VALVE_CLOSED);
+			 
+			-- Initial status is closed
+			guarantee "Initial status is closed" :
+				(status = datatypes.VALVE_CLOSED) -> true; 
+			
+			
+			-- If command is open, open valve. If command is closed, then close valve.
+			guarantee "If command is open, open valve. If command is closed, then close valve." :
+				if (command = datatypes.VALVE_OPEN) 
+					then (status = datatypes.VALVE_OPEN)
+				else (status = datatypes.VALVE_CLOSED);
+			 
+			guarantee "Output status is bounded." :
+				(status >= datatypes.VALVE_OPEN) and (status <= datatypes.VALVE_CLOSED); 
+			
+		**};
+	annex safety {**
+		fault valve_stuck_open_fault "In valve: valve stuck open.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_OPEN;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+		
+		fault valve_stuck_closed_fault "In valve: valve stuck closed.": faults.fail_to_int {
+			eq open_value : int = datatypes.VALVE_CLOSED;
+			inputs: val_in <- status, 
+					alt_val <- open_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}	
+	**};	
+	end Valve;
+	
+		
+end Valve;

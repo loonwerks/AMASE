@@ -184,13 +184,7 @@ with MonitorSystem;
 			command_wheel_rolling_8 : port wheel_rolling_8 -> command_sys.wheel_rolling_8;
 		
 
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
-		-- MWW: END HACK!
-		-- ---------------------------------------------------------------------------	
-		**}	;
+		
 
 	end Channel.inst;
 end Channel;

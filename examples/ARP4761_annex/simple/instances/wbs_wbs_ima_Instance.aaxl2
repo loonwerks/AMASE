@@ -88,13 +88,13 @@
     </featureInstance>
     <featureInstance name="Select_Alternate" direction="out">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-        <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
         <ownedValue>
           <ownedValue xsi:type="aadl2:NamedValue">
-            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
           </ownedValue>
         </ownedValue>
-        <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
       </ownedPropertyAssociation>
       <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.3"/>
     </featureInstance>
@@ -119,19 +119,19 @@
       </featureInstance>
       <featureInstance name="valid" direction="out">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:NamedValue">
-              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
             </ownedValue>
           </ownedValue>
-          <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.3"/>
       </featureInstance>
       <componentInstance name="mon" category="process">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+          <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:ListValue">
               <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.6/@componentInstance.3/@componentInstance.0/@componentInstance.1"/>
@@ -147,13 +147,13 @@
         </featureInstance>
         <featureInstance name="valid" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-            <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+            <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
             <ownedValue>
               <ownedValue xsi:type="aadl2:NamedValue">
-                <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+                <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
               </ownedValue>
             </ownedValue>
-            <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+            <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
           <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.2"/>
         </featureInstance>
@@ -163,7 +163,7 @@
       </componentInstance>
       <componentInstance name="cmd" category="process">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+          <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:ListValue">
               <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.6/@componentInstance.3/@componentInstance.0/@componentInstance.0"/>
@@ -213,19 +213,19 @@
       </featureInstance>
       <featureInstance name="valid" direction="out">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:NamedValue">
-              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
             </ownedValue>
           </ownedValue>
-          <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.3"/>
       </featureInstance>
       <componentInstance name="mon" category="process">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+          <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:ListValue">
               <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.6/@componentInstance.3/@componentInstance.0/@componentInstance.3"/>
@@ -241,13 +241,13 @@
         </featureInstance>
         <featureInstance name="valid" direction="out">
           <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-            <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+            <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
             <ownedValue>
               <ownedValue xsi:type="aadl2:NamedValue">
-                <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+                <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
               </ownedValue>
             </ownedValue>
-            <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+            <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
           </ownedPropertyAssociation>
           <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.2"/>
         </featureInstance>
@@ -257,7 +257,7 @@
       </componentInstance>
       <componentInstance name="cmd" category="process">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+          <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:ListValue">
               <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.6/@componentInstance.3/@componentInstance.0/@componentInstance.2"/>
@@ -295,37 +295,37 @@
     <componentInstance name="select" category="system">
       <featureInstance name="input1">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:NamedValue">
-              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
             </ownedValue>
           </ownedValue>
-          <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
       </featureInstance>
       <featureInstance name="input2">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:NamedValue">
-              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
             </ownedValue>
           </ownedValue>
-          <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
       </featureInstance>
       <featureInstance name="result" direction="out">
         <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-          <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
           <ownedValue>
             <ownedValue xsi:type="aadl2:NamedValue">
-              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
             </ownedValue>
           </ownedValue>
-          <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
       </featureInstance>
@@ -392,13 +392,13 @@
     </featureInstance>
     <featureInstance name="select_alternate">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-        <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
         <ownedValue>
           <ownedValue xsi:type="aadl2:NamedValue">
-            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
           </ownedValue>
         </ownedValue>
-        <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
       </ownedPropertyAssociation>
       <feature xsi:type="aadl2:DataPort" href="../valves.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedDataPort.2"/>
     </featureInstance>
@@ -427,13 +427,13 @@
     </featureInstance>
     <featureInstance name="boolean_input">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-        <property href="../../../Plugin_Resources/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
         <ownedValue>
           <ownedValue xsi:type="aadl2:NamedValue">
-            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../Plugin_Resources/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
           </ownedValue>
         </ownedValue>
-        <propertyAssociation href="../../../Plugin_Resources/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
       </ownedPropertyAssociation>
       <feature xsi:type="aadl2:DataPort" href="../valves.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
     </featureInstance>

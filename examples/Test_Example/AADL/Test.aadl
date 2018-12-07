@@ -1,0 +1,142 @@
+package Test
+public
+	with Base_Types;
+	renames Base_Types::all;
+
+	system C1
+		features
+			in1: in data port Integer;
+			out1: out data port Integer;
+		annex agree {**
+			assume "C1 in1 range": (in1 > 0) and (in1 < 10);		
+				
+			guarantee "C1 out1 value":
+			out1 = in1;
+		**};
+		annex safety {**
+			fault C1_out_negation "C1 out1 negation fault": Common_Faults.invert_signal {
+			inputs: val_in <- out1;     
+			outputs: out1 <- val_out;  
+         	probability: 1.0E-6 ;  
+			duration: permanent;
+			}	
+		**};
+	end C1;
+
+	system C2
+		features 
+			in2: in data port Integer;
+			out2: out data port Integer;
+		annex agree{**
+			assume "C2 in2 range": (in2 >0) and (in2 < 10);	
+				
+			guarantee "C2 out2 value":
+			out2 = in2;
+		**};
+		annex safety {**
+			fault C2_out_fail_to_zero "C2 out2 fail to zero fault": Common_Faults.fail_to_zero {
+			inputs: val_in <- out2;     
+			outputs: out2 <- val_out;   
+         	probability: 1.0E-5 ;
+			duration: permanent;
+			}	
+		**};		
+	end C2;	
+	
+	system C3
+		features 
+			in13: in data port Integer;
+			in23: in data port Integer;
+			out3: out data port Integer;
+		annex agree{**				
+			guarantee "C3 out3 value":
+			out3 = in13 + in23;
+		**};
+	end C3;	
+	
+	system C123
+		features
+			in1: in data port Integer;
+			in2: in data port Integer;
+			out3: out data port Integer;
+		annex agree{**	
+			assume "C123 in1 range": (in1 > 0) and (in1 < 10);	
+			
+			assume "C123 in2 range": (in2 >0) and (in2 < 10);
+				
+			guarantee "C123 out3 range":
+			(out3 > 0) and (out3 < 20);
+			
+			guarantee "C123 out3 value":
+			out3 = (in1 + in2);
+		**};
+	end C123;
+	
+	system implementation C123.impl
+		subcomponents
+			C1: system C1;
+			C2: system C2;
+			C3: system C3;
+		connections
+			in1_to_C1: port in1 -> C1.in1;
+			in2_to_C2: port in2 -> C2.in2;
+			C3_to_out3: port C3.out3 -> out3;
+			C1_to_C3: port C1.out1 -> C3.in13;
+			C2_to_C3: port C2.out2 -> C3.in23;
+		annex safety {**
+      		analyze : max 3 fault
+   		**};
+	end C123.impl;
+	
+	system C0
+		features
+			in0: in data port Integer;
+			out0: out data port Integer;
+		annex agree{**
+			guarantee "C0 out0 value":
+			out0 = in0 * 2;
+		**};
+		annex safety {**
+			fault C0_out_fail_to_one "C0 out0 fail to one fault": Common_Faults.fail_to_one {
+			inputs: val_in <- out0;     
+			outputs: out0 <- val_out;   
+         	probability: 1.0E-7 ;
+			duration: permanent;
+			}	
+		**};
+	end C0;
+	
+	system C0123
+		features
+			in1: in data port Integer;
+			in2: in data port Integer;
+			out0: out data port Integer;
+		annex agree{**
+			assume "C0123 in1 range": (in1 > 0) and (in1 < 10);	
+			
+			assume "C0123 in2 range": (in2 >0) and (in2 < 10);				
+				
+			guarantee "C0123 out0 range":
+			(out0 > 0) and (out0 < 40);
+			
+			guarantee "C0123 out0 value":
+			out0 = 2 * (in1 + in2);
+		**};
+	end C0123;
+	
+	system implementation C0123.impl
+		subcomponents
+			C123: system C123.Impl;
+			C0: system C0;
+		connections
+			in1_to_C123: port in1 -> C123.in1;
+			in2_to_C123: port in2 -> C123.in2;
+			C123_to_C0: port C123.out3 -> C0.in0;
+			C0_to_out0: port C0.out0 -> out0;
+		annex safety {**
+      		analyze : max 0 fault
+   		**};
+	end C0123.impl;
+
+	
+end Test;

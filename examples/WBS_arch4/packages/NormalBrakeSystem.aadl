@@ -136,12 +136,12 @@ with Base_Types;
 			press_out_8 : port mv8.hyd_pressure_out -> hyd_pressure_out8; 
 			
 			
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
+		
+	end NormalBrakeSystem.inst;
+	annex safety{**
+	
+		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;
-	end NormalBrakeSystem.inst;
 end NormalBrakeSystem;

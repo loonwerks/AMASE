@@ -57,11 +57,12 @@ features
 	**};
 
 	annex safety {**
-		fault shutoff_fault "Output failed to non-deterministic value.": faults.pressure_fail_to {
+			
+		fault shutoff_valve_fault "Output failed to non-deterministic value.": faults.fail_to {
 			eq alt_value :real;
-			inputs: val_in <- shutoff_output,
+			inputs: val_in <- shutoff_output.val,
 					alt_val <- alt_value; 
-			outputs: shutoff_output <- val_out ;    
+			outputs: shutoff_output.val <- val_out ;    
          	probability: 1.0E-5 ;
 			duration: permanent;
 		}
@@ -70,6 +71,7 @@ features
 			probability: 1.0E-5;
 			duration: permanent;
 		}
+		
 	**};
 
 end boolean_shutoff;
@@ -96,13 +98,13 @@ features
 	**}	;
 
 	annex safety {**
-		fault pressure_fail "cmd_shutoff: Output failed to non-deterministic value.": faults.pressure_fail_to {
+		fault pressure_fail "cmd_shutoff: Output failed to non-deterministic value.": faults.fail_to {
 			-- non-deterministic "failed" value.
 			-- Note: system cannot handle 
 			eq alt_value :real;
-			inputs: val_in <- output,
+			inputs: val_in <- output.val,
 					alt_val <- alt_value; 
-			outputs: output <- val_out ;    
+			outputs: output.val <- val_out ;    
          probability: 1.0E-5 ;
 			duration: permanent;
 		}
@@ -183,13 +185,13 @@ features
 
 
 	annex safety {**
-		fault pressure_fail_green "Selector Green output failed to non-deterministic value.": faults.pressure_fail_to {
+		fault pressure_fail_green "Selector Green output failed to non-deterministic value.": faults.fail_to {
 			-- non-deterministic "failed" value.
 			-- Note: system cannot handle 
 			eq alt_value1 :real;
-			inputs: val_in <- green_output,
+			inputs: val_in <- green_output.val,
 					alt_val <- alt_value1; 
-			outputs: green_output <- val_out ;    
+			outputs: green_output.val <- val_out ;    
             		probability: 1.0E-5 ;
 			duration: permanent;
 		}
@@ -235,13 +237,13 @@ features
    **}	;
 
    annex safety {**
-      fault valv_non_deterministic "Accum_valve: Blue skid output failed to non-deterministic value.": faults.pressure_fail_to {
+      fault valv_non_deterministic "Accum_valve: Blue skid output failed to non-deterministic value.": faults.fail_to {
          -- non-deterministic "failed" value.
          -- Note: system cannot handle 
          eq alt_value :real;
-         inputs: val_in <- blue_skid_output,
+         inputs: val_in <- blue_skid_output.val,
                alt_val <- alt_value; 
-         outputs: blue_skid_output <- val_out ;    
+         outputs: blue_skid_output.val <- val_out ;    
          probability: 1.0E-5 ;
          duration: permanent;
       }

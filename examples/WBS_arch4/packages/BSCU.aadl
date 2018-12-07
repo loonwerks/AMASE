@@ -236,14 +236,13 @@ with Base_Types;
 			power_to_channel2 : port power_2 -> channel2.power;
 			
 		
-		annex safety {**
-		-- ---------------------------------------------------------------------------	
-	    -- MWW: HACK!
-	    analyze : max 1 fault
+	
+	end BSCU.inst;
+	annex safety{**
+	
+		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;
-	end BSCU.inst;
-
 	
 end bscu;

@@ -1,0 +1,123 @@
+package ParallelPump
+public
+with Base_Types;
+with Pump;
+with faults;
+
+	system ParallelPump
+		features
+			-- Input from main TMI: command for pump: {start, stop}
+			command : in data port Base_Types::Integer;
+			
+			-- Coolant status from circuit
+			coolant_status : in data port Base_Types::Integer; 
+			
+			-- {pumping, stopped, shaking}
+			pumpA_status : out data port Base_Types::Integer;
+			-- {pumping, stopped, shaking}
+			pumpB_status : out data port Base_Types::Integer;
+			
+			-- {pumping, stopped, shaking}
+			status : out data port Base_Types::Integer; 
+		
+		annex agree {**
+			 
+			assume "Command input is bounded." :
+				(command >= datatypes.MAIN_START) and (command <= datatypes.MAIN_STOP); 
+				
+			assume "Coolant status input is bounded." :
+				(coolant_status >= datatypes.STEAM_CAVITIES) and (coolant_status <= datatypes.SOLID);
+				
+			assume "Pump A is initially pumping." :
+				pumpA_status = datatypes.PUMPING -> true;
+				
+			assume "Pump B is initially pumping." :
+				pumpB_status = datatypes.PUMPING -> true;
+			
+			-- If pump A is broken or stopped, use output of pump B. 
+			-- If pump B is broken or stopped, use output of pump A.
+			-- Else use output of pump A.
+			guarantee "If pumpA is broken or stopped, use pump B. Else use pump A." :
+				if ((prev(pumpA_status,1) = datatypes.BROKEN) or (prev(pumpA_status,2) = datatypes.STOPPED))
+					then (status = pumpB_status)
+				else (status = pumpA_status);
+				
+			-- Output is bounded
+			guarantee "Output is bounded" :
+				(status >= datatypes.PUMPING) and (status <= datatypes.BROKEN);
+
+			
+		**};
+		
+	annex safety {**
+		fault pump_stuck_on_broken_fault "In pump: pump stopped.": faults.fail_to_int {
+			eq stopped_value : int = datatypes.STOPPED;
+			inputs: val_in <- status, 
+					alt_val <- stopped_value; 
+			outputs: status <- val_out ;   
+			probability: 1.0 ;
+			duration: permanent;
+		}		
+	**};
+			
+	end ParallelPump;
+	
+	
+	system implementation ParallelPump.impl
+		subcomponents
+			pumpA : system Pump::Pump;
+			pumpB : system Pump::Pump;
+		
+		connections
+			-- Commands to pumps
+			cmd1_to_pump : port command -> pumpA.command;
+			cmd2_to_pump : port command -> pumpB.command;
+			
+			-- Input from pumps
+			pumpA_out : port pumpA.status -> pumpA_status;
+			pumpB_out : port pumpB.status -> pumpB_status;
+			
+			-- Coolant to pumps
+			coolant_to_pumpA : port coolant_status -> pumpA.coolant_status;
+			coolant_to_pumpB : port coolant_status -> pumpB.coolant_status;
+			
+		annex agree {**
+			
+			-- Initial state is pumping
+			lemma "Initial status of pump is pumping." :
+				(pumpA.status = datatypes.PUMPING) -> true;
+			
+			-- If the pump is  broken, it stays broken.
+			lemma "If the pump is broken, it stays broken." :
+				(pre(pumpA.status) = datatypes.BROKEN) => (pumpA.status = datatypes.BROKEN);
+			
+			-- Pump is shaking when it is pumping with steam cavities in the coolant. 	
+			lemma "Switch to shaking status." :
+				((pre(pumpA.status) = datatypes.PUMPING) and (prev(pumpA.coolant_status,1)  = datatypes.STEAM_CAVITIES)) 
+					=> (pumpA.status = datatypes.SHAKING);
+			
+			-- If in the previous step, the pump is shaking, it is now broken.
+			lemma "If in the previous step, the pump is shaking, it is now broken." :
+				(pre(pumpA.status) = datatypes.SHAKING) => (pumpA.status <= datatypes.BROKEN);
+			
+			-- If we have command to pump and we do not have steam cavities, then we are pumping.	
+			lemma "If we have command to pump and we do not have steam cavities, then we are pumping." :
+				(((pumpA.command = datatypes.MAIN_START) and (not (pumpA.coolant_status = datatypes.STEAM_CAVITIES)))) 
+					=> (pumpA.status = datatypes.PUMPING);
+			
+			-- Command comes in to stop pumping, we stop in the next step.	
+			lemma "Command to stop pumping." :
+				((pumpA.command = datatypes.MAIN_STOP) and not(pre(pumpA.status) = datatypes.BROKEN))  => (pumpA.status = datatypes.STOPPED);
+			
+			-- Command comes in to start pumping, we stop in the next step.	
+			lemma "Command to start pumping." :
+				((pumpA.command = datatypes.MAIN_START) and not(pre(pumpA.status) = datatypes.BROKEN))  => (pumpA.status = datatypes.PUMPING);
+			
+			-- Output is always bounded.
+			lemma "Bounds on status" :
+				(pumpA.status >= datatypes.PUMPING) and (pumpA.status <= datatypes.BROKEN); 
+		**};
+		
+		
+	end ParallelPump.impl;
+end ParallelPump;

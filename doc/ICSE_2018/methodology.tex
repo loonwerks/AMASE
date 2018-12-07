@@ -1,0 +1,85 @@
+\section{Methodology}
+In our description leading up to the generation of compositional fault trees, we must first define important aspects of this procedure. 
+
+\subsection{Preliminaries}
+Given a state space $S$, a transition system $(I,T)$ consists of the initial state predicate $I : S \rightarrow \{0,1\}$ and a transition step predicate $T : S \times S \rightarrow \{0,1\}$. Reachability for $(I,T)$ is defined as the smallest predicate $R : S \rightarrow \{0,1\}$ which satisfies the following formulas:
+\begin{center}
+$\forall s. I(s) \Rightarrow R(s)$\\
+$\forall s, s' .  R \land T(s,s') \Rightarrow R(s')$\\
+\end{center}
+A safety property $\mathcal{P} : S \to \{0,1\}$ is a state predicate. A safety property $\mathcal{P}$ holds on a transition system $(I,T)$ if it holds on all reachable states. More formally, $\forall s . R(s) \Rightarrow \mathcal{P}(s)$. When this is the case, we write $(I,T) \vdash\mathcal{P}$. Following Ghassabani, et. al. \cite{DBLP:journals/corr/GhassabaniGW16}, we formalize IVCs as follows.\\
+
+\begin{definition}Inductive Validity Core\\
+ Let $(I,T)$ be a transition system and let $\mathcal{P}$ be a safety property with $(I,T) \vdash \mathcal{P}$. Then $S \subseteq T$ is an \textit{inductive validity core} for $(I,T) \vdash \mathcal{P}$ iff $(I,S) \vdash\mathcal{P}$.  \\
+\end{definition}
+
+\begin{definition}Minimal Inductive Validity Core\\
+An inductive validity core $S$ for $(I,T) \vdash \mathcal{P}$ is minimal iff $! \exists S' . S' \subset S \ni (I,S') \vdash \mathcal{P}$. \\
+\end{definition}
+
+Intuitively, this can be understood as the minimal set of elements such that the safety property $\mathcal{P}$ is proved. \\
+
+To formalize a fault tree, FT, we use $GateTypes = \{And, Or\}$. Following Ruijters, et. al. \cite{RuijtersSurvey}, we formalize FT as follows. \\
+
+\begin{definition}Fault Tree\\ 
+A FT is a 4-tuple $F = \langle BE, G, T, I \rangle$ consisting of the following components. 
+\begin{itemize}
+\item BE is the set of basic events
+\item G is the set of gates with $BE \cap G = \emptyset$. We write $E = BE \cup G$ for the set of elements.
+\item $T: G \to GateTypes$ is a function that describes the type of each gate.
+\item $I: G \to P(E)$ describes the inputs of each gate. We require that $I(G) \neq \emptyset$.
+\end{itemize}
+\end{definition}
+
+The graph formed by $\langle E, I \rangle$ is a directed acyclic graph with a unique root $TLE$ which is reachable from all nodes. \\
+
+\begin{definition}Semantics of a Fault Tree\\  
+The semantics of FT F is a function $\pi_F : \mathcal{P}(BE) \times E \vdash \{0,1\}$ where $\pi_F(S, e)$ indicates whether $e$ fails given the set $S$ of failed BEs. It is defined as follows. 
+\begin{itemize}
+\item For $e \in BE$, $\pi_F(S,e) = e \in S$.
+\item For $g \in G$ and $T(g) = And$, let\\ $\pi_F(S,g) = \land_{x \in I(g)} \pi_F(S, x)$
+\item For $g \in G$ and $T(g) = Or$, let\\ $\pi_F(S,g) = \lor_{x \in I(g)} \pi_F(S, x)$ \\
+\end{itemize}
+\end{definition}
+
+The interpretation of the TLE $t$ is written as $\pi_F(S,t) = \pi_F(S)$. If the failure of $S$ causes the TLE to occur, we write $\pi_F(S) = 1$. 
+
+In qualitative analysis, cut sets and minimal cut sets provide information about the vulnerabilities of a system in terms of its basic events. A \textit{cut set} is a set of components that together can cause a system to fail. A \textit{minimal cut set} is a cut set which contains the minimum number of basic events required in order to cause the TLE to occur. More formally, these are defined as follows. \\
+
+\begin{definition}Cut Set\\   
+ $C \subseteq BE$ is a cut set of FT F if $\pi_F(C) = 1$. \\
+\end{definition}
+
+\begin{definition}Minimal Cut Set\\    
+$C \subseteq BE$ is a MCS if $\pi_F(C) = 1 \land \forall C' \subset C. \pi_F(C') = 0$. In other words, a minimal cut set (MCS) is a cut set of which no subset is a cut set. \\
+\end{definition}
+
+Given the formalisms defined previously, we show that finding the minimal IVCs is equivalent to finding the MCS. \\
+
+\begin{theorem} Finding all minimal IVCs in a compositional verification problem is equivalent to finding the set of all MCSs \\
+
+\begin{proof} 
+Assume that the system is composed of $n$ components and let $\mathcal{P}_{tle} = \mathcal{P}_n$ be the top level event and likewise $\mathcal{P}_{i}$ corresponds to the properties at the $i{th}$ level of the system. 
+\textit{Base Case}:
+We begin at the leaf level of the system where $T_1 = F_1$ is the set of model elements corresponding to faults for the leaf level components. By the definition for IVC, we know that $S_1 \subseteq T_1$ is an IVC for $(I, T_1) \vdash \mathcal{P}_{1}$ iff $(I, S_1) \vdash \mathcal{P}_{1}$.
+In this case, $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
+Since $S_1$ is minimal IVC, for any $M_1 \subset S_1$, $(I, M_1) \doesnotentail \mathcal{P}_{1}$. Hence it follows that $\pi_F(M_1) = 0$ for any $M_1 \subset S_1$.
+
+\textit{Induction Case}:
+Let $T_{n} = F_{n} \cup G_{n}$ where $F_{n}$ is the set of faults corresponding to the components at level ${n}$ and $G_{n}$ is the set of guarantees of those components. Assume $S_{n} \subseteq T_{n}$ is the set of minimal IVCs. Then we know that $(I, S_{n}) \vdash \mathcal{P}_{n}$ and hence $\pi_F(S_{n}) = 1$. We also know since $S_{n}$ is minimal, for any $M_{n} \subset S_{n}$, $(I, M_{n}) \doesnotentail \mathcal{P}_{n}$. Hence it follows that $\pi_F(M_{n}) = 0$ for any $M_{n} \subset S_{n}$ and $S_{n}$ is the minimal cut set for $\mathcal{P}_{tle} = \mathcal{P}_n$.
+
+\end{proof}
+\end{theorem}
+
+ 
+
+
+
+\subsection{Quantitative analysis}
+Quantitative analysis methods derive numerical values for fault trees. One of these calculations that is of particular interest to the safety engineering community is the probability of the occurance of the top level event (TLE). This value is of interest because in certain critical systems, the top level properties must be proved safe within a certain probabilistic threshold~\cite{SAE:ARP4761}. Given the set of MCSs and the probabilities of occurrance associated with them, the probability of the TLE can be calculated using a variety of algorithms~\cite{RuijtersSurvey}. The bottleneck in this computation is the calculation of the MCSs. The quantitative analysis utilized in the SOTERIA tool is based on known methods of probabilistic computation and the techniques are well described in SAE ARP4761 as well as other pertinant literature~\cite{RuijtersSurvey, SOTERIAproject,SAE:ARP4761}. The computation of the MCSs and the Lustre model with contracts, faults, and fault probabilities is automatically translated into the SOTERIA model and the quantitative analysis is performed using these methods. 
+
+
+
+
+
+
