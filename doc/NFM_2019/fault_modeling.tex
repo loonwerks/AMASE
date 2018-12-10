@@ -34,7 +34,13 @@ In the following subsections, we walk through examples of component failure mode
 
 When using the Safety Annex to model behavioral failure propagation, a \textit{fault} is attached to a component, which when active will change the output of said component. This faulty value on the output may or may not violate the contracts of the component and it may or may not violate the assumptions of the destination component. These details are seen through the output of the model checker when the safety analysis is run on the fault model. Examples of such faults include valves being stuck open or closed, output of a software component being nondeterministic, or power being cut off. These component types range from mechanical to digital, but for this section we focus on a digital component in the WBS, a sensor on the pedal component. 
 
-The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain reliability in the presence of faults. In the WBS, there are a number of safety properties of interest and we focus on one: Inadvertant braking. As described in Section~\ref{subsubsec:wbs:behavior}, one of the components important to the property \textit{Inadvertant braking}, is the pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then proceeds in commanding hydraulic pressure to the wheels. 
+The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain reliability in the presence of faults. 
+
+One of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. Due to the catastrophic classification of this hazard, this is a property we chose for illustrative purposes. 
+
+This property can be broken down as follows. In order for no inadvertent braking to occur, there needs to be a series of things that occur in the system simultaneously. The system is provided with both power and hydraulic pressure and the pilot has not commanded braking (by pressing the pedal). At the same time, the ground is moving (the plane is not stopped), there is braking force at the wheel, and the wheel is rolling. When all of these things happen together, this is inadvertant braking. Naturally, the safety property states this as all of these things do \textit{not} occur together. Given a model of this size, it can be complicated to determine the combinations of component errors that could occur in order to lead to a functional failure.
+
+One of the components important to the property \textit{Inadvertant braking}, is the pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then proceeds in commanding hydraulic pressure to the wheels. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}

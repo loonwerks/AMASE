@@ -7,7 +7,7 @@ Furthermore, we will describe the tool support enabling an analysis to perform a
 \end{comment}
 
 \subsection{Architecture and Implementation}
-
+\begin{comment}
 The architecture of the Safety Annex is shown in Figure~\ref{fig:plugin-arch}.  It is written in Java as a plug-in for the OSATE AADL toolset, which is built on Eclipse.  It is not designed as a stand-alone extension of the language, but works with behavioral contracts specified in AGREE AADL annex and associated tools~\cite{NFM2012:CoGaMiWhLaLu}.  AGREE allows {\em assume-guarantee} behavioral contracts to be added to AADL components.  The language used for contract specification is based on the Lustre dataflow language~\cite{Halbwachs91:IEEE}. AGREE improves scalability of formal verification to large systems by decomposing the analysis of a complex system architecture into a collection of smaller verification tasks that correspond to the structure of the architecture.
 
 \begin{figure}
@@ -37,7 +37,7 @@ With the introduction of dependent faults, active faults are divided into two ca
 
 Once augmented with fault information, the AGREE model follows the standard translation path to the model checker JKind~\cite{2017arXiv171201222G}, an infinite-state model checker for safety properties.  The augmentation includes traceability information so that when counterexamples are displayed to users, the active faults for each component are visualized.
 
-
+\end{comment}
 
 A  benefit of utilizing the AGREE behavioral annex is the ability to perform both monolithic and compositional analysis on the nominal model. AGREE allows {\em assume-guarantee} behavioral contracts to be added to AADL components.  The language used for contract specification is based on the Lustre dataflow language~\cite{Halbwachs91:IEEE} and the nominal model (AADL model annotated with AGREE contracts) is translated into Lustre before being sent to the JKind model checker for verification\cite{2017arXiv171201222G}. 
 
@@ -57,7 +57,7 @@ In the right column, the additional local variables for the fault are seen in bo
 	\vspace{-0.3in}
 \end{figure}
 
-For fault analysis, we separate the possible analyses available to users into two distinct actions and describe them here.
+For fault analysis, we separate the possible analyses available to users into two distinct actions , monolithic and compositional, and describe them here.
 
 
 
