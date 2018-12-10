@@ -67,9 +67,10 @@ This property can be broken down as follows. In order for no inadvertent braking
 %The Safety Annex allows an analyst to model the failure modes of components and then ``weave'' these failure modes together with the original models developed as part of MBSE. 
 %The safety analyst can then leverage the merged behavioral models to propagate failures through the system to investigate their effect on the safety requirements (implicit failure propagation). 
 
-When using the Safety Annex to model behavioral failure propagation, a \textit{fault} is attached to a component, which when active will change the output of said component. This faulty value on the output may or may not violate the contracts of the component and it may or may not violate the assumptions of the destination component. These details are seen through the output of the model checker when the safety analysis is run on the fault model. Examples of such faults include valves being stuck open or closed, output of a software component being nondeterministic, or power being cut off. These component types range from mechanical to digital, but for this section we focus on a digital component in the WBS, a sensor on the pedal component. 
+When using the Safety Annex to model behavioral faulty behaviors, %failure propagation, 
+a \textit{fault} is attached to a component, which when active will change the output of said component. This faulty value on the output may or may not violate the contracts of the component and it may or may not violate the assumptions of the destination component. These details are seen through the output of the model checker when the safety analysis is run on the fault model. Examples of such faults include valves being stuck open or closed, output of a software component being nondeterministic, or power being cut off. These component types range from mechanical to digital, but for this section we focus on a digital component in the WBS, a sensor on the pedal component. 
 
-The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain reliability in the presence of faults. 
+%The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain reliability in the presence of faults. 
 
 %One of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. Due to the catastrophic classification of this hazard, this is a property we chose for illustrative purposes. 
 
@@ -192,6 +193,13 @@ The HW fault definition can be modeled first in the green hydraulic pump compone
 %\danielle{Danielle comment: I still need to actually define this fault in the WBS system in order to talk about the effects on the system.}
 \end{comment}
 
+\subsection{Fault Hypothesis}
+An annotation in the AADL model determines the fault hypothesis. This may specify either a maximum number of faults that can be active at any point in execution (typically one or two), or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered. Tying back to traditional safety analysis, the former is analogous to restricting the cutsets to a specified maximum number of terms, and the latter is analogous to restricting the cutsets to only those whose probability is above some set value.
+\janet{TODO: need some example figure of the fault hypothesis here}
+
+In the former case, we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold.  In the latter, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. 
+%
+With the introduction of dependent faults, active faults are divided into two categories: independently active (activated by its own triggering event) and dependently active (activated when the faults they depend on become active). The top level fault hypothesis applies to independently active faults. Faulty behaviors augment nominal behaviors whenever their corresponding faults are active (either independently active or dependently active).
 
 
 
