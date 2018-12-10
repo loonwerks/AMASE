@@ -1,6 +1,11 @@
 \section{Analysis of the Fault Model}
 \label{sec:fault_analysis}
 
+\begin{comment}
+%To align with the following paragraph from the Intro section
+Furthermore, we will describe the tool support enabling an analysis to perform analysis to investigate the correctness of the nominal system behavior (where no failures have occurred) as well as the system's resilience to component failures. We illustrate the work with a substantial example drawn from the civil aviation domain.
+\end{comment}
+
 A  benefit of utilizing the AGREE behavioral annex is the ability to perform both monolithic and compositional analysis on the nominal model. AGREE allows {\em assume-guarantee} behavioral contracts to be added to AADL components.  The language used for contract specification is based on the Lustre dataflow language~\cite{Halbwachs91:IEEE} and the nominal model (AADL model annotated with AGREE contracts) is translated into Lustre before being sent to the JKind model checker for verification\cite{2017arXiv171201222G}. 
 
 When a user selects to run the fault analysis during verification, the AGREE contracts are automatically extended in Lustre in order to allow faults to modify the behavior of component outputs. These injections into the Lustre model are shown in Figure~\ref{fig:lustre}. In the left column of the figure, the nominal Lustre pump definition is shown with an AGREE contract on the output. 

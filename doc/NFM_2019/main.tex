@@ -62,7 +62,7 @@
 \newcommand{\rbb}{]\!]}
 \newcommand{\expr}{\phi}
 \newcommand{\exprS}{\Phi}
-\newcommand{\mike}[1]{\textcolor{red}{#1}}
+\newcommand{\mats}[1]{\textcolor{red}{#1}}
 \newcommand{\janet}[1]{\textcolor{blue}{#1}}
 \newcommand{\darren}[1]{\textcolor{green}{#1}}
 \newcommand{\danielle}[1]{\textcolor{orange}{#1}}
@@ -107,7 +107,10 @@ Commercial Systems Flight Controls Safety Engineering\\
 \maketitle
 
 \begin{abstract}
-This paper describes a new methodology with tool support for model-based safety analysis. It is implemented as a {\em Safety Annex} for the Architecture Analysis and Design Language (AADL). The Safety Annex provides the ability to describe faults and faulty component behaviors in AADL models. In contrast to previous AADL-based approaches, the Safety Annex leverages a formal description of the nominal system behavior to propagate faults in the system. This approach ensures consistency with the rest of the system development process and simplifies the work of safety engineers. The language for describing faults is extensible and allows safety engineers to weave various types of faults into the nominal system model. The Safety Annex supports the injection of faults into component level outputs, and the resulting behavior of the system can be analyzed using model checking through the Assume-Guarantee Reasoning Environment (AGREE).
+%Mats' abstract
+Model-based development techniques are increasingly being used in the development of critical systems software. Leveraging the artifacts from model based development in the safety analysis process would be highly desirable to provide accurate analysis and enable cost savings. In particular, the architectural and behavioral models provide rich information on the system's operation. In this paper we describe an extension (an Annex) to the Architecture Analysis and Design Language (AADL) developed to allow a rich modeling of a system under failure conditions. This \emph{Safety Annex} allows the independent modeling of component failure modes and allows safety engineers to weave various types of faults into the nominal system model. The accompanying tool support allows investigation of the \emph{implicit} propagation of failures from their source to their effect on top level safety properties as well as the modeling of \emph{explicit} failure propagation that is not captured through the behavioral models, e.g., failures correlated due to the physical structure of the system. We describe the Safety Annex, illustrate its use with a representative example, and discuss and demonstrate the tool support enabling an analyst to investigate the system behavior under various failure conditions.	
+	
+%This paper describes a new methodology with tool support for model-based safety analysis. It is implemented as a {\em Safety Annex} for the Architecture Analysis and Design Language (AADL). The Safety Annex provides the ability to describe faults and faulty component behaviors in AADL models. In contrast to previous AADL-based approaches, the Safety Annex leverages a formal description of the nominal system behavior to propagate faults in the system. This approach ensures consistency with the rest of the system development process and simplifies the work of safety engineers. The language for describing faults is extensible and allows safety engineers to weave various types of faults into the nominal system model. The Safety Annex supports the injection of faults into component level outputs, and the resulting behavior of the system can be analyzed using model checking through the Assume-Guarantee Reasoning Environment (AGREE).
 
 %System safety assessment is a crucial process in the development of complex airborne systems to show that the relevant safety requirements are met. Acquiring the required knowledge about how the software functions are intended to work in such systems has shown in practice a very involved and time consuming task. Existing approaches that annotate the system architecture model with failure modes and fault propagations help safety analysts better communicate with system designers and address the complexity of the system. However, knowledge on how the faults propagate through the components still needs to be acquired before such information can be captured in the model. Nor do the models capture analyzable behaviors. The methodology described in this paper enables safety analysts to specify faults and faulty behaviors at individual components (using the Safety Annex for the Architecture Analysis and Design Language (AADL)). The provided tool support auto weaves the faults into the nominal system model provided by system designers. No additional effort is needed to specify fault propagations as the faulty behavior propagates in the nominal system model the same as the normal behavior. The behavior of the system in the presence of faults are verified using model checking through Assume Guarantee Reasoning Environment (AGREE), and the effects of any triggered fault are manifested in the formal analysis results.
 
@@ -119,13 +122,13 @@ This paper describes a new methodology with tool support for model-based safety 
 
 \input{introduction}
 
-\input{preliminaries}
+%\input{preliminaries}
 
-\input{motivating_example}
+%\input{motivating_example}
 
-\input{fault_modeling}
+%\input{fault_modeling}
 
-\input{fault_analysis}
+%\input{fault_analysis}
 
 \input{related_work}
 
