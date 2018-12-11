@@ -149,23 +149,32 @@ An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-		\includegraphics[width=.5\textwidth]{images/hw_fault.png}
+		\includegraphics[width=.5\textwidth]{images/hw_fault_green_pump.png}
 	\end{center}
-	\vspace{-0.4in}
+	\vspace{-0.3in}
+	\caption{Hardware fault for the green pump}
+	\label{fig:hwFault}
+	\vspace{-0.2in}
 \end{figure}
 
 Users specify dependencies between the HW component faults and faults that are defined in other components, either HW or SW. The hardware fault then acts as a trigger for dependent faults. This allows a simple propagation from the faulty HW component to the SW components that rely on it, affecting the behavior on the outputs of the affected SW components.
 
+\danielle{As an example, we will look yet again at the WBS. Assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft. An accident took place in said compartment and the green (normal) hydraulic pump took the force of the explosion. When the green hydraulic pump exploded, the pump shrapnel flew into the blue (alternate) pump and it became from then on unoperable. The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown in Figure~\ref{fig:hwFaultProp}. Notice that these pumps need not be connected through a data port in order to specify this propagation. Furthermore, the probability of the HW fault activation can be specified. }
+
 The fault dependencies are typically specified in the system implementation where the system configuration that causes the dependencies becomes clear (e.g., binding between SW and HW components, co-location of HW components). This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. Having fault propagations specified outside of a component’s fault statements also makes it easier to reuse the component in different systems. 
 
-An example of a fault dependency specification is shown below, showing that the valve{\_}failed fault at the shutoff subcomponent triggers the pressure{\_}fail{\_}blue fault at the selector subcomponent.
+\danielle{Note from Danielle: This propagate statement will be changed to reflect the example above. I will also change the hw fault definition in the figure to not state the propagation.}
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
 		\includegraphics[width=.9\textwidth]{images/fault_propagation.png}
 	\end{center}
-	\vspace{-0.4in}
+	\vspace{-0.3in}
+	\caption{Hardware fault propagation statement}
+	\label{fig:hwFaultProp}
+	\vspace{-0.2in}
 \end{figure}
+
 
 
 \begin{comment}
@@ -193,9 +202,12 @@ The HW fault definition can be modeled first in the green hydraulic pump compone
 %\danielle{Danielle comment: I still need to actually define this fault in the WBS system in order to talk about the effects on the system.}
 \end{comment}
 
+\vspace{-0.2in}
 \subsection{Fault Hypothesis}
+\vspace{-0.2in}
 An annotation in the AADL model determines the fault hypothesis. This may specify either a maximum number of faults that can be active at any point in execution (typically one or two), or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered. Tying back to traditional safety analysis, the former is analogous to restricting the cutsets to a specified maximum number of terms, and the latter is analogous to restricting the cutsets to only those whose probability is above some set value.
-\janet{TODO: need some example figure of the fault hypothesis here}
+\janet{Note from Janet: TODO: need some example figure of the fault hypothesis here}
+\danielle{Note from Danielle: Not necessarily. We already will be including the fault hypothesis figure in the previous section with the fault propagation statement. We can just reference that figure here.}
 
 In the former case, we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold.  In the latter, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. 
 %
