@@ -1,5 +1,23 @@
 \subsection{Safety Assessment Process}
 \label{subsec:process}
+\janet{This section needs more work}
+\begin{comment}
+When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component~\cite{SAE:ARP4754A}. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms (error, failure, fault) throughout this description.
+
+Many of these modes can be determined through domain knowledge and other modes are specified through the manufacturer of a given mechanical or digital component. Once the faults and failure modes are determined, the safety engineer must determine the consequence of this component failure on connected components, components that are physically located nearby, and on the system as a whole. Given that many safety critical systems are quite complex, this propagation process can be error prone and time consuming.
+
+
+\janet{include a safety assessment process figure and introduce ARP4754, ARP4761 here}
+\janet{describe definition for cutset here}
+(The cutset is the set of primary events that must occur in order for the undesired top level event to occur)
+The Primary Events are the root causes of the first level fault events.
+
+\janet{describe what safety engineers need}
+
+\janet{describe guidance on integration of the approach to traditional safety assessment process, e.g., system engineers model the nominal behavioral and behavioral propagations in AGREE, safety engineers add failure modes to components in safety annex, and invoke the analysis to see the effects}
+\end{comment}
+
+
 %\janet{J's comment: It seems to me that we could reference/mention ARP4761, FHA, PSSA etc. in a figure later in this section and briefly explain them in small-font notes that accompany the figure, but not necessary explaining them at the beginning of this section, so to avoid too much information loaded at the beginning. Therefore I commented out those descriptions for now, and revived some of our old text from the last submission.}
  %According to ARP4754, a safety critical system is a system whose safety cannot be shown solely by test, whose logic is difficult to comprehend without the aid of analytical tools, and whose failure can directly or indirectly cause significant loss of life or property~\cite{SAE:ARP4754A}. Guaranteeing safety and reliability of safety critical systems is mandatory and the process that guides it is highly standardized and controlled~\cite{RTCA:StdC,SAE:ARP4761}. ARP4761, the Guidelines and Methods for Conducting Safety Assessment Process on Civil Airborne Systems and Equipment, identifies systematic means in order to show compliance with certification standards and has been recognized by the Federal Aviation Administration (FAA) as an acceptable method to establish the assurance process.~\cite{SAE:ARP4761}. The safety assessment process is tightly coupled with the system development and verification processes and is used to show compliance with certification requirements as well as meeting a company's internal safety standards.
 
@@ -13,10 +31,10 @@
 
 %A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use the acquired understanding to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. In practice, prior to performing the safety assessment of a system, the safety engineers are often equipped with the domain knowledge about the system, but do not necessarily have detailed knowledge of how the software functions are designed. Acquiring the required knowledge about the behavior and implementation of each software function in a system can be a very time consuming and involved process. For example, understanding 
 
-System safety analysis techniques are crucial in the development life cycle of highly integrated/complex aircraft systems and are used to show compliance with certification requirements~\cite{SAE:ARP4754A, SAE:ARP4761}. 
-A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use this information to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. 
+%System safety analysis techniques are crucial in the development life cycle of highly integrated/complex aircraft systems and are used to show compliance with certification requirements~\cite{SAE:ARP4754A, SAE:ARP4761}. 
+%A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use this information to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. 
 %In practice, prior to performing the safety assessment of a system, the safety engineers are often equipped with the domain knowledge about the system, but do not necessarily have detailed knowledge of how the software applications hosted in a system are designed. Acquiring the required knowledge about the behavior and implementation of each software application in a system can be a very time consuming and involved process.
-Acquiring knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior has shown in practice one of the most time consuming and involved step in the safety assessment process.
+%Acquiring knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior has shown in practice one of the most time consuming and involved step in the safety assessment process.
 
 %For example, in a recent project it took one of our safety engineers two days to understand how the software in a Stall Warning System was intended to work. The primary task includes connecting the signal and function flows to relate the input and output signals from end-to-end and understanding the causal effect between them. This is at least as much time as was required to construct the safety analysis artifacts and perform the safety analysis itself.
 
@@ -37,16 +55,3 @@ A model that supports both system design and safety analysis must describe both 
 %\janet{J's comment: consider clarifying/replacing/complementing the following paragraph with a figure:}
 %What the Safety Annex helps to provide throughout the assessment process is the ability to examine and define failure modes (the ways in which a component or system can fail) for individual system components (mechanical and digital) and then utilize behavioral propagation to determine whether these failures can cause violations of the safety requirements to occur. This can assist in understanding the system under development as well as how certain component errors contribute to both the aircraft functions and system level hazards defined in the FHA process. The nominal model and fault model are separately defined and yet interact with each  other to provide information about the system under development.
 
-\begin{comment}
-When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component~\cite{SAE:ARP4754A}. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms (error, failure, fault) throughout this description.
-
-Many of these modes can be determined through domain knowledge and other modes are specified through the manufacturer of a given mechanical or digital component. Once the faults and failure modes are determined, the safety engineer must determine the consequence of this component failure on connected components, components that are physically located nearby, and on the system as a whole. Given that many safety critical systems are quite complex, this propagation process can be error prone and time consuming.
-
-\janet{describe definition for cutset here}
-(The cutset is the set of primary events that must occur in order for the undesired top level event to occur)
-The Primary Events are the root causes of the first level fault events.
-
-\janet{describe what safety engineers need}
-
-\janet{describe guidance on integration of the approach to traditional safety assessment process, e.g., system engineers model the nominal behavioral and behavioral propagations in AGREE, safety engineers add failure modes to components in safety annex, and invoke the analysis to see the effects}
-\end{comment}
