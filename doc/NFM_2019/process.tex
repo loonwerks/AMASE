@@ -1,6 +1,37 @@
 \subsection{Safety Assessment Process}
 \label{subsec:process}
-\janet{This section needs more work}
+
+ARP4754A, the Guidelines for Development of Civil Aircraft and Systems~\cite{SAE:ARP4754A}, provides guidance on applying development assurance at each hierarchical level throughout the development life cycle of highly-integrated/complex aircraft systems, and has been recognized by the Federal Aviation Administration (FAA) as an acceptable method to establish the assurance process. The safety assessment process is a starting point at each hierarchical level of the development life cycle, and is tightly coupled with the system development and verification processes. It is used to show compliance with certification requirements, and for meeting a company's internal safety standards. 
+
+ARP4761, the Guidelines and Methods for Conducting Safety Assessment Process on Civil Airborne Systems and Equipment~\cite{SAE:ARP4761},  identifies a systematic means to show compliance. The guidelines presented in ARP4761 include industry accepted safety assessment processes (Functional Hazard Assessment (FHA), Preliminary System Safety Assessment (PSSA), and System Safety Assessment (SSA)), and safety analysis methods to conduct the safety assessment, 
+such as Fault Tree Analysis (FTA), Failure Modes and Effect Analysis (FMEA), and Common Cause Analysis (CCA).
+
+A prerequisite of performing the safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the integrity of the outputs and the availability of the system. The safety engineers then use the acquired understanding to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. 
+
+In practice, prior to performing the safety assessment of a system, the safety engineers are often equipped with the domain knowledge about the system, but do not necessarily have detailed knowledge of how the software applications are designed. Acquiring knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior is typically one of the most time consuming and involved step in the process. 
+
+Industry practitioners have come to realize the benefits and importance of
+using models to assist the safety assessment process (either by augmenting the existing system design model, or by building a separate safety model), and a revision of the ARP4761 to include {\em model based safety analysis} is under way.
+
+Figure~\ref{fig:proposed_safety_process} presents our proposed use of a single unified model to supports both system design and safety analysis. It describes both the system design information and safety-relevant information. The two types of information are kept distinguishable, yet are able to interact with each other. The shared model maintains a living model that captures the current state of the system design as it moves through the system development lifecycle, allowing all participants of the ARP4754A process to be able to communicate and review the system design. Safety analysis artifacts can be generated directly from the model. This could greatly improve communication and synchronization between system designer and safety engineers, and provide the ability to more accurately analyze complex systems. 
+
+\begin{figure}[t!]
+	\vspace{-0.19in}
+	\centering
+	\includegraphics[trim=0 9 0 5,clip,width=0.85\textwidth]{images/safety_process.pdf}
+	%\vspace{0.4in}
+	\caption{Using the Shared System/Safety Model in the ARP4754A Safety Assessment Process}
+	\label{fig:proposed_safety_process}
+\end{figure}
+
+\begin{comment}
+ It describes both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure modes, failure rates). The two types of information are kept distinguishable, yet are able to interact with each other. The shared model maintains a living model that captures the current state of the system design as it moves through the system development lifecycle, allowing all participants of the ARP4754A process to be able to communicate and review the system design. 
+
+For example, the preliminary FTAs and final system FTAs (artifacts from the PSSA and SSA activities in the Safety Assessment Process) can guide and be updated from the shared model. The shared model is expected to be created and maintained in sync with the current state of the system design (including needed information from software and hardware design), and guided by the hazard and probability information from the preliminary system FTA.  The analysis results from checking the system level properties on the shared model are then used to update the preliminary system FTA. This process continues iteratively until the system safety property is satisfied with the desired fault tolerance and failure probability achieved. Consequently, the effort needed to update the final system FTA from the preliminary system FTA would be greatly reduced.
+
+
+\end{comment}
+
 \begin{comment}
 When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component~\cite{SAE:ARP4754A}. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms (error, failure, fault) throughout this description.
 
