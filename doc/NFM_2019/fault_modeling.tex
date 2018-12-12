@@ -1,23 +1,37 @@
-\section{Fault Modeling and the Safety Annex}
+\section{Fault Modeling with the Safety Annex}
 \label{sec:fault_modeling}
 
-\subsection{Features Needed for Fault Modeling}
-It is assumed that an AADL model of the nominal system specifies the hardware, software, and mechanical components of the system and their interconnections. This model is annotated with behavioral contracts using the AGREE annex~\cite{NFM2012:CoGaMiWhLaLu}. The nominal model behavioral requirements are verified using inductive model checking through AGREE~\cite{2017arXiv171201222G}. At this point, the fault modelling can commence. 
+To demonstrate the fault modeling capabilities of the Safety Annex we will use the Wheel Brake System (WBS) described in AIR6110~\cite{AIR6110}.  This system is a well-known example that has been used as a case study for safety analysis, formal verification, and contract based design~\cite{DBLP:conf/cav/BozzanoCPJKPRT15, 10.1007/978-3-319-11936-6-7, CAV2015:BoCiGrMa, Joshi05:SafeComp}. The preliminary work for the safety annex was based on a simple model of the WBS~\cite{Stewart17:IMBSA}. To demonstrate a more complex fault modeling process, we constructed a functionally and structurally equivalent AADL version of one of the more complex WBS NuSMV/xSAP model (arch4wbs) described in~\cite{DBLP:conf/cav/BozzanoCPJKPRT15}.    
 
-When conducting the safety assessment and examining the individual subcomponents of a system, the faults and failure modes must be determined. A fault is the manifestation of an error that may lead to failure in a given component~\cite{SAE:ARP4754A}. For example, a fault in a valve may be that it is stuck closed. If this fault is active, it may cause a failure to occur. If there is no command to provide outgoing pressure, then this active fault will not cause a failure of the component to perform as intended. On the other hand, if there is such a command to provide pressure, this fault will cause failure of the valve component. The failure mode in this case is that there is a command to provide outgoing pressure, but an active fault on the valve causes it to be stuck closed. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy and follow the definitions of these terms (error, failure, fault) throughout this description.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[trim=0 9 0 5,clip,width=\textwidth]{images/wbs_arch.pdf}
+	\caption{Wheel Brake System}
+	\label{fig:wbs}
+\end{figure} 
 
-Many of these modes can be determined through domain knowledge and other modes are specified through the manufacturer of a given mechanical or digital component. Once the faults and failure modes are determined, the safety engineer must determine the consequence of this component failure on connected components, components that are physically located nearby, and on the system as a whole. Given that many safety critical systems are quite complex, this propagation process can be error prone and time consuming.
 
-In the following subsections, we walk through examples of component failure modes to illustrate how a safety engineer can use the Safety Annex to model these modes and see how an active fault may or may not cause failure of a component.
+The WBS is composed of two main parts: the control system and the physical system. The control system electronically controls the physical system and contains a redundant channel of the Braking System Control Unit (BSCU) in case of failure. It also commands antiskid braking in case of skidding on the ground. The physical system consists of the hydraulic circuits running from hydraulic pumps to wheel brakes as well as valves that control the hydraulic fluid flow. This is what provides braking force to each of the eight wheels of the aircraft. The wheels are all mechanically braked in pairs (one pair per landing gear). For simplicity, Figure~\ref{fig:wbs} displays only two of the eight wheels. 
 
-In the AADL system model and the AGREE behavioral model, we have the component structures and behaviors (properties) defined for the system subcomponents. Assuming that the nominal model holds (in the absence of errors, the system behavior is correct), it is of interest to see how the manifestation of errors impacts the overall system functionality. To determine this information, a safety engineer must determine what possible errors could be present in the given components of the system and if the manifestation of these errors will cause a systems functionality to be erroneous. Many of these component errors originate in software and when these errors manifest in real life, they are propagated implicitly through the system. For example, when a valve is stuck closed the effects of this component failure can be seen through the behavioral contracts and need not be explicitly modelled. But this does not cover all possible failure types. As an example, assume there are colocated pipes and one bursts. Given the nature of the failure, this could affect the behavior of the colocated pipe and thus must be explicitly propagated. In the system model, there are no connections between these components, only in the physical world are they related. For this reason, a safety analyst must be able to define explicit propagation as well as implicit.  
+There are three operating modes in the WBS model. In \textit{normal} mode, the system uses the \textit{green} hydraulic circuit. The normal system is composed of the green hydraulic pump and one meter valve per each of the eight wheels. Each of the meter valves are controlled through electronic commands coming from the active channel of the BSCU. These signals provide braking and antiskid commands for each wheel. The braking command is determined through a sensor on the pilot pedal position and is labeled as \textit{Left/Right Pedal Sensor} in Figure~\ref{fig:wbs} and the antiskid command is determined by the \textit{Wheel Sensors}. 
 
-In the following subsections, we describe the modelling process for these failure modes using the WBS as a reference model. 
+In \textit{alternate} mode, the system uses the \textit{blue} hydraulic circuit. The alternate system is composed of the blue hydraulic pump, four meter valves, and four antiskid shutoff valves: one for each landing gear. The meter valves are mechanically commanded through the pilot pedal corresponding to each landing gear. If the system detects lack of pressure in the green circuit, the BSCU channel commands the selector valve to switch to the blue circuit. 
+If the BSCU channel becomes invalid, the shutoff valve closes and we move into alternate mode. Once this system switches into alternate mode, it does not return to normal operation mode.
 
-\subsection{Implicit (Behavioral) Failure Propagation}
-When using the Safety Annex to model behavioral failure propagation, a \textit{fault} is attached to a component, which when active will change the output of said component. This faulty value on the output may or may not violate the contracts of the component and it may or may not violate the assumptions of the destination component. These details are seen through the output of the model checker when the safety analysis is run on the fault model. Examples of such faults include valves being stuck open or closed, output of a software component being nondeterministic, or power being cut off. These component types range from mechanical to digital, but for this section we focus on a digital component in the WBS, a sensor on the pedal component. 
+The last mode of operation of the WBS is the \textit{emergency} mode. This mode is entered if the blue hydraulic pump fails. The accumulator pump has a reserve of pressurized hydraulic fluid and will supply this to the blue circuit in emergency mode.
 
-The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain reliability in the presence of faults. In the WBS, there are a number of safety properties of interest and we focus on one: Inadvertant braking. As described in Section~\ref{subsubsec:wbs:behavior}, one of the components important to the property \textit{Inadvertant braking}, is the pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then proceeds in commanding hydraulic pressure to the wheels. 
+The model contains 30 different kinds of components, 169 component instances, a model depth of 5 hierarchical levels.  The model includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  There are a total of 33 different fault types and 141 fault instances within the model.  The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
+
+The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110. The top level system properties are given by the requirements and safety objectives in AIR6110. All of the subcomponent contracts support these system safety objectives through the use of assumptions on component input and guarantees on the output.
+
+An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on one of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. 
+Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the definition requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding).
+
+\subsection{Fault Modeling}
+
+The Safety Annex is used to add potential faulty behaviors to a component model.  When the fault is activated by its specified triggering conditions, it modifes the output of the component. This faulty behvior may violate the contracts of other components in the system, including assumptions of downstream components. The impact of a fault is computed by the AGREE model checker when the safety analysis is run on the fault model. Examples of such faults include valves being stuck open or closed, output of a software component being nondeterministic, or power being cut off. Faulty components can be mechanical or digital, but in this section we focus on a digital component in the WBS -- a brake pedal position sensor component. 
+
+One of the components important to the property \textit{Inadvertent braking}, is the brake pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then commands hydraulic pressure to the wheels. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
@@ -30,7 +44,7 @@ The purpose of the safety analysis process is to guarantee that certain top leve
 	\vspace{-0.3in}
 \end{figure}
 
-In Figure~\ref{fig:sensor}, the AADL system component is shown with a contract on the output of this component. The sensor has only one input: the mechanical pedal position and one output: the electrical pedal position. The property that governs the behavior of the component is that the mechanical position should always equal the electronic position. This is an example of the nominal system model in AADL with behaviors defined in AGREE. 
+Figure~\ref{fig:sensor} shows the AADL pedal sensor component with a contract for its nominal behavior. The sensor has only one input, the mechanical pedal position, and one output, the electrical pedal position. The property that governs the behavior of the component is that the mechanical position should always equal the electronic position. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
@@ -43,40 +57,71 @@ In Figure~\ref{fig:sensor}, the AADL system component is shown with a contract o
 	\vspace{-0.3in}
 \end{figure}
 
-This sensor has a known failure which can invert the signal read and pass along an incorrect value. This fault which causes this failure is triggered with probability $5.0e-6$. In Figure~\ref{fig:sensorFault}, the Safety Annex definition for this fault is shown. The faults are defined using a library of fault nodes (in this case, \textit{inverted\_fail}) and when the fault is triggered, the output of the component (\textit{elec\_pedal\_position}) is converted into its failure value (\textit{val\_out}). 
+One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$. Figure~\ref{fig:sensorFault} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes (in this case, \textit{inverted\_fail}).  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
 
-When this particular fault is active in the system, we can run the analysis to see how it propagates through the system. The classification of the top level safety property is catastrophic and carries a probability threshold of $1.0e-9$. Upon running the fault analysis in the toolset, a counterexample is provided for this top level property given the fault definition provided in Figure~\ref{fig:sensorFault}. Since the probability of this fault occuring on the sensor is higher than that of the top level property, it is of interest. 
+\subsection{Comparison to the AADL Error Annex}
 
-Through the counterexample display we can trace the behavior of the system through the active faults as well as the violated contracts. The mechanical pedal is not pressed, but this failure causes the sensor subcomponent to report to the BSCU that it was pressed. The active BSCU channel uses this value in order to command braking, determine validity of the channel and control the antiskid behavior of the aircraft. The BSCU carries on with its normal behavior assuming that the pedal was pressed and the state of the system is as follows: braking is not commanded and power is supplied throughout the system. The ground is moving, there is braking force at the wheels, and the wheel is rolling. Taken together this clearly disproves the top level contract that inadvertant braking at a given wheel does not occur. Thus the safety analyst of this system can recognize that some set of precautions such as redundancy are required for the pedal sensor component. 
+The AADL language has previously been extended to provide some fault modeling and analysis capabilities using its Error Model Annex, Version 2 (EMV2)~\cite{EMV2}.  EMV2 focuses on injection and propagation of discrete faults for generation of fault trees, rather than on analysis of system behavior in the presence of faults. 
+To illustrate some of the key differences between our approach and the EMV2 approach, Figure~\ref{fig:comparison_with_EMV2} shows a simplified  behavioral flow with code fragments from EMV2, AGREE, and the Safety Annex. 
+
+\begin{figure}[t]
+	\vspace{-0.19in}
+	\centering
+	\includegraphics[trim=0 9 0 5,clip,width=\textwidth]{images/Comparison_with_EMV2.pdf}
+	%\vspace{0.4in}
+	\caption{Differences between Safety Annex and EMV2}
+	\label{fig:comparison_with_EMV2}
+\end{figure} 
+
+In this simplified WBS system, the physical signal from the Pedal component is detected by the Sensor, and the pedal position value is passed to the Braking System Control Unit (BSCU) components.  The BSCU generates a pressure command to the Valve component which applies hydraulic brake pressure to the Wheels. 
+
+In the EMV2 approach (top half of Figure~\ref{fig:comparison_with_EMV2}), all errors must be explicitly propagated through each component (by applying fault types on each of the output ports) in order for a component to have an impact on the rest of the system. In the example, the ``NoService'' fault is explicitly allowed by the EMV2 declarations to propagate through all of the components.  These fault types are essentially tokens that do not capture any analyzable behavior.  At the system level, analysis tools supporting the EMV2 annex can aggregate the fault flow and propagation information from different components to compose an overall fault flow diagram or fault tree.
+
+In the Safety Annex approach (bottom half of Figure~\ref{fig:comparison_with_EMV2}), faults augment the system behavioral model through the AGREE contracts.  When a fault is triggered, the output behavior of the Sensor component is modified, in this case resulting a ``stuck at zero'' error. The behavior of the BSCU receives a zero input and proceeds as if the pedal has not been pressed. This will cause the top level system contract to fail: {\em pedal pressed implies brake pressure output is positive}. No explicit propagation is necessary since the faulty behavior propagates through the system just as in the nominal system model. The system and component failures are manifested through analysis of the AGREE contracts. 
+
 
 \subsection{Explicit Failure Propagation} 
+Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, fire in the containment location, or a stray bullet. 
 
-As described in Section~\ref{subsec:comparison_with_EMV2}, explicit fault propagation is something that currently exists in EMV2 for AADL and the mode of fault analysis presented in this paper is behavioral fault propagation. But there is another set of possible failures in a system that are difficult to capture with the fault definitions previously discussed. Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, fire in the containment location, or a stray bullet. 
+To better model HW dependent faults, a fault model element is introduced for HW components called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. 
 
-To better model HW dependent faults, a fault model element is introduced for HW components called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. Users specify dependencies between the HW component faults and faults that are defined in other components, either HW or SW. The hardware fault then acts as a trigger for dependent faults. 
-
-In complex systems, it can be difficult to determine the effects of HW faults on SW functions. By utilizing a simple propagation from the faulty HW component to the SW components that rely on it, the behavior and outputs of the affected SW functions can be realized. 
-
+An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
-	\hspace*{-2cm}
-	\vspace{-0.3in} 
+	\vspace{-0.2in}
 	\begin{center}
-		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/hw_fault_green_pump.pdf}
-		\caption{Hardware fault for the green pump}
-		\label{fig:hwFault}
+		\includegraphics[width=.5\textwidth]{images/hw_fault_green_pump.png}
 	\end{center}
 	\vspace{-0.3in}
+	\caption{Hardware fault for the green pump}
+	\label{fig:hwFault}
+	\vspace{-0.2in}
 \end{figure}
 
-As an example, we will look yet again at the WBS. Assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft. This particular aircraft was in flight when the zombie apocolypse began and unfortunately a few of the passengers were among the undead. The description of the chaos leading up to the pump compartment accident is unnecessary in order to illustrate hardware fault modeling. It is sufficient to say that due to this series of events, an explosion took place in said compartment. The green (normal) hydraulic pump took the force of the explosion and when the green hydraulic pump exploded, the pump shrapnel flew into the blue (alternate) pump and it became from then on unoperable. 
+Users specify dependencies between the HW component faults and faults that are defined in other components, either HW or SW. The hardware fault then acts as a trigger for dependent faults. This allows a simple propagation from the faulty HW component to the SW components that rely on it, affecting the behavior on the outputs of the affected SW components.
 
-The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement. Notice that these pumps need not be connected through a data port in order to specify this propagation, they need only to be located in the same area of the aircraft. Furthermore, the probability of occurance can be given. This specifies the probability of the HW fault activation. If this HW fault is activated, the probability of propagation is 100\%. (Note: This value in this example does not reflect the probability of a zombie apocolypse, but rather some unforseen event leading to the destruction of the pumps, i.e. fire, water damage, explosion, bullet, etc.)  
+As an example, we will look yet again at the WBS. Assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft. An accident took place in said compartment and the green (normal) hydraulic pump took the force of the explosion. When the green hydraulic pump exploded, the pump shrapnel flew into the blue (alternate) pump and it became from then on unoperable. The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown in Figure~\ref{fig:hwFaultProp}. Notice that these pumps need not be connected through a data port in order to specify this propagation. Furthermore, the probability of the HW fault activation can be specified. 
 
-\danielle{Danielle comment: I still need to actually define this fault in the WBS system in order to talk about the effects on the system.}
+The fault dependencies are typically specified in the system implementation where the system configuration that causes the dependencies becomes clear (e.g., binding between SW and HW components, co-location of HW components). This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. Having fault propagations specified outside of a component’s fault statements also makes it easier to reuse the component in different systems. 
+
+\begin{figure}[h!]
+	\vspace{-0.2in}
+	\begin{center}
+		\includegraphics[width=.9\textwidth]{images/fault_propagation.png}
+	\end{center}
+	\vspace{-0.3in}
+	\caption{Hardware fault propagation statement}
+	\label{fig:hwFaultProp}
+	\vspace{-0.2in}
+\end{figure}
 
 
+\subsection{Fault Hypothesis}
 
+An annotation in the AADL model determines the fault hypothesis. This may specify either a maximum number of faults that can be active at any point in execution (see Figure~\ref{fig:hwFaultProp}) or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered. Tying back to traditional safety analysis, the former is analogous to restricting the cutsets to a specified maximum number of terms, and the latter is analogous to restricting the cutsets to only those whose probability is above some set value.
 
+In the former case, we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold.  In the latter, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. 
+%
+With the introduction of dependent faults, active faults are divided into two categories: independently active (activated by its own triggering event) and dependently active (activated when the faults they depend on become active). The top level fault hypothesis applies to independently active faults. Faulty behaviors augment nominal behaviors whenever their corresponding faults are active (either independently active or dependently active).
 
 
 

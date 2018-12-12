@@ -52,6 +52,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="edu.umn.cs.crisys.safety"/>
       <import plugin="edu.umn.cs.crisys.safety.analysis"/>
       <import plugin="edu.umn.cs.crisys.safety.ui"/>
+      <import plugin="org.eclipse.xtend"/>
+      <import plugin="org.eclipse.xtext"/>
+      <import feature="com.rockwellcollins.atc.agree.feature" version="2.4.0.qualifier"/>
    </requires>
 
    <plugin
