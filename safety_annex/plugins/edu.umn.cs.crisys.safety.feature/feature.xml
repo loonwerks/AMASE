@@ -48,6 +48,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    </license>
 
+   <includes
+         id="com.rockwellcollins.atc.agree.feature"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="edu.umn.cs.crisys.safety"/>
       <import plugin="edu.umn.cs.crisys.safety.analysis"/>
