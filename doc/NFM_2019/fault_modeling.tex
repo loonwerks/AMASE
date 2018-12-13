@@ -5,12 +5,10 @@ To demonstrate the fault modeling capabilities of the Safety Annex we will use t
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[trim=0 9 0 5,clip,width=\textwidth]{images/wbs_arch.pdf}
+	\includegraphics[trim=0 9 0 5,clip,width=\textwidth]{images/wbs_arch4_diagram.pdf}
 	\caption{Wheel Brake System}
 	\label{fig:wbs}
 \end{figure} 
-
-\janet{TODO: enlarge the text size in Figure~\ref{fig:wbs}, and bring all figure title fonts to normal size}
 
 The WBS is composed of two main parts: the control system and the physical system. The control system electronically controls the physical system and contains a redundant channel of the Braking System Control Unit (BSCU) in case of failure. It also commands antiskid braking in case of skidding on the ground. The physical system consists of the hydraulic circuits running from hydraulic pumps to wheel brakes as well as valves that control the hydraulic fluid flow. This is what provides braking force to each of the eight wheels of the aircraft. The wheels are all mechanically braked in pairs (one pair per landing gear). For simplicity, Figure~\ref{fig:wbs} displays only two of the eight wheels. 
 
@@ -43,7 +41,7 @@ An example system safety property is to ensure that there is no inadvertent brak
 Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the definition requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding).
 
 
-\subsection{\janet{Component} Fault Modeling}
+\subsection{Component Fault Modeling}
 
 \janet{TODO: explain our usage of fault/error/failure, per Mats' 12/12 comments and email}
 
@@ -79,7 +77,7 @@ One possible failure for this sensor is inversion of its output value. This faul
 
 The WBS fault model in Safety Annex contains a total of 33 different fault types and 141 fault instances. The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
 
-\subsection{\janet{Implicit Failure Propagation}}
+\subsection{Implicit Failure Propagation}
 In the Safety Annex approach, faults are captured as faulty behaviors that augment the system behavioral model in AGREE contracts. No explicit fault propagation is necessary since the faulty behavior itself propagates through the system just as in the nominal system model. The effects of any triggered fault are manifested through analysis of the AGREE contracts. 
 
 On the contrary, in the AADL Error Model Annex, Version 2 (EMV2)~\cite{EMV2} approach, all errors must be explicitly propagated through each component (by applying fault types on each of the output ports) in order for a component to have an impact on the rest of the system. 
@@ -133,10 +131,10 @@ An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-		\includegraphics[width=.5\textwidth]{images/hw_fault_green_pump.png}
+		\includegraphics[width=.8\textwidth]{images/hw_fault2.png}
 	\end{center}
 	\vspace{-0.3in}
-	\caption{Hardware fault for the green pump}
+	\caption{Hardware Fault Definition}
 	\label{fig:hwFault}
 	\vspace{-0.2in}
 \end{figure}
@@ -151,10 +149,10 @@ The fault dependencies are typically specified in the system implementation wher
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-		\includegraphics[width=.9\textwidth]{images/fault_propagation.png}
+		\includegraphics[width=1.0\textwidth]{images/hw_prop_stmt.png}
 	\end{center}
 	\vspace{-0.3in}
-	\caption{Hardware fault propagation statement}
+	\caption{Hardware Fault Propagation Statement}
 	\label{fig:hwFaultProp}
 	\vspace{-0.2in}
 \end{figure}
