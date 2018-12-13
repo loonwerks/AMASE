@@ -122,8 +122,10 @@ In the Safety Annex approach (bottom half of Figure~\ref{fig:comparison_with_EMV
 \end{comment}
 
 \subsection{Explicit Failure Propagation} 
-Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, or fire in the containment location. %, or a stray bullet. 
-This type of error propagation is easily modeled using the EMV2 annex and due to its importance in the fault modeling process, is also an included capability of the Safety Annex.
+Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, fire, \janet{or explosion}
+in the containment location. %, or a stray bullet. 
+%This type of error propagation is easily modeled using the EMV2 annex and due to its importance in the fault modeling process, is also an included capability of the Safety Annex.
+\janet{Safety Annex provides the capability to explicitly model the impact of hardware faults on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.}
 
 To better model HW dependent faults, a fault model element is introduced for HW components called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. 
 
