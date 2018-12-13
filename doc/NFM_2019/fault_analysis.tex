@@ -3,6 +3,8 @@
 There are two possible fault analyses available to users, monolithic and compositional. 
 The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain probability in the presence of faults. 
 
+\janet{TODO: consider combine the first three subsections and update the last section to talk from users/use case stand point of view - walk through concrete examples to show how we use the analysis capabilities mentioned in the original subsections to help address the problem we raised in the intro/prelim section}
+
 \subsection{Fault Hypothesis}
 
 An annotation in the AADL model determines the fault hypothesis. This may specify either a maximum number of faults that can be active at any point in execution (see Figure~\ref{fig:hwFaultProp}) or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered. Tying back to traditional safety analysis, the former is analogous to restricting the cutsets to a specified maximum number of terms, and the latter is analogous to restricting the cutsets to only those whose probability is above some set value.
@@ -98,7 +100,7 @@ Fault analysis on the top level WBS system was performed on the 11 top-level pro
 
 We use this model to demonstrate the benefits of formal fault analysis and to show the scalability of our tools.  We applied both {\em monolithic} analysis, and also {\em compositional} analysis.
 
-\janet{should we keep the following two paragraphs on the timing?}
+\janet{TODO: replace timing data on something about what we learned from the analysis results, and use it to feedback to the system design, and rerun the analysis. As Mats pointed out, "can we add a redundant sensor and get fault tolerance?}
 
 For the fault-free ``nominal'' system model, monolithic analysis requires 21 seconds, whereas compositional analysis requires 1 minute and 53 seconds.  Although the compositional time is longer, each sub-problem completes in less than 5 seconds.  The additional time for compositional analysis is  due to the start-up overhead to invoke the JKind model checker many times for individual layers.  On the other hand, when examining the model under a single-fault hypothesis, compositional analysis requires 2 minutes 6 seconds, while monolithic analysis did not terminate after 60 minutes.
 
