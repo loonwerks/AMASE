@@ -1,14 +1,19 @@
 \section{Analysis of the Fault Model}
 \label{sec:fault_analysis}
-There are two possible fault analyses available to users, monolithic and compositional. 
-The purpose of the safety analysis process is to guarantee that certain top level safety properties of the system hold with certain probability in the presence of faults. 
+There are two types of fault analyses available to users, monolithic and compositional. 
+The purpose of the safety analysis process is to \janet{check if the} %guarantee that certain
+top level safety properties of the system hold 
+%with certain probability 
+in the presence of faults
+\janet{with acceptable probability or maximum number of fault events considered}. 
+
 
 %\janet{Janet Note TODO: consider combine the first three subsections and update the last section to talk from users/use case stand point of view - walk through concrete examples to show how we use the analysis capabilities mentioned in the original subsections to help address the problem we raised in the intro/prelim section}
 %\danielle{Danielle Note: Reading through a paper, I believe it is helpful to have subsections to make the distinction clear. It makes it less of a block of text. Yeah, not super important, but having the subsections makes each topic a little clearer to see. I vote to keep them.}
 
 \subsection{Fault Hypothesis}
 
-An annotation in the AADL model determines the fault hypothesis. This may specify either a maximum number of faults that can be active at any point in execution or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered (see Figure~\ref{fig:hwFaultProp}). Tying back to traditional safety analysis, the former is analogous to restricting the cutsets to a specified maximum number of terms, and the latter is analogous to restricting the cutsets to only those whose probability is above some set value.
+An annotation in the AADL model determines the fault hypothesis. This may specify either a maximum number of faults that can be active at any point in execution or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered (see Figure~\ref{fig:hwFaultProp}). Tying back to \janet{the fault tree analysis in} traditional safety analysis, the former is analogous to restricting the cutsets to a specified maximum number of terms, and the latter is analogous to restricting the cutsets to only those whose probability is above some set value.
 
 In the former case, we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold.  In the latter, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. 
 %
