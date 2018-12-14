@@ -122,11 +122,13 @@ For compositional anlaysis, fault hypotheses (see Figure 3) must be added to eac
 \subsection{Analysis Results of the WBS Example}
 \label{sec:results}
 
-The fault analysis on the top level WBS system was performed on the 11 top-level properties using two fault hypotheses. 
+The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately.}
 
-%The fault analysis on the top level WBS system was performed on the 11 top-level properties using two fault hypotheses. 
-%In the first case, we allow at most one fault, and in the second we allow combinations of faults that exceed the acceptable probability for the top-level hazard defined in AIR6110. 
+\janet{We first applied compositional analysis with max one fault hypothesis at all layers of the model.} Most properties were verified except for the \textit{Inadvertent braking at the wheel} properties. \janet{The failure of the verification for those properties shows that they are not resilient to a single fault.} The {\em counterexample} returned by the tools allowed us to straightforwardly diagnose the fault conditions that lead to property failure: In this model, there is a single pedal position sensor for the brake pedal. If this sensor fails, it can command braking without a pilot request.
 
+This counterexample can be used to further analyze the system design.  For our model, there are several possible reasons for failure: it could be that redundant sensors are required on the pedals (here we note that the architecture of the pedal assembly is not discussed in AIR6110) or that the phase of flight is sufficiently short that we need to adjust our pedal failure rate to match this phase of flight, rather than normalizing the failure rate to per-flight-hour.  
+
+\janet{We then applied monolithic analysis with probabilistic fault hypothesis of $10^{-9}$ fault threshold. The \textit{Inadvertent braking at the wheel} properties were again failed. Updating the probability of occurrence for the sensor components identified above to be above the fault threshold allowed the properties to pass, showing that increasing the reliability of those components help increase the reliability of the system.}
 
 
 %During our analysis, we discovered that most properties were verified, but the \textit{Inadvertent braking at the wheel} properties are not resilient to a single fault nor do they meet the desired $10^{-9}$ fault threshold for probabilistic analysis. In this model, there is a single pedal position sensor for the brake pedal.  If this sensor fails, it can command braking without a pilot request.  Given the {\em counterexample} returned by the tools, it is straightforward to diagnose the fault conditions that lead to property failure.
@@ -136,9 +138,8 @@ The fault analysis on the top level WBS system was performed on the 11 top-level
 %what did we use max one fault
 %what did we do with what probability
 
-%This counterexample can be used to further analyze the system design.  For our model, there are several possible reasons for failure: it could be that redundant sensors are required on the pedals (here we note that the architecture of the pedal assembly is not discussed in AIR6110) or that the phase of flight is sufficiently short that we need to adjust our pedal failure rate to match this phase of flight, rather than normalizing the failure rate to per-flight-hour.  
 
-%It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
+It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
 %The sync and update between the safety analysis artifacts and the system architecture/analysis model continues until the system safety property is satisfied with the desired fault tolerance and failure probability achieved.
 
 \begin{comment}
