@@ -81,7 +81,11 @@ Once augmented with fault information, the AGREE model follows the standard tran
 \subsection{Monolithic Analysis}
 
 When monolithic analysis is performed on the nominal system model, the architectural model is flattened in order to perform the analysis. All of the contracts in the lower levels are used for the analysis.
-A top level threshold is defined within the safety annex located in the top level system implementation. In the lower levels, each defined subcomponent fault is given a probability of occurrence. To perform this analysis, it is assumed that the non-hardware faults occur independently and possible combinations of faults are analyzed by the model checker. This corresponds to performing a prior analysis on which combinations of faults have a probability less than the threshold and then inserting assertions into the Lustre code accordingly. If the probability of such combination of faults is in fact less than the designated top level threshold, these faults may be activated and the behavioral effects can be seen through a counterexample.  
+%A top level threshold is defined within the safety annex located in the top level system implementation. In the lower levels, each defined subcomponent fault is given a probability of occurrence. 
+To perform this analysis, it is assumed that the non-hardware faults occur independently and possible combinations of faults are analyzed by the model checker. 
+
+\janet{Given a probabilistic fault hypothesis,} this corresponds to performing a %prior 
+analysis on which combinations of faults have a probability less than the threshold and then inserting assertions into the Lustre code accordingly. If the probability of such combination of faults is in fact less than the designated top level threshold, these faults may be activated and the behavioral effects can be seen through a counterexample.  
 
 \begin{algorithm}[H]
 % \KwData{this text}
