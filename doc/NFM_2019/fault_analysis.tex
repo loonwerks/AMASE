@@ -20,7 +20,7 @@ in the presence of faults
 
 \begin{itemize}
 	\renewcommand{\labelitemi}{\textbullet}
-	\item The \textit{max fault hypothesis} specifies a maximum number of faults that can be active at any point in execution. This is analogous to restricting the cutsets to a specified maximum number of terms ub the fault tree analysis in traditional safety analysis. In implementation (i.e., the translated Lustre model feeding into the model checker), we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold. \janet{Each layer of the model needs to have a max fault hypothesis statement specified in order to consider fault activations in that layer in the analysis.}
+	\item The \textit{max fault hypothesis} specifies a maximum number of faults that can be active at any point in execution. This is analogous to restricting the cutsets to a specified maximum number of terms ub the fault tree analysis in traditional safety analysis. In implementation (i.e., the translated Lustre model feeding into the model checker), we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold. \janet{Each layer of the model needs to have a max fault hypothesis statement specified in order to consider fault activation in that layer in the analysis.}
 	
 	\item The \textit{probabilistic fault hypothesis} specifies that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered (see Figure~\ref{fig:hwFaultProp}). This is analogous to restricting the cutsets to only those whose probability is above some set value. In implementation, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. \janet{Each subcomponent fault needs to specify a probability of occurrence in order to be considered in the analysis.}
 \end{itemize}
@@ -118,11 +118,15 @@ In this calculation, we assume independence among the faults, but in the Safety 
 \subsection{Compositional Analysis}
 In compositional analysis, the analysis proceeds in a top down fashion. To prove the top level properties, the properties in the layer directly beneath the top level are used to perform the proof. The analysis proceeds in this manner.
 
- Users can constrain the maximum number of faults within each layer of the model by specifying the maximum fault hypothesis statement to that layer. If any lower level property failed due to activation of faults, the property verification at the higher level can no longer be trusted as the higher level properties were proved based on the facts that its direct sub level properties are valid.
+\janet{The compositional analysis currently works with the max fault hypothesis.} Users can constrain the maximum number of faults within each layer of the model by specifying the maximum fault hypothesis statement to that layer. If any lower level property failed due to activation of faults, the property verification at the higher level can no longer be trusted as the higher level properties were proved based on the facts that its direct sub level properties are valid.
  
-For compositional anlaysis, fault hypotheses (see Figure 3) must be added to each layer of a system in order for analysis to proceed correctly. Also, at most one of the analysis statements must be present. 
+%For compositional anlaysis, fault hypotheses (see Figure 3) must be added to each layer of a system in order for analysis to proceed correctly. Also, at most one of the analysis statements must be present. 
  
- This type of analysis is helpful to see weaknesses in a given component or layer of the system. In future work, we plan to reflect lower level property violations in the verification results of higher layers in the architecture, and enable displaying or constraining active faults system wide instead of component wide.
+ %This type of
+ \janet{The compositional} analysis is helpful to see weaknesses in a given %component or 
+ layer of the system. In future work, we plan to reflect lower \janet{layer} %level 
+ property violations in the verification results of higher layers in the architecture, and enable displaying or constraining active faults system wide instead of %component 
+ \janet{layer} wide.
 
 \subsection{Analysis Results of the WBS Example}
 \label{sec:results}
