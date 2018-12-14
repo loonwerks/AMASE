@@ -1,7 +1,7 @@
 \section{Analysis of the Fault Model}
 \label{sec:fault_analysis}
 
-\janet{When the Safety Annex is enabled, users can invoke either the monolithic analysis or compositional analysis in AGREE to check if the top level safety properties of the system hold in the presence of faults under the fault hypothesis given for the system. If an active fault causes the violation of a contract, this is seen in a counterexample provided by the model checker.}
+\janet{When the Safety Annex is enabled, users can invoke either the monolithic analysis or compositional analysis in AGREE to check if the top level safety properties of the system hold in the presence of faults under the fault hypothesis given for the system. If an active fault causes the violation of a contract, a counterexample is provided by the model checker. The counterexample can be used to further analyze the system design, and make necessary updates to the shared model between safety assessment and system development processes. This iterations continues until the system safety property is satisfied with the desired fault tolerance and failure probability achieved.}
 
 \begin{comment}
 There are two types of fault analyses available to users, monolithic and compositional. 
@@ -20,7 +20,7 @@ in the presence of faults
 
 \begin{itemize}
 	\renewcommand{\labelitemi}{\textbullet}
-	\item The \textit{max fault hypothesis} specifies a maximum number of faults that can be active at any point in execution. This is analogous to restricting the cutsets to a specified maximum number of terms ub the fault tree analysis in traditional safety analysis. In implementation (i.e., the translated Lustre model feeding into the model checker), we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold. \janet{Each layer of the model needs to have a max fault hypothesis statement specified in order to consider fault activations in that layer in the analysis.}
+	\item The \textit{max fault hypothesis} specifies a maximum number of faults that can be active at any point in execution. This is analogous to restricting the cutsets to a specified maximum number of terms ub the fault tree analysis in traditional safety analysis. In implementation (i.e., the translated Lustre model feeding into the model checker), we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold. \janet{Each layer of the model needs to have a max fault hypothesis statement specified in order to consider fault activation in that layer in the analysis.}
 	
 	\item The \textit{probabilistic fault hypothesis} specifies that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered (see Figure~\ref{fig:hwFaultProp}). This is analogous to restricting the cutsets to only those whose probability is above some set value. In implementation, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. \janet{Each subcomponent fault needs to specify a probability of occurrence in order to be considered in the analysis.}
 \end{itemize}
@@ -118,16 +118,21 @@ In this calculation, we assume independence among the faults, but in the Safety 
 \subsection{Compositional Analysis}
 In compositional analysis, the analysis proceeds in a top down fashion. To prove the top level properties, the properties in the layer directly beneath the top level are used to perform the proof. The analysis proceeds in this manner.
 
- Users can constrain the maximum number of faults within each layer of the model by specifying the maximum fault hypothesis statement to that layer. If any lower level property failed due to activation of faults, the property verification at the higher level can no longer be trusted as the higher level properties were proved based on the facts that its direct sub level properties are valid.
- 
-For compositional anlaysis, fault hypotheses (see Figure 3) must be added to each layer of a system in order for analysis to proceed correctly. Also, at most one of the analysis statements must be present. 
- 
- This type of analysis is helpful to see weaknesses in a given component or layer of the system. In future work, we plan to reflect lower level property violations in the verification results of higher layers in the architecture, and enable displaying or constraining active faults system wide instead of component wide.
+\janet{The compositional analysis currently works with the max fault hypothesis.} Users can constrain the maximum number of faults within each layer of the model by specifying the maximum fault hypothesis statement to that layer. If any lower level property failed due to activation of faults, the property verification at the higher level can no longer be trusted as the higher level properties were proved based on the facts that its direct sub level properties are valid.
+
+%For compositional anlaysis, fault hypotheses (see Figure 3) must be added to each layer of a system in order for analysis to proceed correctly. Also, at most one of the analysis statements must be present. 
+
+%This type of
+\janet{The compositional} analysis is helpful to see weaknesses in a given %component or 
+layer of the system. In future work, we plan to reflect lower \janet{layer} %level 
+property violations in the verification results of higher layers in the architecture, and enable displaying or constraining active faults system wide instead of %component 
+\janet{layer} wide.
+
 
 \subsection{Analysis Results of the WBS Example}
 \label{sec:results}
 
-The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately.}
+The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately. It requires between 2 and 4 minutes to run either compositional analysis with max fault hypothesis or monolithic analysis with probabilistic fault hypothesis on the model. The analysis is computationally inexpensive, allowing quick iterations between systems and safety engineers.}
 
 \janet{We first applied compositional analysis with max one fault hypothesis at all layers of the model.} Most properties were verified except for the \textit{Inadvertent braking at the wheel} properties. \janet{The failure of the verification for those properties shows that they are not resilient to a single fault.} The {\em counterexample} returned by the tools allowed us to straightforwardly diagnose the fault conditions that lead to property failure: In this model, there is a single pedal position sensor for the brake pedal. If this sensor fails, it can command braking without a pilot request.
 
@@ -137,7 +142,10 @@ This counterexample can be used to further analyze the system design.  For our m
 
 \danielle{Given these results, we were faced with a couple of options regarding the model. In order to meet the probabilistic threshold, one option is to find a brake pedal sensor with better reliability. Given that our top level threshold is $10^{-9}$, the sensor reliability must be less than this value. This is most likely an unrealistic solution, but even if it was possible, the model still has a single point of failure. This is shown thorugh the compositional analysis. The other option is to create redundancy in the sensor component and model a voting procedure. In order for braking to occur, both (or all) sensors must agree. This would eliminate a single point of failure and would also cause the model to meet the top level probabilistic threshold. The problem this raises is the complementary property in the system which states that when braking is commanded, braking pressure is provided at the wheel. By introducing redundancy, this also introduces a tradeoff between false positives and false negatives and directly affects the property regarding commanded braking.}
 
-\danielle{These are realistic scenarios and decisions that are faced by system and safety engineers. Providing a way to quickly and effectively run analysis on the model so that these different modes of failure can be easily seen is of great benefit.} It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
+\danielle{These are realistic scenarios and decisions that are faced by system and safety engineers. Providing a way to quickly and effectively run analysis on the model so that these different modes of failure can be easily seen is of great benefit.} 
+
+
+%It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
 
 %During our analysis, we discovered that most properties were verified, but the \textit{Inadvertent braking at the wheel} properties are not resilient to a single fault nor do they meet the desired $10^{-9}$ fault threshold for probabilistic analysis. In this model, there is a single pedal position sensor for the brake pedal.  If this sensor fails, it can command braking without a pilot request.  Given the {\em counterexample} returned by the tools, it is straightforward to diagnose the fault conditions that lead to property failure.
 
