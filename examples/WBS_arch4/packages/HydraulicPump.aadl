@@ -37,8 +37,8 @@ with Base_Types;
 				duration: permanent;
 			}
 			
-			-- HW fault
-			HW_fault Pump_Catastrophe "Colocated pump failure": {
+			
+		HW_fault Pump_HW_Fault "Colocated pump failure": {
 			probability: 1.0E-5;
 			duration: permanent;
 		}
