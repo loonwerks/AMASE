@@ -20,7 +20,7 @@ in the presence of faults
 
 \begin{itemize}
 	\renewcommand{\labelitemi}{\textbullet}
-	\item The \textit{max fault hypothesis} specifies a maximum number of faults that can be active at any point in execution. This is analogous to restricting the cutsets to a specified maximum number of terms \danielle{in}% the fault tree analysis 
+	\item The \textit{max fault hypothesis} specifies a maximum number of faults that can be active at any point in execution. This is analogous to restricting the cutsets to a specified maximum number of terms \danielle{in} % the fault tree analysis 
 traditional safety analysis. In implementation (i.e., the translated Lustre model feeding into the model checker), we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold. \janet{Each layer of the model needs to have a max fault hypothesis statement specified in order to consider fault activation in that layer in the analysis.}
 	
 	\item The \textit{probabilistic fault hypothesis} specifies that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered (see Figure~\ref{fig:hwFaultProp}). This is analogous to restricting the cutsets to only those whose probability is above some set value. In implementation, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables. \janet{Each subcomponent fault needs to specify a probability of occurrence in order to be considered in the analysis.}
@@ -135,6 +135,32 @@ property violations in the verification results of higher layers in the architec
 
 The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately. It requires between 2 and 4 minutes to run either compositional analysis with max fault hypothesis or monolithic analysis with probabilistic fault hypothesis on the model. The analysis is computationally inexpensive, allowing quick iterations between systems and safety engineers.}
 
+\janet{We first applied compositional analysis with max one fault hypothesis at all layers of the model.} Most properties were verified except for the \textit{Inadvertent braking at the wheel} properties. \janet{The failure of the verification for those properties shows that they are not resilient to a single fault.} \janet{We then applied monolithic analysis with probabilistic fault hypothesis of $10^{-9}$ fault threshold. The \textit{Inadvertent braking at the wheel} properties failed. Results from the first round of checks indicate that the WBS design is not fault tolerant to the inadvertent braking properties, and is not meeting the reliability goals of $10^{-9}$ on those properties.}
+
+The {\em counterexample} returned by the tools allowed us to straightforwardly diagnose the fault conditions that lead to property failure: in this model, there is a single pedal position sensor for the brake pedal. If this sensor fails, it can command braking without a pilot request. \janet{The counterexample can be used to further analyze the system design and explore a solution to the problem. There are several ways to proceed (here we note that the architecture of the pedal assembly is not discussed in AIR6110):}
+	
+	\begin{itemize}
+	\renewcommand{\labelitemi}{\textbullet}
+	\item \janet{Increase the reliability of the brake pedal sensor. The failure probabilities are estimated from the failure rates and exposure times of the events. We may adjust the exposure time to match the phase of flight, rather than normalizing it per-flight-hour, if the phase of flight is sufficiently short. We may also find a brake pedal sensor with a lower failure rate.}
+	\janet{For example, if the failure probability for the sensor component is lower than the $10^{-9}$ fault threshold, it will not be considered in the possible fault combinations for the analysis. Increasing the reliability of the components could help increase the reliability of the system. However, the system still has a single point of failure in this case.}
+	%Find a brake pedal sensor with better reliability. Given that our top level threshold is $10^{-9}$, the sensor reliability must be less than this value. This is most likely an unrealistic solution, 
+	%but even if it was possible, 
+	%\janet{However, with this solution,} \danielle{the model will has a single point of failure}. %This is shown thorugh the compositional analysis. 
+	
+	\item \danielle{Create redundancy in the sensor component and model a voting procedure.}
+	%The other option is to create redundancy in the sensor component and model a voting procedure. 
+	\danielle{In order for braking to occur, both (or all) sensors must agree. This would eliminate a single point of failure and would also cause the model to meet the top level probabilistic threshold.} \janet{However, by introducing redundancy, it could affect the probability of meeting of other properties in the system that command braking, for example, when braking is commanded, braking pressure is provided at the wheel. Introducing the redundancy can increase the reliability on inadvertent braking, but decrease the reliability on braking when needed.} 
+	%By introducing redundancy, this also introduces a tradeoff between false positives and false negatives and directly affects the property regarding commanded braking.
+\end{itemize}
+
+%\danielle{These are realistic scenarios and decisions that are faced by system and safety engineers.}
+\danielle{Providing a way to quickly and effectively run analysis on the model so that these different modes of failure}
+% can be easily seen }
+\janet{can be of great benefit to assist system engineers to make design decisions and safety engineers to assess the effect.} 
+
+\begin{comment}
+The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately. It requires between 2 and 4 minutes to run either compositional analysis with max fault hypothesis or monolithic analysis with probabilistic fault hypothesis on the model. The analysis is computationally inexpensive, allowing quick iterations between systems and safety engineers.}
+
 \janet{We first applied compositional analysis with max one fault hypothesis at all layers of the model.} Most properties were verified except for the \textit{Inadvertent braking at the wheel} properties. \janet{The failure of the verification for those properties shows that they are not resilient to a single fault.} The {\em counterexample} returned by the tools allowed us to straightforwardly diagnose the fault conditions that lead to property failure: In this model, there is a single pedal position sensor for the brake pedal. If this sensor fails, it can command braking without a pilot request.
 
 This counterexample can be used to further analyze the system design.  For our model, there are several possible reasons for failure: it could be that redundant sensors are required on the pedals (here we note that the architecture of the pedal assembly is not discussed in AIR6110) or that the phase of flight is sufficiently short that we need to adjust our pedal failure rate to match this phase of flight, rather than normalizing the failure rate to per-flight-hour.  
@@ -157,6 +183,7 @@ This counterexample can be used to further analyze the system design.  For our m
 
 
 %The sync and update between the safety analysis artifacts and the system architecture/analysis model continues until the system safety property is satisfied with the desired fault tolerance and failure probability achieved.
+\end{comment}
 
 \begin{comment}
 
