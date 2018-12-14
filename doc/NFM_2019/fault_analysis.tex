@@ -1,7 +1,7 @@
 \section{Analysis of the Fault Model}
 \label{sec:fault_analysis}
 
-\janet{When the Safety Annex is enabled, users can invoke either the monolithic analysis or compositional analysis in AGREE to check if the top level safety properties of the system hold in the presence of faults under the fault hypothesis given for the system. If an active fault causes the violation of a contract, this is seen in a counterexample provided by the model checker.}
+\janet{When the Safety Annex is enabled, users can invoke either the monolithic analysis or compositional analysis in AGREE to check if the top level safety properties of the system hold in the presence of faults under the fault hypothesis given for the system. If an active fault causes the violation of a contract, a counterexample is provided by the model checker. The counterexample can be used to further analyze the system design, and make necessary updates to the shared model between safety assessment and system development processes. This iterations continues until the system safety property is satisfied with the desired fault tolerance and failure probability achieved.}
 
 \begin{comment}
 There are two types of fault analyses available to users, monolithic and compositional. 
@@ -132,7 +132,7 @@ property violations in the verification results of higher layers in the architec
 \subsection{Analysis Results of the WBS Example}
 \label{sec:results}
 
-The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately.}
+The fault analysis on the top level WBS system was performed on the 11 top-level properties \janet{applying the max fault hypothesis and probabilistic fault hypothesis separately. It requires between 2 and 4 minutes to run either compositional analysis with max fault hypothesis or monolithic analysis with probabilistic fault hypothesis on the model. The analysis is computationally inexpensive, allowing quick iterations between systems and safety engineers.}
 
 \janet{We first applied compositional analysis with max one fault hypothesis at all layers of the model.} Most properties were verified except for the \textit{Inadvertent braking at the wheel} properties. \janet{The failure of the verification for those properties shows that they are not resilient to a single fault.} The {\em counterexample} returned by the tools allowed us to straightforwardly diagnose the fault conditions that lead to property failure: In this model, there is a single pedal position sensor for the brake pedal. If this sensor fails, it can command braking without a pilot request.
 
@@ -142,7 +142,10 @@ This counterexample can be used to further analyze the system design.  For our m
 
 \danielle{Given these results, we were faced with a couple of options regarding the model. In order to meet the probabilistic threshold, one option is to find a brake pedal sensor with better reliability. Given that our top level threshold is $10^{-9}$, the sensor reliability must be less than this value. This is most likely an unrealistic solution, but even if it was possible, the model still has a single point of failure. This is shown thorugh the compositional analysis. The other option is to create redundancy in the sensor component and model a voting procedure. In order for braking to occur, both (or all) sensors must agree. This would eliminate a single point of failure and would also cause the model to meet the top level probabilistic threshold. The problem this raises is the complementary property in the system which states that when braking is commanded, braking pressure is provided at the wheel. By introducing redundancy, this also introduces a tradeoff between false positives and false negatives and directly affects the property regarding commanded braking.}
 
-\danielle{These are realistic scenarios and decisions that are faced by system and safety engineers. Providing a way to quickly and effectively run analysis on the model so that these different modes of failure can be easily seen is of great benefit.} It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
+\danielle{These are realistic scenarios and decisions that are faced by system and safety engineers. Providing a way to quickly and effectively run analysis on the model so that these different modes of failure can be easily seen is of great benefit.} 
+
+
+%It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
 
 %During our analysis, we discovered that most properties were verified, but the \textit{Inadvertent braking at the wheel} properties are not resilient to a single fault nor do they meet the desired $10^{-9}$ fault threshold for probabilistic analysis. In this model, there is a single pedal position sensor for the brake pedal.  If this sensor fails, it can command braking without a pilot request.  Given the {\em counterexample} returned by the tools, it is straightforward to diagnose the fault conditions that lead to property failure.
 
