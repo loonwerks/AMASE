@@ -37,8 +37,6 @@ The WBS architecture model in AADL contains 30 different kinds of components, 16
 
 The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110. The top level system properties are given by the requirements and safety objectives in AIR6110. All of the subcomponent contracts support these system safety objectives through the use of assumptions on component input and guarantees on the output. The WBS behavioral model in AGREE annex includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  
 
-An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on one of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. 
-Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). \danielle{This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking} and for clarifications sake, the property is stated such that inadvertent braking does \textit{not} occur.}
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
@@ -49,6 +47,10 @@ Inadvertent braking means that braking force is applied at the wheel but the pil
 	\label{fig:inadvertent_braking}
 	\vspace{-0.2in}
 \end{figure}
+
+An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on one of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. 
+Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). \danielle{This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking}. The property is stated in AGREE such that inadvertent braking does \textit{not} occur.}
+
 
 
 \subsection{Component Fault Modeling}
@@ -83,7 +85,7 @@ Figure~\ref{fig:sensor} shows the AADL pedal sensor component with a contract fo
 	\vspace{-0.3in}
 \end{figure}
 
-One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110. In reality, the component failure probability %is \janet{can be} 
+One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110. In reality, the component failure probability is %\janet{can be} 
 collected from hardware specification sheets.  Figure~\ref{fig:sensorFault} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes (in this case, \textit{inverted\_fail}).  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
 
 The WBS fault model in Safety Annex contains a total of 33 different fault types and 141 fault instances. The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
