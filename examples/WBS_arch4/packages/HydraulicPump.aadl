@@ -38,10 +38,10 @@ with Base_Types;
 			}
 			
 			
-		HW_fault Pump_HW_Fault "Colocated pump failure": {
-			probability: 1.0E-5;
-			duration: permanent;
-		}
+--		HW_fault Pump_HW_Fault "Colocated pump failure": {
+--			probability: 1.0E-5;
+--			duration: permanent;
+--		}
 			
 		**};
 	end HydraulicPump;
