@@ -224,7 +224,7 @@ with sensor;
 		
 		--------------------------------------------------------------------------------------------------------------
 		-- S18-WBS-R-0322-left(-right)
-		-- Asymmetrical left and right braking.
+		-- Asymmetrical left and right braking. 
 		-- (AIR6110) Asymmetrical loss of wheel braking coupled with loss of rudder or nose wheel steering 
 		-- during landing shall be less than 5E-7 per flight. 
 		--------------------------------------------------------------------------------------------------------------
@@ -303,14 +303,19 @@ with sensor;
 		-- S18-WBS-0325 for wheels 1-8
 		-- Never inadvertent braking of all wheels.
 		-- (AIR6110) Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff
-		-- : If power and max hydraulic pressure is supplied, then
-		--			either we have no ground speed, mechanical pedal is pressed, brake force is zero, 
+		-- : no power or max hydraulic pressure is not supplied
+		--			or we have no ground speed, mechanical pedal is pressed, brake force is zero, 
 		--			or wheel is not rolling.
 		--------------------------------------------------------------------------------------------------------------
+		
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 1" :
-					true -> ((POWER and HYD_PRESSURE_MAX) => 
-						((mechanical_pedal_pos_L or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL)))
-					);
+					true -> (not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mechanical_pedal_pos_L 
+						or (not SPEED) 
+						or (wheel_braking_force1 <= 0) 
+						or (not W1ROLL)));
+		
 		
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 2" :
 					true -> ((POWER and HYD_PRESSURE_MAX) => 
@@ -446,7 +451,7 @@ with sensor;
 		lemma "(cmd=>braking6) Wheel 6 cmd implies braking" :
 						true -> ((NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0);
 			
-		property NORMAL7 = phys_sys.brake_as_cmd_7 and (GREEN_PRESSURE_VALID);
+		property NORMAL7 = phys_sys.brake_as_cmd_7 and (GREEN_PRESSURE_VALID); 
 		property ALTERNATE7 = ((phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
 			
 		lemma "(cmd=>braking7) Wheel 7 cmd implies braking" :
@@ -464,7 +469,8 @@ with sensor;
 	
    annex safety{**
 	  
-	  analyze : probability 1.0E-7
+	  analyze : probability 1.0E-9 
+	  --analyze : max 1 fault 
 	  --propagate_from: {Pump_HW_Fault@phys_sys.green_hyd_pump} to {HydPump_FailedOff@phys_sys.blue_hyd_pump};
 	  
    **};

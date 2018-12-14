@@ -242,13 +242,6 @@ with ShutoffValve;
 										  
 			property PEDALS_NOT_PRESSED = not mech_pedal_pos_L and not mech_pedal_pos_R;
 			
-			guarantee "Inadvertent braking of all wheels shall not occur." :
-						not (PEDALS_NOT_PRESSED 
-								and BRAKE_AS_NOT_COMMANDED 
-								and ALL_WHEELS_BRAKE 
-								and ALL_WHEELS_STOPPED 
-								and ground_speed > 0);
-							
 			-- never_inadvertent_braking_of_all_wheels_norm_guarantee := (TRUE ->  G 
 			-- 			!(((((((((((!mechanical_pedal_pos_L & !mechanical_pedal_pos_R) & !brake_as_cmd_1) & !brake_as_cmd_2) & !brake_as_cmd_3) & !brake_as_cmd_4) & !brake_as_cmd_5) & !brake_as_cmd_6) & !brake_as_cmd_7) & !brake_as_cmd_8) 
 			-- 			& (((((((wheel_braking_force_1 > 0 & wheel_braking_force_2 > 0) & wheel_braking_force_3 > 0) & wheel_braking_force_4 > 0) & wheel_braking_force_5 > 0) & wheel_braking_force_6 > 0) & wheel_braking_force_7 > 0) & wheel_braking_force_8 > 0)) 
