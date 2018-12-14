@@ -73,7 +73,8 @@ Figure~\ref{fig:sensor} shows the AADL pedal sensor component with a contract fo
 	\vspace{-0.3in}
 \end{figure}
 
-One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110. In reality, the component failure probability is collected from hardware specification sheets.  Figure~\ref{fig:sensorFault} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes (in this case, \textit{inverted\_fail}).  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
+One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110. In reality, the component failure probability %is \janet{can be} 
+collected from hardware specification sheets.  Figure~\ref{fig:sensorFault} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes (in this case, \textit{inverted\_fail}).  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
 
 The WBS fault model in Safety Annex contains a total of 33 different fault types and 141 fault instances. The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
 
@@ -168,9 +169,6 @@ In the former case, we assert that the sum of the true {\em fault\_\_trigger} va
 %
 With the introduction of dependent faults, active faults are divided into two categories: independently active (activated by its own triggering event) and dependently active (activated when the faults they depend on become active). The top level fault hypothesis applies to independently active faults. Faulty behaviors augment nominal behaviors whenever their corresponding faults are active (either independently active or dependently active).
 \end{comment}
-
-
-
 
 
 
