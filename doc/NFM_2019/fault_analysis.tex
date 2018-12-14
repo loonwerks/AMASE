@@ -14,7 +14,7 @@ in the presence of faults
 
 \subsection{Fault Hypothesis}
 
-\janet{As the number of component faults increases, the different fault combinations can grow exponentially, making model checking untackleable. Therefore, a fault hypothesis needs to be specified for the system under verification to limit the simultaneous fault activations that are considered by the model checker.}
+\janet{As the number of component faults increases, the different fault combinations can grow exponentially, making model checking }\danielle{infeasible.} \janet{Therefore, a fault hypothesis needs to be specified for the system under verification to limit the simultaneous fault activations that are considered by the model checker.}
 
 \janet{A Safety Annex} annotation in the \janet{system implementation of the} AADL model determines the fault hypothesis. \janet{There are two types of fault hypothesis:}
 
@@ -130,6 +130,9 @@ This counterexample can be used to further analyze the system design.  For our m
 
 \janet{We then applied monolithic analysis with probabilistic fault hypothesis of $10^{-9}$ fault threshold. The \textit{Inadvertent braking at the wheel} properties were again failed. Updating the probability of occurrence for the sensor components identified above to be above the fault threshold allowed the properties to pass, showing that increasing the reliability of those components help increase the reliability of the system.}
 
+\danielle{Given these results, we were faced with a couple of options regarding the model. In order to meet the probabilistic threshold, one option is to find a brake pedal sensor with better reliability. Given that our top level threshold is $10^{-9}$, the sensor reliability must be less than this value. This is most likely an unrealistic solution, but even if it was possible, the model still has a single point of failure. This is shown thorugh the compositional analysis. The other option is to create redundancy in the sensor component and model a voting procedure. In order for braking to occur, both (or all) sensors must agree. This would eliminate a single point of failure and would also cause the model to meet the top level probabilistic threshold. The problem this raises is the complementary property in the system which states that when braking is commanded, braking pressure is provided at the wheel. By introducing redundancy, this also introduces a tradeoff between false positives and false negatives and directly affects the property regarding commanded braking.}
+
+\danielle{These are realistic scenarios and decisions that are faced by system and safety engineers. Providing a way to quickly and effectively run analysis on the model so that these different modes of failure can be easily seen is of great benefit.} It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
 
 %During our analysis, we discovered that most properties were verified, but the \textit{Inadvertent braking at the wheel} properties are not resilient to a single fault nor do they meet the desired $10^{-9}$ fault threshold for probabilistic analysis. In this model, there is a single pedal position sensor for the brake pedal.  If this sensor fails, it can command braking without a pilot request.  Given the {\em counterexample} returned by the tools, it is straightforward to diagnose the fault conditions that lead to property failure.
 
@@ -139,7 +142,6 @@ This counterexample can be used to further analyze the system design.  For our m
 %what did we do with what probability
 
 
-It is computationally inexpensive to run the analysis, allowing quick iterations between systems and safety engineers. In the case of the WBS, it requires between 2 and 4 minutes to run either compositional (restricting the number of faults) or monolithic (probabilistic) fault analysis on the model.
 %The sync and update between the safety analysis artifacts and the system architecture/analysis model continues until the system safety property is satisfied with the desired fault tolerance and failure probability achieved.
 
 \begin{comment}
