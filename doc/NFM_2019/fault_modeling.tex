@@ -38,7 +38,7 @@ The WBS architecture model in AADL contains 30 different kinds of components, 16
 The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110. The top level system properties are given by the requirements and safety objectives in AIR6110. All of the subcomponent contracts support these system safety objectives through the use of assumptions on component input and guarantees on the output. The WBS behavioral model in AGREE annex includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  
 
 An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on one of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. 
-Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the definition requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). \danielle{This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking}.}
+Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). \danielle{This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking} and for clarifications sake, the property is stated such that inadvertent braking does \textit{not} occur.}
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
