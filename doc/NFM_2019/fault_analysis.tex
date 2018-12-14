@@ -119,14 +119,15 @@ In this calculation, we assume independence among the faults, but in the Safety 
 In compositional analysis, the analysis proceeds in a top down fashion. To prove the top level properties, the properties in the layer directly beneath the top level are used to perform the proof. The analysis proceeds in this manner.
 
 \janet{The compositional analysis currently works with the max fault hypothesis.} Users can constrain the maximum number of faults within each layer of the model by specifying the maximum fault hypothesis statement to that layer. If any lower level property failed due to activation of faults, the property verification at the higher level can no longer be trusted as the higher level properties were proved based on the facts that its direct sub level properties are valid.
- 
+
 %For compositional anlaysis, fault hypotheses (see Figure 3) must be added to each layer of a system in order for analysis to proceed correctly. Also, at most one of the analysis statements must be present. 
- 
- %This type of
- \janet{The compositional} analysis is helpful to see weaknesses in a given %component or 
- layer of the system. In future work, we plan to reflect lower \janet{layer} %level 
- property violations in the verification results of higher layers in the architecture, and enable displaying or constraining active faults system wide instead of %component 
- \janet{layer} wide.
+
+%This type of
+\janet{The compositional} analysis is helpful to see weaknesses in a given %component or 
+layer of the system. In future work, we plan to reflect lower \janet{layer} %level 
+property violations in the verification results of higher layers in the architecture, and enable displaying or constraining active faults system wide instead of %component 
+\janet{layer} wide.
+
 
 \subsection{Analysis Results of the WBS Example}
 \label{sec:results}
