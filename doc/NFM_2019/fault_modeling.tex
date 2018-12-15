@@ -49,7 +49,7 @@ The behavioral model is encoded using the AGREE annex and the behavior is based 
 \end{figure}
 
 An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on one of the failure conditions described in AIR6110 is \textit{Inadvertent wheel braking of all wheels during takeoff roll after V1 shall be less than 1E-9 per takeoff}. 
-Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). \danielle{This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking}. The property is stated in AGREE such that inadvertent braking does \textit{not} occur.}
+Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking}. The property is stated in AGREE such that inadvertent braking does \textit{not} occur.
 
 
 
@@ -59,7 +59,7 @@ The usage of the terms error, failure, and fault are defined in ARP4754A and are
 
 The Safety Annex is used to add potential faulty behaviors to a component model.  When the fault is activated by its specified triggering conditions, it modifies the output of the component. This faulty behavior may violate the contracts of other components in the system, including assumptions of downstream components. The impact of a fault is computed by the AGREE model checker when the safety analysis is run on the fault model. Examples of such faults include valves being stuck open or closed, output of a software component being nondeterministic, or power being cut off. Faulty components can be mechanical or digital, but in this section we focus on a digital component in the WBS -- a brake pedal position sensor component. 
 
-One of the components important to the property \textit{Inadvertent braking}, is the brake pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then commands hydraulic pressure to the wheels. 
+One of the components important to the inadvertent braking property is the brake pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then commands hydraulic pressure to the wheels. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
@@ -85,8 +85,8 @@ Figure~\ref{fig:sensor} shows the AADL pedal sensor component with a contract fo
 	\vspace{-0.3in}
 \end{figure}
 
-One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110. In reality, the component failure probability is %\janet{can be} 
-collected from hardware specification sheets.  Figure~\ref{fig:sensorFault} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes (in this case, \textit{inverted\_fail}).  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
+One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110 (in reality, the component failure probability is 
+collected from hardware specification sheets).  Figure~\ref{fig:sensorFault} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes, in this case, \textit{inverted\_fail}.  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
 
 The WBS fault model in Safety Annex contains a total of 33 different fault types and 141 fault instances. The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
 
@@ -104,13 +104,14 @@ On the contrary, in the AADL Error Model Annex, Version 2 (EMV2)~\cite{EMV2} app
 	\label{fig:comparison_with_EMV2}
 \end{figure} 
 
-To illustrate the key differences between implicit failure propagation provided in Safety Annex, and the explicit failure propagation provided in EMV2, we use a simplified behavioral flow from the WBS example. The code fragments in the figure extracted from EMV2, AGREE, and the Safety Annex do not represent the complete code. 
+To illustrate the key differences between implicit failure propagation provided in Safety Annex and the explicit failure propagation provided in EMV2, we use a simplified behavioral flow from the WBS example using code fragments from EMV2, AGREE, and the Safety Annex. 
+%The code fragments in the figure extracted from EMV2, AGREE, and the Safety Annex do not represent the complete code. 
 
-In this simplified WBS system, the physical signal from the Pedal component is detected by the Sensor, and the pedal position value is passed to the Braking System Control Unit (BSCU) components.  The BSCU generates a pressure command to the Valve component which applies hydraulic brake pressure to the Wheels. 
+In this simplified WBS system, the physical signal from the Pedal component is detected by the Sensor and the pedal position value is passed to the Braking System Control Unit (BSCU) components.  The BSCU generates a pressure command to the Valve component which applies hydraulic brake pressure to the Wheels. 
 
 In the EMV2 approach (top half of Figure~\ref{fig:comparison_with_EMV2}), the ``NoService'' fault is explicitly allowed by the EMV2 declarations to propagate through all of the components. These fault types are essentially tokens that do not capture any analyzable behavior. At the system level, analysis tools supporting the EMV2 annex can aggregate the fault flow and propagation information from different components to compose an overall fault flow diagram or fault tree. 
 
-In the Safety Annex approach (bottom half of Figure~\ref{fig:comparison_with_EMV2}), when a fault is triggered, the output behavior of the Sensor component is modified, in this case resulting a ``stuck at zero'' error. The behavior of the BSCU receives a zero input and proceeds as if the pedal has not been pressed. This will cause the top level system contract to fail: {\em pedal pressed implies brake pressure output is positive}.
+When a fault is triggered in the Safety Annex (bottom half of Figure~\ref{fig:comparison_with_EMV2}), the output behavior of the Sensor component is modified. In this case the result is a ``stuck at zero'' error. The behavior of the BSCU receives a zero input and proceeds as if the pedal has not been pressed. This will cause the top level system contract to fail: {\em pedal pressed implies brake pressure output is positive}.
 
 \begin{comment}
 %\subsection{Comparison to the AADL Error Annex}
@@ -136,9 +137,8 @@ In the Safety Annex approach (bottom half of Figure~\ref{fig:comparison_with_EMV
 
 \subsection{Explicit Failure Propagation} 
 Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, fire, \janet{or explosion}
-in the containment location. %, or a stray bullet. 
-%This type of error propagation is easily modeled using the EMV2 annex and due to its importance in the fault modeling process, is also an included capability of the Safety Annex.
-\janet{Safety Annex provides the capability to explicitly model the impact of hardware faults on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.}
+in the containment location. 
+Safety Annex provides the capability to explicitly model the impact of hardware faults on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.
 
 To better model HW dependent faults, a fault model element is introduced for HW components called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. 
 
