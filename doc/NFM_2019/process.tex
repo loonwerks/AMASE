@@ -3,7 +3,16 @@
 
 ARP4754A, the Guidelines for Development of Civil Aircraft and Systems~\cite{SAE:ARP4754A}, provides guidance on applying development assurance at each hierarchical level throughout the development life cycle of highly-integrated/complex aircraft systems. It has been recognized by the Federal Aviation Administration (FAA) as an acceptable method to establish the assurance process. The safety assessment process is a starting point at each hierarchical level of the development life cycle and is tightly coupled with the system development and verification processes. It is used to show compliance with certification requirements and for meeting a company's internal safety standards. 
 
-ARP4761, the Guidelines and Methods for Conducting Safety Assessment Process on Civil Airborne Systems and Equipment~\cite{SAE:ARP4761},  identifies a systematic means to show compliance. Among the industry accepted safety assessment processes are Preliminary System Safety Assessment (PSSA) and System Safety Assessment (SSA). \janet{PSSA evaluates the system design and defines safety requirements. SSA evaluates the implemented system to show that safety requirements defined in the PSSA are in fact satisfied.} 
+ARP4761, the Guidelines and Methods for Conducting Safety Assessment Process on Civil Airborne Systems and Equipment~\cite{SAE:ARP4761},  identifies a systematic means to show compliance. Among the industry accepted safety assessment processes are Preliminary System Safety Assessment (PSSA) and System Safety Assessment (SSA). PSSA evaluates the system design and defines safety requirements. SSA evaluates the implemented system to show that safety requirements defined in the PSSA are in fact satisfied.
+
+\begin{figure}[t!]
+	\vspace{-0.45in}
+	\centering
+	\includegraphics[trim=0 9 0 5,clip,width=0.85\textwidth]{images/safety_process.pdf}
+	\vspace{-0.45in}
+	\caption{Using the Shared System/Safety Model in the ARP4754A Safety Assessment Process}
+	\label{fig:proposed_safety_process}
+\end{figure}
 
 %PSSA performs a systematic evaluation of the system architecture and determines safety related design requirements of system components. After PSSA is completed and the components are implemented and the SSA takes place to conduct a comprehensive evaluation of the implemented system to show that safety requirements defined in the PSSA are in fact satisfied. 
 	
@@ -23,24 +32,24 @@ It is a systematic evaluation of the system architecture to determine safety rel
 The SSA is a comprehensive evaluation of the implemented system to show that safety requirements defined in the PSSA are in fact satisfied. 
 \end{comment}
 
-\danielle{A prerequisite of} \janet{performing the} \danielle{safety assessment is understanding how the system is intended to work, primarily focusing on the integrity of the outputs and the availability of the system.}
-\janet{The safety engineers then use the acquired understanding to conduct safety analysis, construct safety analysis artifacts, and compare the results with established safety objectives and requirements.} 
+A prerequisite of performing the safety assessment is understanding how the system is intended to work, primarily focusing on the integrity of the outputs and the availability of the system. The safety engineers then use the acquired understanding to conduct safety analysis, construct safety analysis artifacts, and compare the results with established safety objectives and requirements.
 %The safety engineers use this understanding to conduct the analysis and assessment process. 
-\janet{Typically equipped with the domain knowledge about the system, but not detailed knowledge of how the software applications are designed, practicing safety engineers find it a time consuming and involved process to acquire the knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior.}
-
+Typically equipped with the domain knowledge about the system, but not detailed knowledge of how the software applications are designed, practicing safety engineers find it a time consuming and involved process to acquire the knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior.
 %A prerequisite of performing the safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the integrity of the outputs and the availability of the system. The safety engineers then use the acquired understanding to conduct safety analysis, construct safety analysis artifacts, and compare the results with established safety objectives and requirements. 
 
 %Prior to performing the safety assessment of a system, the safety engineers are often equipped with the domain knowledge about the system, but do not necessarily have detailed knowledge of how the software applications are designed. Acquiring knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior is typically one of the most time consuming and involved steps in the process. 
 
 %Industry practitioners have come to realize the benefits and importance of using models to assist the safety assessment process either by augmenting the existing system design model or by building a separate safety model. A revision of the ARP4761 to include Model Based Safety Analysis (MBSA) is under way.
 
-\janet{Industry practitioners have come to realize the benefits of using models in the safety assessment process, and a revision of the ARP4761 to include Model Based Safety Analysis (MBSA) is under way.}
+Industry practitioners have come to realize the benefits of using models in the safety assessment process, and a revision of the ARP4761 to include Model Based Safety Analysis (MBSA) is under way.
 % either by augmenting the existing system model or by building a separate safety model. 
 Figure~\ref{fig:proposed_safety_process} presents our proposed use of a single unified model to support both system design and safety analysis. It describes both system design and safety-relevant information %. The two types of information 
-\janet{that are kept distinguishable and yet are able to interact with each other.} The shared model maintains a living model that captures the current state of the system design as it moves through the development lifecycle\janet{, allowing} all participants of the ARP4754A process to be able to communicate and review the system design. Safety analysis artifacts can be generated directly from the model, %. \janet{This could} greatly improve communication and synchronization between system designer and safety engineers, \janet{and provide} %This also 
-\janet{providing}
+that are kept distinguishable and yet are able to interact with each other. The shared model maintains a living model that captures the current state of the system design as it moves through the development lifecycle, allowing all participants of the ARP4754A process to be able to communicate and review the system design. Safety analysis artifacts can be generated directly from the model, %. \janet{This could} greatly improve communication and synchronization between system designer and safety engineers, \janet{and provide} %This also 
+providing
 the capability to more accurately analyze complex systems.
 %\danielle{, including system software applications and their impact on the overall system behavior}.
+
+\begin{comment}
 
 \begin{figure}[t!]
 	\vspace{-0.45in}
@@ -51,7 +60,7 @@ the capability to more accurately analyze complex systems.
 	\label{fig:proposed_safety_process}
 \end{figure}
 
-\begin{comment}
+
  It describes both the system design information (e.g., system architecture, functional behavior) and safety-relevant information (e.g., failure modes, failure rates). The two types of information are kept distinguishable, yet are able to interact with each other. The shared model maintains a living model that captures the current state of the system design as it moves through the system development lifecycle, allowing all participants of the ARP4754A process to be able to communicate and review the system design. 
 
 For example, the preliminary FTAs and final system FTAs (artifacts from the PSSA and SSA activities in the Safety Assessment Process) can guide and be updated from the shared model. The shared model is expected to be created and maintained in sync with the current state of the system design (including needed information from software and hardware design), and guided by the hazard and probability information from the preliminary system FTA.  The analysis results from checking the system level properties on the shared model are then used to update the preliminary system FTA. This process continues iteratively until the system safety property is satisfied with the desired fault tolerance and failure probability achieved. Consequently, the effort needed to update the final system FTA from the preliminary system FTA would be greatly reduced.

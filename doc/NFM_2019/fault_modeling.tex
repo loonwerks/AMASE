@@ -65,22 +65,24 @@ One of the components important to the inadvertent braking property is the brake
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
-	\vspace{-0.4in} 
+	\vspace{-0.55in} 
 	\begin{center}
 		\includegraphics[trim=0 640 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/system_sensor.pdf}
+		\vspace{-0.3in}
 		\caption{An AADL System Type: The Pedal Sensor}
 		\label{fig:sensor}
 	\end{center}
-	\vspace{-0.3in}
+	\vspace{-0.4in}
 \end{figure}
 
 Figure~\ref{fig:sensor} shows the AADL pedal sensor component with a contract for its nominal behavior. The sensor has only one input, the mechanical pedal position, and one output, the electrical pedal position. The property that governs the behavior of the component is that the mechanical position should always equal the electronic position. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
-	\vspace{-0.4in} 
+	\vspace{-0.5in} 
 	\begin{center}
 		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/safetyannex_sensorfault.pdf}
+		\vspace{-0.3in}
 		\caption{The Safety Annex for the Pedal Sensor}
 		\label{fig:sensorFault}
 	\end{center}
@@ -95,23 +97,21 @@ The WBS fault model in Safety Annex contains a total of 33 different fault types
 \subsection{Implicit Failure Propagation}
 In the Safety Annex approach, faults are captured as faulty behaviors that augment the system behavioral model in AGREE contracts. No explicit fault propagation is necessary since the faulty behavior itself propagates through the system just as in the nominal system model. The effects of any triggered fault are manifested through analysis of the AGREE contracts. 
 
-On the contrary, in the AADL Error Model Annex, Version 2 (EMV2)~\cite{EMV2} approach, all errors must be explicitly propagated through each component (by applying fault types on each of the output ports) in order for a component to have an impact on the rest of the system. 
+On the contrary, in the AADL Error Model Annex, Version 2 (EMV2)~\cite{EMV2} approach, all errors must be explicitly propagated through each component (by applying fault types on each of the output ports) in order for a component to have an impact on the rest of the system. To illustrate the key differences between implicit failure propagation provided in Safety Annex and the explicit failure propagation provided in EMV2, we use a simplified behavioral flow from the WBS example using code fragments from EMV2, AGREE, and the Safety Annex. 
 
 \begin{figure}[t]
 	\vspace{-0.19in}
 	\centering
 	\includegraphics[trim=0 9 0 5,clip,width=\textwidth]{images/Comparison_with_EMV2.pdf}
-	%\vspace{0.4in}
+	\vspace{-0.3in}
 	\caption{Differences between Safety Annex and EMV2}
 	\label{fig:comparison_with_EMV2}
+	\vspace{-0.2in}
 \end{figure} 
-
-To illustrate the key differences between implicit failure propagation provided in Safety Annex and the explicit failure propagation provided in EMV2, we use a simplified behavioral flow from the WBS example using code fragments from EMV2, AGREE, and the Safety Annex. 
-%The code fragments in the figure extracted from EMV2, AGREE, and the Safety Annex do not represent the complete code. 
 
 In this simplified WBS system, the physical signal from the Pedal component is detected by the Sensor and the pedal position value is passed to the Braking System Control Unit (BSCU) components.  The BSCU generates a pressure command to the Valve component which applies hydraulic brake pressure to the Wheels. 
 
-In the EMV2 approach (top half of Figure~\ref{fig:comparison_with_EMV2}), the ``NoService'' fault is explicitly allowed by the EMV2 declarations to propagate through all of the components. These fault types are essentially tokens that do not capture any analyzable behavior. At the system level, analysis tools supporting the EMV2 annex can aggregate the fault flow and propagation information from different components to compose an overall fault flow diagram or fault tree. 
+In the EMV2 approach (top half of Figure~\ref{fig:comparison_with_EMV2}), the ``NoService'' fault is explicitly propagated through all of the components. These fault types are essentially tokens that do not capture any analyzable behavior. At the system level, analysis tools supporting the EMV2 annex can aggregate the propagation information from different components to compose an overall fault flow diagram or fault tree. 
 
 When a fault is triggered in the Safety Annex (bottom half of Figure~\ref{fig:comparison_with_EMV2}), the output behavior of the Sensor component is modified. In this case the result is a ``stuck at zero'' error. The behavior of the BSCU receives a zero input and proceeds as if the pedal has not been pressed. This will cause the top level system contract to fail: {\em pedal pressed implies brake pressure output is positive}.
 
@@ -138,11 +138,11 @@ In the Safety Annex approach (bottom half of Figure~\ref{fig:comparison_with_EMV
 \end{comment}
 
 \subsection{Explicit Failure Propagation} 
-Faults in hardware (HW) components can trigger behavioral faults in the software (SW) or system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, fire, or explosion
+Faults in hardware (HW) components can trigger behavioral faults in the system components that depend on them. For example, a CPU fault may trigger faulty behavior in the threads bound to that CPU. In addition, a fault in one HW component may trigger faults in other HW components located nearby, such as overheating, fire, or explosion
 in the containment location. 
-Safety Annex provides the capability to explicitly model the impact of hardware faults on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.
+The Safety Annex provides the capability to explicitly model the impact of hardware faults on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.
 
-To better model HW dependent faults, a fault model element is introduced for HW components called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. 
+To better model HW dependent faults, a fault model element is introduced called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. 
 
 An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
@@ -159,7 +159,7 @@ An example of a model component fault declaration is shown below:
 Users specify dependencies between the HW component faults and faults that are defined in other components, either HW or SW. The hardware fault then acts as a trigger for dependent faults. This allows a simple propagation from the faulty HW component to the SW components that rely on it, affecting the behavior on the outputs of the affected SW components.
 
 %As an example, we will look yet again at the WBS. 
-In the WBS example, assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft and \danielle{ an explosion in this compartment rendered both pumps inoperable.}
+In the WBS example, assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft and an explosion in this compartment rendered both pumps inoperable.
 %An accident took place and the green (normal) hydraulic pump took the force of an explosion. When the green hydraulic pump exploded, the pump shrapnel flew into the blue pump and it became from then on unoperable. 
 The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown in Figure~\ref{fig:hwFaultProp}. Notice that these pumps need not be connected through a data port in order to specify this propagation. %Furthermore, the probability of the HW fault activation can be specified. 
 
