@@ -38,20 +38,21 @@ The WBS architecture model in AADL contains 30 different kinds of components, 16
 
 The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110. The top level system properties are given by the requirements and safety objectives in AIR6110. All of the subcomponent contracts support these system safety objectives through the use of assumptions on component input and guarantees on the output. The WBS behavioral model in AGREE annex includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  
 
+An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on a failure condition described in AIR6110 is \textit{Inadvertent wheel braking on one wheel during takeoff shall be less than 1E-9 per takeoff}. 
+Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). This AGREE contract is shown \janet{below}. 
+%in Figure~\ref{fig:inadvertent_braking}. 
+The property is stated in AGREE such that inadvertent braking does \textit{not} occur.
+
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-	\includegraphics[width=.8\textwidth]{images/inadvertent_braking.png}
+		\includegraphics[width=.8\textwidth]{images/inadvertent_braking.png}
 	\end{center}
 	\vspace{-0.3in}
-	\caption{AGREE Contract for Top Level Property}
+	%\caption{AGREE Contract for Top Level Property}
 	\label{fig:inadvertent_braking}
 	\vspace{-0.2in}
 \end{figure}
-
-An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on a failure condition described in AIR6110 is \textit{Inadvertent wheel braking on one wheel during takeoff shall be less than 1E-9 per takeoff}. 
-Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). This AGREE contract is shown in Figure~\ref{fig:inadvertent_braking}. The property is stated in AGREE such that inadvertent braking does \textit{not} occur.
-
 
 
 \subsection{Component Fault Modeling}
@@ -154,18 +155,17 @@ The Safety Annex provides the capability to explicitly model the impact of hardw
 \janet{failures} on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.
 
 To better model %HW dependent faults 
-\janet{faults at the system level dependent on HW failures}, a fault model element is introduced called a \textit{hardware} fault. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. 
-
-An example of a model component fault declaration is shown below:
+\janet{faults at the system level dependent on HW failures}, a fault model element is introduced called a \janet{\textit{hardware fault}}. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. An example of a model component fault declaration is shown \janet{below}:
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
 	\includegraphics[width=.7\textwidth]{images/hw_fault2.png}
 	\end{center}
 	\vspace{-0.3in}
-	\caption{Hardware Fault Definition}
+	%\caption{Hardware Fault Definition}
 	\label{fig:hwFault}
-	\vspace{-0.2in}
+	%\vspace{-0.2in}
+	\vspace{-0.1in}
 \end{figure}
 
 Users specify dependencies between the HW component faults and faults that are defined in other components, either HW or SW. The hardware fault then acts as a trigger for dependent faults. This allows a simple propagation from the faulty HW component to the SW components that rely on it, affecting the behavior on the outputs of the affected SW components.
@@ -173,21 +173,24 @@ Users specify dependencies between the HW component faults and faults that are d
 %As an example, we will look yet again at the WBS. 
 In the WBS example, assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft and an explosion in this compartment rendered both pumps inoperable.
 %An accident took place and the green (normal) hydraulic pump took the force of an explosion. When the green hydraulic pump exploded, the pump shrapnel flew into the blue pump and it became from then on unoperable. 
-The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown in Figure~\ref{fig:hwFaultProp}. Notice that these pumps need not be connected through a data port in order to specify this propagation. %Furthermore, the probability of the HW fault activation can be specified. 
-
-The fault dependencies are specified in the system implementation where the system configuration that causes the dependencies becomes clear (e.g., binding between SW and HW components, co-location of HW components). 
-%This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. Having fault propagations specified outside of a component’s fault statements also makes it easier to reuse the component in different systems. 
+The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown \janet{below}. % in Figure~\ref{fig:hwFaultProp}. 
+Notice that these pumps need not be connected through a data port in order to specify this propagation. %Furthermore, the probability of the HW fault activation can be specified. 
 
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-	\includegraphics[width=1.0\textwidth]{images/hw_prop_stmt.png}
+		\includegraphics[width=1.0\textwidth]{images/hw_prop_stmt.png}
 	\end{center}
 	\vspace{-0.3in}
-	\caption{Hardware Fault Propagation Statement}
+	%\caption{Hardware Fault Propagation Statement}
 	\label{fig:hwFaultProp}
-	\vspace{-0.2in}
+	%\vspace{-0.2in}
+	\vspace{-0.1in}
 \end{figure}
+
+The fault dependencies are specified in the system implementation where the system configuration that causes the dependencies becomes clear (e.g., binding between SW and HW components, co-location of HW components). 
+%This is because fault propagations are typically tied to the way components are connected or bound together; this information may not be available when faults are being specified for individual components. Having fault propagations specified outside of a component’s fault statements also makes it easier to reuse the component in different systems. 
+
 
 \begin{comment}
 \subsection{Fault Hypothesis}
