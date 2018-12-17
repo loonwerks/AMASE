@@ -10,7 +10,10 @@ To demonstrate the fault modeling capabilities of the Safety Annex we will use t
 	\label{fig:wbs}
 \end{figure} 
 
-The WBS is composed of two main parts: the control system and the physical system. The control system electronically controls the physical system and contains a redundant channel of the Braking System Control Unit (BSCU) in case of failure. It also commands antiskid braking.% in case of skidding on the ground. 
+The WBS is composed of two main parts: the Line Replaceable Unit control system and the electro-mechanical physical system.
+The control system electronically controls the physical system and contains a redundant
+channel of the Braking System Control Unit (BSCU) in case a detectable fault occurs in the active channel.
+ It also commands antiskid braking.% in case of skidding on the ground. 
 The physical system consists of the hydraulic circuits running from hydraulic pumps to wheel brakes as well as valves that control the hydraulic fluid flow. This system provides braking force to each of the eight wheels of the aircraft. The wheels are all mechanically braked in pairs (one pair per landing gear). For simplicity, Figure~\ref{fig:wbs} displays only two of the eight wheels. 
 
 There are three operating modes in the WBS model:
