@@ -119,13 +119,10 @@ The accompanying tool support allows investigation of the \emph{implicit} propag
 errors from their source to their effect on top level safety properties as well as the modeling of \emph{explicit} %failure
 error propagation that is not captured through the behavioral models, e.g., failures correlated due to the physical structure of the system. 
 \end{comment}
-<<<<<<< HEAD
 The accompanying tool support allows investigation of the propagation of errors from their source to their effect on top level safety properties without the need to add separate propagation specifications (\emph{implicit} error propagation); it  also supports describing dependent faults that are not captured through the behavioral models (\emph{explicit} error propagation), e.g., failures correlated due to the physical structure of the system.
-=======
 The accompanying tool support allows investigation of the propagation of errors from their source to their effect on top level safety properties without the need to add separate propagation specifications; %(\emph{implicit} error propagation)
 it  also supports describing dependent faults that are not captured through the behavioral models, %(\emph{explicit} error propagation)
 e.g., failures correlated due to the physical structure of the system.
->>>>>>> 468099d25796c50b046ef6cb24f65e4f524490e3
 We describe the Safety Annex, illustrate its use with a representative example, and discuss and demonstrate the tool support enabling an analyst to investigate the system behavior under failure conditions.	
 	
 %This paper describes a new methodology with tool support for model-based safety analysis. It is implemented as a {\em Safety Annex} for the Architecture Analysis and Design Language (AADL). The Safety Annex provides the ability to describe faults and faulty component behaviors in AADL models. In contrast to previous AADL-based approaches, the Safety Annex leverages a formal description of the nominal system behavior to propagate faults in the system. This approach ensures consistency with the rest of the system development process and simplifies the work of safety engineers. The language for describing faults is extensible and allows safety engineers to weave various types of faults into the nominal system model. The Safety Annex supports the injection of faults into component level outputs, and the resulting behavior of the system can be analyzed using model checking through the Assume-Guarantee Reasoning Environment (AGREE).
