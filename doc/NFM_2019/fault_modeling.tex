@@ -46,12 +46,12 @@ The property is stated in AGREE such that inadvertent braking does \textit{not} 
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-		\includegraphics[width=.8\textwidth]{images/inadvertent_braking.png}
+		\includegraphics[width=.7\textwidth]{images/inadvertent_braking.png}
 	\end{center}
 	\vspace{-0.3in}
 	%\caption{AGREE Contract for Top Level Property}
 	\label{fig:inadvertent_braking}
-	\vspace{-0.2in}
+	%\vspace{-0.2in}
 \end{figure}
 
 
@@ -77,7 +77,7 @@ A property that governs the behavior of the component is that the mechanical pos
 	%	\caption{An AADL System Type: The Pedal Sensor}
 		\label{fig:sensor}
 	\end{center}
-	\vspace{-0.4in}
+	\vspace{-0.2in}
 \end{figure}
 
 One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110 (in reality, the component failure probability is 
@@ -88,12 +88,12 @@ The Safety Annex definition for this fault is shown below. Fault behaviors may b
 	\hspace*{-2cm}
 	\vspace{-0.5in} 
 	\begin{center}
-		\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/safetyannex_sensorfault.pdf}
-		\vspace{-0.3in}
+		\includegraphics[trim=0 680 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/safetyannex_sensorfault.pdf}
+		%\vspace{-0.3in}
 		%\caption{The Safety Annex for the Pedal Sensor}
 		\label{fig:sensorFault}
 	\end{center}
-	\vspace{-0.3in}
+	\vspace{-0.5in}
 \end{figure}
 
 The WBS fault model in Safety Annex contains a total of 33 different fault types and 141 fault instances. The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
@@ -161,7 +161,7 @@ faults at the system level dependent on HW failures, a fault model element is in
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
-	\includegraphics[width=.7\textwidth]{images/hw_fault2.png}
+	\includegraphics[width=.6\textwidth]{images/hw_fault2.png}
 	\end{center}
 	\vspace{-0.3in}
 	%\caption{Hardware Fault Definition}
