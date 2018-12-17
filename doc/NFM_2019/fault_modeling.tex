@@ -39,9 +39,9 @@ The WBS architecture model in AADL contains 30 different kinds of components, 16
 The behavioral model is encoded using the AGREE annex and the behavior is based on descriptions found in AIR6110. The top level system properties are given by the requirements and safety objectives in AIR6110. All of the subcomponent contracts support these system safety objectives through the use of assumptions on component input and guarantees on the output. The WBS behavioral model in AGREE annex includes one top-level assumption and  11 top-level system properties, with 113 guarantees allocated to subsystems.  
 
 An example system safety property is to ensure that there is no inadvertent braking of any of the wheels. This is based on a failure condition described in AIR6110 is \textit{Inadvertent wheel braking on one wheel during takeoff shall be less than 1E-9 per takeoff}. 
-Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). This AGREE contract is shown \janet{below}. 
+Inadvertent braking means that braking force is applied at the wheel but the pilot has not pressed the brake pedal.  In addition, the inadvertent braking requires that power and hydraulic pressure are both present, the plane is not stopped, and the wheel is rolling (not skidding). 
 %in Figure~\ref{fig:inadvertent_braking}. 
-The property is stated in AGREE such that inadvertent braking does \textit{not} occur.
+The property is stated in AGREE such that inadvertent braking does \textit{not} occur, as shown below. 
 
 \begin{figure}[h!]
 	\vspace{-0.2in}
@@ -65,8 +65,8 @@ The Safety Annex is used to add potential faulty behaviors to a component model.
 One of the components important to the inadvertent braking property is the brake pedal. When the mechanical pedal is pressed, a sensor reads this information and passes an electronic signal to the BSCU which then commands hydraulic pressure to the wheels. 
 
 %Figure~\ref{fig:sensor} 
-\janet{Below} shows the AADL pedal sensor component with a contract for its nominal behavior. The sensor has only one input, the mechanical pedal position, and one output, the electrical pedal position. %The 
-\janet{A} property that governs the behavior of the component is that the mechanical position should always equal the electronic position. 
+Below shows the AADL pedal sensor component with a contract for its nominal behavior. The sensor has only one input, the mechanical pedal position, and one output, the electrical pedal position. %The 
+A property that governs the behavior of the component is that the mechanical position should always equal the electronic position. 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
@@ -82,7 +82,7 @@ One of the components important to the inadvertent braking property is the brake
 
 One possible failure for this sensor is inversion of its output value. This fault can be triggered with probability $5.0\times 10^{-6}$ as described in AIR6110 (in reality, the component failure probability is 
 collected from hardware specification sheets).  %Figure~\ref{fig:sensorFault} 
-\janet{Below} shows the Safety Annex definition for this fault. Fault behaviors may be defined by the user or by using a library of fault nodes, in this case, \textit{inverted\_fail}.  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
+The Safety Annex definition for this fault is shown below. Fault behaviors may be defined by the user or by using a library of fault nodes, in this case, \textit{inverted\_fail}.  When the fault is triggered, the nominal output of the component (\textit{elec\_pedal\_position}) is replaced with its failure value (\textit{val\_out}). 
 
 \begin{figure}[h!]
 	\hspace*{-2cm}
@@ -99,13 +99,13 @@ collected from hardware specification sheets).  %Figure~\ref{fig:sensorFault}
 The WBS fault model in Safety Annex contains a total of 33 different fault types and 141 fault instances. The large number of fault instances is due to the redundancy in the system design and its replication to control 8 wheels.
 
 \subsection{Implicit %Failure
-	\janet{Error} Propagation}
+	Error Propagation}
 In the Safety Annex approach, faults are captured as faulty behaviors that augment the system behavioral model in AGREE contracts. No explicit %fault
-\janet{error} propagation is necessary since the faulty behavior itself propagates through the system just as in the nominal system model. The effects of any triggered fault are manifested through analysis of the AGREE contracts. 
+error propagation is necessary since the faulty behavior itself propagates through the system just as in the nominal system model. The effects of any triggered fault are manifested through analysis of the AGREE contracts. 
 
 On the contrary, in the AADL Error Model Annex, Version 2 (EMV2)~\cite{EMV2} approach, all errors must be explicitly propagated through each component (by applying fault types on each of the output ports) in order for a component to have an impact on the rest of the system. To illustrate the key differences between implicit %failure
-\janet{error} propagation provided in Safety Annex and the explicit %failure 
-\janet{error} propagation provided in EMV2, we use a simplified behavioral flow from the WBS example using code fragments from EMV2, AGREE, and the Safety Annex. 
+error propagation provided in Safety Annex and the explicit %failure 
+error propagation provided in EMV2, we use a simplified behavioral flow from the WBS example using code fragments from EMV2, AGREE, and the Safety Annex. 
 
 \begin{figure}[t]
 	\vspace{-0.19in}
@@ -146,18 +146,18 @@ In the Safety Annex approach (bottom half of Figure~\ref{fig:comparison_with_EMV
 \end{comment}
 
 \subsection{Explicit %Failure 
-	\janet{Error} Propagation} 
+	Error Propagation} 
 %Faults
-\janet{Failures} in hardware (HW) components can trigger behavioral faults in the system components that depend on them. For example, a CPU %fault
-\janet{Failure} may trigger faulty behavior in the threads bound to that CPU. In addition, a %fault
-\janet{failure} in one HW component may trigger %faults
-\janet{failure} in other HW components located nearby, such as overheating, fire, or explosion
+Failures in hardware (HW) components can trigger behavioral faults in the system components that depend on them. For example, a CPU %fault
+Failure may trigger faulty behavior in the threads bound to that CPU. In addition, a %fault
+failure in one HW component may trigger %faults
+failure in other HW components located nearby, such as overheating, fire, or explosion
 in the containment location. 
 The Safety Annex provides the capability to explicitly model the impact of hardware %faults
-\janet{failures} on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.
+failures on other faults, behavioral or non behavioral. The explicit propagation to non behavioral faults is similar to that provided in EMV2.
 
 To better model %HW dependent faults 
-\janet{faults at the system level dependent on HW failures}, a fault model element is introduced called a \janet{\textit{hardware fault}}. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. An example of a model component fault declaration is shown \janet{below}:
+faults at the system level dependent on HW failures, a fault model element is introduced called a \textit{hardware fault}. Users are not required to specify behavioral effects for the HW faults, nor are data ports necessary on which to apply the fault definition. An example of a model component fault declaration is shown below:
 \begin{figure}[h!]
 	\vspace{-0.2in}
 	\begin{center}
@@ -175,7 +175,7 @@ Users specify dependencies between the HW component faults and faults that are d
 %As an example, we will look yet again at the WBS. 
 In the WBS example, assume that both the green and blue hydraulic pumps are located in the same compartment in the aircraft and an explosion in this compartment rendered both pumps inoperable.
 %An accident took place and the green (normal) hydraulic pump took the force of an explosion. When the green hydraulic pump exploded, the pump shrapnel flew into the blue pump and it became from then on unoperable. 
-The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown \janet{below}. % in Figure~\ref{fig:hwFaultProp}. 
+The HW fault definition can be modeled first in the green hydraulic pump component as shown in Figure~\ref{fig:hwFault}. The activation of this fault triggers the activation of related faults as seen in the \textit{propagate\_to} statement shown below. % in Figure~\ref{fig:hwFaultProp}. 
 Notice that these pumps need not be connected through a data port in order to specify this propagation. %Furthermore, the probability of the HW fault activation can be specified. 
 
 \begin{figure}[h!]
