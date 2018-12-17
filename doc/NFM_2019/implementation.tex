@@ -23,10 +23,9 @@ The Safety Annex is written in Java as a plug-in for the OSATE AADL toolset, whi
 
 AGREE contracts are used to define the nominal behaviors of system components as {\em guarantees} that hold when {\em assumptions} about the values the component's environment are met.  The Safety Annex extends these contracts to allow faults to modify the behavior of component inputs and outputs. 
 % To support these extensions, AGREE implements an Eclipse extension point interface that allows other plug-ins to modify the generated abstract syntax tree (AST) prior to its submission to the solver.  If the Safety Annex is enabled, these faults are added to the AGREE contract and, when triggered, override the nominal guarantees provided by the component.  
-An example of a portion of an initial AGREE node and its extended contract is shown in Figure~\ref{fig:lustre}. In the left column of the figure, the nominal Lustre pump definition is shown with an AGREE contract on the output. In the right column, the additional local variables for the fault are seen in boxes 1 and 2, the assertion binding the fault value to the nominal value is seen in boxes 3 and 4, and the fault node definition is given in box 5. 
+An example of a portion of an initial AGREE node and its extended contract is shown in Figure~\ref{fig:lustre}. \janet{The left column of the figure shows the nominal Lustre pump definition is shown with an AGREE contract on the output; and the right column shows the additional local variables for the fault (boxes 1 and 2), the assertion binding the fault value to the nominal value (boxes 3 and 4), and the fault node definition (box 5).}
 
-
-
+%In the left column of the figure, the nominal Lustre pump definition is shown with an AGREE contract on the output. In the right column, the additional local variables for the fault are seen in boxes 1 and 2, the assertion binding the fault value to the nominal value is seen in boxes 3 and 4, and the fault node definition is given in box 5. 
 
 Once augmented with fault information, the AGREE model follows the standard translation path to the model checker JKind~\cite{2017arXiv171201222G}, an infinite-state model checker for safety properties.  The augmentation includes traceability information so that when counterexamples are displayed to users, the active faults for each component are visualized.
 
@@ -36,7 +35,8 @@ Once augmented with fault information, the AGREE model follows the standard tran
 	\begin{center}
 		%\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/lustre.pdf}
 		\includegraphics[scale=0.3]{images/lustre.jpg}
-		\caption{Nominal AGREE node and its extension with faults}
+		%\caption{Nominal AGREE node and its extension with faults}
+		\caption{Nominal AGREE Node and Extension with Faults}
 		\label{fig:lustre}
 	\end{center}
 	\vspace{-0.3in}
