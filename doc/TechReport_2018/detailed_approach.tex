@@ -3,7 +3,7 @@
 
 In this section, we describe the main features and functionality of the Safety Annex. The usage of the terms error, failure, and fault follow their definitions in ARP4754A~\cite{SAE:ARP4754A}. We use {\em fault} as the generic modeling keyword throughout the AADL model hierarchy.
 
-The Safety Annex Users Guide can be found at \url{https://github.com/loonwerks/AMASE/tree/develop} along with the tool plugins and examples described in this technical report. 
+The Safety Annex Users Guide can be found in the GitHub repository along with the tool plugins and examples described in this technical report~\cite{SAGithub}. 
 
 \subsection{Basic Functionality}
 
@@ -78,15 +78,25 @@ The architecture of the Safety Annex is shown in Figure~\ref{fig:plugin-arch}.  
 	\label{fig:plugin-arch}
 \end{figure}
 
-AGREE contracts are used to define the nominal behaviors of system components as {\em guarantees} that hold when {\em assumptions} about the values the component's environment are met.  The Safety Annex extends these contracts to allow faults to modify the behavior of component inputs and outputs.  To support these extensions, AGREE implements an Eclipse extension point interface that allows other plug-ins to modify the generated abstract syntax tree (AST) prior to its submission to the solver.  If the Safety Annex is enabled, these faults are added to the AGREE contract and, when triggered, override the nominal guarantees provided by the component.  An example of a portion of an initial AGREE node and its extended contract is shown in Figure~\ref{fig:comp}.  The \texttt{\_\_fault} variables and declarations are added to allow the contract to override the nominal behavioral constraints (provided by guarantees) on outputs.  In the Lustre language, \texttt{assertion}s are constraints that are assumed to hold in the transition system.
+AGREE contracts are used to define the nominal behaviors of system components as {\em guarantees} that hold when {\em assumptions} about the values the component's environment are met.  The Safety Annex extends these contracts to allow faults to modify the behavior of component inputs and outputs. 
+ To support these extensions, AGREE implements an Eclipse extension point interface that allows other plug-ins to modify the generated abstract syntax tree (AST) prior to its submission to the solver.  If the Safety Annex is enabled, these faults are added to the AGREE contract and, when triggered, override the nominal guarantees provided by the component.  
+An example of a portion of an initial AGREE node and its extended contract is shown in Figure~\ref{fig:lustre}. The left column of the figure shows the nominal Lustre pump definition is shown with an AGREE contract on the output; and the right column shows the additional local variables for the fault (boxes 1 and 2), the assertion binding the fault value to the nominal value (boxes 3 and 4), and the fault node definition (box 5).
 
-\begin{figure}
-	\vspace{-0.1in}
-	%\includegraphics[trim=30 150 120 10,clip,width=\textwidth]{images/sample_code.png}
-	\includegraphics[width=\textwidth]{images/sample_code.png}
+%In the left column of the figure, the nominal Lustre pump definition is shown with an AGREE contract on the output. In the right column, the additional local variables for the fault are seen in boxes 1 and 2, the assertion binding the fault value to the nominal value is seen in boxes 3 and 4, and the fault node definition is given in box 5. 
+
+Once augmented with fault information, the AGREE model follows the standard translation path to the model checker JKind~\cite{2017arXiv171201222G}, an infinite-state model checker for safety properties.  The augmentation includes traceability information so that when counterexamples are displayed to users, the active faults for each component are visualized.
+
+\begin{figure}[h!]
+	\hspace*{-2cm}
+	\vspace{-0.3in} 
+	\begin{center}
+		%\includegraphics[trim=0 690 -10 70,clip,width=1.5\dimexpr\textwidth-2cm\relax]{images/lustre.pdf}
+		\includegraphics[scale=0.3]{images/lustre.jpg}
+		%\caption{Nominal AGREE node and its extension with faults}
+	\caption{Nominal AGREE Node and Extension with Faults}
+		\label{fig:lustre}
+	\end{center}
 	\vspace{-0.3in}
-	\caption{Nominal AGREE node and its extension with faults}
-	\label{fig:comp}
 \end{figure}
 
 An annotation in the AADL model determines the fault hypothesis.  This may specify either a maximum number of faults that can be active at any point in execution (typically one or two), or that only faults whose probability of simultaneous occurrence is above some probability threshold should be considered. In the former case, we assert that the sum of the true {\em fault\_\_trigger} variables is below some integer threshold.  In the latter, we determine all combinations of faults whose probabilities are above the specified probability threshold, and describe this as a proposition over {\em fault\_\_trigger} variables.

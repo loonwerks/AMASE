@@ -1,6 +1,107 @@
 \section{Introduction}
 \label{sec:intro}
 
+%Mats' intro
+System safety analysis is crucial in the development life cycle of critical systems to ensure adequate safety as well as demonstrate compliance with applicable standards. A prerequisite for any safety analysis is a thorough understanding of the system architecture and the behavior of its components; safety engineers use this understanding to explore the system behavior to ensure safe operation, assess the effect of failures on the overall safety objectives, and construct the accompanying safety analysis artifacts. Developing adequate understanding, especially for software components, is a difficult and time consuming endeavor. Given the increase in model-based development in critical systems~\cite{Joshi05:Dasc,CAV2015:BoCiGrMa,info17:HaLuHo,5979344,Gudemann:2010:FQQ:1909626.1909813}, leveraging the resultant models in the safety analysis process holds great promise in terms of analysis accuracy as well as efficiency.
+
+In this paper we describe the \emph{Safety Annex} for the system engineering language AADL (Architecture Analysis and Design Language), a SAE Standard modeling language for Model-Based Systems Engineering (MBSE)~\cite{AADL_Standard}. The Safety Annex allows an analyst to model the failure modes of components and then ``weave'' these failure modes together with the original models developed as part of MBSE. The safety analyst can then leverage the merged behavioral models to propagate %failures
+errors through the system to investigate their effect on the safety requirements. %(implicit %failure
+%error propagation). 
+Determining how %faults
+errors propagate through software components is currently a costly and time-consuming element of the safety analysis process. 
+\begin{comment} 
+The use of behavioral contracts to capture the implicit %fault
+error propagation characteristics of software component is a significant benefit for safety analysts.  
+In addition, the annex allows modeling of explicit %failure 
+error propagation that is not captured through the behavioral models, for example, the effect of a single electrical failure on multiple software components or the effect hardware failure (e.g., an explosion) on multiple behaviorally unrelated components. 
+\end{comment}
+The use of behavioral contracts to capture the %implicit %fault
+error propagation characteristics of software component without the need to add separate propagation specifications (\emph{implicit} error propagation) is a significant benefit for safety analysts.  
+In addition, the annex allows modeling of %explicit %failure 
+dependent faults that are not captured through the behavioral models (\emph{explicit} error propagation),
+%error propagation that is not captured through the behavioral models, 
+for example, the effect of a single electrical failure on multiple software components or the effect hardware failure (e.g., an explosion) on multiple behaviorally unrelated components. 
+Furthermore, we will describe the tool support enabling engineers to investigate the correctness of the nominal system behavior (where no failures have occurred) as well as the system's resilience to component failures. We illustrate the work with a substantial example drawn from the civil aviation domain.
+
+Our work can be viewed as a continuation of work conducted by Joshi et al.~where they explored model-based safety analysis techniques defined over Simulink/Stateflow~\cite{MathWorks} models~\cite{Joshi05:SafeComp,Joshi07:Hase,Joshi05:Dasc,DBLP:conf/cav/BozzanoCPJKPRT15}. Our current work extends and generalizes this work and provide new modeling and analysis capabilities not previously available.  For example, the Safety Annex allows modeling explicit %fault 
+error propagation, supports compositional verification and exploration of the nominal system behavior as well as the system's behavior under failure conditions. Our work is also closely related to the existing safety analysis approaches, in particular, the AADL Error Annex (EMV2)~\cite{EMV2}, COMPASS~\cite{10.1007/978-3-642-04468-7_15}, and AltaRica~\cite{PROSVIRNOVA2013127,BieberERTS2018}. Our approach is significantly different from previous work in that unlike EVM2 we leverage the behavioral modeling for implicit %failure 
+error propagation.  We provide compositional analysis capabilities not available in COMPASS.  In addition, the Safety Annex  is fully integrated in a model-based development process and environment unlike a stand alone language such as AltaRica. 
+
+The contributions of the Safety Annex and this paper are:
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+		\item close integration of behavioral fault analysis into the {\em Architecture Analysis and Design Language} AADL, which allows close connection between system and safety analysis and system generation from the model,
+		\item support for {\em behavioral specification of faults} and their {\em implicit propagation} through behavioral relationships in the model, in contrast to existing AADL-based annexes (HiP-HOPS, EMV2) and other related toolsets (COMPASS, Cecilia, etc.),
+		\item additional support to capture binding relationships between hardware and software and logical and physical communications, and
+		\item guidance on integration into a traditional safety analysis process.
+\end{itemize}
+
+%The remainder of the paper is organized as follows. INSERT WHATEVER IT ENDED UP LOOKING LIKE. 
+
+\begin{comment}
+%Danielle's and Janet's intermediate intro
+
+System safety analysis techniques are crucial in the development life cycle of highly integrated/complex aircraft systems and are used to show compliance with certification requirements. A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use this information to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements. Acquiring knowledge about the behavior of the software applications hosted in a system and its impact on the overall system behavior is typically a time consuming and involved process.
+
+To help solve this problem, researchers and industry practitioners have turned to the use of models. Models have been shown to be an effective way to help engineers capture, understand and analyze complex systems. Previous work has been done showing the benefits of leveraging the system model in the safety analysis process~\cite{Joshi05:SafeComp,Joshi07:Hase,Joshi05:Dasc,DBLP:conf/cav/BozzanoCPJKPRT15}.
+
+%In order to effectively assist safety engineers to acquire the knowledge on software application behaviors and assess their effects on the overall behavior of the system, the models should allow system designers to capture the expected behaviors of the software application and the expected behavioral propagations among different components/application in the system; and allow safety engineers to leverage the same model provided by system designers, capture failure modes for individual components, and automatically assess the effects to the overall system through the behavioral propagations built in the existing model.
+
+During this safety analysis process, it is important to reason about faults and how faulty component behaviors can impact the overall system behavior. In order to address the problem of understanding the model and complex system, it is advantageous to provide an automated analysis framework that allows for various types of fault definitions, propagations, and modeling options. 
+
+This paper introduces a tool that provides a solution to these problems: the Safety Annex for the system engineering language called Architecture Analysis and Design Language (AADL), a widely used SAE Standard design language for MBSE applications~\cite{AADL_Standard}. Given a system model in AADL and a behavioral model developed in the Assume Guarantee Reasoning Environment (AGREE)~\cite{NFM2012:CoGaMiWhLaLu}, the Safety Annex is a fault modelling tool that utilizes model checking in order to analyze the behavior of a system in the presence of faults. The Safety Annex allows safety engineers to leverage existing models from system development for conducting assessment. 
+
+Throughout this paper we show that the Safety Annex allows both implicit and explicit failure propagation which gives richer fault modeling capabilities than comparable tools. It is also shown how behavioral information regarding the active faults, the component properties and the overall system behavior when faults are active are provided. We demonstrate that the toolset (AADL, AGREE, and Safety Annex) captures behaviors of both the nominal model (absence of faults) and the faulty model in a cleanly separated and yet analyzable fashion. This serves to preserve the system model for the systems engineering process and simultaneously be able to see their combined effect on the system behavior. 
+
+
+ %Using a Model-Based Safety Analysis (MBSA) approach allows safety engineers to weave a fault model into the entire MBSE process while preserving the separation of a system model and a fault model.
+
+
+%To help solve this problem, researchers and industry practitioners have turned to Model-based System Engineering (MBSE). Models have been shown to be an effective way to help engineers capture, understand and analyze complex systems. Previous work has been done showing the benefits of leveraging the system model in the safety analysis process~\cite{Joshi05:SafeComp,Joshi07:Hase,Joshi05:Dasc,DBLP:conf/cav/BozzanoCPJKPRT15}. Using a Model-Based Safety Analysis (MBSA) approach allows an analyst \janet{use the term ``safety engineer'' only or both ``safety engineer'' and ``safety analyst''?} to weave a fault model into the entire MBSE process while preserving the separation of a system model and a fault model.
+\end{comment}
+
+\iffalse
+
+Throughout the development life cycle of highly-integrated/complex aircraft systems, safety assessment process is a crucial piece in asserting development assurance, and is used to show compliance with certification requirements and meeting a company's internal safety standards. A prerequisite of performing any safety assessment of a system design is to understand how the system is intended to work, primarily focusing on the relationship between component outputs and the overall behavior of the system. The safety engineers then use the acquired understanding to conduct safety analysis, construct the safety analysis artifacts, and compare the analysis results with established safety objectives and safety-related requirements.  
+
+In practice, prior to performing the safety assessment of a system, the safety engineers are often equipped with the domain knowledge about the system, but do not necessarily have detailed knowledge of how the software functions are designed. Acquiring the required knowledge about the behavior and implementation of each software function in a system is typically the most time consuming and involved step in the process.
+
+Industry practitioners have come to realize the benefits and importance of
+using models to assist the safety assessment process, such as to better understand system behaviors, communicate with system designers, capture the failure propagations, and manage and analyze more complex systems. And a revision to the Guidelines and Methods for Conducting Safety Assessment Process on Civil Airborne Systems and Equipment~\cite{SAE:ARP4761} to include {\em model based safety analysis} is under way.
+
+%condensed version
+%System safety assessment is a crucial process in the development of complex airborne systems to show that the relevant safety requirements are met. Acquiring the required knowledge about how the software functions are intended to work in such systems has shown in practice a very involved and time consuming task. Existing approaches that annotate the system architecture model with failure modes and fault propagations help safety analysts better communicate with system designers and address the complexity of the system. However, knowledge on how the faults propagate through the components still needs to be acquired by safety analysts before such information can be captured in the model. Acquiring the information on fault propagation is still a manual effort.
+
+We think that the following criteria are important for the models to help safety analysts effectively acquire the knowledge about system/software behaviors and capture/analyze failure propagations:
+
+\begin{itemize}
+	\item Allow safety engineers to leverage existing models from system development for conducting assessment. %This captures the current state of the system design as it moves through the system development lifecycle, reducing the gap in comprehending the system behavior and transferring the knowledge between the system designers and the safety analysts.
+	\item Support capturing behaviors of nominal and faulty behaviors in the system that are cleanly separated, yet analyzable in an integrated fashion to see their combined effect on the system.
+	\item Enable safety engineers to inject failures/faults at component level, and assess the effect of behavioral propagation at system level, without needing to acquire the knowledge on the propagation beforehand. 
+	\item Allow safety engineers to add failure propagations to the model that may not be behavioral related such as common cause/hardware dependent faults (e.g., common failures such as pipe burst that can propagate through physical systems).
+\end{itemize}
+
+\janet{To add: describe our approach that satisfy the criteria and all other work don't}
+%The methodology described in this paper enables safety analysts to specify faults and faulty behaviors at individual components (using the Safety Annex for the Architecture Analysis and Design Language (AADL)). 
+
+%The provided tool support auto weaves the faults into the nominal system model provided by system designers. No additional effort is needed to specify fault propagations as the faulty behavior propagates in the nominal system model the same as the normal behavior. The behavior of the system in the presence of faults are verified using model checking through Assume Guarantee Reasoning Environment (AGREE), and the effects of any triggered fault are manifested in the formal analysis results.
+
+%1. Introduce our approach and it addresses all that
+%2. behavioral propagation of failures
+%3. We could just describe/split in implicit and explicit fault/failure propagations. E.g., for explicit failure propagation, now we can connect behaviorally unrelated components.
+%3. You activate a fault/inject a failure to the system, so it's not fault propagation, but failure propagation
+
+%How we evaluate our work in comparison with others'
+%1. There are other approaches support some of them. However, they don't support ...
+%What are the related work and why they don't solve the problem:
+%Researchers like Anjali have explored ...
+%EMV2
+%xSAP
+%2. What we do is different from XXX because ...
+%3. The EMV2 is really talking about failure propagation. They view errors as corrupted states. That lead to certain level of confusion. 
+%4. In ARP4754, an error is treated as a source of fault, but a fault can happen without error. An error might lead to a fault. A SW can have errors as software doesn't fail on its own - someone has to put it there
+
+\begin{comment}
 %This paper describes a new methodology with tool support for model based safety analysis. It is implemented as a {\em Safety Annex} for the Architecture Analysis and Design Language (AADL). The Safety Annex provides the ability to describe faults and faulty component behaviors in AADL models. In contrast to previous AADL-based approaches, the Safety Annex leverages a formal description of the nominal system behavior to propagate faults in the system. This approach ensures consistency with the rest of the system development process and simplifies the work of safety engineers. The language for describing faults is extensible and allows safety engineers to weave various types of faults into the nominal system model. The Safety Annex supports the injection of faults into component level outputs, and the resulting behavior of the system can be analyzed using model checking through the Assume-Guarantee Reasoning Environment (AGREE).
 
 System safety analysis techniques are well-established and are a required activity in the development of safety-critical systems. Model-based systems engineering (MBSE) methods and tools based on formal methods now permit system-level requirements to be specified and analyzed early in the development process~\cite{NFM2012:CoGaMiWhLaLu,CAV2015:BoCiGrMa}. While model-based development methods are widely used in the aerospace industry, they are only recently being applied to system safety analysis.  
@@ -23,3 +124,6 @@ Thus, the contributions of the Safety Annex and this paper are:
 \item guidance on integration into a traditional safety analysis process.
 \end{itemize}
 %\mike{What are our contributions?}
+\end{comment}
+
+\fi
