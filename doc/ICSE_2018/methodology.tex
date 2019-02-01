@@ -54,19 +54,14 @@ In qualitative analysis, cut sets and minimal cut sets provide information about
 $C \subseteq BE$ is a MCS if $\pi_F(C) = 1 \land \forall C' \subset C. \pi_F(C') = 0$. In other words, a minimal cut set (MCS) is a cut set of which no subset is a cut set. \\
 \end{definition}
 
-Given the formalisms defined previously, we show that finding the minimal IVCs is equivalent to finding the MCS. \\
-
-\begin{theorem} Finding all minimal IVCs in a compositional verification problem is equivalent to finding the set of all MCSs \\
+\begin{theorem} 
 
 \begin{proof} 
-Assume that the system is composed of $n$ components and let $\mathcal{P}_{tle} = \mathcal{P}_n$ be the top level event and likewise $\mathcal{P}_{i}$ corresponds to the properties at the $i{th}$ level of the system. 
+
 \textit{Base Case}:
-We begin at the leaf level of the system where $T_1 = F_1$ is the set of model elements corresponding to faults for the leaf level components. By the definition for IVC, we know that $S_1 \subseteq T_1$ is an IVC for $(I, T_1) \vdash \mathcal{P}_{1}$ iff $(I, S_1) \vdash \mathcal{P}_{1}$.
-In this case, $\pi_F(S) = 1$, i.e. given the set $S \subseteq T$ of failed model elements, the top level event occurs. 
-Since $S_1$ is minimal IVC, for any $M_1 \subset S_1$, $(I, M_1) \doesnotentail \mathcal{P}_{1}$. Hence it follows that $\pi_F(M_1) = 0$ for any $M_1 \subset S_1$.
+
 
 \textit{Induction Case}:
-Let $T_{n} = F_{n} \cup G_{n}$ where $F_{n}$ is the set of faults corresponding to the components at level ${n}$ and $G_{n}$ is the set of guarantees of those components. Assume $S_{n} \subseteq T_{n}$ is the set of minimal IVCs. Then we know that $(I, S_{n}) \vdash \mathcal{P}_{n}$ and hence $\pi_F(S_{n}) = 1$. We also know since $S_{n}$ is minimal, for any $M_{n} \subset S_{n}$, $(I, M_{n}) \doesnotentail \mathcal{P}_{n}$. Hence it follows that $\pi_F(M_{n}) = 0$ for any $M_{n} \subset S_{n}$ and $S_{n}$ is the minimal cut set for $\mathcal{P}_{tle} = \mathcal{P}_n$.
 
 \end{proof}
 \end{theorem}

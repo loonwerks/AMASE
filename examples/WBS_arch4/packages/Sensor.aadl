@@ -23,7 +23,7 @@ with Base_Types;
 			fault SensorPedalPosition_ErroneousData "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
 				inputs: val_in <- elec_pedal_pos; 
 				outputs: elec_pedal_pos <- val_out;    
-        		probability: 5.0E-6 ;
+        		probability: 1.0E-2 ;
 				duration: permanent;
 			}
 			
@@ -63,7 +63,7 @@ with Base_Types;
 			fault Sensor_ErroneousData "(Sensor) Inverted boolean (Erroneous data) fault." : faults.inverted_fail {
 				inputs: val_in <- wheel_rolling; 
 				outputs: wheel_rolling <- val_out;    
-        		probability: 5.0E-6 ;
+        		probability: 1.0E-2 ;
 				duration: permanent;
 			}
 		
