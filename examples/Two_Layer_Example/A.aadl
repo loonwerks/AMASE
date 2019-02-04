@@ -1,0 +1,27 @@
+package A
+public
+with Base_Types;
+with Common_Faults;
+	system A
+		features 
+			e_temp : in data port Base_Types::Boolean;
+			m_temp : out data port Base_Types::Boolean;
+		
+		annex agree{**
+			
+			guarantee "Environment temp equals measured temp." :
+				e_temp = m_temp;
+			
+		**};
+		annex safety {**
+      		
+      		fault temp_stuck_at_low "m_temp stuck low (false)": Common_Faults.stuck_false {
+				inputs: val_in <- m_temp;     
+				outputs: m_temp <- val_out;   
+         		probability: 0.1 ;
+				duration: permanent;
+			}
+      		
+   		**};
+	end A;	
+end A;
