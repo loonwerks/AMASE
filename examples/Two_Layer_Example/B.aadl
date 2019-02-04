@@ -1,0 +1,26 @@
+package B
+public
+with Base_Types;
+	system B
+		features 
+			e_press : in data port Base_Types::Boolean;
+			m_press : out data port Base_Types::Boolean;
+		
+		annex agree{**
+			
+			guarantee "Environment pressure equals measured pressure." :
+				e_press = m_press;
+			
+		**};
+		annex safety {**
+      		
+      		fault pressure_stuck_at_low "m_press stuck low (false)": Common_Faults.stuck_false {
+				inputs: val_in <- m_press;     
+				outputs: m_press <- val_out;   
+         		probability: 0.1 ;
+				duration: permanent;
+			}
+      		
+   		**};	
+	end B;	
+end B;

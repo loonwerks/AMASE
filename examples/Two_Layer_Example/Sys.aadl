@@ -1,0 +1,85 @@
+package Sys
+public
+with Base_Types;
+with A;
+with B;
+with C;
+with C2;
+
+	system Sys_Top
+		features
+			e_temp: in data port Base_Types::Boolean;
+			e_press: in data port Base_Types::Boolean;
+			e_shutdown: out data port Base_Types::Boolean;
+			
+		annex agree {**
+			
+			assume "True" : true;
+			
+		**};
+		
+	end Sys_Top;
+
+	system implementation Sys_Top.C
+		subcomponents
+			A: system A::A;
+			B: system B::B;
+			C: system C::C;
+	
+		connections
+			e_temp_to_A : port e_temp -> A.e_temp;
+			e_press_to_B : port e_press -> B.e_press;
+			
+			m_temp_to_C : port A.m_temp -> C.m_temp;
+			m_press_to_C : port B.m_press -> C.m_press;
+			
+			e_shutdown_to_top : port C.e_shutdown -> e_shutdown;
+		
+		
+	annex agree {**
+			
+			lemma "We only shut down when both environmental temp and pressure
+						are false." :
+				(not e_temp and not e_press) = e_shutdown;
+				
+	**};
+	annex safety {**
+			
+			--analyze : max 1 fault
+      		analyze : probability 0.1001
+   	**};
+			
+	end Sys_Top.C;
+	
+	
+	system implementation Sys_Top.C2
+		subcomponents
+			A: system A::A;
+			B: system B::B;
+			C2: system C2::C2;
+	
+		connections
+			e_temp_to_A : port e_temp -> A.e_temp;
+			e_press_to_B : port e_press -> B.e_press;
+			
+			m_temp_to_C : port A.m_temp -> C2.m_temp;
+			m_press_to_C : port B.m_press -> C2.m_press;
+			
+			e_shutdown_to_top : port C2.e_shutdown -> e_shutdown;
+		
+		
+	annex agree {**
+			
+			lemma "We shut down when either measured temp or pressure
+						are false." :
+				(not e_temp or not e_press) = e_shutdown;
+				
+	**};
+	annex safety {**
+			
+			--analyze : max 1 fault
+      		analyze : probability 0.1001
+   	**};
+	end Sys_Top.C2;
+	
+end Sys;

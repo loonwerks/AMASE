@@ -1,0 +1,19 @@
+package C
+public
+with Base_Types;
+	system C
+		features 
+			m_temp : in data port Base_Types::Boolean;
+			m_press : in data port Base_Types::Boolean;
+			e_shutdown : out data port Base_Types::Boolean;
+			
+		annex agree{**
+			
+			guarantee "We only shut down when both measured temp and pressure
+						are false." :
+				(not m_temp and not m_press) = e_shutdown;
+			
+		**};
+		
+	end C;	
+end C;
