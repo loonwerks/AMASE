@@ -1,0 +1,116 @@
+\subsection{Example}
+Let $P$ be our top level safety property: the ``good'' behavior we want to happen.\\ 
+
+$P =  $ (pressure $>$ threshold) $\implies$ shut down command, i.e. shut down when we should. \\
+
+Our model elements are: $F = \{f1, f2, f3\}$ corresponding to: \\
+$f1 =$ sensor 1 fault (stuck at low)\\
+$f2 =$ sensor 2 fault (stuck at low)\\
+$f3 =$ sensor 3 fault (stuck at low)\\
+
+For the \textit{no voting} implementation, each sensor can have a stuck at low fault and the system shuts down when one of the sensors indicates high pressure. The constraint system for this example corresponds to : $C = \{\neg f1, \neg f2, \neg f3, \neg P\}$. This constraint system is given to the SAT solver. Assuming that the nominal model holds ($P$ and model elements are satisfied), we get an UNSAT result with this constraint system. The SAT solver provides all counterexamples in the form of IVCs which are our Minimal Unsatisfiable Subsets (MUSs). Since these are all of the sets that show $\neg P$ is UNSAT, they also are the sets that prove $P$. For example $IVC_1 = \{\neg f1\}$: if sensor 1 fault is inactive, we can prove P : this is the minimal explanation of infeasibility with respect to $C$.\\
+
+In this case, the IVCs generated are: \\
+$IVC_1 = \{\neg f1\}$, sensor 1 fault (stuck at low) = false,\\
+$IVC_2 = \{\neg f2\}$, sensor 2 fault (stuck at low) = false,\\
+$IVC_3 = \{\neg f3\}$, sensor 3 fault (stuck at low) = false.\\
+
+MUSes are equivalent to the IVCs. \\
+$MUS_1 = \{\neg f1\}$,\\
+$MUS_2 = \{\neg f2\}$,\\
+$MUS_3 = \{\neg f3\}$.\\
+
+Now we look at Maximal Satisfiable Subsets (MSS). MSSs are the sets for which we have the maximal number of elements that will prove our constraint system. If we add anything to these sets, it becomes UNSAT. Since our original constraint system is of the form $C = \{\neg f1, \neg f2, \neg f3, \neg P\}$, we have:\\
+MUS: $P$ is SAT $\iff \neg P$ is UNSAT\\
+MSS: $P$ is UNSAT $\iff \neg P$ is SAT. \\
+
+The Minimal Correction Sets (MCSs) are the complement of MSS relative to constraint system $C$. The MCSs describes the infeasibility of the system and works as a ``correction'' set to the problem. The MCSs describe the constraints that when removed from the constraint system, provide a satisfiable system. Furthermore, any strict subset of the MCSs, when removed from the constraint system, will provide an unsatisfiable system. It seems that we do not need to actually find the $MSSs$ in order to get their complement because of what is called a \textit{hitting set}. Intuitively, a minimal hitting set has the minimal number of elements in it such that every set in that collection has something in common with the set its ``hitting.'' Every MCS is a minimal hitting set of its MUSes.\\
+
+For us in this example, it is: MCS $ = \{\neg f1, \neg f2, \neg f3\}$. This is the hitting set because if we take the intersection of every MUS with the MCS, it is nonempty and it is the minimal such set for which this is true. When the constraints on these model elements are removed, we get a constraint system that is satisfiable with regard to $\neg P$. Thus, this is the minimal set of elements for which the top level property occurs. What this means from the models perspective is that all three faults together cause the top level property to fail. Thus, when all three sensors have a fault which causes them to report low temp, we do not shut down when we should. Intuitively, it makes sense that this is the Minimal Cut Set because it is the minimal description of why the top level property fails. \\
+
+
+\textbf{Theory}\\
+\noindent\rule{10cm}{0.4pt}\\
+Given a constraint system $C$ where $C$ is an ordered set of abstract constraints over some set of variables, $\{C_1, ..., C_n\}$. The satisfiability problem is in conjuntive normal form (CNF): $C = \land_{i=1,...,n} C_i$; and each $C_i$ is a disjunction of literals $C_i = l_{i1} \lor ... \lor l_{ik_i}$ where each literal $ l_{ij}$is either a Boolean variable $x$ or its negation $\neg x$. \\
+
+\textbf{Satisfiability (SAT)} : A CNF is satisfiable iff there exists an assignment of truth values to its variables such that the formula evaluates to true. If not, it is unsatisfiable (UNSAT). \\
+
+\textbf{MUS} : Minimal Unsatisfiable Subset (MUS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $M$ is UNSAT and $\forall c \in M$: $M \setminus \{c\}$ is SAT. This is the minimal explaination of the constraint systems infeasability. \\
+
+\textbf{MSS} : Maximal Satisfiable Subset (MSS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $M$ is SAT and $\forall C \in C$: $M \cup \{c\}$ is UNSAT. If any element is added to an MSS, we get UNSAT results. \\
+
+\textbf{MCS} : Minimal Correction Set (MCS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $C \setminus M$ is SAT and $\forall S \subset M$ : $C \setminus M$ is UNSAT. A MCS can be seen to ``correct'' the infeasability of the constraint system.\\
+
+\textbf{Hitting Set}: Given a collection of sets $K$, a hitting set for $K$ is a set $H \subseteq \cup_{S \in K} S$ such that $H \cap S \neq \emptyset$ for each $S  \in K$. A hitting set for $K$ is minimal if and only if no proper subset of it is a hitting set for $K$. \\
+
+Let $F = \{f_1, f_2,...,f_n\}$ be the model elements corresponding to faults at the leaf layer of the system. The constraint system is defined as $C = \bigwedge_{i=1}^{n} (\neg f_i \land \neg P)$ for safety property $P$. \\
+
+Using the algorithm to find all IVCs, we get all MUSs of $C$: the $UnsatCores$ of $C: $ $ \{ IVC \subseteq C | IVC$ is UNSAT $\land$ $ \forall c \in C, IVC \setminus \{c\}$ is SAT$\}$.   \\
+
+Using the hitting set algorithm described by Reiter and Greiner, et. al., the MCSs of $C$ are generated:$ \{ M \subseteq C |  C\setminus M$ is SAT $\land$ $ \forall S \subset M, C \setminus S$ is UNSAT$\}$.\\
+
+The MCSs describe the minimal set of model elements for which if constraints are removed, the constraint system is satisfied. For $C$, this corresponds to which faults are not constrained to inactive (and are hence active) and the top level property is violated. In other words, the minimal set of faults that lead to the top level event. This is the definition of a minimal cut set.
+
+\begin{itemize}
+\item MCSs$ = \{ M \subseteq C |  C\setminus M$ is SAT $\land$ $ \forall S \subset M, C \setminus S$ is UNSAT$\}$ 
+\item MinCutSets $ = \{ Cut \subseteq C | Cut $ $\land$ $ \neg P $ is SAT $\land \forall S \subset Cut, S \land$ $ \neg P$ is UNSAT$ \}$
+\end{itemize}
+
+\begin{theorem} The unconstrained model elements found in the Minimal Correction Sets of a constraint system $C$ are equivalent to the faults in the Minimal Cut Sets of the system.
+
+\begin{proof} (Leaf level of system)
+\begin{enumerate}[label=(\roman*)]
+
+\item MCS $\subseteq$ MinCutSet: \\
+
+Let $M \in $ MCS. Then $M$ consists of a collection of $\neg f_j$ for values of $j \in \{1,...,n\}$. Let this collection of $j$ values be $J$. When these constraints are removed from $C$, this results in the updated satisfiable constraint system $C' = (\wedge_{j \in J}(f_j)) \land (\wedge_{i \notin J}(\neg f_i)) \land \neg P$. The unconstrained model elements are $f_j$, for all $j \in J$ and when active will cause $\neg P$ to occur since $C'$ is satisfiable.\\
+
+Furthermore, let $S \subset M$. Then there is at least one $\neg f_j$ for $j \in J$ such that $\neg f_j \notin S$ and by definition, $S \land \neg P$ is unsatisfiable. \\
+
+\item $Cut $ $\subseteq$ MCS: \\
+
+Let $M \in Cut$. Then $M$ consists of unconstrained model elements such that $M \land \neg P$ is satisfiable. Clearly, the removal of the constraints from the corresponding elements in $C$ provides the same result. \\
+
+Let $S \subset M$. Then $S \land \neg P$ is unsatisfiable and removal of the constraints from the corresponding elements in $C$ provides the same result. \\
+\end{enumerate}
+\end{proof}
+\end{theorem}
+
+While I believe this theorem is true for the leaf level of a system, it seems that we may only have subset ($Cut $ $\subseteq$ MCS) one direction for the intermediate layers due to the contracts that will be part of the hitting sets. We will have to discuss what this means and how to handle them in the remainder of the proof. I do believe that this theorem for the leaf level of the system is sufficient only for the base case of the eventual proof. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

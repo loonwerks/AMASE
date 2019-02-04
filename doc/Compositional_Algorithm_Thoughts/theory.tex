@@ -1,0 +1,128 @@
+\subsection{Theory}
+\underline{Definitions:} \\
+
+Given a constraint system $C$ where $C$ is an ordered set of abstract constraints over some set of variables, $\{C_1, ..., C_n\}$. The satisfiability problem is in conjuntive normal form (CNF): $C = \land_{i=1,...,n} C_i$; and each $C_i$ is a disjunction of literals $C_i = l_{i1} \lor ... \lor l_{ik_i}$ where each literal $ l_{ij}$is either a Boolean variable $x$ or its negation $\neg x$. \\
+
+\textbf{Satisfiability (SAT)} : A CNF is satisfiable iff there exists an assignment of truth values to its variables such that the formula evaluates to true. If not, it is unsatisfiable (UNSAT). \\
+
+\textbf{MUS} : Minimal Unsatisfiable Subset (MUS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $M$ is UNSAT and $\forall c \in M$: $M \setminus \{c\}$ is SAT. This is the minimal explaination of the constraint systems infeasability. \\
+
+\textbf{MSS} : Maximal Satisfiable Subset (MSS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $M$ is SAT and $\forall C \in C$: $M \cup \{c\}$ is UNSAT. If any element is added to an MSS, we get UNSAT results. \\
+
+\textbf{MCS} : Minimal Correction Set (MCS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $C \setminus M$ is SAT and $\forall S \subset M$ : $C \setminus M$ is UNSAT. A MCS can be seen to ``correct'' the infeasability of the constraint system.\\
+
+\textbf{MinCutSet}: Minimal Cut Set is a minimal collection of faults that lead to the violation of the safety property (or in other words, lead to the top level event). \\
+
+\textbf{Hitting Set}: Given a collection of sets $K$, a hitting set for $K$ is a set $H \subseteq \cup_{S \in K} S$ such that $H \cap S \neq \emptyset$ for each $S  \in K$. A hitting set for $K$ is minimal if and only if no proper subset of it is a hitting set for $K$. \\
+
+Using the algorithm to find all IVCs, we get all MUSs of $C$: the $UnsatCores$ of $C$ and using the hitting set algorithm described by Reiter and Greiner, et. al., the MCSs of $C$ are generated.\\
+
+The MCSs describe the minimal set of model elements for which if constraints are removed, the constraint system is satisfied. For $C$, this corresponds to which faults are not constrained to inactive (and are hence active) and violated contracts which lead to the violation of the safety property. In other words, the minimal set of active faults and/or violated properties that lead to the top level event. 
+
+\begin{theorem} The unconstrained model elements found in the Minimal Correction Sets of a constraint system $C$ are equivalent to the faults in the Minimal Cut Sets of the system.
+
+\begin{proof} 
+
+Part 1: Leaf level of system
+\begin{enumerate}[label=(\roman*)]
+
+\item MCS $\subseteq$ MinCutSet: \\
+
+Let $M \in  MCS$. Then $C\setminus M$ is SAT $\land$ $ \forall S \subset M$, $C \setminus S$ is UNSAT. Since $C$ contains faults constrained to inactive and $ \neg P $, then any unconstrained faults in $M$ cause $ \neg P $ to occur. This is the definition of a Minimal Cut Set.  \\
+
+By minimality of the $MCS$, $M$ is a minimal cut set for $ \neg P $.  \\
+
+\item $MinCutSet $ $\subseteq$ MCS: \\
+
+Let $M \in MinCutSet$. Then all faults in $M$ cause $ \neg P $ to occur by definition. Thus, by removing the constraints of these faults in the constraint system $C$, we get a satisfiable constraint system with $ \neg P $.  \\
+
+By minimality of $MinCutSet$, $M$ is also minimal and thus is a minimal correction set.
+
+\end{enumerate}
+
+Part 2: Intermediate level of system
+\begin{enumerate}[label=(\roman*)]
+
+\item MCS $\subseteq$ MinCutSet: \\
+
+Let $M \in  MCS$. The elements of $M$ contain unconstrained faults and/or violated contracts from the current level of analysis. In the case that $M$ only contains unconstrained faults, the proof is the same as in the leaf level. In the case that one or more contracts appear in $M$, we make use of the assumption that the nominal model proves and all contracts hold in the absence of faults. Then if a contract is violated, it is due to the presence of faults in the lower level of the system. In this case, we replace the violated contract with the fault(s) that caused its violation and now $M$ consists only of unconstrained faults. The rest of the proof remains the same as in the leaf level. \\
+
+By minimality of the $MCS$, $M$ is a minimal cut set for $ \neg P $.  \\
+
+\item $MinCutSet $ $\subseteq$ MCS: \\
+
+Let $M \in MinCutSet$. Then all faults in $M$ cause $ \neg P $ to occur by definition. If all faults in $M$ are from the current layer of analysis, the proof is done and is identical to the leaf layer. If one or more faults are defined in a lower level of the architecture, we can replace these faults with the contracts they will violate. \\
+
+NOTE: I need to think more about this part of the proof and showing that any lower level faults that occur in a MinCutSet can be replaced with the contracts they violate AND these will be equivalent to the contracts found in the MCSs... This part needs more work. \\
+
+By minimality of $MinCutSet$, $M$ is also minimal and thus is a minimal correction set.
+
+
+
+\end{enumerate}
+\end{proof}
+\end{theorem}
+
+
+
+
+
+\iffalse
+
+\begin{theorem} The unconstrained model elements found in the Minimal Correction Sets of a constraint system $C$ are equivalent to the faults in the Minimal Cut Sets of the system.
+\begin{proof} (Leaf level of system)
+\begin{enumerate}[label=(\roman*)]
+
+\item MCS $\subseteq$ MinCutSet: \\
+
+Let $M \in $ MCS. Then $M$ consists of a collection of $\neg f_j$ for values of $j \in \{1,...,n\}$. Let this collection of $j$ values be $J$. When these constraints are removed from $C$, this results in the updated satisfiable constraint system $C' = (\wedge_{j \in J}(f_j)) \land (\wedge_{i \notin J}(\neg f_i)) \land \neg P$. The unconstrained model elements are $f_j$, for all $j \in J$ and when active will cause $\neg P$ to occur since $C'$ is satisfiable.\\
+
+Furthermore, let $S \subset M$. Then there is at least one $\neg f_j$ for $j \in J$ such that $\neg f_j \notin S$ and by the minimality of the minimal correction sets, $S \land \neg P$ is unsatisfiable. \\
+
+\item $MinCutSet $ $\subseteq$ MCS: \\
+
+Let $M \in MinCutSet$. Then $M$ consists of unconstrained model elements such that $M \land \neg P$ is satisfiable. Clearly, the removal of the constraints from the corresponding elements in $C$ provides the same result due to the minimality of minimal cut sets. \\
+
+Let $S \subset M$. Then $S \land \neg P$ is unsatisfiable and removal of the constraints from the corresponding elements in $C$ provides the same result. \\
+\end{enumerate}
+\end{proof}
+\end{theorem}
+
+While I believe this theorem is true for the leaf level of a system, it seems that we may only have subset ($Cut $ $\subseteq$ MCS) one direction for the intermediate layers due to the contracts that will be part of the hitting sets. We will have to discuss what this means and how to handle them in the remainder of the proof. I do believe that this theorem for the leaf level of the system is sufficient only for the base case of the eventual proof. 
+
+
+
+\fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
