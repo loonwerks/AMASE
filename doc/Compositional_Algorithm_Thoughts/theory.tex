@@ -5,7 +5,26 @@ Given a constraint system $C$ where $C$ is an ordered set of abstract constraint
 
 \textbf{Satisfiability (SAT)} : A CNF is satisfiable iff there exists an assignment of truth values to its variables such that the formula evaluates to true. If not, it is unsatisfiable (UNSAT). \\
 
+Given a state space $S$, a transition system $(I,T)$ consists of the initial state predicate $I : S \rightarrow \{0,1\}$ and a transition step predicate $T : S \times S \rightarrow \{0,1\}$. Reachability for $(I,T)$ is defined as the smallest predicate $R : S \rightarrow \{0,1\}$ which satisfies the following formulas:
+\begin{center}
+$\forall s. I(s) \Rightarrow R(s)$\\
+$\forall s, s' .  R \land T(s,s') \Rightarrow R(s')$\\
+\end{center}
+A safety property $\mathcal{P} : S \to \{0,1\}$ is a state predicate. A safety property $\mathcal{P}$ holds on a transition system $(I,T)$ if it holds on all reachable states. More formally, $\forall s . R(s) \Rightarrow \mathcal{P}(s)$. When this is the case, we write $(I,T) \vdash\mathcal{P}$. Following Ghassabani, et. al. \cite{DBLP:journals/corr/GhassabaniGW16}, we formalize IVCs as follows.\\
+
+\begin{definition}Inductive Validity Core\\
+ Let $(I,T)$ be a transition system and let $\mathcal{P}$ be a safety property with $(I,T) \vdash \mathcal{P}$. Then $S \subseteq T$ is an \textit{inductive validity core} for $(I,T) \vdash \mathcal{P}$ iff $(I,S) \vdash\mathcal{P}$.  \\
+\end{definition}
+
+\begin{definition}Minimal Inductive Validity Core\\
+An inductive validity core $S$ for $(I,T) \vdash \mathcal{P}$ is minimal iff $! \exists S' . S' \subset S \ni (I,S') \vdash \mathcal{P}$. \\
+\end{definition}
+
+Intuitively, this can be understood as the minimal set of elements such that the safety property $\mathcal{P}$ is proved. \\
+
 \textbf{MUS} : Minimal Unsatisfiable Subset (MUS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $M$ is UNSAT and $\forall c \in M$: $M \setminus \{c\}$ is SAT. This is the minimal explaination of the constraint systems infeasability. \\
+
+The IVC problem is in essence a MUS problem. The original safety predicate $\mathcal{P}$ of a transition system $C$ is negated by the model checker in order to find all MUSs of the system given $\neg \mathcal{P}$. Thus all IVCs found are the MUSs of the transition system with the negation of the safety predicate.\\
 
 \textbf{MSS} : Maximal Satisfiable Subset (MSS) $M$ of a constraint system $C$ is a subset $M \subseteq C$ such that $M$ is SAT and $\forall C \in C$: $M \cup \{c\}$ is UNSAT. If any element is added to an MSS, we get UNSAT results. \\
 
