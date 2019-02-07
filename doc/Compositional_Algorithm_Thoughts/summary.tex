@@ -12,11 +12,11 @@ The MIVCs collected for each verification layer are the Minimal Unsatisfiable Su
 
 \item \underline{Step 2:} Compute Minimal Cut Sets (MinCutSets) from the IVCs \\
 
-For each of the MIVCs (MUSs) collected at each verification layer, we compute the MinCutSets from the IVCs from the bottom up. Using the Hitting Set Algorithm, the Minimal Correction Sets (MCSs) are collected. Then we transform the MCSs into MinCutSets.  \\
+For each of the MIVCs (MUSs) collected at each verification layer, we compute the MinCutSets from the IVCs from the bottom up. Using the Hitting Set Algorithm, the Minimal Correction Sets (MCSs) are collected. Then we transform the MCSs into MinCutSets.   \\ % For bottom layer, we may disregard a MCS during the minimal hitting set generation process if its cardinality exceeds the threshold. For any upper layers, we may do so after transitioning the MCS to MinCutSets.
 
-Bottom layer: For each MCS of an upper level property, all fault activation literals in the MCS are constrained to true in order to obtain the MinCutSets for the violation of that upper level property. Since we are looking at only some maximum number of faults, we can eliminate from consideration the MinCutSets with cardinality greater than N from the Max N Hypothesis.  \\
+Bottom layer: For each MCS of an upper level property, all fault activation literals in the MCS are constrained to true in order to obtain the MinCutSets for the violation of that upper level property. Since we are looking at only some maximum number of faults, we can eliminate from consideration the MCSs with cardinality greater than N from the Max N Hypothesis.  \\
 
-Upper layer: For each MCS, any element that is not a fault activation literal (i.e. any property violation) is replaced/inlined with the MinCutSet boolean expression obtained at the lower level for the violation of that property. If any of the MinCutSets from the lower level are empty, replace this property with \textit{false} (indicating that this property cannot happen).  \\
+Upper layer: For each MCS, any element that is not a fault activation literal (i.e. any property violation) is replaced/inlined with the MinCutSet boolean expression obtained at the lower level for the violation of that property. If any of the MinCutSets from the lower level are empty, replace this property with \textit{false} (indicating that this property cannot happen).  If any of the MinCutSets have cardinality greater than the threshold, we disregard these sets.\\
 
 What remains is the MinCutSets with cardinality less than or equal to the max fault hypothesis for the violation of each top level property. \\
 
@@ -32,11 +32,13 @@ If some MinCutSets are obtained using Step 2, then the property is invalid with 
 \begin{enumerate}[label=(\roman*)]
 \item \underline{Step 1:} Verify Nominal Model and Generate MIVCs \\
 
-Assuming the nominal model is defined using AADL and AGREE and the nominal behaviors and top level safety properties are verified, the user must also define the faulty behavior using the Safety Annex. Each of the subcomponents of the system have faults defined with probability of occurrence specified and each top level property has a Probability Hypothesis statement (e.g. probability threshold). \\
+This process is the same as described in Step 1 for Max Fault Hypothesis algorithm.\\
 
-At this point, the user can select to perform compositional max fault verification and behind the scenes, the verification process is as follows. The verification proceeds in a top-down compositional approach and all properties at all layers are verified valid. In the IVC analysis, the model elements considered depend on the layer of the architecture currently being verified. For a leaf level, only fault activation literals are considered for the IVC analysis. At an intermediate layer, the current layer fault activation literals are considered as well as contracts (if there exists a subcomponent of this layer). During verification, the MIVCs are collected.  \\
+%Assuming the nominal model is defined using AADL and AGREE and the nominal behaviors and top level safety properties are verified, the user must also define the faulty behavior using the Safety Annex. Each of the subcomponents of the system have faults defined with probability of occurrence specified and each top level property has a Probability Hypothesis statement (e.g. probability threshold). \\
 
-The MIVCs collected for each verification layer are the Minimal Unsatisfiable Subsets for the constraint system with the top level property set to false. For the bottom layers, the MIVCs only contain fault activation literals constrained to false. For the upper levels, the MIVCs contain both properties and fault activation literals constrained to false. \\
+%At this point, the user can select to perform compositional max fault verification and behind the scenes, the verification process is as follows. The verification proceeds in a top-down compositional approach and all properties at all layers are verified valid. In the IVC analysis, the model elements considered depend on the layer of the architecture currently being verified. For a leaf level, only fault activation literals are considered for the IVC analysis. At an intermediate layer, the current layer fault activation literals are considered as well as contracts (if there exists a subcomponent of this layer). During verification, the MIVCs are collected.  \\
+
+%The MIVCs collected for each verification layer are the Minimal Unsatisfiable Subsets for the constraint system with the top level property set to false. For the bottom layers, the MIVCs only contain fault activation literals constrained to false. For the upper levels, the MIVCs contain both properties and fault activation literals constrained to false. \\
 
 \item \underline{Step 2:} Compute Fault Combinations based on Fault Probabilities and Hypotheses \\
 
@@ -48,7 +50,7 @@ For each of the MIVCs (MUSs) collected at each verification layer, we compute th
 
 Bottom layer: For each MCS of an upper level property, all fault activation literals in the MCS are constrained to true in order to obtain the MinCutSets for the violation of that upper level property. If a MinCutSet is not a subset of any fault combinations computed in the last step, we can eliminate this MinCutSet from consideration.  \\
 
-Upper layer: For each MCS, any element that is not a fault activation literal (i.e. any property violation) is replaced/inlined with the MinCutSet boolean expression obtained at the lower level for the violation of that property. If any of the MinCutSets from the lower level are empty, replace this property with \textit{false} (indicating that this property cannot happen).  \\
+Upper layer: For each MCS, any element that is not a fault activation literal (i.e. any property violation) is replaced/inlined with the MinCutSet boolean expression obtained at the lower level for the violation of that property. If any of the MinCutSets from the lower level are empty, replace this property with \textit{false} (indicating that this property cannot happen).   If any of the MinCutSets have probability greater than the threshold, we disregard these sets.\\
 
 What remains is the MinCutSets with probability equal to or greater than the probabilistic threshold specified for a given top level property. \\
 
