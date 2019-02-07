@@ -174,9 +174,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			if (text.contains("Safety Analysis")) {
 				transformFlag = 1;
 			}
-//			else if (text.contains("Generate SOTERIA model")) {
-//				transformFlag = 2;
-//			}
+			else if (text.contains("Generate SOTERIA model")) {
+				transformFlag = 2;
+			}
 			else {
 				transformFlag = 0;
 			}

@@ -62,16 +62,16 @@
 //			}
 //			// if (!compNameSet.contains(curCompName)) {
 //			// compNameSet.add(curCompName);
-//				// build Soteria model for the current component
+//			// build Soteria model for the current component
 //			// get currenret component name
-//				for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
-//					// recursively call walkthroughResults
-//					walkthroughResults(curResult, curCompName, linker);
-//					// only the first result contains the top level properties
-//					if (!isLowerLevel) {
-//						isLowerLevel = true;
-//					}
+//			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
+//				// recursively call walkthroughResults
+//				walkthroughResults(curResult, curCompName, linker);
+//				// only the first result contains the top level properties
+//				if (!isLowerLevel) {
+//					isLowerLevel = true;
 //				}
+//			}
 //			// }
 //
 //		} else {
