@@ -25,13 +25,13 @@ public class PreferencesUtil {
 		String modelChecker = prefs.getString(PreferenceConstants.PREF_MODEL_CHECKER);
 		String remoteUrl = prefs.getString(PreferenceConstants.PREF_REMOTE_URL);
 		KindApi api = getKindApi(modelChecker, remoteUrl);
-		if (prefs.getBoolean(PreferenceConstants.PREF_DEBUG)) {
-			api.setApiDebug();
-		}
-//		if (api instanceof JKindApi) {
-//			((JKindApi) api).setAllIvcs();
-//			((JKindApi) api).setAllIvcsJkindTimeout(100);
+//		if (prefs.getBoolean(PreferenceConstants.PREF_DEBUG)) {
+//			api.setApiDebug();
 //		}
+		if (api instanceof JKindApi) {
+			((JKindApi) api).setAllIvcs();
+			// ((JKindApi) api).setAllIvcsJkindTimeout(100);
+		}
 
 		return api;
 	}
