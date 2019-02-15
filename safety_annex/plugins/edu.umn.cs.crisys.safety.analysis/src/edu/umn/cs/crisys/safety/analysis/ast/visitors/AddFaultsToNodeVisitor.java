@@ -154,9 +154,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
-//		if (AddFaultsToAgree.getTransformFlag() == 2) {
-//			nb.setFaultTreeFlag(true);
-//		}
+		if (AddFaultsToAgree.getTransformFlag() == 2) {
+			nb.setFaultTreeFlag(true);
+		}
 		addNominalVars(node, nb);
 		addFaultInputs(faults, nb);
 		addHWFaultInputs(hwFaults, nb);
