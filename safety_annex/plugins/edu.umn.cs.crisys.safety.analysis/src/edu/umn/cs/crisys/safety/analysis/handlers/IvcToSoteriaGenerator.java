@@ -106,18 +106,18 @@ public class IvcToSoteriaGenerator {
 				}
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 				SoteriaFormula formula = new SoteriaFormula(propertyName);
-				for (String ivc : property.getIvc()) {
-					System.out.println("current ivc is" + ivc);
-				}
-
-//				// handle multiple ivc sets
-//				for (List<String> ivcSet : property.getIvcSets()) {
-//					SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
-//					extractIvcSets(comp, renaming, formulaSubgroup, ivcSet);
-//					if (!formulaSubgroup.elmeList.isEmpty()) {
-//						formula.addFormulaSubgroup(formulaSubgroup);
-//					}
+//				for (String ivc : property.getIvc()) {
+//					System.out.println("current ivc is" + ivc);
 //				}
+
+				// handle multiple ivc sets
+				for (List<String> ivcSet : property.getIvcSets()) {
+					SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
+					extractIvcSets(comp, renaming, formulaSubgroup, ivcSet);
+					if (!formulaSubgroup.elmeList.isEmpty()) {
+						formula.addFormulaSubgroup(formulaSubgroup);
+					}
+				}
 				if (!formula.formulaBody.isEmpty()) {
 					comp.addFormula(propertyName, formula);
 				}
