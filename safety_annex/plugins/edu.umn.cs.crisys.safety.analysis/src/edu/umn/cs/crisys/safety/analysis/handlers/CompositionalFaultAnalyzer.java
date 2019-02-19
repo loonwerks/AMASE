@@ -41,8 +41,8 @@ public class CompositionalFaultAnalyzer {
 	SoteriaModel model = new SoteriaModel();
 	boolean isLowerLevel = false;
 	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
-//	public HashMap<UniqueID, UniqueID> compIdMap = new HashMap<>();
 	public HashSet<String> compNameSet = new HashSet<>();
+	public HashMap<String, Set<List<String>>> propertyMinCutSets = new HashMap<>();
 
 
 	private StringBuilder mivcSb = new StringBuilder();
@@ -173,7 +173,10 @@ public class CompositionalFaultAnalyzer {
 					CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
 							propertyName);
 					model.addTopLevelFault(contractViolation);
+					System.out.println("top level property to verify");
 				}
+				System.out.println("property to verify " + propertyName);
+
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 				SoteriaFormula formula = new SoteriaFormula(propertyName);
 
@@ -185,9 +188,10 @@ public class CompositionalFaultAnalyzer {
 
 				// 1.1 turn string elements in MIVCs to unique numbers
 				boolean multipleSets = false;
+				clearMivcSb();
 				for (List<String> ivcSet : property.getIvcSets()) {
 					if (multipleSets) {
-						writeln("\n");
+						newline();
 					}
 					for (String ivcElem : ivcSet) {
 						//update ivcElemName
@@ -210,7 +214,7 @@ public class CompositionalFaultAnalyzer {
 					multipleSets = true;
 				}
 
-				Set<List<String>> mhs;
+				Set<List<String>> mhs = new HashSet<List<String>>();
 				try {
 					// 1.2 write MIVC numbers to file
 					File mivcFile = File.createTempFile("mivcSets_", ".dat");
@@ -220,10 +224,10 @@ public class CompositionalFaultAnalyzer {
 					clearMivcSb();
 
 					String shdPath = findSHDExe().getAbsolutePath();
-					System.out.println("shdPath is: " + shdPath);
+					// System.out.println("shdPath is: " + shdPath);
 					// 1.3 write MHS numbers to file
 					File mhsFile = File.createTempFile("mhs_", ".dat");
-					System.out.println("mhs file path is: " + mhsFile.getAbsolutePath());
+					// System.out.println("mhs file path is: " + mhsFile.getAbsolutePath());
 
 					// 1.4 invoke shd.exe to generate minimal hitting sets from the numbered MIVC sets
 					ProcessBuilder pb = new ProcessBuilder(
@@ -231,7 +235,7 @@ public class CompositionalFaultAnalyzer {
 							mivcFile.getAbsolutePath(),
 							mhsFile.getAbsolutePath());
 					// inherit IO
-					pb.inheritIO();
+					// pb.inheritIO();
 					Process process = pb.start();
 					process.waitFor();
 
@@ -243,14 +247,16 @@ public class CompositionalFaultAnalyzer {
 					while ((sCurrentLine = br.readLine()) != null) {
 						String[] curMHSElemNums = sCurrentLine.split(" ");
 						List<String> curMHSElemStrs = new ArrayList<>();
-
+						System.out.println("current minimal cut set");
 						for (int i = 0; i < curMHSElemNums.length; i++) {
 							Integer mhsElemNum = new Integer(curMHSElemNums[i]);
 							String mhsElemStr = intToStrMap.get(mhsElemNum);
 							curMHSElemStrs.add(mhsElemStr);
 							System.out.println(mhsElemStr);
 						}
+						mhs.add(curMHSElemStrs);
 					}
+					propertyMinCutSets.put(propertyName, mhs);
 
 				} catch (Exception e) {
 					Dialog.showError("Unable to open file", e.getMessage());
@@ -358,40 +364,4 @@ public class CompositionalFaultAnalyzer {
 
 		return updatedName;
 	}
-
-
-//	public boolean checkCompName(String name) {
-//		UniqueID originalNameId = new UniqueID(name);
-//		// first check if the original name is already in the keys of the map
-//		// if yes, need to create a new name
-//		if (compNameSet.contains(originalNameId)) {
-//			return true;
-//		} else {
-//			compIdMap.put(originalNameId, new UniqueID(updatedName));
-//			return false;
-//		}
-//	}
-//
-//	public String updateCompName(String name) {
-//		String updatedName = name;
-//		String nameToCheck = updatedName;
-//		int varIndex = 0;
-//		UniqueID originalNameId = new UniqueID(name);
-//		// first check if the original name is already in the keys of the map
-//		// if yes, need to create a new name
-//		if (compIdMap.containsKey(originalNameId)) {
-//			// check if the updated name is in the map values
-//			// if yes, update the name further so it's unique from existing values
-//			while (compIdMap.containsValue(new UniqueID(nameToCheck))) {
-//				varIndex++;
-//				nameToCheck = updatedName + "_" + varIndex;
-//			}
-//			updatedName = nameToCheck;
-//			// add a new entry into the map
-//			compIdMap.put(originalNameId, new UniqueID(updatedName));
-//		}
-//
-//		return updatedName;
-//	}
-
 }
