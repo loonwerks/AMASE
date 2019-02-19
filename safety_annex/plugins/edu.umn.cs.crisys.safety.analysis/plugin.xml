@@ -15,7 +15,7 @@
       </command>
       <!-- New command for menu item (Soteria) -->
        <command
-           name="Generate SOTERIA model during AGREE Verification"
+           name="Compositional Fault Analysis for the current layer"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand">
      </command> 
@@ -89,7 +89,7 @@
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
                   icon="icons/sample.gif"
-                  tooltip="SOTERIA model is generating."
+                  tooltip="Compositional Fault Analysis is running."
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.soteriaCommand">
             </command>
          </toolbar>
