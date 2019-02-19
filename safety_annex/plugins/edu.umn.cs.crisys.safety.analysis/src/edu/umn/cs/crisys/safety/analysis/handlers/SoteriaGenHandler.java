@@ -291,9 +291,9 @@ public class SoteriaGenHandler extends VerifyHandler {
 					queue.remove().cancel();
 				}
 
-				// generate soteria model from the result
-				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
-				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
+				// Turn MIVCs to minimal cut sets
+				CompositionalFaultAnalyzer compFaultAnalyzer = new CompositionalFaultAnalyzer();
+				SoteriaModel soteriaModel = compFaultAnalyzer.generateMinCutSet(result, linker);
 				try {
 					File file = File.createTempFile("soteriaMdl_", ".ml");
 					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -304,6 +304,20 @@ public class SoteriaGenHandler extends VerifyHandler {
 					Dialog.showError("Unable to open file", e.getMessage());
 					e.printStackTrace();
 				}
+
+//				// generate soteria model from the result
+//				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
+//				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
+//				try {
+//					File file = File.createTempFile("soteriaMdl_", ".ml");
+//					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+//					bw.write(soteriaModel.toString());
+//					bw.close();
+//					org.eclipse.swt.program.Program.launch(file.toString());
+//				} catch (IOException e) {
+//					Dialog.showError("Unable to open file", e.getMessage());
+//					e.printStackTrace();
+//				}
 //
 //				// generate soteria fault tree from the result
 //
