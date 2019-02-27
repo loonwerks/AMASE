@@ -1,0 +1,429 @@
+package PhysicalSystem
+public
+with NormalBrakeSystem;
+with AlternateBrakeSystem;
+with WheelBrake;
+with Base_Types;
+with HydraulicPump;
+with accumulator;
+with wheel;
+with AdditionGate;
+with SelectorValve;
+with ShutoffValve;
+
+	
+	system PhysicalSystem
+		features
+			-- Inputs
+			hyd_supply1 : in data port Base_Types::Integer;
+			hyd_supply2 : in data port Base_Types::Integer;
+			
+			pump_power1 : in data port Base_Types::Boolean; 
+			pump_power2 : in data port Base_Types::Boolean;
+			
+			system_validity : in data port Base_Types::Boolean;
+			
+			brake_as_cmd_1 : in data port Base_Types::Boolean;
+			brake_as_cmd_2 : in data port Base_Types::Boolean;
+			brake_as_cmd_3 : in data port Base_Types::Boolean;
+			brake_as_cmd_4 : in data port Base_Types::Boolean;
+			brake_as_cmd_5 : in data port Base_Types::Boolean;
+			brake_as_cmd_6 : in data port Base_Types::Boolean;
+			brake_as_cmd_7 : in data port Base_Types::Boolean;
+			brake_as_cmd_8 : in data port Base_Types::Boolean;
+			
+			as_cmd_pair_1_5 : in data port Base_Types::Boolean;
+			as_cmd_pair_2_6 : in data port Base_Types::Boolean;
+			as_cmd_pair_3_7 : in data port Base_Types::Boolean;
+			as_cmd_pair_4_8 : in data port Base_Types::Boolean;
+			
+			ground_speed : in data port Base_Types::Integer;
+			
+			mech_pedal_pos_L : in data port Base_Types::Boolean;
+			mech_pedal_pos_R : in data port Base_Types::Boolean;
+			
+			-- This is to pass accumulator pressure display up to the 
+			-- wbs enclosing component
+			accum_pressure_display_in : out data port Base_Types::Integer;
+			
+			-- Outputs
+			accum_pressure_display : out data port Base_Types::Integer;
+			green_pressure_in_selec_valve : out data port Base_Types::Integer;
+			
+			-- Enumerated types : {rolling, stopped}
+			wheel_status1 : out data port Base_Types::Boolean;
+			wheel_status2 : out data port Base_Types::Boolean;
+			wheel_status3 : out data port Base_Types::Boolean;
+			wheel_status4 : out data port Base_Types::Boolean;
+			wheel_status5 : out data port Base_Types::Boolean;
+			wheel_status6 : out data port Base_Types::Boolean;
+			wheel_status7 : out data port Base_Types::Boolean; 
+			wheel_status8 : out data port Base_Types::Boolean;
+			
+			-- Output from wheel_brake components
+			wheel_braking_force1 : out data port Base_Types::Integer;
+			wheel_braking_force2 : out data port Base_Types::Integer;
+			wheel_braking_force3 : out data port Base_Types::Integer;
+			wheel_braking_force4 : out data port Base_Types::Integer;
+			wheel_braking_force5 : out data port Base_Types::Integer;
+			wheel_braking_force6 : out data port Base_Types::Integer;
+			wheel_braking_force7 : out data port Base_Types::Integer;
+			wheel_braking_force8 : out data port Base_Types::Integer;
+	
+		annex agree {**
+
+			property hyd_supply1_range = hyd_supply1 > -1 and hyd_supply1 < 11;
+			property hyd_supply2_range = hyd_supply2 > -1 and hyd_supply2 < 11;
+			property ground_speed_range = ground_speed > -1 and ground_speed < 11;
+		
+			-- Hydraulic supply {0,...,10} allowable values
+			-- Ground speed {0,...,10} allowable values
+			assume "(PhysicalSystem) Hydraulic pressure and ground speed bounded between 0 and 10 inclusive." :
+				true -> ((hyd_supply1_range) and (hyd_supply2_range) and (ground_speed_range));		
+			
+			-- cmd_implies_braking_wheel_7_norm_guarantee := (TRUE ->  G 
+			--    (((brake_as_cmd_7 & (green_pressure_in_selector_valve > 0 & system_validity)) 
+			--	  	| ((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & (green_pressure_in_selector_valve = 0 | !system_validity))) 
+					
+			--							-> wheel_braking_force_7 > 0));
+			property GREEN_PRESSURE_VALID = green_pressure_in_selec_valve > 0 and system_validity;
+			
+			property NORMAL1 = brake_as_cmd_1 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE1 = ((mech_pedal_pos_L and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID)); 
+			
+			guarantee "(PhysicalSystem) Wheel 1 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL1 or ALTERNATE1) => wheel_braking_force1 > 0);
+			
+			property NORMAL2 = brake_as_cmd_2 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE2 = ((mech_pedal_pos_L and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 2 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL2 or ALTERNATE2) => wheel_braking_force2 > 0);
+			
+			
+			property NORMAL3 = brake_as_cmd_3 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE3 = ((mech_pedal_pos_R and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 3 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL3 or ALTERNATE3) => wheel_braking_force3 > 0);
+			
+			property NORMAL4 = brake_as_cmd_4 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE4 = ((mech_pedal_pos_R and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 4 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL4 or ALTERNATE4) => wheel_braking_force4 > 0);
+			
+			property NORMAL5 = brake_as_cmd_5 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE5 = ((mech_pedal_pos_L and not as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 5 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL5 or ALTERNATE5) => wheel_braking_force5 > 0);
+			
+			property NORMAL6 = brake_as_cmd_6 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE6 = ((mech_pedal_pos_L and not as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 6 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0);
+			
+			property NORMAL7 = brake_as_cmd_7 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE7 = ((mech_pedal_pos_R and not as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 7 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL7 or ALTERNATE7) => wheel_braking_force7 > 0);
+			
+			property NORMAL8 = brake_as_cmd_8 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE8 = ((mech_pedal_pos_R and not as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
+			
+			guarantee "(PhysicalSystem) Wheel 8 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL8 or ALTERNATE8) => wheel_braking_force8 > 0);
+			
+			-- getting_green_pressure_in_selector_valve_norm_guarantee := (TRUE ->  G 
+			--     (green_pressure_in_selector_valve > 0 <-> ((system_validity & pump_power_1) & hydraulic_supply_1 > 0)));
+			guarantee "(PhysicalSystem) Green pressure into selector valve is positive if and only if
+						system is valid, pump has power, and we have hydraulic supplied." :
+						true -> ((green_pressure_in_selec_valve > 0) <=> (system_validity and pump_power1 and hyd_supply1 > 0));
+			
+			
+			-- braking_wheel_5_implies_cmd_norm_guarantee := ( G 
+			-- 		(((mechanical_pedal_pos_L & system_validity) & !brake_as_cmd_5) -> as_cmd_pair_1_5) 
+			--		->  G (wheel_braking_force_5 > 0 -> ((brake_as_cmd_5 & (green_pressure_in_selector_valve > 0 & system_validity)) 
+			--											| ((mechanical_pedal_pos_L & !as_cmd_pair_1_5) & (green_pressure_in_selector_valve = 0 | !system_validity)))));
+			
+			property L_PEDAL_VALID = mech_pedal_pos_L and system_validity;
+			property R_PEDAL_VALID = mech_pedal_pos_R and system_validity;
+			
+			
+			guarantee "(PhysicalSystem) Wheel 1 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_1) => as_cmd_pair_1_5)
+						=> ((wheel_braking_force1 > 0 => (brake_as_cmd_1 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID))));
+			
+			
+			guarantee "(PhysicalSystem) Wheel 2 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_2) => as_cmd_pair_2_6)
+						=> (wheel_braking_force2 > 0 => (brake_as_cmd_2 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID)));
+			
+			guarantee "(PhysicalSystem) Wheel 3 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not brake_as_cmd_3) => as_cmd_pair_3_7)
+						=> (wheel_braking_force3 > 0 => (brake_as_cmd_3 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID)));
+			
+			guarantee "(PhysicalSystem) Wheel 4 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not brake_as_cmd_4) => as_cmd_pair_4_8)
+						=> (wheel_braking_force4 > 0 => (brake_as_cmd_4 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID)));
+			
+			guarantee "(PhysicalSystem) Wheel 5 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_5) => as_cmd_pair_1_5)
+						=> (wheel_braking_force5 > 0 => (brake_as_cmd_5 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_L and not as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID)));
+			
+			guarantee "(PhysicalSystem) Wheel 6 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not brake_as_cmd_6) => as_cmd_pair_2_6)
+						=> (wheel_braking_force6 > 0 => (brake_as_cmd_6 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_L and not as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID)));
+			
+			guarantee "(PhysicalSystem) Wheel 7 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not brake_as_cmd_7) => as_cmd_pair_3_7)
+						=> (wheel_braking_force7 > 0 => (brake_as_cmd_7 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_R and not as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID)));
+			
+			guarantee "(PhysicalSystem) Wheel 8 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not brake_as_cmd_8) => as_cmd_pair_1_5)
+						=> (wheel_braking_force8 > 0 => (brake_as_cmd_8 and (GREEN_PRESSURE_VALID)) 
+							or (mech_pedal_pos_R and not as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID)));
+						
+			
+			-- never_inadvertent_braking_with_all_wheels_locked_norm_guarantee := (TRUE ->  G 
+			-- !((((((((((((!mechanical_pedal_pos_L & !mechanical_pedal_pos_R) & !brake_as_cmd_1)
+		 	-- 	& !brake_as_cmd_2) & !brake_as_cmd_3) & !brake_as_cmd_4) & !brake_as_cmd_5) & !brake_as_cmd_6) & !brake_as_cmd_7) & !brake_as_cmd_8) 
+			-- 		& (((((((wheel_braking_force_1 > 0 & wheel_braking_force_2 > 0) 
+			--		& wheel_braking_force_3 > 0) & wheel_braking_force_4 > 0) 
+			-- 		& wheel_braking_force_5 > 0) & wheel_braking_force_6 > 0) 
+			--		& wheel_braking_force_7 > 0) & wheel_braking_force_8 > 0)) 
+			-- & (((((((wheel_status_1 = stopped & wheel_status_2 = stopped) & wheel_status_3 = stopped) 
+			-- 		& wheel_status_4 = stopped) & wheel_status_5 = stopped) & wheel_status_6 = stopped) 
+			-- 		& wheel_status_7 = stopped) & wheel_status_8 = stopped)) & ground_speed > 0));
+			
+			
+			property ALL_WHEELS_BRAKE = wheel_braking_force1 > 0 and wheel_braking_force2 > 0 
+					and wheel_braking_force3 > 0 and wheel_braking_force4 > 0 
+			 		and wheel_braking_force5 > 0 and wheel_braking_force6 > 0 
+					and wheel_braking_force7 > 0 and wheel_braking_force8 > 0; 
+					
+			property ALL_WHEELS_STOPPED = not wheel_status1 
+									  and not wheel_status2
+									  and not wheel_status3
+									  and not wheel_status4
+									  and not wheel_status5
+									  and not wheel_status6
+									  and not wheel_status7
+									  and not wheel_status8;
+									  
+			property BRAKE_AS_NOT_COMMANDED = not brake_as_cmd_1 and not brake_as_cmd_2 and not brake_as_cmd_3 and not brake_as_cmd_4 
+										  and not brake_as_cmd_5 and not brake_as_cmd_6 and not brake_as_cmd_7 and not brake_as_cmd_8;
+										  
+			property PEDALS_NOT_PRESSED = not mech_pedal_pos_L and not mech_pedal_pos_R;
+			
+			-- never_inadvertent_braking_of_all_wheels_norm_guarantee := (TRUE ->  G 
+			-- 			!(((((((((((!mechanical_pedal_pos_L & !mechanical_pedal_pos_R) & !brake_as_cmd_1) & !brake_as_cmd_2) & !brake_as_cmd_3) & !brake_as_cmd_4) & !brake_as_cmd_5) & !brake_as_cmd_6) & !brake_as_cmd_7) & !brake_as_cmd_8) 
+			-- 			& (((((((wheel_braking_force_1 > 0 & wheel_braking_force_2 > 0) & wheel_braking_force_3 > 0) & wheel_braking_force_4 > 0) & wheel_braking_force_5 > 0) & wheel_braking_force_6 > 0) & wheel_braking_force_7 > 0) & wheel_braking_force_8 > 0)) 
+			-- 			& ground_speed > 0));
+			
+			guarantee "(PhysicalSystem) It will not occur that all wheels are braked inadvertently." :
+				true -> (not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ground_speed > 0));  
+							
+		**};
+	
+	end PhysicalSystem;
+	
+	system implementation PhysicalSystem.inst
+		subcomponents
+			
+			blue_hyd_pump : system HydraulicPump::HydraulicPump;
+			green_hyd_pump : system HydraulicPump::HydraulicPump;
+			accumulator : system Accumulator::Accumulator; 
+			
+			add_gate_hyd_pressure : system AdditionGate::AdditionGate;
+			
+			shutoff_valve : system ShutoffValve::ShutoffValve;
+			selector_valve : system SelectorValve::SelectorValve;
+			 
+			normal_sys : system NormalBrakeSystem::NormalBrakeSystem.inst;
+			alt_sys : system AlternateBrakeSystem::AlternateBrakeSystem.inst;
+			
+			wheel_brake1 : system WheelBrake::WheelBrake.inst;
+			wheel_brake2 : system WheelBrake::WheelBrake.inst;
+			wheel_brake3 : system WheelBrake::WheelBrake.inst;
+			wheel_brake4 : system WheelBrake::WheelBrake.inst;
+			wheel_brake5 : system WheelBrake::WheelBrake.inst;
+			wheel_brake6 : system WheelBrake::WheelBrake.inst;
+			wheel_brake7 : system WheelBrake::WheelBrake.inst;
+			wheel_brake8 : system WheelBrake::WheelBrake.inst;
+			 
+			wheel_1 : system Wheel::Wheel;
+			wheel_2 : system Wheel::Wheel;
+			wheel_3 : system Wheel::Wheel;
+			wheel_4 : system Wheel::Wheel;
+			wheel_5 : system Wheel::Wheel;
+			wheel_6 : system Wheel::Wheel;
+			wheel_7 : system Wheel::Wheel;
+			wheel_8 : system Wheel::Wheel;
+			
+		connections
+			-- Power to pumps
+			power_to_blue_pump : port pump_power1 -> green_hyd_pump.power;
+			power_to_green_pump : port pump_power2 -> blue_hyd_pump.power;
+			
+			-- Hydraulic supply to pumps
+			hyd_supply_to_blue_pump : port hyd_supply1 -> green_hyd_pump.hyd_supply;
+			hyd_supply_to_green_pump : port hyd_supply2 -> blue_hyd_pump.hyd_supply;
+			
+			-- accumulator 
+			pressure_to_accumulator : port blue_hyd_pump.hyd_pressure_out -> accumulator.circuit_pressure_value;
+			
+			-- Shutoff valve
+			system_valid_to_shutoff : port system_validity -> shutoff_valve.system_validity;
+			shutoff_pressure_out : port shutoff_valve.hyd_pressure_out -> green_pressure_in_selec_valve;
+			shutoff_pressure_to_selector : port shutoff_valve.hyd_pressure_out -> selector_valve.green_select_in;
+			green_pressure_to_shutoff : port green_hyd_pump.hyd_pressure_out -> shutoff_valve.hyd_pressure_in;
+			
+			-- Selector valve
+			system_valid_to_selector : port system_validity -> selector_valve.system_validity;
+			add_gate_to_selector : port add_gate_hyd_pressure.out_pressure -> selector_valve.blue_select_in;
+			
+			selector_green_out : port selector_valve.green_select_out -> normal_sys.hyd_pressure_in;
+			selector_blue_out : port selector_valve.blue_select_out -> alt_sys.hyd_pressure_in;
+			
+			-- Addition gate
+			blue_pressure_to_add_gate : port blue_hyd_pump.hyd_pressure_out -> add_gate_hyd_pressure.in_1;
+			accum_pressure_to_add_gate : port accumulator.reserve_out -> add_gate_hyd_pressure.in_2;
+			
+			-- Normal system
+			-- hyd pressure to wheel_brake components
+			normal_pressure_to_wb_1 : port normal_sys.hyd_pressure_out1 -> wheel_brake1.normal_hyd_pressure_in;
+			normal_pressure_to_wb_2 : port normal_sys.hyd_pressure_out2 -> wheel_brake2.normal_hyd_pressure_in;
+			normal_pressure_to_wb_3 : port normal_sys.hyd_pressure_out3 -> wheel_brake3.normal_hyd_pressure_in;
+			normal_pressure_to_wb_4 : port normal_sys.hyd_pressure_out4 -> wheel_brake4.normal_hyd_pressure_in;
+			normal_pressure_to_wb_5 : port normal_sys.hyd_pressure_out5 -> wheel_brake5.normal_hyd_pressure_in;
+			normal_pressure_to_wb_6 : port normal_sys.hyd_pressure_out6 -> wheel_brake6.normal_hyd_pressure_in;
+			normal_pressure_to_wb_7 : port normal_sys.hyd_pressure_out7 -> wheel_brake7.normal_hyd_pressure_in;
+			normal_pressure_to_wb_8 : port normal_sys.hyd_pressure_out8 -> wheel_brake8.normal_hyd_pressure_in;
+			
+			-- brake antiskid commands to normal system
+			brake_as_1 : port brake_as_cmd_1 -> normal_sys.brake_as_cmd1;
+			brake_as_2 : port brake_as_cmd_2 -> normal_sys.brake_as_cmd2;
+			brake_as_3 : port brake_as_cmd_3 -> normal_sys.brake_as_cmd3;
+			brake_as_4 : port brake_as_cmd_4 -> normal_sys.brake_as_cmd4;
+			brake_as_5 : port brake_as_cmd_5 -> normal_sys.brake_as_cmd5;
+			brake_as_6 : port brake_as_cmd_6 -> normal_sys.brake_as_cmd6;
+			brake_as_7 : port brake_as_cmd_7 -> normal_sys.brake_as_cmd7;
+			brake_as_8 : port brake_as_cmd_8 -> normal_sys.brake_as_cmd8;
+			
+			
+			-- Alternate system
+			-- mechanical pedal position
+			ped_position_L : port mech_pedal_pos_L -> alt_sys.mech_pedal_pos_L;
+			ped_position_R : port mech_pedal_pos_R -> alt_sys.mech_pedal_pos_R;
+			
+			-- antiskid command pair
+			as_cmd_1_5 : port as_cmd_pair_1_5 -> alt_sys.as_cmd_pair_1_5;
+			as_cmd_2_6 : port as_cmd_pair_2_6 -> alt_sys.as_cmd_pair_2_6;
+			as_cmd_3_7 : port as_cmd_pair_3_7 -> alt_sys.as_cmd_pair_3_7;
+			as_cmd_4_8 : port as_cmd_pair_4_8 -> alt_sys.as_cmd_pair_4_8;
+			
+			-- alternate hydraulic pressure out to wheel brake
+			alt_pressure_to_wb_1 : port alt_sys.hyd_pressure_out1 -> wheel_brake1.alt_hyd_pressure_in;
+			alt_pressure_to_wb_5 : port alt_sys.hyd_pressure_out1 -> wheel_brake5.alt_hyd_pressure_in;
+			alt_pressure_to_wb_2 : port alt_sys.hyd_pressure_out2 -> wheel_brake2.alt_hyd_pressure_in;
+			alt_pressure_to_wb_6 : port alt_sys.hyd_pressure_out2 -> wheel_brake6.alt_hyd_pressure_in;
+			alt_pressure_to_wb_3 : port alt_sys.hyd_pressure_out3 -> wheel_brake3.alt_hyd_pressure_in;
+			alt_pressure_to_wb_7 : port alt_sys.hyd_pressure_out3 -> wheel_brake7.alt_hyd_pressure_in;
+			alt_pressure_to_wb_4 : port alt_sys.hyd_pressure_out4 -> wheel_brake4.alt_hyd_pressure_in;
+			alt_pressure_to_wb_8 : port alt_sys.hyd_pressure_out4 -> wheel_brake8.alt_hyd_pressure_in;
+			
+			-- Wheel brake component outputs
+			-- Brake force to wheel component
+			brake_force_1 : port wheel_brake1.brake_force -> wheel_1.brake_force;
+			brake_force_2 : port wheel_brake2.brake_force -> wheel_2.brake_force;
+			brake_force_3 : port wheel_brake3.brake_force -> wheel_3.brake_force;
+			brake_force_4 : port wheel_brake4.brake_force -> wheel_4.brake_force;
+			brake_force_5 : port wheel_brake5.brake_force -> wheel_5.brake_force;
+			brake_force_6 : port wheel_brake6.brake_force -> wheel_6.brake_force;
+			brake_force_7 : port wheel_brake7.brake_force -> wheel_7.brake_force;
+			brake_force_8 : port wheel_brake8.brake_force -> wheel_8.brake_force;
+			
+			-- Brake force to enclosing component
+			braking_force_out_1 : port wheel_brake1.brake_force -> wheel_braking_force1;
+			braking_force_out_2 : port wheel_brake2.brake_force -> wheel_braking_force2;
+			braking_force_out_3 : port wheel_brake3.brake_force -> wheel_braking_force3;
+			braking_force_out_4 : port wheel_brake4.brake_force -> wheel_braking_force4;
+			braking_force_out_5 : port wheel_brake5.brake_force -> wheel_braking_force5;
+			braking_force_out_6 : port wheel_brake6.brake_force -> wheel_braking_force6;
+			braking_force_out_7 : port wheel_brake7.brake_force -> wheel_braking_force7;
+			braking_force_out_8 : port wheel_brake8.brake_force -> wheel_braking_force8;
+			
+			 
+			-- Wheel component outputs
+			-- Ground speed to wheels
+			ground_speed_1 : port ground_speed -> wheel_1.ground_speed;
+			ground_speed_2 : port ground_speed -> wheel_2.ground_speed;
+			ground_speed_3 : port ground_speed -> wheel_3.ground_speed;
+			ground_speed_4 : port ground_speed -> wheel_4.ground_speed;
+			ground_speed_5 : port ground_speed -> wheel_5.ground_speed;
+			ground_speed_6 : port ground_speed -> wheel_6.ground_speed;
+			ground_speed_7 : port ground_speed -> wheel_7.ground_speed;
+			ground_speed_8 : port ground_speed -> wheel_8.ground_speed;
+			
+			-- wheel status output {running, stopped}
+			wheel_1_status : port wheel_1.wheel_status -> wheel_status1;
+			wheel_2_status : port wheel_2.wheel_status -> wheel_status2;
+			wheel_3_status : port wheel_3.wheel_status -> wheel_status3;
+			wheel_4_status : port wheel_4.wheel_status -> wheel_status4;
+			wheel_5_status : port wheel_5.wheel_status -> wheel_status5;
+			wheel_6_status : port wheel_6.wheel_status -> wheel_status6;
+			wheel_7_status : port wheel_7.wheel_status -> wheel_status7;
+			wheel_8_status : port wheel_8.wheel_status -> wheel_status8;
+		
+		
+		annex agree {**
+	
+			-- DO NOT REMOVE THESE!!!
+			assert (normal_sys.false_to_mv = false);
+			assert (alt_sys.false_to_mv = false); 
+		
+		
+		**}	;
+		annex safety{**
+	  		analyze : max 1 fault
+	  		--analyze : probability 1.0E-7
+	  
+	  		propagate_from: {Pump_Catastrophe@green_hyd_pump} to {HydPump_FailedOff@blue_hyd_pump};
+	  
+   **};
+	end PhysicalSystem.inst; 
+
+
+
+
+
+
+
+end PhysicalSystem;
