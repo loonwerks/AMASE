@@ -68,7 +68,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
-import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
+import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import jkind.JKindException;
 import jkind.api.JKindApi;
@@ -291,20 +291,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 					queue.remove().cancel();
 				}
 
-				// Turn MIVCs to minimal cut sets
-				CompositionalFaultAnalyzer compFaultAnalyzer = new CompositionalFaultAnalyzer();
-				SoteriaModel soteriaModel = compFaultAnalyzer.generateMinCutSet(result, linker);
-				try {
-					File file = File.createTempFile("soteriaMdl_", ".ml");
-					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-					bw.write(soteriaModel.toString());
-					bw.close();
-					org.eclipse.swt.program.Program.launch(file.toString());
-				} catch (IOException e) {
-					Dialog.showError("Unable to open file", e.getMessage());
-					e.printStackTrace();
-				}
-
 //				// generate soteria model from the result
 //				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
 //				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
@@ -318,22 +304,22 @@ public class SoteriaGenHandler extends VerifyHandler {
 //					Dialog.showError("Unable to open file", e.getMessage());
 //					e.printStackTrace();
 //				}
-//
-//				// generate soteria fault tree from the result
-//
-//				IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-//				SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-//
-//				try {
-//					File file = File.createTempFile("soteriaFT_", ".ml");
-//					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-//					bw.write(soteriaFT.toString());
-//					bw.close();
-//					org.eclipse.swt.program.Program.launch(file.toString());
-//				} catch (IOException e) {
-//					Dialog.showError("Unable to open file", e.getMessage());
-//					e.printStackTrace();
-//				}
+
+				// generate soteria fault tree from the result
+
+				IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
+				SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
+
+				try {
+					File file = File.createTempFile("soteriaFT_", ".ml");
+					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+					bw.write(soteriaFT.toString());
+					bw.close();
+					org.eclipse.swt.program.Program.launch(file.toString());
+				} catch (IOException e) {
+					Dialog.showError("Unable to open file", e.getMessage());
+					e.printStackTrace();
+				}
 
 				deactivateTerminateHandlers();
 				enableRerunHandler(root);
