@@ -12,6 +12,7 @@ public class SoteriaFaultTree extends SoteriaFTAst {
 	public HashMap<String, SoteriaFTNonLeafNode> rootNodes = new HashMap<>();
 	public HashMap<String, SoteriaFTNonLeafNode> intermediateNodes = new HashMap<>();
 	public List<SoteriaFTNonLeafNode> sortedIntermediateNodes = new ArrayList<SoteriaFTNonLeafNode>();
+	public List<SoteriaFTNode> resolvedRootNodes = new ArrayList<SoteriaFTNode>();
 
 	public void addLeafNode(String nodeName, SoteriaFTLeafNode leafNode) {
 		leafNodes.put(nodeName, leafNode);
@@ -23,6 +24,10 @@ public class SoteriaFaultTree extends SoteriaFTAst {
 
 	public void addIntermediateNode(String nodeName, SoteriaFTNonLeafNode intermediateNode) {
 		intermediateNodes.put(nodeName, intermediateNode);
+	}
+
+	public void addResolvedRootNode(SoteriaFTNode intermediateNode) {
+		resolvedRootNodes.add(intermediateNode);
 	}
 
 	@Override
