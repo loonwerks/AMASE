@@ -34,7 +34,7 @@ public class IvcToSoteriaFTGenerator {
 
 	public SoteriaFaultTree generateSoteriaFT(AnalysisResult result, AgreeResultsLinker linker) {
 		// initialize
-		MHSUtils.clearElemMap();
+		MHSUtils.clearLocals();
 		// get current verification result
 		AnalysisResult curResult = ((CompositeAnalysisResult) result).getChildren().get(0);
 		walkthroughResults(curResult, null, linker);
@@ -126,11 +126,13 @@ public class IvcToSoteriaFTGenerator {
 						SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName);
 						extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
 						propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
+						mcsSetNode.addParentNode(propertyNode);
 						soteriaFT.addIntermediateNode(mcsSetNodeName, mcsSetNode);
 						index++;
 					}
 					if (!isLowerLevel) {
 						soteriaFT.addRootNode(propertyName, propertyNode);
+						propertyNode.setRoot();
 					}
 					soteriaFT.addIntermediateNode(propertyName, propertyNode);
 				}
@@ -176,6 +178,7 @@ public class IvcToSoteriaFTGenerator {
 		// note: a SoteriaFTNonLeafNode added here as a child node could be updated later with its own child node
 		// will walk through all nodes again to fix the discrepancy
 		mcsSetNode.addChildNode(propertyName, nonLeafNode);
+		nonLeafNode.addParentNode(mcsSetNode);
 	}
 
 	private void extractFaultMCSElem(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode,
@@ -196,11 +199,13 @@ public class IvcToSoteriaFTGenerator {
 							(float) 1.0);
 					soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
 					mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
+					ftLeafNode.addParentNode(mcsSetNode);
 				}
 			}
 		} else {
 			SoteriaFTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
 			mcsSetNode.addChildNode(updatedFaultName, leafNode);
+			leafNode.addParentNode(mcsSetNode);
 		}
 
 	}

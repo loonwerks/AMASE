@@ -24,7 +24,7 @@ public class MHSUtils {
 
 	private static StringBuilder sourceSetSb = new StringBuilder();
 	private static HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
-
+	private static int varIndex = 0;
 	private static final String seperator = System.getProperty("line.separator");
 
 	private static void newline() {
@@ -169,8 +169,10 @@ public class MHSUtils {
 		return destSets;
 	}
 
-	public static void clearElemMap() {
+	public static void clearLocals() {
 		elemIdMap.clear();
+		clearSourceSetSb();
+		varIndex = 0;
 	}
 
 	public static String updateElemName(String name) {
@@ -192,6 +194,15 @@ public class MHSUtils {
 			elemIdMap.put(originalNameId, new UniqueID(updatedName));
 		}
 
+		return updatedName;
+	}
+
+	public static String createUniqueElemName(String name) {
+		String updatedName = name + "_" + varIndex;
+		while (elemIdMap.containsValue(new UniqueID(updatedName))) {
+			varIndex++;
+			updatedName = name + "_" + varIndex;
+		}
 		return updatedName;
 	}
 
