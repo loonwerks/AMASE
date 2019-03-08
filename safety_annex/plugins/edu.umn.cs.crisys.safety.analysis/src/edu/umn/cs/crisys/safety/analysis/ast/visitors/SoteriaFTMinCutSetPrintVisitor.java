@@ -1,6 +1,5 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
-import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNode;
@@ -33,13 +32,14 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 
 	@Override
 	public Void visit(SoteriaFaultTree ft) {
-		// print min cut set for each root node
+		write(ft.includeStr);
+		newline();
+
+		// walk through the tree and print from bottom to top
 		for (SoteriaFTNode root : ft.resolvedRootNodes) {
 			String rootName = root.nodeName;
-			writeln("cutsets for " + rootName + ";;");
-			for (SoteriaFTNode child : root.childNodes.values()) {
-				child.accept(this);
-			}
+			root.accept(this);
+			printRootNode(rootName);
 		}
 	return null;
 
@@ -47,37 +47,29 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 
 	@Override
 	public Void visit(SoteriaFTLeafNode leaf) {
-		writeln("let " + leaf.faultName + " = ");
-		writeln("Leaf");
-		write("    ((\"" + leaf.compName + "\",");
-		write("\"" + leaf.faultName + "\"),");
-		write(leaf.failureRate + ", ");
-		writeln(leaf.exposureTime + ");;");
+		printLeafNode(leaf);
 		return null;
 	}
 
 	@Override
 	public Void visit(SoteriaFTNonLeafNode nonLeaf) {
-		if (nonLeaf instanceof SoteriaFTOrNode) {
-			SoteriaFTOrNode orNode = (SoteriaFTOrNode) nonLeaf;
-			orNode.accept(this);
-		} else if (nonLeaf instanceof SoteriaFTAndNode) {
-			SoteriaFTAndNode andNode = (SoteriaFTAndNode) nonLeaf;
-			andNode.accept(this);
-		} else {
-			throw new SafetyException("Not instanstiated non leaf node " + nonLeaf.nodeName);
-		}
 		return null;
 	}
 
 	@Override
 	public Void visit(SoteriaFTOrNode orNode) {
+		for (SoteriaFTNode child : orNode.childNodes.values()) {
+			child.accept(this);
+		}
 		printNonLeafNode(orNode.nodeOpStr, orNode);
 		return null;
 	}
 
 	@Override
 	public Void visit(SoteriaFTAndNode andNode) {
+		for (SoteriaFTNode child : andNode.childNodes.values()) {
+			child.accept(this);
+		}
 		printNonLeafNode(andNode.nodeOpStr, andNode);
 		return null;
 	}
@@ -94,6 +86,29 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 			multipleElem = true;
 		}
 		writeln("    ];;");
+	}
+
+	private void printRootNode(String rootName) {
+		writeln("(* ----- CUTSET WITH PROBABILITIES ----- *)");
+		writeln("cutsets " + rootName + ";;");
+		writeln("probErrorCut " + rootName + ";;");
+		writeln("probErrorCutImp " + rootName + ";;");
+		writeln("(* ----- FAULT TREE VISUALIZATIONS ----- *)");
+		// fault tree visualization
+		write("dot_gen_show_direct_tree_file ~rend:\"pdf\" ");
+		writeln("\"" + rootName + "_direct_ftree.gv\" " + rootName + " ;;");
+		write("dot_gen_show_tree_file ~rend:\"pdf\" ");
+		writeln("\"" + rootName + "_optimized_ftree.gv\" " + rootName + " ;;");
+		newline();
+	}
+
+	private void printLeafNode(SoteriaFTLeafNode leaf) {
+		writeln("let " + leaf.faultName + " = ");
+		writeln("Leaf");
+		write("    ((\"" + leaf.compName + "\",");
+		write("\"" + leaf.faultName + "\"),");
+		write(leaf.failureRate + ", ");
+		writeln(leaf.exposureTime + ");;");
 	}
 
 }
