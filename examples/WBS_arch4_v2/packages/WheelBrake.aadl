@@ -45,15 +45,15 @@ with Base_Types;
 			
 			-- Braking force
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
-			
-		
-	end WheelBrake.inst;
-	annex safety{**
+		annex safety{**
 	
 		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
-		**}	;
+		**}	;		
+		
+	end WheelBrake.inst;
+
 
 	system HydraulicFuse
 		features

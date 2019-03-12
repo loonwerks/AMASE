@@ -145,14 +145,14 @@ with Base_Types;
 			wheel_4_roll : port wheel_rolling_4 -> w4_w8_cmd_sys.wheel_rolling_1;
 			wheel_8_roll : port wheel_rolling_8 -> w4_w8_cmd_sys.wheel_rolling_2;
 	
-		
-	end CommandSystem.inst;
-	
-	
-	annex safety{**
+		annex safety{**
 	
 		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
-		**}	;
+		**}	;	
+	end CommandSystem.inst;
+	
+	
+
 end CommandSystem;
