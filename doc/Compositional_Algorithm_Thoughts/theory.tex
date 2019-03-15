@@ -35,7 +35,7 @@ A duality exists between MUSs of a constraint system and MCSs as established by 
 
 \textbf{Hitting Set}: Given a collection of sets $K$, a hitting set for $K$ is a set $H \subseteq \cup_{S \in K} S$ such that $H \cap S \neq \emptyset$ for each $S  \in K$. A hitting set for $K$ is minimal if and only if no proper subset of it is a hitting set for $K$. \\
 
-Utilizing this approach, we can easily collect the MCSs from the MUSs provided through the all MIVC algorithm. 
+Utilizing this approach, we can easily collect the MCSs from the MUSs provided through the all MIVC algorithm and a hitting set algorithm by Murakami et. al.~\cite{murakami2013efficient,gainer2017minimal}. \\
 
 Cut sets and minimal cut sets provide important information about the vulnerabilities of a system. A \textit{Minimal Cut Set} (MinCutSet) is a minimal collection of faults that lead to the violation of the safety property (or in other words, lead to the top level event). We define MinCutSet in terms of the constraint system in question as follows:\\
 
@@ -76,11 +76,11 @@ Assume $\overline{C} = \{F,G,P\}$ with the constraints that all $f \in F$ are in
 
 Let $MCS = \{f_1,...,f_n,g_1,...,g_m\}$
 
-For $g_1 \in MCS$, $\exists \overline{F}_1 \subseteq F$ where $\overline{F}_1$ is a minimal set of active faults that cause the violation of $g_1$.  Replace $g_1$ in $MCS$ with $\overline{F}_1$. Then $MCS = \{f_1,...,f_n, \overline{F}_1,g_2,...,g_m\}$. \\
+For $g_1 \in MCS$, $\exists F_1 \subseteq F$ where $F_1$ is a minimal set of active faults that cause the violation of $g_1$.  Replace $g_1$ in $MCS$ with $F_1$. Then $MCS = \{f_1,...,f_n, F_1,g_2,...,g_m\}$. \\
 
-Perform this replacement for all $g_i \in MCS$ until we reach $MCS = \{f_1,...,f_n,\overline{F}_1,...,\overline{F}_m\}$. \\
+Perform this replacement for all $g_i \in MCS$ until we reach $MCS = \{f_1,...,f_n,F_1,...,F_m\}$. \\
 
-Since $\overline{F}_i$ is minimal, the $MCS$ retains its minimality. Furthermore $MCS \subseteq F$ and $C\setminus MCS$ is SAT. Therefore the $MCS$ is transformed into MinCutSet. 
+Since $F_i$ is minimal, the $MCS$ retains its minimality. Furthermore $MCS \subseteq F$ and $C\setminus MCS$ is SAT. Therefore the $MCS$ is transformed into MinCutSet. 
 
 %\end{proof}
 %\end{theorem}
