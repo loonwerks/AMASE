@@ -164,9 +164,7 @@ with Base_Types;
 				duration: permanent;
 			}
 			fault BrakeActuator_FailedFullOpen "(BrakeActuator) Stuck open fault." : faults.fail_to {
-				eq fail_value : int = if (normal_force_in > 0) then normal_force_in
-										else (alternate_force_in);
-
+				
 				inputs: val_in <- braking_force, alt_val <- fail_value; 
 				outputs: braking_force <- val_out;    
         		probability: 3.3E-6 ;
