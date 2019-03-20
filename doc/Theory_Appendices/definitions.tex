@@ -1,0 +1,73 @@
+\subsection{Definitions} 
+
+Given a constraint system $C$ where $C$ is an ordered set of abstract constraints over some set of variables, $\{C_1, ..., C_n\}$. The satisfiability problem is in conjuntive normal form (CNF): $C = \land_{i=1,...,n} C_i$; and each $C_i$ is a disjunction of literals $C_i = l_{i1} \lor ... \lor l_{ik_i}$ where each literal $ l_{ij}$is either a Boolean variable $x$ or its negation $\neg x$. \\
+
+\textbf{Satisfiability (SAT)} : A CNF is satisfiable iff there exists an assignment of truth values to its variables such that the formula evaluates to true. If not, it is unsatisfiable (UNSAT). \\
+
+Intuitively a constraint system contains the contracts that constrain component behavior and faults that are defined over these components. In the case of the nominal model, a constraint system is defined as follows: \\
+
+Let $F$ be the set of all faults defined in the model and $G$ be the set of all component contracts (guarantees). $C = \{C_1,C_2,...,C_n\}$ where for $i \in \{1,...,n\}$, $C_i$ has the following constraints for any $f_j \in F$ and $g_k \in G$ with regard to the top level property $P$: \\
+\begin{center}
+$C_i \in \left\{ \begin{array}{ll}
+	f_j :&  inactive\\
+	g_k :& true\\
+	P :& true\\
+\end{array}\right.$	
+\end{center}
+
+Given a state space $S$, a transition system $(I,T)$ consists of the initial state predicate $I : S \rightarrow \{0,1\}$ and a transition step predicate $T : S \times S \rightarrow \{0,1\}$. Reachability for $(I,T)$ is defined as the smallest predicate $R : S \rightarrow \{0,1\}$ which satisfies the following formulas:
+\begin{center}
+$\forall s. I(s) \Rightarrow R(s)$\\
+$\forall s, s' .  R \land T(s,s') \Rightarrow R(s')$\\
+\end{center}
+A safety property $\mathcal{P} : S \to \{0,1\}$ is a state predicate. A safety property $\mathcal{P}$ holds on a transition system $(I,T)$ if it holds on all reachable states. More formally, $\forall s . R(s) \Rightarrow \mathcal{P}(s)$. When this is the case, we write $(I,T) \vdash\mathcal{P}$. 
+
+Given a transition system which satisfies a safety property $P$, it is possible to find which parts of the system are necessary for satisfying the safety property through the use of Ghassabani's \textit{All Minimal Inductive Validity Cores} algorithm \cite{ghassabani2016efficient,ghassabani2017efficient}. This algorithm makes use of the collection of all minimal unsatisfiable subsets of a given transition system in terms of the negation of the top level property, i.e. the top level event. This is a minimal subset of the activation literals such that the constraint system $C$ with the formula $\neg P$ is unsatisfiable when these activation literals are held true. Formally: \\
+
+\textbf{MUS} : A Minimal Unsatisfiable Subset $M$ of a constraint system $C$ is : $\{M \subseteq C | M$ is UNSAT and $\forall c \in M$: $M \setminus \{c\}$ is SAT$\}$. This is the minimal explaination of the constraint systems infeasability. \\
+
+A closely related set is a \textit{minimal correction set} (MCS). The MCSs describe the minimal set of model elements for which if constraints are removed, the constraint system is satisfied. For $C$, this corresponds to which faults are not constrained to inactive (and are hence active) and violated contracts which lead to the violation of the safety property. In other words, the minimal set of active faults and/or violated properties that lead to the top level event.  \\
+
+\textbf{MCS} : A Minimal Correction Set $M$ of a constraint system $C$ is : $\{M \subseteq C | C \setminus M$ is SAT and $\forall S \subset M$ : $C \setminus M$ is UNSAT$\}$. A MCS can be seen to ``correct'' the infeasability of the constraint system.\\
+
+A duality exists between MUSs of a constraint system and MCSs as established by Reiter \cite{reiter1987theory}. This duality is defined in terms of \textit{hitting sets}. A hitting set of a collection of sets $A$ is a set $H$ such that every set in $A$ is ``hit'' be $H$; $H$ contains at least one element from every set in $A$ \cite{liffiton2016fast}. \\
+
+\textbf{Hitting Set}: Given a collection of sets $K$, a hitting set for $K$ is a set $H \subseteq \cup_{S \in K} S$ such that $H \cap S \neq \emptyset$ for each $S  \in K$. A hitting set for $K$ is minimal if and only if no proper subset of it is a hitting set for $K$. \\
+
+Utilizing this approach, we can easily collect the MCSs from the MUSs provided through the all MIVC algorithm and a hitting set algorithm by Murakami et. al.~\cite{murakami2013efficient,gainer2017minimal}. \\
+
+Cut sets and minimal cut sets provide important information about the vulnerabilities of a system. A \textit{Minimal Cut Set} (MinCutSet) is a minimal collection of faults that lead to the violation of the safety property (or in other words, lead to the top level event). We define MinCutSet in terms of the constraint system in question as follows:\\
+
+\textbf{MinCutSet} : Minimal Cut Set of a constraint system $C$ with all faults in the system denoted as the set $F$ is : $\{ cut \subseteq F | C \setminus cut$ is SAT and $\forall c \subset cut$ : $C \setminus c$ is UNSAT $\}$. 
+
+When the MCS contains only faults, the MCS is equivalent to the MinCutSet as shown in the first part of the proof. When contracts exist in the MCS, a replacement can be made which transforms the MCS into the MinCutSet. \\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
