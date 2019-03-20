@@ -1,0 +1,91 @@
+\subsection{Replacements for Max N Faults Analysis: Algorithm and Theory}
+
+At the leaf level, only faults are contained in IVCs (and consequently in MCSs). Thus we store these cut sets in a lookup table for quick access throughout the algorithm. For this algorithm, we assume we are in an intermediate level of the analysis. Given a fault hypothesis of max N faults, we disregard any cut sets over cardinality N and collect the rest.\\
+
+Assuming we have used the hitting set to generate MCS from the IVC, this is where the algorithm begins. \\
+
+Let $MCS = F \cup G$ for faults $f \in F$ and contracts $g \in G$. If $|G| = 0$, then add $MCS$ to contract lookup table (it is already a MinCutSet). \\
+
+Assume $|G| = \alpha > 0$.\\
+
+Let $Cut(g_j) = {cut_1(g_j), ..., cut_{\beta}(g_j)}$ be all minimal cut sets for a contract $g_j \in G$ where $|Cut(g_j)|=\beta_j$.\\
+
+\begin{algorithm}[H]
+	% \KwData{this text}
+	% \KwResult{how to write algorithm with \LaTeX2e }
+	$List(MCS) = {MCS}$ : initialize list of MCSs that contain contracts \;
+	$Cut(g_j)$ : all minimal cut sets with cardinality less than or equal to $N$ of the contract $g_j$ \;
+	$0 < j \leq \alpha$ \;
+	$0 < i \leq \gamma$ \;
+	\For{all $MCS_i \in List(MCS)$ }{
+	    Remove $MCS_i$ from $List(MCS)$\;
+	    \For{all $g_j\in MCS_i$}{
+		Remove $g_j$ from $MCS_i$ \;
+		\For{all $cut_k(g_j) \in Cut(g_j)$}{
+			Add $cut_k(g_j)$ to $MCS_i$ \;
+			\If{$|MCS_i| \leq N$}{
+				\eIf{$\exists g_j\in MCS_i$}{
+					Add $MCS_i$ to $List(MCS)$
+				}{
+					Add $MCS_i$ to contract look up table (done)
+				} % end if-else there is a contract in new MCS
+			} % end if MCS is under threshold
+		} % end for cut_i(g)
+               } % end for contracts in MCS_i
+	} % end for List(MCS)
+	\caption{Replacement}
+	\label{alg:repl_alg}
+\end{algorithm}
+
+The number of replacements $R$ that are made in this algorithm are given as the combination of minimal cut sets of the contracts within the $MCS$. The validity of this statement follows directly from the general multiplicative combinatorial principle. Therefore, the number of replacements $R$ is given by:\\
+
+$R = {\displaystyle \prod_{j=1}^{\alpha } |Cut(g_j)|}$ \\
+
+This is equivalent to the number of minimal cut sets generated which follows easily from the combinatorial calculation. It is also important to note that the cardinality of $List(MCS)$ is bounded. Every new $MCS$ that is generated that still contains contracts is added to $List(MCS)$. Thus every contract up until the penultimate contract contributes to the cardinality of $List(MCS)$. The bound is given by: \\
+
+$|List(MCS)| \leq {\displaystyle \prod_{j=1}^{\alpha -1} |Cut(g_j)|}$\\
+
+\begin{theorem} 
+The elimination of any $|MCS_i| \leq N$ will not eliminate any $|MinCutSet| \leq N$. \\
+
+\begin{proof} 
+
+If $!\exists g_j \in MCS_i$, then $MCS_i = MinCutSet$ by proof previously given. Thus, this cut set is not required for consideration in the analysis since $|MinCutSet| > N$. 
+
+If $\exists g_j \in MCS_i$, then further replacement will need to be made. Thus in the next phase of the algorithm, we will have $MCS_{i+1}$. In this case, the size can only get larger and $|MCS_i| \leq |MCS_{i+1}|$ and we have not eliminated a cut set that must be considered for the analysis. \\
+
+\end{proof}
+\end{theorem}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
