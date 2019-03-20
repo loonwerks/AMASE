@@ -555,7 +555,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 			}
 		}
-		throw new SafetyException("Unable to identify fault for " + faultName + "@" + compPath.getBase().getName());
+		return null;
+		// throw new SafetyException("Unable to identify fault for " + faultName + "@" + compPath.getBase().getName());
 	}
 
 	public void gatherFaultPropagation(AgreeNode node) {
@@ -575,16 +576,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					NestedDotID srcCompPath = srcCompPathIt.next();
 					String srcFaultName = srcFaultIt.next();
 					srcFault = findFaultInCompInst(srcFaultName, srcCompPath);
-					// for each destination fault name and path, locate the fault
-					BaseFault destFault = null;
-					Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
-					Iterator<NestedDotID> destCompPathIt = ps.getDestComp_path().iterator();
-					while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
-						NestedDotID destCompPath = destCompPathIt.next();
-						String destFaultName = destFaultIt.next();
-						destFault = findFaultInCompInst(destFaultName, destCompPath);
-						SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);
-						propagations.add(propagation);
+					if (srcFault != null) {
+						// for each destination fault name and path, locate the fault
+						BaseFault destFault = null;
+						Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
+						Iterator<NestedDotID> destCompPathIt = ps.getDestComp_path().iterator();
+						while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
+							NestedDotID destCompPath = destCompPathIt.next();
+							String destFaultName = destFaultIt.next();
+							destFault = findFaultInCompInst(destFaultName, destCompPath);
+							SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);
+							propagations.add(propagation);
+						}
 					}
 				}
 			}
@@ -777,8 +780,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (AddFaultsToAgree.getTransformFlag() == 1) {
 				// If transform flag is 1, that means we are doing the max/prob analysis
 				nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
-			}
-			else {
+			} else {
 				// If transform flag is 2, then we want to generate fault tree.
 				// In this case, we add the indep as a local var.
 				AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL,
@@ -1078,24 +1080,24 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// without changing the fault set's probability
 		if (!propagations.isEmpty()) {
 			int index = 0;
-			//go through the fault combinations
+			// go through the fault combinations
 			for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
 				FaultSetProbability currentSet = fsp;
 				boolean changed = false;
-				//for each fault probability in a combination set
+				// for each fault probability in a combination set
 				for (FaultProbability fp : fsp.elements) {
-					//see if the fault appears as a source fault in a propagation
+					// see if the fault appears as a source fault in a propagation
 					for (SafetyPropagation propagation : propagations) {
-						//if yes, get the destination fault
+						// if yes, get the destination fault
 						if (propagation.srcFault.equals(fp.fault)) {
 							BaseFault newFault = propagation.destFault;
 							changed = true;
-							//find the destination fault probability in the original list
-							//and add that to the combination set
-							//(instead of creating a new one, as applicable fault probabilities
-							//will be removed from the original list later)
-							for(FaultProbability element: elementProbabilities) {
-								if(newFault.equals(element.fault)) {
+							// find the destination fault probability in the original list
+							// and add that to the combination set
+							// (instead of creating a new one, as applicable fault probabilities
+							// will be removed from the original list later)
+							for (FaultProbability element : elementProbabilities) {
+								if (newFault.equals(element.fault)) {
 									currentSet = new FaultSetProbability(fsp.probability, currentSet, element);
 								}
 							}

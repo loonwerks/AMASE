@@ -193,11 +193,15 @@ with Base_Types;
 			power1_to_bscu : port power_1 -> bscu.power_1;
 			power2_to_bscu : port power_2 -> bscu.power_2;
 			
-	annex safety{**
-	  	analyze : max 1 fault
-	  	--analyze : probability 1.0E-7
-	  
-   **};	
+--	annex safety{**
+--	  	analyze : max 1 fault
+--	  	--analyze : probability 1.0E-7
+--	  
+--   **};	
+--   
+         annex safety{**
+	  analyze : max 0 fault 
+   **};
 	end ControlSystem.inst;
 	
 
