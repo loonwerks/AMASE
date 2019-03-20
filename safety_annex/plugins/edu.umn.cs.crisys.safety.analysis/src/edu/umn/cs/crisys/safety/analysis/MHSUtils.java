@@ -24,8 +24,8 @@ public class MHSUtils {
 
 	private static StringBuilder sourceSetSb = new StringBuilder();
 	private static HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
-	private static int varIndex = 0;
 	private static final String seperator = System.getProperty("line.separator");
+	private static int varIndex = 0;
 
 	private static void newline() {
 		write(seperator);
@@ -82,17 +82,23 @@ public class MHSUtils {
 		throw new Exception("Unable to find shd.exe in SHD_HOME or on system PATH");
 	}
 
-	public static Set<List<String>> computeMHS(Set<List<String>> sourceSets) {
+	/**
+	 *
+	 * @param sourceSets
+	 * @param mhsLimit: 0 for no limit; > 0 for upper limit on the mhs set size
+	 * @return
+	 */
+	public static Set<List<String>> computeMHS(Set<List<String>> sourceSets, int mhsLimit) {
 		HashMap<Integer, String> intToStrMap = new HashMap<>();
 		HashMap<String, Integer> strToIntMap = new HashMap<>();
 		Integer elemIdNum = new Integer(1);
 
 		// 1.1 turn string elements in sourceSets to unique numbers
-		System.out.println("source sets:");
+		// System.out.println("source sets:");
 		boolean multipleSets = false;
 		clearSourceSetSb();
 		for (List<String> curSet : sourceSets) {
-			System.out.println("source cur set: " + curSet);
+			// System.out.println("source cur set: " + curSet);
 			if (multipleSets) {
 				newline();
 			}
@@ -132,10 +138,16 @@ public class MHSUtils {
 
 			// 1.3 write MHS numbers to file
 			File destFile = File.createTempFile("mhs_", ".dat");
-
+			ProcessBuilder pb;
 			// 1.4 invoke shd.exe to generate minimal hitting sets from the numbered source sets
-			ProcessBuilder pb = new ProcessBuilder(shdPath, "0", sourceSetFile.getAbsolutePath(),
+			if (mhsLimit > 0) {
+			String mhsLimitStr = String.valueOf(mhsLimit);
+				pb = new ProcessBuilder(shdPath, "0", "-u", mhsLimitStr, sourceSetFile.getAbsolutePath(),
 					destFile.getAbsolutePath());
+			} else {
+				pb = new ProcessBuilder(shdPath, "0", sourceSetFile.getAbsolutePath(), destFile.getAbsolutePath());
+			}
+
 			// inherit IO
 			// pb.inheritIO();
 			Process process = pb.start();
@@ -145,7 +157,7 @@ public class MHSUtils {
 			BufferedReader br = new BufferedReader(new FileReader(destFile));
 			String sCurrentLine;
 
-			System.out.println("dest sets:");
+			// System.out.println("dest sets:");
 			// 1.6 convert numbered minimal hitting set to minimal hitting set in strings
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] curMHSElemNums = sCurrentLine.split(" ");
@@ -157,7 +169,7 @@ public class MHSUtils {
 					curMHSElemStrs.add(mhsElemStr);
 				}
 				destSets.add(curMHSElemStrs);
-				System.out.println("dest current set: " + curMHSElemStrs);
+				// System.out.println("dest current set: " + curMHSElemStrs);
 			}
 			br.close();
 			ensureDeleted(sourceSetFile);
@@ -203,6 +215,7 @@ public class MHSUtils {
 			varIndex++;
 			updatedName = name + "_" + varIndex;
 		}
+		elemIdMap.put(new UniqueID(name), new UniqueID(updatedName));
 		return updatedName;
 	}
 

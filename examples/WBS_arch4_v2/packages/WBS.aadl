@@ -348,12 +348,16 @@ with sensor;
 		
 	**};
 	
-   annex safety{**
-	  
-	  analyze : probability 1.0E-9 
-	  --analyze : max 1 fault 
-	  --propagate_from: {Pump_HW_Fault@phys_sys.green_hyd_pump} to {HydPump_FailedOff@phys_sys.blue_hyd_pump};
-	  
+--   annex safety{**
+--	  
+--	  analyze : probability 1.0E-9 
+--	  --analyze : max 1 fault 
+--	  --propagate_from: {Pump_HW_Fault@phys_sys.green_hyd_pump} to {HydPump_FailedOff@phys_sys.blue_hyd_pump};
+--	  
+--   **};
+   
+         annex safety{**
+	  analyze : max 0 fault 
    **};
    
 end WBS.inst;

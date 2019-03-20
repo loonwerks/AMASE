@@ -183,7 +183,9 @@ with MonitorSystem;
 			command_wheel_rolling_7 : port wheel_rolling_7 -> command_sys.wheel_rolling_7;
 			command_wheel_rolling_8 : port wheel_rolling_8 -> command_sys.wheel_rolling_8;
 		
-
+      annex safety{**
+	  analyze : max 0 fault 
+   **};
 		
 
 	end Channel.inst;

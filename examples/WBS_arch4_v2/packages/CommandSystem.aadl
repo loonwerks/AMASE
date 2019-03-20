@@ -147,7 +147,7 @@ with Base_Types;
 	
 	annex safety{**
 	
-		analyze : max 1 fault
+		analyze : max 0 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;		
