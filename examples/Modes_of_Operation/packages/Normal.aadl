@@ -1,0 +1,39 @@
+package Normal
+public
+with Base_Types;
+	system Normal
+		features
+			-- Main signal
+			signal_in : in data port Base_Types::Integer;
+			
+			-- True if and only if this system is active
+			active_mode : out data port Base_Types::Boolean;
+			-- Pass signal out
+			signal_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+				
+			assume "Main signal is bounded." : 
+				((0 <= signal_in) and (10 >= signal_in));
+				
+			guarantee "System begins in normal mode." : 
+				active_mode -> true;
+			
+			-- Need a way to see if we have previously been in alternate mode. 
+			-- If so, we cannot switch back to normal mode.
+			-- Therefore, we require a check along WITH the regular mode calculations
+			-- to see if we are actually in normal mode.	
+			guarantee "When signal input is in the range [0,5], we are in normal mode." :
+				((0 <= signal_in) and (signal_in <= 5) and not(prev(signal_in > 5, false)) => (active_mode));
+				
+			guarantee "Signal output is always equivalent to signal input." :
+				(signal_in = signal_out);
+				
+				
+			-- Need a way to see if we have previously been in alternate mode. 
+			-- If so, we cannot switch back to normal mode. 
+			
+			
+		**};	
+	end Normal;
+end Normal;

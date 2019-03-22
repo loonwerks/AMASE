@@ -1,0 +1,58 @@
+package TwoModeSys
+public
+with Base_Types;
+with Normal;
+with Alternate;
+
+	system TwoModeSys
+		features
+			-- Main signal passed to subcomponent that is active.
+			main_signal : in data port Base_Types::Integer;
+			-- Normal mode = 1
+			-- Alternate mode = 0
+			active_mode_normal : out data port Base_Types::Boolean;
+			active_mode_alt : out data port Base_Types::Boolean;	
+			
+		annex agree {**
+			
+			assume "Main signal is bounded initially between 0 and 5." : 
+				((0 <= main_signal) and (5 >= main_signal)) -> true;
+			
+			assume "Main signal is bounded always between 0 and 10." : 
+				((0 <= main_signal) and (10 >= main_signal));
+			
+		**};
+	end TwoModeSys;
+	
+	system implementation TwoModeSys.simple
+		subcomponents
+			normal_sys : system Normal::Normal;
+			alternate_sys : system Alternate::Alternate;
+			
+		connections 
+			signal_to_normal : port main_signal -> normal_sys.signal_in;
+			signal_to_alt : port main_signal -> alternate_sys.signal_in;
+			
+			active_sys_normal : port normal_sys.active_mode -> active_mode_normal;
+			active_sys_alt : port alternate_sys.active_mode -> active_mode_alt;
+		
+		annex agree {**
+			
+			-- If signal is in range AND we have not been in alternate mode, 
+			-- then we are in normal mode.
+			-- Else we are in alternate mode.
+			lemma "When signal input is in the range [0,5], we are in normal mode." :
+				if ((0 <= main_signal) and (main_signal <= 5) and not(prev(active_mode_alt, false))) 
+					then (active_mode_normal)
+				else (active_mode_alt);
+			
+			-- Lemma to make sure we do not switch back to normal mode.
+			lemma "When we switch to alternate mode, we do not change back to normal." :
+				(prev(active_mode_alt, false) => active_mode_alt);
+			
+		**};
+			
+	end TwoModeSys.simple;
+
+
+end TwoModeSys;
