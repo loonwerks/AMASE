@@ -227,7 +227,7 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			// make each minimal hitting set an node whose AND/OR that matches parent node, and whose child nodes are the elements of that mhs set
 			// connect all mhs sets via a node whose AND/OR is the opposite of the original parent node, and replace the original parent node with this new node
 			// TODO: set mhs set size according to fault hypothesis
-			Set<List<String>> destSets = MHSUtils.computeMHS(sourceSets, 1);
+			Set<List<String>> destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount);
 
 			if (destSets.size() == 0) {
 				return returnNode;

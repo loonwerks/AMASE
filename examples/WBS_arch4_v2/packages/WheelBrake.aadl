@@ -136,7 +136,8 @@ with Base_Types;
 			braking_force : out data port Base_Types::Integer;
 			
 			annex agree {**
-				
+				eq fail_value : int = if (normal_force_in > 0) then normal_force_in
+										else (alternate_force_in);
 				-- Added guarantee: brake force is always either normal or alternate force value
 				guarantee "(BrakeActuator) Brake force is equivalent to either alternate or normal force in." :
 							true -> (braking_force = alternate_force_in) or (braking_force = normal_force_in);
@@ -155,8 +156,6 @@ with Base_Types;
 				duration: permanent;
 			}
 			fault BrakeActuator_FailedFullOpen "(BrakeActuator) Stuck open fault." : faults.fail_to {
-				eq fail_value : int = if (normal_force_in > 0) then normal_force_in
-										else (alternate_force_in);
 				
 				inputs: val_in <- braking_force, alt_val <- fail_value; 
 				outputs: braking_force <- val_out;    
