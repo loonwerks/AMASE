@@ -5,6 +5,7 @@ with Base_Types;
 		features
 			-- Main signal
 			signal_in : in data port Base_Types::Integer;
+			normal_sys_signal : in data port Base_Types::Integer;
 			
 			-- True if and only if this system is active
 			active_mode : out data port Base_Types::Boolean;
@@ -14,7 +15,7 @@ with Base_Types;
 		annex agree {**
 			
 			assume "Main signal is bounded." : 
-				((0 <= signal_in) and (10 >= signal_in));
+				((0 <= signal_in) and (5 >= signal_in));
 			
 			guarantee "System never begins in alternate mode." : 
 				(active_mode = false) -> true;
@@ -23,12 +24,16 @@ with Base_Types;
 			-- If so, we cannot switch back to normal mode.
 			-- Therefore, we require a check along WITH the regular mode calculations
 			-- to see if we must remain in active mode.	
-			guarantee "When signal input is in the range [6,10], we are in alternate mode." :
-				(((6 <= signal_in) and (signal_in <= 10)) or prev(active_mode, false)) => (active_mode);
+			guarantee "When normal mode signal input is greater than 5, we are in alternate mode." :
+				(((normal_sys_signal > 5)) or prev(active_mode, false)) <=> (active_mode);
 				
 			guarantee "Signal output is always equivalent to signal input." :
 				(signal_in = signal_out);
 				
+			
+		**};
+		annex safety {**
+			
 			
 		**};
 	end Alternate;

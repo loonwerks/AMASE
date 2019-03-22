@@ -1,6 +1,7 @@
 package Normal
 public
 with Base_Types;
+with faults;
 	system Normal
 		features
 			-- Main signal
@@ -12,9 +13,12 @@ with Base_Types;
 			signal_out : out data port Base_Types::Integer;
 			
 		annex agree {**
+			
+			assume "Main signal is bounded initially." : 
+				((0 <= signal_in) and (5 >= signal_in)) -> true;
 				
 			assume "Main signal is bounded." : 
-				((0 <= signal_in) and (10 >= signal_in));
+				((0 <= signal_in) and (5 >= signal_in));
 				
 			guarantee "System begins in normal mode." : 
 				active_mode -> true;
@@ -23,16 +27,28 @@ with Base_Types;
 			-- If so, we cannot switch back to normal mode.
 			-- Therefore, we require a check along WITH the regular mode calculations
 			-- to see if we are actually in normal mode.	
-			guarantee "When signal input is in the range [0,5], we are in normal mode." :
+			guarantee "When signal input is in the range [0,5] and we haven't been in alt mode,
+					   we are in normal mode." :
 				((0 <= signal_in) and (signal_in <= 5) and not(prev(signal_in > 5, false)) => (active_mode));
 				
 			guarantee "Signal output is always equivalent to signal input." :
 				(signal_in = signal_out);
 				
 				
-			-- Need a way to see if we have previously been in alternate mode. 
-			-- If so, we cannot switch back to normal mode. 
 			
+			
+		**};
+		annex safety {**
+			
+			fault Normal_Mode_Fault "Normal fault." : faults.fail_to{
+				
+				eq fail_val : int = 11;
+				
+				inputs: val_in <- signal_out, alt_val <- fail_val; 
+				outputs: signal_out <- val_out;    
+        		probability: 1.0E-7;
+				duration: permanent;
+		}
 			
 		**};	
 	end Normal;

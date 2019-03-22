@@ -11,15 +11,19 @@ with Alternate;
 			-- Normal mode = 1
 			-- Alternate mode = 0
 			active_mode_normal : out data port Base_Types::Boolean;
-			active_mode_alt : out data port Base_Types::Boolean;	
+			active_mode_alt : out data port Base_Types::Boolean;
+			
+			-- Output signal from normal and alternate modes
+			output_normal : out data port Base_Types::Integer;
+			output_alt : out data port Base_Types::Integer;	
 			
 		annex agree {**
 			
-			assume "Main signal is bounded initially between 0 and 5." : 
+			assume "Main signal is bounded in initial step." : 
 				((0 <= main_signal) and (5 >= main_signal)) -> true;
 			
-			assume "Main signal is bounded always between 0 and 10." : 
-				((0 <= main_signal) and (10 >= main_signal));
+			assume "Main signal is bounded always between 0 and 5." : 
+				((0 <= main_signal) and (5 >= main_signal));
 			
 		**};
 	end TwoModeSys;
@@ -32,17 +36,21 @@ with Alternate;
 		connections 
 			signal_to_normal : port main_signal -> normal_sys.signal_in;
 			signal_to_alt : port main_signal -> alternate_sys.signal_in;
+			signal_from_norm_to_alt : port normal_sys.signal_out -> alternate_sys.normal_sys_signal;
 			
 			active_sys_normal : port normal_sys.active_mode -> active_mode_normal;
 			active_sys_alt : port alternate_sys.active_mode -> active_mode_alt;
+			
+			norm_output : port normal_sys.signal_out -> output_normal;
+			alt_output : port alternate_sys.signal_out -> output_alt;
 		
 		annex agree {**
 			
 			-- If signal is in range AND we have not been in alternate mode, 
 			-- then we are in normal mode.
 			-- Else we are in alternate mode.
-			lemma "When signal input is in the range [0,5], we are in normal mode." :
-				if ((0 <= main_signal) and (main_signal <= 5) and not(prev(active_mode_alt, false))) 
+			lemma "When signal is in the range [0,5], we are in normal mode." :
+				if (prev(0 <= output_normal, true) and prev(output_normal <= 5, true) and not(prev(active_mode_alt, false))) 
 					then (active_mode_normal)
 				else (active_mode_alt);
 			
@@ -50,8 +58,21 @@ with Alternate;
 			lemma "When we switch to alternate mode, we do not change back to normal." :
 				(prev(active_mode_alt, false) => active_mode_alt);
 			
-		**};
+							
+			lemma "Without faults present, we are always in normal mode." :
+				active_mode_normal and not(active_mode_alt);
+				
 			
+			lemma "Top level signal equals output from normal system." :
+				main_signal = output_normal;	
+			
+		**};
+		annex safety {**
+			
+			analyze : max 1 fault
+	  		--analyze : probability 1.0E-6
+			
+		**};	
 	end TwoModeSys.simple;
 
 
