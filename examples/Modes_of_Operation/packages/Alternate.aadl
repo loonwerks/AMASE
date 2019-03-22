@@ -1,0 +1,35 @@
+package Alternate
+public
+with Base_Types;
+	system Alternate
+		features
+			-- Main signal
+			signal_in : in data port Base_Types::Integer;
+			
+			-- True if and only if this system is active
+			active_mode : out data port Base_Types::Boolean;
+			-- Pass signal out
+			signal_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+			
+			assume "Main signal is bounded." : 
+				((0 <= signal_in) and (10 >= signal_in));
+			
+			guarantee "System never begins in alternate mode." : 
+				(active_mode = false) -> true;
+			
+			-- Need a way to see if we have previously been in alternate mode. 
+			-- If so, we cannot switch back to normal mode.
+			-- Therefore, we require a check along WITH the regular mode calculations
+			-- to see if we must remain in active mode.	
+			guarantee "When signal input is in the range [6,10], we are in alternate mode." :
+				(((6 <= signal_in) and (signal_in <= 10)) or prev(active_mode, false)) => (active_mode);
+				
+			guarantee "Signal output is always equivalent to signal input." :
+				(signal_in = signal_out);
+				
+			
+		**};
+	end Alternate;
+end Alternate;
