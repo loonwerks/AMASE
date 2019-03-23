@@ -96,6 +96,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	public static int maxFaultCount = 0;
 	public static boolean upperMostLevel = true;
+	public static ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
 
 	/*
 	 * public accessor for faultMap: faultMap is used to properly set up the
@@ -114,6 +115,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static void init() {
 		maxFaultCount = 0;
 		upperMostLevel = true;
+		faultCombinationsAboveThreshold.clear();
 	}
 
 	@Override
@@ -1040,6 +1042,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
 		PriorityQueue<FaultSetProbability> pq = new PriorityQueue<>();
 
+		collectFaultOccurrenceConstraint(minProbability, topNode, elementProbabilities, faultCombinationsAboveThreshold,
+				pq);
+
+		buildNonFaultCombinationAssertions(topNode, builder, elementProbabilities, faultCombinationsAboveThreshold);
+	}
+
+	private void collectFaultOccurrenceConstraint(double minProbability, AgreeNode topNode,
+			ArrayList<FaultProbability> elementProbabilities,
+			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold, PriorityQueue<FaultSetProbability> pq) {
 		// gather all fault probabilities. If there are no faults, exit out.
 		getFaultProbExprList(topNode, new ArrayList<>(), elementProbabilities);
 		Collections.sort(elementProbabilities);
@@ -1126,20 +1137,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				index++;
 			}
 		}
-
-		// With the valid fault combinations including dependent faults, and
-		// noFaultExpr has the default (no-fault) case. Let's construct a proposition.
-		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
-		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
-		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
-			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
-			goodElements.removeAll(fsp.elements);
-			Expr local = getNoFaultProposition(goodElements);
-			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
-		}
-
-		// Add this fault hypothesis as an assertion.
-		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
 	// This will add max fault behavior or probability behavior depending on what is
@@ -1179,110 +1176,29 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private void collectTopLevelMaxFaultOccurrenceConstraint(double minProbability, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
 
-//		ArrayList<FaultProbability> elementProbabilities = new ArrayList<>();
-//		ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
-//		PriorityQueue<FaultSetProbability> pq = new PriorityQueue<>();
-//
-//		// gather all fault probabilities. If there are no faults, exit out.
-//		getFaultProbExprList(topNode, new ArrayList<>(), elementProbabilities);
-//		Collections.sort(elementProbabilities);
-//		if (elementProbabilities.isEmpty()) {
-//			return;
-//		}
-//
-//		// remove elements from list that are too unlikely & add remaining elements to
-//		// 'good' set.
-//		ArrayList<FaultProbability> remainder = new ArrayList<>(elementProbabilities);
-//		for (int i = 0; i < remainder.size(); i++) {
-//			FaultProbability elementProbability = remainder.get(i);
-//			if (elementProbability.probability < minProbability) {
-//				remainder.subList(i, remainder.size()).clear();
-//			} else {
-//				FaultSetProbability fsp = new FaultSetProbability(elementProbability.probability, elementProbability);
-//				faultCombinationsAboveThreshold.add(fsp);
-//				pq.add(fsp);
-//			}
-//		}
-//
-//		// So...now we have a priority queue with remaining fault combinations to be
-//		// checked
-//		// for addition. The PQ preserves the invariant that highest probability
-//		// elements are
-//		// first. We attempt to combine with remainder (also in priority order).
-//		// If unable to combine because combination below threshold, remove rest of
-//		// elementProbability list (the rest will be below threshold for all subsequent
-//		// elements).
-//		// Complete when either the PQ or the element list is empty.
-//		while (!pq.isEmpty() && !remainder.isEmpty()) {
-//			FaultSetProbability fsp = pq.remove();
-//			for (int i = 0; i < remainder.size(); i++) {
-//				FaultProbability fp = remainder.get(i);
-//				double setProbability = fp.probability * fsp.probability;
-//				if (setProbability < minProbability) {
-//					remainder.subList(i, remainder.size()).clear();
-//				} else if (!fsp.elements.contains(fp)) {
-//					FaultSetProbability newSet = new FaultSetProbability(setProbability, fsp, fp);
-//					pq.add(newSet);
-//					faultCombinationsAboveThreshold.add(newSet);
-//				}
-//			}
-//		}
-//
-//		// Now faultCombinationsAboveThreshold contains all the valid fault combinations
-//		// of the independently active faults
-//
-//		// If the propagations set is not empty, then for each fault in each valid fault
-//		// combination
-//		// see if it appears as a source fault in the propagations
-//		// if yes, insert the destination fault in the same valid fault combination
-//		// (fault set)
-//		// without changing the fault set's probability
-//		if (!propagations.isEmpty()) {
-//			int index = 0;
-//			// go through the fault combinations
-//			for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
-//				FaultSetProbability currentSet = fsp;
-//				boolean changed = false;
-//				// for each fault probability in a combination set
-//				for (FaultProbability fp : fsp.elements) {
-//					// see if the fault appears as a source fault in a propagation
-//					for (SafetyPropagation propagation : propagations) {
-//						// if yes, get the destination fault
-//						if (propagation.srcFault.equals(fp.fault)) {
-//							BaseFault newFault = propagation.destFault;
-//							changed = true;
-//							// find the destination fault probability in the original list
-//							// and add that to the combination set
-//							// (instead of creating a new one, as applicable fault probabilities
-//							// will be removed from the original list later)
-//							for (FaultProbability element : elementProbabilities) {
-//								if (newFault.equals(element.fault)) {
-//									currentSet = new FaultSetProbability(fsp.probability, currentSet, element);
-//								}
-//							}
-//						}
-//					}
-//				}
-//				if (changed) {
-//					faultCombinationsAboveThreshold.set(index, currentSet);
-//				}
-//				index++;
-//			}
-//		}
-//
-//		// With the valid fault combinations including dependent faults, and
-//		// noFaultExpr has the default (no-fault) case. Let's construct a proposition.
-//		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
-//		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
-//		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
-//			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
-//			goodElements.removeAll(fsp.elements);
-//			Expr local = getNoFaultProposition(goodElements);
-//			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
-//		}
-//
-//		// Add this fault hypothesis as an assertion.
-//		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
+		ArrayList<FaultProbability> elementProbabilities = new ArrayList<>();
+		PriorityQueue<FaultSetProbability> pq = new PriorityQueue<>();
+
+		collectFaultOccurrenceConstraint(minProbability, topNode, elementProbabilities, faultCombinationsAboveThreshold,
+				pq);
+	}
+
+	private void buildNonFaultCombinationAssertions(AgreeNode topNode, AgreeNodeBuilder builder,
+			ArrayList<FaultProbability> elementProbabilities,
+			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold) {
+		// With the valid fault combinations including dependent faults, and
+		// noFaultExpr has the default (no-fault) case. Let's construct a proposition.
+		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
+		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
+		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
+			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
+			goodElements.removeAll(fsp.elements);
+			Expr local = getNoFaultProposition(goodElements);
+			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
+		}
+
+		// Add this fault hypothesis as an assertion.
+		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
 	/*

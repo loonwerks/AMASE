@@ -41,11 +41,23 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 	public SoteriaFTNonLeafNode visit(SoteriaFTOrNode node) {
 		SoteriaFTNonLeafNode returnNode = null;
 		boolean isRoot = node.isRoot;
+		List<SoteriaFTNode> childNodesToRemove = new ArrayList<SoteriaFTNode>();
 		// if not resolved, go visit its child nodes
 		if (!isORNodeResolved(node, isRoot)) {
 			for (SoteriaFTNode child : node.childNodes.values()) {
 				SoteriaFTNode childReturn = child.accept(this);
-				node.replaceChildNode(childReturn.nodeName, childReturn);
+				if (childReturn.nodeValue == false) {
+					childNodesToRemove.add(child);
+				} else {
+					node.replaceChildNode(childReturn.nodeName, childReturn);
+				}
+			}
+			node.removeChildNodes(childNodesToRemove);
+			// if no child node left for this node
+			// set it can be removed at the upper level
+			if (node.childNodes.size() == 0) {
+				node.nodeValue = false;
+				return node;
 			}
 			// after visiting, if not resolved, go resolve it
 			if (!isORNodeResolved(node, isRoot)) {
@@ -53,9 +65,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			}
 		}
 		if (returnNode != null) {
-			return returnNode;
+			return prune(returnNode);
 		} else {
-			return node;
+			return prune(node);
 		}
 	}
 
@@ -63,21 +75,34 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 	public SoteriaFTNode visit(SoteriaFTAndNode node) {
 		SoteriaFTNonLeafNode returnNode = null;
 		boolean isRoot = node.isRoot;
+		List<SoteriaFTNode> childNodesToRemove = new ArrayList<SoteriaFTNode>();
 		// if not resolved, go visit its child nodes
 		if (!isANDNodeResolved(node)) {
 			for (SoteriaFTNode child : node.childNodes.values()) {
 				SoteriaFTNode childReturn = child.accept(this);
-				node.replaceChildNode(childReturn.nodeName, childReturn);
+				if (childReturn.nodeValue == false) {
+					childNodesToRemove.add(child);
+				} else {
+					node.replaceChildNode(childReturn.nodeName, childReturn);
+				}
+			}
+			node.removeChildNodes(childNodesToRemove);
+			// if no child node left for this node
+			// set it can be removed at the upper level
+			if (node.childNodes.size() == 0) {
+				node.nodeValue = false;
+				return node;
 			}
 			// after visiting, if not resolved, go resolve it
 			if (!isANDNodeResolved(node)) {
 				returnNode = resolveAndNode(node);
 			}
 		}
+
 		if (returnNode != null) {
-			return returnNode;
+			return prune(returnNode);
 		} else {
-			return node;
+			return prune(node);
 		}
 	}
 
@@ -105,6 +130,23 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 		}
 		node.resolved = true;
 		return true;
+	}
+
+	private SoteriaFTNonLeafNode prune(SoteriaFTNonLeafNode node) {
+		// only prune AND node
+		if (node instanceof SoteriaFTAndNode) {
+			if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
+				if (node.childNodes.size() > AddFaultsToNodeVisitor.maxFaultCount) {
+					node.nodeValue = false;
+				} else {
+					node.nodeValue = true;
+				}
+			} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+				// TODO: prune according to valid fault combinations
+				node.nodeValue = true;
+			}
+		}
+		return node;
 	}
 
 	// An AND node is resolved if
@@ -227,7 +269,22 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			// make each minimal hitting set an node whose AND/OR that matches parent node, and whose child nodes are the elements of that mhs set
 			// connect all mhs sets via a node whose AND/OR is the opposite of the original parent node, and replace the original parent node with this new node
 			// TODO: set mhs set size according to fault hypothesis
-			Set<List<String>> destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount);
+			Set<List<String>> destSets = new HashSet<List<String>>();
+
+			// if original AND node, transform to an OR node with child nodes as AND nodes connecting leaf nodes
+			// the child nodes for each AND node corresponds to a mhs returned
+			// - they can be pruned according to fault hypothesis
+			if (originalAndNode) {
+				if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
+					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount);
+				} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+					// TODO: prune according to valid fault combinations
+				}
+			}
+			// else no pruning
+			else {
+				destSets = MHSUtils.computeMHS(sourceSets, 0);
+			}
 
 			if (destSets.size() == 0) {
 				return returnNode;
