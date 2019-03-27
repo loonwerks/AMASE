@@ -1,0 +1,50 @@
+package Simple_Test
+public
+	with Base_Types;
+	
+	system C1
+		features
+			in1: in data port Base_Types::Integer;
+			out1: out data port Base_Types::Integer;
+		annex agree {**	
+			guarantee "C1 out1 value": out1 >= 3;
+		**};
+	end C1;
+	
+	system implementation C1.impl
+		subcomponents
+			C2: system C2;
+		connections
+			in1_to_C2_in2: port in1 -> C2.in2;
+			C2_out2_to_out1: port C2.out2 -> out1;
+		annex safety {**
+      		analyze : max 0 fault
+   		**};		
+	end C1.impl;
+	
+	system C2
+		features
+			in2: in data port Base_Types::Integer;
+			out2: out data port Base_Types::Integer;
+		annex agree {**	
+			guarantee "C2 out2 value": out2 = 3;
+			node invert_bool_signal(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (not(val_in)) else val_in;
+		tel;
+		
+			node invert_int_signal(val_in: int, trigger: bool) returns (val_out:int);
+		let
+	  		val_out = if trigger then (-1*val_in) else val_in;
+		tel;
+		**};	
+		annex safety {**
+
+			fault C2_out_negation "C2 out2 negation fault": invert_int_signal {
+			inputs: val_in <- out2;     
+			outputs: out2 <- val_out;    
+			duration: permanent;
+			}	
+		**};	
+	end C2;
+end Simple_Test;
