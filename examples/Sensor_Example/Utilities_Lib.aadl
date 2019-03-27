@@ -1,0 +1,35 @@
+package Utilities_Lib
+public
+
+annex agree {**
+    
+  	node Vote_2_of_3_Sensors(sensor1_in: bool, sensor2_in: bool, sensor3_in: bool) returns (voter_out: bool);
+  	var
+	 sensor1_val: int;
+	 sensor2_val: int;
+	 sensor3_val: int; 
+	 sensors_val: int;
+   	let
+   	  sensor1_val = if(sensor1_in) then 1 else 0 ;	
+   	  sensor2_val = if(sensor2_in) then 1 else 0 ;	
+   	  sensor3_val = if(sensor3_in) then 1 else 0 ;	
+   	  sensors_val = sensor1_val + sensor2_val + sensor3_val;
+      voter_out = if(sensors_val >=2) then true else false; 
+    tel;	
+    
+  	node Vote_all_3_Sensors(sensor1_in: bool, sensor2_in: bool, sensor3_in: bool) returns (voter_out: bool);
+  	var
+	 sensor1_val: int;
+	 sensor2_val: int;
+	 sensor3_val: int; 
+	 sensors_val: int;
+   	let
+   	  sensor1_val = if(sensor1_in) then 1 else 0 ;	
+   	  sensor2_val = if(sensor2_in) then 1 else 0 ;	
+   	  sensor3_val = if(sensor3_in) then 1 else 0 ;	
+   	  sensors_val = sensor1_val + sensor2_val + sensor3_val;
+      voter_out = if(sensors_val = 3) then true else false; 
+    tel;    
+    	
+**};
+end Utilities_Lib;
