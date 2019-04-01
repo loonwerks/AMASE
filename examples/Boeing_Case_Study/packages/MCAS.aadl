@@ -1,0 +1,29 @@
+package MCAS
+public
+with Base_Types;
+
+	-- Maneuvering Characteristics Augmentation System
+	system MCAS
+		features
+			-- Status: on or off
+			autopilot_status : in data port Base_Types::Boolean;
+			
+			-- Degrees
+			angle_of_attack : in data port Base_Types::Float;
+			
+			-- Assuming this is boolean (up=1, down=0)
+			flaps_up_signal : in data port Base_Types::Boolean;
+			
+			-- Indicates a turn that involves a bank of more than 30 degrees.
+			-- Calculated based on airspeed and bank angle inputs.
+			steep_turn : in data port Base_Types::Float;
+			
+			-- Degrees: trim nose up, trim nose down
+			pilot_column_cutout : in data port Base_Types::Float;
+			
+			--Trim command to HSTCS up to predefined limit each time the
+			-- MCAS is activated.
+			trim_cmd : out data port Base_Types::Float;
+			
+	end MCAS;
+end MCAS;
