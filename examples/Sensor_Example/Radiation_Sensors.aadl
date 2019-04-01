@@ -1,0 +1,33 @@
+package Radiation_Sensors
+public
+	
+	with Base_Types;
+	renames Base_Types::all;
+	
+		system Radiation_Sensor
+		features
+			Env_Radiation: in data port Integer;
+			High_Radiation_Indicator: out data port Boolean;
+		annex agree{**
+			guarantee "if env radiation higher than radiation threshold then indicate high radiation":
+			High_Radiation_Indicator = (Env_Radiation > Constants.HIGH_RADIATION_THRESHOLD);
+					
+		**};
+		annex safety {**
+--			fault radiation_sensor_stuck_at_low "radiation sensor stuck at low": Common_Faults.stuck_false {
+--			inputs: val_in <- High_Radiation_Indicator;     
+--			outputs: High_Radiation_Indicator <- val_out;   
+--         	probability: 1.0E-6 ;
+--			duration: permanent;
+--			}
+			
+			fault radiation_sensor_stuck_at_high "radiation sensor stuck at high": Common_Faults.stuck_true {
+			inputs: val_in <- High_Radiation_Indicator;     
+			outputs: High_Radiation_Indicator <- val_out;   
+         	probability: 1.0E-6 ;
+			duration: permanent;
+			}	
+		**};
+	end Radiation_Sensor;	
+	
+end Radiation_Sensors;

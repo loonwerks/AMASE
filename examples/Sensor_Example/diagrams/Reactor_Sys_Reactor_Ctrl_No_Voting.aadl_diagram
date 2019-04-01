@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="ASCII"?>
+<diagram:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:diagram="http://osate.org/diagram" formatVersion="7">
+  <element uuid="03013e26-2bad-4ba4-80ff-b1bb7c865303" manual="true">
+    <element uuid="212accbd-d72c-4a14-b46f-7791556a2356">
+      <element uuid="6c929e79-c9ce-4a58-8881-27c7a9892b7e">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>env_pressure_to_reactor_pressure_ctrl</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="194e8ca5-6c46-43f9-883e-cea0600322da">
+      <element uuid="fc86639f-4845-43b7-b584-71de16815226">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>env_radiation_to_reactor_radiation_ctrl</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="3435f6d3-213b-4a05-896a-3a4c8959c0bc">
+      <element uuid="e10e748d-e84c-4d03-a1e7-fc282a19bfe9">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>env_temp_to_reactor_temp_ctrl</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="78957cb9-87d9-465f-b615-dff6ba412d92">
+      <element uuid="17c5ed53-a5b1-4be5-8f3e-f5dea09d2dab">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>reactor_pressure_ctrl_to_shut_down</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="edc51504-4e57-4acf-ac5d-9219d09b9245">
+      <element uuid="097885b2-02e2-48eb-ae15-018a0c9638de">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>reactor_radiation_ctrl_to_shut_down</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="64e9cc59-8fb6-4a10-8678-58332ae0fc75">
+      <element uuid="00ff06cb-1d53-4554-b82e-eff6af908ee6">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>reactor_temp_ctrl_to_shut_down</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="1a9dfa1a-751c-437d-b479-c63e4f64a635" dockArea="left">
+      <bo>
+        <seg>feature</seg>
+        <seg>env_pressure</seg>
+      </bo>
+      <position y="440.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="473efa83-5765-4bc7-9868-b9cc7a7fe8a9" dockArea="left">
+      <bo>
+        <seg>feature</seg>
+        <seg>env_radiation</seg>
+      </bo>
+      <position y="110.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="e1a3e34e-6c9a-4363-88b9-1cac2dae00a5" dockArea="left">
+      <bo>
+        <seg>feature</seg>
+        <seg>env_temp</seg>
+      </bo>
+      <position y="790.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="a7be621c-2c45-4eeb-8d3f-4a10a3905c32" dockArea="right">
+      <bo>
+        <seg>feature</seg>
+        <seg>shut_down_cmd</seg>
+      </bo>
+      <position x="1274.0" y="310.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="0e466a46-d1da-4a18-b39d-90b3e51c2ef4" manual="true">
+      <element uuid="1244f0c5-50b9-4b21-9733-70a3a9778911">
+        <element uuid="f7798dbc-f24c-49b8-a8ae-6143fb61db64">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_pressure_to_pressure_sensor1</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="55ec8bc4-5f8a-41f0-b563-0de39c2ff043">
+        <element uuid="27a483da-1092-4c52-a6b8-45c886ad645e">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_pressure_to_pressure_sensor2</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="88e4a439-4d09-427f-8310-631db2241fe9">
+        <element uuid="d1185a85-33c1-44fb-8ccb-7c1e8170fd31">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_pressure_to_pressure_sensor3</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="fa9abf2b-c9b7-4e64-949a-bd2abc693aaf">
+        <element uuid="635d5ae6-686b-4e8a-ad1e-e9ab5d0e1c8e">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>pressure_sensor1_high_temp_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="083d3fa1-36ee-4aec-87bf-940af1507c58">
+        <element uuid="3eef1d06-1f39-4dfb-ac1b-ead4e2679e09">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>pressure_sensor2_high_temp_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="1201185c-1c8b-45c2-97ea-6a18d93181da">
+        <element uuid="0aa504e9-ab10-44d6-9bce-1bbc0bd8af3c">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>pressure_sensor3_high_temp_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="e87cd1c8-7a77-421e-a832-a7cd6da846e4" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>env_pressure</seg>
+        </bo>
+        <position y="122.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="d02299a3-6698-40ac-95e6-54688a539b10" dockArea="right">
+        <bo>
+          <seg>feature</seg>
+          <seg>shut_down_cmd</seg>
+        </bo>
+        <position x="514.0" y="112.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="9f181d10-798d-4cbd-8290-4590ea6f41e0" manual="true">
+        <element uuid="6c77bdf8-8585-4b90-81ae-db04f65fab7a" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_pressure</seg>
+          </bo>
+          <position y="21.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="a0858cd6-8951-46c5-b043-eeb45682d54e" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_pressure_indicator</seg>
+          </bo>
+          <position x="355.0" y="21.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>pressure_sensor1</seg>
+        </bo>
+        <position x="50.0" y="52.0"/>
+        <size width="535.0" height="61.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <element uuid="c2ed70f7-381e-4d60-82ce-3819d37a0f10" manual="true">
+        <element uuid="d8ded378-6533-43d8-8f68-a70097891822" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_pressure</seg>
+          </bo>
+          <position y="20.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="ba48c849-f72b-42eb-a18f-f0399785928b" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_pressure_indicator</seg>
+          </bo>
+          <position x="355.0" y="28.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>pressure_sensor2</seg>
+        </bo>
+        <position x="50.0" y="122.0"/>
+        <size width="535.0" height="68.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <element uuid="961cf87d-9daf-49d3-abfa-738117c66ba0" manual="true">
+        <element uuid="7d5f5a8f-277f-4243-b4bb-17148ada3226" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_pressure</seg>
+          </bo>
+          <position y="10.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="c354c84f-f767-423c-9086-d4da128c85ae" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_pressure_indicator</seg>
+          </bo>
+          <position x="352.0" y="10.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>pressure_sensor3</seg>
+        </bo>
+        <position x="52.0" y="200.0"/>
+        <size width="532.0" height="60.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>reactor_pressure_ctrl</seg>
+      </bo>
+      <position x="291.0" y="400.0"/>
+      <size width="640.0" height="281.0"/>
+      <contentFilters>
+        <filter>internalFeatures</filter>
+        <filter>connections</filter>
+        <filter>flowSpecifications</filter>
+        <filter>features</filter>
+        <filter>processorFeatures</filter>
+        <filter>subcomponents</filter>
+      </contentFilters>
+    </element>
+    <element uuid="7ad9959a-f7fe-4f87-95e4-d0ac5877c666">
+      <element uuid="4f58561c-0832-4eda-a041-5747b24661ae">
+        <element uuid="3e9c6cbe-9bee-4656-9598-454fc1bca7fa">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_radiation_to_radiation_sensor1</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="7fe77394-10f9-49fa-9397-977f90a316ce">
+        <element uuid="257c7c11-e2de-469b-841c-e319ba5b03a6">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_radiation_to_radiation_sensor2</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="b3aa8d74-43eb-4ddb-82e7-d4450e6ceb9b">
+        <element uuid="fb55fe0e-ad8c-483e-b10e-c10e3e73c15a">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_radiation_to_radiation_sensor3</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="61048f93-2616-4622-a51d-e248a2250928">
+        <element uuid="d5d8641e-6a63-434f-9c23-89fc43477956">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>radiation_sensor1_high_radiation_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="1231ced4-03bd-497a-a4c0-5d5d512288b0">
+        <element uuid="9230f25a-ee3d-48bd-83c5-9636700d4f71">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>radiation_sensor2_high_radiation_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="2a030a3f-dca1-4584-900b-7936816b0105">
+        <element uuid="6a563cf8-cb00-4692-966c-f1ee21cee0ed">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>radiation_sensor3_high_radiation_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="57679da2-6a8a-4610-b8ad-f6cdcd3b1bc5" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>env_radiation</seg>
+        </bo>
+        <position y="190.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="e3b10578-dc83-473a-96ef-ff9ce89681c2" dockArea="right">
+        <bo>
+          <seg>feature</seg>
+          <seg>shut_down_cmd</seg>
+        </bo>
+        <position x="515.0" y="180.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="a5e8689c-fe3a-4815-a24a-e2aa2ec3a9ad">
+        <element uuid="75410342-2769-4c91-901a-94afa64bfc52" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_radiation</seg>
+          </bo>
+          <position y="60.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="d034a56b-4130-4c14-bd37-e9693bc798b1" dockArea="top">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_radiation_indicator</seg>
+          </bo>
+          <position x="213.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>radiation_sensor1</seg>
+        </bo>
+        <position x="74.0" y="20.0"/>
+        <size width="448.0" height="100.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <element uuid="ef801a85-f2eb-4554-9c3d-8e1068651bdc">
+        <element uuid="8d6f74b8-e580-4e75-ac88-997baeaead0c" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_radiation</seg>
+          </bo>
+          <position y="60.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="d8bc8dec-6204-43c0-8da3-80ec6abaef4c" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_radiation_indicator</seg>
+          </bo>
+          <position x="273.0" y="21.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>radiation_sensor2</seg>
+        </bo>
+        <position x="68.0" y="130.0"/>
+        <size width="460.0" height="100.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <element uuid="b91a5cfa-f7b2-48f0-9f7a-3a3482fb2619">
+        <element uuid="faf1e02c-1cfc-41bd-9736-4ae710fa73ba" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_radiation</seg>
+          </bo>
+          <position y="30.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="314dced5-965a-460c-9c72-220d946125cb" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_radiation_indicator</seg>
+          </bo>
+          <position x="257.0" y="21.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>radiation_sensor3</seg>
+        </bo>
+        <position x="76.0" y="240.0"/>
+        <size width="444.0" height="100.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>reactor_radiation_ctrl</seg>
+      </bo>
+      <position x="290.0" y="30.0"/>
+      <size width="641.0" height="360.0"/>
+      <contentFilters>
+        <filter>connections</filter>
+        <filter>systemSubcomponents</filter>
+        <filter>flowSpecifications</filter>
+        <filter>features</filter>
+        <filter>internalFeatures</filter>
+        <filter>processorFeatures</filter>
+      </contentFilters>
+    </element>
+    <element uuid="a23a308d-6fb0-4895-b6e3-725ebbd9f9d5" manual="true">
+      <element uuid="b41fe961-64f6-4803-8301-92a44b2b0416">
+        <element uuid="144f1d2f-136e-47ef-a9a6-b9727d7b5c41">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_temp_to_temp_sensor1</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="bcd8c97f-5ae3-44a1-9d82-c4c5991e2a8d">
+        <element uuid="a79ef8ac-9413-4aaa-87c1-c66f3ea2a746">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_temp_to_temp_sensor2</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="09b72711-28c7-4eff-8494-9b71cee177d8">
+        <element uuid="80a6d3c1-dd79-448e-b4fa-fff1045fe639">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>env_temp_to_temp_sensor3</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="14260ea6-927f-4fb7-aa55-f5cc1e6b569e">
+        <element uuid="a748f6bd-c3b9-4e47-b4c9-98ede3aaeb35">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>temp_sensor1_high_temp_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="5c0b051e-08ea-403d-b82b-d07f489f1cbe">
+        <element uuid="304d3ce3-b7ec-43ae-bcf8-60a4d66fb80a">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>temp_sensor2_high_temp_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="0576ed77-647e-48c6-8c11-52dc75108921">
+        <element uuid="f19c297d-4311-47cd-80b6-974ebdacb039">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>temp_sensor3_high_temp_to_shut_down</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <element uuid="fb17ed89-db10-49ac-8833-21686281f616" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>env_temp</seg>
+        </bo>
+        <position y="160.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="93f14bed-8e8a-4503-b6ac-bbcf68a16043" dockArea="right">
+        <bo>
+          <seg>feature</seg>
+          <seg>shut_down_cmd</seg>
+        </bo>
+        <position x="515.0" y="110.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="1d1886d9-158e-4d1f-a0d0-c1c2bc462e1e" manual="true">
+        <element uuid="8f3e436e-3309-4278-8a68-95093a72456e" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_temp</seg>
+          </bo>
+          <position y="10.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="339b53da-9c30-4cf4-bca8-e075ee5cd601" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_temp_indicator</seg>
+          </bo>
+          <position x="235.0" y="20.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>temp_sensor1</seg>
+        </bo>
+        <position x="110.0" y="41.0"/>
+        <size width="391.0" height="70.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <element uuid="aa81bfaa-70b2-40d5-abbf-da4bba0ee6d9" manual="true">
+        <element uuid="d5a735b2-2ce6-4844-a5e3-931c00617b67" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_temp</seg>
+          </bo>
+          <position y="10.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="69af1d7c-7d00-459f-b232-b453202771fd" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_temp_indicator</seg>
+          </bo>
+          <position x="235.0" y="10.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>temp_sensor2</seg>
+        </bo>
+        <position x="110.0" y="130.0"/>
+        <size width="391.0" height="61.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <element uuid="b395baf0-b115-42e7-93a7-bbc2324c3dac" manual="true">
+        <element uuid="e8cd2569-ee83-4379-9efe-09a85c869b5b" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>env_temp</seg>
+          </bo>
+          <position y="10.0"/>
+          <contentFilters/>
+        </element>
+        <element uuid="88707e60-ead7-4a4c-8d69-4b0966be252c" dockArea="right">
+          <bo>
+            <seg>feature</seg>
+            <seg>high_temp_indicator</seg>
+          </bo>
+          <position x="235.0" y="10.0"/>
+          <contentFilters/>
+        </element>
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>temp_sensor3</seg>
+        </bo>
+        <position x="110.0" y="210.0"/>
+        <size width="391.0" height="59.0"/>
+        <contentFilters>
+          <filter>features</filter>
+          <filter>internalFeatures</filter>
+          <filter>processorFeatures</filter>
+          <filter>connections</filter>
+          <filter>flowSpecifications</filter>
+        </contentFilters>
+      </element>
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>reactor_temp_ctrl</seg>
+      </bo>
+      <position x="290.0" y="690.0"/>
+      <size width="641.0" height="291.0"/>
+      <contentFilters>
+        <filter>features</filter>
+        <filter>internalFeatures</filter>
+        <filter>processorFeatures</filter>
+        <filter>connections</filter>
+        <filter>flowSpecifications</filter>
+      </contentFilters>
+    </element>
+    <bo>
+      <seg>classifier</seg>
+      <seg>reactor_ctrl.no_voting</seg>
+    </bo>
+    <position x="-270.0" y="-60.0"/>
+    <size width="1400.0" height="991.0"/>
+    <contentFilters>
+      <filter>features</filter>
+      <filter>internalFeatures</filter>
+      <filter>processorFeatures</filter>
+      <filter>connections</filter>
+      <filter>flowSpecifications</filter>
+      <filter>subcomponents</filter>
+    </contentFilters>
+  </element>
+  <config type="structure" connectionPrimaryLabelsVisible="false">
+    <enabledAadlProperties/>
+    <context>
+      <seg>classifier</seg>
+      <seg>reactor_sys::reactor_ctrl.no_voting</seg>
+    </context>
+  </config>
+</diagram:Diagram>
