@@ -1,0 +1,76 @@
+package Reactor_Pressure_Ctrl
+public
+	with Base_Types;
+	renames Base_Types::all;
+	
+	with Pressure_Sensors;
+	renames Pressure_Sensors::all;
+
+	with Voters;
+	renames Voters::all;
+
+	system Reactor_Pressure_Ctrl
+		features
+			Env_Pressure: in data port Integer;
+			Shut_Down_Cmd: out data port Boolean;
+		annex agree {**
+				
+			guarantee "shut down when and only when we should": 
+			Shut_Down_Cmd = (Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD);		
+			
+--with the above guarantee split into the following two, with pressure sensor stuck at low,
+--for the non voting implementation, it takes the max 3 fault to make the "shut down when we should" to fail						
+--			guarantee "shut down when we should": 
+--			(Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD) => Shut_Down_Cmd;			
+--				
+--			guarantee "don't shut down when we shouldn't": 
+--			not(Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD) => not(Shut_Down_Cmd);	
+			
+		**};
+	end Reactor_Pressure_Ctrl;
+
+	system implementation Reactor_Pressure_Ctrl.No_Voting
+		subcomponents
+			Pressure_Sensor1: system Pressure_Sensor;
+			Pressure_Sensor2: system Pressure_Sensor;
+			Pressure_Sensor3: system Pressure_Sensor;
+		connections
+			Env_Pressure_To_Pressure_Sensor1: port Env_Pressure -> Pressure_Sensor1.Env_Pressure;
+			Env_Pressure_To_Pressure_Sensor2: port Env_Pressure -> Pressure_Sensor2.Env_Pressure;
+			Env_Pressure_To_Pressure_Sensor3: port Env_Pressure -> Pressure_Sensor3.Env_Pressure;
+			Pressure_Sensor1_High_Temp_To_Shut_Down: port Pressure_Sensor1.High_Pressure_Indicator -> Shut_Down_Cmd;
+			Pressure_Sensor2_High_Temp_To_Shut_Down: port Pressure_Sensor2.High_Pressure_Indicator -> Shut_Down_Cmd;
+			Pressure_Sensor3_High_Temp_To_Shut_Down: port Pressure_Sensor3.High_Pressure_Indicator -> Shut_Down_Cmd;
+		annex agree {**
+			connection Pressure_Sensor1_High_Temp_To_Shut_Down: true;
+			connection Pressure_Sensor2_High_Temp_To_Shut_Down: true;
+			connection Pressure_Sensor3_High_Temp_To_Shut_Down: true;
+			
+			assign Shut_Down_Cmd = Pressure_Sensor1.High_Pressure_Indicator or Pressure_Sensor2.High_Pressure_Indicator or Pressure_Sensor3.High_Pressure_Indicator;
+			
+		**};
+		annex safety {**
+      		analyze : max 3 fault
+   		**};
+	end Reactor_Pressure_Ctrl.No_Voting;
+
+	system implementation Reactor_Pressure_Ctrl.W_Voting
+		subcomponents
+			Pressure_Sensor1: system Pressure_Sensor;
+			Pressure_Sensor2: system Pressure_Sensor;
+			Pressure_Sensor3: system Pressure_Sensor;
+			Pressure_Voter: system Two_Of_Three_Agree_Voter;
+		connections
+			Env_Pressure_To_Pressure_Sensor1: port Env_Pressure -> Pressure_Sensor1.Env_Pressure;
+			Env_Pressure_To_Pressure_Sensor2: port Env_Pressure -> Pressure_Sensor2.Env_Pressure;
+			Env_Pressure_To_Pressure_Sensor3: port Env_Pressure -> Pressure_Sensor3.Env_Pressure;
+			Pressure_Sensor1_To_Voter: port Pressure_Sensor1.High_Pressure_Indicator -> Pressure_Voter.Sensor1_High;
+			Pressure_Sensor2_To_Voter: port Pressure_Sensor2.High_Pressure_Indicator -> Pressure_Voter.Sensor2_High;
+			Pressure_Sensor3_To_Voter: port Pressure_Sensor3.High_Pressure_Indicator -> Pressure_Voter.Sensor3_High;
+			Pressure_Voter_To_Shut_Down: port Pressure_Voter.High_Out -> Shut_Down_Cmd;
+		annex safety {**
+      		analyze : max 2 fault
+   		**};
+	end Reactor_Pressure_Ctrl.W_Voting;
+	
+end Reactor_Pressure_Ctrl;

@@ -38,12 +38,30 @@ public class SoteriaFaultTree extends SoteriaFTAst {
 	// some node's child nodes were added before those child nodes obtained their own child nodes
 	// walk through all intermediate nodes to fix any discrepancies
 	public void updateChildNodes() {
+		List<SoteriaFTNonLeafNode> nodesToRemove = new ArrayList<SoteriaFTNonLeafNode>();
 		for (SoteriaFTNonLeafNode intermediateNode : intermediateNodes.values()) {
+			List<SoteriaFTNode> childNodesToRemove = new ArrayList<SoteriaFTNode>();
 			for (String childName : intermediateNode.childNodes.keySet()) {
 				if (intermediateNodes.containsKey(childName)) {
-					intermediateNode.addChildNode(childName, intermediateNodes.get(childName));
+					// update child node if it has child node
+					SoteriaFTNonLeafNode childNode = intermediateNodes.get(childName);
+					if ((childNode instanceof SoteriaFTOrNode) || (childNode instanceof SoteriaFTAndNode)) {
+						intermediateNode.addChildNode(childName, intermediateNodes.get(childName));
+					}
+					// otherwise remove this child node
+					else {
+						childNodesToRemove.add(childNode);
+						nodesToRemove.add(childNode);
+					}
 				}
 			}
+			intermediateNode.removeChildNodes(childNodesToRemove);
+			// if no child node left for this intermediate node,
+			// then its parent node should remove this intermediate node as well
+		}
+		// remove the no child nodes
+		for (SoteriaFTNonLeafNode node : nodesToRemove) {
+			intermediateNodes.remove(node.nodeName);
 		}
 	}
 

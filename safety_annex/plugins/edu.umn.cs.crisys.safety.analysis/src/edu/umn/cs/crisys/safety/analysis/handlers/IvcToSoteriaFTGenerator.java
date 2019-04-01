@@ -97,39 +97,44 @@ public class IvcToSoteriaFTGenerator {
 				// turn MIVC sets to MCS sets
 				// no limit on mhs set size
 				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0);
-				SoteriaFTNonLeafNode propertyNode;
-				boolean isNewNode = true;
-				boolean createOrNode = (mcsSets.size() > 1);
-				if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
-					if (createOrNode) {
-						propertyNode = new SoteriaFTOrNode(propertyName);
-					} else {
-						propertyNode = new SoteriaFTAndNode(propertyName);
-					}
-				} else {
-					propertyNode = soteriaFT.intermediateNodes.get(propertyName);
-					// if the no child node has been populated for this node yet
-					if (!(propertyNode instanceof SoteriaFTOrNode) && !(propertyNode instanceof SoteriaFTAndNode)) {
+				// create node when mcsSets is not empty
+				if (!mcsSets.isEmpty()) {
+					SoteriaFTNonLeafNode propertyNode;
+					boolean isNewNode = true;
+					boolean createOrNode = (mcsSets.size() > 1);
+					if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
 						if (createOrNode) {
 							propertyNode = new SoteriaFTOrNode(propertyName);
 						} else {
 							propertyNode = new SoteriaFTAndNode(propertyName);
 						}
 					} else {
-						isNewNode = false;
+						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
+						// if the no child node has been populated for this node yet
+						if (!(propertyNode instanceof SoteriaFTOrNode) && !(propertyNode instanceof SoteriaFTAndNode)) {
+							if (createOrNode) {
+								propertyNode = new SoteriaFTOrNode(propertyName);
+							} else {
+								propertyNode = new SoteriaFTAndNode(propertyName);
+							}
+						} else {
+							isNewNode = false;
+						}
 					}
-				}
 
-				if (isNewNode) {
-					int index = 0;
-					for (List<String> mcsSet : mcsSets) {
-						String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
-						SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName);
-						extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
-						propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
-						mcsSetNode.addParentNode(propertyNode);
-						soteriaFT.addIntermediateNode(mcsSetNodeName, mcsSetNode);
-						index++;
+					if (isNewNode) {
+						int index = 0;
+						for (List<String> mcsSet : mcsSets) {
+							String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
+							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName);
+							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
+							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
+							// mcsSetNode.addParentNode(propertyNode);
+							soteriaFT.addIntermediateNode(mcsSetNodeName, mcsSetNode);
+							// update intermediate node
+							soteriaFT.addIntermediateNode(propertyNode.nodeName, propertyNode);
+							index++;
+						}
 					}
 					if (!isLowerLevel) {
 						soteriaFT.addRootNode(propertyName, propertyNode);
@@ -138,6 +143,7 @@ public class IvcToSoteriaFTGenerator {
 					soteriaFT.addIntermediateNode(propertyName, propertyNode);
 				}
 			}
+
 		} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
 			// TODO: throw exception in the GUI
 			throw new SafetyException("One of the properties was canceled in the process of model checking."
@@ -179,7 +185,9 @@ public class IvcToSoteriaFTGenerator {
 		// note: a SoteriaFTNonLeafNode added here as a child node could be updated later with its own child node
 		// will walk through all nodes again to fix the discrepancy
 		mcsSetNode.addChildNode(propertyName, nonLeafNode);
-		nonLeafNode.addParentNode(mcsSetNode);
+		// update the node in intermediate nodes
+		soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+		// nonLeafNode.addParentNode(mcsSetNode);
 	}
 
 	private void extractFaultMCSElem(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode,
@@ -200,13 +208,16 @@ public class IvcToSoteriaFTGenerator {
 							(float) 1.0);
 					soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
 					mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
-					ftLeafNode.addParentNode(mcsSetNode);
+					// update intermediate node
+					soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+					// ftLeafNode.addParentNode(mcsSetNode);
 				}
 			}
 		} else {
 			SoteriaFTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
 			mcsSetNode.addChildNode(updatedFaultName, leafNode);
-			leafNode.addParentNode(mcsSetNode);
+			soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+			// leafNode.addParentNode(mcsSetNode);
 		}
 
 	}

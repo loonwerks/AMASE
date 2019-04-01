@@ -1,0 +1,24 @@
+package Temp_Sensors
+public
+	with Base_Types;
+	renames Base_Types::all;
+	
+	system Temp_Sensor
+		features
+			Env_Temp: in data port Integer;
+			High_Temp_Indicator: out data port Boolean;
+		annex agree{**
+			guarantee "if env temperature higher than temperature threshold then indicate high temperature":
+			High_Temp_Indicator = (Env_Temp > Constants.HIGHT_TEMPERATURE_THRESHOLD);
+		**};
+		annex safety {**
+			fault temp_sensor_stuck_at_low "temp sensor stuck at high": Common_Faults.stuck_true {
+			inputs: val_in <- High_Temp_Indicator;     
+			outputs: High_Temp_Indicator <- val_out;   
+         	probability: 1.0E-5 ;
+			duration: permanent;
+			}	
+		**};
+	end Temp_Sensor;
+	
+end Temp_Sensors;

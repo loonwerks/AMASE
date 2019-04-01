@@ -38,10 +38,14 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 		// walk through the tree and print from bottom to top
 		for (SoteriaFTNode root : ft.resolvedRootNodes) {
 			String rootName = root.nodeName;
-			root.accept(this);
-			printRootNode(rootName);
+			if (root.nodeValue == true) {
+				root.accept(this);
+				printRootNode(rootName);
+			} else {
+				printNoTreeRootNode(rootName);
+			}
 		}
-	return null;
+		return null;
 
 	}
 
@@ -86,6 +90,11 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 			multipleElem = true;
 		}
 		writeln("    ];;");
+	}
+
+	private void printNoTreeRootNode(String rootName) {
+		writeln("(* ----- NO CUTSET for " + rootName + "----- *)");
+		newline();
 	}
 
 	private void printRootNode(String rootName) {

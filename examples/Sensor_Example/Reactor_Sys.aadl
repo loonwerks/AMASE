@@ -1,0 +1,78 @@
+package Reactor_Sys
+public
+	with Base_Types;
+	renames Base_Types::all;
+	with Reactor_Temp_Ctrl;
+	renames Reactor_Temp_Ctrl::all;
+	with Reactor_Pressure_Ctrl;
+	renames Reactor_Pressure_Ctrl::all;
+	with Reactor_Radiation_Ctrl;
+	renames Reactor_Radiation_Ctrl::all;
+	
+	
+	system Reactor_Ctrl
+		features
+			Env_Temp: in data port Integer;
+			Env_Pressure: in data port Integer;
+			Env_Radiation: in data port Integer;
+			Shut_Down_Cmd: out data port Boolean;
+		annex agree{**
+				
+			guarantee "shut down when and only when we should": 
+			Shut_Down_Cmd = 
+			((Env_Temp> Constants.HIGHT_TEMPERATURE_THRESHOLD)  and 
+			(Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD) and
+			(Env_Radiation > Constants.HIGH_RADIATION_THRESHOLD));	
+			
+		**};
+	end Reactor_Ctrl;
+	
+	system implementation Reactor_Ctrl.No_Voting
+		subcomponents
+			Reactor_Temp_Ctrl: system Reactor_Temp_Ctrl.No_Voting;
+			Reactor_Pressure_Ctrl: system Reactor_Pressure_Ctrl.No_Voting;
+			Reactor_Radiation_Ctrl: system Reactor_Radiation_Ctrl.No_Voting;
+		connections
+			Env_Temp_To_Reactor_Temp_Ctrl: port Env_Temp -> Reactor_Temp_Ctrl.Env_Temp;
+			Env_Pressure_To_Reactor_Pressure_Ctrl: port Env_Pressure -> Reactor_Pressure_Ctrl.Env_Pressure;
+			Env_Radiation_To_Reactor_Radiation_Ctrl: port Env_Radiation -> Reactor_Radiation_Ctrl.Env_Radiation;
+			Reactor_Temp_Ctrl_To_Shut_Down: port Reactor_Temp_Ctrl.Shut_Down_Cmd -> Shut_Down_Cmd;
+			Reactor_Pressure_Ctrl_To_Shut_Down: port Reactor_Pressure_Ctrl.Shut_Down_Cmd -> Shut_Down_Cmd;
+			Reactor_Radiation_Ctrl_To_Shut_Down: port Reactor_Radiation_Ctrl.Shut_Down_Cmd -> Shut_Down_Cmd;
+		annex agree {**
+			connection Reactor_Temp_Ctrl_To_Shut_Down: true;
+			connection Reactor_Pressure_Ctrl_To_Shut_Down: true;	
+			connection Reactor_Radiation_Ctrl_To_Shut_Down: true;
+			
+			assign Shut_Down_Cmd = Reactor_Temp_Ctrl.Shut_Down_Cmd and Reactor_Pressure_Ctrl.Shut_Down_Cmd and Reactor_Radiation_Ctrl.Shut_Down_Cmd;		    						
+		**};
+		annex safety {**
+      		analyze : max 3 fault
+   		**};
+	end Reactor_Ctrl.No_Voting;
+	
+		system implementation Reactor_Ctrl.W_Voting
+		subcomponents
+			Reactor_Temp_Ctrl: system Reactor_Temp_Ctrl.W_Voting;
+			Reactor_Pressure_Ctrl: system Reactor_Pressure_Ctrl.W_Voting;
+			Reactor_Radiation_Ctrl: system Reactor_Radiation_Ctrl.W_Voting;
+		connections
+			Env_Temp_To_Reactor_Temp_Ctrl: port Env_Temp -> Reactor_Temp_Ctrl.Env_Temp;
+			Env_Pressure_To_Reactor_Pressure_Ctrl: port Env_Pressure -> Reactor_Pressure_Ctrl.Env_Pressure;
+			Env_Radiation_To_Reactor_Radiation_Ctrl: port Env_Radiation -> Reactor_Radiation_Ctrl.Env_Radiation;
+			Reactor_Temp_Ctrl_To_Shut_Down: port Reactor_Temp_Ctrl.Shut_Down_Cmd -> Shut_Down_Cmd;
+			Reactor_Pressure_Ctrl_To_Shut_Down: port Reactor_Pressure_Ctrl.Shut_Down_Cmd -> Shut_Down_Cmd;
+			Reactor_Radiation_Ctrl_To_Shut_Down: port Reactor_Radiation_Ctrl.Shut_Down_Cmd -> Shut_Down_Cmd;
+		annex agree {**
+			connection Reactor_Temp_Ctrl_To_Shut_Down: true;
+			connection Reactor_Pressure_Ctrl_To_Shut_Down: true;	
+			connection Reactor_Radiation_Ctrl_To_Shut_Down: true;
+			
+			assign Shut_Down_Cmd = Reactor_Temp_Ctrl.Shut_Down_Cmd and Reactor_Pressure_Ctrl.Shut_Down_Cmd and Reactor_Radiation_Ctrl.Shut_Down_Cmd;		    						
+		**};
+		annex safety {**
+      		analyze : max 3 fault
+   		**};
+	end Reactor_Ctrl.W_Voting;
+	
+end Reactor_Sys;

@@ -1,0 +1,76 @@
+package Reactor_Temp_Ctrl
+public
+	with Base_Types;
+	renames Base_Types::all;
+	
+	with Temp_Sensors;
+	renames Temp_Sensors::all;
+
+	with Voters;
+	renames Voters::all;
+
+	system Reactor_Temp_Ctrl
+		features
+			Env_Temp: in data port Integer;
+			Shut_Down_Cmd: out data port Boolean;
+		annex agree {**
+				
+			guarantee "shut down when and only when we should": 
+			Shut_Down_Cmd = (Env_Temp > Constants.HIGHT_TEMPERATURE_THRESHOLD);	
+			
+--with the above guarantee split into the following two, with temperature sensor stuck at high,
+--for the non voting implementation, it takes the max 1 fault to make the "don't shut down when we shouldn't'" to fail		
+--			guarantee "shut down when we should": 
+--			(Env_Temp > Constants.HIGHT_TEMPERATURE_THRESHOLD) => Shut_Down_Cmd;			
+--				
+--			guarantee "don't shut down when we shouldn't": 
+--			not(Env_Temp > Constants.HIGHT_TEMPERATURE_THRESHOLD) => not(Shut_Down_Cmd);				
+			
+		**};
+	end Reactor_Temp_Ctrl;
+
+	system implementation Reactor_Temp_Ctrl.No_Voting
+		subcomponents
+			Temp_Sensor1: system Temp_Sensor;
+			Temp_Sensor2: system Temp_Sensor;
+			Temp_Sensor3: system Temp_Sensor;
+		connections
+			Env_Temp_To_Temp_Sensor1: port Env_Temp -> Temp_Sensor1.Env_Temp;
+			Env_Temp_To_Temp_Sensor2: port Env_Temp -> Temp_Sensor2.Env_Temp;
+			Env_Temp_To_Temp_Sensor3: port Env_Temp -> Temp_Sensor3.Env_Temp;
+			Temp_Sensor1_High_Temp_To_Shut_Down: port Temp_Sensor1.High_Temp_Indicator -> Shut_Down_Cmd;
+			Temp_Sensor2_High_Temp_To_Shut_Down: port Temp_Sensor2.High_Temp_Indicator -> Shut_Down_Cmd;
+			Temp_Sensor3_High_Temp_To_Shut_Down: port Temp_Sensor3.High_Temp_Indicator -> Shut_Down_Cmd;
+		annex agree {**
+			connection Temp_Sensor1_High_Temp_To_Shut_Down: true;
+			connection Temp_Sensor2_High_Temp_To_Shut_Down: true;
+			connection Temp_Sensor3_High_Temp_To_Shut_Down: true;
+			
+			assign Shut_Down_Cmd = Temp_Sensor1.High_Temp_Indicator or Temp_Sensor2.High_Temp_Indicator or Temp_Sensor3.High_Temp_Indicator;
+							
+		**};
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
+	end Reactor_Temp_Ctrl.No_Voting;
+
+	system implementation Reactor_Temp_Ctrl.W_Voting
+		subcomponents
+			Temp_Sensor1: system Temp_Sensor;
+			Temp_Sensor2: system Temp_Sensor;
+			Temp_Sensor3: system Temp_Sensor;
+			Temp_Voter: system Two_Of_Three_Agree_Voter;
+		connections
+			Env_Temp_To_Temp_Sensor1: port Env_Temp -> Temp_Sensor1.Env_Temp;
+			Env_Temp_To_Temp_Sensor2: port Env_Temp -> Temp_Sensor2.Env_Temp;
+			Env_Temp_To_Temp_Sensor3: port Env_Temp -> Temp_Sensor3.Env_Temp;
+			Temp_Sensor1_To_Voter: port Temp_Sensor1.High_Temp_Indicator -> Temp_Voter.Sensor1_High;
+			Temp_Sensor2_To_Voter: port Temp_Sensor2.High_Temp_Indicator -> Temp_Voter.Sensor2_High;
+			Temp_Sensor3_To_Voter: port Temp_Sensor3.High_Temp_Indicator -> Temp_Voter.Sensor3_High;
+			Temp_Voter_To_Shut_Down: port Temp_Voter.High_Out -> Shut_Down_Cmd;
+		annex safety {**
+      		analyze : max 2 fault
+   		**};
+	end Reactor_Temp_Ctrl.W_Voting;
+	
+end Reactor_Temp_Ctrl;
