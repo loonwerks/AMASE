@@ -1,0 +1,55 @@
+package Aircraft
+public
+with Base_Types;
+with FCC;
+with HSTCS;
+
+	system Aircraft
+		features
+			-- Status: on or off
+			autopilot_status : in data port Base_Types::Boolean;
+			-- Assuming this is boolean (up=1, down=0)
+			flaps_up_signal : in data port Base_Types::Boolean;
+			
+			airspeed : in data port Base_Types::Float;
+			altitude : in data port Base_Types::Float;
+			bank_angle : in data port Base_Types::Float;
+			angle_of_attack : in data port Base_Types::Float;
+			
+			-- Need more information to determine data type
+			pilot_column_input : in data port Base_Types::Boolean;
+			-- Degrees: trim nose up, trim nose down
+			pilot_column_cutout : in data port Base_Types::Float;
+			
+			-- Sent from autopilot system to HSTCS when autopilot is active.
+			autopilot_trim_cmd : in data port Base_Types::Float;
+			
+			
+	end Aircraft;
+	
+	system implementation Aircraft.impl
+		subcomponents
+			fcc : system FCC::FCC.impl;
+			hstcs : system HSTCS::HSTCS;
+		
+		connections
+			-- Autopilot on/off to FCC
+			autopilot : port autopilot_status -> fcc.autopilot_status;
+			-- Airspeed, altitude, angle of attack and bank angle info sent to FCC
+			speed : port airspeed -> fcc.airspeed;
+			alt : port altitude -> fcc.altitude;
+			bank : port bank_angle -> fcc.bank_angle;
+			aoa : port angle_of_attack -> fcc.angle_of_attack;
+			
+			-- Pilot column info
+			column_in : port pilot_column_input -> fcc.pilot_column_input;
+			cutout : port pilot_column_cutout -> fcc.pilot_column_cutout;
+			
+			-- Autopilot trim command sent to HSTCS when autopilot is active
+			auto_trim : port autopilot_trim_cmd -> hstcs.autopilot_trim_cmd;
+			
+			-- Commands from FCC to HSTCS
+			
+			
+	end Aircraft.impl;
+end Aircraft;
