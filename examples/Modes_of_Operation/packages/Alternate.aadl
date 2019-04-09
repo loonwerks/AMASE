@@ -3,38 +3,43 @@ public
 with Base_Types;
 	system Alternate
 		features
-			-- Main signal
-			signal_in : in data port Base_Types::Integer;
-			normal_sys_signal : in data port Base_Types::Integer;
+			-- Main supply
+			supply_in : in data port Base_Types::Integer;
 			
-			-- True if and only if this system is active
-			active_mode : out data port Base_Types::Boolean;
 			-- Pass signal out
-			signal_out : out data port Base_Types::Integer;
+			supply_out : out data port Base_Types::Integer;
 			
 		annex agree {**
 			
-			assume "Main signal is bounded." : 
-				((0 <= signal_in) and (5 >= signal_in));
-			
-			guarantee "System never begins in alternate mode." : 
-				(active_mode = false) -> true;
-			
-			-- Need a way to see if we have previously been in alternate mode. 
-			-- If so, we cannot switch back to normal mode.
-			-- Therefore, we require a check along WITH the regular mode calculations
-			-- to see if we must remain in active mode.	
-			guarantee "When normal mode signal input is greater than 5, we are in alternate mode." :
-				(((normal_sys_signal > 5)) or prev(active_mode, false)) <=> (active_mode);
-				
-			guarantee "Signal output is always equivalent to signal input." :
-				(signal_in = signal_out);
+--			assume "Main signal is bounded." : 
+--				((0 <= signal_in) and (5 >= signal_in));
+--			
+--			guarantee "System never begins in alternate mode." : 
+--				(active_mode = false) -> true;
+--			
+--			-- Need a way to see if we have previously been in alternate mode. 
+--			-- If so, we cannot switch back to normal mode.
+--			-- Therefore, we require a check along WITH the regular mode calculations
+--			-- to see if we must remain in active mode.	
+--			guarantee "When normal mode signal input is greater than 5, we are in alternate mode." :
+--				(((normal_sys_signal > 5)) or prev(active_mode, false)) <=> (active_mode);
+--				
+--			guarantee "Signal output is always equivalent to signal input." :
+--				(signal_in = signal_out);
 				
 			
 		**};
 		annex safety {**
 			
-			
+--			fault Alt_Mode_Fault "Alt fault." : faults.fail_to{
+--				
+--				eq fail_val : int = 11;
+--				
+--				inputs: val_in <- signal_out, alt_val <- fail_val; 
+--				outputs: signal_out <- val_out;    
+--        		probability: 1.0E-7;
+--				duration: permanent;
+--		}
 		**};
 	end Alternate;
 end Alternate;

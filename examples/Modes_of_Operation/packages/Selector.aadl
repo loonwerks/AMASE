@@ -1,0 +1,17 @@
+package Selector
+public
+with Base_Types;
+	
+	system Selector
+		features
+			normal_supply : in data port Base_Types::Integer;
+			alt_supply : in data port Base_Types::Integer;
+			
+			emergency_signal : out data port Base_Types::Boolean;
+			
+			supply_out_norm : out data port Base_Types::Integer;
+			supply_out_alt : out data port Base_Types::Integer;
+			
+	end Selector;
+	
+end Selector;

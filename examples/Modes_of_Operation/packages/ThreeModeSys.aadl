@@ -1,0 +1,109 @@
+package ThreeModeSys
+public
+with Base_Types;
+with Normal;
+with Alternate;
+with Emergency;
+with SupplyReceiver;
+with MonitorSystem;
+with Selector;
+
+	system ThreeModeSys
+		features
+			-- Main signal passed to subcomponent that is active.
+			normal_supply : in data port Base_Types::Integer;
+			alt_supply : in data port Base_Types::Integer;
+			
+			-- Mode comes from monitor system
+			sys_mode: out data port Base_Types::Boolean;
+			
+			-- Signal that receiver got (just for testing purposes)
+			signal_in : in data port Base_Types::Integer;
+			
+		annex agree {**
+--			
+--			assume "Main signal is bounded in initial step." : 
+--				((0 <= main_signal) and (5 >= main_signal)) -> true;
+--			
+--			assume "Main signal is bounded always between 0 and 5." : 
+--				((0 <= main_signal) and (5 >= main_signal));
+			
+		**};
+	end ThreeModeSys;
+	
+	system implementation ThreeModeSys.simple
+		subcomponents
+			normal_sys : system Normal::Normal;
+			alternate_sys : system Alternate::Alternate;
+			emergency_sys : system Emergency::Emergency;
+			receiver : system SupplyReceiver::SupplyReceiver;
+			monitor : system MonitorSystem::MonitorSystem;
+			selector : system Selector::Selector;
+			
+		connections 
+			-- Supply to normal and alternate lines
+			supply_to_normal : port normal_supply -> normal_sys.supply_in;
+			supply_to_alt : port alt_supply -> alternate_sys.supply_in;
+			
+			-- Mode of system from Monitor
+			system_mode : port monitor.sys_mode -> sys_mode;
+				
+				
+			-- Supply to selector
+			supply_from_norm_to_sel : port normal_sys.supply_out -> selector.normal_supply;
+			supply_from_alt_to_sel : port alternate_sys.supply_out -> selector.alt_supply;
+			
+			-- Supply to receiver
+			norm_supply_from_sel_to_rec : port selector.supply_out_norm -> receiver.supply_in_norm;
+			alt_supply_from_sel_to_rec : port selector.supply_out_alt -> receiver.supply_in_alt;
+			supply_from_emer_to_rec : port emergency_sys.supply_out -> receiver.supply_in_emergency;
+			
+			-- Selector info to receiver
+			supply_norm_info_to_monitor : port selector.supply_out_norm -> monitor.normal_supply;
+			supply_alt_info_to_monitor : port selector.supply_out_alt -> monitor.alt_supply;
+			
+			
+		
+		annex agree {**
+			
+			-- If signal is in range AND we have not been in alternate mode, 
+			-- then we are in normal mode.
+			-- Else we are in alternate mode.
+--			lemma "When signal is in the range [0,5], we are in normal mode." :
+--				if (prev(0 <= signal_in, true) and prev(signal_in <= 5, true) and not(prev(active_mode_alt, false))) 
+--					then (active_mode_normal)
+--				else (active_mode_alt);
+--			
+--			-- Lemma to make sure we do not switch back to normal mode.
+--			lemma "When we switch to alternate mode, we do not change back to normal." :
+--				(prev(active_mode_alt, false) => active_mode_alt);
+--				
+--			-- Lemma to make sure we do not switch back to alt mode.
+--			lemma "When we switch to emergency mode, we do not change back to alternate or normal." :
+--				(prev(active_mode_emergency, false) => active_mode_emergency);
+--			
+--			
+--			-- Lemma to test that no faults keeps us in normal mode.				
+--			lemma "Without faults present, we are always in normal mode (should be false with 1+ fault active)." :
+--				active_mode_normal and not(active_mode_alt);
+--				
+--			
+--			-- Lemma to test that our signal is correct when no faults are present.
+--			lemma "Top level signal equals output from normal system (should be false with 1+ fault active)." :
+--				main_signal = signal_in;	
+--				
+--			-- Lemma to test that one fault will not put us in emergency mode
+--			lemma "We are not in emergency mode (should be false only when 2+ faults are active)." :
+--				(active_mode_emergency = false);
+			
+		**};
+		annex safety {**
+			
+			analyze : max 1 fault
+	  		--analyze : probability 1.0E-6
+			
+		**};	
+	end ThreeModeSys.simple;
+
+
+end ThreeModeSys;
