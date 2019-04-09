@@ -1,0 +1,30 @@
+package SupplyReceiver
+public
+with Base_Types;
+
+	system SupplyReceiver
+		features
+			supply_in_norm : in data port Base_Types::Integer;
+			supply_in_alt : in data port Base_Types::Integer;
+			supply_in_emergency : in data port Base_Types::Integer;
+			
+			supply_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+			
+--			assume "Main signal is bounded initially." : 
+--				((0 <= signal_in_norm) and (5 >= signal_in_norm)) -> true;
+--				
+--			assume "Main signal is bounded." : 
+--				((0 <= signal_in_norm) and (5 >= signal_in_norm));
+			
+			-- Signal out depends on which mode we are in. 
+			-- If normal mode, alternate and emergency outputs are 0.
+			-- If alternate mode, emergency output is 0. 
+			-- Else output emergency mode.
+			--guarantee "Signal in equals signal out." :
+				
+			
+		**};
+	end SupplyReceiver;
+end SupplyReceiver;
