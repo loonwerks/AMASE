@@ -3,30 +3,17 @@ public
 with Base_Types;
 	system Emergency
 		features
-			selector_supply : in data port Base_Types::Integer;
-			
-			-- Pass signal out : emergency value is always 5. 
+			cmd_to_activate : in data port Base_Types::Boolean;
+			 
 			supply_out : out data port Base_Types::Integer;
 		
 		annex agree {**
 			
---			assume "Main signal is bounded." : 
---				((0 <= alt_sys_signal) and (5 >= alt_sys_signal));
---			
---			guarantee "System never begins in emergency mode." : 
---				(active_mode = false) -> true;
---			
---			-- Need a way to see if we have previously been in alternate mode. 
---			-- If so, we cannot switch back to normal mode.
---			-- Therefore, we require a check along WITH the regular mode calculations
---			-- to see if we must remain in active mode.	
---			guarantee "When alt mode signal input is greater than 5, we are in emergency mode." :
---				(((alt_sys_signal > 5)) or prev(active_mode, false)) <=> (active_mode);
---				
---			guarantee "Emergency signal output is always equivalent to 5." :
---				(emergency_out = 5);
+			guarantee "If in emergency mode, output is 5. Else it is 0." :
+				if cmd_to_activate 
+					then (supply_out = 5)
+				else (supply_out = 0);
 				
-			
 		**};	
 	end Emergency; 
 end Emergency;

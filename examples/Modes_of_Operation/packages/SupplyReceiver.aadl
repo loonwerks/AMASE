@@ -4,26 +4,26 @@ with Base_Types;
 
 	system SupplyReceiver
 		features
-			supply_in_norm : in data port Base_Types::Integer;
-			supply_in_alt : in data port Base_Types::Integer;
+			-- Position 1 indicates normal supply.
+			-- Position 2 indicates alternate supply.
+			supply_in : in data port Base_Types::Integer;
+			
 			supply_in_emergency : in data port Base_Types::Integer;
 			
 			supply_out : out data port Base_Types::Integer;
 			
 		annex agree {**
 			
---			assume "Main signal is bounded initially." : 
---				((0 <= signal_in_norm) and (5 >= signal_in_norm)) -> true;
---				
---			assume "Main signal is bounded." : 
---				((0 <= signal_in_norm) and (5 >= signal_in_norm));
+			-- Initially receiving supply.
+--			guarantee "Initially receiving supply." :
+--				(supply_in > 0) -> true;
 			
-			-- Signal out depends on which mode we are in. 
-			-- If normal mode, alternate and emergency outputs are 0.
-			-- If alternate mode, emergency output is 0. 
-			-- Else output emergency mode.
-			--guarantee "Signal in equals signal out." :
-				
+			-- If supply in is positive, this is supply out. 
+			-- Else our supply out is the emergency line.
+			guarantee "Use main supply unless it is zero. Then use emergency." :
+				if (supply_in > 0)
+					then (supply_in = supply_out)
+				else (supply_in_emergency = supply_out);
 			
 		**};
 	end SupplyReceiver;
