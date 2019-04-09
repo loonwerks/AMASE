@@ -4,10 +4,48 @@ with Base_Types;
 
 	system MonitorSystem
 		features
-			normal_supply : in data port Base_Types::Integer;
-			alt_supply : in data port Base_Types::Integer;
+			-- Position 1 indicates normal supply.
+			-- Position 2 indicates alternate supply.
+			selector_valve_position : in data port Base_Types::Integer;
 			
-			sys_mode : out data port Base_Types::Boolean;
+			cmd_emergency : out data port Base_Types::Boolean;
+			-- System modes: 
+			-- mode = 1 -> normal
+			-- mode = 2 -> alternate
+			-- mode = 3 -> emergency
+			sys_mode : out data port Base_Types::Integer;
+		
+		annex agree {**
 			
+			-- System mode starts normal (1)
+--			guarantee "Initially in normal mode (1)." : 
+--				(sys_mode = 1) -> true;
+				
+			-- Sys mode is always {1,2,3}
+			guarantee "System mode is 1,2 or 3." :
+				(sys_mode > 0) and (sys_mode < 4);
+			
+			-- System Modes:
+			----------------
+			-- Normal mode: (normal_supply > 0) and not(prev(alt_mode) or prev(emergency_mode))
+			-- Alternate mode: (normal_supply <= 0) or (prev(alt_mode) and alt_supply > 0)
+			-- Emergency mode: (prev(alt_mode) and alt_supply <= 0)	
+			
+			
+			-- -- Problems with nonterminating lemmas. Removing notion of switching back to previous state.
+			
+			guarantee "Define normal mode." :
+				((selector_valve_position = 1)) => (sys_mode = 1);
+				
+			guarantee "Define alternate mode." :
+				(not(selector_valve_position = 1) or ((selector_valve_position = 2))) => (sys_mode = 2);
+				
+			guarantee "Define emergency mode." :
+				((selector_valve_position = 2)) => (sys_mode = 3);
+				
+				
+			
+			
+		**};	
 	end MonitorSystem;
 end MonitorSystem;

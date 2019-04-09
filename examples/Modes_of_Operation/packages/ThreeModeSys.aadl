@@ -7,7 +7,29 @@ with Emergency;
 with SupplyReceiver;
 with MonitorSystem;
 with Selector;
-
+    -- Top level has supply as inputs. This "supply" is always positive and never zero. 
+    -- Subcomponents: 
+    -- - Normal : Takes supply input from top level.
+	-- - Alternate : Takes supply input from top level.
+	-- - Emergency : Backup reserve supply. 
+	-- - Selector : is a valve that takes the supply from both normal and alternate components and selects between them. 
+	--      Its behavior is very much like the selector valve in the WBS. 
+	-- 		If neither normal nor alternate gives the supply, then it sends a signal to the Monitor.
+	--
+	-- - Monitor : Monitors the mode of the system (similar to the MonitorSystem in WBS). 
+	--		It gets input from the Selector on whether its getting supply from normal or alternate 
+	--		and if the supply is not received at Selector, then it sends command to Emergency. 
+	--		Emergency then sends pressure to Receiver. 
+	--		The system mode is sent to the top level for testing purposes.
+	--
+	-- - Receiver : the "end of the flow" subcomponent that needs to receive the supply. 
+	--		Similar to the wheel, I guess. It takes input from the selector and from the emergency component. 
+	--		The only output is to the top level stating that it has received supply. 
+	--
+	-- The logic is very basic. If no normal supply at selector, then switch to alternate. 
+	--	Likewise alternate switch to emergency. Faulty behavior is defined when the supply is zero. 
+	--	The only faults defined are in normal component or in alternate component.
+	-- 
 	system ThreeModeSys
 		features
 			-- Main signal passed to subcomponent that is active.
@@ -15,18 +37,28 @@ with Selector;
 			alt_supply : in data port Base_Types::Integer;
 			
 			-- Mode comes from monitor system
-			sys_mode: out data port Base_Types::Boolean;
+			-- System modes: 
+			-- mode = 1 -> normal
+			-- mode = 2 -> alternate
+			-- mode = 3 -> emergency
+			sys_mode: out data port Base_Types::Integer;
 			
 			-- Signal that receiver got (just for testing purposes)
-			signal_in : in data port Base_Types::Integer;
+			supply_received : out data port Base_Types::Integer;
 			
 		annex agree {**
---			
---			assume "Main signal is bounded in initial step." : 
---				((0 <= main_signal) and (5 >= main_signal)) -> true;
---			
---			assume "Main signal is bounded always between 0 and 5." : 
---				((0 <= main_signal) and (5 >= main_signal));
+		
+			-- The supply is always positive
+		
+			assume "Normal supply is bounded." : 
+				(1 <= normal_supply);
+			
+			assume "Alternate supply is bounded." : 
+				(1 <= alt_supply);
+			
+--			guarantee "Initial state is normal mode." :
+--				(sys_mode = 1) -> true;
+				
 			
 		**};
 	end ThreeModeSys;
@@ -54,52 +86,71 @@ with Selector;
 			supply_from_alt_to_sel : port alternate_sys.supply_out -> selector.alt_supply;
 			
 			-- Supply to receiver
-			norm_supply_from_sel_to_rec : port selector.supply_out_norm -> receiver.supply_in_norm;
-			alt_supply_from_sel_to_rec : port selector.supply_out_alt -> receiver.supply_in_alt;
+			supply_from_sel_to_rec : port selector.supply_out -> receiver.supply_in;
 			supply_from_emer_to_rec : port emergency_sys.supply_out -> receiver.supply_in_emergency;
 			
-			-- Selector info to receiver
-			supply_norm_info_to_monitor : port selector.supply_out_norm -> monitor.normal_supply;
-			supply_alt_info_to_monitor : port selector.supply_out_alt -> monitor.alt_supply;
+			-- Selector info to monitor
+			selector_info_to_monitor : port selector.valve_position -> monitor.selector_valve_position;
 			
+			-- Emergency command
+			cmd_emergency_mode : port monitor.cmd_emergency -> emergency_sys.cmd_to_activate;
 			
+			-- Supply received (sent to top level for testing)
+			supply_at_receiver : port receiver.supply_out -> supply_received;
 		
 		annex agree {**
 			
-			-- If signal is in range AND we have not been in alternate mode, 
-			-- then we are in normal mode.
-			-- Else we are in alternate mode.
---			lemma "When signal is in the range [0,5], we are in normal mode." :
---				if (prev(0 <= signal_in, true) and prev(signal_in <= 5, true) and not(prev(active_mode_alt, false))) 
---					then (active_mode_normal)
---				else (active_mode_alt);
---			
---			-- Lemma to make sure we do not switch back to normal mode.
---			lemma "When we switch to alternate mode, we do not change back to normal." :
---				(prev(active_mode_alt, false) => active_mode_alt);
+			-- Supply is always provided at receiver. 
+			lemma "Receiver supply is always positive." :
+				(supply_received > 0);
+			
+			-- Make sure system modes are bounded.
+			lemma "System modes are bounded." :
+				(sys_mode > 0) and (sys_mode < 4);
+			
+			-- Lemma to make sure we do not switch back to normal mode.
+--			lemma "When we switch to alternate or emergency mode, we do not change back to normal." :
+--				((prev(sys_mode, 1) = 2)) => not((sys_mode = 1));
 --				
---			-- Lemma to make sure we do not switch back to alt mode.
+--			-- Lemma to make sure we do not switch back to alternate once in emergency mode.
 --			lemma "When we switch to emergency mode, we do not change back to alternate or normal." :
---				(prev(active_mode_emergency, false) => active_mode_emergency);
+--				((prev(sys_mode, 1) = 3)) => (not(sys_mode = 2) and not(sys_mode = 1));
+			
+			
+			-- When in normal mode, receving pressure is equal to normal pressure.
+			-- This should fail with one fault active.
+			lemma "Normal supply equals supply received (false with 1+ fault active)." :
+				normal_supply = supply_received;	
+				
+--			lemma "Alternate supply equals supply received (false with 0 faults active)." :
+--				alt_supply = supply_received;
+				
+			-- Lemma to test that no faults keeps us in normal mode.				
+			lemma "We are always in normal mode (false with 1+ fault active)." :
+				(sys_mode = 1);
+				
+			-- 
+			
+			-----------------------------------------------------------------------------------------------------------	
+			-- Contracts false in nominal model: just using for testing active fault behavior.
+			-----------------------------------------------------------------------------------------------------------
 --			
+--			-- When in alternate mode, receving pressure is equal to alternate pressure.
+--			-- This should fail with two faults active.
+--			lemma "Alternate supply equals supply received (false with 0 or 2+ faults active, true with 1 fault active on normal sys)." :
+--				alt_supply = supply_received;
 --			
---			-- Lemma to test that no faults keeps us in normal mode.				
---			lemma "Without faults present, we are always in normal mode (should be false with 1+ fault active)." :
---				active_mode_normal and not(active_mode_alt);
---				
---			
---			-- Lemma to test that our signal is correct when no faults are present.
---			lemma "Top level signal equals output from normal system (should be false with 1+ fault active)." :
---				main_signal = signal_in;	
---				
---			-- Lemma to test that one fault will not put us in emergency mode
---			lemma "We are not in emergency mode (should be false only when 2+ faults are active)." :
---				(active_mode_emergency = false);
+--			-- When in emergency mode, receving pressure is equal to emergency pressure (always 5).
+--			-- This should fail with two faults active.
+--			lemma "Emergency supply (5) equals supply received (false with 0,1 faults active, true with 2 faults active)." :
+--				alt_supply = supply_received;
+				
+			
 			
 		**};
 		annex safety {**
 			
-			analyze : max 1 fault
+			analyze : max 2 fault
 	  		--analyze : probability 1.0E-6
 			
 		**};	
