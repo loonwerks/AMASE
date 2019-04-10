@@ -18,8 +18,8 @@ with Base_Types;
 		annex agree {**
 			
 			-- System mode starts normal (1)
---			guarantee "Initially in normal mode (1)." : 
---				(sys_mode = 1) -> true;
+			guarantee "Initially in normal mode (1)." : 
+				(sys_mode = 1) -> true;
 				
 			-- Sys mode is always {1,2,3}
 			guarantee "System mode is 1,2 or 3." :

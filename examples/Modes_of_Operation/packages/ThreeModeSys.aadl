@@ -56,8 +56,8 @@ with Selector;
 			assume "Alternate supply is bounded." : 
 				(1 <= alt_supply);
 			
---			guarantee "Initial state is normal mode." :
---				(sys_mode = 1) -> true;
+			guarantee "Initial state is normal mode." :
+				(sys_mode = 1) -> true;
 				
 			
 		**};
@@ -150,7 +150,7 @@ with Selector;
 		**};
 		annex safety {**
 			
-			analyze : max 2 fault
+			analyze : max 1 fault
 	  		--analyze : probability 1.0E-6
 			
 		**};	
