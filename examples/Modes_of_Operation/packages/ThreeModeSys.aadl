@@ -116,6 +116,8 @@ with Selector;
 --			lemma "When we switch to emergency mode, we do not change back to alternate or normal." :
 --				((prev(sys_mode, 1) = 3)) => (not(sys_mode = 2) and not(sys_mode = 1));
 			
+			lemma "System mode reflects selector position." :
+				(selector.valve_position) = (sys_mode); 
 			
 			-- When in normal mode, receving pressure is equal to normal pressure.
 			-- This should fail with one fault active.
