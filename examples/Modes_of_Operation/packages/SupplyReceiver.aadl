@@ -15,8 +15,8 @@ with Base_Types;
 		annex agree {**
 			
 			-- Initially receiving supply.
---			guarantee "Initially receiving supply." :
---				(supply_in > 0) -> true;
+			guarantee "Initially receiving supply." :
+				(supply_in > 0) -> true;
 			
 			-- If supply in is positive, this is supply out. 
 			-- Else our supply out is the emergency line.

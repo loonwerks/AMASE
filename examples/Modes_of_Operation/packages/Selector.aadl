@@ -26,29 +26,53 @@ with Base_Types;
 			--				  Keep valve position at 1
 			--
 			-- Alternate supply : Case 1: Normal gets cut off, we have alternate supply, and we were prev in normal mode.
-			--						  normal_supply = 0 and alt_supply > 0 and not(prev(valve_position) = 3)
+			--						  normal_supply = 0 and alt_supply > 0 and (prev(valve_position) = 1)
 			--					  Case 2: We have alternate supply and we were prev in alternate mode.
 			--				      Set valve_position to 2
 			--
-			-- Emergency signal : Case 1: We were in alternate mode and now alternate is cut off.
+			-- Emergency signal : Case 3 : previously in alternate mode, but alt supply is zero OR previously in emergency mode.
 			--						  alt_supply = 0 and prev(valve_position) = 2
 			--	           		  Set valve_position to 3
 				
 			
 			-- We always start in normal mode.
---			assume "Normal supply is initially positive." : 
---				(normal_supply > 0) -> true;
+			assume "Normal supply is initially positive." : 
+				(normal_supply > 0) -> true;
 			
-			guarantee "Define normal valve position (1)." :
-				((normal_supply > 0) and (prev(valve_position, 1) = 1)) => (valve_position = 1);
+			-- Case 1 : Normal -> positive normal supply and previously in normal mode.
+			guarantee "Normal mode valve position." :
+				((normal_supply > 0) and prev(valve_position, 1) = 1) => (valve_position = 1);
+				
+				
+			-- Alternate supply : Case 1: Normal gets cut off, we have alternate supply, and we were prev in normal mode.
+			--						  normal_supply = 0 and alt_supply > 0 and (prev(valve_position) = 1)
+			--					  Case 2: We have alternate supply and we were prev in alternate mode.
+			--				      Set valve_position to 2
+			guarantee "Case 1: Alternate mode valve position." :
+			 	((normal_supply <= 0) and (alt_supply > 0) and prev(valve_position,1) = 1) => (valve_position = 2);
+			 		
+			guarantee "Case 2: Alternate mode valve position." :
+			 ((alt_supply > 0) and prev(valve_position, 1) = 2) => (valve_position = 2);
 			
-			-- Problems with nonterminating lemmas. Removing notion of switching back to previous state.
-			guarantee "Define alt valve position (2)." :
-				((normal_supply <= 0) and (alt_supply > 0)) => (valve_position = 2);
+			-- Case 3 : Emergency : previously in alternate mode, but alt supply is zero OR previously in emergency mode.
+			guarantee "Case 1: Emergency mode valve position." :
+				((prev(valve_position,1) = 2) and (alt_supply <= 0)) => (valve_position = 3);
+					
+			guarantee "Case 2: Emergency mode valve position." :
+					(prev(valve_position,1) = 3) => (valve_position = 3);
+			
+			-- Set output based on valve position.
+			guarantee "If valve position is normal, supply out equals normal in.
+					   Else if valve position is alt, supply out equals alternate in.
+					   Else supply out is zero." :
+			 	if (valve_position = 1) 
+			 		then (normal_supply = supply_out)
+			 	else if (valve_position = 2) 
+			 		then (alt_supply = supply_out)
+			 	else (supply_out = 0);	
 				
-			guarantee "Define emergency valve position (3)."  :
-				((alt_supply <= 0)) => (valve_position = 3);
-				
+			-- Problems with nonterminating lemmas. Removing notion of switching back to previous state for now.	
+			
 --			guarantee "Define alt valve position (2)." :
 --				-- Case 1
 --				((normal_supply <= 0) and (alt_supply > 0) and not(prev(valve_position, 1) = 3))
@@ -60,15 +84,6 @@ with Base_Types;
 --				((alt_supply <= 0) and (prev(valve_position, 1) = 2)) => (valve_position = 3);
 				
 				
-			-- Set output based on valve position.
-			guarantee "If valve position is normal, supply out equals normal in.
-					   Else if valve position is alt, supply out equals alternate in.
-					   Else supply out is zero." :
-			 	if (valve_position = 1) 
-			 		then (normal_supply = supply_out)
-			 	else if (valve_position = 2) 
-			 		then (alt_supply = supply_out)
-			 	else (supply_out = 0);
 			
 		**};	
 			
