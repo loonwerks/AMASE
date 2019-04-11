@@ -107,27 +107,27 @@ with Selector;
 				(sys_mode > 0) and (sys_mode < 4);
 			
 			-- Lemma to make sure we do not switch back to normal mode.
---			lemma "When we switch to alternate or emergency mode, we do not change back to normal." :
---				((prev(sys_mode, 1) = 2)) => not((sys_mode = 1));
+			lemma "When we switch to alternate or emergency mode, we do not change back to normal." :
+				((prev(sys_mode, 1) = 2)) => not((sys_mode = 1));
 --				
 --			-- Lemma to make sure we do not switch back to alternate once in emergency mode.
---			lemma "When we switch to emergency mode, we do not change back to alternate or normal." :
---				((prev(sys_mode, 1) = 3)) => (not(sys_mode = 2) and not(sys_mode = 1));
+			lemma "When we switch to emergency mode, we do not change back to alternate or normal." :
+				((prev(sys_mode, 1) = 3)) => (not(sys_mode = 2) and not(sys_mode = 1));
 			
 			lemma "System mode reflects selector position." :
 				(selector.valve_position) = (sys_mode); 
 			
 			-- When in normal mode, receving pressure is equal to normal pressure.
 			-- This should fail with one fault active.
-			lemma "Normal supply equals supply received (false with 1+ fault active)." :
-				normal_supply = supply_received;	
+--			lemma "Normal supply equals supply received (false with 1+ fault active)." :
+--				normal_supply = supply_received;	
 				
 --			lemma "Alternate supply equals supply received (false with 0 faults active)." :
 --				alt_supply = supply_received;
 				
 			-- Lemma to test that no faults keeps us in normal mode.				
-			lemma "We are always in normal mode (false with 1+ fault active)." :
-				(sys_mode = 1);
+--			lemma "We are always in normal mode (false with 1+ fault active)." :
+--				(sys_mode = 1);
 				
 			-- 
 			
@@ -150,7 +150,7 @@ with Selector;
 		**};
 		annex safety {**
 			
-			analyze : max 3 fault
+			analyze : max 2 fault
 	  		--analyze : probability 1.0E-6
 			
 		**};	
