@@ -97,32 +97,32 @@ with Base_Types;
 			**};
 			
 			
-		annex safety {**
-			fault HydraulicPiston_FailedFullOff "(HydraulicPiston) Stuck closed fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- 0; 
-				outputs: force_out <- val_out;    
-        		probability: 3.3E-5 ;
-				duration: permanent;
-			}
-			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
-				outputs: force_out <- val_out;    
-        		probability: 3.3E-5 ;
-				duration: permanent;
-			}
-			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
-				outputs: force_out <- val_out;    
-        		probability: 3.3E-5 ;
-				duration: permanent;
-			}			
-			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- pre(force_out); 
-				outputs: force_out <- val_out;    
-        		probability: 3.3E-5 ;
-				duration: permanent;
-			}
-		**};		
+--		annex safety {**
+--			fault HydraulicPiston_FailedFullOff "(HydraulicPiston) Stuck closed fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- 0; 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}
+--			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}
+--			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}			
+--			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- pre(force_out); 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}
+--		**};		
 	end HydraulicPiston;
 	
 	
