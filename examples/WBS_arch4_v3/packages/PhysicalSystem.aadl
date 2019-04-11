@@ -419,8 +419,8 @@ with ShutoffValve;
 --	  
 --   **};
    
-      annex safety{**
-	  analyze : max 0 fault 
+   annex safety{**
+	  analyze : max 1 fault 
    **};
 	end PhysicalSystem.inst; 
 

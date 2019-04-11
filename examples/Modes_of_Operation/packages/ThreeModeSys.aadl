@@ -137,7 +137,7 @@ with Selector;
 		**};
 		annex safety {**
 			
-			analyze : max 2 fault
+			analyze : max 3 fault
 	  		--analyze : probability 1.0E-6
 			
 		**};	
