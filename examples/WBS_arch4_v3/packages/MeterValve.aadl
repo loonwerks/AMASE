@@ -1,0 +1,69 @@
+package MeterValve
+public
+with Base_Types;
+
+	system MeterValve
+		features
+			-- Inputs
+			elec_cmd : in data port Base_Types::Boolean;
+			mech_cmd : in data port Base_Types::Boolean;
+			hyd_pressure_in : in data port Base_Types::Integer;
+			
+			-- Outputs
+			hyd_pressure_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+				
+				-- apply_command_norm_guarantee := (TRUE ->  G (((elec_cmd | mech_cmd) & hyd_pressure_in > 0) <-> hyd_pressure_out > 0));
+				guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
+				 we have either electrical or mechanical command and positive pressure." :
+					true -> (((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);
+				
+				-- Used for fail to ranges in safety annex.
+				-- Restrictions on the ranges defined in implementation agree annex.
+				eq low : int = 0;
+				eq high : int = 10;
+				eq rangeval : int;	
+		**};
+		annex safety {**
+			fault MeterValve_FailedOpen "(MeterValve) Stuck open fault.": faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+--			fault MeterValve_FailedClosed "(MeterValve) Stuck closed fault." : faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 3.25E-6 ;
+--				duration: permanent;
+--			}
+			
+			fault MeterValve_FailedLastPosition "(MeterValve) Stuck at last position fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 3.25E-6 ;
+				duration: permanent;
+			}
+			
+--			fault MeterValve_FailedRandomPosition "(MeterValve) Stuck at nondeterministic fault." : faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 3.25E-6 ;
+--				duration: permanent;
+--			}
+			
+	**};
+	end MeterValve;
+	
+	system implementation MeterValve.inst
+		annex agree {**
+			-- This assert is to restrict the range of the fail to value
+			-- in our fault nodes. 
+			-- Once we have ranges implemented, this can be tossed. Until then, 
+			-- DO NOT REMOVE.
+			assert(low <= rangeval and rangeval <= high);
+		**};
+	end MeterValve.inst;
+end MeterValve;
