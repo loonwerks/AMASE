@@ -17,33 +17,18 @@ with Base_Types;
 		
 		annex agree {**
 			
-			-- System mode starts normal (1)
-			guarantee "Initially in normal mode (1)." : 
-				(sys_mode = 1) -> true;
-				
 			-- Sys mode is always {1,2,3}
 			guarantee "System mode is 1,2 or 3." :
 				(sys_mode > 0) and (sys_mode < 4);
 			
 			-- System Modes:
 			----------------
-			-- Normal mode: (normal_supply > 0) and not(prev(alt_mode) or prev(emergency_mode))
-			-- Alternate mode: (normal_supply <= 0) or (prev(alt_mode) and alt_supply > 0)
-			-- Emergency mode: (prev(alt_mode) and alt_supply <= 0)	
-			
-			
-			-- -- Problems with nonterminating lemmas. Removing notion of switching back to previous state.
-			
-			guarantee "Define normal mode." :
-				((selector_valve_position = 1)) => (sys_mode = 1);
-				
-			guarantee "Define alternate mode." :
-				(not(selector_valve_position = 1) or ((selector_valve_position = 2))) => (sys_mode = 2);
-				
-			guarantee "Define emergency mode." :
-				((selector_valve_position = 2)) => (sys_mode = 3);
+			guarantee "Define system mode based on status of selector." :
+				(selector_valve_position = sys_mode);
 				
 				
+			guarantee "Send emergency command when selector position indicates no supply (3)." :
+				(selector_valve_position = 3) => cmd_emergency;	
 			
 			
 		**};	

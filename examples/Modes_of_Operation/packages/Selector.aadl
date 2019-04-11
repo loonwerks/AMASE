@@ -19,47 +19,49 @@ with Base_Types;
 		annex agree {**
 				
 			-- Behavior for valve position:
-			-- Normal supply: Case 1:  Initial position
-			--						  normal_supply > 0 -> true;
-			--				  Case 2: Normal is supplied and previously in normal mode.
+			-- Normal supply: Case 1: Normal is supplied and previously in normal mode.
 			--						  normal_supply > 0 and (prev(valve_position) = 1)
 			--				  Keep valve position at 1
 			--
-			-- Alternate supply : Case 1: Normal gets cut off, we have alternate supply, and we were prev in normal mode.
-			--						  normal_supply = 0 and alt_supply > 0 and (prev(valve_position) = 1)
-			--					  Case 2: We have alternate supply and we were prev in alternate mode.
+			-- Alternate supply : Case 1: Previously normal, normal supplies nothing, alternate has supply.
+			--					  Case 2: Previously alternate, alternate still has supply.
 			--				      Set valve_position to 2
 			--
-			-- Emergency signal : Case 3 : previously in alternate mode, but alt supply is zero OR previously in emergency mode.
-			--						  alt_supply = 0 and prev(valve_position) = 2
+			-- Emergency signal : Case 1 : Previously normal, both normal and alternate supply zero.
+			--					  Case 2 : Previously alternate, alternate supplies zero.
+			--					  Case 3 : Previously emergency.
 			--	           		  Set valve_position to 3
 				
 			
-			-- We always start in normal mode.
-			assume "Normal supply is initially positive." : 
-				(normal_supply > 0) -> true;
 			
-			-- Case 1 : Normal -> positive normal supply and previously in normal mode.
+			-- Normal supply: Case 1: Normal is supplied and previously in normal mode.
 			guarantee "Normal mode valve position." :
 				((normal_supply > 0) and prev(valve_position, 1) = 1) => (valve_position = 1);
 				
 				
-			-- Alternate supply : Case 1: Normal gets cut off, we have alternate supply, and we were prev in normal mode.
-			--						  normal_supply = 0 and alt_supply > 0 and (prev(valve_position) = 1)
-			--					  Case 2: We have alternate supply and we were prev in alternate mode.
-			--				      Set valve_position to 2
-			guarantee "Case 1: Alternate mode valve position." :
-			 	((normal_supply <= 0) and (alt_supply > 0) and prev(valve_position,1) = 1) => (valve_position = 2);
+			-- Alternate supply : Case 1: Previously normal, normal supplies nothing, alternate has supply.
+			--					  Case 2: Previously alternate, alternate still has supply.
+			guarantee "Alternate mode valve position." :
+				-- Case 1 :
+			 	(((normal_supply <= 0) and (alt_supply > 0) and prev(valve_position,1) = 1) 
+			 	-- Case 2 :
+			 	or ((alt_supply > 0) and prev(valve_position,1) = 2))
+			 			-- Change valve position
+			 			=> (valve_position = 2);
 			 		
-			guarantee "Case 2: Alternate mode valve position." :
-			 ((alt_supply > 0) and prev(valve_position, 1) = 2) => (valve_position = 2);
 			
-			-- Case 3 : Emergency : previously in alternate mode, but alt supply is zero OR previously in emergency mode.
+			-- Emergency signal : Case 1 : Previously normal, both normal and alternate supply zero.
+			--					  Case 2 : Previously alternate, alternate supplies zero.
+			--					  Case 3 : Previously emergency.
 			guarantee "Case 1: Emergency mode valve position." :
-				((prev(valve_position,1) = 2) and (alt_supply <= 0)) => (valve_position = 3);
+				-- Case 1 : 
+				(((prev(valve_position,1) = 1) and (alt_supply <= 0) and (normal_supply <= 0)) 
+				-- Case 2 : 
+				or (prev(valve_position,1) = 2 and (alt_supply <= 0))
+				-- Case 3 :
+				or (prev(valve_position,1) = 3))
+						=> (valve_position = 3);
 					
-			guarantee "Case 2: Emergency mode valve position." :
-					(prev(valve_position,1) = 3) => (valve_position = 3);
 			
 			-- Set output based on valve position.
 			guarantee "If valve position is normal, supply out equals normal in.
