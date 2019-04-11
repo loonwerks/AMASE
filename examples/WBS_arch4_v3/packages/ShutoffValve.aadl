@@ -1,0 +1,53 @@
+package ShutoffValve
+public
+with Base_Types;
+	system ShutoffValve
+		features
+			-- Inputs
+			hyd_pressure_in : in data port Base_Types::Integer;
+			system_validity : in data port Base_Types::Boolean;
+				
+			-- Output
+			hyd_pressure_out : out data port Base_Types::Integer;
+			
+		annex agree {**
+			assume "Pressure input is always from 0 to 10 inclusive" : 
+					true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+			
+			-- apply_command_norm_guarantee := (TRUE -> ( G 
+			-- ((hyd_pressure_in > 0 & system_validity_cmd) -> (hyd_pressure_out > 0 & hyd_pressure_out = hyd_pressure_in)) 
+			--   &  G ((hyd_pressure_in = 0 | !system_validity_cmd) -> hyd_pressure_out = 0)
+			
+			guarantee "(ShutoffValve) Positive pressure out occurs whenever pressure in is positive and system is valid. 
+						Zero pressure out occurs whenever hyd pressure in is zero or system is not valid." :
+						true -> (
+							
+							if(hyd_pressure_in > 0 and system_validity) then (hyd_pressure_out = hyd_pressure_in)
+								else (hyd_pressure_out = 0)
+							
+							);
+		
+		**};
+
+		annex safety {**
+			fault ShutoffValve_FailedClosed "(ShutoffValve) Stuck closed fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 5.0E-6 ;
+				duration: permanent;
+			}
+			
+			fault ShutoffValve_FailedOpen "(ShutoffValve) Stuck open fault." : faults.fail_to {
+				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in; 
+				outputs: hyd_pressure_out <- val_out;    
+        		probability: 5.0E-6 ;
+				duration: permanent;
+			}
+		**};
+
+	end ShutoffValve;
+	
+	system implementation ShutoffValve.inst
+		
+	end ShutoffValve.inst;
+end ShutoffValve;
