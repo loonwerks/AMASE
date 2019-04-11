@@ -117,22 +117,9 @@ with Selector;
 			lemma "System mode reflects selector position." :
 				(selector.valve_position) = (sys_mode); 
 			
-			-- When in normal mode, receving pressure is equal to normal pressure.
-			-- This should fail with one fault active.
---			lemma "Normal supply equals supply received (false with 1+ fault active)." :
---				normal_supply = supply_received;	
-				
---			lemma "Alternate supply equals supply received (false with 0 faults active)." :
---				alt_supply = supply_received;
-				
-			-- Lemma to test that no faults keeps us in normal mode.				
---			lemma "We are always in normal mode (false with 1+ fault active)." :
---				(sys_mode = 1);
-				
-			-- 
 			
 			-----------------------------------------------------------------------------------------------------------	
-			-- Contracts false in nominal model: just using for testing active fault behavior.
+			-- Testing active fault behavior.
 			-----------------------------------------------------------------------------------------------------------
 --			
 --			-- When in alternate mode, receving pressure is equal to alternate pressure.
