@@ -112,15 +112,15 @@ with Base_Types;
 						true -> (power and (as_cmd_1 or as_cmd_2)) <=> as_cmd_out;
 			
 		**};
-		annex safety {**
-			fault AlternateCommandCalculator_ErroneousData "(AlternateCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
-				inputs: val_in <- as_cmd_out; 
-				outputs: as_cmd_out <- val_out;    
-        		probability: 9.0E-6 ;
-				duration: permanent;
-			}
-			
-		**};
+--		annex safety {**
+--			fault AlternateCommandCalculator_ErroneousData "(AlternateCommandCalculator) Inverted boolean fault." : faults.inverted_fail {
+--				inputs: val_in <- as_cmd_out; 
+--				outputs: as_cmd_out <- val_out;    
+--        		probability: 9.0E-6 ;
+--				duration: permanent;
+--			}
+--			
+--		**};
 	end AlternateCommandCalculator;
 	
 	system implementation AlternateCommandCalculator.inst
