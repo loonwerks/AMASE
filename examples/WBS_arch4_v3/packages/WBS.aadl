@@ -389,7 +389,7 @@ with sensor;
 --	  
 --   **};
    
-         annex safety{**
+   annex safety{**
 	  analyze : max 1 fault 
    **};
    
