@@ -40,50 +40,50 @@ with Base_Types;
 			-- command_creation_alternate_1_norm_guarantee := (TRUE ->  
 			-- 		G (((power & ground_speed > 0) & (!wheel_rolling_1 | !wheel_rolling_5)) <-> as_cmd_pair_1_5));
 			guarantee "(CommandSystem) Pair 1,5: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_1 or not wheel_rolling_5));
+				as_cmd_pair_1_5 <=> (power and ground_speed > 0 and (not wheel_rolling_1 or not wheel_rolling_5));
 				
 			guarantee "(CommandSystem) Pair 2,6: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_2_6 <=> (power and ground_speed > 0 and (not wheel_rolling_2 or not wheel_rolling_6));
+				as_cmd_pair_2_6 <=> (power and ground_speed > 0 and (not wheel_rolling_2 or not wheel_rolling_6));
 				
 			guarantee "(CommandSystem) Pair 3,7: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_3_7 <=> (power and ground_speed > 0 and (not wheel_rolling_3 or not wheel_rolling_7));
+				as_cmd_pair_3_7 <=> (power and ground_speed > 0 and (not wheel_rolling_3 or not wheel_rolling_7));
 				
 			guarantee "(CommandSystem) Pair 4,8: Create alternate commands based on power, grond speed and wheel rolling status" :
-				true -> as_cmd_pair_4_8 <=> (power and ground_speed > 0 and (not wheel_rolling_4 or not wheel_rolling_8));
+				as_cmd_pair_4_8 <=> (power and ground_speed > 0 and (not wheel_rolling_4 or not wheel_rolling_8));
 				
 			--  command_creation_normal_1_norm_guarantee := (TRUE ->  
 			--     		G (((power & electrical_pedal_pos_L) & ((ground_speed > 0 & wheel_rolling_1) | ground_speed = 0)) <-> brake_as_cmd_1)
 			guarantee "(CommandSystem) Wheel 1: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0))	
+						((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_1) or ground_speed = 0))	
 									<=> brake_as_cmd_1);
 			
 			
 			guarantee "(CommandSystem) Wheel 2: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_2) or ground_speed = 0))	
+						((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_2) or ground_speed = 0))	
 									<=> brake_as_cmd_2);
 			
 			guarantee "(CommandSystem) Wheel 3: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_3) or ground_speed = 0))	
+						((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_3) or ground_speed = 0))	
 									<=> brake_as_cmd_3);
 			
 			guarantee "(CommandSystem) Wheel 4: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_4) or ground_speed = 0))	
+						((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_4) or ground_speed = 0))	
 									<=> brake_as_cmd_4);
 			
 			guarantee "(CommandSystem) Wheel 5: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_5) or ground_speed = 0))	
+						((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_5) or ground_speed = 0))	
 									<=> brake_as_cmd_5);
 			
 			guarantee "(CommandSystem) Wheel 6: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_6) or ground_speed = 0))	
+						((power and elec_pedal_pos_L and ((ground_speed > 0 and wheel_rolling_6) or ground_speed = 0))	
 									<=> brake_as_cmd_6);
 			
 			guarantee "(CommandSystem) Wheel 7: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_7) or ground_speed = 0))	
+						((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_7) or ground_speed = 0))	
 									<=> brake_as_cmd_7);
 			
 			guarantee "(CommandSystem) Wheel 8: brake command to wheel one based on power, pedal, speed, and wheel rolling status." :
-						true -> ((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_8) or ground_speed = 0))	
+						((power and elec_pedal_pos_R and ((ground_speed > 0 and wheel_rolling_8) or ground_speed = 0))	
 									<=> brake_as_cmd_8);
 			
 		**};

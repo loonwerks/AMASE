@@ -14,16 +14,26 @@ with Base_Types;
 			
 		annex agree {**
 				
+				assume "Pressure input from 0 to 10 inclusive" : 
+					(hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
 				-- apply_command_norm_guarantee := (TRUE ->  G (((elec_cmd | mech_cmd) & hyd_pressure_in > 0) <-> hyd_pressure_out > 0));
 				guarantee "(MeterValve) Hydraulic pressure out is positive if and only if
-				 we have either electrical or mechanical command and positive pressure." :
-					true -> (((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);
+				 			we have either electrical or mechanical command and positive pressure." :
+					(((elec_cmd or mech_cmd) and hyd_pressure_in > 0) <=> hyd_pressure_out > 0);
+				
+				guarantee "(MeterValve)Pressure out is bounded." :
+				(hyd_pressure_out >= 0) and (hyd_pressure_out <= 0);
 				
 				-- Used for fail to ranges in safety annex.
 				-- Restrictions on the ranges defined in implementation agree annex.
 				eq low : int = 0;
 				eq high : int = 10;
 				eq rangeval : int;	
+		
+		
+		
+		
 		**};
 		annex safety {**
 			fault MeterValve_FailedOpen "(MeterValve) Stuck open fault.": faults.fail_to {

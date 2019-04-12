@@ -12,11 +12,16 @@ with Base_Types;
 			
 			annex agree {**
 				
+				assume "Pressure input from 0 to 10 inclusive" : 
+					(normal_hyd_pressure_in >= 0 and normal_hyd_pressure_in <= 10)
+					and (alt_hyd_pressure_in >= 0 and alt_hyd_pressure_in <= 10);
+				
 				guarantee "(WheelBrake) braking force is positive if and only if
 							either normal or alternate pressure is positive." :
-							true -> (brake_force > 0 <=> (normal_hyd_pressure_in > 0 or alt_hyd_pressure_in > 0));			
+							(brake_force > 0 <=> (normal_hyd_pressure_in > 0 or alt_hyd_pressure_in > 0));			
 				
-				
+				guarantee "(WheelBrake) Brake force output from 0 to 10 inclusive" : 
+					(brake_force >= 0 and brake_force <= 10);
 				
 			**};
 			
@@ -45,6 +50,28 @@ with Base_Types;
 			
 			-- Braking force
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
+		
+		
+		annex agree {**
+			lemma "(BrakeActuator) Brake force is equivalent to either alternate or normal force in." :
+							(brake_actuator.braking_force = brake_actuator.alternate_force_in) or (brake_actuator.braking_force = brake_actuator.normal_force_in);
+					
+				-- transform_force_norm_guarantee := (TRUE ->  G ((normal_force_in > 0 | alternate_force_in > 0) <-> braking_force > 0));
+	 		lemma "(BrakeActuator) Braking force is positive if and only if
+							normal force or alternate force is positive." :
+							(brake_actuator.braking_force > 0 <=> (brake_actuator.normal_force_in > 0 or brake_actuator.alternate_force_in > 0));
+		
+		
+			lemma "(NormHydraulicFuse) hydraulic pressure in equals hydraulic pressure out." :
+							(normal_hyd_fuse.hyd_pressure_in = normal_hyd_fuse.hyd_pressure_out);
+		
+			
+			lemma "(HydraulicPiston) hydraulic pressure in equals force out." :
+							(normal_hyd_piston.hyd_pressure_in = normal_hyd_piston.force_out);
+		
+		**};
+		
+		
 		annex safety{**
 	
 		analyze : max 0 fault
@@ -64,9 +91,18 @@ with Base_Types;
 			
 			annex agree {**
 				
+				assume "Pressure input from 0 to 10 inclusive" : 
+					(hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
 				--  fuse_behavior_norm_guarantee := (TRUE ->  G hyd_pressure_out = hyd_pressure_in);
 				guarantee "(HydraulicFuse) hydraulic pressure in equals hydraulic pressure out." :
-							true -> (hyd_pressure_in = hyd_pressure_out);
+							(hyd_pressure_in = hyd_pressure_out);
+			
+			
+				guarantee "Pressure output from 0 to 10 inclusive" : 
+					(hyd_pressure_out >= 0 and hyd_pressure_out <= 10);
+					
+					
 			**};
 		annex safety {**
 			fault HydraulicFuse_FailedClosed "(HydraulicFuse) Stuck closed fault." : faults.fail_to {
@@ -91,9 +127,16 @@ with Base_Types;
 			
 			annex agree {**
 				
+				assume "Pressure input from 0 to 10 inclusive" : 
+					(hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				
 				--  create_force_norm_guarantee := (TRUE ->  G hyd_pressure_in = force_out);
 				guarantee "(HydraulicPiston) hydraulic pressure in equals force out." :
-							true -> (hyd_pressure_in = force_out);
+							(hyd_pressure_in = force_out);
+			
+				guarantee "Force output from 0 to 10 inclusive" : 
+					(force_out >= 0 and force_out <= 10);
+			
 			**};
 			
 			
@@ -136,16 +179,27 @@ with Base_Types;
 			braking_force : out data port Base_Types::Integer;
 			
 			annex agree {**
+				
+				assume "Force input from 0 to 10 inclusive" : 
+					(normal_force_in >= 0 and normal_force_in <= 10)
+					and (alternate_force_in >= 0 and alternate_force_in <= 10);
+				
 				eq fail_value : int = if (normal_force_in > 0) then normal_force_in
 										else (alternate_force_in);
 				-- Added guarantee: brake force is always either normal or alternate force value
 				guarantee "(BrakeActuator) Brake force is equivalent to either alternate or normal force in." :
-							true -> (braking_force = alternate_force_in) or (braking_force = normal_force_in);
+							(braking_force = alternate_force_in) or (braking_force = normal_force_in);
 					
 				-- transform_force_norm_guarantee := (TRUE ->  G ((normal_force_in > 0 | alternate_force_in > 0) <-> braking_force > 0));
 	 			guarantee "(BrakeActuator) Braking force is positive if and only if
 							normal force or alternate force is positive." :
-							true -> (braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));
+							(braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));
+			
+			
+			
+				guarantee "Force output from 0 to 10 inclusive" : 
+					(braking_force >= 0 and braking_force <= 10);
+				
 			**};
 			
 		annex safety {**
