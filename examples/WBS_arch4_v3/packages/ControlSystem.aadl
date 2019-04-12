@@ -75,21 +75,21 @@ with Base_Types;
 				--	&   (as_cmd_pair_4_8 -> ((system_validity & ground_speed > 0) & (!wheel_rolling_4 | !wheel_rolling_8)));
 				
 				-- Translates to:
-				guarantee "(ctrl system) 1 Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
+				guarantee "(ctrl system) Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_1_5 = (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false));
+						  ((as_cmd_pair_1_5 <=> (power and SPEED and PAIR_NOT_ROLLING_15)));
 						  
 				guarantee "(ctrl system) Expected antiskid behavior pair 2,6: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_2_6 = (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
+						  ((as_cmd_pair_2_6 <=> (power and SPEED and PAIR_NOT_ROLLING_26)));
 				
 				guarantee "(ctrl system) Expected antiskid behavior pair 3,7: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_3_7 = (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
+						  ((as_cmd_pair_3_7 <=> (power and SPEED and PAIR_NOT_ROLLING_37)));
 						  				  
 				guarantee "(ctrl system) Expected antiskid behavior pair 4,8: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_4_8 = (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
+						  ((as_cmd_pair_4_8 <=> (power and SPEED and PAIR_NOT_ROLLING_48)));
 				
 				--	as_cmd_excludes_brake_as_cmd_norm_guarantee := 
 				--	(TRUE -> ((( G 
