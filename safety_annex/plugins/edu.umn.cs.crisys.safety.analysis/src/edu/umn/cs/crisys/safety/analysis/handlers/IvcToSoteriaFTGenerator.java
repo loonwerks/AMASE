@@ -94,6 +94,11 @@ public class IvcToSoteriaFTGenerator {
 			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
 
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
+				// check if there is timeout in MIVC analysis
+				if (property.getMivcTimedOut()) {
+					System.err.println("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
+				}
+				// boolean mivcTimedOut = property.
 				// turn MIVC sets to MCS sets
 				// no limit on mhs set size
 				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0);
