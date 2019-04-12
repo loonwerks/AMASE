@@ -14,7 +14,7 @@ with Base_Types;
 				
 				-- pedal_position_translation_norm_guarantee := (TRUE ->  G (mechanical_pedal_pos <-> electrical_pedal_pos));
 				guarantee "(SensorPedalPosition) mechanical pedal position is equivalent to electrical pedal position." :
-					true -> mech_pedal_pos <=> elec_pedal_pos;
+					mech_pedal_pos <=> elec_pedal_pos;
 					
 				
 		**};
