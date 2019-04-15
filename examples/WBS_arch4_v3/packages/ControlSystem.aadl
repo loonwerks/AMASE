@@ -77,19 +77,19 @@ with Base_Types;
 				-- Translates to:
 				guarantee "(ctrl system) Expected antiskid behavior pair 1,5: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_1_5 <=> (power and SPEED and PAIR_NOT_ROLLING_15)));
+						  ((as_cmd_pair_1_5 <=> (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false));
 						  
 				guarantee "(ctrl system) Expected antiskid behavior pair 2,6: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_2_6 <=> (power and SPEED and PAIR_NOT_ROLLING_26)));
+						  ((as_cmd_pair_2_6 <=> (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
 				
 				guarantee "(ctrl system) Expected antiskid behavior pair 3,7: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_3_7 <=> (power and SPEED and PAIR_NOT_ROLLING_37)));
+						  ((as_cmd_pair_3_7 <=> (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
 						  				  
 				guarantee "(ctrl system) Expected antiskid behavior pair 4,8: Valid system and ground speed and either wheel is not rolling
 						  if and only if antiskid is commanded to the pair." :
-						  ((as_cmd_pair_4_8 <=> (power and SPEED and PAIR_NOT_ROLLING_48)));
+						  ((as_cmd_pair_4_8 <=> (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
 				
 				--	as_cmd_excludes_brake_as_cmd_norm_guarantee := 
 				--	(TRUE -> ((( G 
@@ -150,6 +150,18 @@ with Base_Types;
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 8): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
 							(((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
+			
+			
+--				guarantee "(S18-WBS-R-0321) Never loss of all wheel braking" :
+--					((not ((((((((((elec_pedal_pos_L and elec_pedal_pos_R) and (ground_speed > 0)) 
+--				and (not (((brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_L and (not as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force2 > 0)))) 
+--				and (not (((brake_as_cmd_5 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_L and (not as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force5 > 0)))) 
+--				and (not (((brake_as_cmd_6 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_L and (not as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force6 > 0)))) 
+--				and (not (((brake_as_cmd_3 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_R and (not as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force3 > 0)))) 
+--				and (not (((brake_as_cmd_4 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_R and (not as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force4 > 0)))) 
+--				and (not (((brake_as_cmd_7 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_R and (not as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force7 > 0)))) 
+--				and (not (((brake_as_cmd_8 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((elec_pedal_pos_R and (not as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force8 > 0)))
+--			)));
 			
 			**};
 				

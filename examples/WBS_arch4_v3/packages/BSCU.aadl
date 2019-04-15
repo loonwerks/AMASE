@@ -54,23 +54,24 @@ with Base_Types;
 				property PAIR_NOT_ROLLING_37 = not wheel_rolling_3 or not wheel_rolling_7;
 				property PAIR_NOT_ROLLING_48 = not wheel_rolling_4 or not wheel_rolling_8;
 				property power = power_1 or power_2;			
-				-- Antiskid command equivalence
+				-- Antiskid command equivalence  
+				--------------------------------------------------------------------------------------------------------------
 				guarantee "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_1_5 = (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false)); 
+							((as_cmd_pair_1_5 <=> (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false)); 
 							
 				guarantee "(Channel) Antiskid command to pair 2,6: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_2_6 <=> (power and SPEED and PAIR_NOT_ROLLING_26)));
+							((as_cmd_pair_2_6 <=> (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 3,7: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_3_7 <=> (power and SPEED and PAIR_NOT_ROLLING_37)));
+							((as_cmd_pair_3_7 <=> (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 4,8: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_4_8 <=> (power and SPEED and PAIR_NOT_ROLLING_48)));
-
+							((as_cmd_pair_4_8 <=> (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
+				--------------------------------------------------------------------------------------------------------------
 
 
 
