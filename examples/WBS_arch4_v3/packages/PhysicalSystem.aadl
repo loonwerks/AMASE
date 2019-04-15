@@ -223,10 +223,26 @@ with ShutoffValve;
 			-- 		& wheel_status_7 = stopped) & wheel_status_8 = stopped)) & ground_speed > 0));
 			
 			
-			property ALL_WHEELS_BRAKE = wheel_braking_force1 > 0 and wheel_braking_force2 > 0 
-					and wheel_braking_force3 > 0 and wheel_braking_force4 > 0 
-			 		and wheel_braking_force5 > 0 and wheel_braking_force6 > 0 
-					and wheel_braking_force7 > 0 and wheel_braking_force8 > 0; 
+			
+			-- never_inadvertent_braking_of_all_wheels_norm_guarantee := (TRUE ->  G 
+			-- 			!(((((((((((!mechanical_pedal_pos_L & !mechanical_pedal_pos_R) & !brake_as_cmd_1) & !brake_as_cmd_2) & !brake_as_cmd_3) & !brake_as_cmd_4) & !brake_as_cmd_5) & !brake_as_cmd_6) & !brake_as_cmd_7) & !brake_as_cmd_8) 
+			-- 			& (((((((wheel_braking_force_1 > 0 & wheel_braking_force_2 > 0) & wheel_braking_force_3 > 0) & wheel_braking_force_4 > 0) & wheel_braking_force_5 > 0) & wheel_braking_force_6 > 0) & wheel_braking_force_7 > 0) & wheel_braking_force_8 > 0)) 
+			-- 			& ground_speed > 0));
+			
+			guarantee "(PhysicalSystem) It will not occur that all wheels are braked inadvertently." :
+				true -> (not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ground_speed > 0));  
+--			
+
+
+
+			property ALL_WHEELS_BRAKE = wheel_braking_force1 > 0 
+								    and wheel_braking_force2 > 0 
+									and wheel_braking_force3 > 0 
+									and wheel_braking_force4 > 0 
+			 						and wheel_braking_force5 > 0 
+			 						and wheel_braking_force6 > 0 
+									and wheel_braking_force7 > 0 
+									and wheel_braking_force8 > 0; 
 					
 			property ALL_WHEELS_STOPPED = not wheel_status1 
 									  and not wheel_status2
@@ -236,21 +252,111 @@ with ShutoffValve;
 									  and not wheel_status6
 									  and not wheel_status7
 									  and not wheel_status8;
-									  
-			property BRAKE_AS_NOT_COMMANDED = not brake_as_cmd_1 and not brake_as_cmd_2 and not brake_as_cmd_3 and not brake_as_cmd_4 
-										  and not brake_as_cmd_5 and not brake_as_cmd_6 and not brake_as_cmd_7 and not brake_as_cmd_8;
+									  							  
+			property BRAKE_AS_NOT_COMMANDED = not brake_as_cmd_1 
+										  and not brake_as_cmd_2 
+										  and not brake_as_cmd_3 
+										  and not brake_as_cmd_4 
+										  and not brake_as_cmd_5 
+										  and not brake_as_cmd_6 
+										  and not brake_as_cmd_7 
+										  and not brake_as_cmd_8;
 										  
-			property PEDALS_NOT_PRESSED = not mech_pedal_pos_L and not mech_pedal_pos_R;
+			property PEDALS_NOT_PRESSED = not mech_pedal_pos_L 
+									  and not mech_pedal_pos_R;
 			
-			-- never_inadvertent_braking_of_all_wheels_norm_guarantee := (TRUE ->  G 
-			-- 			!(((((((((((!mechanical_pedal_pos_L & !mechanical_pedal_pos_R) & !brake_as_cmd_1) & !brake_as_cmd_2) & !brake_as_cmd_3) & !brake_as_cmd_4) & !brake_as_cmd_5) & !brake_as_cmd_6) & !brake_as_cmd_7) & !brake_as_cmd_8) 
-			-- 			& (((((((wheel_braking_force_1 > 0 & wheel_braking_force_2 > 0) & wheel_braking_force_3 > 0) & wheel_braking_force_4 > 0) & wheel_braking_force_5 > 0) & wheel_braking_force_6 > 0) & wheel_braking_force_7 > 0) & wheel_braking_force_8 > 0)) 
-			-- 			& ground_speed > 0));
-			
-			guarantee "(PhysicalSystem) It will not occur that all wheels are braked inadvertently." :
-				true -> (not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ground_speed > 0));  
---							
-		**};
+		
+		-- All power is supplied
+		property POWER = pump_power1 and pump_power2;
+		-- Hydraulic fluid is at it's max value (10)
+		property HYD_PRESSURE_MAX = (hyd_supply1 = 10) and (hyd_supply2 = 10);
+		-- Speed is positive
+		property SPEED = ground_speed > 0;
+		-- wheel rolling
+		property W1ROLL = wheel_status1;
+		property W2ROLL = wheel_status2;
+		property W3ROLL = wheel_status3;
+		property W4ROLL = wheel_status4;
+		property W5ROLL = wheel_status5;
+		property W6ROLL = wheel_status6;
+		property W7ROLL = wheel_status7;
+		property W8ROLL = wheel_status8;
+		
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 1" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_L) 
+						or (not SPEED) 
+						or (wheel_braking_force1 <= 0) 
+						or (not W1ROLL));	
+		
+		
+		
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 2" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_L 
+						or (not SPEED) 
+						or (wheel_braking_force2 <= 0) 
+						or (not W2ROLL)));
+					
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 3" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_R 
+						or (not SPEED) 
+						or (wheel_braking_force3 <= 0) 
+						or (not W3ROLL)));
+					
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 4" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_R 
+						or (not SPEED) 
+						or (wheel_braking_force4 <= 0) 
+						or (not W4ROLL)));		
+		
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 5" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_L 
+						or (not SPEED) 
+						or (wheel_braking_force5 <= 0) 
+						or (not W5ROLL)));
+					
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 6" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_L 
+						or (not SPEED) 
+						or (wheel_braking_force6 <= 0) 
+						or (not W6ROLL)));
+					
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 7" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_R 
+						or (not SPEED) 
+						or (wheel_braking_force7 <= 0) 
+						or (not W7ROLL)));
+					
+		guarantee "(S18-WBS-0325) Never inadvertent braking of wheel 8" :
+					(not(POWER)
+						or (not HYD_PRESSURE_MAX) 
+						or (mech_pedal_pos_R 
+						or (not SPEED) 
+						or (wheel_braking_force8 <= 0) 
+						or (not W8ROLL)));					
+	
+		guarantee "(S18-WBS-0324) Never inadvertent braking of all wheels." :
+			((not(POWER) or (not HYD_PRESSURE_MAX) or (mech_pedal_pos_L) or (mech_pedal_pos_R)
+				                or (not SPEED)
+				                or (wheel_braking_force1 <= 0) or (wheel_braking_force2 <= 0)
+				                or (wheel_braking_force3 <= 0) or (wheel_braking_force4 <= 0)
+				                or (wheel_braking_force5 <= 0) or (wheel_braking_force6 <= 0)
+				                or (wheel_braking_force7 <= 0) or (wheel_braking_force8 <= 0)));
+	
+	**};
 	
 	end PhysicalSystem;
 	
@@ -409,8 +515,7 @@ with ShutoffValve;
 			assert (normal_sys.false_to_mv = false);
 			assert (alt_sys.false_to_mv = false); 
 		
-			property POWER = pump_power1 and pump_power2;
-		
+			
 		--------------------------------------------------------
 			-- Testing contracts for modes of system
 		--------------------------------------------------------

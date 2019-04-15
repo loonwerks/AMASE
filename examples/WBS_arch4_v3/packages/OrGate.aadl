@@ -20,9 +20,5 @@ with Base_Types;
 			
 			**};
 			
-	end OrGate;	
-	
-	system implementation OrGate.inst
-		
-	end OrGate.inst;
+	end OrGate;
 end OrGate;
