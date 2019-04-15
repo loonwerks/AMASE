@@ -30,7 +30,7 @@ public class PreferencesUtil {
 //		}
 		if (api instanceof JKindApi) {
 			((JKindApi) api).setAllIvcs();
-			// ((JKindApi) api).setAllIvcsJkindTimeout(100);
+			((JKindApi) api).setAllIvcsJkindTimeout(30);
 		}
 
 		return api;
