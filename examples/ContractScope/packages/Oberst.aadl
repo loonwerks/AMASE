@@ -19,7 +19,7 @@ with Hauptmann;
 			
 		connections
 			inputs : port in_1 -> sub.in_1;
-			--outputs : port sub.out_1 -> out_1;
+			outputs : port sub.out_1 -> out_1;
 			
 		annex agree {**
 			lemma "Top level input equals sub level input." :
@@ -28,8 +28,12 @@ with Hauptmann;
 			lemma "Top level output equals sub level output." :
 				out_1 = sub.out_1;
 				
+			lemma "Input equals output (top level)" :
+				in_1 = out_1;
+				
 			lemma "Sub level input equals sub level output." :
 				sub.out_1 = sub.in_1;
-		**};	
+		**};
+			
 	end Oberst.top;
 end Oberst;
