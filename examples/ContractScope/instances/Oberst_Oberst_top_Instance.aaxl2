@@ -53,8 +53,8 @@
     <index>0</index>
     <classifier xsi:type="aadl2:SystemType" href="../packages/Hauptmann.aadl#Hauptmann.Hauptmann"/>
   </componentInstance>
-  <connectionInstance name="in_1 -> sub.in_1" kind="portConnection" destination="//@componentInstance.0/@featureInstance.0" source="//@featureInstance.0">
-    <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.0/@featureInstance.0">
+  <connectionInstance name="sub.out_1 -> out_1" kind="portConnection" destination="//@featureInstance.1" source="//@componentInstance.0/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.1" destination="//@featureInstance.1">
       <connection xsi:type="aadl2:PortConnection" href="../packages/Oberst.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
   </connectionInstance>
