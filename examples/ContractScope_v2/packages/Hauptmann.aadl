@@ -1,0 +1,25 @@
+package Hauptmann
+public
+with Base_Types;
+
+	system Hauptmann
+		features 
+			in_1 : in data port Base_Types::Integer;
+			out_1: out data port Base_Types::Integer;
+			
+		
+	annex agree {**
+		
+		assume "Initial value of input is 1 and the rest of the states must have input bounded." :
+				(in_1 = 1) -> ((in_1 >= 0) and (in_1 <= 10));
+			
+		guarantee "Input equals output." : 
+			(in_1 = out_1);
+			
+		guarantee "Output bounded between 0 and 10." : 
+			true -> ((out_1 >= 0) and (out_1 <= 10));
+	
+	**};
+	
+	end Hauptmann;
+end Hauptmann;
