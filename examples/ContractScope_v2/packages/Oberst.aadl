@@ -1,0 +1,61 @@
+package Oberst
+public
+with Base_Types;
+with Hauptmann;
+	
+	system Oberst
+		features 
+			in_1 : in data port Base_Types::Integer;
+			out_1: out data port Base_Types::Integer;
+			
+		annex agree {**
+			
+			assume "Initial value of input is 1." :
+				(in_1 = 1) -> true;
+			
+			assume "Input bounded between 0 and 10." : 
+				true -> ((in_1 >= 0) and (in_1 <= 10));
+			
+			guarantee "Output bounded between 0 and 10." : 
+				true -> ((out_1 >= 0) and (out_1 <= 10));
+				
+		**};
+	end Oberst;
+	
+	system implementation Oberst.top
+		subcomponents
+			sub : system Hauptmann::Hauptmann;
+			
+		connections
+			inputs : port in_1 -> sub.in_1;
+			outputs : port sub.out_1 -> out_1;
+			
+		annex agree {**
+--			lemma "Top level input equals sub level input." :
+--				true -> (in_1 = sub.in_1);
+--				
+--			lemma "Top level output equals sub level output." :
+--				true -> (out_1 = sub.out_1);
+--				
+--			lemma "Input equals output (top level)" :
+--				true -> (in_1 = out_1);
+--				
+--			lemma "Sub level input equals sub level output." :
+--				true -> (sub.out_1 = sub.in_1);
+
+			-- testing necessity of true -> operator
+			lemma "Top level input equals sub level input." :
+				(in_1 = sub.in_1);
+				
+			lemma "Top level output equals sub level output." :
+				(out_1 = sub.out_1);
+				
+			lemma "Input equals output (top level)" :
+				(in_1 = out_1);
+				
+			lemma "Sub level input equals sub level output." :
+				(sub.out_1 = sub.in_1);
+		**};
+			
+	end Oberst.top;
+end Oberst;
