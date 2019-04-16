@@ -1,0 +1,16 @@
+package Hauptmann
+public
+with Base_Types;
+
+	system Hauptmann
+		features 
+			in_1 : in data port Base_Types::Boolean;
+			out_1: out data port Base_Types::Boolean;
+			
+		
+	annex agree {**
+		guarantee "Input equals output." : 
+			in_1 = out_1;
+	**};
+	end Hauptmann;
+end Hauptmann;

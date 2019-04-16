@@ -1,0 +1,35 @@
+package Oberst
+public
+with Base_Types;
+with Hauptmann;
+	
+	system Oberst
+		features 
+			in_1 : in data port Base_Types::Boolean;
+			out_1: out data port Base_Types::Boolean;
+			
+		annex agree {**
+			assume "true" : true;
+		**};
+	end Oberst;
+	
+	system implementation Oberst.top
+		subcomponents
+			sub : system Hauptmann::Hauptmann;
+			
+		connections
+			inputs : port in_1 -> sub.in_1;
+			--outputs : port sub.out_1 -> out_1;
+			
+		annex agree {**
+			lemma "Top level input equals sub level input." :
+				in_1 = sub.in_1;
+				
+			lemma "Top level output equals sub level output." :
+				out_1 = sub.out_1;
+				
+			lemma "Sub level input equals sub level output." :
+				sub.out_1 = sub.in_1;
+		**};	
+	end Oberst.top;
+end Oberst;
