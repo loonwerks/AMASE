@@ -154,7 +154,7 @@ with Base_Types;
 				duration: permanent;
 			}	
 			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- pre(force_out); 
+				inputs: val_in <- force_out, alt_val <- prev(force_out,0); 
 				outputs: force_out <- val_out;    
         		probability: 3.3E-5 ;
 				duration: permanent;
@@ -215,7 +215,7 @@ with Base_Types;
 				duration: permanent;
 			}			
 			fault BrakeActuator_StuckAtLastPosition "(BrakeActuator) Stuck at last value fault." : faults.fail_to {
-				inputs: val_in <- braking_force, alt_val <- pre(braking_force); 
+				inputs: val_in <- braking_force, alt_val <- prev(braking_force,0); 
 				outputs: braking_force <- val_out;    
         		probability: 3.3E-6 ;
 				duration: permanent;
