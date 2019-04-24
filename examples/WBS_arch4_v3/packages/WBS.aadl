@@ -225,15 +225,6 @@ with sensor;
 				and (not (((ctrl_sys.brake_as_cmd_8 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force8 > 0)))
 			)));
 		
-		
-		
-		--------------------------------------------------------------------------------------------------------------
-		-- TESTING
-		--------------------------------------------------------------------------------------------------------------	
-		lemma "Testing new : Never loss of all wheel braking." :
-			((POWER and (mechanical_pedal_pos_L and mechanical_pedal_pos_R) and (ground_speed > 0) and not(ctrl_sys.brake_as_cmd_1 or ctrl_sys.as_cmd_pair_1_5))) => wheel_braking_force1 > 0;
-			
-			
 			
 		--------------------------------------------------------------------------------------------------------------
 		-- S18-WBS-R-0322-left(-right)
