@@ -24,6 +24,8 @@ with Base_Types;
 						  And if neither channel is valid, then cmd_out is false." :
 						  (if (validity1) then (cmd_out = cmd_in_1)
 								else (if (validity2) then (cmd_out = cmd_in_2) else (cmd_out = false)));
+--						(if (validity1) then (cmd_out = cmd_in_1)
+--								else (cmd_out = cmd_in_2));
 				
 			**};
 		annex safety {**
