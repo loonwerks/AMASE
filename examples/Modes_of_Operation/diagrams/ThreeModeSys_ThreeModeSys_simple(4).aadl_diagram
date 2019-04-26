@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="ASCII"?>
+<diagram:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:diagram="http://osate.org/diagram" formatVersion="7">
+  <element uuid="a4874d77-b98a-4eb5-a92e-be3a0d16519f" manual="true">
+    <element uuid="e4a1425e-7078-4459-af65-4afa7f1ad04f">
+      <element uuid="071b8e54-d34a-47b9-8e55-02b235ed497a">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>cmd_emergency_mode</seg>
+      </bo>
+      <bendpoints>
+        <point x="549.0" y="138.5"/>
+        <point x="561.0" y="138.5"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="ffc58f0c-7043-43a9-a745-a6f6a3598368">
+      <element uuid="42986ea9-d569-4043-8132-2f826386c9f1">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>selector_info_to_monitor</seg>
+      </bo>
+      <bendpoints>
+        <point x="420.0" y="154.33333333333334"/>
+        <point x="426.0" y="154.33333333333334"/>
+        <point x="426.0" y="132.66666666666669"/>
+        <point x="432.0" y="132.66666666666669"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="84222b80-40a3-4106-a50a-6be8f2c84ed7">
+      <element uuid="5501e8f2-dc9c-4e2d-ac51-22604f9e5199">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_at_receiver</seg>
+      </bo>
+      <bendpoints>
+        <point x="854.0" y="160.16666666666669"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="7fc4babe-ee00-40c3-bd2e-6a5c5de2a588">
+      <element uuid="c3c1a546-62db-4788-ba33-56037af9ab32">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_from_alt_to_sel</seg>
+      </bo>
+      <bendpoints>
+        <point x="290.0" y="111.0"/>
+        <point x="296.0" y="111.0"/>
+        <point x="296.0" y="154.33333333333334"/>
+        <point x="302.0" y="154.33333333333334"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="185ddf8a-9f2f-4b07-a712-1a2f02d8e9eb">
+      <element uuid="cf57b334-ddde-4b19-8f3b-0dadbaf569f6">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_from_emer_to_rec</seg>
+      </bo>
+      <bendpoints>
+        <point x="726.0" y="138.5"/>
+        <point x="732.0" y="138.5"/>
+        <point x="732.0" y="154.33333333333334"/>
+        <point x="738.0" y="154.33333333333334"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="1fca7895-a1a6-436d-98a1-30bbb40dcee0">
+      <element uuid="dcd8737f-e0a2-4a4b-9bf4-eee90ac0a165">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_from_norm_to_sel</seg>
+      </bo>
+      <bendpoints>
+        <point x="284.0" y="166.0"/>
+        <point x="302.0" y="166.0"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="782dbd0a-4d40-4c08-92ce-b11827abdee1">
+      <element uuid="859426be-4398-422c-9063-7d0771181f7c">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_from_sel_to_rec</seg>
+      </bo>
+      <bendpoints>
+        <point x="420.0" y="166.0"/>
+        <point x="738.0" y="166.0"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="3e6f5d14-8127-4317-b825-5538692d141d">
+      <element uuid="a497bf48-5096-4cf4-88b2-1cd79704a95d">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_to_alt</seg>
+      </bo>
+      <bendpoints>
+        <point x="143.0" y="111.0"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="919dde8a-3d5d-40ff-ae15-7da321131372">
+      <element uuid="0e98a936-1ccb-42fd-a912-7bb40c6948f3">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>supply_to_normal</seg>
+      </bo>
+      <bendpoints>
+        <point x="149.0" y="166.0"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="c4a49433-065d-475d-b756-e4518da14823">
+      <element uuid="937ab4df-5b40-4679-8743-567661999b3b">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>system_mode</seg>
+      </bo>
+      <bendpoints>
+        <point x="549.0" y="126.83333333333334"/>
+        <point x="555.0" y="126.83333333333334"/>
+        <point x="555.0" y="110.0"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="89ce5024-cbe5-4400-a459-b178db88dc85" dockArea="left">
+      <bo>
+        <seg>feature</seg>
+        <seg>alt_supply</seg>
+      </bo>
+      <position y="39.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="3b4e6fd2-0d25-47fa-a718-72759b0134a2" dockArea="left">
+      <bo>
+        <seg>feature</seg>
+        <seg>normal_supply</seg>
+      </bo>
+      <position y="94.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="603fb387-72bd-4eb2-8afb-e844230d99d5" dockArea="right">
+      <bo>
+        <seg>feature</seg>
+        <seg>supply_received</seg>
+      </bo>
+      <position x="713.0" y="88.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="563acbac-4dfe-4413-aa06-f39179ec372f" dockArea="right">
+      <bo>
+        <seg>feature</seg>
+        <seg>sys_mode</seg>
+      </bo>
+      <position x="754.0" y="38.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="318a5d4c-bfeb-4c5b-94dd-e507d4fe8735">
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>alternate_sys</seg>
+      </bo>
+      <position x="123.0" y="54.0"/>
+      <size width="143.0" height="35.0"/>
+      <contentFilters>
+        <filter>modes</filter>
+        <filter>modeTransitions</filter>
+      </contentFilters>
+    </element>
+    <element uuid="2dab110f-a94b-4278-9ac8-575de7ab7c2b">
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>emergency_sys</seg>
+      </bo>
+      <position x="545.0" y="81.0"/>
+      <size width="157.0" height="35.0"/>
+      <contentFilters>
+        <filter>modes</filter>
+        <filter>modeTransitions</filter>
+      </contentFilters>
+    </element>
+    <element uuid="e1e7b96a-45a6-43c2-b59e-4675a4985ec1">
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>monitor</seg>
+      </bo>
+      <position x="416.0" y="75.0"/>
+      <size width="109.0" height="35.0"/>
+      <contentFilters>
+        <filter>modes</filter>
+        <filter>modeTransitions</filter>
+      </contentFilters>
+    </element>
+    <element uuid="55971c94-16e0-4453-819a-b91bc298434a">
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>normal_sys</seg>
+      </bo>
+      <position x="129.0" y="109.0"/>
+      <size width="131.0" height="35.0"/>
+      <contentFilters>
+        <filter>modes</filter>
+        <filter>modeTransitions</filter>
+      </contentFilters>
+    </element>
+    <element uuid="c8b9fffa-650f-4047-8af5-bcb3953ad1af">
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>receiver</seg>
+      </bo>
+      <position x="722.0" y="103.0"/>
+      <size width="112.0" height="35.0"/>
+      <contentFilters>
+        <filter>modes</filter>
+        <filter>modeTransitions</filter>
+      </contentFilters>
+    </element>
+    <element uuid="c1c2c60f-d993-4cef-999a-58b0e9cec9b8">
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>selector</seg>
+      </bo>
+      <position x="286.0" y="103.0"/>
+      <size width="110.0" height="35.0"/>
+      <contentFilters>
+        <filter>modes</filter>
+        <filter>modeTransitions</filter>
+      </contentFilters>
+    </element>
+    <bo>
+      <seg>classifier</seg>
+      <seg>threemodesys.simple</seg>
+    </bo>
+    <position x="20.0" y="40.0"/>
+    <size width="834.0" height="231.0"/>
+    <contentFilters>
+      <filter>connections</filter>
+      <filter>flowSpecifications</filter>
+      <filter>features</filter>
+      <filter>modes</filter>
+      <filter>subcomponents</filter>
+      <filter>modeTransitions</filter>
+    </contentFilters>
+  </element>
+  <config type="mode" connectionPrimaryLabelsVisible="false">
+    <enabledAadlProperties/>
+    <context>
+      <seg>classifier</seg>
+      <seg>threemodesys::threemodesys.simple</seg>
+    </context>
+  </config>
+</diagram:Diagram>
