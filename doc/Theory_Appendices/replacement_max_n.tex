@@ -37,9 +37,11 @@ Let $Cut(g_j) = {cut_1(g_j), ..., cut_{\beta}(g_j)}$ be all minimal cut sets for
 	\label{alg:repl_alg}
 \end{algorithm}
 
-The number of replacements $R$ that are made in this algorithm are given as the combination of minimal cut sets of the contracts within the $MCS$. The validity of this statement follows directly from the general multiplicative combinatorial principle. Therefore, the number of replacements $R$ is given by:\\
+The number of replacements $R$ per $MCS$ that are made in this algorithm are given as the combination of minimal cut sets of the contracts within the $MCS$. The validity of this statement follows directly from the general multiplicative combinatorial principle. Therefore, the number of replacements $R$ in $MCS_i$ is given by:\\
 
-$R = {\displaystyle \prod_{j=1}^{\alpha } |Cut(g_j)|}$ \\
+$R = {\displaystyle \prod_{j=1}^{\alpha } |Cut(g_j)|}$, for $g_j \in MCS_i$. \\
+
+Then the total number of replacements for all $MCSs$ is: $R*|MCS|$. \\
 
 This is equivalent to the number of minimal cut sets generated which follows easily from the combinatorial calculation. It is also important to note that the cardinality of $List(MCS)$ is bounded. Every new $MCS$ that is generated that still contains contracts is added to $List(MCS)$. Thus every contract up until the penultimate contract contributes to the cardinality of $List(MCS)$. The bound is given by: \\
 
