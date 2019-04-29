@@ -89,7 +89,7 @@ public
       		--see C123 out3 value failure with 1E-5 threshold
       		--see both C123 out3 range and out3 value failure with 1E-8 threshold
       		--see both properties pass with 1E-4 threshold
-      		analyze : probability 1.0E-8
+      		analyze : probability 1.0E-4
    		**};
 	end C123.impl;
 	

@@ -93,6 +93,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// with that
 	// id and expression.
 	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
+	private List<FaultPair> mutualExclusiveFaults = new ArrayList<FaultPair>();
 
 	public static int maxFaultCount = 0;
 	public static boolean upperMostLevel = true;
@@ -244,7 +245,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	public List<Expr> constructNodeInputs(Fault f) {
+	public List<Expr> constructNodeInputs(Fault f, Map<Fault, Expr> localFaultTriggerMap) {
 		List<Expr> actuals = new ArrayList<>();
 		for (VarDecl vd : f.faultNode.inputs) {
 			// there is an extra "trigger" input
@@ -255,6 +256,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							"Trigger input for fault node should not be explicitly assigned by user.");
 				}
 				actual = new IdExpr(createFaultNodeInputId(f.id));
+				localFaultTriggerMap.put(f, actual);
 			} else {
 				actual = f.faultInputMap.get(vd.id);
 				// do any name conversions on the stored expression.
@@ -269,6 +271,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	public void addFaultNodeEqs(List<Fault> faults, AgreeNodeBuilder nb) {
+		Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
 		for (Fault f : faults) {
 			List<IdExpr> lhs = new ArrayList<IdExpr>();
 			for (VarDecl v : f.faultNode.outputs) {
@@ -278,7 +281,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				lhs.add(new IdExpr(lhsId));
 				f.outputParamToActualMap.put(v.id, actual);
 			}
-			AgreeEquation eq = new AgreeEquation(lhs, new NodeCallExpr(f.faultNode.id, constructNodeInputs(f)),
+			AgreeEquation eq = new AgreeEquation(lhs,
+					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)),
 					f.faultStatement);
 			nb.addLocalEquation(eq);
 		}
@@ -293,6 +297,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			String nomId = createNominalId(lhsWithStmtName);
 			// base is the root of the WITH expression.
 			Expr toAssign = new IdExpr(nomId);
+			Expr defaultExpr = new IdExpr(nomId);
+			Expr resultExpr = defaultExpr;
+			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
 
 			// Go through pairs of the list and create with statements.
 			for (Pair pair : list) {
@@ -302,10 +309,30 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Expr base = replPathIdExpr(pair.ex, toAssign);
 				Expr repl = faultToActual(pair.f, pair.ex);
 				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
+
+				if(faultsForSameOutput.isEmpty()) {
+					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
+					resultExpr = new IfThenElseExpr(ftTrigger, toAssign, defaultExpr);
+				}
+				else {
+					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
+					Expr originalDefault = defaultExpr;
+					defaultExpr = new IfThenElseExpr(ftTrigger, toAssign, originalDefault);
+					IfThenElseExpr originalResult = (IfThenElseExpr) resultExpr;
+					resultExpr = new IfThenElseExpr(originalResult.cond, originalResult.thenExpr, defaultExpr);
+				}
+
+				for (Fault curFault : faultsForSameOutput) {
+					mutualExclusiveFaults.add(new FaultPair(curFault, pair.f));
+				}
+				faultsForSameOutput.add(pair.f);
 			}
+
 			// create new assertion expression : id = ((nominal_id with p1 := f1) with ...)
+		//	nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
+		//			new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
-					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
+					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, resultExpr), null));
 		}
 	}
 
@@ -429,14 +456,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return outputMap;
 	}
 
-	private void addIdToMap(HashMap<String, List<Pair>> faultyVarsExpr, Expr ex, String id, Fault f) {
+	private void addIdToMap(HashMap<String, List<Pair>> outputMap, Expr ex, String id, Fault f) {
 		Pair pair = new Pair(ex, f);
-		if (faultyVarsExpr.containsKey(id)) {
-			faultyVarsExpr.get(id).add(pair);
+		if (outputMap.containsKey(id)) {
+			outputMap.get(id).add(pair);
 		} else {
 			List<Pair> list = new ArrayList<Pair>();
 			list.add(pair);
-			faultyVarsExpr.put(id, list);
+			outputMap.put(id, list);
 		}
 	}
 
@@ -870,18 +897,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return new IfThenElseExpr(cond, new IntExpr(1), new IntExpr(0));
 	}
 
-	public void getFaultCountExprList(AgreeNode currentNode, List<String> path, List<Expr> sumExprs) {
-
+	// public void getFaultCountExprList(AgreeNode currentNode, List<String> path, List<Expr> sumExprs) {
+	public void getFaultCountExprList(AgreeNode currentNode, List<Expr> sumExprs) {
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
 		for (Fault f : faults) {
 			// only add independently active fault to sumExprs
-			String base = addPathDelimiters(path, f.id);
+			String base = addPathDelimiters(f.path, f.id);
 			sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(base))));
 		}
 		for (AgreeNode n : currentNode.subNodes) {
-			List<String> ext = new ArrayList<>(path);
-			ext.add(n.id);
-			getFaultCountExprList(n, ext, sumExprs);
+			// List<String> ext = new ArrayList<>(path);
+			// ext.add(n.id);
+			getFaultCountExprList(n, sumExprs);
 		}
 	}
 
@@ -929,6 +956,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
+	private String getMainNodeFaultTriggerStr(Fault f) {
+		String base = addPathDelimiters(f.path, f.id);
+		return this.createFaultIndependentActiveId(base);
+	}
+
 	public void addTopLevelMaxFaultOccurrenceConstraint(int maxFaults, AgreeNode topNode, AgreeNodeBuilder builder) {
 
 		// add a global fault count
@@ -937,10 +969,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		// assign it.
 		List<Expr> sumExprs = new ArrayList<>();
-		getFaultCountExprList(topNode, new ArrayList<>(), sumExprs);
+		// getFaultCountExprList(topNode, new ArrayList<>(), sumExprs);
+		getFaultCountExprList(topNode, sumExprs);
 		Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
 		Expr equate = new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
 		builder.addAssertion(new AgreeStatement("", equate, topNode.reference));
+
+		// add assertions that the mutually exclusive fault activations
+		for (FaultPair curPair : mutualExclusiveFaults) {
+			// assert that the pair cannot both be true
+			// get fault triggers
+			String ft1Trigger = this.getMainNodeFaultTriggerStr(curPair.ft1);
+			String ft2Trigger = this.getMainNodeFaultTriggerStr(curPair.ft2);
+			Expr ft1False = new UnaryExpr(UnaryOp.NOT, new IdExpr(ft1Trigger));
+			Expr ft2False = new UnaryExpr(UnaryOp.NOT, new IdExpr(ft2Trigger));
+			Expr ft1FalseOrft2False = new BinaryExpr(ft1False, BinaryOp.OR, ft2False);
+			builder.addAssertion(new AgreeStatement("", ft1FalseOrft2False, topNode.reference));
+		}
 
 		// assert that the value is <= 1
 		Expr lessEqual = new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(maxFaults));
@@ -1224,6 +1269,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		public Pair(Expr ex, Fault f) {
 			this.ex = ex;
 			this.f = f;
+		}
+	}
+
+	public class FaultPair {
+		private Fault ft1;
+		private Fault ft2;
+
+		public FaultPair(Fault ft1, Fault ft2) {
+			this.ft1 = ft1;
+			this.ft2 = ft2;
 		}
 	}
 
