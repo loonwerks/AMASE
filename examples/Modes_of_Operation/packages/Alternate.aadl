@@ -29,7 +29,7 @@ with Base_Types;
 				
 				inputs: val_in <- supply_out, alt_val <- fail_val; 
 				outputs: supply_out <- val_out;    
-        		probability: 1.0E-7;
+        		probability: 1.0E-2;
 				duration: permanent;
 		}
 		**};
