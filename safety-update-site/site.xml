@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201812131350.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201812131350">
+   <feature url="features/edu.umn.cs.crisys.safety.feature_1.0.0.201904291533.jar" id="edu.umn.cs.crisys.safety.feature" version="1.0.0.201904291533">
       <category name="edu.umn.cs.crisys.safety"/>
    </feature>
    <category-def name="edu.umn.cs.crisys.safety" label="Safety Annex: model-based safety analysis tools">

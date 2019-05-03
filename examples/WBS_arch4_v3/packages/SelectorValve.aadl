@@ -42,7 +42,6 @@ with Base_Types;
 				((green_select_out >= 0 and green_select_out <= 10)
 					and (blue_select_out >= 0 and blue_select_out <= 10));
 			
-			
 		**};
 		
 		
