@@ -59,6 +59,7 @@ with Base_Types;
 				guarantee "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
 							((as_cmd_pair_1_5 <=> (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false)); 
+--							(power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
 							
 				guarantee "(Channel) Antiskid command to pair 2,6: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
