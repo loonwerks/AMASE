@@ -42,6 +42,11 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 		SoteriaFTNonLeafNode returnNode = null;
 		boolean isRoot = node.isRoot;
 		List<SoteriaFTNode> childNodesToRemove = new ArrayList<SoteriaFTNode>();
+		// if no child node, return nodeValue false
+		if (node.childNodes.isEmpty()) {
+			node.nodeValue = false;
+			return node;
+		}
 		// if not resolved, go visit its child nodes
 		if (!isORNodeResolved(node, isRoot)) {
 			for (SoteriaFTNode child : node.childNodes.values()) {
@@ -55,7 +60,7 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			node.removeChildNodes(childNodesToRemove);
 			// if no child node left for this node
 			// set it can be removed at the upper level
-			if (node.childNodes.size() == 0) {
+			if (node.childNodes.isEmpty()) {
 				node.nodeValue = false;
 				return node;
 			}
@@ -76,6 +81,11 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 		SoteriaFTNonLeafNode returnNode = null;
 		boolean isRoot = node.isRoot;
 		List<SoteriaFTNode> childNodesToRemove = new ArrayList<SoteriaFTNode>();
+		// if no child node, return node value false
+		if (node.childNodes.isEmpty()) {
+			node.nodeValue = false;
+			return node;
+		}
 		// if not resolved, go visit its child nodes
 		if (!isANDNodeResolved(node)) {
 			for (SoteriaFTNode child : node.childNodes.values()) {
@@ -89,7 +99,7 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			node.removeChildNodes(childNodesToRemove);
 			// if no child node left for this node
 			// set it can be removed at the upper level
-			if (node.childNodes.size() == 0) {
+			if (node.childNodes.isEmpty()) {
 				node.nodeValue = false;
 				return node;
 			}
