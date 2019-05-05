@@ -69,6 +69,7 @@ import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
@@ -308,30 +309,58 @@ public class SoteriaGenHandler extends VerifyHandler {
 //				}
 
 				// generate soteria fault tree from the result
-				IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-				SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-				try {
-					File file = File.createTempFile("soteriaFT_", ".ml");
-					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-					bw.write(soteriaFT.toString());
-					bw.close();
-					org.eclipse.swt.program.Program.launch(file.toString());
-				} catch (IOException e) {
-					Dialog.showError("Unable to open file", e.getMessage());
-					e.printStackTrace();
-				}
+				// TODO: if zero max N fault hypothesis and empty fault combination for probabilistic analysis
+				// generate empty tree
 
-				SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
-				resolveVisitor.visit(soteriaFT);
-				try {
-					File file = File.createTempFile("soteriaResolvedFT_", ".ml");
-					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-					bw.write(soteriaFT.printMinCutSet());
-					bw.close();
-					org.eclipse.swt.program.Program.launch(file.toString());
-				} catch (IOException e) {
-					Dialog.showError("Unable to open file", e.getMessage());
-					e.printStackTrace();
+				// if no fault hypothesis
+				// or if max fault hypothesis but N = 0
+				// or if probablistic hypothesis but fault combinations above threshold is empty
+				// then print empty min cut set fault tree
+				if ((!AddFaultsToNodeVisitor.maxFaultHypothesis && !AddFaultsToNodeVisitor.probablisticHypothesis)
+						|| (AddFaultsToNodeVisitor.maxFaultHypothesis && (AddFaultsToNodeVisitor.maxFaultCount == 0))
+						|| (AddFaultsToNodeVisitor.probablisticHypothesis
+								&& AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty())) {
+					SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+					printUtils.printEmptyTree();
+
+					try {
+						File file = File.createTempFile("soteriaResolvedFT_", ".ml");
+						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+						bw.write(printUtils.toString());
+						bw.close();
+						org.eclipse.swt.program.Program.launch(file.toString());
+					} catch (IOException e) {
+						Dialog.showError("Unable to open file", e.getMessage());
+						e.printStackTrace();
+					}
+				}
+				else {
+					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
+					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
+//					try {
+//						File file = File.createTempFile("soteriaFT_", ".ml");
+//						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+//						bw.write(soteriaFT.toString());
+//						bw.close();
+//						org.eclipse.swt.program.Program.launch(file.toString());
+//					} catch (IOException e) {
+//						Dialog.showError("Unable to open file", e.getMessage());
+//						e.printStackTrace();
+//					}
+
+					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
+					resolveVisitor.visit(soteriaFT);
+					try {
+						File file = File.createTempFile("soteriaResolvedFT_", ".ml");
+						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+						bw.write(soteriaFT.printMinCutSet());
+						bw.close();
+						org.eclipse.swt.program.Program.launch(file.toString());
+					} catch (IOException e) {
+						Dialog.showError("Unable to open file", e.getMessage());
+						e.printStackTrace();
+					}
+
 				}
 
 				deactivateTerminateHandlers();

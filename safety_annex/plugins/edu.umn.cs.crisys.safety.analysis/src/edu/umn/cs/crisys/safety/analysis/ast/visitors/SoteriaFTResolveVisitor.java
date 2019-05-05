@@ -152,6 +152,8 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 					node.nodeValue = true;
 				}
 			} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+				System.out.println("pruning for probablity analysis");
+				// TODO: prune according to valid fault combinations
 //				boolean isSubset = false;
 //				for (FaultSetProbability faultCombination : AddFaultsToNodeVisitor.faultCombinationsAboveThreshold) {
 //					boolean isCurrentSubset = true;
@@ -322,6 +324,8 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount);
 				} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
 					// TODO: prune according to valid fault combinations
+					System.out.println("pruning for probablity analysis");
+					destSets = MHSUtils.computeMHS(sourceSets, 0);
 				}
 			}
 			// else no pruning

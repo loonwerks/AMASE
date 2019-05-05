@@ -98,6 +98,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static int maxFaultCount = 0;
 	public static boolean upperMostLevel = true;
 	public static ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
+	public static boolean maxFaultHypothesis = false;
+	public static boolean probablisticHypothesis = false;
 
 	/*
 	 * public accessor for faultMap: faultMap is used to properly set up the
@@ -117,6 +119,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		maxFaultCount = 0;
 		upperMostLevel = true;
 		faultCombinationsAboveThreshold.clear();
+		maxFaultHypothesis = false;
+		probablisticHypothesis = false;
 	}
 
 	@Override
@@ -987,7 +991,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			builder.addAssertion(new AgreeStatement("", ft1FalseOrft2False, topNode.reference));
 		}
 
-		// assert that the value is <= 1
+		// assert that the value is <= maxFaults
 		Expr lessEqual = new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(maxFaults));
 		builder.addAssertion(new AgreeStatement("", lessEqual, topNode.reference));
 
@@ -1210,9 +1214,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			AgreeNodeBuilder builder) {
 
 		if (ab instanceof FaultCountBehavior) {
+			maxFaultHypothesis = true;
 			maxFaultCount = Integer.parseInt(((FaultCountBehavior) ab).getMaxFaults());
 			System.out.println("maxFault: " + maxFaultCount);
 		} else if (ab instanceof ProbabilityBehavior) {
+			probablisticHypothesis = true;
 			collectTopLevelMaxFaultOccurrenceConstraint(Double.parseDouble(((ProbabilityBehavior) ab).getProbabilty()),
 					topNode, builder);
 		}
