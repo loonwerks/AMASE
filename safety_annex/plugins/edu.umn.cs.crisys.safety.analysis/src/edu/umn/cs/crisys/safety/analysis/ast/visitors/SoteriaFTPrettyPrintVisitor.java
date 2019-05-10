@@ -65,10 +65,10 @@ public class SoteriaFTPrettyPrintVisitor implements SoteriaFTAstVisitor<Void> {
 
 	@Override
 	public Void visit(SoteriaFTLeafNode leaf) {
-		writeln("let " + leaf.faultName + " = ");
+		writeln("let " + leaf.soteriaFaultName + " = ");
 		writeln("Leaf");
 		write("    ((\"" + leaf.compName + "\",");
-		write("\"" + leaf.faultName + "\"),");
+		write("\"" + leaf.soteriaFaultName + "\"),");
 		write(leaf.failureRate + ", ");
 		writeln(leaf.exposureTime + ");;");
 		return null;

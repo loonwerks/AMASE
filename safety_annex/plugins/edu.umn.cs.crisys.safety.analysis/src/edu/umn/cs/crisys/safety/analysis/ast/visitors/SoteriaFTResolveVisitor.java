@@ -8,6 +8,7 @@ import java.util.Set;
 
 import edu.umn.cs.crisys.safety.analysis.MHSUtils;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor.FaultSetProbability;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNode;
@@ -142,6 +143,32 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 		return true;
 	}
 
+	private boolean isSubset(SoteriaFTNonLeafNode node,
+			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold) {
+		boolean isSubset = false;
+
+		HashSet<String> childNodeSet = new HashSet<String>();
+
+		for (SoteriaFTNode childNode : node.childNodes.values()) {
+			if (!(childNode instanceof SoteriaFTLeafNode)) {
+				throw new SafetyException(
+						"Trying to prune node " + node.nodeName + " with non leaf child " + childNode.nodeName);
+			} else {
+				childNodeSet.add(((SoteriaFTLeafNode) childNode).lustreFaultName);
+			}
+		}
+
+		for (FaultSetProbability faultCombination : AddFaultsToNodeVisitor.faultCombinationsAboveThreshold) {
+			HashSet<String> faultCombinationSet = faultCombination.toStringSet();
+			if (faultCombinationSet.containsAll(childNodeSet)) {
+				isSubset = true;
+				return isSubset;
+			}
+		}
+
+		return isSubset;
+	}
+
 	private SoteriaFTNonLeafNode prune(SoteriaFTNonLeafNode node) {
 		// only prune AND node
 		if (node instanceof SoteriaFTAndNode) {
@@ -153,42 +180,11 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				}
 			} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
 				System.out.println("pruning for probablity analysis");
-				// TODO: prune according to valid fault combinations
-//				boolean isSubset = false;
-//				for (FaultSetProbability faultCombination : AddFaultsToNodeVisitor.faultCombinationsAboveThreshold) {
-//					boolean isCurrentSubset = true;
-//					for (FaultProbability faultElement : faultCombination.elements) {
-//						System.out.println("faultCombination element: " + faultElement.faultName);
-//						for (SoteriaFTNode childNode : node.childNodes.values()) {
-//							if (!(childNode instanceof SoteriaFTLeafNode)) {
-//								throw new SafetyException("Trying to prune node " + node.nodeName
-//										+ " with non leaf child " + childNode.nodeName);
-//							}
-//							SoteriaFTLeafNode leafNode = (SoteriaFTLeafNode) childNode;
-//							System.out.println("leafNode: " + leafNode.faultName);
-//							if (!faultElement.faultName.contentEquals(leafNode.faultName)) {
-//								isCurrentSubset = false;
-//							}
-//						}
-//						if (isCurrentSubset) {
-//							isSubset = true;
-//						}
-//					}
-//				}
-//				if (isSubset) {
-//					node.nodeValue = true;
-//				} else {
-//					node.nodeValue = false;
-//				}
-
-				// Create FaultProbability from all leaf child nodes
-				// and check if they are subset of any elements
-				// If the set of child nodes
-				// is not a subset of any set from faultCombinationsAboveThreshold,
-				// eliminate that Minimal Hitting Set
-
-				// TODO: prune according to valid fault combinations
-				node.nodeValue = true;
+				if (isSubset(node, AddFaultsToNodeVisitor.faultCombinationsAboveThreshold)) {
+					node.nodeValue = true;
+				} else {
+					node.nodeValue = false;
+				}
 			}
 		}
 		return node;

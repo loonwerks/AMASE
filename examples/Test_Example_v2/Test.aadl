@@ -85,11 +85,11 @@ public
 			C1_to_C3: port C1.out1 -> C3.in13;
 			C2_to_C3: port C2.out2 -> C3.in23;
 		annex safety {**
-      		--analyze : max 0 fault
+      		--analyze : max 1 fault
       		--see C123 out3 value failure with 1E-5 threshold
       		--see both C123 out3 range and out3 value failure with 1E-8 threshold
       		--see both properties pass with 1E-4 threshold
-      		analyze : probability 1.0E-4
+      		analyze : probability 1.0E-7
    		**};
 	end C123.impl;
 	
