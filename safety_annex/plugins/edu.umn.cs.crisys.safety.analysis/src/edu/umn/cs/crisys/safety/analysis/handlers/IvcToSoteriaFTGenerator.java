@@ -173,7 +173,7 @@ public class IvcToSoteriaFTGenerator {
 		// add each mcs element to formulaSubgroup
 		if (mcsElem.startsWith("__fault")) {
 			String refStr = renaming.getSupportRefString(mcsElem);
-			extractFaultMCSElem(compName, renaming, mcsSetNode, mcsElemName, refStr);
+			extractFaultMCSElem(compName, renaming, mcsSetNode, mcsElemName, refStr, mcsElem);
 		} else {
 			extractContractMCSElem(compName, mcsSetNode, mcsElemName);
 		}
@@ -196,7 +196,7 @@ public class IvcToSoteriaFTGenerator {
 	}
 
 	private void extractFaultMCSElem(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode,
-			String faultName, String faultRefName) {
+			String faultName, String faultRefName, String originalFaultName) {
 		// differentiate same fault definitions activated in subcomponents of different parent components
 		String updatedFaultName = MHSUtils.updateElemName(compName + "_" + faultName);
 		// if mcsElem is not yet in leaf nodes
@@ -210,7 +210,7 @@ public class IvcToSoteriaFTGenerator {
 					// currently treat exposure time as (float) 1.0
 					// and treat the failure probability from the fault statement as the failure rate
 					SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, failureProb,
-							(float) 1.0);
+							(float) 1.0, originalFaultName);
 					soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
 					mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
 					// update intermediate node

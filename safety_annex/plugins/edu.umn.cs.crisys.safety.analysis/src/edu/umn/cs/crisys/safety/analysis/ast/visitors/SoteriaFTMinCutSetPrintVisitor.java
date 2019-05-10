@@ -112,10 +112,10 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 	}
 
 	private void printLeafNode(SoteriaFTLeafNode leaf) {
-		writeln("let " + leaf.faultName + " = ");
+		writeln("let " + leaf.soteriaFaultName + " = ");
 		writeln("Leaf");
 		write("    ((\"" + leaf.compName + "\",");
-		write("\"" + leaf.faultName + "\"),");
+		write("\"" + leaf.soteriaFaultName + "\"),");
 		write(leaf.failureRate + ", ");
 		writeln(leaf.exposureTime + ");;");
 	}

@@ -1053,6 +1053,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		public String toString() {
 			return "(" + probability + ", " + elements.toString() + " )";
 		}
+
+		public HashSet<String> toStringSet() {
+			HashSet<String> elemSet = new HashSet<String>();
+			for (FaultProbability element : elements) {
+				elemSet.add(element.faultName);
+			}
+			return elemSet;
+		}
 	}
 
 	public void getFaultProbExprList(AgreeNode currentNode, List<String> path, List<FaultProbability> probabilities) {
