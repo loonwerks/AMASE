@@ -22,6 +22,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 	public SoteriaFTNode visit(SoteriaFaultTree ft) {
 		for (SoteriaFTNonLeafNode root : ft.rootNodes.values()) {
 			SoteriaFTNode newRoot = root.accept(this);
+			if (newRoot instanceof SoteriaFTNonLeafNode) {
+				promoteNode((SoteriaFTNonLeafNode) newRoot);
+			}
 			ft.addResolvedRootNode(newRoot);
 		}
 		return null;
@@ -179,7 +182,7 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 					node.nodeValue = true;
 				}
 			} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
-				System.out.println("pruning for probablity analysis");
+				// System.out.println("pruning for probablity analysis");
 				if (isSubset(node, AddFaultsToNodeVisitor.faultCombinationsAboveThreshold)) {
 					node.nodeValue = true;
 				} else {
