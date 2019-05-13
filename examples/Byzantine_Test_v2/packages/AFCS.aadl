@@ -1,0 +1,95 @@
+package AFCS
+--Avionics (and) Flight Control System (Integrated)
+public
+	with FCC;
+	with DMC;
+	with Pilot_Wheel;
+	with AADL_Properties;
+	renames FCC::all;
+	renames Data_Types::all;
+	renames DMC::all;
+	renames Pilot_Wheel::all;
+
+	system AFCS
+		annex agree {**
+			eq num_fcc_in_cmd: int;
+						
+			--top level property
+			guarantee "there is at most one FCC in Cmd":
+			num_fcc_in_cmd <=1;		
+			
+		**};
+	end AFCS;
+
+	system implementation AFCS.impl
+		subcomponents
+			FCC1: system FCC {AADL_Properties::FCC_ID => 1;};
+			FCC2: system FCC {AADL_Properties::FCC_ID => 2;};
+			FCC3: system FCC {AADL_Properties::FCC_ID => 3;};
+			FCC4: system FCC {AADL_Properties::FCC_ID => 4;};
+			DMCA: system DMC;
+			DMCB: system DMC;
+			Pilot_Wheel: system Pilot_Wheel;
+			CoPilot_Wheel: system Pilot_Wheel;
+		connections
+			--Data between DMCs and FCCs
+			DMCA_to_FCC1: port DMCA.FCC_Out -> FCC1.DMCA_In;
+			DMCA_to_FCC2: port DMCA.FCC_Out -> FCC2.DMCA_In;
+			DMCA_to_FCC3: port DMCA.FCC_Out -> FCC3.DMCA_In;
+			DMCA_to_FCC4: port DMCA.FCC_Out -> FCC4.DMCA_In;
+			DMCB_to_FCC1: port DMCB.FCC_Out -> FCC1.DMCB_In;
+			DMCB_to_FCC2: port DMCB.FCC_Out -> FCC2.DMCB_In;
+			DMCB_to_FCC3: port DMCB.FCC_Out -> FCC3.DMCB_In;
+			DMCB_to_FCC4: port DMCB.FCC_Out -> FCC4.DMCB_In;
+			FCC1_to_DMCA: port FCC1.DMCA_Out -> DMCA.FCC_In;
+			FCC2_to_DMCA: port FCC2.DMCA_Out -> DMCA.FCC_In;
+			FCC3_to_DMCA: port FCC3.DMCA_Out -> DMCA.FCC_In;
+			FCC4_to_DMCA: port FCC4.DMCA_Out -> DMCA.FCC_In;
+			FCC1_to_DMCB: port FCC1.DMCB_Out -> DMCB.FCC_In;
+			FCC2_to_DMCB: port FCC2.DMCB_Out -> DMCB.FCC_In;
+			FCC3_to_DMCB: port FCC3.DMCB_Out -> DMCB.FCC_In;
+			FCC4_to_DMCB: port FCC4.DMCB_Out -> DMCB.FCC_In;
+			
+			--Data between FCCs
+			FCC1_to_FCC2: port FCC1.FCC1_Out -> FCC2.FCC1_In;
+			FCC1_to_FCC3: port FCC1.FCC2_Out -> FCC3.FCC1_In;
+			FCC1_to_FCC4: port FCC1.FCC3_Out -> FCC4.FCC1_In;
+			FCC2_to_FCC1: port FCC2.FCC1_Out -> FCC1.FCC1_In;
+			FCC2_to_FCC3: port FCC2.FCC2_Out -> FCC3.FCC2_In;
+			FCC2_to_FCC4: port FCC2.FCC3_Out -> FCC4.FCC2_In;
+			FCC3_to_FCC1: port FCC3.FCC1_Out -> FCC1.FCC2_In;
+			FCC3_to_FCC2: port FCC3.FCC2_Out -> FCC2.FCC2_In;
+			FCC3_to_FCC4: port FCC3.FCC3_Out -> FCC4.FCC3_In;
+			FCC4_to_FCC1: port FCC4.FCC1_Out -> FCC1.FCC3_In;
+			FCC4_to_FCC2: port FCC4.FCC2_Out -> FCC2.FCC3_In;
+			FCC4_to_FCC3: port FCC4.FCC3_Out -> FCC3.FCC3_In;
+			
+			--Data between Pilot Wheel and CoPilot Wheel and FCCs
+			Pilot_Wheel_FCC1: port Pilot_Wheel.AP_Quick_Disconnect -> FCC1.AP_Quick_Disconnect;
+			Pilot_Wheel_FCC2: port Pilot_Wheel.AP_Quick_Disconnect -> FCC2.AP_Quick_Disconnect;
+			Pilot_Wheel_FCC3: port Pilot_Wheel.AP_Quick_Disconnect -> FCC3.AP_Quick_Disconnect;
+			Pilot_Wheel_FCC4: port Pilot_Wheel.AP_Quick_Disconnect -> FCC4.AP_Quick_Disconnect;
+			CoPilot_Wheel_FCC1: port CoPilot_Wheel.AP_Quick_Disconnect -> FCC1.AP_Quick_Disconnect;
+			CoPilot_Wheel_FCC2: port CoPilot_Wheel.AP_Quick_Disconnect -> FCC2.AP_Quick_Disconnect;
+			CoPilot_Wheel_FCC3: port CoPilot_Wheel.AP_Quick_Disconnect -> FCC3.AP_Quick_Disconnect;
+			CoPilot_Wheel_FCC4: port CoPilot_Wheel.AP_Quick_Disconnect -> FCC4.AP_Quick_Disconnect;		
+		
+		annex agree {**
+			--for top level property
+			assign num_fcc_in_cmd = 		
+			(if(FCC1.In_Cmd)then 1 else 0) + 
+			(if(FCC2.In_Cmd)then 1 else 0) + 
+			(if(FCC3.In_Cmd)then 1 else 0) + 
+			(if(FCC4.In_Cmd)then 1 else 0);
+			
+			lemma "there is always a FCC in Cmd":
+			FCC1.In_Cmd or FCC2.In_Cmd or FCC3.In_Cmd or FCC4.In_Cmd;
+				
+			lemma "not all FCCs will fail at the same time":
+			not(FCC1.Failed and FCC2.Failed and FCC3.Failed and FCC4.Failed);
+		**};
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
+	end AFCS.impl;
+end AFCS;

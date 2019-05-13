@@ -1,0 +1,255 @@
+package FCC
+--Flight Control Computer
+public
+	with Data_Types;
+	renames Data_Types::all;
+
+	with Base_Types;
+
+	system FCC
+		features
+			--inputs
+			FCC1_In: in data port CCDL_Data.Impl;
+			FCC2_In: in data port CCDL_Data.Impl;
+			FCC3_In: in data port CCDL_Data.Impl;
+			DMCA_In: in data port DMC_Data.Impl;
+			DMCB_In: in data port DMC_Data.Impl;
+			AP_Quick_Disconnect: in data port Base_Types::Boolean;
+			
+			--outputs
+			DMCA_Out: out data port DMC_Data.Impl;
+			DMCB_Out: out data port DMC_Data.Impl;
+			FCC1_Out: out data port CCDL_Data.Impl;
+			FCC2_Out: out data port CCDL_Data.Impl;
+			FCC3_Out: out data port CCDL_Data.Impl;
+			FCC_Cmd: out data port FCC_Cmd.Impl;
+			Failed: out data port Base_Types::Boolean;
+			In_Cmd: out data port Base_Types::Boolean;
+			
+		annex agree {**
+			eq fcc_id : int = Get_Property(this, AADL_Properties::FCC_ID);
+			
+			eq count: int = 0 -> (pre(count) + 1);		
+
+			guarantee "Send In Command Status to all other FCCs":
+				(In_Cmd = FCC1_Out.FCC_In_Cmd) 
+				and (In_Cmd = FCC2_Out.FCC_In_Cmd)
+				and (In_Cmd = FCC3_Out.FCC_In_Cmd);
+			
+			--Making it not failed in normal behavior
+			guarantee "FCC no failures":
+				not(Failed);
+
+			--The following is logic without Byzantine fault mitigation mechanisms 
+			guarantee "FCC1 in Cmd Logic":
+			(fcc_id = 1) => (In_Cmd = (true -> (pre(not(Failed)))));
+			
+			guarantee "FCC2 in Cmd Logic":
+			(fcc_id = 2) => (In_Cmd = (false -> (pre(not(Failed)) and pre(FCC1_In.FCC1_Failed))));
+			
+			guarantee "FCC3 in Cmd Logic":
+			(fcc_id = 3) 
+				=> (In_Cmd = (false -> (pre(not(Failed)) and pre(FCC1_In.FCC1_Failed) and pre(FCC2_In.FCC2_Failed))));
+			
+			guarantee "FCC4 in Cmd Logic":
+			(fcc_id = 4) 
+					=> (In_Cmd = (false -> (pre(not(Failed)) and pre(FCC1_In.FCC1_Failed) and pre(FCC2_In.FCC2_Failed) and pre(FCC3_In.FCC3_Failed))));	
+
+			--Byzantine fault mitigation using full message exchange and voting
+			--following the SPIDER architecture from [1]
+			--[1] Kevin Driscoll, Brendan Hall, Hakan Sivencrona, Phil Zumsteg, "Byantine Fault Tolerance, from Theory to Reality"
+			--SafeComp, 2003, Springer
+		
+	
+		
+			--Vote to get cross channel FCC Failed status
+--			eq xchan_fcc1_failed: bool = 
+--			false -> 
+--			(
+--				((if(FCC1_In.FCC1_Failed) then 1 else 0) + 
+--			 	 (if(FCC2_In.FCC1_Failed) then 1 else 0) + 
+--			 	 (if(FCC3_In.FCC1_Failed) then 1 else 0)
+--			 	) > 2
+--			);	
+--			
+--			eq xchan_fcc2_failed: bool = 
+--			false -> 
+--			(
+--				((if(FCC1_In.FCC2_Failed) then 1 else 0) + 
+--			 	 (if(FCC2_In.FCC2_Failed) then 1 else 0) + 
+--			 	 (if(FCC3_In.FCC2_Failed) then 1 else 0)
+--			 	) > 2
+--			);
+--			
+--			eq xchan_fcc3_failed: bool = 
+--			false -> 
+--			(
+--				((if(FCC1_In.FCC3_Failed) then 1 else 0) + 
+--			 	 (if(FCC2_In.FCC3_Failed) then 1 else 0) + 
+--			 	 (if(FCC3_In.FCC3_Failed) then 1 else 0)
+--			 	) > 2
+--			);
+--			
+--			eq xchan_fcc4_failed: bool = 
+--			false ->
+--			(
+--				((if(FCC1_In.FCC4_Failed) then 1 else 0) + 
+--			 	 (if(FCC2_In.FCC4_Failed) then 1 else 0) + 
+--			 	 (if(FCC3_In.FCC4_Failed) then 1 else 0)
+--			 	) > 2
+--			);
+--			
+--			guarantee "FCC1 send local and cross-channel Failed Stauts to all other FCCs":
+--			(fcc_id = 1)
+--			=>
+--			(
+--				((FCC1_Out.FCC1_Failed = Failed) and 
+--			 	 (FCC1_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC1_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC1_Out.FCC4_Failed = xchan_fcc4_failed)) and
+--			 	((FCC2_Out.FCC1_Failed = Failed) and 
+--			 	 (FCC2_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC2_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC2_Out.FCC4_Failed = xchan_fcc4_failed)) and
+--			 	((FCC3_Out.FCC1_Failed = Failed) and 
+--			 	 (FCC3_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC3_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC3_Out.FCC4_Failed = xchan_fcc4_failed))
+--			 );			 	 			 	 
+--
+--			guarantee "FCC2 send local and cross-channel Failed Stauts to all other FCCs":
+--			(fcc_id = 2)
+--			=>
+--			(
+--				((FCC1_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC1_Out.FCC2_Failed = Failed) and 
+--			 	 (FCC1_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC1_Out.FCC4_Failed = xchan_fcc4_failed)) and
+--			 	((FCC2_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC2_Out.FCC2_Failed = Failed) and 
+--			 	 (FCC2_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC2_Out.FCC4_Failed = xchan_fcc4_failed)) and
+--			 	((FCC3_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC3_Out.FCC2_Failed = Failed) and 
+--			 	 (FCC3_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC3_Out.FCC4_Failed = xchan_fcc4_failed))
+--			 );	
+--			
+--			guarantee "FCC3 send local and cross-channel Failed Stauts to all other FCCs":
+--			(fcc_id = 3)
+--			=>
+--			(
+--				((FCC1_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC1_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC1_Out.FCC3_Failed = Failed) and 
+--			 	 (FCC1_Out.FCC4_Failed = xchan_fcc4_failed)) and
+--			 	((FCC2_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC2_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC2_Out.FCC3_Failed = Failed) and 
+--			 	 (FCC2_Out.FCC4_Failed = xchan_fcc4_failed)) and
+--			 	((FCC3_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC3_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC3_Out.FCC3_Failed = Failed) and 
+--			 	 (FCC3_Out.FCC4_Failed = xchan_fcc4_failed))
+--			 );	
+--			
+--			guarantee "FCC4 send local and cross-channel Failed Stauts to all other FCCs":
+--			(fcc_id = 4)
+--			=>
+--			(
+--				((FCC1_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC1_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC1_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC1_Out.FCC4_Failed = Failed)) and
+--			 	((FCC2_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC2_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC2_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC2_Out.FCC4_Failed = Failed)) and
+--			 	((FCC3_Out.FCC1_Failed = xchan_fcc1_failed) and 
+--			 	 (FCC3_Out.FCC2_Failed = xchan_fcc2_failed) and 
+--			 	 (FCC3_Out.FCC3_Failed = xchan_fcc3_failed) and 
+--			 	 (FCC3_Out.FCC4_Failed = Failed))
+--			 );			
+--			
+--			guarantee "FCC1 in Cmd Logic":
+--			(fcc_id = 1) 
+--					=> 
+--			(In_Cmd = (
+--						true 
+--						-> 
+--						(pre(not(Failed)))
+--						)
+--			);
+--			
+--			guarantee "FCC2 in Cmd Logic":
+--			(fcc_id = 2) 
+--					=> 
+--			(In_Cmd = (
+--						false 
+--						-> 
+--						(pre(not(Failed)) and pre(xchan_fcc1_failed))
+--						)
+--			);
+--			
+--			guarantee "FCC3 in Cmd Logic":
+--			(fcc_id = 3) 
+--					=> 
+--			(In_Cmd = (
+--						false 
+--						-> 
+--						(pre(not(Failed)) and pre(xchan_fcc1_failed) and pre(xchan_fcc2_failed))
+--						)
+--			);
+--			
+--			guarantee "FCC4 in Cmd Logic":
+--			(fcc_id = 4) 
+--					=> 
+--			(In_Cmd = (
+--						false 
+--						-> 
+--						(pre(not(Failed)) and pre(xchan_fcc1_failed) and pre(xchan_fcc2_failed) and pre(xchan_fcc3_failed))
+--						)
+--			);		
+--			
+			--logic not related to channel in control
+			--for future function growth
+			guarantee "respond only to maint cmd from FCC in Cmd ": 
+			((FCC1_In.FCC_In_Cmd and FCC1_In.Maint_Cmd) => (FCC1_Out.Maint_Ack and not(FCC2_Out.Maint_Ack) and not(FCC3_Out.Maint_Ack))) and
+			((FCC2_In.FCC_In_Cmd and FCC2_In.Maint_Cmd) => (FCC2_Out.Maint_Ack and not(FCC1_Out.Maint_Ack) and not(FCC3_Out.Maint_Ack))) and
+			((FCC3_In.FCC_In_Cmd and FCC3_In.Maint_Cmd) => (FCC3_Out.Maint_Ack and not(FCC1_Out.Maint_Ack) and not(FCC2_Out.Maint_Ack)));
+			
+			guarantee "produce valid AP_Roll_Cmd only when receiving valid FG_Roll_Cmd and no AP_Quick_Disconnect":
+			FCC_Cmd.AP_Roll_Cmd_Valid => (DMCA_In.FG_Roll_Cmd_Valid and DMCB_In.FG_Roll_Cmd_Valid and not(AP_Quick_Disconnect));
+			
+		**};
+		annex safety {**
+--		fault "Local FCC Fail Status Inverted": Common_Faults.invert_local_FCC_Fail {
+--			inputs: val_in <- Failed;     
+--			outputs: Failed <- val_out;    
+--			duration: permanent;
+--		}
+		
+		--The following invert the output on Fail status the same time before sending to all three other FCCs.
+		--This invalidates the top level property that at most one FCC in command.
+		--This is not really byzantine fault as the other FCCs can get the same inverted status.
+		fault fautl1 "FCC1_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
+			inputs: val_in <- FCC1_Out, id <- fcc_id;     
+			outputs: FCC1_Out <- val_out;    
+			duration: permanent;
+		}		
+
+		fault fautl2 "FCC2_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
+			inputs: val_in <- FCC2_Out, id <- fcc_id;     
+			outputs: FCC2_Out <- val_out;    
+			duration: permanent;
+		}		
+
+		fault fautl3 "FCC3_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
+			inputs: val_in <- FCC3_Out, id <- fcc_id;      
+			outputs: FCC3_Out <- val_out;    
+			duration: permanent;
+		}							
+		
+	**};
+	end FCC;
+end FCC;

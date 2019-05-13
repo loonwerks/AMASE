@@ -1,0 +1,48 @@
+package Data_Types
+public
+	with Base_Types;
+	
+	data CCDL_Data
+	end CCDL_Data;
+	
+	data implementation CCDL_Data.Impl
+		subcomponents
+			FCC_In_Cmd: data Base_Types::Boolean;
+			FCC1_Failed: data Base_Types::Boolean;
+			FCC2_Failed: data Base_Types::Boolean;
+			FCC3_Failed: data Base_Types::Boolean;
+			FCC4_Failed: data Base_Types::Boolean;
+			Maint_Cmd: data Base_Types::Boolean;
+			Maint_Ack: data Base_Types::Boolean;
+			Bus_Valid: data Base_Types::Boolean;
+	end CCDL_Data.Impl;
+
+	data DMC_Data
+	end DMC_Data;
+	
+	data implementation DMC_Data.Impl
+		subcomponents
+			FG_Roll_Cmd: data Base_Types::Float; --Flight Guidance roll command in degrees
+			FG_Roll_Cmd_Valid: data Base_Types::Boolean;
+			Channel_Select: data Base_Types::Integer;
+	end DMC_Data.Impl;
+	
+	data FCC_Cmd
+	end FCC_Cmd;
+	
+	data implementation FCC_Cmd.Impl
+		subcomponents
+			AP_Roll_Cmd: data Base_Types::Float; --Autopilot roll command in degrees
+			AP_Roll_Cmd_Valid: data Base_Types::Boolean;
+	end FCC_Cmd.Impl;
+	
+	data FCC_Status
+	end FCC_Status;
+
+	data implementation FCC_Status.Impl
+		subcomponents
+			In_Cmd: data Base_Types::Boolean;
+			Failed: data Base_Types::Boolean;
+	end FCC_Status.Impl;
+
+end Data_Types;

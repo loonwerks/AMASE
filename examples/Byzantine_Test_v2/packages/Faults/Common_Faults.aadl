@@ -1,0 +1,38 @@
+package Common_Faults
+public
+	with Data_Types;
+	
+	annex agree {**
+		--Invert the local Fail status
+	    node invert_local_FCC_Fail(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (not(val_in)) else val_in;
+		tel;
+	
+		--Invert each FCC's CCDL out on Fail status to invert from the local one
+		node invert_CCDL_Out_Fail(val_in: Data_Types::CCDL_Data.Impl, id: int, trigger: bool) returns (val_out:Data_Types::CCDL_Data.Impl);
+		var
+			fail: bool;
+		let
+			fail = if(id = 1)
+					then (val_in.FCC1_Failed)
+					else (if(id = 2)
+						  then (val_in.FCC2_Failed)
+						  else(if(id = 3) 
+						  	   then (val_in.FCC3_Failed)
+						  	   else (val_in.FCC4_Failed)
+						  	  )
+						 );
+		
+			val_out = if trigger then (
+							if(id=1) then val_in{FCC1_Failed := not(fail)} 
+							else(if(id=2) then val_in{FCC2_Failed := not(fail)}
+								 else(if(id=3) then val_in{FCC3_Failed := not(fail)}
+								 	  else(val_in{FCC4_Failed := not(fail)})
+								 	  )
+								 )
+							)else val_in;
+		tel;
+		
+**};
+end Common_Faults;
