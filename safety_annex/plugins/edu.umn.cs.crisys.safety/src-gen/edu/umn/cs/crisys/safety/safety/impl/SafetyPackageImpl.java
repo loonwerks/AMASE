@@ -8,7 +8,10 @@ import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.AnnexLibrary;
 import edu.umn.cs.crisys.safety.safety.AnnexSubclause;
+import edu.umn.cs.crisys.safety.safety.ByzantineFaultStatement;
+import edu.umn.cs.crisys.safety.safety.ByzantineFaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
+import edu.umn.cs.crisys.safety.safety.ConnectionsStatement;
 import edu.umn.cs.crisys.safety.safety.Contract;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
@@ -16,6 +19,7 @@ import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.FaultyOutputStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
@@ -135,6 +139,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass byzantineFaultSubcomponentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass propagationTypeConstraintEClass = null;
 
   /**
@@ -219,6 +230,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass byzantineFaultStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass faultCountBehaviorEClass = null;
 
   /**
@@ -269,6 +287,20 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass propagationTypeStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass faultyOutputStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass connectionsStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -390,7 +422,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link SafetyPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -405,7 +437,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     if (isInited) return (SafetyPackage)EPackage.Registry.INSTANCE.getEPackage(SafetyPackage.eNS_URI);
 
     // Obtain or create and register package
-    SafetyPackageImpl theSafetyPackage = (SafetyPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SafetyPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SafetyPackageImpl());
+    Object registeredSafetyPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    SafetyPackageImpl theSafetyPackage = registeredSafetyPackage instanceof SafetyPackageImpl ? (SafetyPackageImpl)registeredSafetyPackage : new SafetyPackageImpl();
 
     isInited = true;
 
@@ -423,7 +456,6 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     // Mark meta-data to indicate it can't be changed
     theSafetyPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(SafetyPackage.eNS_URI, theSafetyPackage);
     return theSafetyPackage;
@@ -434,6 +466,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAnnexLibrary()
   {
     return annexLibraryEClass;
@@ -444,6 +477,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAnnexSubclause()
   {
     return annexSubclauseEClass;
@@ -454,6 +488,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSafetyLibrary()
   {
     return safetyLibraryEClass;
@@ -464,6 +499,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSafetySubclause()
   {
     return safetySubclauseEClass;
@@ -474,6 +510,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getContract()
   {
     return contractEClass;
@@ -484,6 +521,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSpecStatement()
   {
     return specStatementEClass;
@@ -494,6 +532,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAnalysisBehavior()
   {
     return analysisBehaviorEClass;
@@ -504,6 +543,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFaultSubcomponent()
   {
     return faultSubcomponentEClass;
@@ -514,6 +554,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getHWFaultSubcomponent()
   {
     return hwFaultSubcomponentEClass;
@@ -524,6 +565,18 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
+  public EClass getByzantineFaultSubcomponent()
+  {
+    return byzantineFaultSubcomponentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getPropagationTypeConstraint()
   {
     return propagationTypeConstraintEClass;
@@ -534,6 +587,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTemporalConstraint()
   {
     return temporalConstraintEClass;
@@ -544,6 +598,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTriggerCondition()
   {
     return triggerConditionEClass;
@@ -554,6 +609,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSafetyEqStatement()
   {
     return safetyEqStatementEClass;
@@ -564,6 +620,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInterval()
   {
     return intervalEClass;
@@ -574,6 +631,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInterval_Low()
   {
     return (EReference)intervalEClass.getEStructuralFeatures().get(0);
@@ -584,6 +642,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInterval_High()
   {
     return (EReference)intervalEClass.getEStructuralFeatures().get(1);
@@ -594,6 +653,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSafetyContractLibrary()
   {
     return safetyContractLibraryEClass;
@@ -604,6 +664,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSafetyContractLibrary_Contract()
   {
     return (EReference)safetyContractLibraryEClass.getEStructuralFeatures().get(0);
@@ -614,6 +675,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSafetyContractSubclause()
   {
     return safetyContractSubclauseEClass;
@@ -624,6 +686,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSafetyContractSubclause_Contract()
   {
     return (EReference)safetyContractSubclauseEClass.getEStructuralFeatures().get(0);
@@ -634,6 +697,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSafetyContract()
   {
     return safetyContractEClass;
@@ -644,6 +708,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSafetyContract_Specs()
   {
     return (EReference)safetyContractEClass.getEStructuralFeatures().get(0);
@@ -654,6 +719,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFaultStatement()
   {
     return faultStatementEClass;
@@ -664,6 +730,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFaultStatement_Name()
   {
     return (EAttribute)faultStatementEClass.getEStructuralFeatures().get(0);
@@ -674,6 +741,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFaultStatement_Str()
   {
     return (EAttribute)faultStatementEClass.getEStructuralFeatures().get(1);
@@ -684,6 +752,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFaultStatement_FaultDefName()
   {
     return (EReference)faultStatementEClass.getEStructuralFeatures().get(2);
@@ -694,6 +763,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFaultStatement_FaultDefinitions()
   {
     return (EReference)faultStatementEClass.getEStructuralFeatures().get(3);
@@ -704,6 +774,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAnalysisStatement()
   {
     return analysisStatementEClass;
@@ -714,6 +785,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnalysisStatement_Behavior()
   {
     return (EReference)analysisStatementEClass.getEStructuralFeatures().get(0);
@@ -724,6 +796,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getHWFaultStatement()
   {
     return hwFaultStatementEClass;
@@ -734,6 +807,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getHWFaultStatement_Name()
   {
     return (EAttribute)hwFaultStatementEClass.getEStructuralFeatures().get(0);
@@ -744,6 +818,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getHWFaultStatement_Str()
   {
     return (EAttribute)hwFaultStatementEClass.getEStructuralFeatures().get(1);
@@ -754,6 +829,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getHWFaultStatement_FaultDefinitions()
   {
     return (EReference)hwFaultStatementEClass.getEStructuralFeatures().get(2);
@@ -764,6 +840,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPropagateStatement()
   {
     return propagateStatementEClass;
@@ -774,6 +851,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPropagateStatement_SrcFaultList()
   {
     return (EAttribute)propagateStatementEClass.getEStructuralFeatures().get(0);
@@ -784,6 +862,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPropagateStatement_SrcComp_path()
   {
     return (EReference)propagateStatementEClass.getEStructuralFeatures().get(1);
@@ -794,6 +873,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPropagateStatement_DestFaultList()
   {
     return (EAttribute)propagateStatementEClass.getEStructuralFeatures().get(2);
@@ -804,6 +884,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPropagateStatement_DestComp_path()
   {
     return (EReference)propagateStatementEClass.getEStructuralFeatures().get(3);
@@ -814,6 +895,51 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
+  public EClass getByzantineFaultStatement()
+  {
+    return byzantineFaultStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getByzantineFaultStatement_Name()
+  {
+    return (EAttribute)byzantineFaultStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getByzantineFaultStatement_Str()
+  {
+    return (EAttribute)byzantineFaultStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getByzantineFaultStatement_Byzantine()
+  {
+    return (EReference)byzantineFaultStatementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getFaultCountBehavior()
   {
     return faultCountBehaviorEClass;
@@ -824,6 +950,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFaultCountBehavior_MaxFaults()
   {
     return (EAttribute)faultCountBehaviorEClass.getEStructuralFeatures().get(0);
@@ -834,6 +961,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProbabilityBehavior()
   {
     return probabilityBehaviorEClass;
@@ -844,6 +972,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProbabilityBehavior_Probabilty()
   {
     return (EAttribute)probabilityBehaviorEClass.getEStructuralFeatures().get(0);
@@ -854,6 +983,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInputStatement()
   {
     return inputStatementEClass;
@@ -864,6 +994,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getInputStatement_Fault_in()
   {
     return (EAttribute)inputStatementEClass.getEStructuralFeatures().get(0);
@@ -874,6 +1005,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInputStatement_Nom_conn()
   {
     return (EReference)inputStatementEClass.getEStructuralFeatures().get(1);
@@ -884,6 +1016,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOutputStatement()
   {
     return outputStatementEClass;
@@ -894,6 +1027,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOutputStatement_Nom_conn()
   {
     return (EReference)outputStatementEClass.getEStructuralFeatures().get(0);
@@ -904,6 +1038,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getOutputStatement_Fault_out()
   {
     return (EAttribute)outputStatementEClass.getEStructuralFeatures().get(1);
@@ -914,6 +1049,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDurationStatement()
   {
     return durationStatementEClass;
@@ -924,6 +1060,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDurationStatement_Tc()
   {
     return (EReference)durationStatementEClass.getEStructuralFeatures().get(0);
@@ -934,6 +1071,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDurationStatement_Interv()
   {
     return (EReference)durationStatementEClass.getEStructuralFeatures().get(1);
@@ -944,6 +1082,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProbabilityStatement()
   {
     return probabilityStatementEClass;
@@ -954,6 +1093,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProbabilityStatement_Probability()
   {
     return (EAttribute)probabilityStatementEClass.getEStructuralFeatures().get(0);
@@ -964,6 +1104,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTriggerStatement()
   {
     return triggerStatementEClass;
@@ -974,6 +1115,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTriggerStatement_Cond()
   {
     return (EReference)triggerStatementEClass.getEStructuralFeatures().get(0);
@@ -984,6 +1126,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPropagationTypeStatement()
   {
     return propagationTypeStatementEClass;
@@ -994,6 +1137,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPropagationTypeStatement_Pty()
   {
     return (EReference)propagationTypeStatementEClass.getEStructuralFeatures().get(0);
@@ -1004,6 +1148,62 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
+  public EClass getFaultyOutputStatement()
+  {
+    return faultyOutputStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getFaultyOutputStatement_Fault_out()
+  {
+    return (EAttribute)faultyOutputStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getConnectionsStatement()
+  {
+    return connectionsStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getConnectionsStatement_Fault_in()
+  {
+    return (EReference)connectionsStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getConnectionsStatement_FaultDefName()
+  {
+    return (EReference)connectionsStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getasymmetric()
   {
     return asymmetricEClass;
@@ -1014,6 +1214,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getsymmetric()
   {
     return symmetricEClass;
@@ -1024,6 +1225,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPermanentConstraint()
   {
     return permanentConstraintEClass;
@@ -1034,6 +1236,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTransientConstraint()
   {
     return transientConstraintEClass;
@@ -1044,6 +1247,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEnablerCondition()
   {
     return enablerConditionEClass;
@@ -1054,6 +1258,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEnablerCondition_ExprList()
   {
     return (EReference)enablerConditionEClass.getEStructuralFeatures().get(0);
@@ -1064,6 +1269,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEqValue()
   {
     return eqValueEClass;
@@ -1074,6 +1280,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqValue_Lhs()
   {
     return (EReference)eqValueEClass.getEStructuralFeatures().get(0);
@@ -1084,6 +1291,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqValue_Expr()
   {
     return (EReference)eqValueEClass.getEStructuralFeatures().get(1);
@@ -1094,6 +1302,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getIntervalEq()
   {
     return intervalEqEClass;
@@ -1104,6 +1313,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIntervalEq_Lhs_int()
   {
     return (EReference)intervalEqEClass.getEStructuralFeatures().get(0);
@@ -1114,6 +1324,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIntervalEq_Interv()
   {
     return (EReference)intervalEqEClass.getEStructuralFeatures().get(1);
@@ -1124,6 +1335,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSetEq()
   {
     return setEqEClass;
@@ -1134,6 +1346,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetEq_Lhs_set()
   {
     return (EReference)setEqEClass.getEStructuralFeatures().get(0);
@@ -1144,6 +1357,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetEq_L1()
   {
     return (EReference)setEqEClass.getEStructuralFeatures().get(1);
@@ -1154,6 +1368,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetEq_List()
   {
     return (EReference)setEqEClass.getEStructuralFeatures().get(2);
@@ -1164,6 +1379,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRangeEq()
   {
     return rangeEqEClass;
@@ -1174,6 +1390,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRangeEq_Lhs_range()
   {
     return (EReference)rangeEqEClass.getEStructuralFeatures().get(0);
@@ -1184,6 +1401,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRangeEq_L1()
   {
     return (EReference)rangeEqEClass.getEStructuralFeatures().get(1);
@@ -1194,6 +1412,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRangeEq_L2()
   {
     return (EReference)rangeEqEClass.getEStructuralFeatures().get(2);
@@ -1204,6 +1423,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getClosedInterval()
   {
     return closedIntervalEClass;
@@ -1214,6 +1434,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOpenLeftInterval()
   {
     return openLeftIntervalEClass;
@@ -1224,6 +1445,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOpenRightInterval()
   {
     return openRightIntervalEClass;
@@ -1234,6 +1456,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOpenInterval()
   {
     return openIntervalEClass;
@@ -1244,6 +1467,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyFactory getSafetyFactory()
   {
     return (SafetyFactory)getEFactoryInstance();
@@ -1287,6 +1511,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     hwFaultSubcomponentEClass = createEClass(HW_FAULT_SUBCOMPONENT);
 
+    byzantineFaultSubcomponentEClass = createEClass(BYZANTINE_FAULT_SUBCOMPONENT);
+
     propagationTypeConstraintEClass = createEClass(PROPAGATION_TYPE_CONSTRAINT);
 
     temporalConstraintEClass = createEClass(TEMPORAL_CONSTRAINT);
@@ -1328,6 +1554,11 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     createEAttribute(propagateStatementEClass, PROPAGATE_STATEMENT__DEST_FAULT_LIST);
     createEReference(propagateStatementEClass, PROPAGATE_STATEMENT__DEST_COMP_PATH);
 
+    byzantineFaultStatementEClass = createEClass(BYZANTINE_FAULT_STATEMENT);
+    createEAttribute(byzantineFaultStatementEClass, BYZANTINE_FAULT_STATEMENT__NAME);
+    createEAttribute(byzantineFaultStatementEClass, BYZANTINE_FAULT_STATEMENT__STR);
+    createEReference(byzantineFaultStatementEClass, BYZANTINE_FAULT_STATEMENT__BYZANTINE);
+
     faultCountBehaviorEClass = createEClass(FAULT_COUNT_BEHAVIOR);
     createEAttribute(faultCountBehaviorEClass, FAULT_COUNT_BEHAVIOR__MAX_FAULTS);
 
@@ -1354,6 +1585,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     propagationTypeStatementEClass = createEClass(PROPAGATION_TYPE_STATEMENT);
     createEReference(propagationTypeStatementEClass, PROPAGATION_TYPE_STATEMENT__PTY);
+
+    faultyOutputStatementEClass = createEClass(FAULTY_OUTPUT_STATEMENT);
+    createEAttribute(faultyOutputStatementEClass, FAULTY_OUTPUT_STATEMENT__FAULT_OUT);
+
+    connectionsStatementEClass = createEClass(CONNECTIONS_STATEMENT);
+    createEReference(connectionsStatementEClass, CONNECTIONS_STATEMENT__FAULT_IN);
+    createEReference(connectionsStatementEClass, CONNECTIONS_STATEMENT__FAULT_DEF_NAME);
 
     asymmetricEClass = createEClass(ASYMMETRIC);
 
@@ -1442,17 +1680,22 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     analysisStatementEClass.getESuperTypes().add(this.getSpecStatement());
     hwFaultStatementEClass.getESuperTypes().add(this.getSpecStatement());
     propagateStatementEClass.getESuperTypes().add(this.getSpecStatement());
+    byzantineFaultStatementEClass.getESuperTypes().add(this.getSpecStatement());
     faultCountBehaviorEClass.getESuperTypes().add(this.getAnalysisBehavior());
     probabilityBehaviorEClass.getESuperTypes().add(this.getAnalysisBehavior());
     inputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     outputStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     durationStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     durationStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
+    durationStatementEClass.getESuperTypes().add(this.getByzantineFaultSubcomponent());
     probabilityStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     probabilityStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
+    probabilityStatementEClass.getESuperTypes().add(this.getByzantineFaultSubcomponent());
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     propagationTypeStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     propagationTypeStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
+    faultyOutputStatementEClass.getESuperTypes().add(this.getByzantineFaultSubcomponent());
+    connectionsStatementEClass.getESuperTypes().add(this.getByzantineFaultSubcomponent());
     asymmetricEClass.getESuperTypes().add(this.getPropagationTypeConstraint());
     symmetricEClass.getESuperTypes().add(this.getPropagationTypeConstraint());
     permanentConstraintEClass.getESuperTypes().add(this.getTemporalConstraint());
@@ -1485,6 +1728,8 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEClass(faultSubcomponentEClass, FaultSubcomponent.class, "FaultSubcomponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(hwFaultSubcomponentEClass, HWFaultSubcomponent.class, "HWFaultSubcomponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(byzantineFaultSubcomponentEClass, ByzantineFaultSubcomponent.class, "ByzantineFaultSubcomponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(propagationTypeConstraintEClass, PropagationTypeConstraint.class, "PropagationTypeConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1527,6 +1772,11 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     initEAttribute(getPropagateStatement_DestFaultList(), theEcorePackage.getEString(), "destFaultList", null, 0, -1, PropagateStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPropagateStatement_DestComp_path(), theAgreePackage.getNestedDotID(), null, "destComp_path", null, 0, -1, PropagateStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(byzantineFaultStatementEClass, ByzantineFaultStatement.class, "ByzantineFaultStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getByzantineFaultStatement_Name(), theEcorePackage.getEString(), "name", null, 0, 1, ByzantineFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getByzantineFaultStatement_Str(), theEcorePackage.getEString(), "str", null, 0, 1, ByzantineFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getByzantineFaultStatement_Byzantine(), this.getByzantineFaultSubcomponent(), null, "byzantine", null, 0, -1, ByzantineFaultStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(faultCountBehaviorEClass, FaultCountBehavior.class, "FaultCountBehavior", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFaultCountBehavior_MaxFaults(), theEcorePackage.getEString(), "maxFaults", null, 0, 1, FaultCountBehavior.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1553,6 +1803,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(propagationTypeStatementEClass, PropagationTypeStatement.class, "PropagationTypeStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getPropagationTypeStatement_Pty(), this.getPropagationTypeConstraint(), null, "pty", null, 0, 1, PropagationTypeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(faultyOutputStatementEClass, FaultyOutputStatement.class, "FaultyOutputStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFaultyOutputStatement_Fault_out(), theEcorePackage.getEString(), "fault_out", null, 0, 1, FaultyOutputStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(connectionsStatementEClass, ConnectionsStatement.class, "ConnectionsStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getConnectionsStatement_Fault_in(), theAgreePackage.getNestedDotID(), null, "fault_in", null, 0, 1, ConnectionsStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConnectionsStatement_FaultDefName(), theAgreePackage.getNestedDotID(), null, "faultDefName", null, 0, 1, ConnectionsStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(asymmetricEClass, asymmetric.class, "asymmetric", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

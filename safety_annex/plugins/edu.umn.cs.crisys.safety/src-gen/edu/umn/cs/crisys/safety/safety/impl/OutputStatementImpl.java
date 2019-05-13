@@ -82,6 +82,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<NestedDotID> getNom_conn()
   {
     if (nom_conn == null)
@@ -96,6 +97,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getFault_out()
   {
     if (fault_out == null)
@@ -210,7 +212,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (fault_out: ");
     result.append(fault_out);
     result.append(')');

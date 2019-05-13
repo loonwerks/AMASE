@@ -104,6 +104,15 @@ public interface SafetyFactory extends EFactory
   HWFaultSubcomponent createHWFaultSubcomponent();
 
   /**
+   * Returns a new object of class '<em>Byzantine Fault Subcomponent</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Byzantine Fault Subcomponent</em>'.
+   * @generated
+   */
+  ByzantineFaultSubcomponent createByzantineFaultSubcomponent();
+
+  /**
    * Returns a new object of class '<em>Propagation Type Constraint</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -212,6 +221,15 @@ public interface SafetyFactory extends EFactory
   PropagateStatement createPropagateStatement();
 
   /**
+   * Returns a new object of class '<em>Byzantine Fault Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Byzantine Fault Statement</em>'.
+   * @generated
+   */
+  ByzantineFaultStatement createByzantineFaultStatement();
+
+  /**
    * Returns a new object of class '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -282,6 +300,24 @@ public interface SafetyFactory extends EFactory
    * @generated
    */
   PropagationTypeStatement createPropagationTypeStatement();
+
+  /**
+   * Returns a new object of class '<em>Faulty Output Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Faulty Output Statement</em>'.
+   * @generated
+   */
+  FaultyOutputStatement createFaultyOutputStatement();
+
+  /**
+   * Returns a new object of class '<em>Connections Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Connections Statement</em>'.
+   * @generated
+   */
+  ConnectionsStatement createConnectionsStatement();
 
   /**
    * Returns a new object of class '<em>asymmetric</em>'.

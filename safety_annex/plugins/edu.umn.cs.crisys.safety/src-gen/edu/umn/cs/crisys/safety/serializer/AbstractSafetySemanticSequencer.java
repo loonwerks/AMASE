@@ -76,12 +76,15 @@ import com.rockwellcollins.atc.agree.agree.WheneverImpliesStatement;
 import com.rockwellcollins.atc.agree.agree.WheneverOccursStatement;
 import com.rockwellcollins.atc.agree.serializer.AgreeSemanticSequencer;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
+import edu.umn.cs.crisys.safety.safety.ByzantineFaultStatement;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
+import edu.umn.cs.crisys.safety.safety.ConnectionsStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.FaultyOutputStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OpenInterval;
@@ -457,11 +460,21 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.ANALYSIS_STATEMENT:
 				sequence_SpecStatement(context, (AnalysisStatement) semanticObject); 
 				return; 
+			case SafetyPackage.BYZANTINE_FAULT_STATEMENT:
+				sequence_SpecStatement(context, (ByzantineFaultStatement) semanticObject); 
+				return; 
 			case SafetyPackage.CLOSED_INTERVAL:
 				sequence_Interval(context, (ClosedInterval) semanticObject); 
 				return; 
+			case SafetyPackage.CONNECTIONS_STATEMENT:
+				sequence_ByzantineFaultSubcomponent(context, (ConnectionsStatement) semanticObject); 
+				return; 
 			case SafetyPackage.DURATION_STATEMENT:
-				if (rule == grammarAccess.getElementSafetyRule()
+				if (rule == grammarAccess.getByzantineFaultSubcomponentRule()) {
+					sequence_ByzantineFaultSubcomponent(context, (DurationStatement) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getElementSafetyRule()
 						|| rule == grammarAccess.getFaultSubcomponentRule()) {
 					sequence_FaultSubcomponent(context, (DurationStatement) semanticObject); 
 					return; 
@@ -482,6 +495,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case SafetyPackage.FAULT_STATEMENT:
 				sequence_SpecStatement(context, (FaultStatement) semanticObject); 
+				return; 
+			case SafetyPackage.FAULTY_OUTPUT_STATEMENT:
+				sequence_ByzantineFaultSubcomponent(context, (FaultyOutputStatement) semanticObject); 
 				return; 
 			case SafetyPackage.HW_FAULT_STATEMENT:
 				sequence_SpecStatement(context, (HWFaultStatement) semanticObject); 
@@ -511,7 +527,11 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_AnalysisBehavior(context, (ProbabilityBehavior) semanticObject); 
 				return; 
 			case SafetyPackage.PROBABILITY_STATEMENT:
-				if (rule == grammarAccess.getElementSafetyRule()
+				if (rule == grammarAccess.getByzantineFaultSubcomponentRule()) {
+					sequence_ByzantineFaultSubcomponent(context, (ProbabilityStatement) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getElementSafetyRule()
 						|| rule == grammarAccess.getFaultSubcomponentRule()) {
 					sequence_FaultSubcomponent(context, (ProbabilityStatement) semanticObject); 
 					return; 
@@ -599,6 +619,75 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getAnalysisBehaviorAccess().getProbabiltyREAL_LITTerminalRuleCall_1_2_0(), semanticObject.getProbabilty());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ByzantineFaultSubcomponent returns ConnectionsStatement
+	 *
+	 * Constraint:
+	 *     (fault_in=NestedDotID faultDefName=NestedDotID)
+	 */
+	protected void sequence_ByzantineFaultSubcomponent(ISerializationContext context, ConnectionsStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.CONNECTIONS_STATEMENT__FAULT_IN) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.CONNECTIONS_STATEMENT__FAULT_IN));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.CONNECTIONS_STATEMENT__FAULT_DEF_NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.CONNECTIONS_STATEMENT__FAULT_DEF_NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getByzantineFaultSubcomponentAccess().getFault_inNestedDotIDParserRuleCall_1_3_0(), semanticObject.getFault_in());
+		feeder.accept(grammarAccess.getByzantineFaultSubcomponentAccess().getFaultDefNameNestedDotIDParserRuleCall_1_5_0(), semanticObject.getFaultDefName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ByzantineFaultSubcomponent returns DurationStatement
+	 *
+	 * Constraint:
+	 *     (tc=TemporalConstraint interv=Interval?)
+	 */
+	protected void sequence_ByzantineFaultSubcomponent(ISerializationContext context, DurationStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ByzantineFaultSubcomponent returns FaultyOutputStatement
+	 *
+	 * Constraint:
+	 *     fault_out=ID
+	 */
+	protected void sequence_ByzantineFaultSubcomponent(ISerializationContext context, FaultyOutputStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.FAULTY_OUTPUT_STATEMENT__FAULT_OUT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.FAULTY_OUTPUT_STATEMENT__FAULT_OUT));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getByzantineFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_0_3_0(), semanticObject.getFault_out());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ByzantineFaultSubcomponent returns ProbabilityStatement
+	 *
+	 * Constraint:
+	 *     probability=REAL_LIT
+	 */
+	protected void sequence_ByzantineFaultSubcomponent(ISerializationContext context, ProbabilityStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.PROBABILITY_STATEMENT__PROBABILITY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROBABILITY_STATEMENT__PROBABILITY));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getByzantineFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_2_3_0(), semanticObject.getProbability());
 		feeder.finish();
 	}
 	
@@ -998,6 +1087,19 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSpecStatementAccess().getBehaviorAnalysisBehaviorParserRuleCall_1_3_0(), semanticObject.getBehavior());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SpecStatement returns ByzantineFaultStatement
+	 *     Element returns ByzantineFaultStatement
+	 *
+	 * Constraint:
+	 *     (name=ID str=STRING? byzantine+=ByzantineFaultSubcomponent*)
+	 */
+	protected void sequence_SpecStatement(ISerializationContext context, ByzantineFaultStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

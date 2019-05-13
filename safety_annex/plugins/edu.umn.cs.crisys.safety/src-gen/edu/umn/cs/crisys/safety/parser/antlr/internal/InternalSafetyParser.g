@@ -675,6 +675,82 @@ ruleSpecStatement returns [EObject current=null]
     {
     	newLeafNode(otherlv_43, grammarAccess.getSpecStatementAccess().getSemicolonKeyword_3_16());
     }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getSpecStatementAccess().getByzantineFaultStatementAction_4_0(),
+            $current);
+    }
+)
+	otherlv_45=Byzantine
+    {
+    	newLeafNode(otherlv_45, grammarAccess.getSpecStatementAccess().getByzantineKeyword_4_1());
+    }
+(
+(
+		lv_name_46_0=RULE_ID
+		{
+			newLeafNode(lv_name_46_0, grammarAccess.getSpecStatementAccess().getNameIDTerminalRuleCall_4_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"name",
+        		lv_name_46_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)(
+(
+		lv_str_47_0=RULE_STRING
+		{
+			newLeafNode(lv_str_47_0, grammarAccess.getSpecStatementAccess().getStrSTRINGTerminalRuleCall_4_3_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"str",
+        		lv_str_47_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.STRING");
+	    }
+
+)
+)?
+	otherlv_48=LeftCurlyBracket
+    {
+    	newLeafNode(otherlv_48, grammarAccess.getSpecStatementAccess().getLeftCurlyBracketKeyword_4_4());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getByzantineByzantineFaultSubcomponentParserRuleCall_4_5_0()); 
+	    }
+		lv_byzantine_49_0=ruleByzantineFaultSubcomponent		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"byzantine",
+        		lv_byzantine_49_0, 
+        		"edu.umn.cs.crisys.safety.Safety.ByzantineFaultSubcomponent");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)*
+	otherlv_50=RightCurlyBracket
+    {
+    	newLeafNode(otherlv_50, grammarAccess.getSpecStatementAccess().getRightCurlyBracketKeyword_4_6());
+    }
 ))
 ;
 
@@ -1338,6 +1414,227 @@ ruleHWFaultSubcomponent returns [EObject current=null]
 	otherlv_15=Semicolon
     {
     	newLeafNode(otherlv_15, grammarAccess.getHWFaultSubcomponentAccess().getSemicolonKeyword_2_4());
+    }
+))
+;
+
+
+
+
+
+// Entry rule entryRuleByzantineFaultSubcomponent
+entryRuleByzantineFaultSubcomponent returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getByzantineFaultSubcomponentRule()); }
+	 iv_ruleByzantineFaultSubcomponent=ruleByzantineFaultSubcomponent 
+	 { $current=$iv_ruleByzantineFaultSubcomponent.current; } 
+	 EOF 
+;
+
+// Rule ByzantineFaultSubcomponent
+ruleByzantineFaultSubcomponent returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getByzantineFaultSubcomponentAccess().getFaultyOutputStatementAction_0_0(),
+            $current);
+    }
+)
+	otherlv_1=Faulty_output
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getByzantineFaultSubcomponentAccess().getFaulty_outputKeyword_0_1());
+    }
+
+	otherlv_2=Colon
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getByzantineFaultSubcomponentAccess().getColonKeyword_0_2());
+    }
+(
+(
+		lv_fault_out_3_0=RULE_ID
+		{
+			newLeafNode(lv_fault_out_3_0, grammarAccess.getByzantineFaultSubcomponentAccess().getFault_outIDTerminalRuleCall_0_3_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getByzantineFaultSubcomponentRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"fault_out",
+        		lv_fault_out_3_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_4=Semicolon
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getByzantineFaultSubcomponentAccess().getSemicolonKeyword_0_4());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getByzantineFaultSubcomponentAccess().getConnectionsStatementAction_1_0(),
+            $current);
+    }
+)
+	otherlv_6=Connections
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getByzantineFaultSubcomponentAccess().getConnectionsKeyword_1_1());
+    }
+
+	otherlv_7=Colon
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getByzantineFaultSubcomponentAccess().getColonKeyword_1_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getByzantineFaultSubcomponentAccess().getFault_inNestedDotIDParserRuleCall_1_3_0()); 
+	    }
+		lv_fault_in_8_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getByzantineFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"fault_in",
+        		lv_fault_in_8_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_9=Colon
+    {
+    	newLeafNode(otherlv_9, grammarAccess.getByzantineFaultSubcomponentAccess().getColonKeyword_1_4());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getByzantineFaultSubcomponentAccess().getFaultDefNameNestedDotIDParserRuleCall_1_5_0()); 
+	    }
+		lv_faultDefName_10_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getByzantineFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"faultDefName",
+        		lv_faultDefName_10_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_11=Semicolon
+    {
+    	newLeafNode(otherlv_11, grammarAccess.getByzantineFaultSubcomponentAccess().getSemicolonKeyword_1_6());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getByzantineFaultSubcomponentAccess().getProbabilityStatementAction_2_0(),
+            $current);
+    }
+)
+	otherlv_13=Probability
+    {
+    	newLeafNode(otherlv_13, grammarAccess.getByzantineFaultSubcomponentAccess().getProbabilityKeyword_2_1());
+    }
+
+	otherlv_14=Colon
+    {
+    	newLeafNode(otherlv_14, grammarAccess.getByzantineFaultSubcomponentAccess().getColonKeyword_2_2());
+    }
+(
+(
+		lv_probability_15_0=RULE_REAL_LIT
+		{
+			newLeafNode(lv_probability_15_0, grammarAccess.getByzantineFaultSubcomponentAccess().getProbabilityREAL_LITTerminalRuleCall_2_3_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getByzantineFaultSubcomponentRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"probability",
+        		lv_probability_15_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.REAL_LIT");
+	    }
+
+)
+)
+	otherlv_16=Semicolon
+    {
+    	newLeafNode(otherlv_16, grammarAccess.getByzantineFaultSubcomponentAccess().getSemicolonKeyword_2_4());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getByzantineFaultSubcomponentAccess().getDurationStatementAction_3_0(),
+            $current);
+    }
+)
+	otherlv_18=Duration
+    {
+    	newLeafNode(otherlv_18, grammarAccess.getByzantineFaultSubcomponentAccess().getDurationKeyword_3_1());
+    }
+
+	otherlv_19=Colon
+    {
+    	newLeafNode(otherlv_19, grammarAccess.getByzantineFaultSubcomponentAccess().getColonKeyword_3_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getByzantineFaultSubcomponentAccess().getTcTemporalConstraintParserRuleCall_3_3_0()); 
+	    }
+		lv_tc_20_0=ruleTemporalConstraint		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getByzantineFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"tc",
+        		lv_tc_20_0, 
+        		"edu.umn.cs.crisys.safety.Safety.TemporalConstraint");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getByzantineFaultSubcomponentAccess().getIntervIntervalParserRuleCall_3_4_0()); 
+	    }
+		lv_interv_21_0=ruleInterval		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getByzantineFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"interv",
+        		lv_interv_21_0, 
+        		"edu.umn.cs.crisys.safety.Safety.Interval");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?
+	otherlv_22=Semicolon
+    {
+    	newLeafNode(otherlv_22, grammarAccess.getByzantineFaultSubcomponentAccess().getSemicolonKeyword_3_5());
     }
 ))
 ;

@@ -104,6 +104,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getSrcFaultList()
   {
     if (srcFaultList == null)
@@ -118,6 +119,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<NestedDotID> getSrcComp_path()
   {
     if (srcComp_path == null)
@@ -132,6 +134,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getDestFaultList()
   {
     if (destFaultList == null)
@@ -146,6 +149,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<NestedDotID> getDestComp_path()
   {
     if (destComp_path == null)
@@ -284,7 +288,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (srcFaultList: ");
     result.append(srcFaultList);
     result.append(", destFaultList: ");

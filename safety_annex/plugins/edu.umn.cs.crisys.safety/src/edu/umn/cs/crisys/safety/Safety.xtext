@@ -29,64 +29,75 @@ ElementSafety returns aadl2::Element:
 ;
 
 @Override 
-SpecStatement: {FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=NestedDotID  
+SpecStatement: 
+		{FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=NestedDotID  
 			'{' faultDefinitions+=(FaultSubcomponent)* '}' 
 	|	{AnalysisStatement} 'analyze' ':' behavior = AnalysisBehavior 
 	|   {HWFaultStatement} 'HW_fault' name = ID (str=STRING)? ':' 
-		'{' faultDefinitions+=(HWFaultSubcomponent)* '}'
-	|   {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+= ID '@' srcComp_path+=NestedDotID (',' 
-		srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 
-		'to' '{' destFaultList+= ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
+			'{' faultDefinitions+=(HWFaultSubcomponent)* '}'
+	| 	{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+= ID '@' srcComp_path+=NestedDotID (',' 
+			srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 
+			'to' '{' destFaultList+= ID '@' destComp_path+=NestedDotID 
+			(',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
+	|	{ByzantineFaultStatement} 'byzantine' name=ID (str=STRING)? '{'
+			byzantine+=(ByzantineFaultSubcomponent)* '}'
 ;
 	
-AnalysisBehavior : {FaultCountBehavior} 'max' (maxFaults=INTEGER_LIT) 'fault'
-   | {ProbabilityBehavior} 'probability' (probabilty=REAL_LIT) 
+AnalysisBehavior : 
+		{FaultCountBehavior} 'max' (maxFaults=INTEGER_LIT) 'fault'
+   | 	{ProbabilityBehavior} 'probability' (probabilty=REAL_LIT) 
 ;	
 
 FaultSubcomponent returns FaultSubcomponent: 
-	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
-							(','fault_in+=ID '<-' nom_conn+=Expr)*';' 
-	
-	| {OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID 
-							(','nom_conn+=NestedDotID '<-' fault_out+=ID)*';'
-	
- 	| {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
- 	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
- 	| {TriggerStatement} 'enabled' cond=TriggerCondition  ';'
- 	| {PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
-	| SafetyEqStatement ;
+		{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
+			(','fault_in+=ID '<-' nom_conn+=Expr)*';' 
+	| 	{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID 
+			(','nom_conn+=NestedDotID '<-' fault_out+=ID)*';'
+ 	| 	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
+ 	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	|	{TriggerStatement} 'enabled' cond=TriggerCondition  ';'
+ 	| 	{PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
+	| 	SafetyEqStatement 
+;
 	
 HWFaultSubcomponent returns HWFaultSubcomponent: 
-	  {DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
- 	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
- 	| {PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
-    ;	
+	  	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
+ 	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	| 	{PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';' 
+;	
+ 
+ByzantineFaultSubcomponent returns ByzantineFaultSubcomponent:
+	  	{FaultyOutputStatement} 'faulty_output' ':' fault_out=ID ';'
+	| 	{ConnectionsStatement} 'connections' ':' fault_in=NestedDotID ':' faultDefName=NestedDotID ';'
+	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+	|	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'
+;
 
 PropagationTypeConstraint:
-	  {asymmetric} 'asymmetric'
-    | {symmetric} 'symmetric'
+	  	{asymmetric} 'asymmetric'
+    | 	{symmetric} 'symmetric'
 ;
 	 
 TemporalConstraint:
-	{PermanentConstraint} 'permanent' 
-	| {TransientConstraint} 'transient'
+		{PermanentConstraint} 'permanent' 
+	| 	{TransientConstraint} 'transient'
 ;
 
 TriggerCondition:
-   {EnablerCondition} 'by' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
+   		{EnablerCondition} 'by' '{' exprList+=(Expr) ("," exprList+=(Expr))*  '}'  
 ;
 	
 SafetyEqStatement:
-	{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	| {IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval ';'
-    | {SetEq} 'set' lhs_set=Arg '=' '{'l1=Expr (',' list+=Expr)* '}' ';'
-    | {RangeEq} 'range' lhs_range=Arg '=' '{'l1=Expr ',' l2=Expr '}' ';'
+		{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
+	| 	{IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval ';'
+    | 	{SetEq} 'set' lhs_set=Arg '=' '{'l1=Expr (',' list+=Expr)* '}' ';'
+    | 	{RangeEq} 'range' lhs_range=Arg '=' '{'l1=Expr ',' l2=Expr '}' ';'
 ;
 
 Interval:
-	=>({ClosedInterval} '[' low=Expr ',' high=Expr ']')
-|   =>({OpenLeftInterval} '(' low=Expr ',' high=Expr']')
-|   =>({OpenRightInterval} '[' low=Expr ',' high=Expr ')')
-|   =>({OpenInterval} '(' low=Expr ',' high=Expr ')') 	
+		=>({ClosedInterval} '[' low=Expr ',' high=Expr ']')
+	|   =>({OpenLeftInterval} '(' low=Expr ',' high=Expr']')
+	|   =>({OpenRightInterval} '[' low=Expr ',' high=Expr ')')
+	|   =>({OpenInterval} '(' low=Expr ',' high=Expr ')') 	
 ;
 

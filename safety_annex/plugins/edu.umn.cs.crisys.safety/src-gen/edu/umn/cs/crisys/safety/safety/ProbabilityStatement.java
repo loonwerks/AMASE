@@ -19,15 +19,11 @@ package edu.umn.cs.crisys.safety.safety;
  * @model
  * @generated
  */
-public interface ProbabilityStatement extends FaultSubcomponent, HWFaultSubcomponent
+public interface ProbabilityStatement extends FaultSubcomponent, HWFaultSubcomponent, ByzantineFaultSubcomponent
 {
   /**
    * Returns the value of the '<em><b>Probability</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Probability</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Probability</em>' attribute.
    * @see #setProbability(String)
