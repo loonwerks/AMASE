@@ -65,8 +65,8 @@ public
 			
 			assume "C123 in2 range": (in2 >0) and (in2 < 10);
 				
-			guarantee "C123 out3 range":
-			(out3 > 0) and (out3 < 20);
+		--	guarantee "C123 out3 range":
+		--	(out3 > 0) and (out3 < 20);
 			
 			guarantee "C123 out3 value":
 			out3 = (in1 + in2);

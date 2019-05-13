@@ -96,10 +96,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private List<FaultPair> mutualExclusiveFaults = new ArrayList<FaultPair>();
 
 	public static int maxFaultCount = 0;
+	public static double probabilityThreshold = 0.0;
 	public static boolean upperMostLevel = true;
 	public static ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
 	public static boolean maxFaultHypothesis = false;
-	public static boolean probablisticHypothesis = false;
+	public static boolean probabilisticHypothesis = false;
 
 	/*
 	 * public accessor for faultMap: faultMap is used to properly set up the
@@ -117,10 +118,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	public static void init() {
 		maxFaultCount = 0;
+		probabilityThreshold = 0.0;
 		upperMostLevel = true;
 		faultCombinationsAboveThreshold.clear();
 		maxFaultHypothesis = false;
-		probablisticHypothesis = false;
+		probabilisticHypothesis = false;
 	}
 
 	@Override
@@ -202,15 +204,35 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 			}
 
-			if (upperMostLevel) {
-				upperMostLevel = false;
-				if (AddFaultsToAgree.getTransformFlag() == 2) {
-					collectTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
-					nb.setFaultTreeFlag(true);
+			else if (AddFaultsToAgree.getTransformFlag() == 2) {
+				nb.setFaultTreeFlag(true);
+
+				//only collect fault hypothesis from the upper most level
+				if (upperMostLevel) {
+					upperMostLevel = false;
+					// if max fault hypothesis, collect max fault count
+					if (maxFaults instanceof FaultCountBehavior) {
+						maxFaultHypothesis = true;
+						maxFaultCount = Integer.parseInt(((FaultCountBehavior) maxFaults).getMaxFaults());
+						System.out.println("maxFault: " + maxFaultCount);
+					}
+					// if probabilistic fault hypothesis, collect probabilistic hypothesis
+					else if (maxFaults instanceof ProbabilityBehavior) {
+						probabilisticHypothesis = true;
+						probabilityThreshold = Double
+								.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
+						System.out.println("probability threshold: " + probabilityThreshold);
+					}
+				}
+
+				// if probabilistic fault hypothesis, need to collect valid fault combinations from every verification level
+				// but using the probability threshold from the upper most level
+				if (probabilisticHypothesis) {
+					collectTopLevelMaxFaultOccurrenceConstraint(
+							probabilityThreshold, topNode, nb);
 				}
 			}
 		}
-
 		node = nb.build();
 		faultyVarsExpr = parentFaultyVarsExpr;
 		return node;
@@ -286,8 +308,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				f.outputParamToActualMap.put(v.id, actual);
 			}
 			AgreeEquation eq = new AgreeEquation(lhs,
-					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)),
-					f.faultStatement);
+					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
 			nb.addLocalEquation(eq);
 		}
 
@@ -314,11 +335,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Expr repl = faultToActual(pair.f, pair.ex);
 				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 
-				if(faultsForSameOutput.isEmpty()) {
+				if (faultsForSameOutput.isEmpty()) {
 					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
 					resultExpr = new IfThenElseExpr(ftTrigger, toAssign, defaultExpr);
-				}
-				else {
+				} else {
 					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
 					Expr originalDefault = defaultExpr;
 					defaultExpr = new IfThenElseExpr(ftTrigger, toAssign, originalDefault);
@@ -333,8 +353,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 
 			// create new assertion expression : id = ((nominal_id with p1 := f1) with ...)
-		//	nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
-		//			new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
+			// nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
+			// new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, toAssign), null));
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
 					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, resultExpr), null));
 		}
@@ -1226,7 +1246,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			maxFaultCount = Integer.parseInt(((FaultCountBehavior) ab).getMaxFaults());
 			System.out.println("maxFault: " + maxFaultCount);
 		} else if (ab instanceof ProbabilityBehavior) {
-			probablisticHypothesis = true;
+			probabilisticHypothesis = true;
 			collectTopLevelMaxFaultOccurrenceConstraint(Double.parseDouble(((ProbabilityBehavior) ab).getProbabilty()),
 					topNode, builder);
 		}

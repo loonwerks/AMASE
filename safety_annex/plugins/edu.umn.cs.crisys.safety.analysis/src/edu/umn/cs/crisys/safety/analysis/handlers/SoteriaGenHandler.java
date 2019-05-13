@@ -316,9 +316,9 @@ public class SoteriaGenHandler extends VerifyHandler {
 				// or if max fault hypothesis but N = 0
 				// or if probablistic hypothesis but fault combinations above threshold is empty
 				// then print empty min cut set fault tree
-				if ((!AddFaultsToNodeVisitor.maxFaultHypothesis && !AddFaultsToNodeVisitor.probablisticHypothesis)
+				if ((!AddFaultsToNodeVisitor.maxFaultHypothesis && !AddFaultsToNodeVisitor.probabilisticHypothesis)
 						|| (AddFaultsToNodeVisitor.maxFaultHypothesis && (AddFaultsToNodeVisitor.maxFaultCount == 0))
-						|| (AddFaultsToNodeVisitor.probablisticHypothesis
+						|| (AddFaultsToNodeVisitor.probabilisticHypothesis
 								&& AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty())) {
 					SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
 					printUtils.printEmptyTree();
