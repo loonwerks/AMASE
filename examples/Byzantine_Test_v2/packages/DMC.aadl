@@ -1,0 +1,14 @@
+package DMC
+--Data Module Concentrator
+public
+	with Data_Types;
+	renames Data_Types::all;
+	
+	system DMC
+		features
+			--inputs
+			FCC_In: in data port DMC_Data;
+			--outputs
+			FCC_Out: out data port DMC_Data;
+	end DMC;
+end DMC;

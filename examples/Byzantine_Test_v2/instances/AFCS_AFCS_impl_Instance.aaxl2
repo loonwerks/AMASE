@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="ASCII"?>
+<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="AFCS_impl_Instance" category="system">
+  <componentInstance name="FCC1" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Types_Properties/AADL_Properties.aadl#AADL_Properties.FCC_ID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="1"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="FCC1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="FCC2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="FCC3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="DMCA_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <featureInstance name="DMCB_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+    </featureInstance>
+    <featureInstance name="AP_Quick_Disconnect">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
+    </featureInstance>
+    <featureInstance name="DMCA_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+    </featureInstance>
+    <featureInstance name="DMCB_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+    </featureInstance>
+    <featureInstance name="FCC1_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+    </featureInstance>
+    <featureInstance name="FCC2_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.9"/>
+    </featureInstance>
+    <featureInstance name="FCC3_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.10"/>
+    </featureInstance>
+    <featureInstance name="FCC_Cmd" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.11"/>
+    </featureInstance>
+    <featureInstance name="Failed" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.12"/>
+    </featureInstance>
+    <featureInstance name="In_Cmd" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.13"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/FCC.aadl#FCC.FCC"/>
+  </componentInstance>
+  <componentInstance name="FCC2" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Types_Properties/AADL_Properties.aadl#AADL_Properties.FCC_ID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="2"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="FCC1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="FCC2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="FCC3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="DMCA_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <featureInstance name="DMCB_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+    </featureInstance>
+    <featureInstance name="AP_Quick_Disconnect">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
+    </featureInstance>
+    <featureInstance name="DMCA_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+    </featureInstance>
+    <featureInstance name="DMCB_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+    </featureInstance>
+    <featureInstance name="FCC1_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+    </featureInstance>
+    <featureInstance name="FCC2_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.9"/>
+    </featureInstance>
+    <featureInstance name="FCC3_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.10"/>
+    </featureInstance>
+    <featureInstance name="FCC_Cmd" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.11"/>
+    </featureInstance>
+    <featureInstance name="Failed" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.12"/>
+    </featureInstance>
+    <featureInstance name="In_Cmd" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.13"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/FCC.aadl#FCC.FCC"/>
+  </componentInstance>
+  <componentInstance name="FCC3" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Types_Properties/AADL_Properties.aadl#AADL_Properties.FCC_ID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="3"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="FCC1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="FCC2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="FCC3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="DMCA_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <featureInstance name="DMCB_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+    </featureInstance>
+    <featureInstance name="AP_Quick_Disconnect">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
+    </featureInstance>
+    <featureInstance name="DMCA_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+    </featureInstance>
+    <featureInstance name="DMCB_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+    </featureInstance>
+    <featureInstance name="FCC1_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+    </featureInstance>
+    <featureInstance name="FCC2_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.9"/>
+    </featureInstance>
+    <featureInstance name="FCC3_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.10"/>
+    </featureInstance>
+    <featureInstance name="FCC_Cmd" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.11"/>
+    </featureInstance>
+    <featureInstance name="Failed" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.12"/>
+    </featureInstance>
+    <featureInstance name="In_Cmd" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.13"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/FCC.aadl#FCC.FCC"/>
+  </componentInstance>
+  <componentInstance name="FCC4" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Types_Properties/AADL_Properties.aadl#AADL_Properties.FCC_ID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="4"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="FCC1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="FCC2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="FCC3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="DMCA_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <featureInstance name="DMCB_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+    </featureInstance>
+    <featureInstance name="AP_Quick_Disconnect">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
+    </featureInstance>
+    <featureInstance name="DMCA_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+    </featureInstance>
+    <featureInstance name="DMCB_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+    </featureInstance>
+    <featureInstance name="FCC1_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+    </featureInstance>
+    <featureInstance name="FCC2_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.9"/>
+    </featureInstance>
+    <featureInstance name="FCC3_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.10"/>
+    </featureInstance>
+    <featureInstance name="FCC_Cmd" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.11"/>
+    </featureInstance>
+    <featureInstance name="Failed" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.12"/>
+    </featureInstance>
+    <featureInstance name="In_Cmd" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.13"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/FCC.aadl#FCC.FCC"/>
+  </componentInstance>
+  <componentInstance name="DMCA" category="system">
+    <featureInstance name="FCC_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/DMC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="FCC_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/DMC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.4"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/DMC.aadl#DMC.DMC"/>
+  </componentInstance>
+  <componentInstance name="DMCB" category="system">
+    <featureInstance name="FCC_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/DMC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="FCC_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/DMC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.5"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/DMC.aadl#DMC.DMC"/>
+  </componentInstance>
+  <componentInstance name="Pilot_Wheel" category="system">
+    <featureInstance name="AP_Quick_Disconnect" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/Pilot_Wheel.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.6"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/Pilot_Wheel.aadl#Pilot_Wheel.Pilot_Wheel"/>
+  </componentInstance>
+  <componentInstance name="CoPilot_Wheel" category="system">
+    <featureInstance name="AP_Quick_Disconnect" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../packages/Pilot_Wheel.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.7"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/Pilot_Wheel.aadl#Pilot_Wheel.Pilot_Wheel"/>
+  </componentInstance>
+  <connectionInstance name="FCC1.DMCA_Out -> DMCA.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.4/@featureInstance.0" source="//@componentInstance.0/@featureInstance.6">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.6" destination="//@componentInstance.4/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.8"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC1.DMCB_Out -> DMCB.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.5/@featureInstance.0" source="//@componentInstance.0/@featureInstance.7">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.7" destination="//@componentInstance.5/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.12"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC1.FCC1_Out -> FCC2.FCC1_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@componentInstance.0/@featureInstance.8">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.8" destination="//@componentInstance.1/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.16"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC1.FCC2_Out -> FCC3.FCC1_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.0" source="//@componentInstance.0/@featureInstance.9">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.9" destination="//@componentInstance.2/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.17"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC1.FCC3_Out -> FCC4.FCC1_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.0" source="//@componentInstance.0/@featureInstance.10">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.10" destination="//@componentInstance.3/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.18"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC2.DMCA_Out -> DMCA.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.4/@featureInstance.0" source="//@componentInstance.1/@featureInstance.6">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.6" destination="//@componentInstance.4/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.9"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC2.DMCB_Out -> DMCB.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.5/@featureInstance.0" source="//@componentInstance.1/@featureInstance.7">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.7" destination="//@componentInstance.5/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.13"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC2.FCC1_Out -> FCC1.FCC1_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.0" source="//@componentInstance.1/@featureInstance.8">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.8" destination="//@componentInstance.0/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.19"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC2.FCC2_Out -> FCC3.FCC2_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.1" source="//@componentInstance.1/@featureInstance.9">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.9" destination="//@componentInstance.2/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.20"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC2.FCC3_Out -> FCC4.FCC2_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.1" source="//@componentInstance.1/@featureInstance.10">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.10" destination="//@componentInstance.3/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.21"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC3.DMCA_Out -> DMCA.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.4/@featureInstance.0" source="//@componentInstance.2/@featureInstance.6">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.6" destination="//@componentInstance.4/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.10"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC3.DMCB_Out -> DMCB.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.5/@featureInstance.0" source="//@componentInstance.2/@featureInstance.7">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.7" destination="//@componentInstance.5/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.14"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC3.FCC1_Out -> FCC1.FCC2_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.1" source="//@componentInstance.2/@featureInstance.8">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.8" destination="//@componentInstance.0/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.22"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC3.FCC2_Out -> FCC2.FCC2_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.1" source="//@componentInstance.2/@featureInstance.9">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.9" destination="//@componentInstance.1/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.23"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC3.FCC3_Out -> FCC4.FCC3_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.2" source="//@componentInstance.2/@featureInstance.10">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.10" destination="//@componentInstance.3/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.24"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC4.DMCA_Out -> DMCA.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.4/@featureInstance.0" source="//@componentInstance.3/@featureInstance.6">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.6" destination="//@componentInstance.4/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.11"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC4.DMCB_Out -> DMCB.FCC_In" complete="true" kind="portConnection" destination="//@componentInstance.5/@featureInstance.0" source="//@componentInstance.3/@featureInstance.7">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.7" destination="//@componentInstance.5/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.15"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC4.FCC1_Out -> FCC1.FCC3_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.2" source="//@componentInstance.3/@featureInstance.8">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.8" destination="//@componentInstance.0/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.25"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC4.FCC2_Out -> FCC2.FCC3_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.2" source="//@componentInstance.3/@featureInstance.9">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.9" destination="//@componentInstance.1/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.26"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="FCC4.FCC3_Out -> FCC3.FCC3_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.2" source="//@componentInstance.3/@featureInstance.10">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.10" destination="//@componentInstance.2/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.27"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCA.FCC_Out -> FCC1.DMCA_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.3" source="//@componentInstance.4/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.4/@featureInstance.1" destination="//@componentInstance.0/@featureInstance.3">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCA.FCC_Out -> FCC2.DMCA_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.3" source="//@componentInstance.4/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.4/@featureInstance.1" destination="//@componentInstance.1/@featureInstance.3">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCA.FCC_Out -> FCC3.DMCA_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.3" source="//@componentInstance.4/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.4/@featureInstance.1" destination="//@componentInstance.2/@featureInstance.3">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCA.FCC_Out -> FCC4.DMCA_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.3" source="//@componentInstance.4/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.4/@featureInstance.1" destination="//@componentInstance.3/@featureInstance.3">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCB.FCC_Out -> FCC1.DMCB_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.4" source="//@componentInstance.5/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.5/@featureInstance.1" destination="//@componentInstance.0/@featureInstance.4">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCB.FCC_Out -> FCC2.DMCB_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.4" source="//@componentInstance.5/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.5/@featureInstance.1" destination="//@componentInstance.1/@featureInstance.4">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCB.FCC_Out -> FCC3.DMCB_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.4" source="//@componentInstance.5/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.5/@featureInstance.1" destination="//@componentInstance.2/@featureInstance.4">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.6"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="DMCB.FCC_Out -> FCC4.DMCB_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.4" source="//@componentInstance.5/@featureInstance.1">
+    <connectionReference context="/" source="//@componentInstance.5/@featureInstance.1" destination="//@componentInstance.3/@featureInstance.4">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.7"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="Pilot_Wheel.AP_Quick_Disconnect -> FCC1.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.5" source="//@componentInstance.6/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.6/@featureInstance.0" destination="//@componentInstance.0/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.28"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="Pilot_Wheel.AP_Quick_Disconnect -> FCC2.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.5" source="//@componentInstance.6/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.6/@featureInstance.0" destination="//@componentInstance.1/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.29"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="Pilot_Wheel.AP_Quick_Disconnect -> FCC3.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.5" source="//@componentInstance.6/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.6/@featureInstance.0" destination="//@componentInstance.2/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.30"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="Pilot_Wheel.AP_Quick_Disconnect -> FCC4.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.5" source="//@componentInstance.6/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.6/@featureInstance.0" destination="//@componentInstance.3/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.31"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="CoPilot_Wheel.AP_Quick_Disconnect -> FCC1.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.5" source="//@componentInstance.7/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.7/@featureInstance.0" destination="//@componentInstance.0/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.32"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="CoPilot_Wheel.AP_Quick_Disconnect -> FCC2.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.5" source="//@componentInstance.7/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.7/@featureInstance.0" destination="//@componentInstance.1/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.33"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="CoPilot_Wheel.AP_Quick_Disconnect -> FCC3.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.5" source="//@componentInstance.7/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.7/@featureInstance.0" destination="//@componentInstance.2/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.34"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="CoPilot_Wheel.AP_Quick_Disconnect -> FCC4.AP_Quick_Disconnect" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.5" source="//@componentInstance.7/@featureInstance.0">
+    <connectionReference context="/" source="//@componentInstance.7/@featureInstance.0" destination="//@componentInstance.3/@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/AFCS.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.35"/>
+    </connectionReference>
+  </connectionInstance>
+  <systemOperationMode name="No Modes"/>
+  <componentImplementation xsi:type="aadl2:SystemImplementation" href="../packages/AFCS.aadl#AFCS.AFCS.impl"/>
+</instance:SystemInstance>

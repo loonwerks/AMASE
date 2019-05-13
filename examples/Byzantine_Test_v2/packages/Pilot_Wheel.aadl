@@ -1,0 +1,9 @@
+package Pilot_Wheel
+public
+	with Base_Types;
+	
+	system Pilot_Wheel
+		features
+			AP_Quick_Disconnect: out data port Base_Types::Boolean; --Autopilot Quick Disconnect
+	end Pilot_Wheel;
+end Pilot_Wheel;
