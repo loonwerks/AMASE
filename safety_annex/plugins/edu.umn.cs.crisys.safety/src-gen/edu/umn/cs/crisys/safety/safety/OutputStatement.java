@@ -29,10 +29,6 @@ public interface OutputStatement extends FaultSubcomponent
    * Returns the value of the '<em><b>Nom conn</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.NestedDotID}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Nom conn</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Nom conn</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Nom_conn()
@@ -45,10 +41,6 @@ public interface OutputStatement extends FaultSubcomponent
    * Returns the value of the '<em><b>Fault out</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Fault out</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fault out</em>' attribute list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Fault_out()

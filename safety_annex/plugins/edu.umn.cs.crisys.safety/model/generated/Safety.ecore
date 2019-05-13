@@ -10,6 +10,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisBehavior"/>
   <eClassifiers xsi:type="ecore:EClass" name="FaultSubcomponent" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element"/>
   <eClassifiers xsi:type="ecore:EClass" name="HWFaultSubcomponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ByzantineFaultSubcomponent"/>
   <eClassifiers xsi:type="ecore:EClass" name="PropagationTypeConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerCondition"/>
@@ -62,6 +63,12 @@
         eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ByzantineFaultStatement" eSuperTypes="#//SpecStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="str" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="byzantine" upperBound="-1"
+        eType="#//ByzantineFaultSubcomponent" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FaultCountBehavior" eSuperTypes="#//AnalysisBehavior">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxFaults" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
@@ -82,13 +89,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fault_out" unique="false"
         upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DurationStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
+  <eClassifiers xsi:type="ecore:EClass" name="DurationStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent #//ByzantineFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tc" eType="#//TemporalConstraint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interv" eType="#//Interval"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProbabilityStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
+  <eClassifiers xsi:type="ecore:EClass" name="ProbabilityStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent #//ByzantineFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerStatement" eSuperTypes="#//FaultSubcomponent">
@@ -97,6 +104,15 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PropagationTypeStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pty" eType="#//PropagationTypeConstraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FaultyOutputStatement" eSuperTypes="#//ByzantineFaultSubcomponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fault_out" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionsStatement" eSuperTypes="#//ByzantineFaultSubcomponent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fault_in" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefName" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//NestedDotID"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="asymmetric" eSuperTypes="#//PropagationTypeConstraint"/>

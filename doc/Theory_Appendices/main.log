@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  7 FEB 2019 16:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  9 MAY 2019 10:20
 entering extended mode
 **./main.tex
 (main.tex
@@ -520,7 +520,14 @@ Package csquotes Info: ... none found.
 Package csquotes Warning: No multilingual support.
 (csquotes)                Cannot enable multilingual quotes on input line 74.
 
-(main.aux)
+(main.aux
+
+LaTeX Warning: Label `alg:repl_alg' multiply defined.
+
+
+LaTeX Warning: Label `alg:repl_alg' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 74.
@@ -625,9 +632,14 @@ LaTeX Font Info:    Try loading font information for U+lasy on input line 1.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-) (summary.tex
+) (definitions.tex
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+
+ []
+
 
 Underfull \hbox (badness 10000) in paragraph at lines 5--6
 
@@ -644,162 +656,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--10
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11--12
+LaTeX Warning: Citation `ghassabani2016efficient' on page 1 undefined on input 
+line 25.
+
+
+LaTeX Warning: Citation `ghassabani2017efficient' on page 1 undefined on input 
+line 25.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--26
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 13--14
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 15--16
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 19--20
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
 
  []
 
 [1
 
 {C:/Users/Danielle Stewart/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 21--22
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 23--24
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 25--26
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 27--28
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 33--34
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 35--36
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 43--44
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 45--46
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 47--48
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 49--50
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 51--52
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 53--54
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 55--56
-
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 57--58
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 59--60
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 61--62
-
- []
-
-) (theory.tex
-Underfull \hbox (badness 10000) in paragraph at lines 2--3
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 4--5
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6--7
-
- []
-
-
-LaTeX Warning: Citation `DBLP:journals/corr/GhassabaniGW16' on page 3 undefined
- on input line 13.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 13--14
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 15--17
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 19--21
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 23--24
-
- []
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 25--26
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 27--28
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 29--30
 
  []
@@ -810,6 +686,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--32
  []
 
 
+LaTeX Warning: Citation `reiter1987theory' on page 2 undefined on input line 33
+.
+
+
+LaTeX Warning: Citation `liffiton2016fast' on page 2 undefined on input line 33
+.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
@@ -820,7 +704,159 @@ Underfull \hbox (badness 10000) in paragraph at lines 35--36
  []
 
 
+LaTeX Warning: Citation `murakami2013efficient' on page 2 undefined on input li
+ne 37.
+
+
+LaTeX Warning: Citation `gainer2017minimal' on page 2 undefined on input line 3
+7.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 37--38
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--44
+
+ []
+
+) (mcs_to_mincutset.tex
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+
+ []
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--17
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--29
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--31
+
+ []
+
+
+Underfull \hbox (badness 3291) in paragraph at lines 34--35
+[]\OT1/ptm/m/n/10 For $\OML/cmm/m/it/10 g[] \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10
+ MCS$\OT1/ptm/m/n/10 , $\OMS/cmsy/m/n/10 9\OML/cmm/m/it/10 F[] \OMS/cmsy/m/n/10
+  \OML/cmm/m/it/10 F$ \OT1/ptm/m/n/10 where $\OML/cmm/m/it/10 F[]$ \OT1/ptm/m/
+n/10 is a min-i-mal set of ac-tive
+ []
+
+
+Underfull \hbox (badness 3068) in paragraph at lines 34--35
+\OT1/ptm/m/n/10 faults that cause the vi-o-la-tion of $\OML/cmm/m/it/10 g[]$\OT
+1/ptm/m/n/10 . Re-place $\OML/cmm/m/it/10 g[]$ \OT1/ptm/m/n/10 in $\OML/cmm/m/i
+t/10 MCS$ \OT1/ptm/m/n/10 with $\OML/cmm/m/it/10 F[]$\OT1/ptm/m/n/10 . Then
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 34--35
+
+ []
+
+
+Underfull \hbox (badness 1931) in paragraph at lines 36--37
+[]\OT1/ptm/m/n/10 Perform this re-place-ment for all $\OML/cmm/m/it/10 g[] \OMS
+/cmsy/m/n/10 2 \OML/cmm/m/it/10 MCS$ \OT1/ptm/m/n/10 un-til we reach $\OML/cmm/
+m/it/10 MCS \OT1/cmr/m/n/10 =
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
+
+ []
+
+)) (replacement_max_n.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 16.
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 46--47
 
  []
 
@@ -830,11 +866,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--49
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--51
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4]
+Underfull \hbox (badness 3078) in paragraph at lines 51--52
+[]\OT1/ptm/m/it/10 The elim-i-na-tion of any $\OMS/cmsy/m/n/10 j\OML/cmm/m/it/1
+0 MCS[]\OMS/cmsy/m/n/10 j  \OML/cmm/m/it/10 N$ \OT1/ptm/m/it/10 will not elim-
+i-nate any
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
 
  []
 
-[4]
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--58
+
+ []
+
+) (replacement_prob.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--9
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--26
+
+ []
+
+[5]
 Underfull \hbox (badness 10000) in paragraph at lines 52--53
 
  []
@@ -850,110 +921,141 @@ Underfull \hbox (badness 10000) in paragraph at lines 56--57
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 65--66
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 67--68
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 69--70
+Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 71--72
+Underfull \hbox (badness 10000) in paragraph at lines 70--71
+
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 74--75
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--74
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 75--76
-
- []
-
-) (example.tex
-Underfull \hbox (badness 10000) in paragraph at lines 2--3
+Underfull \hbox (badness 10000) in paragraph at lines 83--84
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4--5
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 6--10
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11--12
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 13--17
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 18--22
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 23--26
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 27--28
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
 
  []
 
 
-Underfull \vbox (badness 5726) has occurred while \output is active []
+Underfull \vbox (badness 1281) has occurred while \output is active []
 
- [6]
-Underfull \hbox (badness 10000) in paragraph at lines 29--30
+ [7]
+Underfull \hbox (badness 10000) in paragraph at lines 112--113
 
  []
 
-)) [7] (main.aux)
+
+Underfull \hbox (badness 10000) in paragraph at lines 114--115
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 152--155
+
+ []
+
+
+Underfull \vbox (badness 7981) has occurred while \output is active []
+
+ [8]
+Underfull \hbox (badness 5607) in paragraph at lines 156--157
+[]\OT1/ptm/m/n/10 If this is the case, the user must de-fine the de-pen-dency a
+s fol-lows:
+ []
+
+
+Underfull \hbox (badness 1297) in paragraph at lines 156--157
+\OML/cmm/m/it/10 f[] \OMS/cmsy/m/n/10 ! f\OML/cmm/m/it/10 f[]; f[]; f[]\OMS/cms
+y/m/n/10 g$\OT1/ptm/m/n/10 . We will prob-a-bly have to make this as-sump-tion 
+clear to
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 156--157
+
+ []
+
+)
+No file main.bbl.
+[9] (main.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 7868 strings out of 492973
- 110051 string characters out of 3135897
- 217517 words of memory out of 3000000
- 11562 multiletter control sequences out of 15000+200000
- 13297 words of font info for 37 fonts, out of 3000000 for 9000
+ 7883 strings out of 492973
+ 110246 string characters out of 3135897
+ 217564 words of memory out of 3000000
+ 11571 multiletter control sequences out of 15000+200000
+ 14923 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,6n,35p,870b,333s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,24n,42p,807b,558s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publi
-c/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy1
-0.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:
-/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on main.pdf (7 pages, 137551 bytes).
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr
+7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9
+/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/
+times/utmri8a.pfb>
+Output written on main.pdf (9 pages, 160633 bytes).
 PDF statistics:
- 71 PDF objects out of 1000 (max. 8388607)
+ 77 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

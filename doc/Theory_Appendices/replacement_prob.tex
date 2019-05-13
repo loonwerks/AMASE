@@ -1,4 +1,7 @@
 \subsection{Replacements for Probabilistic Analysis: Algorithm and Theory}
+
+\textbf{Replacements for Probabilistic Analysis: Algorithm and Theory}\\
+
 In order to complete the probabilistic analysis, we must first calculate allowable combinations of faults. This allows us the option to eliminate unnecessary combinations while performing the algorithm, thus increasing performance and diminishing the problem of combinatorial explosions in the size of minimal cut sets. \\
 
 The steps are as follows:\\
@@ -52,7 +55,7 @@ At the leaf level, only faults are contained in IVCs (and consequently in MCSs).
 
 Assume we have used the hitting set to generate MCS from the IVC and we have calculated allowable fault combinations. This is where the algorithm begins. \\
 
-\textbf{Rough draft for review}\\
+\textbf{Compositional Probabilistic Minimal Cut Set Algorithm}\\
 
 $List(MCS)$ : the set of all MCSs, ex: $\{\{f_1,f_2,g_1,g_2\}, ...\}$ 
 
@@ -75,38 +78,38 @@ We combine probabilities and add dependent faults after this algorithm terminate
 
 %So, $p_{MCS_i}$ corresponds to the probability of the MinCutSet generated from $MCS_i$ and is stored in a list of probabilities called $P_{List}$. \\
 
-In this algorithm, it seems we have a few options where to eliminate sets that do not correspond with allowed combinations. Where we do this elimination depends on timing: which option is overall better for timing results? I still have to investigate this. 
+In this algorithm, we have a few options where to eliminate sets that do not correspond with allowed combinations or whether to eliminate at all. \\
 
-\textbf{Option 1}: If $cut_k(g_j) \not \subseteq \mathcal{F}_i$ where $\mathcal{F}$ is the set of all possible combinations $\mathcal{F}_i $, then we can safely eliminate the $MCS_i$ in which $g_j$ is located. This option seems good in terms of early elimination, but would have a detrimental overhead in other areas. We still have to do a search over $\mathcal{F}$  to determine if $cut_k(g_j)$ is a subset of one of the allowed combinations AND we would still have to check final combination (or intermediate combinations) with more than just $cut_k(g_j)$. \\
+\textbf{Option 1}: Once the inlining is complete and we have a minimal cut set, if $MinCutSet \not \subseteq \mathcal{F}_i $, then we can safely eliminate $MinCutSet$. We avoid the overhead of checking subsets in $\mathcal{F}$, but we have the complete overhead of inlining. \\
+
+\textbf{Option 2}: If $cut_k(g_j) \not \subseteq \mathcal{F}_i$ where $\mathcal{F}$ is the set of all possible combinations $\mathcal{F}_i $, then we can safely eliminate the $MCS_i$ in which $g_j$ is located. This option seems good in terms of early elimination, but would have a detrimental overhead in other areas. We still have to do a search over $\mathcal{F}$  to determine if $cut_k(g_j)$ is a subset of one of the allowed combinations AND we would still have to check final combination (or intermediate combinations) with more than just $cut_k(g_j)$. \\
 
 Ex: Let $\mathcal{F} = \{\{f_1,f_2,f_5\},\{f_6\}\}\}$ be the allowed fault combinations. 
 
 Let $MCS = \{f_1,g_1,g_2\}$,  $Cut(g_1) = \{\{f_2\}\}$, $Cut(g_2) = \{\{f_5\},\{f_6\}\}$.
 
-Then for option 1, we would not eliminate anything: $cut_1(g_1) = \{f2\} \subseteq \mathcal{F}_i$ and likewise for $cut_1(g_2)$ and $cut_2(g_2)$. 
+Then for option 2, we would not eliminate anything: $cut_1(g_1) = \{f2\} \subseteq \mathcal{F}_i$ and likewise for $cut_1(g_2)$ and $cut_2(g_2)$. 
 
 The MCSs generated through the inlining process are: 
 
-$MCS_1 = \{f_1,f_2,f_5\}$ and $MCS_2 = \{f_1,f_2,f_6\}$ which provides one combination which should be eliminated. Thus we would have to perform another check at the end of the algorithm to eliminate these. 
+$MCS_1 = \{f_1,f_2,f_5\}$ and $MCS_2 = \{f_1,f_2,f_6\}$ which provides one combination which should be eliminated. Thus we would have to perform another check at the end of the algorithm to eliminate these. \\
 
 
-\textbf{Option 2}: If ($\{f_n | f_n \in MCS_i\} \cup cut_k(g_j)) \not \subseteq  \mathcal{F}_i $, then we can safely eliminate this $MCS_i$.This option is better in that we do not have to perform two searches in $\mathcal{F}$, but has the drawback of needing to find the union of all faults located in $MCS_i$, ignoring the $g_j$ in $MCS_i$, and then performing the subset search through $\mathcal{F}$. \\
+\textbf{Option 3}: If ($\{f_n | f_n \in MCS_i\} \cup cut_k(g_j)) \not \subseteq  \mathcal{F}_i $, then we can safely eliminate this $MCS_i$.This option is better in that we do not have to perform two searches in $\mathcal{F}$, but has the drawback of needing to find the union of all faults located in $MCS_i$, ignoring the $g_j$ in $MCS_i$, and then performing the subset search through $\mathcal{F}$. \\
 
-Upside: $List(MCS)$ does not grow as fast IF we can eliminate things along the way.
+Upside: $List(MCS)$ does not grow as fast IF we can eliminate things along the way.\\
 
-Downside: Worst case scenario, every $cut_k(g_j)$ has to be combined with faults in $MCS_i$ and a complete search of all subsets of $\mathcal{F}$ completed for every $MCS_i$ and NOTHING is eliminated. In this scenario, it is way more efficient to wait until the end and do one search through $\mathcal{F}$ and eliminate accordingly. 
+Downside: Worst case scenario, every $cut_k(g_j)$ has to be combined with faults in $MCS_i$ and a complete search of all subsets of $\mathcal{F}$ completed for every $MCS_i$ and NOTHING is eliminated. In this scenario, it is more efficient to wait until the end and do one search through $\mathcal{F}$ and eliminate accordingly. \\
 
 Let $|MCS| = n$ ($MCS = \{MCS_1,...,MCS_n\}$). 
 
 In the worst case scenario, we have a contract in every $MCS_i$. There are $\alpha_i$ contracts in $MCS_i$. 
 
-Every contract has $m_{g_\alpha}$ minimal cut sets. Then every cut set is combined with faults remaining in $MCS_i$ and searched for in $\mathcal{F}_i$. This makes 
+Every contract has $m_{g_\alpha}$ minimal cut sets. Then every cut set is combined with faults remaining in $MCS_i$ and searched for in $\mathcal{F}_i$. \\ 
 
 
 
-\textbf{Option 3}: Once the inlining is complete and we have a minimal cut set, if $MinCutSet \not \subseteq \mathcal{F}_i $, then we can safely eliminate $MinCutSet$. We avoid the overhead of checking subsets in $\mathcal{F}$, but we have the complete overhead of inlining. \\
-
-Which option is better? I have to figure that out. For now in the algorithm, I will just write Option 1, Option 2, Option 3 in their respective locations. This assumes that if option 1 is used, options 2 and 3 are removed from the algorithm. Obviously. The choice of option will also change a lot depending on our data structures for these lists and what algorithms we use to check for subsets within lists. I do not think this can be done without thinking it through carefully regardless of which option we choose. \\
+Which option is better? For now in the algorithm, I will just write Option 1, Option 2, Option 3 in their respective locations. This assumes that if option 1 is used, options 2 and 3 are removed from the algorithm. Obviously. The choice of option will also change a lot depending on our data structures for these lists and what algorithms we use to check for subsets within lists. It is also highly dependent on the model that is used in this analysis. Depending on the model itself, different options would be more efficient. \\
 
 \textbf{Outline of algorithm}\\
 
@@ -124,15 +127,15 @@ Which option is better? I have to figure that out. For now in the algorithm, I w
 	    \For{all $g_j\in MCS_i$}{
 		Remove $g_j$ from $MCS_i$ \;
 		\For{all $cut_k(g_j) \in Cut(g_j)$}{
-			\textbf{Option 1} : if $cut_k(g_j) \subseteq \mathcal{F}_i $ for some $\mathcal{F}_i  \in \mathcal{F}$, then add $cut_k(g_j)$ to $MCS_i$ else break \; 
-			\textbf{Option 2}: if union of faults in $MCS_i$ with $cut_k(g_j)$ is subset of $\mathcal{F}_i $
+			\textbf{Option 2} : if $cut_k(g_j) \subseteq \mathcal{F}_i $ for some $\mathcal{F}_i  \in \mathcal{F}$, then add $cut_k(g_j)$ to $MCS_i$ else break \; 
+			\textbf{Option 3}: if union of faults in $MCS_i$ with $cut_k(g_j)$ is subset of $\mathcal{F}_i $
 				     for some $\mathcal{F}_i \in \mathcal{F}$, then add $cut_k(g_j)$ to $MCS_i$ else break \;
 			\eIf{$\exists g\in MCS_i$}{
 				Add $MCS_i$ to $List(MCS)$ \;
 			}{
 				
-				\textbf{Option 1 and 3}: if $MCS_i \in \mathcal{F}$, add dependencies, calculate probability, and append $p(MCS_i)$ to $P_{List}$ , else break \;
-				\textbf{Option 2} : add dependencies, calculate probability, and append $p(MCS_i)$ to $P_{List}$ \;
+				\textbf{Option 1 and 2}: if $MCS_i \in \mathcal{F}$, add dependencies, calculate probability, and append $p(MCS_i)$ to $P_{List}$ , else break \;
+				\textbf{Option 3} : add dependencies, calculate probability, and append $p(MCS_i)$ to $P_{List}$ \;
 				
 			}%end if-else there is another contract in MCS
 		} % end for cut_i(g)
