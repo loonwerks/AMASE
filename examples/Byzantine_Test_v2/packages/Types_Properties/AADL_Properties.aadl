@@ -1,3 +1,0 @@
-property set AADL_Properties is
-	FCC_ID: aadlinteger applies to (system);
-end AADL_Properties;
