@@ -1,0 +1,73 @@
+package DecidingComponent
+public
+with Base_Types;
+with Sensor;
+with OrGate;
+with Receiver;
+with AndGate;
+	system DecidingComponent
+		features
+			-- From top level
+			env_variable : in data port Base_Types::Integer;
+			-- From receivers
+			and_output : out data port Base_Types::Boolean;
+			
+			reaction_complete : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			guarantee "If all receivers report reaction, then the system reacts." :
+				if (env_variable > 10) then reaction_complete else (reaction_complete = false);
+			
+		**};
+			
+	end DecidingComponent;
+	
+	system implementation DecidingComponent.impl
+		subcomponents
+			sensor1 : system Sensor::Sensor;
+			sensor2 : system Sensor::Sensor;
+			orGate : system OrGate::OrGate;
+			receiver1 : system Receiver::Receiver;
+			receiver2 : system Receiver::Receiver;
+			receiver3 : system Receiver::Receiver;
+			receiver4 : system Receiver::Receiver;
+			andGate : system AndGate::AndGate;
+		
+		connections 
+			var_to_sensor1 : port env_variable -> sensor1.sensed_variable;
+			var_to_sensor2 : port env_variable -> sensor2.sensed_variable;
+			
+			sense1_or : port sensor1.not_safe -> orGate.in1;
+			sense2_or : port sensor2.not_safe -> orGate.in2;
+			
+			or_rec1 : port orGate.or_out -> receiver1.not_safe;
+			or_rec2 : port orGate.or_out -> receiver2.not_safe;
+			or_rec3 : port orGate.or_out -> receiver3.not_safe;
+			or_rec4 : port orGate.or_out -> receiver4.not_safe; 
+			
+			rec1_do_something : port receiver1.react -> andGate.in1;
+			rec2_do_something : port receiver2.react -> andGate.in2;
+			rec3_do_something : port receiver3.react -> andGate.in3;
+			rec4_do_something : port receiver4.react -> andGate.in4;
+			
+			and_to_reaction : port andGate.and_out -> reaction_complete;
+		
+		annex agree {**
+			
+			lemma "If we are not save 1, then we react.":
+				if receiver1.not_safe then receiver1.react else (receiver1.react = false);
+			
+			lemma "If we are not save 2, then we react.":
+				if receiver2.not_safe then receiver2.react else (receiver2.react = false);
+			
+			lemma "If we are not save 3, then we react.":
+				if receiver3.not_safe then receiver3.react else (receiver3.react = false);
+				
+			lemma "If we are not save 4, then we react.":
+				if receiver4.not_safe then receiver4.react else (receiver4.react = false);
+			
+		**}	;
+				
+	end DecidingComponent.impl;
+end DecidingComponent;

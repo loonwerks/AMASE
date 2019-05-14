@@ -1,0 +1,18 @@
+package Sensor
+public
+with Base_Types;
+	system Sensor
+		features
+			sensed_variable : in data port Base_Types::Integer;
+			
+			not_safe : out data port Base_Types::Boolean;
+		
+		annex agree {** 
+			
+			guarantee "If sensor variable is greater than threshold, system is not safe." :
+				 if (sensed_variable > 10) then (not_safe) else (not_safe = false);
+			
+		**};
+		
+	end Sensor;
+end Sensor;

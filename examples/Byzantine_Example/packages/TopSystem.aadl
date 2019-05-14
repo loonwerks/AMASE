@@ -1,0 +1,30 @@
+package TopSystem
+public
+with Base_Types;
+with DecidingComponent;
+
+	system TopSystem
+		features
+			env_variable : in data port Base_Types::Integer;
+			
+			system_reaction : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			guarantee "If the env variable is above threshold, the system reacts." :
+				if (env_variable > 10) then system_reaction else (system_reaction = false);
+			
+		**};
+			
+	end TopSystem;
+	
+	system implementation TopSystem.impl
+		subcomponents
+			decider : system DecidingComponent::DecidingComponent.impl;
+			
+		connections
+			env_to_decider : port env_variable -> decider.env_variable;
+			decider_to_top : port decider.reaction_complete -> system_reaction;
+			
+	end TopSystem.impl;
+end TopSystem;

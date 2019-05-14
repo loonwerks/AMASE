@@ -1,0 +1,17 @@
+package Receiver
+public
+with Base_Types;
+	system Receiver
+		features
+			not_safe : in data port Base_Types::Boolean;
+			
+			react : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			guarantee "If we are not save, then we react.":
+				if not_safe then react else (react = false);
+			
+		**}	;
+	end Receiver;
+end Receiver;

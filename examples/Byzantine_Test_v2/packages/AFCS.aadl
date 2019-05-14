@@ -15,8 +15,8 @@ public
 			eq num_fcc_in_cmd: int;
 						
 			--top level property
-			guarantee "there is at most one FCC in Cmd":
-			num_fcc_in_cmd <=1;		
+--			guarantee "there is at most one FCC in Cmd":
+--			num_fcc_in_cmd <=1;		
 			
 		**};
 	end AFCS;
