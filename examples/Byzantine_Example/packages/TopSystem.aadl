@@ -1,18 +1,18 @@
 package TopSystem
 public
 with Base_Types;
-with DecidingComponent;
+with OrGate;
+with Receiver;
 
 	system TopSystem
 		features
-			env_variable : in data port Base_Types::Integer;
-			
-			system_reaction : out data port Base_Types::Boolean;
+			receiver1_output : out data port Base_Types::Boolean;
+			receiver2_output : out data port Base_Types::Boolean;
 		
 		annex agree {**
 			
-			guarantee "If the env variable is above threshold, the system reacts." :
-				if (env_variable > 10) then system_reaction else (system_reaction = false);
+			guarantee "Both receivers get same output from or gate." :
+				receiver1_output = receiver2_output;
 			
 		**};
 			
@@ -20,11 +20,20 @@ with DecidingComponent;
 	
 	system implementation TopSystem.impl
 		subcomponents
-			decider : system DecidingComponent::DecidingComponent.impl;
+			orGate : system OrGate::OrGate;
+			receiver1 : system Receiver::Receiver;
+			receiver2 : system Receiver::Receiver;
 			
 		connections
-			env_to_decider : port env_variable -> decider.env_variable;
-			decider_to_top : port decider.reaction_complete -> system_reaction;
+			or_to_rec1 : port orGate.or_out -> receiver1.or_input;
+			or_to_rec2 : port orGate.or_out -> receiver2.or_input;
+			
+			rec1_to_top : port receiver1.output -> receiver1_output;
+			rec2_to_top : port receiver2.output -> receiver2_output;
+		
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
 			
 	end TopSystem.impl;
 end TopSystem;

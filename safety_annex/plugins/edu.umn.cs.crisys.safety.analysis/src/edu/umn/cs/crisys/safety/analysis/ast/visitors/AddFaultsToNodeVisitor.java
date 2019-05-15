@@ -186,6 +186,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		addFaultLocalEqsAndAsserts(faults, nb);
 		addFaultNodeEqs(faults, nb);
 
+		// Add new method for byzantine faults here. (?)
+		// Make new lustre nodes for each connection.
+		// Define new faults for these nodes.
+		// Make sure those faults aren't counted in final fault active count.
+		// Make sure those faults are (possibly) triggered by the active byzantine fault.
+
 		if (isTop) {
 			topNode = node;
 			AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
@@ -647,6 +653,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 
+		// Byzantine fault addition:
+		// Finds byz fault in component instance.
 		compInsts = new ArrayList<ComponentInstance>(byzfaultMap.keySet());
 		for (ComponentInstance compInst : compInsts) {
 			if (compInst.getName().equals(compPath.getBase().getName())) {
