@@ -3,15 +3,23 @@ public
 with Base_Types;
 	system Receiver
 		features
-			not_safe : in data port Base_Types::Boolean;
+			or_input : in data port Base_Types::Boolean;
 			
-			react : out data port Base_Types::Boolean;
+			output : out data port Base_Types::Boolean;
 		
 		annex agree {**
 			
-			guarantee "If we are not save, then we react.":
-				if not_safe then react else (react = false);
+			guarantee "Or gate input equals output.":
+				or_input = output;
 			
 		**}	;
+		annex safety {**
+
+			fault Receiver_Fault "Receiver output is inverted": Common_Faults.invert_signal {
+				inputs: val_in <- output;     
+				outputs: output <- val_out;    
+				duration: permanent;
+			}	
+		**};
 	end Receiver;
 end Receiver;
