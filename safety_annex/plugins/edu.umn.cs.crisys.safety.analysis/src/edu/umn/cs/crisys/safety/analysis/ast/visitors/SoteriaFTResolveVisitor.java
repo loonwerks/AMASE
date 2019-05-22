@@ -320,16 +320,14 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			// - they can be pruned according to fault hypothesis
 			if (originalAndNode) {
 				if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
-					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount);
+					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount, false);
 				} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
-					// TODO: prune according to valid fault combinations
-					System.out.println("pruning for probablity analysis");
-					destSets = MHSUtils.computeMHS(sourceSets, 0);
+					destSets = MHSUtils.computeMHS(sourceSets, 0, true);
 				}
 			}
 			// else no pruning
 			else {
-				destSets = MHSUtils.computeMHS(sourceSets, 0);
+				destSets = MHSUtils.computeMHS(sourceSets, 0, false);
 			}
 
 			if (destSets.size() == 0) {
