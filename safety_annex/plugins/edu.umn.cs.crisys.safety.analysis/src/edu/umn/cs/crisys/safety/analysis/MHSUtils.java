@@ -15,6 +15,7 @@ import org.osate.ui.dialogs.Dialog;
 
 import edu.umn.cs.crisys.safety.analysis.handlers.UniqueID;
 import jkind.JKindException;
+
 /*
  * This class provides some utility methods:
  * typeContainsSafetyAnnex(Subcomponent)
@@ -88,7 +89,8 @@ public class MHSUtils {
 	 * @param mhsLimit: 0 for no limit; > 0 for upper limit on the mhs set size
 	 * @return
 	 */
-	public static Set<List<String>> computeMHS(Set<List<String>> sourceSets, int mhsLimit) {
+	public static Set<List<String>> computeMHS(Set<List<String>> sourceSets, int mhsLimit,
+			boolean prunePerProbability) {
 		HashMap<Integer, String> intToStrMap = new HashMap<>();
 		HashMap<String, Integer> strToIntMap = new HashMap<>();
 		Integer elemIdNum = new Integer(1);
@@ -141,9 +143,9 @@ public class MHSUtils {
 			ProcessBuilder pb;
 			// 1.4 invoke shd.exe to generate minimal hitting sets from the numbered source sets
 			if (mhsLimit > 0) {
-			String mhsLimitStr = String.valueOf(mhsLimit);
+				String mhsLimitStr = String.valueOf(mhsLimit);
 				pb = new ProcessBuilder(shdPath, "0", "-u", mhsLimitStr, sourceSetFile.getAbsolutePath(),
-					destFile.getAbsolutePath());
+						destFile.getAbsolutePath());
 			} else {
 				pb = new ProcessBuilder(shdPath, "0", sourceSetFile.getAbsolutePath(), destFile.getAbsolutePath());
 			}
@@ -162,12 +164,16 @@ public class MHSUtils {
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] curMHSElemNums = sCurrentLine.split(" ");
 				List<String> curMHSElemStrs = new ArrayList<>();
+				List<Integer> curMHSElemInt = new ArrayList<>();
 
 				for (int i = 0; i < curMHSElemNums.length; i++) {
 					Integer mhsElemNum = new Integer(curMHSElemNums[i]);
 					String mhsElemStr = intToStrMap.get(mhsElemNum);
 					curMHSElemStrs.add(mhsElemStr);
+					curMHSElemInt.add(mhsElemNum);
 				}
+
+				// TODO: add to destSets if curMHSElemInt is a subset of faultCombinationsAboveThreshold
 				destSets.add(curMHSElemStrs);
 				// System.out.println("dest current set: " + curMHSElemStrs);
 			}

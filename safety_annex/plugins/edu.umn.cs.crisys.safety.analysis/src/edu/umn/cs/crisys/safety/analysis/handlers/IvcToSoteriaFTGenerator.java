@@ -101,7 +101,7 @@ public class IvcToSoteriaFTGenerator {
 				// boolean mivcTimedOut = property.
 				// turn MIVC sets to MCS sets
 				// no limit on mhs set size
-				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0);
+				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0, false);
 				// create node when mcsSets is not empty
 				if (!mcsSets.isEmpty()) {
 					SoteriaFTNonLeafNode propertyNode;
