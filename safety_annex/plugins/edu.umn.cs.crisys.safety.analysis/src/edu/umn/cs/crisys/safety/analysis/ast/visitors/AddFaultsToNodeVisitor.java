@@ -26,15 +26,12 @@ import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.analysis.transform.BaseFault;
-import edu.umn.cs.crisys.safety.analysis.transform.ByzFault;
-import edu.umn.cs.crisys.safety.analysis.transform.ByzFaultASTBuilder;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
 import edu.umn.cs.crisys.safety.analysis.transform.HWFault;
 import edu.umn.cs.crisys.safety.analysis.transform.HWFaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
-import edu.umn.cs.crisys.safety.safety.ByzantineFaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
@@ -83,7 +80,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// have problems with "stale" AgreeNode references during transformations.
 	private Map<ComponentInstance, List<Fault>> faultMap = new HashMap<>();
 	private Map<ComponentInstance, List<HWFault>> hwfaultMap = new HashMap<>();
-	private Map<ComponentInstance, List<ByzFault>> byzfaultMap = new HashMap<>();
 	// It is used to store src to dest fault propagations
 	private HashSet<SafetyPropagation> propagations = new HashSet<>();
 
@@ -160,8 +156,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop);
 		// gather HW faults
 		List<HWFault> hwFaults = gatherHWFaults(globalLustreNodes, node, isTop);
-		// gather byzantine faults
-		List<ByzFault> byzFaults = gatherByzFaults(globalLustreNodes, node, isTop);
 		// rename var names in faults, like faultname_varname
 		faults = renameFaultEqs(faults);
 
@@ -566,21 +560,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return hwFaults;
 	}
 
-	public List<ByzFault> gatherByzFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
-		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
-
-		List<ByzFault> byzFaults = new ArrayList<>();
-
-		for (SpecStatement s : specs) {
-			if (s instanceof ByzantineFaultStatement) {
-				ByzantineFaultStatement byzfs = (ByzantineFaultStatement) s;
-				ByzFaultASTBuilder builder = new ByzFaultASTBuilder(globalLustreNodes, node);
-				ByzFault safetyFault = builder.buildByzFault(byzfs);
-				byzFaults.add(safetyFault);
-			}
-		}
-		return byzFaults;
-	}
 
 	public AnalysisBehavior gatherTopLevelFaultAnalysis(AgreeNode node) {
 
@@ -653,19 +632,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 
-		// Byzantine fault addition:
-		// Finds byz fault in component instance.
-		compInsts = new ArrayList<ComponentInstance>(byzfaultMap.keySet());
-		for (ComponentInstance compInst : compInsts) {
-			if (compInst.getName().equals(compPath.getBase().getName())) {
-				List<ByzFault> byzfaults = new ArrayList<ByzFault>(byzfaultMap.get(compInst));
-				for (ByzFault byzfault : byzfaults) {
-					if (byzfault.name.equals(faultName)) {
-						return byzfault;
-					}
-				}
-			}
-		}
 
 		return null;
 		// throw new SafetyException("Unable to identify fault for " + faultName + "@" + compPath.getBase().getName());

@@ -42,7 +42,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getAnalysisBehaviorAccess().getAlternatives(), "rule__AnalysisBehavior__Alternatives");
 					put(grammarAccess.getFaultSubcomponentAccess().getAlternatives(), "rule__FaultSubcomponent__Alternatives");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getAlternatives(), "rule__HWFaultSubcomponent__Alternatives");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getAlternatives(), "rule__ByzantineFaultSubcomponent__Alternatives");
 					put(grammarAccess.getPropagationTypeConstraintAccess().getAlternatives(), "rule__PropagationTypeConstraint__Alternatives");
 					put(grammarAccess.getTemporalConstraintAccess().getAlternatives(), "rule__TemporalConstraint__Alternatives");
 					put(grammarAccess.getSafetyEqStatementAccess().getAlternatives(), "rule__SafetyEqStatement__Alternatives");
@@ -97,7 +96,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getGroup_3(), "rule__SpecStatement__Group_3__0");
 					put(grammarAccess.getSpecStatementAccess().getGroup_3_7(), "rule__SpecStatement__Group_3_7__0");
 					put(grammarAccess.getSpecStatementAccess().getGroup_3_14(), "rule__SpecStatement__Group_3_14__0");
-					put(grammarAccess.getSpecStatementAccess().getGroup_4(), "rule__SpecStatement__Group_4__0");
 					put(grammarAccess.getAnalysisBehaviorAccess().getGroup_0(), "rule__AnalysisBehavior__Group_0__0");
 					put(grammarAccess.getAnalysisBehaviorAccess().getGroup_1(), "rule__AnalysisBehavior__Group_1__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_0(), "rule__FaultSubcomponent__Group_0__0");
@@ -111,10 +109,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_0(), "rule__HWFaultSubcomponent__Group_0__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_1(), "rule__HWFaultSubcomponent__Group_1__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_2(), "rule__HWFaultSubcomponent__Group_2__0");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getGroup_0(), "rule__ByzantineFaultSubcomponent__Group_0__0");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getGroup_1(), "rule__ByzantineFaultSubcomponent__Group_1__0");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getGroup_2(), "rule__ByzantineFaultSubcomponent__Group_2__0");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getGroup_3(), "rule__ByzantineFaultSubcomponent__Group_3__0");
 					put(grammarAccess.getPropagationTypeConstraintAccess().getGroup_0(), "rule__PropagationTypeConstraint__Group_0__0");
 					put(grammarAccess.getPropagationTypeConstraintAccess().getGroup_1(), "rule__PropagationTypeConstraint__Group_1__0");
 					put(grammarAccess.getTemporalConstraintAccess().getGroup_0(), "rule__TemporalConstraint__Group_0__0");
@@ -381,9 +375,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getDestComp_pathAssignment_3_13(), "rule__SpecStatement__DestComp_pathAssignment_3_13");
 					put(grammarAccess.getSpecStatementAccess().getDestFaultListAssignment_3_14_1(), "rule__SpecStatement__DestFaultListAssignment_3_14_1");
 					put(grammarAccess.getSpecStatementAccess().getDestComp_pathAssignment_3_14_3(), "rule__SpecStatement__DestComp_pathAssignment_3_14_3");
-					put(grammarAccess.getSpecStatementAccess().getNameAssignment_4_2(), "rule__SpecStatement__NameAssignment_4_2");
-					put(grammarAccess.getSpecStatementAccess().getStrAssignment_4_3(), "rule__SpecStatement__StrAssignment_4_3");
-					put(grammarAccess.getSpecStatementAccess().getByzantineAssignment_4_5(), "rule__SpecStatement__ByzantineAssignment_4_5");
 					put(grammarAccess.getAnalysisBehaviorAccess().getMaxFaultsAssignment_0_2(), "rule__AnalysisBehavior__MaxFaultsAssignment_0_2");
 					put(grammarAccess.getAnalysisBehaviorAccess().getProbabiltyAssignment_1_2(), "rule__AnalysisBehavior__ProbabiltyAssignment_1_2");
 					put(grammarAccess.getFaultSubcomponentAccess().getFault_inAssignment_0_3(), "rule__FaultSubcomponent__Fault_inAssignment_0_3");
@@ -403,12 +394,6 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getHWFaultSubcomponentAccess().getIntervAssignment_0_4(), "rule__HWFaultSubcomponent__IntervAssignment_0_4");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getProbabilityAssignment_1_3(), "rule__HWFaultSubcomponent__ProbabilityAssignment_1_3");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getPtyAssignment_2_3(), "rule__HWFaultSubcomponent__PtyAssignment_2_3");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getFault_outAssignment_0_3(), "rule__ByzantineFaultSubcomponent__Fault_outAssignment_0_3");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getFault_inAssignment_1_3(), "rule__ByzantineFaultSubcomponent__Fault_inAssignment_1_3");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getFaultDefNameAssignment_1_5(), "rule__ByzantineFaultSubcomponent__FaultDefNameAssignment_1_5");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getProbabilityAssignment_2_3(), "rule__ByzantineFaultSubcomponent__ProbabilityAssignment_2_3");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getTcAssignment_3_3(), "rule__ByzantineFaultSubcomponent__TcAssignment_3_3");
-					put(grammarAccess.getByzantineFaultSubcomponentAccess().getIntervAssignment_3_4(), "rule__ByzantineFaultSubcomponent__IntervAssignment_3_4");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_3(), "rule__TriggerCondition__ExprListAssignment_3");
 					put(grammarAccess.getTriggerConditionAccess().getExprListAssignment_4_1(), "rule__TriggerCondition__ExprListAssignment_4_1");
 					put(grammarAccess.getSafetyEqStatementAccess().getLhsAssignment_0_2_0(), "rule__SafetyEqStatement__LhsAssignment_0_2_0");

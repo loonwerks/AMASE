@@ -124,11 +124,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createHWFaultSubcomponentAdapter();
       }
       @Override
-      public Adapter caseByzantineFaultSubcomponent(ByzantineFaultSubcomponent object)
-      {
-        return createByzantineFaultSubcomponentAdapter();
-      }
-      @Override
       public Adapter casePropagationTypeConstraint(PropagationTypeConstraint object)
       {
         return createPropagationTypeConstraintAdapter();
@@ -189,11 +184,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createPropagateStatementAdapter();
       }
       @Override
-      public Adapter caseByzantineFaultStatement(ByzantineFaultStatement object)
-      {
-        return createByzantineFaultStatementAdapter();
-      }
-      @Override
       public Adapter caseFaultCountBehavior(FaultCountBehavior object)
       {
         return createFaultCountBehaviorAdapter();
@@ -232,16 +222,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
       public Adapter casePropagationTypeStatement(PropagationTypeStatement object)
       {
         return createPropagationTypeStatementAdapter();
-      }
-      @Override
-      public Adapter caseFaultyOutputStatement(FaultyOutputStatement object)
-      {
-        return createFaultyOutputStatementAdapter();
-      }
-      @Override
-      public Adapter caseConnectionsStatement(ConnectionsStatement object)
-      {
-        return createConnectionsStatementAdapter();
       }
       @Override
       public Adapter caseasymmetric(asymmetric object)
@@ -496,21 +476,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ByzantineFaultSubcomponent <em>Byzantine Fault Subcomponent</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.ByzantineFaultSubcomponent
-   * @generated
-   */
-  public Adapter createByzantineFaultSubcomponentAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.PropagationTypeConstraint <em>Propagation Type Constraint</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -691,21 +656,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ByzantineFaultStatement <em>Byzantine Fault Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.ByzantineFaultStatement
-   * @generated
-   */
-  public Adapter createByzantineFaultStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultCountBehavior <em>Fault Count Behavior</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -821,36 +771,6 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createPropagationTypeStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.FaultyOutputStatement <em>Faulty Output Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.FaultyOutputStatement
-   * @generated
-   */
-  public Adapter createFaultyOutputStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ConnectionsStatement <em>Connections Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.ConnectionsStatement
-   * @generated
-   */
-  public Adapter createConnectionsStatementAdapter()
   {
     return null;
   }

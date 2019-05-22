@@ -158,13 +158,6 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SafetyPackage.BYZANTINE_FAULT_SUBCOMPONENT:
-      {
-        ByzantineFaultSubcomponent byzantineFaultSubcomponent = (ByzantineFaultSubcomponent)theEObject;
-        T result = caseByzantineFaultSubcomponent(byzantineFaultSubcomponent);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SafetyPackage.PROPAGATION_TYPE_CONSTRAINT:
       {
         PropagationTypeConstraint propagationTypeConstraint = (PropagationTypeConstraint)theEObject;
@@ -275,16 +268,6 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SafetyPackage.BYZANTINE_FAULT_STATEMENT:
-      {
-        ByzantineFaultStatement byzantineFaultStatement = (ByzantineFaultStatement)theEObject;
-        T result = caseByzantineFaultStatement(byzantineFaultStatement);
-        if (result == null) result = caseSpecStatement(byzantineFaultStatement);
-        if (result == null) result = caseAgree_SpecStatement(byzantineFaultStatement);
-        if (result == null) result = caseElement(byzantineFaultStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SafetyPackage.FAULT_COUNT_BEHAVIOR:
       {
         FaultCountBehavior faultCountBehavior = (FaultCountBehavior)theEObject;
@@ -325,7 +308,6 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseDurationStatement(durationStatement);
         if (result == null) result = caseFaultSubcomponent(durationStatement);
         if (result == null) result = caseHWFaultSubcomponent(durationStatement);
-        if (result == null) result = caseByzantineFaultSubcomponent(durationStatement);
         if (result == null) result = caseElement(durationStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -336,7 +318,6 @@ public class SafetySwitch<T> extends Switch<T>
         T result = caseProbabilityStatement(probabilityStatement);
         if (result == null) result = caseFaultSubcomponent(probabilityStatement);
         if (result == null) result = caseHWFaultSubcomponent(probabilityStatement);
-        if (result == null) result = caseByzantineFaultSubcomponent(probabilityStatement);
         if (result == null) result = caseElement(probabilityStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -357,22 +338,6 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = caseFaultSubcomponent(propagationTypeStatement);
         if (result == null) result = caseHWFaultSubcomponent(propagationTypeStatement);
         if (result == null) result = caseElement(propagationTypeStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SafetyPackage.FAULTY_OUTPUT_STATEMENT:
-      {
-        FaultyOutputStatement faultyOutputStatement = (FaultyOutputStatement)theEObject;
-        T result = caseFaultyOutputStatement(faultyOutputStatement);
-        if (result == null) result = caseByzantineFaultSubcomponent(faultyOutputStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SafetyPackage.CONNECTIONS_STATEMENT:
-      {
-        ConnectionsStatement connectionsStatement = (ConnectionsStatement)theEObject;
-        T result = caseConnectionsStatement(connectionsStatement);
-        if (result == null) result = caseByzantineFaultSubcomponent(connectionsStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -637,22 +602,6 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Byzantine Fault Subcomponent</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Byzantine Fault Subcomponent</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseByzantineFaultSubcomponent(ByzantineFaultSubcomponent object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Propagation Type Constraint</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -845,22 +794,6 @@ public class SafetySwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Byzantine Fault Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Byzantine Fault Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseByzantineFaultStatement(ByzantineFaultStatement object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -984,38 +917,6 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T casePropagationTypeStatement(PropagationTypeStatement object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Faulty Output Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Faulty Output Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseFaultyOutputStatement(FaultyOutputStatement object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Connections Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Connections Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseConnectionsStatement(ConnectionsStatement object)
   {
     return null;
   }

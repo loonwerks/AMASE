@@ -73,7 +73,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.ANALYSIS_BEHAVIOR: return createAnalysisBehavior();
       case SafetyPackage.FAULT_SUBCOMPONENT: return createFaultSubcomponent();
       case SafetyPackage.HW_FAULT_SUBCOMPONENT: return createHWFaultSubcomponent();
-      case SafetyPackage.BYZANTINE_FAULT_SUBCOMPONENT: return createByzantineFaultSubcomponent();
       case SafetyPackage.PROPAGATION_TYPE_CONSTRAINT: return createPropagationTypeConstraint();
       case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
@@ -86,7 +85,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.ANALYSIS_STATEMENT: return createAnalysisStatement();
       case SafetyPackage.HW_FAULT_STATEMENT: return createHWFaultStatement();
       case SafetyPackage.PROPAGATE_STATEMENT: return createPropagateStatement();
-      case SafetyPackage.BYZANTINE_FAULT_STATEMENT: return createByzantineFaultStatement();
       case SafetyPackage.FAULT_COUNT_BEHAVIOR: return createFaultCountBehavior();
       case SafetyPackage.PROBABILITY_BEHAVIOR: return createProbabilityBehavior();
       case SafetyPackage.INPUT_STATEMENT: return createInputStatement();
@@ -95,8 +93,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.PROBABILITY_STATEMENT: return createProbabilityStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
       case SafetyPackage.PROPAGATION_TYPE_STATEMENT: return createPropagationTypeStatement();
-      case SafetyPackage.FAULTY_OUTPUT_STATEMENT: return createFaultyOutputStatement();
-      case SafetyPackage.CONNECTIONS_STATEMENT: return createConnectionsStatement();
       case SafetyPackage.ASYMMETRIC: return createasymmetric();
       case SafetyPackage.SYMMETRIC: return createsymmetric();
       case SafetyPackage.PERMANENT_CONSTRAINT: return createPermanentConstraint();
@@ -221,18 +217,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     HWFaultSubcomponentImpl hwFaultSubcomponent = new HWFaultSubcomponentImpl();
     return hwFaultSubcomponent;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public ByzantineFaultSubcomponent createByzantineFaultSubcomponent()
-  {
-    ByzantineFaultSubcomponentImpl byzantineFaultSubcomponent = new ByzantineFaultSubcomponentImpl();
-    return byzantineFaultSubcomponent;
   }
 
   /**
@@ -385,18 +369,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
-  public ByzantineFaultStatement createByzantineFaultStatement()
-  {
-    ByzantineFaultStatementImpl byzantineFaultStatement = new ByzantineFaultStatementImpl();
-    return byzantineFaultStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public FaultCountBehavior createFaultCountBehavior()
   {
     FaultCountBehaviorImpl faultCountBehavior = new FaultCountBehaviorImpl();
@@ -485,30 +457,6 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     PropagationTypeStatementImpl propagationTypeStatement = new PropagationTypeStatementImpl();
     return propagationTypeStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public FaultyOutputStatement createFaultyOutputStatement()
-  {
-    FaultyOutputStatementImpl faultyOutputStatement = new FaultyOutputStatementImpl();
-    return faultyOutputStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public ConnectionsStatement createConnectionsStatement()
-  {
-    ConnectionsStatementImpl connectionsStatement = new ConnectionsStatementImpl();
-    return connectionsStatement;
   }
 
   /**

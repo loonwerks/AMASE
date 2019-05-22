@@ -16,7 +16,6 @@
     <genClasses ecoreClass="Safety.ecore#//AnalysisBehavior"/>
     <genClasses ecoreClass="Safety.ecore#//FaultSubcomponent"/>
     <genClasses ecoreClass="Safety.ecore#//HWFaultSubcomponent"/>
-    <genClasses ecoreClass="Safety.ecore#//ByzantineFaultSubcomponent"/>
     <genClasses ecoreClass="Safety.ecore#//PropagationTypeConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TemporalConstraint"/>
     <genClasses ecoreClass="Safety.ecore#//TriggerCondition">
@@ -59,11 +58,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//PropagateStatement/faultList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//PropagateStatement/comp_path"/>
     </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//ByzantineFaultStatement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ByzantineFaultStatement/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ByzantineFaultStatement/str"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ByzantineFaultStatement/byzantine"/>
-    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//FaultCountBehavior">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultCountBehavior/maxFaults"/>
     </genClasses>
@@ -99,13 +93,6 @@
     <genClasses ecoreClass="Safety.ecore#//PropagationTypeStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//PropagationTypeStatement/pty"/>
     </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//FaultyOutputStatement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultyOutputStatement/fault_out"/>
-    </genClasses>
-    <genClasses ecoreClass="Safety.ecore#//ConnectionsStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ConnectionsStatement/fault_in"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ConnectionsStatement/faultDefName"/>
-    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//asymmetric"/>
     <genClasses ecoreClass="Safety.ecore#//symmetric"/>
     <genClasses ecoreClass="Safety.ecore#//PermanentConstraint"/>
@@ -135,6 +122,19 @@
     <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenRightInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//ByzantineFaultSubcomponent"/>
+    <genClasses ecoreClass="Safety.ecore#//ByzantineFaultStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ByzantineFaultStatement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ByzantineFaultStatement/str"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ByzantineFaultStatement/byzantine"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//FaultyOutputStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultyOutputStatement/fault_out"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ConnectionsStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ConnectionsStatement/fault_in"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ConnectionsStatement/faultDefName"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//PropagateToStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//PropagateToStatement/faultList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute Safety.ecore#//PropagateToStatement/faultDefName"/>
