@@ -1,0 +1,17 @@
+package Receiver
+public
+with Base_Types;
+	system Receiver
+		features
+			input : in data port Base_Types::Boolean;
+			
+			output : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			guarantee "output equals input":
+				output = input;
+			
+		**}	;
+	end Receiver;
+end Receiver;

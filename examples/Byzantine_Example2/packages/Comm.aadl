@@ -1,0 +1,24 @@
+package Comm
+public
+with Base_Types;
+	system Comm
+		features
+			input : in data port Base_Types::Boolean;
+			output : out data port Base_Types::Boolean;
+		
+		annex agree {** 
+			
+			guarantee "output equals input" :
+				output = input;
+			
+		**};
+		annex safety {**
+
+			fault Comm_Fault "output is inverted": Common_Faults.invert_signal {
+				inputs: val_in <- output;     
+				outputs: output <- val_out;    
+				duration: permanent;
+			}	
+		**};
+	end Comm;
+end Comm;
