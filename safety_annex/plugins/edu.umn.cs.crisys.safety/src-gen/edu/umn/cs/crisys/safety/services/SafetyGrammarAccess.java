@@ -212,17 +212,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cDestComp_pathNestedDotIDParserRuleCall_3_14_3_0 = (RuleCall)cDestComp_pathAssignment_3_14_3.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_3_15 = (Keyword)cGroup_3.eContents().get(15);
 		private final Keyword cSemicolonKeyword_3_16 = (Keyword)cGroup_3.eContents().get(16);
-		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
-		private final Action cByzantineFaultStatementAction_4_0 = (Action)cGroup_4.eContents().get(0);
-		private final Keyword cByzantineKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
-		private final Assignment cNameAssignment_4_2 = (Assignment)cGroup_4.eContents().get(2);
-		private final RuleCall cNameIDTerminalRuleCall_4_2_0 = (RuleCall)cNameAssignment_4_2.eContents().get(0);
-		private final Assignment cStrAssignment_4_3 = (Assignment)cGroup_4.eContents().get(3);
-		private final RuleCall cStrSTRINGTerminalRuleCall_4_3_0 = (RuleCall)cStrAssignment_4_3.eContents().get(0);
-		private final Keyword cLeftCurlyBracketKeyword_4_4 = (Keyword)cGroup_4.eContents().get(4);
-		private final Assignment cByzantineAssignment_4_5 = (Assignment)cGroup_4.eContents().get(5);
-		private final RuleCall cByzantineByzantineFaultSubcomponentParserRuleCall_4_5_0 = (RuleCall)cByzantineAssignment_4_5.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_4_6 = (Keyword)cGroup_4.eContents().get(6);
 		
 		//@Override
 		//SpecStatement:
@@ -234,17 +223,14 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	| {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (','
 		//	srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}'
 		//	'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}'
-		//	';'
-		//	| {ByzantineFaultStatement} 'byzantine' name=ID str=STRING? '{'
-		//	byzantine+=ByzantineFaultSubcomponent* '}';
+		//	';';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
 		//{AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior | {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
 		//'{' faultDefinitions+=HWFaultSubcomponent* '}' | {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@'
 		//srcComp_path+=NestedDotID (',' srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 'to' '{' destFaultList+=ID '@'
-		//destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';' | {ByzantineFaultStatement}
-		//'byzantine' name=ID str=STRING? '{' byzantine+=ByzantineFaultSubcomponent* '}'
+		//destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}'
@@ -446,39 +432,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 		//';'
 		public Keyword getSemicolonKeyword_3_16() { return cSemicolonKeyword_3_16; }
-
-		//{ByzantineFaultStatement} 'byzantine' name=ID str=STRING? '{' byzantine+=ByzantineFaultSubcomponent* '}'
-		public Group getGroup_4() { return cGroup_4; }
-
-		//{ByzantineFaultStatement}
-		public Action getByzantineFaultStatementAction_4_0() { return cByzantineFaultStatementAction_4_0; }
-
-		//'byzantine'
-		public Keyword getByzantineKeyword_4_1() { return cByzantineKeyword_4_1; }
-
-		//name=ID
-		public Assignment getNameAssignment_4_2() { return cNameAssignment_4_2; }
-
-		//ID
-		public RuleCall getNameIDTerminalRuleCall_4_2_0() { return cNameIDTerminalRuleCall_4_2_0; }
-
-		//str=STRING?
-		public Assignment getStrAssignment_4_3() { return cStrAssignment_4_3; }
-
-		//STRING
-		public RuleCall getStrSTRINGTerminalRuleCall_4_3_0() { return cStrSTRINGTerminalRuleCall_4_3_0; }
-
-		//'{'
-		public Keyword getLeftCurlyBracketKeyword_4_4() { return cLeftCurlyBracketKeyword_4_4; }
-
-		//byzantine+=ByzantineFaultSubcomponent*
-		public Assignment getByzantineAssignment_4_5() { return cByzantineAssignment_4_5; }
-
-		//ByzantineFaultSubcomponent
-		public RuleCall getByzantineByzantineFaultSubcomponentParserRuleCall_4_5_0() { return cByzantineByzantineFaultSubcomponentParserRuleCall_4_5_0; }
-
-		//'}'
-		public Keyword getRightCurlyBracketKeyword_4_6() { return cRightCurlyBracketKeyword_4_6; }
 	}
 
 	public class AnalysisBehaviorElements extends AbstractParserRuleElementFinder {
@@ -923,155 +876,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 		//';'
 		public Keyword getSemicolonKeyword_2_4() { return cSemicolonKeyword_2_4; }
-	}
-
-	public class ByzantineFaultSubcomponentElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.ByzantineFaultSubcomponent");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Action cFaultyOutputStatementAction_0_0 = (Action)cGroup_0.eContents().get(0);
-		private final Keyword cFaulty_outputKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final Keyword cColonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
-		private final Assignment cFault_outAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
-		private final RuleCall cFault_outIDTerminalRuleCall_0_3_0 = (RuleCall)cFault_outAssignment_0_3.eContents().get(0);
-		private final Keyword cSemicolonKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Action cConnectionsStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
-		private final Keyword cConnectionsKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final Keyword cColonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final Assignment cFault_inAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final RuleCall cFault_inNestedDotIDParserRuleCall_1_3_0 = (RuleCall)cFault_inAssignment_1_3.eContents().get(0);
-		private final Keyword cColonKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
-		private final Assignment cFaultDefNameAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
-		private final RuleCall cFaultDefNameNestedDotIDParserRuleCall_1_5_0 = (RuleCall)cFaultDefNameAssignment_1_5.eContents().get(0);
-		private final Keyword cSemicolonKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
-		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Action cProbabilityStatementAction_2_0 = (Action)cGroup_2.eContents().get(0);
-		private final Keyword cProbabilityKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
-		private final Keyword cColonKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
-		private final Assignment cProbabilityAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
-		private final RuleCall cProbabilityREAL_LITTerminalRuleCall_2_3_0 = (RuleCall)cProbabilityAssignment_2_3.eContents().get(0);
-		private final Keyword cSemicolonKeyword_2_4 = (Keyword)cGroup_2.eContents().get(4);
-		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Action cDurationStatementAction_3_0 = (Action)cGroup_3.eContents().get(0);
-		private final Keyword cDurationKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
-		private final Keyword cColonKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
-		private final Assignment cTcAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
-		private final RuleCall cTcTemporalConstraintParserRuleCall_3_3_0 = (RuleCall)cTcAssignment_3_3.eContents().get(0);
-		private final Assignment cIntervAssignment_3_4 = (Assignment)cGroup_3.eContents().get(4);
-		private final RuleCall cIntervIntervalParserRuleCall_3_4_0 = (RuleCall)cIntervAssignment_3_4.eContents().get(0);
-		private final Keyword cSemicolonKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
-		
-		//ByzantineFaultSubcomponent:
-		//	{FaultyOutputStatement} 'faulty_output' ':' fault_out=ID ';'
-		//	| {ConnectionsStatement} 'connections' ':' fault_in=NestedDotID ':' faultDefName=NestedDotID ';'
-		//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';';
-		@Override public ParserRule getRule() { return rule; }
-
-		//{FaultyOutputStatement} 'faulty_output' ':' fault_out=ID ';' | {ConnectionsStatement} 'connections' ':'
-		//fault_in=NestedDotID ':' faultDefName=NestedDotID ';' | {ProbabilityStatement} 'probability' ':' probability=REAL_LIT
-		//';' | {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
-		public Alternatives getAlternatives() { return cAlternatives; }
-
-		//{FaultyOutputStatement} 'faulty_output' ':' fault_out=ID ';'
-		public Group getGroup_0() { return cGroup_0; }
-
-		//{FaultyOutputStatement}
-		public Action getFaultyOutputStatementAction_0_0() { return cFaultyOutputStatementAction_0_0; }
-
-		//'faulty_output'
-		public Keyword getFaulty_outputKeyword_0_1() { return cFaulty_outputKeyword_0_1; }
-
-		//':'
-		public Keyword getColonKeyword_0_2() { return cColonKeyword_0_2; }
-
-		//fault_out=ID
-		public Assignment getFault_outAssignment_0_3() { return cFault_outAssignment_0_3; }
-
-		//ID
-		public RuleCall getFault_outIDTerminalRuleCall_0_3_0() { return cFault_outIDTerminalRuleCall_0_3_0; }
-
-		//';'
-		public Keyword getSemicolonKeyword_0_4() { return cSemicolonKeyword_0_4; }
-
-		//{ConnectionsStatement} 'connections' ':' fault_in=NestedDotID ':' faultDefName=NestedDotID ';'
-		public Group getGroup_1() { return cGroup_1; }
-
-		//{ConnectionsStatement}
-		public Action getConnectionsStatementAction_1_0() { return cConnectionsStatementAction_1_0; }
-
-		//'connections'
-		public Keyword getConnectionsKeyword_1_1() { return cConnectionsKeyword_1_1; }
-
-		//':'
-		public Keyword getColonKeyword_1_2() { return cColonKeyword_1_2; }
-
-		//fault_in=NestedDotID
-		public Assignment getFault_inAssignment_1_3() { return cFault_inAssignment_1_3; }
-
-		//NestedDotID
-		public RuleCall getFault_inNestedDotIDParserRuleCall_1_3_0() { return cFault_inNestedDotIDParserRuleCall_1_3_0; }
-
-		//':'
-		public Keyword getColonKeyword_1_4() { return cColonKeyword_1_4; }
-
-		//faultDefName=NestedDotID
-		public Assignment getFaultDefNameAssignment_1_5() { return cFaultDefNameAssignment_1_5; }
-
-		//NestedDotID
-		public RuleCall getFaultDefNameNestedDotIDParserRuleCall_1_5_0() { return cFaultDefNameNestedDotIDParserRuleCall_1_5_0; }
-
-		//';'
-		public Keyword getSemicolonKeyword_1_6() { return cSemicolonKeyword_1_6; }
-
-		//{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-		public Group getGroup_2() { return cGroup_2; }
-
-		//{ProbabilityStatement}
-		public Action getProbabilityStatementAction_2_0() { return cProbabilityStatementAction_2_0; }
-
-		//'probability'
-		public Keyword getProbabilityKeyword_2_1() { return cProbabilityKeyword_2_1; }
-
-		//':'
-		public Keyword getColonKeyword_2_2() { return cColonKeyword_2_2; }
-
-		//probability=REAL_LIT
-		public Assignment getProbabilityAssignment_2_3() { return cProbabilityAssignment_2_3; }
-
-		//REAL_LIT
-		public RuleCall getProbabilityREAL_LITTerminalRuleCall_2_3_0() { return cProbabilityREAL_LITTerminalRuleCall_2_3_0; }
-
-		//';'
-		public Keyword getSemicolonKeyword_2_4() { return cSemicolonKeyword_2_4; }
-
-		//{DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
-		public Group getGroup_3() { return cGroup_3; }
-
-		//{DurationStatement}
-		public Action getDurationStatementAction_3_0() { return cDurationStatementAction_3_0; }
-
-		//'duration'
-		public Keyword getDurationKeyword_3_1() { return cDurationKeyword_3_1; }
-
-		//':'
-		public Keyword getColonKeyword_3_2() { return cColonKeyword_3_2; }
-
-		//tc=TemporalConstraint
-		public Assignment getTcAssignment_3_3() { return cTcAssignment_3_3; }
-
-		//TemporalConstraint
-		public RuleCall getTcTemporalConstraintParserRuleCall_3_3_0() { return cTcTemporalConstraintParserRuleCall_3_3_0; }
-
-		//interv=Interval?
-		public Assignment getIntervAssignment_3_4() { return cIntervAssignment_3_4; }
-
-		//Interval
-		public RuleCall getIntervIntervalParserRuleCall_3_4_0() { return cIntervIntervalParserRuleCall_3_4_0; }
-
-		//';'
-		public Keyword getSemicolonKeyword_3_5() { return cSemicolonKeyword_3_5; }
 	}
 
 	public class PropagationTypeConstraintElements extends AbstractParserRuleElementFinder {
@@ -1614,7 +1418,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	private final AnalysisBehaviorElements pAnalysisBehavior;
 	private final FaultSubcomponentElements pFaultSubcomponent;
 	private final HWFaultSubcomponentElements pHWFaultSubcomponent;
-	private final ByzantineFaultSubcomponentElements pByzantineFaultSubcomponent;
 	private final PropagationTypeConstraintElements pPropagationTypeConstraint;
 	private final TemporalConstraintElements pTemporalConstraint;
 	private final TriggerConditionElements pTriggerCondition;
@@ -1644,7 +1447,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		this.pAnalysisBehavior = new AnalysisBehaviorElements();
 		this.pFaultSubcomponent = new FaultSubcomponentElements();
 		this.pHWFaultSubcomponent = new HWFaultSubcomponentElements();
-		this.pByzantineFaultSubcomponent = new ByzantineFaultSubcomponentElements();
 		this.pPropagationTypeConstraint = new PropagationTypeConstraintElements();
 		this.pTemporalConstraint = new TemporalConstraintElements();
 		this.pTriggerCondition = new TriggerConditionElements();
@@ -1757,9 +1559,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	| {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (','
 	//	srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}'
 	//	'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}'
-	//	';'
-	//	| {ByzantineFaultStatement} 'byzantine' name=ID str=STRING? '{'
-	//	byzantine+=ByzantineFaultSubcomponent* '}';
+	//	';';
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
 	}
@@ -1806,19 +1606,6 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getHWFaultSubcomponentRule() {
 		return getHWFaultSubcomponentAccess().getRule();
-	}
-
-	//ByzantineFaultSubcomponent:
-	//	{FaultyOutputStatement} 'faulty_output' ':' fault_out=ID ';'
-	//	| {ConnectionsStatement} 'connections' ':' fault_in=NestedDotID ':' faultDefName=NestedDotID ';'
-	//	| {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';';
-	public ByzantineFaultSubcomponentElements getByzantineFaultSubcomponentAccess() {
-		return pByzantineFaultSubcomponent;
-	}
-	
-	public ParserRule getByzantineFaultSubcomponentRule() {
-		return getByzantineFaultSubcomponentAccess().getRule();
 	}
 
 	//PropagationTypeConstraint:

@@ -20,7 +20,7 @@ package edu.umn.cs.crisys.safety.safety;
  * @model
  * @generated
  */
-public interface DurationStatement extends FaultSubcomponent, HWFaultSubcomponent, ByzantineFaultSubcomponent
+public interface DurationStatement extends FaultSubcomponent, HWFaultSubcomponent
 {
   /**
    * Returns the value of the '<em><b>Tc</b></em>' containment reference.

@@ -39,8 +39,6 @@ SpecStatement:
 			srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 
 			'to' '{' destFaultList+= ID '@' destComp_path+=NestedDotID 
 			(',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
-	|	{ByzantineFaultStatement} 'byzantine' name=ID (str=STRING)? '{'
-			byzantine+=(ByzantineFaultSubcomponent)* '}'
 ;
 	
 AnalysisBehavior : 
@@ -65,13 +63,6 @@ HWFaultSubcomponent returns HWFaultSubcomponent:
  	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
  	| 	{PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';' 
 ;	
- 
-ByzantineFaultSubcomponent returns ByzantineFaultSubcomponent:
-	  	{FaultyOutputStatement} 'faulty_output' ':' fault_out=ID ';'
-	| 	{ConnectionsStatement} 'connections' ':' fault_in=NestedDotID ':' faultDefName=NestedDotID ';'
-	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
-	|	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'
-;
 
 PropagationTypeConstraint:
 	  	{asymmetric} 'asymmetric'
