@@ -2,7 +2,12 @@ package Common_Faults
 public
 	
 	annex agree {**
-	    node invert_signal(val_in: bool, trigger: bool) returns (val_out:bool);
+	    node invert_signal1(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (not val_in) else val_in;
+		tel;
+		
+		node invert_signal2(val_in: bool, trigger: bool) returns (val_out:bool);
 		let
 	  		val_out = if trigger then (not val_in) else val_in;
 		tel;

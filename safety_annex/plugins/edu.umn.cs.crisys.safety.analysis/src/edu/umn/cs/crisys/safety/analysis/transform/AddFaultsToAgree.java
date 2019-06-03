@@ -29,8 +29,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * If we have the transformFlag selected, then we will make changes to the program
 	 * and send it back. If not, the program is returned unchanged.
 	 *
-	 * (2) AddFaultsToAgree.transform calls AddFaultsToNodeVisitor.visit(program) and then visit is called
-	 * for the node from there. The AddFaultsToNodeVisitor.visit(node) method will set the "FaultTreeFlag" for that node
+	 * (2) AddFaultsToAgree.transform calls AddFaultsToNodeVisitor.visit(program)
+	 * and then visit is called for the node from there.
+	 * The AddFaultsToNodeVisitor.visit(node) method will set the "FaultTreeFlag" for that node
 	 * to true. This tells us in later agree methods that we are generating the soteria model
 	 * and hence we add the ivcs differently for that node. (Lines 159-161)
 	 *

@@ -43,9 +43,9 @@ renames Comm::all;
 			receiver2_to_out: port receiver2.output -> output2;
 		
 		annex safety {**
-      		analyze : max 0 fault
+      		analyze : max 1 fault
       		--propagate_from:
-      		--{Sender_Fault@Sender.Sender} to {Comm_Fault@Comm.Comm};
+      		--{Sender_Fault@Sender} to {Comm_Fault@Comm1};
    		**};
 			
 	end TopSystem.impl;
