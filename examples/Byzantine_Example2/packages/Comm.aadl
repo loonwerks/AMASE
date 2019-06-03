@@ -14,10 +14,11 @@ with Base_Types;
 		**};
 		annex safety {**
 
-			fault Comm_Fault "output is inverted": Common_Faults.invert_signal {
+			fault Comm_Fault "output is inverted": Common_Faults.invert_signal2 {
 				inputs: val_in <- output;     
 				outputs: output <- val_out;    
 				duration: permanent;
+				propagate_type: symmetric;
 			}	
 		**};
 	end Comm;

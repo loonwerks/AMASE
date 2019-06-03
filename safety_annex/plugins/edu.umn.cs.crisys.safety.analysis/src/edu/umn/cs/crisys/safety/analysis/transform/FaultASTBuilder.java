@@ -1,9 +1,12 @@
 package edu.umn.cs.crisys.safety.analysis.transform;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.impl.DataPortImpl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
@@ -27,10 +30,12 @@ import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
 import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
+import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
+import edu.umn.cs.crisys.safety.safety.asymmetric;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
@@ -48,7 +53,8 @@ public class FaultASTBuilder {
 	// globalLustreNodes will be updated occasionally as faults are added
 	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
 	private List<Node> globalLustreNodes;
-
+	// Maps the asymmetric fault statement to corresponding connections in AADL.
+	private Map<FaultStatement, List<DataPortImpl>> mapAsymFaultToConnections = new HashMap<FaultStatement, List<DataPortImpl>>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -213,6 +219,11 @@ public class FaultASTBuilder {
 		fault.probability = Double.parseDouble(stmt.getProbability());
 	}
 
+	private void addPropagationType(Fault fault, PropagationTypeStatement pts) {
+		fault.propType = pts;
+
+	}
+
 	public void processFaultSubcomponents(Fault fault) {
 		for (FaultSubcomponent fs : fault.faultStatement.getFaultDefinitions()) {
 			if (fs instanceof DurationStatement) {
@@ -227,11 +238,14 @@ public class FaultASTBuilder {
 				addTrigger(fault, (TriggerStatement)fs);
 			} else if (fs instanceof ProbabilityStatement) {
 				addProbability(fault, (ProbabilityStatement)fs);
+			} else if (fs instanceof PropagationTypeStatement) {
+				addPropagationType(fault, (PropagationTypeStatement) fs);
 			} else {
 				throw new SafetyException("Unrecognized Fault Statement type");
 			}
 		}
 	}
+
 
 	public String mkUniqueFaultId(FaultStatement fstmt) {
 		faultCounter++;
@@ -239,9 +253,89 @@ public class FaultASTBuilder {
 		return elem;
 	}
 
-	public Fault buildFault(FaultStatement fstmt) {
+	public Fault processFault(FaultStatement fstmt) {
+
+		// If one of the fault subcomponents in this statement
+		// is asymmetric prop type, then we handle the building of
+		// the fault slightly differently. This boolean flag
+		// is used to determine which type we have.
+		boolean asymFlag = false;
+		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
+			if (fs instanceof PropagationTypeStatement) {
+				if (((PropagationTypeStatement) fs).getPty() instanceof asymmetric) {
+					asymFlag = true;
+				} else {
+					asymFlag = false;
+				}
+				break;
+			}
+		}
+
+		if (!asymFlag) {
+			return buildSymmetricFault(fstmt);
+		} else {
+			return buildAsymmetricFault(fstmt);
+		}
+
+	}
+
+	/*
+	 * buildSymmetricFault creates unique string name,
+	 * creates new fault for this fault statement,
+	 * builds the fault node for Lustre, and processes the
+	 * fault subcomponents. Returns symmetric fault.
+	 */
+	private Fault buildSymmetricFault(FaultStatement fstmt) {
+
 		String faultId = mkUniqueFaultId(fstmt);
-		//incorporate user-given fault name in the fault info
+		// incorporate user-given fault name in the fault info
+		String faultName = fstmt.getName();
+
+		Fault fault = new Fault(fstmt, faultId, faultName);
+		setFaultNode(fstmt, fault);
+		processFaultSubcomponents(fault);
+		return fault;
+	}
+
+	/*
+	 * buildAsymmetricFault
+	 */
+	private Fault buildAsymmetricFault(FaultStatement fstmt) {
+
+		DataPortImpl senderOutput = null;
+		DataPortImpl destination = null;
+
+		// 1.Find out how many components the node is connected to.
+		// This is how many communication nodes we need to make.
+
+		// Get output that fault statement is linked to
+		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
+			if (fs instanceof OutputStatement) {
+				List<NestedDotID> nominalConns = ((OutputStatement) fs).getNom_conn();
+				if ((nominalConns.isEmpty()) || (nominalConns.size() > 1)) {
+					new SafetyException("Cannot define asymmetric fault on zero OR more than one output.");
+				} else {
+					senderOutput = (DataPortImpl) nominalConns.get(0).getBase();
+				}
+				break;
+			}
+		}
+
+		// Get list of connections from parent component that senderOutput is connected to.
+//		TreeIterator<EObject> iterate = this.agreeNode.compInst.eContainer().eAllContents();
+
+//		for (ConnectionInstance ci : this.agreeNode.compInst.eContainer().) {
+//			FeatureInstance fi = (FeatureInstance) ci.getSource();
+//
+//		}
+
+		Node commNode = SafetyUtil.createCommNode(this.agreeNode, fstmt, 1);
+
+		// Add node to lustre
+		this.addGlobalLustreNode(commNode);
+
+		String faultId = mkUniqueFaultId(fstmt);
+		// incorporate user-given fault name in the fault info
 		String faultName = fstmt.getName();
 
 		Fault fault = new Fault(fstmt, faultId, faultName);
@@ -250,5 +344,6 @@ public class FaultASTBuilder {
 
 		return fault;
 	}
+
 
 }

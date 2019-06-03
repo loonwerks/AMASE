@@ -41,6 +41,7 @@ import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
+import edu.umn.cs.crisys.safety.safety.symmetric;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.BinaryExpr;
@@ -174,17 +175,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (AddFaultsToAgree.getTransformFlag() == 2) {
 			nb.setFaultTreeFlag(true);
 		}
-		addNominalVars(node, nb);
-		addFaultInputs(faults, nb);
-		addHWFaultInputs(hwFaults, nb);
-		addFaultLocalEqsAndAsserts(faults, nb);
-		addFaultNodeEqs(faults, nb);
 
-		// Add new method for byzantine faults here. (?)
-		// Make new lustre nodes for each connection.
-		// Define new faults for these nodes.
-		// Make sure those faults aren't counted in final fault active count.
-		// Make sure those faults are (possibly) triggered by the active byzantine fault.
+		for (Fault f : faults) {
+			if((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
+				addNominalVars(node, nb);
+				addFaultInputs(faults, nb);
+				addHWFaultInputs(hwFaults, nb);
+				addFaultLocalEqsAndAsserts(faults, nb);
+				addFaultNodeEqs(faults, nb);
+			} else {
+				System.out.println("Have asymmetric fault.");
+				addFaultInputs(faults, nb);
+			}
+		}
 
 		if (isTop) {
 			topNode = node;
@@ -341,6 +344,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				Expr repl = faultToActual(pair.f, pair.ex);
 				toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 
+				// Creates Lustre stmt:
+				// (if fault__trigger then fault_1__node__val_out
+				// else __fault__nominal__output
 				if (faultsForSameOutput.isEmpty()) {
 					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
 					resultExpr = new IfThenElseExpr(ftTrigger, toAssign, defaultExpr);
@@ -478,9 +484,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		HashMap<String, List<Pair>> outputMap = new HashMap<String, List<Pair>>();
 		String id = "";
 		for (Fault f : faults) {
-			for (Expr ide : f.faultOutputMap.keySet()) {
-				id = AgreeUtils.getExprRoot(ide).id;
-				addIdToMap(outputMap, ide, id, f);
+			// If the fault is asymmetric, we do not
+			// want to add the fault information
+			// to the output. We only add this information to the
+			// outputMap when it is symmetric propagation type.
+			// The formulation of the if statement is "not (null or symmetric)"
+			// Because for now I would like to avoid forcing the
+			// user to specify the prop statement.
+			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
+				for (Expr ide : f.faultOutputMap.keySet()) {
+					id = AgreeUtils.getExprRoot(ide).id;
+					addIdToMap(outputMap, ide, id, f);
+				}
 			}
 		}
 		return outputMap;
@@ -537,7 +552,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (s instanceof FaultStatement) {
 				FaultStatement fs = (FaultStatement) s;
 				FaultASTBuilder builder = new FaultASTBuilder(globalLustreNodes, node);
-				Fault safetyFault = builder.buildFault(fs);
+				// Process fault determines if we have a
+				// symmetric or asymmetric fault and builds it accordingly.
+				Fault safetyFault = builder.processFault(fs);
 				faults.add(safetyFault);
 			}
 		}

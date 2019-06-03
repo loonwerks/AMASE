@@ -27,11 +27,15 @@ with Base_Types;
 		--asymmetric fault
 		annex safety {**
 
-			fault Sender_Fault "output is inverted": Common_Faults.invert_signal {
+--			HW_fault Sender_Fault "Sender failed": {
+--				probability: 1.0E-5;
+--				duration: permanent;
+--			}
+			fault Sender_Fault "output is inverted": Common_Faults.invert_signal1 {
 				inputs: val_in <- output;     
 				outputs: output <- val_out;    
 				duration: permanent;
-				--specify byzantine fault
+				propagate_type: asymmetric;
 			}	
 		**};
 	end Sender;
