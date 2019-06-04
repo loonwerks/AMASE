@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.impl.DataPortImpl;
+import org.osate.aadl2.instance.ConnectionInstance;
+import org.osate.aadl2.instance.ConnectionInstanceEnd;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
@@ -61,7 +64,7 @@ public class FaultASTBuilder {
 	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
 	private List<Node> globalLustreNodes;
 	// Maps the asymmetric fault statement to corresponding connections in AADL.
-	private Map<FaultStatement, List<DataPortImpl>> mapAsymFaultToConnections = new HashMap<FaultStatement, List<DataPortImpl>>();
+	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -310,7 +313,7 @@ public class FaultASTBuilder {
 	private Fault buildAsymmetricFault(FaultStatement fstmt) {
 
 		DataPortImpl senderOutput = null;
-		DataPortImpl destination = null;
+		List<ConnectionInstanceEnd> senderConnections = new ArrayList<>();
 
 		// 1. Create fault for Sender node
 		// We will use this fault to help define each communication
@@ -340,12 +343,16 @@ public class FaultASTBuilder {
 		}
 
 		// Get list of connections from parent component that senderOutput is connected to.
-//		TreeIterator<EObject> iterate = this.agreeNode.compInst.eContainer().eAllContents();
-
-//		for (ConnectionInstance ci : this.agreeNode.compInst.eContainer().) {
-//			FeatureInstance fi = (FeatureInstance) ci.getSource();
-//
-//		}
+		String searchFor = senderOutput.getFullName();
+		if (this.agreeNode.compInst.eContainer() instanceof SystemInstanceImpl) {
+			SystemInstanceImpl parentContainer = (SystemInstanceImpl) this.agreeNode.compInst.eContainer();
+			for (ConnectionInstance ci : parentContainer.allConnectionInstances()) {
+				if (ci.getFullName().contains(searchFor)) {
+					senderConnections.add(ci.getDestination());
+				}
+			}
+			mapAsymFaultToConnections.put(fault, senderConnections);
+		}
 
 		// 3. Create the communication nodes.
 		// For loop goes through the connections collected in step 2
@@ -354,7 +361,7 @@ public class FaultASTBuilder {
 		// link the fault to the comm node as it is inserted into Lustre.
 		//
 		// 4. Add node to Lustre as it is created (inside loop).
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < senderConnections.size(); i++) {
 			Node commNode = createCommNode(this.agreeNode, fstmt, fault, i);
 			// 4. Add node to lustre
 			this.addGlobalLustreNode(commNode);
@@ -485,7 +492,6 @@ public class FaultASTBuilder {
 		BinaryExpr binEx3 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx2);
 		BinaryExpr binEx4 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx3);
 
-		// binEx6
 		// ex5 builds the following:
 		// (if fault_trigger then fault_node_val_out else fault_nominal) and (binEx4)
 		IdExpr cond = new IdExpr("fault__trigger__" + fault.id);
@@ -496,13 +502,12 @@ public class FaultASTBuilder {
 		// Add fault trigger to nodeArg list
 		nodeArgs.add(cond);
 
+		// binEx6:
 		// __ASSERT = (if fault_trigger then fault_node_val_out else fault_nominal)
 		// and (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
 		node.addEquation(new IdExpr("__ASSERT"), binEx6);
 
 		// Construct the node call expression
-//		AgreeEquation eq = new AgreeEquation(lhs,
-//				new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
 		Expr nodeCall = new NodeCallExpr(fault.faultNode.id, nodeArgs);
 		// Now create equation to add
 		node.addEquation(new Equation(faultNodeOutputId, nodeCall));
