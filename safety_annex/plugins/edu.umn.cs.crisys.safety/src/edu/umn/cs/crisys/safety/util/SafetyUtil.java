@@ -18,25 +18,17 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
-import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
-import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.ArrayUpdateExpr;
-import jkind.lustre.BinaryExpr;
-import jkind.lustre.BinaryOp;
-import jkind.lustre.BoolExpr;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
-import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.RecordUpdateExpr;
-import jkind.lustre.Type;
-import jkind.lustre.builders.NodeBuilder;
 
 public class SafetyUtil {
 
@@ -62,150 +54,7 @@ public class SafetyUtil {
 		return (NodeDefExpr)defNameSub;
 	}
 
-	// Create Lustre node for asymmetric fault connection nodes.
-	// Method parameter "node" corresponds to the "sender" node
-	// that has the fan out connections.
-	// This is needed to access the type of connection for input/output
-	// of this node.
-	public static Node createCommNode(AgreeNode node, FaultStatement fstmt, int connNumber) {
 
-//		// 1. Create unique node name
-//
-//		AgreeNodeBuilder newNode = new AgreeNodeBuilder("asym_conn_node_"+connNumber);
-//
-//		// 2. Get the output/input type from the node and the fstmt
-//		List<AgreeVar> nodeOutputs = node.outputs;
-//		AgreeVar outputOfInterest = null;
-//		// Assume asymmetric fault first in list.
-//		// Will have to display this to user somewhere.
-//		List<NestedDotID> nomFaultConn = new ArrayList<NestedDotID>();
-//
-//		for(FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
-//			if(fs instanceof OutputStatement) {
-//				nomFaultConn = ((OutputStatement) fs).getNom_conn();
-//			}
-//		}
-//
-//		for(AgreeVar agreeVar : nodeOutputs) {
-//			String temp = agreeVar.id;
-//			if(temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
-//				System.out.println("Found it: "+temp+" and "+nomFaultConn.get(0).getBase().getName());
-//				outputOfInterest = agreeVar;
-//			}
-//		}
-//
-//		// The output from the sender node is the input to this new node.
-//		// We must only change the id string to reflect that it is now an input.
-//		AgreeVar connNodeIn = new AgreeVar("commNode" + connNumber + "_input", outputOfInterest.type,
-//				outputOfInterest.reference, outputOfInterest.compInst, outputOfInterest.featInst);
-//		newNode.addInput(connNodeIn);
-//
-//		// The output of the new node is the input to what the sender
-//		// is connecting to (it takes sender's outputs as its own).
-//		AgreeVar connNodeOut = new AgreeVar("commNode" + connNumber + "_output", outputOfInterest.type,
-//				outputOfInterest.reference, outputOfInterest.compInst, outputOfInterest.featInst);
-//		newNode.addOutput(connNodeOut);
-//
-//		// New agree statement (guarantee)
-//		IdExpr in = new IdExpr("commNode_input");
-//		IdExpr out = new IdExpr("commNode_output");
-//
-//		Expr binEx = new BinaryExpr(out, BinaryOp.EQUAL, in);
-//		AgreeStatement guar = new AgreeStatement("Comm node " + connNumber + ": in = out", binEx,
-//				outputOfInterest.reference);
-//		newNode.addGuarantee(guar);
-//
-//		return newNode.build();
-
-		// 1. Create unique node name
-
-		NodeBuilder newNode = new NodeBuilder("asym_conn_node_" + connNumber);
-
-		// 2. Get the output/input type from the node and the fstmt
-		List<AgreeVar> nodeOutputs = node.outputs;
-		AgreeVar outputOfInterest = null;
-		// Assume asymmetric fault first in list.
-		// Will have to display this to user somewhere.
-		List<NestedDotID> nomFaultConn = new ArrayList<NestedDotID>();
-
-		for(FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
-			if(fs instanceof OutputStatement) {
-				nomFaultConn = ((OutputStatement) fs).getNom_conn();
-			}
-		}
-
-		for(AgreeVar agreeVar : nodeOutputs) {
-			String temp = agreeVar.id;
-			if(temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
-				System.out.println("Found it: "+temp+" and "+nomFaultConn.get(0).getBase().getName());
-				outputOfInterest = agreeVar;
-			}
-		}
-
-		// Now the same type on the AgreeNode outputOfInterest
-		// is the same as what we will create for the type of
-		// both input and output of commNode.
-		Type type = outputOfInterest.type;
-
-		newNode = createInputForCommNode(newNode, outputOfInterest.type);
-		newNode = createOutputForCommNode(newNode);
-		newNode = createLocalsForCommNode(newNode);
-		newNode = createEquationsForCommNode(newNode);
-
-		return newNode.build();
-	}
-
-	/*
-	 * creates inputs for new communication node.
-	 */
-	public static NodeBuilder createInputForCommNode(NodeBuilder node, Type type) {
-
-		node.createInput("commNode_input", type);
-		node.createInput("commNode_output", type);
-		node.createInput("__ASSUME__HIST", NamedType.BOOL);
-		node.createInput("time", NamedType.REAL);
-		return node;
-	}
-
-	/*
-	 * creates outputs for new communication node.
-	 */
-	public static NodeBuilder createOutputForCommNode(NodeBuilder node) {
-
-		node.createOutput("__ASSERT", NamedType.BOOL);
-		return node;
-	}
-
-	/*
-	 * creates locals for new communication node.
-	 */
-	public static NodeBuilder createLocalsForCommNode(NodeBuilder node) {
-
-		node.createLocal("__GUARANTEE0", NamedType.BOOL);
-		return node;
-	}
-
-	/*
-	 * creates equations for new communication node.
-	 */
-	public static NodeBuilder createEquationsForCommNode(NodeBuilder node) {
-
-		// assign guarantee0 : out = in
-		Expr binEx = new BinaryExpr(new IdExpr("commNode_output"), BinaryOp.EQUAL, new IdExpr("commNode_input"));
-		IdExpr guar = new IdExpr("__GUARANTEE0");
-		node.addEquation(guar, binEx);
-
-		// Assign assert
-		BoolExpr trueExpr = new BoolExpr(true);
-		IdExpr assumeHist = new IdExpr("__ASSUME__HIST");
-		BinaryExpr binEx1 = new BinaryExpr(guar, BinaryOp.AND, trueExpr);
-		BinaryExpr binEx2 = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binEx1);
-		BinaryExpr binEx3 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx2);
-		BinaryExpr binEx4 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx3);
-		node.addEquation(new IdExpr("__ASSERT"), binEx4);
-
-		return node;
-	}
 
 	/*
 	 * getSafetyAnnex

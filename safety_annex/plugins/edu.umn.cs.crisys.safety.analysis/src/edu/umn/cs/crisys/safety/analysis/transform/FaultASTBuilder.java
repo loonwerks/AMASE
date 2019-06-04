@@ -39,12 +39,19 @@ import edu.umn.cs.crisys.safety.safety.asymmetric;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
+import jkind.lustre.BoolExpr;
+import jkind.lustre.Equation;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
+import jkind.lustre.IfThenElseExpr;
+import jkind.lustre.NamedType;
 import jkind.lustre.Node;
+import jkind.lustre.NodeCallExpr;
 import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.TupleExpr;
+import jkind.lustre.Type;
 import jkind.lustre.VarDecl;
+import jkind.lustre.builders.NodeBuilder;
 
 public class FaultASTBuilder {
 
@@ -305,7 +312,18 @@ public class FaultASTBuilder {
 		DataPortImpl senderOutput = null;
 		DataPortImpl destination = null;
 
-		// 1.Find out how many components the node is connected to.
+		// 1. Create fault for Sender node
+		// We will use this fault to help define each communication
+		// node.
+		String faultId = mkUniqueFaultId(fstmt);
+		// incorporate user-given fault name in the fault info
+		String faultName = fstmt.getName();
+
+		Fault fault = new Fault(fstmt, faultId, faultName);
+		setFaultNode(fstmt, fault);
+		processFaultSubcomponents(fault);
+
+		// 2. Find out how many components the node is connected to.
 		// This is how many communication nodes we need to make.
 
 		// Get output that fault statement is linked to
@@ -329,21 +347,167 @@ public class FaultASTBuilder {
 //
 //		}
 
-		Node commNode = SafetyUtil.createCommNode(this.agreeNode, fstmt, 1);
+		// 3. Create the communication nodes.
+		// For loop goes through the connections collected in step 2
+		// and creates a commNode specific for each connection.
+		// The fault is passed into the creation method in order to
+		// link the fault to the comm node as it is inserted into Lustre.
+		//
+		// 4. Add node to Lustre as it is created (inside loop).
+		for (int i = 0; i < 3; i++) {
+			Node commNode = createCommNode(this.agreeNode, fstmt, fault, i);
+			// 4. Add node to lustre
+			this.addGlobalLustreNode(commNode);
+		}
 
-		// Add node to lustre
-		this.addGlobalLustreNode(commNode);
 
-		String faultId = mkUniqueFaultId(fstmt);
-		// incorporate user-given fault name in the fault info
-		String faultName = fstmt.getName();
-
-		Fault fault = new Fault(fstmt, faultId, faultName);
-		setFaultNode(fstmt, fault);
-		processFaultSubcomponents(fault);
 
 		return fault;
 	}
 
+	// Create Lustre node for asymmetric fault connection nodes.
+	// Method parameter "node" corresponds to the "sender" node
+	// that has the fan out connections.
+	// This is needed to access the type of connection for input/output
+	// of this node.
+	public Node createCommNode(AgreeNode node, FaultStatement fstmt, Fault fault, int connNumber) {
+
+		// 1. Create unique node name
+
+		NodeBuilder newNode = new NodeBuilder("asym_conn_node__" + fstmt.getName() + "__" + connNumber);
+
+		// 2. Get the output/input type from the node and the fstmt
+		List<AgreeVar> nodeOutputs = node.outputs;
+		AgreeVar outputOfInterest = null;
+		// Assume asymmetric fault first in list.
+		// Will have to display this to user somewhere.
+		List<NestedDotID> nomFaultConn = new ArrayList<NestedDotID>();
+
+		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
+			if (fs instanceof OutputStatement) {
+				nomFaultConn = ((OutputStatement) fs).getNom_conn();
+			}
+		}
+
+		for (AgreeVar agreeVar : nodeOutputs) {
+			String temp = agreeVar.id;
+			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
+				System.out.println("Found it: " + temp + " and " + nomFaultConn.get(0).getBase().getName());
+				outputOfInterest = agreeVar;
+			}
+		}
+
+		// Now the same type on the AgreeNode outputOfInterest
+		// is the same as what we will create for the type of
+		// both input and output of commNode.
+		Type type = outputOfInterest.type;
+
+		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type, fstmt.getName() + "_" + connNumber);
+		newNode = createOutputForCommNode(newNode);
+		newNode = createLocalsForCommNode(newNode, fault);
+		newNode = createEquationsForCommNode(newNode, fault, fstmt.getName() + "_" + connNumber);
+
+		return newNode.build();
+	}
+
+	/*
+	 * creates inputs for new communication node.
+	 */
+	public NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String name) {
+
+		node.createInput("commNode_input_" + name, type);
+		node.createInput("commNode_output_" + name, type);
+		node.createInput("__ASSUME__HIST", NamedType.BOOL);
+		node.createInput("time", NamedType.REAL);
+		node.createInput("__fault__nominal__output", NamedType.BOOL);
+		node.createInput("fault__trigger__" + fault.id, NamedType.BOOL);
+		return node;
+	}
+
+	/*
+	 * creates outputs for new communication node.
+	 */
+	public NodeBuilder createOutputForCommNode(NodeBuilder node) {
+
+		node.createOutput("__ASSERT", NamedType.BOOL);
+		return node;
+	}
+
+	/*
+	 * creates locals for new communication node.
+	 */
+	public NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault) {
+
+		node.createLocal("__GUARANTEE0", NamedType.BOOL);
+
+		// Create local using fault node output id
+		node.createLocal(getFaultNodeOutputId(fault), NamedType.BOOL);
+
+		return node;
+	}
+
+	public String getFaultNodeOutputId(Fault fault) {
+		String id = "";
+		List<VarDecl> faultNodeOutputs = fault.faultNode.outputs;
+		if ((faultNodeOutputs.size() == 0) || (faultNodeOutputs.size() > 1)) {
+			new SafetyException(
+					"Asymmetric fault definitions (" + fault.id + ") " + "must have one and only one output.");
+		} else {
+			id = fault.id + "__node__" + faultNodeOutputs.get(0).id;
+		}
+		return id;
+	}
+
+	/*
+	 * creates equations for new communication node.
+	 */
+	public NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, String name) {
+		// List of expressions used as input for node call expression later
+		// We collect these as we build them for other expressions.
+		List<Expr> nodeArgs = new ArrayList<>();
+
+		// assign __GUARANTEE0 : fault__nominal__output = input
+		IdExpr faultNominalOut = new IdExpr("__fault__nominal__output");
+		Expr binEx = new BinaryExpr(faultNominalOut, BinaryOp.EQUAL,
+				new IdExpr("commNode_input_" + name));
+		IdExpr guar = new IdExpr("__GUARANTEE0");
+		node.addEquation(guar, binEx);
+		// Add faultNominalOutput to nodeArg list
+		nodeArgs.add(faultNominalOut);
+
+		// Assign assert
+		// binEx1 - 4 builds the following:
+		// binEx4 : (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
+		BoolExpr trueExpr = new BoolExpr(true);
+		IdExpr assumeHist = new IdExpr("__ASSUME__HIST");
+		BinaryExpr binEx1 = new BinaryExpr(guar, BinaryOp.AND, trueExpr);
+		BinaryExpr binEx2 = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binEx1);
+		BinaryExpr binEx3 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx2);
+		BinaryExpr binEx4 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx3);
+
+		// binEx6
+		// ex5 builds the following:
+		// (if fault_trigger then fault_node_val_out else fault_nominal) and (binEx4)
+		IdExpr cond = new IdExpr("fault__trigger__" + fault.id);
+		IdExpr faultNodeOutputId = new IdExpr(getFaultNodeOutputId(fault));
+		IdExpr elseCond = new IdExpr("__fault__nominal__output");
+		Expr ex5 = new IfThenElseExpr(cond, faultNodeOutputId, elseCond);
+		BinaryExpr binEx6 = new BinaryExpr(ex5, BinaryOp.AND, binEx4);
+		// Add fault trigger to nodeArg list
+		nodeArgs.add(cond);
+
+		// __ASSERT = (if fault_trigger then fault_node_val_out else fault_nominal)
+		// and (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
+		node.addEquation(new IdExpr("__ASSERT"), binEx6);
+
+		// Construct the node call expression
+//		AgreeEquation eq = new AgreeEquation(lhs,
+//				new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
+		Expr nodeCall = new NodeCallExpr(fault.faultNode.id, nodeArgs);
+		// Now create equation to add
+		node.addEquation(new Equation(faultNodeOutputId, nodeCall));
+
+		return node;
+	}
 
 }
