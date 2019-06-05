@@ -106,7 +106,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
-	private Map<String, List<IdExpr>> mapCommNodeToInputs = new HashMap<String, List<IdExpr>>();
+	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
+	// Map asym faults to their corresponding commNodes.
+	private Map<Fault, List<String>> mapAsymFaultToCommNodes = new HashMap<Fault, List<String>>();
 
 	public static int maxFaultCount = 0;
 	public static double probabilityThreshold = 0.0;
@@ -207,6 +209,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// gather path information for the faults (for creating names later)
 			collectFaultPath(node, new ArrayList<>());
 			this.gatherFaultPropagation(node);
+			// Add top level fault declarations for asymmetric faults.
+			// This is done in a separate method than the normal call
+			// (addTopLevelFaultDeclarations) due to the recursive nature
+			// of that method. We only add declarations for asym faults once
+			// and do not want recursive calls on this activity for subnodes.
+			addTopLevelAsymFaultDeclarations(nb);
 			// empty path to pass to top level node fault
 			// node id used as the path to pass to sub level node fault
 			addTopLevelFaultDeclarations(node, nb);
@@ -574,6 +582,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if (isAsymmetric(fs)) {
 					mapAsymFaultToConnections = builder.getMapAsymFaultToConnections();
 					mapCommNodeToInputs = builder.getMapCommNodeToInputs();
+					// Create mapping from fault to associated commNodes.
+					for (Fault f : mapAsymFaultToConnections.keySet()) {
+						if (!mapAsymFaultToCommNodes.containsKey(f)) {
+							// Convert set to list and put into map
+							List<String> list = new ArrayList<String>(mapCommNodeToInputs.keySet());
+							mapAsymFaultToCommNodes.put(f, list);
+						}
+					}
 				}
 				faults.add(safetyFault);
 			}
@@ -883,10 +899,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
+	public void addTopLevelAsymFaultDeclarations(AgreeNodeBuilder nb) {
+		// Add information into top level if there are any asymmetric faults.
+		if (!mapAsymFaultToConnections.isEmpty()) {
+			nb.addInput(addLocalsForCommNodes());
+			nb.addInput(addAsymFaultInputs());
+//			nb.addInput(addAsymFaultConstraints);
+//			nb.addAssertion(addAsymEquations);
+//			nb.addAssertion(changeAsymConnections);
+		}
+	}
+
 	public void addTopLevelFaultDeclarations(AgreeNode currentNode, AgreeNodeBuilder nb) {
 
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
-
 		// Add unconstrained input and constrained local to represent fault event and
 		// whether or not fault is currently active.
 		for (Fault f : faults) {
@@ -1346,6 +1372,44 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return isAsym;
+	}
+
+	/*
+	 * addLocalsForCommNode is used when asymmetric fault is being added to the top node.
+	 * It adds all locals to the top node that are present in new comm nodes.
+	 */
+	private List<AgreeVar> addLocalsForCommNodes() {
+		List<AgreeVar> inputs = new ArrayList<>();
+		// Access mapCommNodesToInputs to gather inputs for each comm node.
+		for (String commNodes : mapCommNodeToInputs.keySet()) {
+			inputs.addAll(mapCommNodeToInputs.get(commNodes));
+		}
+
+		return inputs;
+	}
+
+	/*
+	 * addAsymFaultInputs will add all fault dep/indep inputs and
+	 * fault events to the top level node.
+	 */
+	private List<AgreeVar> addAsymFaultInputs() {
+		List<AgreeVar> inputs = new ArrayList<>();
+		// Access fault from map that collected all asym faults,
+		// use this to create base for event, indep/dep active variable names.
+		// For each fault, create event, indep, and dep active vars and add to list.
+		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
+			for (String node : mapAsymFaultToCommNodes.get(fault)) {
+				AgreeVar var1 = new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL,
+						fault.faultStatement);
+				inputs.add(var1);
+				AgreeVar var2 = new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL,
+						fault.faultStatement);
+				inputs.add(var2);
+				AgreeVar var3 = new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement);
+				inputs.add(var3);
+			}
+		}
+		return inputs;
 	}
 
 	/*
