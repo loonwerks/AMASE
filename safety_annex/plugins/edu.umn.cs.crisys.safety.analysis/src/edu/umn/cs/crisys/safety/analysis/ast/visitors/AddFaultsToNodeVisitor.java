@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.ConnectionInstanceEnd;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
@@ -34,13 +35,16 @@ import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
+import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
+import edu.umn.cs.crisys.safety.safety.asymmetric;
 import edu.umn.cs.crisys.safety.safety.symmetric;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.ArrayAccessExpr;
@@ -95,6 +99,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// id and expression.
 	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
 	private List<FaultPair> mutualExclusiveFaults = new ArrayList<FaultPair>();
+
+	// Map from asymmetric fault to associated connections -
+	// ex: sender.out -> receiver1.in, receiver2.in, receiver3.in.
+	// We need the receiver connections in this list.
+	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
+	// Map the name of the communication node for asymmetric faults to its list of local
+	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
+	private Map<String, List<IdExpr>> mapCommNodeToInputs = new HashMap<String, List<IdExpr>>();
 
 	public static int maxFaultCount = 0;
 	public static double probabilityThreshold = 0.0;
@@ -555,6 +567,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// Process fault determines if we have a
 				// symmetric or asymmetric fault and builds it accordingly.
 				Fault safetyFault = builder.processFault(fs);
+				// If this is an asymmetric fault we just built,
+				// collect the mappings that were created by FaultASTBuilder
+				// and use them later when we reach the top node to add assert stmts
+				// to main lustre node.
+				if (isAsymmetric(fs)) {
+					mapAsymFaultToConnections = builder.getMapAsymFaultToConnections();
+					mapCommNodeToInputs = builder.getMapCommNodeToInputs();
+				}
 				faults.add(safetyFault);
 			}
 		}
@@ -1308,6 +1328,24 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		// Add this fault hypothesis as an assertion.
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
+	}
+
+	/*
+	 * private method that checks to see if a fault is an asymmetric fault
+	 */
+	private boolean isAsymmetric(FaultStatement fstmt) {
+		boolean isAsym = false;
+		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
+			if (fs instanceof PropagationTypeStatement) {
+				if (((PropagationTypeStatement) fs).getPty() instanceof asymmetric) {
+					isAsym = true;
+				} else {
+					isAsym = false;
+				}
+				break;
+			}
+		}
+		return isAsym;
 	}
 
 	/*

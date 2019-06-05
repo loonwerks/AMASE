@@ -65,6 +65,9 @@ public class FaultASTBuilder {
 	private List<Node> globalLustreNodes;
 	// Maps the asymmetric fault statement to corresponding connections in AADL.
 	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
+	// Map the name of the communication node for asymmetric faults to its list of local
+	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
+	private Map<String, List<IdExpr>> mapCommNodeToInputs = new HashMap<String, List<IdExpr>>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -362,7 +365,8 @@ public class FaultASTBuilder {
 		//
 		// 4. Add node to Lustre as it is created (inside loop).
 		for (int i = 0; i < senderConnections.size(); i++) {
-			Node commNode = createCommNode(this.agreeNode, fstmt, fault, i);
+			String nodeName = "asym_comm_node__" + fstmt.getName() + "__" + i;
+			Node commNode = createCommNode(this.agreeNode, fstmt, fault, nodeName, i);
 			// 4. Add node to lustre
 			this.addGlobalLustreNode(commNode);
 		}
@@ -377,11 +381,10 @@ public class FaultASTBuilder {
 	// that has the fan out connections.
 	// This is needed to access the type of connection for input/output
 	// of this node.
-	public Node createCommNode(AgreeNode node, FaultStatement fstmt, Fault fault, int connNumber) {
+	public Node createCommNode(AgreeNode node, FaultStatement fstmt, Fault fault, String nodeName, int connNumber) {
 
 		// 1. Create unique node name
-
-		NodeBuilder newNode = new NodeBuilder("asym_conn_node__" + fstmt.getName() + "__" + connNumber);
+		NodeBuilder newNode = new NodeBuilder(nodeName);
 
 		// 2. Get the output/input type from the node and the fstmt
 		List<AgreeVar> nodeOutputs = node.outputs;
@@ -409,7 +412,8 @@ public class FaultASTBuilder {
 		// both input and output of commNode.
 		Type type = outputOfInterest.type;
 
-		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type, fstmt.getName() + "_" + connNumber);
+		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type, fstmt.getName() + "_" + connNumber,
+				nodeName);
 		newNode = createOutputForCommNode(newNode);
 		newNode = createLocalsForCommNode(newNode, fault);
 		newNode = createEquationsForCommNode(newNode, fault, fstmt.getName() + "_" + connNumber);
@@ -420,14 +424,25 @@ public class FaultASTBuilder {
 	/*
 	 * creates inputs for new communication node.
 	 */
-	public NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String name) {
+	public NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String faultName,
+			String nodeName) {
+		List<IdExpr> localsForCommNode = new ArrayList<>();
 
-		node.createInput("commNode_input_" + name, type);
-		node.createInput("commNode_output_" + name, type);
+		node.createInput("commNode_input_" + faultName, type);
+		localsForCommNode.add(new IdExpr("commNode_input_" + faultName));
+		node.createInput("commNode_output_" + faultName, type);
+		localsForCommNode.add(new IdExpr("commNode_output_" + faultName));
 		node.createInput("__ASSUME__HIST", NamedType.BOOL);
+		localsForCommNode.add(new IdExpr("__ASSUME__HIST"));
 		node.createInput("time", NamedType.REAL);
+		localsForCommNode.add(new IdExpr("time"));
 		node.createInput("__fault__nominal__output", NamedType.BOOL);
+		localsForCommNode.add(new IdExpr("__fault__nominal__output"));
 		node.createInput("fault__trigger__" + fault.id, NamedType.BOOL);
+		localsForCommNode.add(new IdExpr("fault__trigger__" + fault.id));
+
+		// Add to map between node and list of locals in lustre
+		mapCommNodeToInputs.put(nodeName, localsForCommNode);
 		return node;
 	}
 
@@ -513,6 +528,14 @@ public class FaultASTBuilder {
 		node.addEquation(new Equation(faultNodeOutputId, nodeCall));
 
 		return node;
+	}
+
+	public Map<String, List<IdExpr>> getMapCommNodeToInputs() {
+		return mapCommNodeToInputs;
+	}
+
+	public Map<Fault, List<ConnectionInstanceEnd>> getMapAsymFaultToConnections() {
+		return mapAsymFaultToConnections;
 	}
 
 }
