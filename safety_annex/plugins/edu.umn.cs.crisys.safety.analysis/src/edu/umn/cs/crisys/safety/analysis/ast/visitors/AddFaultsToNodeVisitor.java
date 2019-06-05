@@ -902,10 +902,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public void addTopLevelAsymFaultDeclarations(AgreeNodeBuilder nb) {
 		// Add information into top level if there are any asymmetric faults.
 		if (!mapAsymFaultToConnections.isEmpty()) {
-			nb.addInput(addLocalsForCommNodes());
-			nb.addInput(addAsymFaultInputs());
-//			nb.addInput(addAsymFaultConstraints);
-//			nb.addAssertion(addAsymEquations);
+			addLocalsForCommNodes(nb);
+			addAsymFaultInputs(nb);
+			addAsymCountConstraints(nb);
+//			nb.addAssertion(addAsymAssertions());
 //			nb.addAssertion(changeAsymConnections);
 		}
 	}
@@ -997,7 +997,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return new IfThenElseExpr(cond, new IntExpr(1), new IntExpr(0));
 	}
 
-	// public void getFaultCountExprList(AgreeNode currentNode, List<String> path, List<Expr> sumExprs) {
 	public void getFaultCountExprList(AgreeNode currentNode, List<Expr> sumExprs) {
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
 		for (Fault f : faults) {
@@ -1036,6 +1035,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
+	/*
+	 * Recursive method builds expression for constraining fault count in lustre.
+	 * Base case 1: list is empty: returns integer expr (0)
+	 * Base case 2: list has one element: returns list
+	 * Recursive case: create nested binary expr and call this method to create next iteration.
+	 */
 	public Expr buildFaultCountExpr(List<Expr> exprList, int index) {
 		if (index > exprList.size() - 1) {
 			return new IntExpr(0);
@@ -1378,38 +1383,70 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * addLocalsForCommNode is used when asymmetric fault is being added to the top node.
 	 * It adds all locals to the top node that are present in new comm nodes.
 	 */
-	private List<AgreeVar> addLocalsForCommNodes() {
-		List<AgreeVar> inputs = new ArrayList<>();
+	private void addLocalsForCommNodes(AgreeNodeBuilder nb) {
 		// Access mapCommNodesToInputs to gather inputs for each comm node.
 		for (String commNodes : mapCommNodeToInputs.keySet()) {
-			inputs.addAll(mapCommNodeToInputs.get(commNodes));
+			nb.addInput(mapCommNodeToInputs.get(commNodes));
 		}
+	}
 
-		return inputs;
+	/*
+	 * addAsymCountConstraints will add the local variable for
+	 * the count of asymmetric faults. Then will add constraints to
+	 * the top node accordingly.
+	 */
+	private void addAsymCountConstraints(AgreeNodeBuilder nb) {
+		// Each asym fault has its own count restrictions that depend on its number of connections.
+		// Access the asym faults through map and create count for each.
+		// Make local map saving said count with its fault.
+		for (Fault f : mapAsymFaultToCommNodes.keySet()) {
+			String id = "__fault__" + f.id + "_count";
+			AgreeVar count = new AgreeVar(id, NamedType.INT, topNode.reference);
+			nb.addInput(count);
+			// Get nodes to build assert stmts
+			List<String> nodes = mapAsymFaultToCommNodes.get(f);
+			List<Expr> sumExprs = new ArrayList<>();
+			for (String n : nodes) {
+				sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(n))));
+			}
+			Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
+			Expr equate = new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
+			// Add the constraints associated with the count.
+			nb.addAssertion(new AgreeStatement("", equate, topNode.reference));
+
+			// Restrict to less than the total number of connections
+			Expr restrict = new BinaryExpr(new IdExpr(id), BinaryOp.LESS, new IntExpr(nodes.size()));
+			nb.addAssertion(new AgreeStatement("", restrict, topNode.reference));
+		}
+	}
+
+	/*
+	 * addAsymAssertions creates assertions associated with the activity of
+	 * an asymmetric fault and its node counterparts. These are inserted into the top
+	 * lustre node.
+	 */
+	private void addAsymAssertions(AgreeNodeBuilder nb) {
+		List<AgreeVar> assertions = new ArrayList<>();
+
 	}
 
 	/*
 	 * addAsymFaultInputs will add all fault dep/indep inputs and
 	 * fault events to the top level node.
 	 */
-	private List<AgreeVar> addAsymFaultInputs() {
-		List<AgreeVar> inputs = new ArrayList<>();
+	private void addAsymFaultInputs(AgreeNodeBuilder nb) {
 		// Access fault from map that collected all asym faults,
 		// use this to create base for event, indep/dep active variable names.
-		// For each fault, create event, indep, and dep active vars and add to list.
+		// For each fault, create event, indep, and dep active vars and add to inputs.
 		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
 			for (String node : mapAsymFaultToCommNodes.get(fault)) {
-				AgreeVar var1 = new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL,
-						fault.faultStatement);
-				inputs.add(var1);
-				AgreeVar var2 = new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL,
-						fault.faultStatement);
-				inputs.add(var2);
-				AgreeVar var3 = new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement);
-				inputs.add(var3);
+				nb.addInput(
+						new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL, fault.faultStatement));
+				nb.addInput(
+						new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL, fault.faultStatement));
+				nb.addInput(new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement));
 			}
 		}
-		return inputs;
 	}
 
 	/*
