@@ -67,7 +67,7 @@ public class FaultASTBuilder {
 	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
-	private Map<String, List<IdExpr>> mapCommNodeToInputs = new HashMap<String, List<IdExpr>>();
+	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -324,6 +324,8 @@ public class FaultASTBuilder {
 		String faultId = mkUniqueFaultId(fstmt);
 		// incorporate user-given fault name in the fault info
 		String faultName = fstmt.getName();
+		// containing component name used in creation of comm node name
+		String compName = "";
 
 		Fault fault = new Fault(fstmt, faultId, faultName);
 		setFaultNode(fstmt, fault);
@@ -354,6 +356,7 @@ public class FaultASTBuilder {
 					senderConnections.add(ci.getDestination());
 				}
 			}
+			compName = this.agreeNode.compInst.getFullName();
 			mapAsymFaultToConnections.put(fault, senderConnections);
 		}
 
@@ -365,7 +368,7 @@ public class FaultASTBuilder {
 		//
 		// 4. Add node to Lustre as it is created (inside loop).
 		for (int i = 0; i < senderConnections.size(); i++) {
-			String nodeName = "asym_comm_node__" + fstmt.getName() + "__" + i;
+			String nodeName = "asym_node_" + i + "__" + compName + "__" + fault.id;
 			Node commNode = createCommNode(this.agreeNode, fstmt, fault, nodeName, i);
 			// 4. Add node to lustre
 			this.addGlobalLustreNode(commNode);
@@ -412,11 +415,11 @@ public class FaultASTBuilder {
 		// both input and output of commNode.
 		Type type = outputOfInterest.type;
 
-		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type, fstmt.getName() + "_" + connNumber,
+		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type,
 				nodeName);
 		newNode = createOutputForCommNode(newNode);
 		newNode = createLocalsForCommNode(newNode, fault);
-		newNode = createEquationsForCommNode(newNode, fault, fstmt.getName() + "_" + connNumber);
+		newNode = createEquationsForCommNode(newNode, fault, nodeName);
 
 		return newNode.build();
 	}
@@ -424,22 +427,30 @@ public class FaultASTBuilder {
 	/*
 	 * creates inputs for new communication node.
 	 */
-	public NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String faultName,
-			String nodeName) {
-		List<IdExpr> localsForCommNode = new ArrayList<>();
+	public NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
+		// This list is used to map the fault to the top node locals that
+		// will reference this node name with its corresponding inputs and outputs.
+		// Hence the AgreeVars that are created are specifically named for this purpose.
+		List<AgreeVar> localsForCommNode = new ArrayList<>();
 
-		node.createInput("commNode_input_" + faultName, type);
-		localsForCommNode.add(new IdExpr("commNode_input_" + faultName));
-		node.createInput("commNode_output_" + faultName, type);
-		localsForCommNode.add(new IdExpr("commNode_output_" + faultName));
+		node.createInput("input", type);
+		AgreeVar var1 = new AgreeVar(nodeName + "__input", type, fault.faultStatement);
+		localsForCommNode.add(var1);
+		node.createInput("output", type);
+		AgreeVar var2 = new AgreeVar(nodeName + "__output", type, fault.faultStatement);
+		localsForCommNode.add(var2);
 		node.createInput("__ASSUME__HIST", NamedType.BOOL);
-		localsForCommNode.add(new IdExpr("__ASSUME__HIST"));
+		AgreeVar var3 = new AgreeVar(nodeName + "____ASSUME__HIST", NamedType.BOOL, fault.faultStatement);
+		localsForCommNode.add(var3);
 		node.createInput("time", NamedType.REAL);
-		localsForCommNode.add(new IdExpr("time"));
+		AgreeVar var4 = new AgreeVar(nodeName + "__time", NamedType.REAL, fault.faultStatement);
+		localsForCommNode.add(var4);
 		node.createInput("__fault__nominal__output", NamedType.BOOL);
-		localsForCommNode.add(new IdExpr("__fault__nominal__output"));
+		AgreeVar var5 = new AgreeVar(nodeName + "____fault__nominal__output", NamedType.BOOL, fault.faultStatement);
+		localsForCommNode.add(var5);
 		node.createInput("fault__trigger__" + fault.id, NamedType.BOOL);
-		localsForCommNode.add(new IdExpr("fault__trigger__" + fault.id));
+		AgreeVar var7 = new AgreeVar(nodeName + "__fault__trigger__" + fault.id, NamedType.BOOL, fault.faultStatement);
+		localsForCommNode.add(var7);
 
 		// Add to map between node and list of locals in lustre
 		mapCommNodeToInputs.put(nodeName, localsForCommNode);
@@ -483,7 +494,7 @@ public class FaultASTBuilder {
 	/*
 	 * creates equations for new communication node.
 	 */
-	public NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, String name) {
+	public NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, String nodeName) {
 		// List of expressions used as input for node call expression later
 		// We collect these as we build them for other expressions.
 		List<Expr> nodeArgs = new ArrayList<>();
@@ -491,7 +502,7 @@ public class FaultASTBuilder {
 		// assign __GUARANTEE0 : fault__nominal__output = input
 		IdExpr faultNominalOut = new IdExpr("__fault__nominal__output");
 		Expr binEx = new BinaryExpr(faultNominalOut, BinaryOp.EQUAL,
-				new IdExpr("commNode_input_" + name));
+				new IdExpr("input"));
 		IdExpr guar = new IdExpr("__GUARANTEE0");
 		node.addEquation(guar, binEx);
 		// Add faultNominalOutput to nodeArg list
@@ -530,7 +541,7 @@ public class FaultASTBuilder {
 		return node;
 	}
 
-	public Map<String, List<IdExpr>> getMapCommNodeToInputs() {
+	public Map<String, List<AgreeVar>> getMapCommNodeToInputs() {
 		return mapCommNodeToInputs;
 	}
 
