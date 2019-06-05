@@ -68,6 +68,9 @@ public class FaultASTBuilder {
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
 	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
+	// Map asym fault to their corresponding component instance names
+	// Used in isTop to find trigger and make assert statement
+	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -358,6 +361,7 @@ public class FaultASTBuilder {
 			}
 			compName = this.agreeNode.compInst.getFullName();
 			mapAsymFaultToConnections.put(fault, senderConnections);
+			mapAsymFaultToCompName.put(fault, compName);
 		}
 
 		// 3. Create the communication nodes.
@@ -547,6 +551,10 @@ public class FaultASTBuilder {
 
 	public Map<Fault, List<ConnectionInstanceEnd>> getMapAsymFaultToConnections() {
 		return mapAsymFaultToConnections;
+	}
+
+	public Map<Fault, String> getMapAsymFaultToCompName() {
+		return mapAsymFaultToCompName;
 	}
 
 }

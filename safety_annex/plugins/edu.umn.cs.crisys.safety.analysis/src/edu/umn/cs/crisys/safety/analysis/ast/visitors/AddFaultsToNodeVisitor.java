@@ -109,6 +109,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
 	// Map asym faults to their corresponding commNodes.
 	private Map<Fault, List<String>> mapAsymFaultToCommNodes = new HashMap<Fault, List<String>>();
+	// Map asym fault to their corresponding component instance names
+	// Used in isTop to find trigger and make assert statement
+	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
 
 	public static int maxFaultCount = 0;
 	public static double probabilityThreshold = 0.0;
@@ -582,6 +585,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if (isAsymmetric(fs)) {
 					mapAsymFaultToConnections = builder.getMapAsymFaultToConnections();
 					mapCommNodeToInputs = builder.getMapCommNodeToInputs();
+					mapAsymFaultToCompName = builder.getMapAsymFaultToCompName();
 					// Create mapping from fault to associated commNodes.
 					for (Fault f : mapAsymFaultToConnections.keySet()) {
 						if (!mapAsymFaultToCommNodes.containsKey(f)) {
@@ -905,7 +909,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			addLocalsForCommNodes(nb);
 			addAsymFaultInputs(nb);
 			addAsymCountConstraints(nb);
-//			nb.addAssertion(addAsymAssertions());
+			addAsymFaultAssertions(nb);
 //			nb.addAssertion(changeAsymConnections);
 		}
 	}
@@ -1391,6 +1395,25 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/*
+	 * addAsymFaultInputs will add all fault dep/indep inputs and
+	 * fault events to the top level node.
+	 */
+	private void addAsymFaultInputs(AgreeNodeBuilder nb) {
+		// Access fault from map that collected all asym faults,
+		// use this to create base for event, indep/dep active variable names.
+		// For each fault, create event, indep, and dep active vars and add to inputs.
+		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
+			for (String node : mapAsymFaultToCommNodes.get(fault)) {
+				nb.addInput(
+						new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL, fault.faultStatement));
+				nb.addInput(
+						new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL, fault.faultStatement));
+				nb.addInput(new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement));
+			}
+		}
+	}
+
+	/*
 	 * addAsymCountConstraints will add the local variable for
 	 * the count of asymmetric faults. Then will add constraints to
 	 * the top node accordingly.
@@ -1420,32 +1443,60 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * addAsymAssertions creates assertions associated with the activity of
-	 * an asymmetric fault and its node counterparts. These are inserted into the top
-	 * lustre node.
-	 */
-	private void addAsymAssertions(AgreeNodeBuilder nb) {
-		List<AgreeVar> assertions = new ArrayList<>();
 
+	/*
+	 * addAsymFaultAssertions method adds assertions associated with the fault event,
+	 * indep/dep active, and sender component fault trigger causing comm node faults to
+	 * become active.
+	 */
+	private void addAsymFaultAssertions(AgreeNodeBuilder nb) {
+		// List of idExpr holding dep ids and list for indep ids
+		List<Expr> depIndepList = new ArrayList<>();
+		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
+			for (String nodeName : mapAsymFaultToCommNodes.get(fault)) {
+				// Create permanent expressions for dep/indep faults
+				IdExpr indepId = new IdExpr(this.createFaultIndependentActiveId(nodeName));
+				depIndepList.add(indepId);
+				IdExpr depId = new IdExpr(this.createFaultDependentActiveId(nodeName));
+				depIndepList.add(depId);
+				IdExpr eventId = new IdExpr(this.createFaultEventId(nodeName));
+				Expr permExprInd = createPermanentExpr(indepId, eventId);
+				Expr permExprDep = createPermanentExpr(depId, new BoolExpr(false));
+
+				// Adds assertion making indep and dep active permanent
+				nb.addAssertion(new AgreeStatement("", permExprInd, this.topNode.reference));
+				nb.addAssertion(new AgreeStatement("", permExprDep, this.topNode.reference));
+
+				// Create and add trigger assertion
+				IdExpr trigger = new IdExpr(nodeName + "__fault__trigger__" + fault.id);
+				BinaryExpr orTrigger = new BinaryExpr(indepId, BinaryOp.OR, depId);
+				BinaryExpr equate = new BinaryExpr(trigger, BinaryOp.EQUAL, orTrigger);
+				nb.addAssertion(new AgreeStatement("", equate, this.topNode.reference));
+			}
+			// Create trigger expression that links fault of sender node to comm node fault action.
+			String compName = mapAsymFaultToCompName.get(fault);
+			IdExpr trigger = new IdExpr(compName + "__fault__trigger__" + fault.id);
+			Expr bigOrExpr = buildBigOrExpr(depIndepList, 0);
+			Expr notBigOrExpr = new UnaryExpr(UnaryOp.NOT, bigOrExpr);
+			Expr ifThenElse = new IfThenElseExpr(trigger, bigOrExpr, notBigOrExpr);
+			nb.addAssertion(new AgreeStatement("", ifThenElse, this.topNode.reference));
+		}
 	}
 
 	/*
-	 * addAsymFaultInputs will add all fault dep/indep inputs and
-	 * fault events to the top level node.
+	 * helper method that builds an or expression of all things in list
+	 * Base case: list is empty : append false to or list
+	 * Base case 2: list has one element : return that element.
+	 * Recursive case: make or of element of list with recursive call
+	 *
 	 */
-	private void addAsymFaultInputs(AgreeNodeBuilder nb) {
-		// Access fault from map that collected all asym faults,
-		// use this to create base for event, indep/dep active variable names.
-		// For each fault, create event, indep, and dep active vars and add to inputs.
-		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
-			for (String node : mapAsymFaultToCommNodes.get(fault)) {
-				nb.addInput(
-						new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL, fault.faultStatement));
-				nb.addInput(
-						new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL, fault.faultStatement));
-				nb.addInput(new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement));
-			}
+	private Expr buildBigOrExpr(List<Expr> exprList, int index) {
+		if (index > exprList.size() - 1) {
+			return new BoolExpr(false);
+		} else if (index == exprList.size() - 1) {
+			return exprList.get(index);
+		} else {
+			return new BinaryExpr(exprList.get(index), BinaryOp.OR, buildBigOrExpr(exprList, index + 1));
 		}
 	}
 
