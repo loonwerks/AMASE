@@ -281,10 +281,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			AgreeVar out = findVar(node.outputs, (faultyId));
 			if (out == null) {
-				throw new SafetyException("A fault defined for " + node.id + "has a connection"
+				throw new SafetyException("A fault defined for " + node.id + " has a connection"
 						+ " that is not a valid output for this component.");
+			} else {
+				nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
 			}
-			nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
 		}
 	}
 
