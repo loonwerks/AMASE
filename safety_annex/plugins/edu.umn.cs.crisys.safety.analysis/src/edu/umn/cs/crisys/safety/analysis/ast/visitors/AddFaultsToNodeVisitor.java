@@ -12,6 +12,8 @@ import java.util.Set;
 
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
+import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
+import org.osate.aadl2.instance.impl.FeatureInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
@@ -103,7 +105,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Map from asymmetric fault to associated connections -
 	// ex: sender.out -> receiver1.in, receiver2.in, receiver3.in.
 	// We need the receiver connections in this list.
-	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
+	private Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
 	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
@@ -112,6 +114,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Map asym fault to their corresponding component instance names
 	// Used in isTop to find trigger and make assert statement
 	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
+	// map comm node outputs to AADL connections
+	private Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
 
 	public static int maxFaultCount = 0;
 	public static double probabilityThreshold = 0.0;
@@ -583,11 +587,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// and use them later when we reach the top node to add assert stmts
 				// to main lustre node.
 				if (isAsymmetric(fs)) {
-					mapAsymFaultToConnections = builder.getMapAsymFaultToConnections();
+					mapAsymCompOutputToCommNodeIn = builder.getMapAsymCompOutputToCommNodeIn();
 					mapCommNodeToInputs = builder.getMapCommNodeToInputs();
 					mapAsymFaultToCompName = builder.getMapAsymFaultToCompName();
+					mapCommNodeOutputToConnections = builder.getMapCommNodeOutputToConnections();
 					// Create mapping from fault to associated commNodes.
-					for (Fault f : mapAsymFaultToConnections.keySet()) {
+					for (Fault f : mapAsymFaultToCompName.keySet()) {
 						if (!mapAsymFaultToCommNodes.containsKey(f)) {
 							// Convert set to list and put into map
 							List<String> list = new ArrayList<String>(mapCommNodeToInputs.keySet());
@@ -905,12 +910,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	public void addTopLevelAsymFaultDeclarations(AgreeNodeBuilder nb) {
 		// Add information into top level if there are any asymmetric faults.
-		if (!mapAsymFaultToConnections.isEmpty()) {
+		if (!mapAsymFaultToCompName.isEmpty()) {
 			addLocalsForCommNodes(nb);
 			addAsymFaultInputs(nb);
 			addAsymCountConstraints(nb);
 			addAsymFaultAssertions(nb);
-//			nb.addAssertion(changeAsymConnections);
+			changeAsymConnections(nb);
 		}
 	}
 
@@ -1480,6 +1485,45 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			Expr notBigOrExpr = new UnaryExpr(UnaryOp.NOT, bigOrExpr);
 			Expr ifThenElse = new IfThenElseExpr(trigger, bigOrExpr, notBigOrExpr);
 			nb.addAssertion(new AgreeStatement("", ifThenElse, this.topNode.reference));
+		}
+	}
+
+	/*
+	 * changeAsymConnections will remove the previous connections from sender to
+	 * receivers and add in the new connections from sender to commNode and
+	 * from commNode to receiver.
+	 */
+	private void changeAsymConnections(AgreeNodeBuilder nb) {
+		// Remove old connections
+
+		// Insert new connections sender_output = commNode_input
+		for (String output : mapAsymCompOutputToCommNodeIn.keySet()) {
+			for (String nodeName : mapAsymCompOutputToCommNodeIn.get(output)) {
+				Expr eq = new BinaryExpr(new IdExpr(output), BinaryOp.EQUAL, new IdExpr(nodeName));
+				nb.addAssertion(new AgreeStatement("", eq, this.topNode.reference));
+			}
+		}
+
+		// Insert connections commNode_output = receiver_input
+		// First access name of receiving component and its input
+		for (String output : mapCommNodeOutputToConnections.keySet()) {
+			String featureName = "";
+			String componentName = "";
+			if (mapCommNodeOutputToConnections.get(output) instanceof FeatureInstanceImpl) {
+				FeatureInstanceImpl fi = (FeatureInstanceImpl) mapCommNodeOutputToConnections.get(output);
+				featureName = fi.getName();
+				if (fi.eContainer() instanceof ComponentInstanceImpl) {
+					ComponentInstanceImpl ci = (ComponentInstanceImpl) fi.eContainer();
+					componentName = ci.getName();
+				} else {
+					new SafetyException("Asymmetric fault must be connected to a component instance.");
+				}
+			} else {
+				new SafetyException("Asymmetric fault must have an allowable connection.");
+			}
+			IdExpr connectionName = new IdExpr(componentName + "__" + featureName);
+			Expr eq = new BinaryExpr(new IdExpr(output), BinaryOp.EQUAL, connectionName);
+			nb.addAssertion(new AgreeStatement("", eq, this.topNode.reference));
 		}
 	}
 

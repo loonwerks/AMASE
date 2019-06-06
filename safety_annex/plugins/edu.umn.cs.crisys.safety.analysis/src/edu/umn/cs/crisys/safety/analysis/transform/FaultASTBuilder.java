@@ -63,8 +63,10 @@ public class FaultASTBuilder {
 	// globalLustreNodes will be updated occasionally as faults are added
 	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
 	private List<Node> globalLustreNodes;
-	// Maps the asymmetric fault statement to corresponding connections in AADL.
-	private Map<Fault, List<ConnectionInstanceEnd>> mapAsymFaultToConnections = new HashMap<Fault, List<ConnectionInstanceEnd>>();
+	// Maps the asymmetric fault statement to corresponding comm node inputs
+	private Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
+	// map comm node outputs to AADL connections
+	private Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
 	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
@@ -359,8 +361,9 @@ public class FaultASTBuilder {
 					senderConnections.add(ci.getDestination());
 				}
 			}
+
+			// Comp name used in mapAsymFaultToCompName
 			compName = this.agreeNode.compInst.getFullName();
-			mapAsymFaultToConnections.put(fault, senderConnections);
 			mapAsymFaultToCompName.put(fault, compName);
 		}
 
@@ -371,14 +374,20 @@ public class FaultASTBuilder {
 		// link the fault to the comm node as it is inserted into Lustre.
 		//
 		// 4. Add node to Lustre as it is created (inside loop).
+		String nodeName = "";
+		List<String> commNodeNames = new ArrayList<>();
 		for (int i = 0; i < senderConnections.size(); i++) {
-			String nodeName = "asym_node_" + i + "__" + compName + "__" + fault.id;
+			nodeName = "asym_node_" + i + "__" + compName + "__" + fault.id;
 			Node commNode = createCommNode(this.agreeNode, fstmt, fault, nodeName, i);
+			commNodeNames.add(nodeName + "__input");
+			// Make map from comm node to connections
+			mapCommNodeOutputToConnections.put(nodeName + "__output", senderConnections.get(i));
 			// 4. Add node to lustre
 			this.addGlobalLustreNode(commNode);
 		}
-
-
+		// Output of sender component used to build lustre main asserts
+		String senderOut = this.agreeNode.id + "__" + searchFor;
+		mapAsymCompOutputToCommNodeIn.put(senderOut, commNodeNames);
 
 		return fault;
 	}
@@ -549,12 +558,16 @@ public class FaultASTBuilder {
 		return mapCommNodeToInputs;
 	}
 
-	public Map<Fault, List<ConnectionInstanceEnd>> getMapAsymFaultToConnections() {
-		return mapAsymFaultToConnections;
+	public Map<String, List<String>> getMapAsymCompOutputToCommNodeIn() {
+		return mapAsymCompOutputToCommNodeIn;
 	}
 
 	public Map<Fault, String> getMapAsymFaultToCompName() {
 		return mapAsymFaultToCompName;
+	}
+
+	public Map<String, ConnectionInstanceEnd> getMapCommNodeOutputToConnections() {
+		return mapCommNodeOutputToConnections;
 	}
 
 }
