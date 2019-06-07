@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.osate.ui.dialogs.Dialog;
 
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.handlers.UniqueID;
 import jkind.JKindException;
 
@@ -94,6 +95,7 @@ public class MHSUtils {
 		HashMap<Integer, String> intToStrMap = new HashMap<>();
 		HashMap<String, Integer> strToIntMap = new HashMap<>();
 		Integer elemIdNum = new Integer(1);
+		Set<Set<Integer>> faultCombinationAboveThresholdInt = new HashSet<Set<Integer>>();
 
 		// 1.1 turn string elements in sourceSets to unique numbers
 		// System.out.println("source sets:");
@@ -124,6 +126,34 @@ public class MHSUtils {
 				}
 			}
 			multipleSets = true;
+		}
+
+		// if prunePerProbability
+		// then convert all strings from faultCombinationAboveThresholdStrs to numbers as well
+		if (prunePerProbability) {
+			Set<Integer> curSetInt = new HashSet<Integer>();
+			for (Set<String> curSet : AddFaultsToNodeVisitor.faultCombinationAboveThresholdStrs) {
+				for (String curElem : curSet) {
+					// update ivcElemName
+					// String curElemName = updateElemName(curElem);
+					String curElemName = curElem;
+					// if the string is already in the map
+					// get its integer id number to the set
+					if (strToIntMap.containsKey(curElemName)) {
+						curSetInt.add(strToIntMap.get(curElemName));
+					}
+					// if the string is not yet in the map
+					// assign it an unique integer id number
+					// update both maps
+					else {
+						intToStrMap.putIfAbsent(elemIdNum, curElemName);
+						strToIntMap.putIfAbsent(curElemName, elemIdNum);
+						curSetInt.add(elemIdNum);
+						elemIdNum++;
+					}
+				}
+			}
+			faultCombinationAboveThresholdInt.add(curSetInt);
 		}
 
 		Set<List<String>> destSets = new HashSet<List<String>>();
@@ -173,8 +203,22 @@ public class MHSUtils {
 					curMHSElemInt.add(mhsElemNum);
 				}
 
-				// TODO: add to destSets if curMHSElemInt is a subset of faultCombinationsAboveThreshold
-				destSets.add(curMHSElemStrs);
+				boolean addCurMHSElemStrs = false;
+				// if prunePerProbability
+				// add to destSets if curMHSElemInt is a subset of faultCombinationsAboveThreshold
+				if (prunePerProbability) {
+					for (Set<Integer> curSetInt : faultCombinationAboveThresholdInt) {
+						if (curSetInt.containsAll(curMHSElemInt)) {
+							addCurMHSElemStrs = true;
+							break;
+						}
+					}
+				} else {
+					addCurMHSElemStrs = true;
+				}
+				if (addCurMHSElemStrs) {
+					destSets.add(curMHSElemStrs);
+				}
 				// System.out.println("dest current set: " + curMHSElemStrs);
 			}
 			br.close();
