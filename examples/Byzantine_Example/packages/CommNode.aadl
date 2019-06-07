@@ -1,0 +1,22 @@
+package CommNode
+public
+with Base_Types;
+	system CommNode
+		features
+			comm_in : in data port Base_Types::Boolean;
+			comm_out : out data port Base_Types::Boolean;
+			
+		annex agree {**
+			guarantee "Input equals output." :
+				comm_in = comm_out;	
+		**};
+		
+		annex safety {**
+			fault CommNode_Fault "Output is inverted": Common_Faults.invert_signal {
+				inputs: val_in <- comm_out;     
+				outputs: comm_out <- val_out;    
+				duration: permanent;
+			}	
+		**};
+	end CommNode;
+end CommNode;
