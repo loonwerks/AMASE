@@ -1,7 +1,7 @@
 package TopSystem
 public
 with Base_Types;
-with OrGate;
+with Sender;
 with Receiver;
 
 	system TopSystem
@@ -11,7 +11,7 @@ with Receiver;
 		
 		annex agree {**
 			
-			guarantee "Both receivers get same output from or gate." :
+			guarantee "Receiver outputs are equal." :
 				receiver1_output = receiver2_output;
 			
 		**};
@@ -20,13 +20,13 @@ with Receiver;
 	
 	system implementation TopSystem.impl
 		subcomponents
-			orGate : system OrGate::OrGate;
+			Sender : system Sender::Sender;
 			receiver1 : system Receiver::Receiver;
 			receiver2 : system Receiver::Receiver;
 			
 		connections
-			or_to_rec1 : port orGate.or_out -> receiver1.or_input;
-			or_to_rec2 : port orGate.or_out -> receiver2.or_input;
+			or_to_comm1 : port sender.sender_out -> receiver1.sender_input;
+			or_to_comm2 : port sender.sender_out -> receiver2.sender_input;
 			
 			rec1_to_top : port receiver1.output -> receiver1_output;
 			rec2_to_top : port receiver2.output -> receiver2_output;
