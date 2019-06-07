@@ -121,6 +121,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static double probabilityThreshold = 0.0;
 	public static boolean upperMostLevel = true;
 	public static ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
+	public static Set<Set<String>> faultCombinationAboveThresholdStrs = new HashSet<Set<String>>();
 	public static boolean maxFaultHypothesis = false;
 	public static boolean probabilisticHypothesis = false;
 
@@ -143,6 +144,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		probabilityThreshold = 0.0;
 		upperMostLevel = true;
 		faultCombinationsAboveThreshold.clear();
+		faultCombinationAboveThresholdStrs.clear();
 		maxFaultHypothesis = false;
 		probabilisticHypothesis = false;
 	}
@@ -1304,6 +1306,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 				index++;
 			}
+		}
+		// convert fault combination to str set
+		convertFaultCombinationToStrSet();
+	}
+
+	private void convertFaultCombinationToStrSet() {
+
+		for (FaultSetProbability faultCombination : faultCombinationsAboveThreshold) {
+			HashSet<String> faultCombinationSet = faultCombination.toStringSet();
+			faultCombinationAboveThresholdStrs.add(faultCombinationSet);
 		}
 	}
 
