@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.impl.DataPortImpl;
 import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
+import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
@@ -73,6 +74,8 @@ public class FaultASTBuilder {
 	// Map asym fault to their corresponding component instance names
 	// Used in isTop to find trigger and make assert statement
 	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
+	// Map string of sender.sender_output to receiver.input for all connections
+	private Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -354,17 +357,31 @@ public class FaultASTBuilder {
 
 		// Get list of connections from parent component that senderOutput is connected to.
 		String searchFor = senderOutput.getFullName();
+		// Will be key for mapSenderToReceiver
+		String tempSend = this.agreeNode.compInst.getName() + "." + searchFor;
+		List<String> tempReceive = new ArrayList<String>();
 		if (this.agreeNode.compInst.eContainer() instanceof SystemInstanceImpl) {
 			SystemInstanceImpl parentContainer = (SystemInstanceImpl) this.agreeNode.compInst.eContainer();
 			for (ConnectionInstance ci : parentContainer.allConnectionInstances()) {
 				if (ci.getFullName().contains(searchFor)) {
+					// Add connection to senderCollection list
 					senderConnections.add(ci.getDestination());
+					// Gather name of parent and connection ("receiver1.sender_input") for map
+					if (ci.getDestination().eContainer() instanceof ComponentInstanceImpl) {
+						ComponentInstanceImpl compInst = (ComponentInstanceImpl) ci.getDestination().eContainer();
+						// Will be value for mapSenderToReceiver
+						tempReceive.add(compInst.getName() + "." + ci.getDestination().getName());
+					} else {
+						new SafetyException("The sender component on asymmetric fault is connected"
+								+ "to an unallowable component. (Debug: FaultASTBuilder 375)");
+					}
 				}
 			}
-
 			// Comp name used in mapAsymFaultToCompName
 			compName = this.agreeNode.compInst.getFullName();
 			mapAsymFaultToCompName.put(fault, compName);
+			// Map sender to receiver names
+			mapSenderToReceiver.put(tempSend, tempReceive);
 		}
 
 		// 3. Create the communication nodes.
@@ -419,6 +436,8 @@ public class FaultASTBuilder {
 			String temp = agreeVar.id;
 			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
 				System.out.println("Found it: " + temp + " and " + nomFaultConn.get(0).getBase().getName());
+				// This agreeVar is the sender var we want to save for the
+				// later mapping to the receiver var.
 				outputOfInterest = agreeVar;
 			}
 		}
@@ -570,4 +589,7 @@ public class FaultASTBuilder {
 		return mapCommNodeOutputToConnections;
 	}
 
+	public Map<String, List<String>> getMapSenderToReceiver() {
+		return mapSenderToReceiver;
+	}
 }
