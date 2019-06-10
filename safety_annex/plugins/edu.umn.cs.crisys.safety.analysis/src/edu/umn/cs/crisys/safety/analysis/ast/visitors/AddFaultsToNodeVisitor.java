@@ -973,6 +973,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		addAsymFaultInputs(nb);
 		addAsymCountConstraints(nb);
 		addAsymFaultAssertions(nb);
+		addAsymNodeCalls(nb);
 		changeAsymConnections(nb);
 	}
 
@@ -1552,6 +1553,25 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			Expr notBigOrExpr = new UnaryExpr(UnaryOp.NOT, bigOrExpr);
 			Expr ifThenElse = new IfThenElseExpr(trigger, bigOrExpr, notBigOrExpr);
 			nb.addAssertion(new AgreeStatement("", ifThenElse, this.topNode.reference));
+		}
+	}
+
+	/*
+	 * addAsymNodeCalls adds the node calls into main node in lustre.
+	 */
+	private void addAsymNodeCalls(AgreeNodeBuilder nb) {
+		// For each key in map, get name of node and list
+		// of lustre inputs. Enter these into node call expr
+		// and insert into assertions in node builder.
+		List<Expr> tempIds = new ArrayList<>();
+		for (String nodeName : mapCommNodeToInputs.keySet()) {
+			for (AgreeVar av : mapCommNodeToInputs.get(nodeName)) {
+				IdExpr id = new IdExpr(av.id);
+				tempIds.add(id);
+			}
+			NodeCallExpr nodeCall = new NodeCallExpr(nodeName, tempIds);
+			nb.addAssertion(new AgreeStatement("", nodeCall, this.topNode.reference));
+			tempIds.clear();
 		}
 	}
 
