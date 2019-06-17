@@ -380,6 +380,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			} else {
 				actual = f.faultInputMap.get(vd.id);
 				// do any name conversions on the stored expression.
+				// create nominal id
 				actual = actual.accept(this);
 				if (actual == null) {
 					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
@@ -1477,8 +1478,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// For each fault, create event, indep, and dep active vars and add to inputs.
 		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
 			for (String node : mapAsymFaultToCommNodes.get(fault)) {
-				nb.addInput(
-						new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL, fault.faultStatement));
+//				nb.addInput(
+//						new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL, fault.faultStatement));
 				nb.addInput(
 						new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL, fault.faultStatement));
 				nb.addInput(new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement));
@@ -1503,7 +1504,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			List<String> nodes = mapAsymFaultToCommNodes.get(f);
 			List<Expr> sumExprs = new ArrayList<>();
 			for (String n : nodes) {
-				sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(n))));
+				sumExprs.add(createSumExpr(new IdExpr(this.createFaultDependentActiveId(n))));
 			}
 			Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
 			Expr equate = new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
@@ -1527,23 +1528,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<Expr> depIndepList = new ArrayList<>();
 		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
 			for (String nodeName : mapAsymFaultToCommNodes.get(fault)) {
-				// Create permanent expressions for dep/indep faults
-				IdExpr indepId = new IdExpr(this.createFaultIndependentActiveId(nodeName));
-				depIndepList.add(indepId);
+				// Create permanent expressions for dep faults on comm nodes
 				IdExpr depId = new IdExpr(this.createFaultDependentActiveId(nodeName));
 				depIndepList.add(depId);
-				IdExpr eventId = new IdExpr(this.createFaultEventId(nodeName));
-				Expr permExprInd = createPermanentExpr(indepId, eventId);
-				Expr permExprDep = createPermanentExpr(depId, new BoolExpr(false));
-
-				// Adds assertion making indep and dep active permanent
-				nb.addAssertion(new AgreeStatement("", permExprInd, this.topNode.reference));
-				nb.addAssertion(new AgreeStatement("", permExprDep, this.topNode.reference));
-
 				// Create and add trigger assertion
 				IdExpr trigger = new IdExpr(nodeName + "__fault__trigger__" + fault.id);
-				BinaryExpr orTrigger = new BinaryExpr(indepId, BinaryOp.OR, depId);
-				BinaryExpr equate = new BinaryExpr(trigger, BinaryOp.EQUAL, orTrigger);
+				BinaryExpr equate = new BinaryExpr(trigger, BinaryOp.EQUAL, depId);
 				nb.addAssertion(new AgreeStatement("", equate, this.topNode.reference));
 			}
 			// Create trigger expression that links fault of sender node to comm node fault action.
@@ -1597,7 +1587,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// First access name of receiving component and its input
 		// then create lustre connection name, put these together in an
 		// "equals" binary expression, and add to assertions.
-//		Map<String, List<String>> mapOutputToConnectionName = new HashMap<String, List<String>>();
 		List<String> receivingConns = new ArrayList<String>();
 		for (String output : mapCommNodeOutputToConnections.keySet()) {
 			String featureName = "";
@@ -1619,9 +1608,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			Expr eq = new BinaryExpr(new IdExpr(output), BinaryOp.EQUAL, connectionName);
 			nb.addAssertion(new AgreeStatement("", eq, this.topNode.reference));
 		}
-
-		// Remove old connections between sender and receiver
-		removeOldConnectionsFromAssertions(receivingConns, nb);
 	}
 
 	/*
@@ -1639,17 +1625,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		} else {
 			return new BinaryExpr(exprList.get(index), BinaryOp.OR, buildBigOrExpr(exprList, index + 1));
 		}
-	}
-
-	/*
-	 * removeOldConnectionsFromAssertions will copy the list of all assertions for the
-	 * top level lustre node, remove the connections that we no longer want present
-	 * (between sender and receiver components), and reinsert the remainder of the assertions
-	 * back into the NodeBuilder.
-	 */
-	private void removeOldConnectionsFromAssertions(List<String> receivingConns, AgreeNodeBuilder nb) {
-		//
-
 	}
 
 	/*
