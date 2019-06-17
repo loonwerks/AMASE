@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  10 JUN 2019 11:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  10 JUN 2019 18:37
 entering extended mode
 **./main.tex
 (main.tex
@@ -520,7 +520,7 @@ Package csquotes Info: ... none found.
 Package csquotes Warning: No multilingual support.
 (csquotes)                Cannot enable multilingual quotes on input line 75.
 
-No file main.aux.
+(main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 75.
@@ -536,7 +536,7 @@ LaTeX Font Info:    ... okay on input line 75.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 75.
 LaTeX Font Info:    ... okay on input line 75.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 75.
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
@@ -640,80 +640,19 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
 
-
-LaTeX Warning: Citation `Joshi05:Dasc' on page 1 undefined on input line 5.
-
-
-LaTeX Warning: Citation `CAV2015:BoCiGrMa' on page 1 undefined on input line 5.
-
-
-
-LaTeX Warning: Citation `info17:HaLuHo' on page 1 undefined on input line 5.
-
-
-LaTeX Warning: Citation `5979344' on page 1 undefined on input line 5.
-
-
-LaTeX Warning: Citation `Gudemann:2010:FQQ:1909626.1909813' on page 1 undefined
- on input line 5.
-
 [1
 
-{C:/Users/Danielle Stewart/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-
-LaTeX Warning: Citation `AADL_Standard' on page 2 undefined on input line 7.
-
+{C:/Users/Danielle Stewart/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] 
 Excluding 'comment' comment.
-
-LaTeX Warning: Citation `MathWorks' on page 2 undefined on input line 26.
-
-
-LaTeX Warning: Citation `Joshi05:SafeComp' on page 2 undefined on input line 26
-.
-
-
-LaTeX Warning: Citation `Joshi07:Hase' on page 2 undefined on input line 26.
-
-
-LaTeX Warning: Citation `Joshi05:Dasc' on page 2 undefined on input line 26.
-
-
-LaTeX Warning: Citation `DBLP:conf/cav/BozzanoCPJKPRT15' on page 2 undefined on
- input line 26.
-
-
-LaTeX Warning: Citation `EMV2' on page 2 undefined on input line 27.
-
-
-LaTeX Warning: Citation `10.1007/978-3-642-04468-7_15' on page 2 undefined on i
-nput line 27.
-
-
-LaTeX Warning: Citation `PROSVIRNOVA2013127' on page 2 undefined on input line 
-27.
-
-
-LaTeX Warning: Citation `BieberERTS2018' on page 2 undefined on input line 27.
-
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 33.
+
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 33.
- [2]
-Excluding 'comment' comment.) (preliminaries.tex (process.tex
 
-LaTeX Warning: Citation `SAE:ARP4754A' on page 3 undefined on input line 4.
-
-
-LaTeX Warning: Citation `SAE:ARP4761' on page 3 undefined on input line 6.
-
-
-LaTeX Warning: Reference `fig:proposed_safety_process' on page 3 undefined on i
-nput line 11.
-
-
+Excluding 'comment' comment.) (preliminaries.tex (process.tex [2]
 
 pdfTeX warning: pdflatex.exe (file ./images/safety_process.pdf): PDF inclusion:
  found PDF version <1.7>, but at most version <1.5> allowed
@@ -722,72 +661,23 @@ File: images/safety_process.pdf Graphic file (type pdf)
 <use images/safety_process.pdf>
 Package pdftex.def Info: images/safety_process.pdf  used on input line 19.
 (pdftex.def)             Requested size: 295.05711pt x 222.79147pt.
-) (agree.tex
+) (agree.tex [3] Excluding 'comment' comment.)) (fault_modeling.tex
+Underfull \vbox (badness 1270) has occurred while \output is active []
 
-LaTeX Warning: Citation `FeilerModelBasedEngineering2012' on page 3 undefined o
-n input line 3.
-
-
-LaTeX Warning: Citation `AADL_Standard' on page 3 undefined on input line 3.
-
-[3]
-
-LaTeX Warning: Citation `NFM2012:CoGaMiWhLaLu' on page 4 undefined on input lin
-e 8.
-
-
-LaTeX Warning: Citation `Halbwachs91:IEEE' on page 4 undefined on input line 8.
-
-
-
-LaTeX Warning: Citation `NFM2012:CoGaMiWhLaLu' on page 4 undefined on input lin
-e 10.
-
-[4 <./images/safety_process.pdf>]
-
-LaTeX Warning: Citation `Stewart17:IMBSA' on page 5 undefined on input line 15.
-
-
-Excluding 'comment' comment.)) (fault_modeling.tex
-
-LaTeX Warning: Citation `AIR6110' on page 5 undefined on input line 4.
-
-
-LaTeX Warning: Citation `DBLP:conf/cav/BozzanoCPJKPRT15' on page 5 undefined on
- input line 4.
-
-
-LaTeX Warning: Citation `10.1007/978-3-319-11936-6-7' on page 5 undefined on in
-put line 4.
-
-
-LaTeX Warning: Citation `CAV2015:BoCiGrMa' on page 5 undefined on input line 4.
-
-
-
-LaTeX Warning: Citation `Joshi05:SafeComp' on page 5 undefined on input line 4.
-
-
+ [4 <./images/safety_process.pdf>]
 <images/wbs_arch4_diagram.pdf, id=37, 1281.78876pt x 638.385pt>
 File: images/wbs_arch4_diagram.pdf Graphic file (type pdf)
 <use images/wbs_arch4_diagram.pdf>
 Package pdftex.def Info: images/wbs_arch4_diagram.pdf  used on input line 8.
 (pdftex.def)             Requested size: 347.12354pt x 169.07692pt.
-
-LaTeX Warning: Reference `fig:wbs' on page 5 undefined on input line 17.
-
-[5 <./images/wbs_arch4_diagram.pdf>]
+ [5 <./images/wbs_arch4_diagram.pdf>]
 <images/inadvertent_braking.png, id=208, 347.2975pt x 88.33pt>
 File: images/inadvertent_braking.png Graphic file (type png)
 <use images/inadvertent_braking.png>
 Package pdftex.def Info: images/inadvertent_braking.png  used on input line 52.
 
 (pdftex.def)             Requested size: 242.98541pt x 61.80226pt.
-
-
-LaTeX Warning: Citation `SAE:ARP4754A' on page 6 undefined on input line 63.
-
-[6 <./images/inadvertent_braking.png>]
+ [6 <./images/inadvertent_braking.png>]
 <images/system_sensor.pdf, id=214, 597.55246pt x 845.07718pt>
 File: images/system_sensor.pdf Graphic file (type pdf)
 <use images/system_sensor.pdf>
@@ -811,10 +701,6 @@ Overfull \hbox (88.2035pt too wide) in paragraph at lines 94--98
 
 [7 <./images/system_sensor.pdf> <./images/safetyannex_sensorfault.pdf>]
 
-LaTeX Warning: Citation `EMV2' on page 8 undefined on input line 109.
-
-
-
 pdfTeX warning: pdflatex.exe (file ./images/Comparison_with_EMV2.pdf): PDF incl
 usion: found PDF version <1.6>, but at most version <1.5> allowed
 <images/Comparison_with_EMV2.pdf, id=255, 794.97pt x 614.295pt>
@@ -823,200 +709,57 @@ File: images/Comparison_with_EMV2.pdf Graphic file (type pdf)
 Package pdftex.def Info: images/Comparison_with_EMV2.pdf  used on input line 11
 6.
 (pdftex.def)             Requested size: 347.12354pt x 262.10168pt.
-
-LaTeX Warning: Reference `fig:comparison_with_EMV2' on page 8 undefined on inpu
-t line 125.
-
-
-LaTeX Warning: Reference `fig:comparison_with_EMV2' on page 8 undefined on inpu
-t line 127.
-
-[8 <./images/Comparison_with_EMV2.pdf, page is rotated 90 degrees>]
-Excluding 'comment' comment.
+Excluding 'comment' comment. [8 <./images/Comparison_with_EMV2.pdf, page is rot
+ated 90 degrees>]
 <images/hw_fault2.png, id=331, 294.09875pt x 55.70813pt>
 File: images/hw_fault2.png Graphic file (type png)
 <use images/hw_fault2.png>
 Package pdftex.def Info: images/hw_fault2.png  used on input line 167.
 (pdftex.def)             Requested size: 208.27623pt x 39.45187pt.
-
-
-LaTeX Warning: Reference `fig:hwFault' on page 9 undefined on input line 181.
-
 <images/hw_prop_stmt.png, id=332, 511.41063pt x 87.82813pt>
 File: images/hw_prop_stmt.png Graphic file (type png)
 <use images/hw_prop_stmt.png>
 Package pdftex.def Info: images/hw_prop_stmt.png  used on input line 187.
 (pdftex.def)             Requested size: 347.12354pt x 59.61377pt.
-Excluding 'comment' comment.) (implementation.tex
-
-LaTeX Warning: Citation `NFM2012:CoGaMiWhLaLu' on page 9 undefined on input lin
-e 4.
-
-
-LaTeX Warning: Reference `fig:plugin-arch' on page 9 undefined on input line 5.
-
-
-[9 <./images/hw_fault2.png> <./images/hw_prop_stmt.png>]
-<images/arch.png, id=338, 462.0462pt x 108.405pt>
+ Excluding 'comment' comment.) (implementation.tex
+<images/arch.png, id=333, 462.0462pt x 108.405pt>
 File: images/arch.png Graphic file (type png)
 <use images/arch.png>
 Package pdftex.def Info: images/arch.png  used on input line 14.
 (pdftex.def)             Requested size: 312.40906pt x 73.29922pt.
-
-
-LaTeX Warning: Reference `fig:lustre' on page 10 undefined on input line 26.
-
-
-LaTeX Warning: Citation `2017arXiv171201222G' on page 10 undefined on input lin
-e 30.
-
+ [9 <./images/hw_fault2.png> <./images/hw_prop_stmt.png>]
 <images/lustre.jpg, id=339, 1132.23pt x 559.33969pt>
 File: images/lustre.jpg Graphic file (type jpg)
 <use images/lustre.jpg>
 Package pdftex.def Info: images/lustre.jpg  used on input line 37.
 (pdftex.def)             Requested size: 339.67162pt x 167.80319pt.
-Excluding 'comment' comment.) (fault_analysis.tex [10 <./images/arch.png> <./im
-ages/lustre.jpg>]
-
-LaTeX Warning: Reference `fig:hwFaultProp' on page 11 undefined on input line 1
-4.
-
-[11]
+ Excluding 'comment' comment.)
+(fault_analysis.tex [10 <./images/arch.png> <./images/lustre.jpg>] [11]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
- [12] Excluding 'comment' comment. Excluding 'comment' comment.)
+
+[12] Excluding 'comment' comment. Excluding 'comment' comment.)
 (related_work.tex [13]
-
-LaTeX Warning: Citation `Joshi05:Dasc' on page 14 undefined on input line 4.
-
-
-LaTeX Warning: Citation `Joshi05:SafeComp' on page 14 undefined on input line 4
-.
-
-
-LaTeX Warning: Citation `Joshi07:Hase' on page 14 undefined on input line 4.
-
-
-LaTeX Warning: Citation `EMV2' on page 14 undefined on input line 18.
-
-
-LaTeX Warning: Citation `CHEN201391' on page 14 undefined on input line 18.
-
-
-LaTeX Warning: Citation `10.1007/978-3-642-04468-7_15' on page 14 undefined on 
-input line 20.
-
-
-LaTeX Warning: Citation `5185388' on page 14 undefined on input line 20.
-
-
-LaTeX Warning: Citation `criticalembeddedsystems' on page 14 undefined on input
- line 20.
-
-
-LaTeX Warning: Citation `Cimatti2000' on page 14 undefined on input line 20.
-
-
-LaTeX Warning: Citation `NuSMV' on page 14 undefined on input line 20.
-
-
-LaTeX Warning: Citation `Katoen:2005:MRM:1114692.1115230' on page 14 undefined 
-on input line 20.
-
-
-LaTeX Warning: Citation `MRMC' on page 14 undefined on input line 20.
-
-
-LaTeX Warning: Citation `RAT' on page 14 undefined on input line 20.
-
-
-LaTeX Warning: Citation `DBLP:conf/tacas/BittnerBCCGGMMZ16' on page 14 undefine
-d on input line 20.
-
-
-LaTeX Warning: Citation `compass30toolset' on page 14 undefined on input line 2
-0.
-
-
 Underfull \hbox (badness 1242) in paragraph at lines 20--21
 \OT1/ptm/m/n/10 COM-PASS (Cor-rect-ness, Mod-el-ing project and Per-for-mance o
 f Aerospace Sys-
  []
 
+[14]) (conclusion.tex) (main.bbl [15] [16]
+Underfull \hbox (badness 10000) in paragraph at lines 174--177
+[]\OT1/ptm/m/n/9 MathWorks.  The Math-Works Inc. Simulink Prod-uct Web Site.
+ []
 
-LaTeX Warning: Citation `info8010007' on page 14 undefined on input line 27.
-
-
-LaTeX Warning: Citation `info8010007' on page 14 undefined on input line 28.
-
-[14]
-
-LaTeX Warning: Citation `Gudemann:2010:FQQ:1909626.1909813' on page 15 undefine
-d on input line 31.
-
-
-LaTeX Warning: Citation `Cimatti2000' on page 15 undefined on input line 31.
-
-
-LaTeX Warning: Citation `CAV2011:KwNoPa' on page 15 undefined on input line 31.
-
-
-
-LaTeX Warning: Citation `Katoen:2005:MRM:1114692.1115230' on page 15 undefined 
-on input line 31.
-
-
-LaTeX Warning: Citation `PROSVIRNOVA2013127' on page 15 undefined on input line
- 38.
-
-
-LaTeX Warning: Citation `BieberERTS2018' on page 15 undefined on input line 38.
-
-
-
-LaTeX Warning: Citation `symbAltaRica' on page 15 undefined on input line 38.
-
-
-LaTeX Warning: Citation `Bieber04safetyassessment' on page 15 undefined on inpu
-t line 38.
-
-
-LaTeX Warning: Citation `symbAltaRica' on page 15 undefined on input line 40.
-
-
-LaTeX Warning: Citation `10.1007/978-3-540-75596-8-13' on page 15 undefined on 
-input line 40.
-
-
-LaTeX Warning: Citation `DBLP:conf/tacas/BittnerBCCGGMMZ16' on page 15 undefine
-d on input line 40.
-
-
-LaTeX Warning: Citation `10.1007/978-3-319-11936-6-7' on page 15 undefined on i
-nput line 40.
-
-) (conclusion.tex
-
-LaTeX Warning: Citation `SATechReport' on page 15 undefined on input line 8.
-
-
-LaTeX Warning: Citation `SAGithub' on page 15 undefined on input line 8.
-
-[15])
-No file main.bbl.
-[16] (main.aux)
-
-LaTeX Warning: There were undefined references.
-
+) [17] (main.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 8087 strings out of 492973
- 113927 string characters out of 3135897
- 217517 words of memory out of 3000000
- 11729 multiletter control sequences out of 15000+200000
+ 8093 strings out of 492973
+ 114141 string characters out of 3135897
+ 218840 words of memory out of 3000000
+ 11731 multiletter control sequences out of 15000+200000
  26188 words of font info for 66 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,18n,35p,1347b,460s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1031,9 +774,9 @@ Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/M
 iKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
 mri8a.pfb>
-Output written on main.pdf (16 pages, 1287889 bytes).
+Output written on main.pdf (17 pages, 1299912 bytes).
 PDF statistics:
- 400 PDF objects out of 1000 (max. 8388607)
+ 403 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
