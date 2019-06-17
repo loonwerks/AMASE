@@ -13,8 +13,8 @@ with Receiver;
 		annex agree {**
 			
 			guarantee "All receiver outputs are equal." :
-				(receiver1_output = receiver2_output)
-				and (receiver1_output = receiver3_output);
+				(receiver1_output = receiver2_output);
+				--and (receiver1_output = receiver3_output);
 			
 		**};
 			
