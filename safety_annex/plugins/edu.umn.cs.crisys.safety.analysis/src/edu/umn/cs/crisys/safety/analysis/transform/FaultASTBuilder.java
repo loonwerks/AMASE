@@ -465,6 +465,11 @@ public class FaultASTBuilder {
 		// Hence the AgreeVars that are created are specifically named for this purpose.
 		List<AgreeVar> localsForCommNode = new ArrayList<>();
 
+		// The type of __fault__nominal__output is the same as what the fault node
+		// returns as its output. First find this in order to create that
+		// variable later.
+		NamedType nominalOutputType = getOutputTypeForFaultNode(fault);
+
 		node.createInput("input", type);
 		AgreeVar var1 = new AgreeVar(nodeName + "__input", type, fault.faultStatement);
 		localsForCommNode.add(var1);
@@ -477,8 +482,8 @@ public class FaultASTBuilder {
 		node.createInput("time", NamedType.REAL);
 		AgreeVar var4 = new AgreeVar(nodeName + "__time", NamedType.REAL, fault.faultStatement);
 		localsForCommNode.add(var4);
-		node.createInput("__fault__nominal__output", NamedType.BOOL);
-		AgreeVar var5 = new AgreeVar(nodeName + "____fault__nominal__output", NamedType.BOOL, fault.faultStatement);
+		node.createInput("__fault__nominal__output", nominalOutputType);
+		AgreeVar var5 = new AgreeVar(nodeName + "____fault__nominal__output", nominalOutputType, fault.faultStatement);
 		localsForCommNode.add(var5);
 		node.createInput("fault__trigger__" + fault.id, NamedType.BOOL);
 		AgreeVar var7 = new AgreeVar(nodeName + "__fault__trigger__" + fault.id, NamedType.BOOL, fault.faultStatement);
@@ -487,6 +492,24 @@ public class FaultASTBuilder {
 		// Add to map between node and list of locals in lustre
 		mapCommNodeToInputs.put(nodeName, localsForCommNode);
 		return node;
+	}
+
+	/*
+	 * Find named type of output on fault node
+	 */
+	public NamedType getOutputTypeForFaultNode(Fault fault) {
+		// The type of __fault__nominal__output is the same as what the fault node
+		// returns as its output. First find this in order to create that
+		// variable later.
+		NamedType nominalOutputType = null;
+		if (fault.faultNode.outputs.size() > 1) {
+			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
+		} else {
+			for (VarDecl output : fault.faultNode.outputs) {
+				nominalOutputType = (NamedType) output.type;
+			}
+		}
+		return nominalOutputType;
 	}
 
 	/*
@@ -506,7 +529,11 @@ public class FaultASTBuilder {
 		node.createLocal("__GUARANTEE0", NamedType.BOOL);
 
 		// Create local using fault node output id
-		node.createLocal(getFaultNodeOutputId(fault), NamedType.BOOL);
+		// The type of fault output id is the same as what the fault node
+		// returns as its output. First find this in order to create that
+		// variable later.
+		NamedType nominalOutputType = getOutputTypeForFaultNode(fault);
+		node.createLocal(getFaultNodeOutputId(fault), nominalOutputType);
 
 		return node;
 	}
@@ -537,35 +564,54 @@ public class FaultASTBuilder {
 				new IdExpr("input"));
 		IdExpr guar = new IdExpr("__GUARANTEE0");
 		node.addEquation(guar, binEx);
-		// Add faultNominalOutput to nodeArg list
-		nodeArgs.add(faultNominalOut);
 
-		// Assign assert
-		// binEx1 - 4 builds the following:
-		// binEx4 : (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
-		BoolExpr trueExpr = new BoolExpr(true);
+		// (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
 		IdExpr assumeHist = new IdExpr("__ASSUME__HIST");
-		BinaryExpr binEx1 = new BinaryExpr(guar, BinaryOp.AND, trueExpr);
-		BinaryExpr binEx2 = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binEx1);
-		BinaryExpr binEx3 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx2);
-		BinaryExpr binEx4 = new BinaryExpr(trueExpr, BinaryOp.AND, binEx3);
+		BoolExpr trueExpr = new BoolExpr(true);
+		BinaryExpr binGuar = new BinaryExpr(guar, BinaryOp.AND, trueExpr);
+		BinaryExpr binAssume = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binGuar);
+		BinaryExpr binAssumeAndTrue = new BinaryExpr(binAssume, BinaryOp.AND, trueExpr);
 
-		// ex5 builds the following:
-		// (if fault_trigger then fault_node_val_out else fault_nominal) and (binEx4)
+		// output = (if fault_trigger then fault_node_val_out else fault_nominal)
 		IdExpr cond = new IdExpr("fault__trigger__" + fault.id);
 		IdExpr faultNodeOutputId = new IdExpr(getFaultNodeOutputId(fault));
 		IdExpr elseCond = new IdExpr("__fault__nominal__output");
-		Expr ex5 = new IfThenElseExpr(cond, faultNodeOutputId, elseCond);
-		BinaryExpr binEx6 = new BinaryExpr(ex5, BinaryOp.AND, binEx4);
-		// Add fault trigger to nodeArg list
-		nodeArgs.add(cond);
+		Expr exprITE = new IfThenElseExpr(cond, faultNodeOutputId, elseCond);
+		Expr output = new IdExpr("output");
+		BinaryExpr binOutputEquals = new BinaryExpr(output, BinaryOp.EQUAL, exprITE);
 
-		// binEx6:
+		// true and output = ...
+		BinaryExpr trueAndOutputEquals = new BinaryExpr(binAssumeAndTrue, BinaryOp.AND, binOutputEquals);
+
+		// Final expression
+		BinaryExpr finalExpr = new BinaryExpr(trueAndOutputEquals, BinaryOp.AND, trueExpr);
+
+		// Assert:
 		// __ASSERT = (if fault_trigger then fault_node_val_out else fault_nominal)
 		// and (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
-		node.addEquation(new IdExpr("__ASSERT"), binEx6);
+		node.addEquation(new IdExpr("__ASSERT"), finalExpr);
 
 		// Construct the node call expression
+		Expr arg;
+		for (String ex : fault.faultInputMap.keySet()) {
+			// val_in is fault__nominal
+			if (ex.equalsIgnoreCase("val_in")) {
+				arg = new IdExpr("__fault__nominal__output");
+			} else {
+				// if alt_val exists, input that value
+				arg = fault.faultInputMap.get(ex);
+			}
+			// Make sure it got assigned properly
+			if (arg == null) {
+				new SafetyException("The arguments in the fault " + fault.id + " are not correct.");
+			} else {
+				// add arg to list
+				nodeArgs.add(arg);
+			}
+		}
+		// Lastly, add the trigger
+		nodeArgs.add(new IdExpr("fault__trigger__" + fault.id));
+
 		Expr nodeCall = new NodeCallExpr(fault.faultNode.id, nodeArgs);
 		// Now create equation to add
 		node.addEquation(new Equation(faultNodeOutputId, nodeCall));
