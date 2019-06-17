@@ -212,7 +212,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				addFaultLocalEqsAndAsserts(faults, nb);
 				addFaultNodeEqs(faults, nb);
 			} else {
-				System.out.println("Have asymmetric fault.");
 				addFaultInputs(faults, nb);
 			}
 		}
@@ -259,14 +258,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					if (maxFaults instanceof FaultCountBehavior) {
 						maxFaultHypothesis = true;
 						maxFaultCount = Integer.parseInt(((FaultCountBehavior) maxFaults).getMaxFaults());
-						System.out.println("maxFault: " + maxFaultCount);
 					}
 					// if probabilistic fault hypothesis, collect probabilistic hypothesis
 					else if (maxFaults instanceof ProbabilityBehavior) {
 						probabilisticHypothesis = true;
 						probabilityThreshold = Double
 								.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
-						System.out.println("probability threshold: " + probabilityThreshold);
 					}
 				}
 
@@ -297,9 +294,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// If we do not have the component instance, we
 					// cannot perform this removal of connections.
 					if ((sourceName.compInst == null) || (destName.compInst == null)) {
-						System.out.println("There may be a problem with connections "
-								+ "for the asymmetric fault. If no results are shown, "
-								+ "then there is a problem there.");
+//						System.out.println("There may be a problem with connections "
+//								+ "for the asymmetric fault. If no results are shown, "
+//								+ "then there is a problem there.");
 						continue;
 					}
 					String senderName = sourceName.compInst.getName() + "." + sourceName.id;
@@ -323,7 +320,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			for (AgreeConnection j : agreeConns) {
 				connList.remove(j);
 			}
-			System.out.println("Did it work?");
 			return sb.build();
 
 		} else {
@@ -1403,7 +1399,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (ab instanceof FaultCountBehavior) {
 			maxFaultHypothesis = true;
 			maxFaultCount = Integer.parseInt(((FaultCountBehavior) ab).getMaxFaults());
-			System.out.println("maxFault: " + maxFaultCount);
 		} else if (ab instanceof ProbabilityBehavior) {
 			probabilisticHypothesis = true;
 			collectTopLevelMaxFaultOccurrenceConstraint(Double.parseDouble(((ProbabilityBehavior) ab).getProbabilty()),

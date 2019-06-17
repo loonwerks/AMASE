@@ -435,7 +435,6 @@ public class FaultASTBuilder {
 		for (AgreeVar agreeVar : nodeOutputs) {
 			String temp = agreeVar.id;
 			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
-				System.out.println("Found it: " + temp + " and " + nomFaultConn.get(0).getBase().getName());
 				// This agreeVar is the sender var we want to save for the
 				// later mapping to the receiver var.
 				outputOfInterest = agreeVar;
