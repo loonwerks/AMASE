@@ -1,0 +1,45 @@
+package TopSystem
+public
+with Base_Types;
+with Sender;
+with Receiver;
+
+	system TopSystem
+		features
+			receiver1_output : out data port Base_Types::Float;
+			receiver2_output : out data port Base_Types::Float;
+			receiver3_output : out data port Base_Types::Float;
+		
+		annex agree {**
+			
+			guarantee "All receiver outputs are equal." :
+				(receiver1_output = receiver2_output)
+				and (receiver1_output = receiver3_output);
+			
+		**};
+			
+	end TopSystem;
+	
+	system implementation TopSystem.impl
+		subcomponents
+			Sender : system Sender::Sender;
+			receiver1 : system Receiver::Receiver;
+			receiver2 : system Receiver::Receiver;
+			receiver3 : system Receiver::Receiver;
+			
+		connections
+			sender_to_comm1 : port sender.sender_out -> receiver1.sender_input;
+			sender_to_comm2 : port sender.sender_out -> receiver2.sender_input;
+			sender_to_comm3 : port sender.sender_out -> receiver3.sender_input;
+			
+			
+			rec1_to_top : port receiver1.output -> receiver1_output;
+			rec2_to_top : port receiver2.output -> receiver2_output;
+			rec3_to_top : port receiver3.output -> receiver3_output;
+		
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
+			
+	end TopSystem.impl;
+end TopSystem;
