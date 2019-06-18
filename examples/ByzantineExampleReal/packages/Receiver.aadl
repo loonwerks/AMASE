@@ -1,0 +1,26 @@
+package Receiver
+public
+with Base_Types;
+	system Receiver
+		features
+			sender_input : in data port Base_Types::Float;
+			
+			output : out data port Base_Types::Float;
+		
+		annex agree {**
+			
+			guarantee "Sender input equals output.":
+				sender_input = output;
+			
+		**}	;
+--		annex safety {**
+--
+--			fault Receiver_Fault "Receiver output fail to zero.": Common_Faults.fail_to_real {
+--				inputs: val_in <- output, alt_val <- 0.0;     
+--				outputs: output <- val_out;    
+--				duration: permanent;
+--				--propagate_type: asymmetric;
+--			}	
+--		**};
+	end Receiver;
+end Receiver;
