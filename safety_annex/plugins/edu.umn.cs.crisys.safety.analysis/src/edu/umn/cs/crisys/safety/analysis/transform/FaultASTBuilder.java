@@ -52,6 +52,7 @@ import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
 import jkind.lustre.RecordAccessExpr;
+import jkind.lustre.RecordType;
 import jkind.lustre.TupleExpr;
 import jkind.lustre.Type;
 import jkind.lustre.VarDecl;
@@ -76,6 +77,8 @@ public class FaultASTBuilder {
 	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
 	// Map string of sender.sender_output to receiver.input for all connections
 	private Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
+	// List of expressions used as input for node call expression.
+	private List<Expr> nodeArgs = new ArrayList<>();
 
 	private AgreeNode agreeNode;
 	private AgreeASTBuilder builder = new AgreeASTBuilder();
@@ -180,8 +183,6 @@ public class FaultASTBuilder {
 		List<VarDecl> vars =
 			builder.agreeVarsFromArgs(stmt.getLhs(), agreeNode.compInst);
 		for (VarDecl var : vars) {
-
-
 			fault.safetyEqVars.add((AgreeVar) var);
 		}
 	}
@@ -291,13 +292,11 @@ public class FaultASTBuilder {
 				break;
 			}
 		}
-
 		if (!asymFlag) {
 			return buildSymmetricFault(fstmt);
 		} else {
 			return buildAsymmetricFault(fstmt);
 		}
-
 	}
 
 	/*
@@ -360,25 +359,34 @@ public class FaultASTBuilder {
 		// Will be key for mapSenderToReceiver
 		String tempSend = this.agreeNode.compInst.getName() + "." + searchFor;
 		List<String> tempReceive = new ArrayList<String>();
+		// Name of sender component (the one with the fanned output)
+		compName = this.agreeNode.compInst.getName();
+		// Find the connections of this component (need to access parent comp to get conns)
 		if (this.agreeNode.compInst.eContainer() instanceof SystemInstanceImpl) {
 			SystemInstanceImpl parentContainer = (SystemInstanceImpl) this.agreeNode.compInst.eContainer();
+			// Go through all connections and find the ones from sender to receiver.
 			for (ConnectionInstance ci : parentContainer.allConnectionInstances()) {
-				if (ci.getFullName().contains(searchFor)) {
-					// Add connection to senderCollection list
-					senderConnections.add(ci.getDestination());
-					// Gather name of parent and connection ("receiver1.sender_input") for map
-					if (ci.getDestination().eContainer() instanceof ComponentInstanceImpl) {
-						ComponentInstanceImpl compInst = (ComponentInstanceImpl) ci.getDestination().eContainer();
-						// Will be value for mapSenderToReceiver
-						tempReceive.add(compInst.getName() + "." + ci.getDestination().getName());
-					} else {
-						new SafetyException("The sender component on asymmetric fault is connected"
-								+ "to an unallowable component. (Debug: FaultASTBuilder 375)");
+				if (ci.getSource().eContainer() instanceof ComponentInstanceImpl) {
+					ComponentInstanceImpl thisComp = (ComponentInstanceImpl) ci.getSource().eContainer();
+					if (thisComp.getName().equals(compName)) {
+						// Add these connections to the local lists used later
+						// to create the communication nodes.
+						senderConnections.add(ci.getDestination());
+						if (ci.getDestination().eContainer() instanceof SystemInstanceImpl) {
+							SystemInstanceImpl sysReceiver = (SystemInstanceImpl) ci.getDestination().eContainer();
+							tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
+						} else if (ci.getDestination().eContainer() instanceof ComponentInstanceImpl) {
+							ComponentInstanceImpl sysReceiver = (ComponentInstanceImpl) ci.getDestination()
+									.eContainer();
+							tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
+						} else {
+							new SafetyException(
+									"Asymmetric fault linked to non-system instance component. "
+											+ "(Debug FaultASTBuilder 377");
+						}
 					}
 				}
 			}
-			// Comp name used in mapAsymFaultToCompName
-			compName = this.agreeNode.compInst.getFullName();
 			mapAsymFaultToCompName.put(fault, compName);
 			// Map sender to receiver names
 			mapSenderToReceiver.put(tempSend, tempReceive);
@@ -449,8 +457,8 @@ public class FaultASTBuilder {
 		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type,
 				nodeName);
 		newNode = createOutputForCommNode(newNode);
-		newNode = createLocalsForCommNode(newNode, fault);
-		newNode = createEquationsForCommNode(newNode, fault, nodeName);
+		newNode = createLocalsForCommNode(newNode, fault, type);
+		newNode = createEquationsForCommNode(newNode, fault, type, nodeName);
 
 		return newNode.build();
 	}
@@ -464,11 +472,6 @@ public class FaultASTBuilder {
 		// Hence the AgreeVars that are created are specifically named for this purpose.
 		List<AgreeVar> localsForCommNode = new ArrayList<>();
 
-		// The type of __fault__nominal__output is the same as what the fault node
-		// returns as its output. First find this in order to create that
-		// variable later.
-		NamedType nominalOutputType = getOutputTypeForFaultNode(fault);
-
 		node.createInput("input", type);
 		AgreeVar var1 = new AgreeVar(nodeName + "__input", type, fault.faultStatement);
 		localsForCommNode.add(var1);
@@ -481,12 +484,19 @@ public class FaultASTBuilder {
 		node.createInput("time", NamedType.REAL);
 		AgreeVar var4 = new AgreeVar(nodeName + "__time", NamedType.REAL, fault.faultStatement);
 		localsForCommNode.add(var4);
-		node.createInput("__fault__nominal__output", nominalOutputType);
-		AgreeVar var5 = new AgreeVar(nodeName + "____fault__nominal__output", nominalOutputType, fault.faultStatement);
+		node.createInput("__fault__nominal__output", type);
+		AgreeVar var5 = new AgreeVar(nodeName + "____fault__nominal__output", type, fault.faultStatement);
 		localsForCommNode.add(var5);
 		node.createInput("fault__trigger__" + fault.id, NamedType.BOOL);
 		AgreeVar var7 = new AgreeVar(nodeName + "__fault__trigger__" + fault.id, NamedType.BOOL, fault.faultStatement);
 		localsForCommNode.add(var7);
+
+		// The fault node may have more than one argument. These all need to be
+		// added as locals to this node and put into the map for main.
+		// They will also be used in the node call expression (line 625).
+		// This helper method will add all locals as needed as well as associated
+		// safetyEqAssert statements. These correspond to "eq" stmts in the fault definition.
+		localsForCommNode.addAll(addInputListAndEqAsserts(node, fault, nodeName));
 
 		// Add to map between node and list of locals in lustre
 		mapCommNodeToInputs.put(nodeName, localsForCommNode);
@@ -494,11 +504,70 @@ public class FaultASTBuilder {
 	}
 
 	/*
+	 * In the case when the fault node has multiple arguments, these must be added
+	 * to the locals list for this commNode, added to the list of locals for main node
+	 * information, and all safetyEqAsserts corresponding to them added to equations as well.
+	 * This method performs those actions.
+	 *
+	 * Size of fault.faultInputMap was checked before this method was called.
+	 * That means that there are more than two arguments to the fault node.
+	 * The first argument is taken care of previously (__fault__nominal__output).
+	 * The last argument is also taken care of (fault__trigger).
+	 * We do the rest here.
+	 */
+	private List<AgreeVar> addInputListAndEqAsserts(NodeBuilder node, Fault fault, String nodename) {
+		List<AgreeVar> localsForCommNode = new ArrayList<AgreeVar>();
+		nodeArgs.clear();
+
+		// Double check size of faultInputList, must be more than 1.
+		if (fault.faultInputMap.size() <= 1) {
+			return localsForCommNode;
+		} else {
+			for (String key : fault.faultInputMap.keySet()) {
+				if (key.equalsIgnoreCase("val_in")) {
+					// First add nominal output to argument list.
+					nodeArgs.add(new IdExpr("__fault__nominal__output"));
+				} else {
+					// If the value is an IdExpr, get the name and type
+					// and add to locals.
+					// The value is the same as the fault output type.
+					if (fault.faultInputMap.get(key) instanceof IdExpr) {
+						IdExpr value = (IdExpr) fault.faultInputMap.get(key);
+						// Get type by accessing this in safetyEqVars
+						Type type = null;
+						for (AgreeVar vars : fault.safetyEqVars) {
+							if (value.id.equals(vars.id)) {
+								type = vars.type;
+							}
+						}
+						if (type == null) {
+							new SafetyException("Error in defining fault node arguments. (debug FaultASTBuilder 539)");
+						}
+						AgreeVar local = new AgreeVar(value.id, type, fault.faultStatement);
+						IdExpr newIdForList = new IdExpr(local.id);
+						nodeArgs.add(newIdForList);
+						localsForCommNode.add(local);
+						node.createInput(local.id, type);
+					} else {
+						// If it is not IdExpr, assume that it is Real/Bool/IntExpr
+						// Added directly to fault node call.
+						nodeArgs.add(fault.faultInputMap.get(key));
+					}
+				}
+			}
+		}
+		// Lastly, add the trigger
+		nodeArgs.add(new IdExpr("fault__trigger__" + fault.id));
+		return localsForCommNode;
+	}
+
+	/*
 	 * Find named type of output on fault node
 	 */
 	public NamedType getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
-		// returns as its output. First find this in order to create that
+		// takes as input. Will have statement: fault__nominal = input
+		// First find this in order to create that
 		// variable later.
 		NamedType nominalOutputType = null;
 		if (fault.faultNode.outputs.size() > 1) {
@@ -523,7 +592,7 @@ public class FaultASTBuilder {
 	/*
 	 * creates locals for new communication node.
 	 */
-	public NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault) {
+	public NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault, Type type) {
 
 		node.createLocal("__GUARANTEE0", NamedType.BOOL);
 
@@ -552,15 +621,28 @@ public class FaultASTBuilder {
 	/*
 	 * creates equations for new communication node.
 	 */
-	public NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, String nodeName) {
-		// List of expressions used as input for node call expression later
-		// We collect these as we build them for other expressions.
-		List<Expr> nodeArgs = new ArrayList<>();
-
+	public NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
 		// assign __GUARANTEE0 : fault__nominal__output = input
-		IdExpr faultNominalOut = new IdExpr("__fault__nominal__output");
+		// Simple case is when it is bool, real. Otherwise if it is a record
+		// type, we need to access the field of the fault node input and append
+		// that to the expression (i.e. __fault__nominal__output.VAL = input.VAL)
+		String field = "";
+		String dotField = "";
+		if (type instanceof RecordType) {
+			for (Expr faultOutput : fault.faultOutputMap.keySet()) {
+				if (faultOutput instanceof RecordAccessExpr) {
+					RecordAccessExpr rac = (RecordAccessExpr) faultOutput;
+					dotField = "." + rac.field;
+					field = rac.field;
+				} else {
+					new SafetyException("Type error in fault output. (Debug FaultASTBuilder 564");
+				}
+			}
+		}
+		RecordAccessExpr recNominal = new RecordAccessExpr(new IdExpr("__fault__nominal__output"), field);
+		IdExpr faultNominalOut = new IdExpr("__fault__nominal__output" + dotField);
 		Expr binEx = new BinaryExpr(faultNominalOut, BinaryOp.EQUAL,
-				new IdExpr("input"));
+				new IdExpr("input" + dotField));
 		IdExpr guar = new IdExpr("__GUARANTEE0");
 		node.addEquation(guar, binEx);
 
@@ -572,11 +654,20 @@ public class FaultASTBuilder {
 		BinaryExpr binAssumeAndTrue = new BinaryExpr(binAssume, BinaryOp.AND, trueExpr);
 
 		// output = (if fault_trigger then fault_node_val_out else fault_nominal)
+		// If record type, need to perform nesting, hence the call to SafetyUtil.
+		Expr toAssign = null;
+		if (type instanceof RecordType) {
+			toAssign = SafetyUtil.createNestedUpdateExpr(recNominal, new IdExpr(getFaultNodeOutputId(fault)));
+		} else {
+			toAssign = new IdExpr(getFaultNodeOutputId(fault));
+		}
+
 		IdExpr cond = new IdExpr("fault__trigger__" + fault.id);
-		IdExpr faultNodeOutputId = new IdExpr(getFaultNodeOutputId(fault));
 		IdExpr elseCond = new IdExpr("__fault__nominal__output");
-		Expr exprITE = new IfThenElseExpr(cond, faultNodeOutputId, elseCond);
-		Expr output = new IdExpr("output");
+		Expr exprITE = new IfThenElseExpr(cond, toAssign, elseCond);
+		// If we have a record type, enter output as entire name.
+		String outputName = "output";
+		Expr output = new IdExpr(outputName);
 		BinaryExpr binOutputEquals = new BinaryExpr(output, BinaryOp.EQUAL, exprITE);
 
 		// true and output = ...
@@ -585,37 +676,42 @@ public class FaultASTBuilder {
 		// Final expression
 		BinaryExpr finalExpr = new BinaryExpr(trueAndOutputEquals, BinaryOp.AND, trueExpr);
 
-		// Assert:
-		// __ASSERT = (if fault_trigger then fault_node_val_out else fault_nominal)
-		// and (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
-		node.addEquation(new IdExpr("__ASSERT"), finalExpr);
+		// Before finishing the assert, check to see if we have safetyEqAsserts in the fault
+		// and add those to the finalExpr with "and"
+		if (fault.safetyEqAsserts.isEmpty()) {
+			// Assert:
+			// __ASSERT = (if fault_trigger then fault_node_val_out else fault_nominal)
+			// and (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
+			node.addEquation(new IdExpr("__ASSERT"), finalExpr);
+		} else {
+			// Build and expression with all expr in list
+			Expr safetyEqExpr = buildBigAndExpr(fault.safetyEqAsserts, 0);
+			BinaryExpr finalExpr2 = new BinaryExpr(safetyEqExpr, BinaryOp.AND, finalExpr);
+			node.addEquation(new IdExpr("__ASSERT"), finalExpr2);
+		}
 
 		// Construct the node call expression
-		Expr arg;
-		for (String ex : fault.faultInputMap.keySet()) {
-			// val_in is fault__nominal
-			if (ex.equalsIgnoreCase("val_in")) {
-				arg = new IdExpr("__fault__nominal__output");
-			} else {
-				// if alt_val exists, input that value
-				arg = fault.faultInputMap.get(ex);
-			}
-			// Make sure it got assigned properly
-			if (arg == null) {
-				new SafetyException("The arguments in the fault " + fault.id + " are not correct.");
-			} else {
-				// add arg to list
-				nodeArgs.add(arg);
-			}
-		}
-		// Lastly, add the trigger
-		nodeArgs.add(new IdExpr("fault__trigger__" + fault.id));
-
-		Expr nodeCall = new NodeCallExpr(fault.faultNode.id, nodeArgs);
-		// Now create equation to add
-		node.addEquation(new Equation(faultNodeOutputId, nodeCall));
+		NodeCallExpr nodeCall = new NodeCallExpr(fault.faultNode.id, this.nodeArgs);
+		node.addEquation(new Equation(new IdExpr(getFaultNodeOutputId(fault)), nodeCall));
 
 		return node;
+	}
+
+	/*
+	 * helper method that builds an AND expression of all things in list
+	 * Base case: list is empty : append false to AND list
+	 * Base case 2: list has one element : return that element.
+	 * Recursive case: make AND of element of list with recursive call
+	 *
+	 */
+	private Expr buildBigAndExpr(List<AgreeStatement> exprList, int index) {
+		if (index > exprList.size() - 1) {
+			return new BoolExpr(false);
+		} else if (index == exprList.size() - 1) {
+			return exprList.get(index).expr;
+		} else {
+			return new BinaryExpr(exprList.get(index).expr, BinaryOp.AND, buildBigAndExpr(exprList, index + 1));
+		}
 	}
 
 	public Map<String, List<AgreeVar>> getMapCommNodeToInputs() {

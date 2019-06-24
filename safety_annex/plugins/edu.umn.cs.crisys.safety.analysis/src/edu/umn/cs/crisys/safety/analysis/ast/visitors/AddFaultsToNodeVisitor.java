@@ -246,9 +246,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
 			if (AddFaultsToAgree.getTransformFlag() == 1) {
 				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
-			}
-
-			else if (AddFaultsToAgree.getTransformFlag() == 2) {
+			} else if (AddFaultsToAgree.getTransformFlag() == 2) {
 				nb.setFaultTreeFlag(true);
 
 				//only collect fault hypothesis from the upper most level
@@ -483,7 +481,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// If this expression is not in map, return exception message
 		String outputName = f.faultOutputMap.get(ex);
 		if (outputName == null) {
-			new Exception("Cannot find expression in mapping: faultToActual (AddFaultsToNodeVisitor class)");
+			new Exception("Cannot find expression in mapping: faultToActual (Debug: AddFaultsToNodeVisitor 484)");
 		}
 		// Use outputName to get value from outputParamToActualMap
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
@@ -1459,6 +1457,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private void addLocalsForCommNodes(AgreeNodeBuilder nb) {
 		// Access mapCommNodesToInputs to gather inputs for each comm node.
 		for (String commNodes : mapCommNodeToInputs.keySet()) {
+			List<AgreeVar> inputs = mapCommNodeToInputs.get(commNodes);
+			List<AgreeVar> inputsCopy = inputs;
+
+			// This loop makes sure the naming is correct for all inputs.
+			// Since they are going into main, it must add "nodename__" to the
+			// start of all var ids.
+			for (AgreeVar var : inputsCopy) {
+				if (!(var.id.contains(commNodes))) {
+					// Create new AgreeVar with new id
+					AgreeVar newVar = new AgreeVar(commNodes + "__" + var.id, var.type, var.reference);
+					// Delete old agree var
+					inputs.remove(var);
+					inputs.add(newVar);
+				}
+			}
+
 			nb.addInput(mapCommNodeToInputs.get(commNodes));
 		}
 	}
