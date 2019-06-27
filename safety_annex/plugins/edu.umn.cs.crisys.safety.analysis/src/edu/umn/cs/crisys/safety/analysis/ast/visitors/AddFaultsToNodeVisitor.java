@@ -117,6 +117,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Map asym fault to their corresponding component instance names
 	// Used in isTop to find trigger and make assert statement
 	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
+	// Maps component name to all associated communication node names.
+	private Map<String, List<String>> mapCompNameToCommNodes = new HashMap<String, List<String>>();
 	// map comm node outputs to AADL connections
 	private Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
 	// Map sender ("sender.output") to receiver name ("receiver1.input", "receiver2.input",...)
@@ -227,7 +229,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// (addTopLevelFaultDeclarations) due to the recursive nature
 			// of that method. We only add declarations for asym faults once
 			// and do not want recursive calls on this activity for subnodes.
-			if (!this.mapAsymFaultToCompName.isEmpty()) {
+			if (!this.mapCommNodeToInputs.isEmpty()) {
 				addTopLevelAsymFaultDeclarations(nb);
 			}
 			// empty path to pass to top level node fault
@@ -279,7 +281,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Create SafetyNodeBuilder and copy over all of this node
 		// information. We do this so we can access connections
 		// for asymmetric faults.
-		if (!this.mapAsymFaultToCompName.isEmpty() && isTop) {
+		if (!this.mapSenderToReceiver.isEmpty() && isTop) {
 			SafetyNodeBuilder sb = new SafetyNodeBuilder(node);
 			List<AgreeConnection> agreeConns = new ArrayList<AgreeConnection>();
 			int i = 0;
@@ -318,6 +320,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			for (AgreeConnection j : agreeConns) {
 				connList.remove(j);
 			}
+			FaultASTBuilder.resetAsymMaps();
 			return sb.build();
 
 		} else {
@@ -626,6 +629,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		List<Fault> faults = new ArrayList<>();
 		// reset fault count for the new Agree Node
+		// reset maps for asymmetric fault info
 		FaultASTBuilder.resetFaultCounter();
 
 		for (SpecStatement s : specs) {
@@ -642,16 +646,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if (isAsymmetric(fs)) {
 					mapAsymCompOutputToCommNodeIn = builder.getMapAsymCompOutputToCommNodeIn();
 					mapCommNodeToInputs = builder.getMapCommNodeToInputs();
-					mapAsymFaultToCompName = builder.getMapAsymFaultToCompName();
 					mapCommNodeOutputToConnections = builder.getMapCommNodeOutputToConnections();
 					mapSenderToReceiver = builder.getMapSenderToReceiver();
-					// Create mapping from fault to associated commNodes.
-					for (Fault f : mapAsymFaultToCompName.keySet()) {
-						if (!mapAsymFaultToCommNodes.containsKey(f)) {
-							// Convert set to list and put into map
-							List<String> list = new ArrayList<String>(mapCommNodeToInputs.keySet());
-							mapAsymFaultToCommNodes.put(f, list);
-						}
+					mapCompNameToCommNodes = builder.getMapCompNameToCommNodes();
+					// Create local mapAsymFaultToCompName
+					if (node.compInst instanceof ComponentInstance) {
+						ComponentInstance comp = node.compInst;
+						String name = comp.getName();
+						mapAsymFaultToCompName.put(safetyFault, name);
+						// Create mapping from fault to associated commNodes.
+						// Use mapping from fault to comp name, then map from comp name to
+						// comm nodes.
+						mapAsymFaultToCommNodes.put(safetyFault, mapCompNameToCommNodes.get(name));
 					}
 				}
 				faults.add(safetyFault);
@@ -1670,6 +1676,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			this.ft1 = ft1;
 			this.ft2 = ft2;
 		}
+	}
+
+	private void deepCopyHashMap() {
+
 	}
 
 }
