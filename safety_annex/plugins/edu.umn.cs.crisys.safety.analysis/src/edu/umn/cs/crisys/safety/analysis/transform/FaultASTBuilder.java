@@ -66,17 +66,17 @@ public class FaultASTBuilder {
 	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
 	private List<Node> globalLustreNodes;
 	// Maps the asymmetric fault statement to corresponding comm node inputs
-	private Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
+	private static Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
 	// map comm node outputs to AADL connections
-	private Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
+	private static Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
-	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
+	private static Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
 	// Map asym fault to their corresponding component instance names
 	// Used in isTop to find trigger and make assert statement
-	private Map<Fault, String> mapAsymFaultToCompName = new HashMap<Fault, String>();
+	private static Map<String, List<String>> mapCompNameToCommNodes = new HashMap<String, List<String>>();
 	// Map string of sender.sender_output to receiver.input for all connections
-	private Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
+	private static Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
 	// List of expressions used as input for node call expression.
 	private List<Expr> nodeArgs = new ArrayList<>();
 
@@ -386,10 +386,9 @@ public class FaultASTBuilder {
 						}
 					}
 				}
+				// Map sender to receiver names
+				mapSenderToReceiver.put(tempSend, tempReceive);
 			}
-			mapAsymFaultToCompName.put(fault, compName);
-			// Map sender to receiver names
-			mapSenderToReceiver.put(tempSend, tempReceive);
 		}
 
 		// 3. Create the communication nodes.
@@ -400,11 +399,13 @@ public class FaultASTBuilder {
 		//
 		// 4. Add node to Lustre as it is created (inside loop).
 		String nodeName = "";
+		List<String> commNodeNamesInput = new ArrayList<>();
 		List<String> commNodeNames = new ArrayList<>();
 		for (int i = 0; i < senderConnections.size(); i++) {
 			nodeName = "asym_node_" + i + "__" + compName + "__" + fault.id;
 			Node commNode = createCommNode(this.agreeNode, fstmt, fault, nodeName, i);
-			commNodeNames.add(nodeName + "__input");
+			commNodeNamesInput.add(nodeName + "__input");
+			commNodeNames.add(nodeName);
 			// Make map from comm node to connections
 			mapCommNodeOutputToConnections.put(nodeName + "__output", senderConnections.get(i));
 			// 4. Add node to lustre
@@ -412,8 +413,8 @@ public class FaultASTBuilder {
 		}
 		// Output of sender component used to build lustre main asserts
 		String senderOut = this.agreeNode.id + "__" + searchFor;
-		mapAsymCompOutputToCommNodeIn.put(senderOut, commNodeNames);
-
+		mapAsymCompOutputToCommNodeIn.put(senderOut, commNodeNamesInput);
+		mapCompNameToCommNodes.put(compName, commNodeNames);
 		return fault;
 	}
 
@@ -520,7 +521,7 @@ public class FaultASTBuilder {
 		nodeArgs.clear();
 
 		// Double check size of faultInputList, must be more than 1.
-		if (fault.faultInputMap.size() <= 1) {
+		if (fault.faultInputMap.size() <= 0) {
 			return localsForCommNode;
 		} else {
 			for (String key : fault.faultInputMap.keySet()) {
@@ -691,8 +692,28 @@ public class FaultASTBuilder {
 		}
 
 		// Construct the node call expression
-		NodeCallExpr nodeCall = new NodeCallExpr(fault.faultNode.id, this.nodeArgs);
-		node.addEquation(new Equation(new IdExpr(getFaultNodeOutputId(fault)), nodeCall));
+		// If record type, add to fault nominal expression
+		if (dotField.isEmpty()) {
+			NodeCallExpr nodeCall = new NodeCallExpr(fault.faultNode.id, nodeArgs);
+			node.addEquation(new Equation(new IdExpr(getFaultNodeOutputId(fault)), nodeCall));
+		} else {
+			List<Expr> newList = new ArrayList<>();
+			for (Expr ex : nodeArgs) {
+				if (ex instanceof IdExpr) {
+					IdExpr idEx = (IdExpr) ex;
+					if (idEx.id.equalsIgnoreCase("__fault__nominal__output")) {
+						IdExpr newId = new IdExpr(idEx.id + dotField);
+						newList.add(newId);
+					} else {
+						newList.add(ex);
+					}
+				} else {
+					newList.add(ex);
+				}
+			}
+			NodeCallExpr nodeCall = new NodeCallExpr(fault.faultNode.id, newList);
+			node.addEquation(new Equation(new IdExpr(getFaultNodeOutputId(fault)), nodeCall));
+		}
 
 		return node;
 	}
@@ -722,8 +743,8 @@ public class FaultASTBuilder {
 		return mapAsymCompOutputToCommNodeIn;
 	}
 
-	public Map<Fault, String> getMapAsymFaultToCompName() {
-		return mapAsymFaultToCompName;
+	public Map<String, List<String>> getMapCompNameToCommNodes() {
+		return mapCompNameToCommNodes;
 	}
 
 	public Map<String, ConnectionInstanceEnd> getMapCommNodeOutputToConnections() {
@@ -732,5 +753,14 @@ public class FaultASTBuilder {
 
 	public Map<String, List<String>> getMapSenderToReceiver() {
 		return mapSenderToReceiver;
+	}
+
+	public static void resetAsymMaps() {
+		mapCommNodeToInputs.clear();
+		mapAsymCompOutputToCommNodeIn.clear();
+		mapCompNameToCommNodes.clear();
+		mapCommNodeOutputToConnections.clear();
+		mapSenderToReceiver.clear();
+		;
 	}
 }

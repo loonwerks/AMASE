@@ -21,7 +21,7 @@ with Base_Types;
 				inputs: val_in <- sender_out;     
 				outputs: sender_out <- val_out;    
 				duration: permanent;
-				--propagate_type: asymmetric;
+				propagate_type: asymmetric;
 			}	
 		**};
 		
