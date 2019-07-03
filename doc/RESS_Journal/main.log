@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  18 JUN 2019 09:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  28 JUN 2019 09:18
 entering extended mode
 **./main.tex
 (main.tex
@@ -681,10 +681,10 @@ Package pdftex.def Info: images/inadvertent_braking.png  used on input line 52.
 <images/system_sensor.pdf, id=214, 597.55246pt x 845.07718pt>
 File: images/system_sensor.pdf Graphic file (type pdf)
 <use images/system_sensor.pdf>
-Package pdftex.def Info: images/system_sensor.pdf  used on input line 78.
+Package pdftex.def Info: images/system_sensor.pdf  used on input line 81.
 (pdftex.def)             Requested size: 435.32704pt x 94.87456pt.
 
-Overfull \hbox (88.2035pt too wide) in paragraph at lines 78--82
+Overfull \hbox (88.2035pt too wide) in paragraph at lines 81--85
  [] 
  []
 
@@ -692,65 +692,80 @@ Overfull \hbox (88.2035pt too wide) in paragraph at lines 78--82
 File: images/safetyannex_sensorfault.pdf Graphic file (type pdf)
 <use images/safetyannex_sensorfault.pdf>
 Package pdftex.def Info: images/safetyannex_sensorfault.pdf  used on input line
- 94.
+ 97.
 (pdftex.def)             Requested size: 435.32704pt x 66.10681pt.
 
-Overfull \hbox (88.2035pt too wide) in paragraph at lines 94--98
+Overfull \hbox (88.2035pt too wide) in paragraph at lines 97--101
  [] 
  []
 
-[7 <./images/system_sensor.pdf> <./images/safetyannex_sensorfault.pdf>]
+[7 <./images/system_sensor.pdf>]
 
 pdfTeX warning: pdflatex.exe (file ./images/Comparison_with_EMV2.pdf): PDF incl
 usion: found PDF version <1.6>, but at most version <1.5> allowed
-<images/Comparison_with_EMV2.pdf, id=255, 794.97pt x 614.295pt>
+<images/Comparison_with_EMV2.pdf, id=241, 794.97pt x 614.295pt>
 File: images/Comparison_with_EMV2.pdf Graphic file (type pdf)
 <use images/Comparison_with_EMV2.pdf>
 Package pdftex.def Info: images/Comparison_with_EMV2.pdf  used on input line 11
-6.
+9.
 (pdftex.def)             Requested size: 347.12354pt x 262.10168pt.
-Excluding 'comment' comment. [8 <./images/Comparison_with_EMV2.pdf, page is rot
-ated 90 degrees>]
-<images/hw_fault2.png, id=331, 294.09875pt x 55.70813pt>
+Excluding 'comment' comment. [8 <./images/safetyannex_sensorfault.pdf>]
+<images/hw_fault2.png, id=260, 294.09875pt x 55.70813pt>
 File: images/hw_fault2.png Graphic file (type png)
 <use images/hw_fault2.png>
-Package pdftex.def Info: images/hw_fault2.png  used on input line 167.
+Package pdftex.def Info: images/hw_fault2.png  used on input line 170.
 (pdftex.def)             Requested size: 208.27623pt x 39.45187pt.
-<images/hw_prop_stmt.png, id=332, 511.41063pt x 87.82813pt>
+<images/hw_prop_stmt.png, id=261, 511.41063pt x 87.82813pt>
 File: images/hw_prop_stmt.png Graphic file (type png)
 <use images/hw_prop_stmt.png>
-Package pdftex.def Info: images/hw_prop_stmt.png  used on input line 187.
+Package pdftex.def Info: images/hw_prop_stmt.png  used on input line 190.
 (pdftex.def)             Requested size: 347.12354pt x 59.61377pt.
- Excluding 'comment' comment.) (implementation.tex
-<images/arch.png, id=333, 462.0462pt x 108.405pt>
+
+[9 <./images/Comparison_with_EMV2.pdf, page is rotated 90 degrees> <./images/hw
+_fault2.png>] Excluding 'comment' comment.) (implementation.tex
+<images/arch.png, id=337, 462.0462pt x 108.405pt>
 File: images/arch.png Graphic file (type png)
 <use images/arch.png>
 Package pdftex.def Info: images/arch.png  used on input line 14.
 (pdftex.def)             Requested size: 312.40906pt x 73.29922pt.
- [9 <./images/hw_fault2.png> <./images/hw_prop_stmt.png>]
-<images/lustre.jpg, id=339, 1132.23pt x 559.33969pt>
+<images/lustre.jpg, id=338, 1132.23pt x 559.33969pt>
 File: images/lustre.jpg Graphic file (type jpg)
 <use images/lustre.jpg>
 Package pdftex.def Info: images/lustre.jpg  used on input line 37.
 (pdftex.def)             Requested size: 339.67162pt x 167.80319pt.
- Excluding 'comment' comment.)
-(fault_analysis.tex [10 <./images/arch.png> <./images/lustre.jpg>] [11]
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+Excluding 'comment' comment.) (fault_analysis.tex [10 <./images/hw_prop_stmt.pn
+g> <./images/arch.png>] [11 <./images/lustre.jpg>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
 
-[12] Excluding 'comment' comment. Excluding 'comment' comment.)
-(related_work.tex [13]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [12]
+[13] Excluding 'comment' comment. Excluding 'comment' comment.)
+(related_work.tex [14]
 Underfull \hbox (badness 1242) in paragraph at lines 20--21
 \OT1/ptm/m/n/10 COM-PASS (Cor-rect-ness, Mod-el-ing project and Per-for-mance o
 f Aerospace Sys-
  []
 
-[14]) (conclusion.tex) (main.bbl [15] [16]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [15])
+(conclusion.tex) (main.bbl [16] [17]
 Underfull \hbox (badness 10000) in paragraph at lines 174--177
 []\OT1/ptm/m/n/9 MathWorks.  The Math-Works Inc. Simulink Prod-uct Web Site.
  []
 
-) [17] (main.aux) ) 
+) [18] (main.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
  8093 strings out of 492973
  114141 string characters out of 3135897
@@ -759,20 +774,20 @@ Here is how much of TeX's memory you used:
  26188 words of font info for 66 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,18n,35p,1347b,460s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:
-/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program
- Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C
-:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
-ype1/urw/times/utmri8a.pfb>
-Output written on main.pdf (17 pages, 1299715 bytes).
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/
+Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/M
+iKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
+ype1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
+mri8a.pfb>
+Output written on main.pdf (18 pages, 1301848 bytes).
 PDF statistics:
- 403 PDF objects out of 1000 (max. 8388607)
+ 406 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
