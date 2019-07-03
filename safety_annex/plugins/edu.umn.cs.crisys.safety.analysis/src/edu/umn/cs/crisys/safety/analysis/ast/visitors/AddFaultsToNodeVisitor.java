@@ -344,6 +344,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * fault information to create unique nominal id.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb, Fault f, String faultyId) {
+		if (faultyId.contains(".")) {
+			String[] spl = faultyId.split("\\.");
+			if (spl.length != 0) {
+				faultyId = spl[0];
+			} else {
+				throw new SafetyException("The component output (" + faultyId + ") this fault (" + f.id + ") is "
+						+ "attached to is erroneous.");
+			}
+		}
 		AgreeVar out = findVar(node.outputs, (faultyId));
 		if (out == null) {
 			throw new SafetyException("A fault defined for " + node.id + " has a connection"
