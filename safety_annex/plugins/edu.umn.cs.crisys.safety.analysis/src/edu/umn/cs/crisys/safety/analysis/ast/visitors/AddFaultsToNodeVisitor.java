@@ -14,6 +14,7 @@ import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
 import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.FeatureInstanceImpl;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
@@ -1614,20 +1615,24 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (String output : mapCommNodeOutputToConnections.keySet()) {
 			String featureName = "";
 			String componentName = "";
-			if (mapCommNodeOutputToConnections.get(output) instanceof FeatureInstanceImpl) {
+			if (mapCommNodeOutputToConnections.get(output).eContainer() instanceof SystemInstanceImpl) {
+				FeatureInstanceImpl fi = (FeatureInstanceImpl) mapCommNodeOutputToConnections.get(output);
+				componentName = "";
+				featureName = fi.getName();
+			} else if (mapCommNodeOutputToConnections.get(output) instanceof FeatureInstanceImpl) {
 				FeatureInstanceImpl fi = (FeatureInstanceImpl) mapCommNodeOutputToConnections.get(output);
 				featureName = fi.getName();
 				if (fi.eContainer() instanceof ComponentInstanceImpl) {
 					ComponentInstanceImpl ci = (ComponentInstanceImpl) fi.eContainer();
-					componentName = ci.getName();
+					componentName = ci.getName() + "__";
 				} else {
 					new SafetyException("Asymmetric fault must be connected to a component instance.");
 				}
 			} else {
 				new SafetyException("Asymmetric fault must have an allowable connection.");
 			}
-			IdExpr connectionName = new IdExpr(componentName + "__" + featureName);
-			receivingConns.add(componentName + "__" + featureName);
+			IdExpr connectionName = new IdExpr(componentName + featureName);
+			receivingConns.add(componentName + featureName);
 			Expr eq = new BinaryExpr(new IdExpr(output), BinaryOp.EQUAL, connectionName);
 			nb.addAssertion(new AgreeStatement("", eq, this.topNode.reference));
 		}
