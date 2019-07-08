@@ -1691,8 +1691,5 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	private void deepCopyHashMap() {
-
-	}
 
 }
