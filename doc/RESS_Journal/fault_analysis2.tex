@@ -1,4 +1,26 @@
 \section{Fault Model Analysis in the Shared Model Process}
 \label{sec:fault_analysis_2}
 
-To demonstrate the shared model process, we outline a subsystem of the WBS and describe the interaction between system development process and the system safety process using a shared model.   
+To demonstrate the shared model process, we outline a subsystem of the WBS and describe the interaction between system development process and the system safety process using a shared model. The AIR6110 document provides a detailed example of the aircraft and systems development for a function of a hypothetical S18 aircraft and we will refer to this standard throughout this section. What we wish to accomplish is to show how the model based process and the use of the Safety Annex fits into this development. 
+
+Initially in the development of a critical system, the planning documents define the developmental process activity. This provides description of the system in question (i.e. the aircraft which holds the wheel brake system) and leads to the aircraft preliminary design. The functions of the aircraft are defined and decomposed, in this case, into the functional statement of this subsystem: "Decelerate aircraft on the ground." The top level requirements are decomposed and pertinant requirements for this subsystem are found. 
+
+Given that the functional requirements of the subsystem are now defined, the preliminary model of the WBS subsystem can be developed on the system engineering side of the process (refer to figure used in prelim section outlining this process). The safety analysis development takes those functions and develops a Functional Hazard Assessment based on them. As an example, we look at one possible hazard based on the top level aircraft requirement: "Aircraft shall have a means to decelerate on the ground." The aircraft level function is then "Decelerate on the ground." This is broken down into two main functions of the WBS: (1) Provide primary stopping force and (2) Provide secondary stopping force. \danielle{This process/paragraph needs help... clarification.}
+
+The preliminary system model is built using AADL, the requirements are decomposed into individual subcomponent contracts constraining output behavior and assumptions on input values. \danielle{Give example and figures in agree of a top level requirement of the aircraft being decomposed into WBS system level req and then into a subcomponent contract that will support the upper level ones. Could use one of the hazards (and associated requirements) given in the previous paragraph to keep consistency.} 
+
+Now that the initial architecture is made in AADL and the nominal model proves using AGREE/JKind, the preliminary system safety assessment (PSSA) begins looking at the WBS subsystem and attempts to identify possible faults for the subcomponents using the hazard analysis as a guide. The PSSA assesses how failures can lead to the associated functional hazards of the aircraft FHA by identifying the elements and interactions that contribute to the relevant failure conditions \danielle{Find an example of this in AIR6110 and show the process going from higher level statement about hazard into a discussion on a specific subcomponent failure that could create such a hazard. Continue the same example that was written about in the previous two paragraphs.}
+
+These faults are then modeled using the Safety Annex and the same AADL/AGREE model that was used in the system architecture development side. Simultaneously, the system probability allocations are determined and factored into the fault analysis. The results from the analysis can then provide information on both the component failures that contribute to a hazard and the probability of such occurrences. Given the results from the analysis, the analyst then flags certain subcomponents or architectural decisions for reconsideration. 
+
+As an example, we will look at the following subcomponent. \danielle{Here is where we outline a subcomponent of WBS, behavior in the nominal case, how it contributes to a top level requirement of the WBS (and hence aircraft), the fault(s) associated with it, and the results from the analysis. Include snippets of code from AADL, AGREE, Safety Annex, figures of where it fits into the WBS as a whole.}
+
+Given these results from the analysis, the archtecture can be changed to make this subsystem of the WBS more resiliant to faults and hence better support the top level requirements of the aircraft. \danielle{Make architectural adjustments with code snippets and figure adjustments to clarify how the system is changed.}
+
+Using this same model, the safety analysis must only be rerun to determine the impact of changes to the system model. \danielle{Show new analysis results.} 
+
+As can be seen through this single example, a system as large as the WBS would benefit from many iterations of this process. Furthermore, if the model is changed even slightly on the system development side, it would automatically be seen from the safety analysis perspective and any negative outcomes would be shown upon subsequent analysis runs. This effectively eliminates any miscommunications between the development and analysis teams and creates a new safeguard regarding model changes. 
+
+\danielle{To end the section, summarize the key points: how we fit into the process and why it matters. Perhaps mention that this is only a small example of what can be modeled using the safety annex and for more information about modeling capabilities, look at the users guide.}
+
+
