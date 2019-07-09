@@ -47,7 +47,7 @@ with Base_Types;
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
 		annex safety{**
 	
-		analyze : max 0 fault
+		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;		
@@ -146,6 +146,10 @@ with Base_Types;
 	 			guarantee "(BrakeActuator) Braking force is positive if and only if
 							normal force or alternate force is positive." :
 							true -> (braking_force > 0 <=> (normal_force_in > 0 or alternate_force_in > 0));
+				
+--				guarantee "(Test) Braking force is positive if and only if
+--							normal force or alternate force is positive." :
+--							true -> (braking_force = 0);
 			**};
 			
 		annex safety {**
