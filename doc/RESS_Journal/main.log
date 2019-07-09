@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  28 JUN 2019 09:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  8 JUL 2019 14:03
 entering extended mode
 **./main.tex
 (main.tex
@@ -737,16 +737,8 @@ Package pdftex.def Info: images/lustre.jpg  used on input line 37.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-Excluding 'comment' comment.) (fault_analysis.tex [10 <./images/hw_prop_stmt.pn
-g> <./images/arch.png>] [11 <./images/lustre.jpg>]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [12]
-[13] Excluding 'comment' comment. Excluding 'comment' comment.)
-(related_work.tex [14]
+Excluding 'comment' comment.) (fault_analysis2.tex [10 <./images/hw_prop_stmt.p
+ng> <./images/arch.png>] [11 <./images/lustre.jpg>]) (related_work.tex [12]
 Underfull \hbox (badness 1242) in paragraph at lines 20--21
 \OT1/ptm/m/n/10 COM-PASS (Cor-rect-ness, Mod-el-ing project and Per-for-mance o
 f Aerospace Sys-
@@ -755,39 +747,34 @@ f Aerospace Sys-
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [15])
-(conclusion.tex) (main.bbl [16] [17]
+ [13])
+(conclusion.tex) (main.bbl [14] [15]
 Underfull \hbox (badness 10000) in paragraph at lines 174--177
 []\OT1/ptm/m/n/9 MathWorks.  The Math-Works Inc. Simulink Prod-uct Web Site.
  []
 
-) [18] (main.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+) [16] (main.aux) ) 
 Here is how much of TeX's memory you used:
- 8093 strings out of 492973
- 114141 string characters out of 3135897
- 218839 words of memory out of 3000000
- 11731 multiletter control sequences out of 15000+200000
- 26188 words of font info for 66 fonts, out of 3000000 for 9000
+ 8089 strings out of 492973
+ 114100 string characters out of 3135897
+ 218830 words of memory out of 3000000
+ 11728 multiletter control sequences out of 15000+200000
+ 24562 words of font info for 64 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,18n,35p,1347b,460s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publi
-c/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
-/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10
-.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/
-Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
-ype1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
-mri8a.pfb>
-Output written on main.pdf (18 pages, 1301848 bytes).
+ 41i,7n,35p,1347b,299s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:
+/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr
+8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Progra
+m Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.
+9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (16 pages, 1281856 bytes).
 PDF statistics:
- 406 PDF objects out of 1000 (max. 8388607)
+ 396 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
