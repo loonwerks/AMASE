@@ -1,0 +1,109 @@
+package TopLevel
+public
+with Base_Types;
+with Sensors;
+with Node_Bus1;
+with Node_Bus2;
+with Node_Bus3;
+with Node_Bus4;
+with Buses;
+
+	system TopLevel
+		features
+			global_input : in data port Base_Types::Float;
+			
+			node1_data : out data port Buses::commBus.real;
+			node2_data : out data port Buses::commBus.real;
+			node3_data : out data port Buses::commBus.real;
+			node4_data : out data port Buses::commBus.real;
+			
+		annex agree{**
+			assume "Global input bounded between 0 and 10.":
+				((global_input > 0.0) and (global_input < 10.0));
+			
+			guarantee "(Sym) All node outputs are equal to global input." :
+					(node1_data.NODE_VAL = node2_data.NODE_VAL) 
+				and (node1_data.NODE_VAL = node3_data.NODE_VAL) 
+				and (node1_data.NODE_VAL = node4_data.NODE_VAL) 
+				and (global_input = node1_data.NODE_VAL);	
+		**};
+	end TopLevel;
+	
+	system implementation TopLevel.impl
+		subcomponents
+			sensor1 : device Sensors::Sensor;
+			sensor2 : device Sensors::Sensor;
+			sensor3 : device Sensors::Sensor;
+			sensor4 : device Sensors::Sensor;
+			
+			node1 : system Node_Bus1::node1;
+			node2 : system Node_Bus2::node2;
+			node3 : system Node_Bus3::node3;
+			node4 : system Node_Bus4::node4;
+		
+		connections
+			-- Gobal input to sensors
+			GS1 : port global_input -> sensor1.sensed_data;
+			GS2 : port global_input -> sensor2.sensed_data;
+			GS3 : port global_input -> sensor3.sensed_data;
+			GS4 : port global_input -> sensor4.sensed_data;
+			
+			-- Sensor connections to each node
+			S1N1 : port sensor1.output -> node1.sensor_input;
+			S2N2 : port sensor2.output -> node2.sensor_input;
+			S3N3 : port sensor3.output -> node3.sensor_input;
+			S4N4 : port sensor4.output -> node4.sensor_input;
+			
+			-- Node 1 output to nodes 2, 3, 4
+			N1B1 : port node1.output -> node2.bus1_input;
+			N1B2 : port node1.output -> node3.bus1_input;
+			N1B3 : port node1.output -> node4.bus1_input;
+			
+			-- Node 2 output to nodes 1, 3, 4
+			N2B1 : port node2.output -> node1.bus2_input;
+			N2B3 : port node2.output -> node3.bus2_input;
+			N2B4 : port node2.output -> node4.bus2_input;
+			
+			-- Node 3 output to nodes 1, 2, 4
+			N3B1 : port node3.output -> node1.bus3_input;
+			N3B2 : port node3.output -> node2.bus3_input;
+			N3B4 : port node3.output -> node4.bus3_input;
+			
+			-- Node 4 output to nodes 1, 2, 3
+			N4B1 : port node4.output -> node1.bus4_input;
+			N4B2 : port node4.output -> node2.bus4_input;
+			N4B3 : port node4.output -> node3.bus4_input;
+			
+			-- Node outputs to top level
+			N1toTop : port node1.output -> node1_data;
+			N2toTop : port node2.output -> node2_data;
+			N3toTop : port node3.output -> node3_data;
+			N4toTop : port node4.output -> node4_data;
+		
+		annex agree {**
+			
+			lemma "All node outputs are equal to global input." :
+				(node1.output.NODE_VAL = node2.output.NODE_VAL) and (node1.output.NODE_VAL = node3.output.NODE_VAL) and (node1.output.NODE_VAL = node4.output.NODE_VAL) and (global_input = node1.output.NODE_VAL);
+			
+			lemma "(Asym) All nodes reading from bus 1 (nodes 2, 3, 4) see the same value." :
+				(node2.bus1_input.NODE_VAL = node3.bus1_input.NODE_VAL) and (node2.bus1_input.NODE_VAL = node4.bus1_input.NODE_VAL);
+				
+			lemma "(Asym) All nodes reading from bus 2 (nodes 1, 3, 4) see the same value." :
+				(node1.bus2_input.NODE_VAL = node3.bus2_input.NODE_VAL) and (node1.bus2_input.NODE_VAL = node4.bus2_input.NODE_VAL);
+				
+			lemma "(Asym) All nodes reading from bus 3 (nodes 1, 2, 4) see the same value." :
+				(node1.bus3_input.NODE_VAL = node2.bus3_input.NODE_VAL) and (node1.bus3_input.NODE_VAL = node4.bus3_input.NODE_VAL);
+				
+			lemma "(Asym) All nodes reading from bus 4 (nodes 1, 2, 3) see the same value." :
+				(node1.bus4_input.NODE_VAL = node2.bus4_input.NODE_VAL) and (node1.bus4_input.NODE_VAL = node3.bus4_input.NODE_VAL);
+			
+				
+		**}	;
+		
+		annex safety {**
+			
+			analyze: max 1 fault
+			
+		**};
+	end TopLevel.impl;
+end TopLevel;

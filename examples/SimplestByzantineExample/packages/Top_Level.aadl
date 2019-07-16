@@ -1,0 +1,39 @@
+package Top_Level
+public
+with Base_Types;
+with Sender;
+with Receiver;
+
+	system Top_Level
+		features
+			receiver1_output : out data port Base_Types::Boolean;
+			receiver2_output : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			guarantee "Receiver outputs are equal." :
+				receiver1_output = receiver2_output;
+			
+		**};
+			
+	end Top_Level;
+	
+	system implementation Top_Level.impl
+		subcomponents
+			Sender : system Sender::Sender;
+			receiver1 : system Receiver::Receiver;
+			receiver2 : system Receiver::Receiver;
+			
+		connections
+			or_to_comm1 : port sender.sender_out -> receiver1.sender_input;
+			or_to_comm2 : port sender.sender_out -> receiver2.sender_input;
+			
+			rec1_to_top : port receiver1.output -> receiver1_output;
+			rec2_to_top : port receiver2.output -> receiver2_output;
+		
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
+			
+	end Top_Level.impl;
+end Top_Level;
