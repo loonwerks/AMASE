@@ -1,0 +1,11 @@
+package Datatypes
+public
+with Base_Types;
+	data commBus
+	end commBus;
+
+	data implementation commBus.real
+ 	 	subcomponents
+    		NODE_VAL : data Base_Types::Float;
+	end commBus.real;
+end Datatypes;

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ASCII"?>
+<diagram:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:diagram="http://osate.org/diagram" formatVersion="7">
+  <element uuid="9c751407-1a9b-48bf-ada4-de3fe2dde008" manual="true">
+    <element uuid="8e3c26ee-d756-4a78-9f66-14932fe6fb3c">
+      <element uuid="865633b4-f9f5-4b60-97aa-0078addab03e">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>or_to_comm1</seg>
+      </bo>
+      <bendpoints>
+        <point x="313.0" y="150.0"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="f12ecee0-d204-4c68-9136-ffb9449bb8a2">
+      <element uuid="4f85cb68-ffbf-425e-9b5d-4d479c373ba2">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>or_to_comm2</seg>
+      </bo>
+      <bendpoints>
+        <point x="301.0" y="150.0"/>
+        <point x="301.0" y="193.5"/>
+      </bendpoints>
+      <contentFilters/>
+    </element>
+    <element uuid="3fd3dbea-4737-4dc0-bbbf-cb52c961276a">
+      <element uuid="0a0ba203-5c52-4b2f-8f65-2c50160e7493">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>rec1_to_top</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="a1c2c09a-198e-48f5-8473-a353dd0dbfac">
+      <element uuid="47cfd26f-9f3d-43dd-bd40-80f47df374b7">
+        <bo>
+          <seg>tag</seg>
+          <seg>unidirectional</seg>
+        </bo>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>connection</seg>
+        <seg>rec2_to_top</seg>
+      </bo>
+      <contentFilters/>
+    </element>
+    <element uuid="970835e9-9c27-4b9e-b1bc-ee3e466ec8eb" dockArea="right">
+      <bo>
+        <seg>feature</seg>
+        <seg>receiver1_output</seg>
+      </bo>
+      <position x="723.0" y="72.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="9f648238-1433-4ddd-b088-cb0b6d25bf6c" dockArea="right">
+      <bo>
+        <seg>feature</seg>
+        <seg>receiver2_output</seg>
+      </bo>
+      <position x="723.0" y="151.0"/>
+      <contentFilters/>
+    </element>
+    <element uuid="f64e4221-bc97-4ad8-af27-31be66b1ee0a">
+      <element uuid="e1487c95-5abe-42bd-a4c2-b95970bfb404" dockArea="right">
+        <bo>
+          <seg>feature</seg>
+          <seg>output</seg>
+        </bo>
+        <position x="276.0" y="10.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="5285e5de-73e3-4250-a366-829e7a170908" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>sender_input</seg>
+        </bo>
+        <position y="10.0"/>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>receiver1</seg>
+      </bo>
+      <position x="318.0" y="38.0"/>
+      <size width="330.0" height="73.0"/>
+      <contentFilters>
+        <filter>features</filter>
+        <filter>internalFeatures</filter>
+        <filter>processorFeatures</filter>
+        <filter>connections</filter>
+        <filter>flowSpecifications</filter>
+      </contentFilters>
+    </element>
+    <element uuid="40d13a34-ff1b-4a0b-b6ea-a344a08d98c2">
+      <element uuid="728ed966-813b-465b-809e-83e9529bd0cb" dockArea="right">
+        <bo>
+          <seg>feature</seg>
+          <seg>output</seg>
+        </bo>
+        <position x="276.0" y="10.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="21f98362-87a4-455e-ae37-4e692ce62c50" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>sender_input</seg>
+        </bo>
+        <position y="10.0"/>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>receiver2</seg>
+      </bo>
+      <position x="318.0" y="148.0"/>
+      <size width="330.0" height="88.0"/>
+      <contentFilters>
+        <filter>features</filter>
+        <filter>internalFeatures</filter>
+        <filter>processorFeatures</filter>
+        <filter>connections</filter>
+        <filter>flowSpecifications</filter>
+      </contentFilters>
+    </element>
+    <element uuid="7105d0da-252b-481e-bdff-214a5ec81d90">
+      <element uuid="47997a75-0a45-4131-af43-fb0193f435d7" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>in1</seg>
+        </bo>
+        <position y="59.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="12554836-da37-4c55-8617-edb83fbc1f81" dockArea="left">
+        <bo>
+          <seg>feature</seg>
+          <seg>in2</seg>
+        </bo>
+        <position y="10.0"/>
+        <contentFilters/>
+      </element>
+      <element uuid="a1e8e93a-7cb5-4fc0-800a-5335953535bb" dockArea="right">
+        <bo>
+          <seg>feature</seg>
+          <seg>sender_out</seg>
+        </bo>
+        <position x="184.0" y="35.0"/>
+        <contentFilters/>
+      </element>
+      <bo>
+        <seg>subcomponent</seg>
+        <seg>sender</seg>
+      </bo>
+      <position x="8.0" y="72.0"/>
+      <size width="267.0" height="108.0"/>
+      <contentFilters>
+        <filter>features</filter>
+        <filter>internalFeatures</filter>
+        <filter>processorFeatures</filter>
+        <filter>connections</filter>
+        <filter>flowSpecifications</filter>
+      </contentFilters>
+    </element>
+    <bo>
+      <seg>classifier</seg>
+      <seg>top_level.impl</seg>
+    </bo>
+    <position x="12.0" y="12.0"/>
+    <size width="839.0" height="279.0"/>
+    <contentFilters>
+      <filter>features</filter>
+      <filter>internalFeatures</filter>
+      <filter>processorFeatures</filter>
+      <filter>connections</filter>
+      <filter>flowSpecifications</filter>
+      <filter>subcomponents</filter>
+    </contentFilters>
+  </element>
+  <config type="structure" connectionPrimaryLabelsVisible="false">
+    <enabledAadlProperties/>
+    <context>
+      <seg>classifier</seg>
+      <seg>top_level::top_level.impl</seg>
+    </context>
+  </config>
+</diagram:Diagram>

@@ -1,0 +1,26 @@
+package Receiver
+public
+with Base_Types;
+	system Receiver
+		features
+			sender_input : in data port Base_Types::Boolean;
+			
+			output : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			
+			guarantee "Sender input equals output.":
+				sender_input = output;
+			
+		**}	;
+--		annex safety {**
+--
+--			fault Receiver_Fault "Receiver output is inverted": Common_Faults.invert_signal {
+--				inputs: val_in <- output;     
+--				outputs: output <- val_out;    
+--				duration: permanent;
+--				--propagate_type: asymmetric;
+--			}	
+--		**};
+	end Receiver;
+end Receiver;
