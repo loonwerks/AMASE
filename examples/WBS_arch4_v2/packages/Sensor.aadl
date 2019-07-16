@@ -54,20 +54,20 @@ with Base_Types;
 				
 		**};
 			
-		annex safety {**
-				
-				-- No data, erroneous data
-				-- Erroneous data I will model as inverted boolean... not sure about no data...
-				
-				
-			fault Sensor_ErroneousData "(Sensor) Inverted boolean (Erroneous data) fault." : faults.inverted_fail {
-				inputs: val_in <- wheel_rolling; 
-				outputs: wheel_rolling <- val_out;    
-        		probability: 1.0E-2 ;
-				duration: permanent;
-			}
-		
-		**};
+--		annex safety {**
+--				
+--				-- No data, erroneous data
+--				-- Erroneous data I will model as inverted boolean... not sure about no data...
+--				
+--				
+--			fault Sensor_ErroneousData "(Sensor) Inverted boolean (Erroneous data) fault." : faults.inverted_fail {
+--				inputs: val_in <- wheel_rolling; 
+--				outputs: wheel_rolling <- val_out;    
+--        		probability: 1.0E-2 ;
+--				duration: permanent;
+--			}
+--		
+--		**};
 	end Sensor;
 	
 	system implementation Sensor.inst

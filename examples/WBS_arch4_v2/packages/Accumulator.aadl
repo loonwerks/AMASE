@@ -31,12 +31,12 @@ with Base_Types;
 		-- this value has any bearing on the system behavior, so it may not matter.
 		annex safety {**
 			
-			fault Accumulator_FailedNoPressure "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
-				inputs: val_in <- reserve_out, alt_val <- 0; 
-				outputs: reserve_out <- val_out;    
-        		probability: 5.0E-5 ;
-				duration: permanent;
-			}
+--			fault Accumulator_FailedNoPressure "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
+--				inputs: val_in <- reserve_out, alt_val <- 0; 
+--				outputs: reserve_out <- val_out;    
+--        		probability: 5.0E-5 ;
+--				duration: permanent;
+--			}
 			
 			fault Accumulator_FailedOpen "(Accumulator) Stuck open fault." : faults.fail_to {
 				eq nondet_value : int;
