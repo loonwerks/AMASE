@@ -35,12 +35,12 @@ with Base_Types;
         		probability: 6.5E-7 ;
 				duration: permanent;
 			}
-			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults.fail_to_bool {
-				inputs: val_in <- cmd_out, alt_val <- pre(cmd_out); 
-				outputs: cmd_out <- val_out;    
-        		probability: 1.3E-5 ;
-				duration: permanent;
-			}
+--			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults.fail_to_bool {
+--				inputs: val_in <- cmd_out, alt_val <- pre(cmd_out); 
+--				outputs: cmd_out <- val_out;    
+--        		probability: 1.3E-5 ;
+--				duration: permanent;
+--			}
 		**};		
 	end SwitchGate;	
 	

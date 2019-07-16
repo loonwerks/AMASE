@@ -37,12 +37,12 @@ with Base_Types;
 				duration: permanent;
 			}
 			
-			fault ShutoffValve_FailedOpen "(ShutoffValve) Stuck open fault." : faults.fail_to {
-				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in; 
-				outputs: hyd_pressure_out <- val_out;    
-        		probability: 5.0E-6 ;
-				duration: permanent;
-			}
+--			fault ShutoffValve_FailedOpen "(ShutoffValve) Stuck open fault." : faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in; 
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 5.0E-6 ;
+--				duration: permanent;
+--			}
 		**};
 
 	end ShutoffValve;
