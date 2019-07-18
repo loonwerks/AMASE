@@ -3,7 +3,8 @@ public
 with ControlSystem;
 with PhysicalSystem;
 with Base_Types;
-with sensor;
+with SensorSystem;
+with WheelSensor;
 	
 	system WBS
 		features
@@ -81,18 +82,18 @@ with sensor;
 			ctrl_sys : system ControlSystem::ControlSystem.inst;
 			
 			-- Wheel sensors
-			wheel_sensor1 : system Sensor::Sensor;
-			wheel_sensor2 : system Sensor::Sensor;
-			wheel_sensor3 : system Sensor::Sensor;
-			wheel_sensor4 : system Sensor::Sensor;
-			wheel_sensor5 : system Sensor::Sensor;
-			wheel_sensor6 : system Sensor::Sensor;
-			wheel_sensor7 : system Sensor::Sensor;
-			wheel_sensor8 : system Sensor::Sensor;
+			wheel_sensor1 : system WheelSensor::WheelSensor;
+			wheel_sensor2 : system WheelSensor::WheelSensor;
+			wheel_sensor3 : system WheelSensor::WheelSensor;
+			wheel_sensor4 : system WheelSensor::WheelSensor;
+			wheel_sensor5 : system WheelSensor::WheelSensor;
+			wheel_sensor6 : system WheelSensor::WheelSensor;
+			wheel_sensor7 : system WheelSensor::WheelSensor;
+			wheel_sensor8 : system WheelSensor::WheelSensor;
 			
 			-- Pedal sensors
-			pedal_sensor_L : system Sensor::SensorPedalPosition;
-			pedal_sensor_R : system Sensor::SensorPedalPosition;
+			pedal_sensor_L : system SensorSystem::SensorSystem;
+			pedal_sensor_R : system SensorSystem::SensorSystem;
 			
 		-- Connections 
 		connections
@@ -214,8 +215,7 @@ with sensor;
 		-- Loss of all wheel braking (unannunciated or annunciated) during landing or RTO shall be less than 5E-7 per flight.
 		--------------------------------------------------------------------------------------------------------------
 		lemma "(S18-WBS-R-0321) Never loss of all wheel braking" :
-			((not ((((((((((mechanical_pedal_pos_L and mechanical_pedal_pos_R) and (ground_speed > 0)) 
-				and (not (((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)))) 
+			(true -> (not ((((((((((mechanical_pedal_pos_L and mechanical_pedal_pos_R) and (ground_speed > 0)) and (not (((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)))) 
 				and (not (((ctrl_sys.brake_as_cmd_2 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force2 > 0)))) 
 				and (not (((ctrl_sys.brake_as_cmd_5 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force5 > 0)))) 
 				and (not (((ctrl_sys.brake_as_cmd_6 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force6 > 0)))) 
@@ -225,7 +225,6 @@ with sensor;
 				and (not (((ctrl_sys.brake_as_cmd_8 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force8 > 0)))
 			)));
 		
-			
 		--------------------------------------------------------------------------------------------------------------
 		-- S18-WBS-R-0322-left(-right)
 		-- Asymmetrical left and right braking. 
@@ -233,13 +232,13 @@ with sensor;
 		-- during landing shall be less than 5E-7 per flight. 
 		--------------------------------------------------------------------------------------------------------------
 		lemma "(S18-WBS-R-0322-left) Asymmetrical left braking." :
-			(((((((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)) 
+			(true -> ((((((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)) 
 				and (((ctrl_sys.brake_as_cmd_2 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force2 > 0))) 
 				and (((ctrl_sys.brake_as_cmd_5 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_5)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force5 > 0))) 
 				and (((ctrl_sys.brake_as_cmd_6 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_2_6)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force6 > 0))));
 
 		lemma "(S18-WBS-R-0322-right) Asymmetrical right braking" :
-			(((((((ctrl_sys.brake_as_cmd_3 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force3 > 0)) 
+			(true -> ((((((ctrl_sys.brake_as_cmd_3 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force3 > 0)) 
 				and (((ctrl_sys.brake_as_cmd_4 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force4 > 0))) 
 				and (((ctrl_sys.brake_as_cmd_7 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_3_7)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force7 > 0))) 
 				and (((ctrl_sys.brake_as_cmd_8 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_4_8)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force8 > 0))));
@@ -251,7 +250,7 @@ with sensor;
 		-- This is just an AND of all 8 contracts S18-WBS-0325
 		----------------------------------------------------------------------------------------------------------
 		lemma "(S18-WBS-0323) Never inadvertent braking with all wheels locked." :
-			((not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_L) or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL))
+			(true -> (not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_L) or (not SPEED) or (wheel_braking_force1 <= 0) or (not W1ROLL))
 				 and (not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_L) or (not SPEED) or (wheel_braking_force2 <= 0) or (not W2ROLL))
 				 and (not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_R) or (not SPEED) or (wheel_braking_force3 <= 0) or (not W3ROLL))
 				 and (not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_R) or (not SPEED) or (wheel_braking_force4 <= 0) or (not W4ROLL))
@@ -269,7 +268,7 @@ with sensor;
 		----------------------------------------------------------------------------------------------------------
 		
 		lemma "(S18-WBS-0324) Never inadvertent braking of all wheels." :
-			((not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_L) or (mechanical_pedal_pos_R)
+			(true -> (not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_L) or (mechanical_pedal_pos_R)
 				                or (not SPEED)
 				                or (wheel_braking_force1 <= 0) or (wheel_braking_force2 <= 0)
 				                or (wheel_braking_force3 <= 0) or (wheel_braking_force4 <= 0)
@@ -313,7 +312,7 @@ with sensor;
 			
 			
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 1" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_L) 
 						or (not SPEED) 
@@ -322,7 +321,7 @@ with sensor;
 		
 		
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 2" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_L 
 						or (not SPEED) 
@@ -330,7 +329,7 @@ with sensor;
 						or (not W2ROLL)));
 					
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 3" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_R 
 						or (not SPEED) 
@@ -338,7 +337,7 @@ with sensor;
 						or (not W3ROLL)));
 					
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 4" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_R 
 						or (not SPEED) 
@@ -346,7 +345,7 @@ with sensor;
 						or (not W4ROLL)));		
 		
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 5" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_L 
 						or (not SPEED) 
@@ -354,7 +353,7 @@ with sensor;
 						or (not W5ROLL)));
 					
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 6" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_L 
 						or (not SPEED) 
@@ -362,7 +361,7 @@ with sensor;
 						or (not W6ROLL)));
 					
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 7" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_R 
 						or (not SPEED) 
@@ -370,7 +369,7 @@ with sensor;
 						or (not W7ROLL)));
 					
 		lemma "(S18-WBS-0325) Never inadvertent braking of wheel 8" :
-					(not(POWER)
+					true -> (not(POWER)
 						or (not HYD_PRESSURE_MAX) 
 						or (mechanical_pedal_pos_R 
 						or (not SPEED) 

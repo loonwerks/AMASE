@@ -10,21 +10,18 @@ with Base_Types;
 			circuit_pressure_value : in data port Base_Types::Integer;
 			
 			-- Outputs
-			
-			-- I don't think this is hooked up anywhere...
 			pressure_display : out data port Base_Types::Integer;
 			reserve_out : out data port Base_Types::Integer;
 			
 		annex agree {**
-			assume "Pressure input from 0 to 10 inclusive" : 
-				(circuit_pressure_value >= 0 and circuit_pressure_value <= 10);
+			assume "Pressure input from 0 to 10 inclusive" : true -> (circuit_pressure_value >= 0 and circuit_pressure_value <= 10);
 			
 			--  supply_reserve_norm_guarantee := (TRUE ->  G (circuit_pressure_value = 0 <-> reserve_out > 0));
 			guarantee "(Accumulator) The reserve out pressure is positive if and only if the circuit pressure value is zero.":
-						(reserve_out > 0 <=> circuit_pressure_value = 0);
+						true -> (reserve_out > 0 <=> circuit_pressure_value = 0);
 			
-			guarantee "Pressure output is bounded." :
-				(reserve_out >= 0 and reserve_out <= 10);
+			guarantee "(Accumulator) Reserve out is always between 0 and 10" : 
+				true -> (reserve_out <= 10 and reserve_out >= 0);
 			
 		**};
 
@@ -34,12 +31,12 @@ with Base_Types;
 		-- this value has any bearing on the system behavior, so it may not matter.
 		annex safety {**
 			
-			fault Accumulator_FailedNoPressure "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
-				inputs: val_in <- reserve_out, alt_val <- 0; 
-				outputs: reserve_out <- val_out;    
-        		probability: 5.0E-5 ;
-				duration: permanent;
-			}
+--			fault Accumulator_FailedNoPressure "(Accumulator) Stuck at zero pressure fault." : faults.fail_to {
+--				inputs: val_in <- reserve_out, alt_val <- 0; 
+--				outputs: reserve_out <- val_out;    
+--        		probability: 5.0E-5 ;
+--				duration: permanent;
+--			}
 			
 			fault Accumulator_FailedOpen "(Accumulator) Stuck open fault." : faults.fail_to {
 				eq nondet_value : int;

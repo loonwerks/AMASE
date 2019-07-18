@@ -15,10 +15,14 @@ with Base_Types;
 				
 				-- or_behavior_norm_guarantee := (TRUE ->  G (out <-> (in_1 | in_2)));
 				guarantee "(OrGate) Output is equivalent to input1 or input2." : 
-					out_val <=> (in_1 or in_2);
+					true -> out_val <=> (in_1 or in_2);
 				
 			
 			**};
 			
-	end OrGate;
+	end OrGate;	
+	
+	system implementation OrGate.inst
+		
+	end OrGate.inst;
 end OrGate;

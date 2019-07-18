@@ -54,59 +54,54 @@ with Base_Types;
 				property PAIR_NOT_ROLLING_37 = not wheel_rolling_3 or not wheel_rolling_7;
 				property PAIR_NOT_ROLLING_48 = not wheel_rolling_4 or not wheel_rolling_8;
 				property power = power_1 or power_2;			
-				-- Antiskid command equivalence  
-				--------------------------------------------------------------------------------------------------------------
+				-- Antiskid command equivalence
 				guarantee "(Channel) Antiskid command to pair 1,5: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_1_5 <=> (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false)); 
---							(power and SPEED and PAIR_NOT_ROLLING_15) <=> as_cmd_pair_1_5;
+							true -> ((as_cmd_pair_1_5 = (power and SPEED and PAIR_NOT_ROLLING_15)) or (as_cmd_pair_1_5 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 2,6: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_2_6 <=> (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
+							true -> ((as_cmd_pair_2_6 = (power and SPEED and PAIR_NOT_ROLLING_26)) or (as_cmd_pair_2_6 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 3,7: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_3_7 <=> (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
+							true -> ((as_cmd_pair_3_7 = (power and SPEED and PAIR_NOT_ROLLING_37)) or (as_cmd_pair_3_7 = false));
 							
 				guarantee "(Channel) Antiskid command to pair 4,8: Alternate AS command is true if and only if
 							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							((as_cmd_pair_4_8 <=> (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
-				--------------------------------------------------------------------------------------------------------------
-
-
+							true -> ((as_cmd_pair_4_8 = (power and SPEED and PAIR_NOT_ROLLING_48)) or (as_cmd_pair_4_8 = false));
 
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 1): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1);
+							true -> (((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1);
 							
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 2): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2);
+							true -> (((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2);
 				
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 3): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_3) or (not SPEED))) <=> brake_as_cmd_3);
+							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_3) or (not SPEED))) <=> brake_as_cmd_3);
 				
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 4): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_4) or (not SPEED))) <=> brake_as_cmd_4);
+							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_4) or (not SPEED))) <=> brake_as_cmd_4);
 							
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 5): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_5) or (not SPEED))) <=> brake_as_cmd_5);
+							true -> (((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_5) or (not SPEED))) <=> brake_as_cmd_5);
 				
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 6): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6);
+							true -> (((VALID and power and elec_pedal_pos_L) and ((SPEED and wheel_rolling_6) or (not SPEED))) <=> brake_as_cmd_6);
 				
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 7): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7);
+							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_7) or (not SPEED))) <=> brake_as_cmd_7);
 							 
 				guarantee " (ctrl system) Brake antiskid command behavior (wheel 8): Brake antiskid is commanded to the wheel only when 
 							Pedal pressed, system valid, and either speed and rolling wheel or no speed." :
-							(((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
+							true -> (((VALID and power and elec_pedal_pos_R) and ((SPEED and wheel_rolling_8) or (not SPEED))) <=> brake_as_cmd_8);
 
 			**};
 				
@@ -239,49 +234,10 @@ with Base_Types;
 			
 			power_to_channel1 : port power_1 -> channel1.power;
 			power_to_channel2 : port power_2 -> channel2.power;
-		
-		
-	annex agree {**
-		
-		lemma "(Channel1) Antiskid command to pair 1,5: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel1.power and channel1.SPEED and channel1.PAIR_NOT_ROLLING_15) <=> channel1.as_cmd_pair_1_5; 
-							
-		lemma "(Channel1) Antiskid command to pair 2,6: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel1.power and channel1.SPEED and channel1.PAIR_NOT_ROLLING_26) <=> channel1.as_cmd_pair_2_6;
-							
-		lemma "(Channel1) Antiskid command to pair 3,7: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel1.power and channel1.SPEED and channel1.PAIR_NOT_ROLLING_37) <=> channel1.as_cmd_pair_3_7;
-							
-		lemma "(Channel1) Antiskid command to pair 4,8: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel1.power and channel1.SPEED and channel1.PAIR_NOT_ROLLING_48) <=> channel1.as_cmd_pair_4_8;
-		
-		lemma "(Channel2) Antiskid command to pair 1,5: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel2.power and channel2.SPEED and channel2.PAIR_NOT_ROLLING_15) <=> channel2.as_cmd_pair_1_5; 
-							
-		lemma "(Channel2) Antiskid command to pair 2,6: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel2.power and channel2.SPEED and channel2.PAIR_NOT_ROLLING_26) <=> channel2.as_cmd_pair_2_6;
-							
-		lemma "(Channel2) Antiskid command to pair 3,7: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel2.power and channel2.SPEED and channel2.PAIR_NOT_ROLLING_37) <=> channel2.as_cmd_pair_3_7;
-							
-		lemma "(Channel2) Antiskid command to pair 4,8: Alternate AS command is true if and only if
-							we have power, ground speed is positive, and one of the two wheels is not rolling." :
-							(channel2.power and channel2.SPEED and channel2.PAIR_NOT_ROLLING_48) <=> channel2.as_cmd_pair_4_8;
-		
-		
-	**};
+			
+		annex safety{**
 	
-		
-	annex safety{**
-	
-		analyze : max 0 fault
+		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;	

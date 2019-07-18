@@ -1,0 +1,26 @@
+package Voters
+public
+with Base_Types;
+
+	system majorityVoter
+		features 
+			in1 : in data port Base_Types::Boolean;
+			in2 : in data port Base_Types::Boolean;
+			in3 : in data port Base_Types::Boolean;
+			
+			majorityVote : out data port Base_Types::Boolean;
+			
+		annex agree {**
+			eq firstSensorMatchesAnother : bool = (in1 = in2) or (in1 = in3);
+										 
+			eq secondSensorMatchesAnother : bool = (in2 = in3);
+			
+			guarantee "If two agree, the output agrees with those two sensors.
+					   If not, the output is false." :
+				true -> (if firstSensorMatchesAnother then (majorityVote = in1)
+					else if secondSensorMatchesAnother then (majorityVote = in2)
+					else (majorityVote = false)
+				);
+		**};
+	end majorityVoter;
+end Voters;

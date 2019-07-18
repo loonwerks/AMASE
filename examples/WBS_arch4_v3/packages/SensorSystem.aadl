@@ -1,0 +1,59 @@
+package SensorSystem
+public
+with Base_Types;
+with PedalSensor;
+with Voters;
+
+	system SensorSystem
+		features 
+			-- Input for pedal sensors
+			mech_pedal_pos : in data port Base_Types::Boolean;
+			
+			-- Output to other systems
+			elec_pedal_pos : out data port Base_Types::Boolean;
+			
+		annex agree {**
+			
+				
+			guarantee "Mechanical pedal position equals electical pedal position." :
+				true -> (mech_pedal_pos = elec_pedal_pos);
+		**}	;
+	end SensorSystem;
+	
+	system implementation SensorSystem.impl
+		subcomponents
+			pedal1 : system PedalSensor::SensorPedalPosition;
+			pedal2 : system PedalSensor::SensorPedalPosition;
+			pedal3 : system PedalSensor::SensorPedalPosition;
+			
+			voter : system Voters::majorityVoter;
+			
+		connections
+			mech_pedal_1 : port mech_pedal_pos -> pedal1.mech_pedal_pos;
+			mech_pedal_2 : port mech_pedal_pos -> pedal2.mech_pedal_pos;
+			mech_pedal_3 : port mech_pedal_pos -> pedal3.mech_pedal_pos;
+			
+			elec_pedal_1 : port pedal1.elec_pedal_pos -> voter.in1;
+			elec_pedal_2 : port pedal2.elec_pedal_pos -> voter.in2;
+			elec_pedal_3 : port pedal3.elec_pedal_pos -> voter.in3;
+			
+			voterin : port voter.majorityVote -> elec_pedal_pos;
+	
+	annex agree {**
+		lemma "Mechanical position equals sensor input for mech position." :
+				true -> ((mech_pedal_pos = pedal1.mech_pedal_pos) 
+				and (mech_pedal_pos = pedal2.mech_pedal_pos)
+				and (mech_pedal_pos = pedal3.mech_pedal_pos));
+	
+		lemma "If all true or the first sensor matches either of the other two, 
+						then outgoing equals first sensor." :
+				true -> (if ((pedal1.elec_pedal_pos = pedal2.elec_pedal_pos) or (pedal1.elec_pedal_pos = pedal3.elec_pedal_pos)) then (elec_pedal_pos = pedal1.elec_pedal_pos)
+					else if (pedal2.elec_pedal_pos = pedal3.elec_pedal_pos) then (elec_pedal_pos = pedal2.elec_pedal_pos)
+					else (elec_pedal_pos = false));
+	**};
+	
+	annex safety{**
+	  analyze : max 2 fault 
+   **};
+	end SensorSystem.impl;
+end SensorSystem;
