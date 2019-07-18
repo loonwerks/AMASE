@@ -24,49 +24,29 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "Pressure input from 0 to 10 inclusive" : 
-					(hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
+				assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
 				
 				assume "False is passed to meter valves for elec_cmd" :
-					(false_to_mv = false);
+					true -> (false_to_mv = false);
 					
 				-- apply_command_3_norm_guarantee := 
 				--		(TRUE ->  G (((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & hyd_pressure_in > 0) <-> hyd_pressure_out_3 > 0));
 				guarantee "(AlternateBrakeSystem) Pair 1,5: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							(hyd_pressure_out1 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_1_5)));
+							true -> (hyd_pressure_out1 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_1_5)));
 							
 				guarantee "(AlternateBrakeSystem) Pair 2,6: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							(hyd_pressure_out2 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_2_6)));
+							true -> (hyd_pressure_out2 > 0 <=> (mech_pedal_pos_L and hyd_pressure_in > 0 and (not as_cmd_pair_2_6)));
 							
 				guarantee "(AlternateBrakeSystem) Pair 3,7: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							(hyd_pressure_out3 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_3_7)));
+							true -> (hyd_pressure_out3 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_3_7)));
 							
 				guarantee "(AlternateBrakeSystem) Pair 4,8: The hyd pressure output is positive if and only if
 							pedal position is true, antiskid is not commanded for the pair, and hyd pressure is positive." :
-							(hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
+							true -> (hyd_pressure_out4 > 0 <=> (mech_pedal_pos_R and hyd_pressure_in > 0 and (not as_cmd_pair_4_8)));
 				
-			
-				guarantee "(AlternateBrakeSystem) (W1,5) Pressure out is bounded." :
-					(hyd_pressure_out1 >= 0) and (hyd_pressure_out1 <= 0);
-			
-			
-				guarantee "(AlternateBrakeSystem) (W2,6) Pressure out is bounded." :
-					(hyd_pressure_out2 >= 0) and (hyd_pressure_out2 <= 0);
-			
-			
-				guarantee "(AlternateBrakeSystem) (W3,7) Pressure out is bounded." :
-					(hyd_pressure_out3 >= 0) and (hyd_pressure_out3 <= 0);
-			
-			
-				guarantee "(AlternateBrakeSystem) (W4,8) Pressure out is bounded." :
-					(hyd_pressure_out4 >= 0) and (hyd_pressure_out4 <= 0);
-					
-					
-					
-					
 			**};
 			
 	end AlternateBrakeSystem;
@@ -120,29 +100,9 @@ with Base_Types;
 			false_to_mv_4 : port false_to_mv -> mv4.elec_cmd;
 			
 
-	annex agree {**
-		
-		lemma "(MeterValve) Hydraulic pressure out is positive if and only if
-				 we have either electrical or mechanical command and positive pressure." :
-					(((mv1.elec_cmd or mv1.mech_cmd) and mv1.hyd_pressure_in > 0) <=> mv1.hyd_pressure_out > 0);
-		
+		annex safety{**
 	
-		lemma "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
-							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
-							to the hyd pressure in." :
-							(if ((antiskid_shutoff_valve_1.hyd_pressure_in = 0) or antiskid_shutoff_valve_1.antiskid_cmd) then (antiskid_shutoff_valve_1.hyd_pressure_out = 0)
-									else (antiskid_shutoff_valve_1.hyd_pressure_out = antiskid_shutoff_valve_1.hyd_pressure_in));
-							
-		lemma "(AntiskidShutoff) Output from 0 to 10" : 
-					(antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);	
-	
-	
-	
-	**};
-
-	annex safety{**
-	
-		analyze : max 0 fault
+		analyze : max 1 fault
 		-- MWW: END HACK!
 		-- ---------------------------------------------------------------------------	
 		**}	;		
@@ -161,17 +121,16 @@ with Base_Types;
 			
 			annex agree {**
 				
-				assume "Pressure input from 0 to 10 inclusive" : 
-					(hyd_pressure_in >= 0 and hyd_pressure_in <= 10);
-				
 				guarantee "(AntiskidShutoffValve) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
 							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
 							to the hyd pressure in." :
-							(if ((hyd_pressure_in = 0) or antiskid_cmd) then (hyd_pressure_out = 0)
-									else (hyd_pressure_out = hyd_pressure_in));
 							
-				guarantee "(AntiskidShutoff) Output from 0 to 10" : 
-					(hyd_pressure_out <= 10 and hyd_pressure_out >= 0);			
+							true -> (
+								if ((hyd_pressure_in = 0) or antiskid_cmd) then (hyd_pressure_out = 0)
+									else (hyd_pressure_out = hyd_pressure_in)
+								);
+							
+				guarantee "(AntiskidShutoff) Output from 0 to 10" : true -> (hyd_pressure_out <= 10 and hyd_pressure_out >= 0);			
 			
 				-- used for nondeterministic range in fault analysis
 				eq low : int = 0;
@@ -195,26 +154,26 @@ with Base_Types;
 		
 		annex safety {**
 
-			fault AntiskidShutoffValve_FailedOpen "(AntiskidShutoff) Stuck open fault.": faults.fail_to {
-				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
-				outputs: hyd_pressure_out <- val_out;    
-        		probability: 3.25E-6 ;
-				duration: permanent;
-			}
-			
-			fault AntiskidShutoffValve_FailedClosed "(AntiskidShutoff) Stuck closed fault." : faults.fail_to {
-				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
-				outputs: hyd_pressure_out <- val_out;    
-        		probability: 3.25E-6 ;
-				duration: permanent;
-			}
-			
-			fault AntiskidShutoffValve_FailedLastPosition "(AntiskidShutoff) Stuck at last position fault." : faults.fail_to {
-				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
-				outputs: hyd_pressure_out <- val_out;    
-        		probability: 3.25E-6 ;
-				duration: permanent;
-			}
+--			fault AntiskidShutoffValve_FailedOpen "(AntiskidShutoff) Stuck open fault.": faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 3.25E-6 ;
+--				duration: permanent;
+--			}
+--			
+--			fault AntiskidShutoffValve_FailedClosed "(AntiskidShutoff) Stuck closed fault." : faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 3.25E-6 ;
+--				duration: permanent;
+--			}
+--			
+--			fault AntiskidShutoffValve_FailedLastPosition "(AntiskidShutoff) Stuck at last position fault." : faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 3.25E-6 ;
+--				duration: permanent;
+--			}
 			
 			fault AntiskidShutoffValve_FailedRandomPosition "(AntiskidShutoff) Stuck at nondeterministic fault." : faults.fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 

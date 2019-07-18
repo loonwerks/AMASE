@@ -22,10 +22,10 @@ with Base_Types;
 				guarantee "(SwitchGate) If channel 1 is valid, then cmd_out is equivalent to cmd_in_1 (from channel 1).
 						  If channel 2 is valid and not channel 1, then cmd_out is equivalent to cmd_in_2 (from channel 2).
 						  And if neither channel is valid, then cmd_out is false." :
-						  (if (validity1) then (cmd_out = cmd_in_1)
-								else (if (validity2) then (cmd_out = cmd_in_2) else (cmd_out = false)));
---						(if (validity1) then (cmd_out = cmd_in_1)
---								else (cmd_out = cmd_in_2));
+						  true -> 
+						  	(if (validity1) then (cmd_out = cmd_in_1)
+								else (if (validity2) then (cmd_out = cmd_in_2) else (cmd_out = false))
+						  );
 				
 			**};
 		annex safety {**
@@ -35,12 +35,12 @@ with Base_Types;
         		probability: 6.5E-7 ;
 				duration: permanent;
 			}
-			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults.fail_to_bool {
-				inputs: val_in <- cmd_out, alt_val <- pre(cmd_out); 
-				outputs: cmd_out <- val_out;    
-        		probability: 1.3E-5 ;
-				duration: permanent;
-			}
+--			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults.fail_to_bool {
+--				inputs: val_in <- cmd_out, alt_val <- pre(cmd_out); 
+--				outputs: cmd_out <- val_out;    
+--        		probability: 1.3E-5 ;
+--				duration: permanent;
+--			}
 		**};		
 	end SwitchGate;	
 	

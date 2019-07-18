@@ -51,7 +51,7 @@ with Base_Types;
 			property PAIR_ROLL_48 = wheel_rolling_4 and wheel_rolling_8;
 			
 			guarantee "(MonitorSystem) 1 BSCU valid contract." : 
-					(bscu_validity <=>
+					true -> (bscu_validity <=>
 						  (power) 
 					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_1) or (not SPEED))) <=> brake_as_cmd_1)
 					  and ((elec_pedal_pos_L and ((SPEED and wheel_rolling_2) or (not SPEED))) <=> brake_as_cmd_2)
@@ -68,7 +68,7 @@ with Base_Types;
 			
 			
 			guarantee "(MonitorSystem) If we have no power, bscu is not valid":
-					(not power => not bscu_validity);
+					true -> (not power => not bscu_validity);
 										
 		**}	;
 		
@@ -83,4 +83,7 @@ with Base_Types;
 		**};
 	end MonitorSystem;
 	
+	system implementation MonitorSystem.inst
+		
+	end MonitorSystem.inst;
 end MonitorSystem;

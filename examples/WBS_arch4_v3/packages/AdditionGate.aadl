@@ -12,18 +12,13 @@ with util;
 			
 			annex agree {**
 				assume "(AdditionGate) Input 1 always bounded between 0 and 10 inclusive." :
-					((in_1 <= 10) and (in_1 >= 0));
+					true -> ((in_1 <= 10) and (in_1 >= 0));
 					
-				assume "(AdditionGate) Input 2 between 0 and 10" : 
-					((in_2 <= 10) and (in_2 >= 0));
-					
+				assume "(AdditionGate) Input 2 between 0 and 10" : true -> ((in_2 <= 10) and (in_2 >= 0));
 				-- addition_behavior_norm_guarantee := 
 				--		(TRUE ->  G (out = 10 <-> in_1 + in_2 >= 10) & (out = in_1 + in_2 <-> in_1 + in_2 <= 10)));
 				guarantee "(AdditionGate) Output is min {in_1+in_2, 10}" : 
-					(out_pressure = util.min(in_1+in_2, 10));
-				
-				guarantee "(AdditionGate) Output is bounded." :
-					((out_pressure <= 10) and (out_pressure >= 0));
+					true -> (out_pressure = util.min(in_1+in_2, 10));
 				
 			**};
 	end AdditionGate;

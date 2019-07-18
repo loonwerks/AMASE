@@ -16,7 +16,7 @@ with Base_Types;
 		annex agree {**
 			
 			assume "Pressure input from 0 to 10 inclusive" : 
-					((green_select_in >= 0 and green_select_in <= 10)
+					true -> ((green_select_in >= 0 and green_select_in <= 10)
 					and (blue_select_in >= 0 and blue_select_in <= 10));
 			
 			-- select_circuit_norm_guarantee := (TRUE -> (( G 
@@ -32,15 +32,20 @@ with Base_Types;
 			guarantee "(SelectorValve) The green line is selected under valid system and positive green pressure. 
 					The blue line is selected under invalid system or no green pressure and positive blue pressure.
 					Neither are selected in any other case." :
-					(if (green_select_in > 0 and system_validity) 
+					true -> (
+						if (green_select_in > 0 and system_validity) 
 							then (green_select_out = green_select_in and blue_select_out = 0)			
 						else if ((green_select_in = 0 or not system_validity) and blue_select_in > 0) 
 							then  (green_select_out = 0 and blue_select_in = blue_select_out)
-						else (green_select_out = 0 and blue_select_out = 0));
+						else (green_select_out = 0 and blue_select_out = 0)
+										
+							
+							);
 			
 			guarantee "(SelectorValve) Output is bounded from 0 to 10" :
-				((green_select_out >= 0 and green_select_out <= 10)
+				true -> ((green_select_out >= 0 and green_select_out <= 10)
 					and (blue_select_out >= 0 and blue_select_out <= 10));
+			
 			
 		**};
 		

@@ -11,24 +11,20 @@ with Base_Types;
 			hyd_pressure_out : out data port Base_Types::Integer;
 		
 		annex agree {**
-			assume "Pressure input from 0 to 10 inclusive" : 
-				(hyd_supply >= 0 and hyd_supply <= 10);
+			assume "Pressure input from 0 to 10 inclusive" : true -> (hyd_supply >= 0 and hyd_supply <= 10);
+			
+			guarantee "(HydraulicPump) Hyd pressure out first step" :
+						(hyd_pressure_out = 0) -> true;
 			
 			-- supply_hydraulic_norm_guarantee := (TRUE -> ( G 
 			-- 		((power & hydraulic_supply > 0) -> hyd_pressure_out > 0) 
 			-- 	&  G ((!power | hydraulic_supply = 0) -> hyd_pressure_out = 0)));
---			guarantee "(HydraulicPump) If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
---						true -> (
---							if (power and hyd_supply > 0) then (hyd_pressure_out = hyd_supply)
---								else (hyd_pressure_out = 0)
---						);
-			guarantee "(HydraulicPump) rework: If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
-						(if power then (hyd_pressure_out = hyd_supply)
-							else (hyd_pressure_out = 0));
-		
-			guarantee "Pressure output is bounded." :
-				(hyd_pressure_out >= 0 and hyd_pressure_out <= 10);
-				
+			guarantee "(HydraulicPump) If we have power and hydraulic sypply, then pressure out is positive, else it is zero." :
+						true -> (
+							if (power and hyd_supply > 0) then (hyd_pressure_out = hyd_supply)
+								else (hyd_pressure_out = 0)
+						);
+			
 		**};
 		
 		
@@ -49,5 +45,10 @@ with Base_Types;
 			
 		**};
 	end HydraulicPump;
+	
+	system implementation HydraulicPump.inst
+	end HydraulicPump.inst;
+	
+	
 	
 end HydraulicPump;
