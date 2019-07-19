@@ -8,6 +8,11 @@
 {AS5506C}.
 \newblock {Architecture Analysis \& Design Language (AADL)}, Jan. 2017.
 
+\bibitem{QFCS15:backes}
+J.~Backes, D.~Cofer, S.~Miller, and M.~W. Whalen.
+\newblock {Requirements Analysis of a Quad-Redundant Flight Control System}.
+\newblock In {\em {NFM}}, volume 9058 of {\em LNCS}, pages 82--96, 2015.
+
 \bibitem{Bieber04safetyassessment}
 P.~Bieber, C.~Bougnol, C.~Castel, J.~P. Heckmann, C.~Kehren, S.~Metge, and
   C.~Seguin.
@@ -88,6 +93,12 @@ A.~Cimatti, E.~Clarke, F.~Giunchiglia, and M.~Roveri.
 \newblock Nusmv: a new symbolic model checker.
 \newblock {\em International Journal on Software Tools for Technology
   Transfer}, 2000.
+
+\bibitem{cofer2012compositional}
+D.~Cofer, A.~Gacek, S.~Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
+\newblock Compositional verification of architectural models.
+\newblock In {\em NASA Formal Methods Symposium}, pages 126--140. Springer,
+  2012.
 
 \bibitem{NFM2012:CoGaMiWhLaLu}
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha.
