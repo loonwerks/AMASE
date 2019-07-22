@@ -979,6 +979,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	public void addTopLevelAsymFaultDeclarations(AgreeNodeBuilder nb) {
 		// Add information into top level regarding asymmetric faults.
+		addAssumeHistStmts(nb);
 		addLocalsForCommNodes(nb);
 		addAsymFaultInputs(nb);
 		addAsymCountConstraints(nb);
@@ -1463,6 +1464,24 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return isAsym;
+	}
+
+	/*
+	 * addAssumeHistStmts is used to assert that the assume hist statements
+	 * for each comm node is true. This is added to main.
+	 */
+	private void addAssumeHistStmts(AgreeNodeBuilder nb) {
+		for (String commNodes : mapCommNodeToInputs.keySet()) {
+			List<AgreeVar> inputs = mapCommNodeToInputs.get(commNodes);
+			for (AgreeVar input : inputs) {
+				if (input.id.contains("__ASSUME__HIST")) {
+					NodeCallExpr nodeCall = new NodeCallExpr("__HIST", new BoolExpr(true));
+					Expr eq = new BinaryExpr(new IdExpr(input.id), BinaryOp.EQUAL, nodeCall);
+					nb.addAssertion(new AgreeStatement("", eq, topNode.reference));
+					break;
+				}
+			}
+		}
 	}
 
 	/*

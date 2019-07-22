@@ -645,6 +645,8 @@ public class FaultASTBuilder {
 		Expr binEx = new BinaryExpr(faultNominalOut, BinaryOp.EQUAL,
 				new IdExpr("input" + dotField));
 		IdExpr guar = new IdExpr("__GUARANTEE0");
+		// This links fault nominal with node input :
+		// assert (__fault__nominal__output.NODE_VAL = input.NODE_VAL)
 		node.addEquation(guar, binEx);
 
 		// (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
