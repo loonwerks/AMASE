@@ -13,14 +13,14 @@ with Base_Types;
 				sender_input = output;
 			
 		**}	;
---		annex safety {**
---
---			fault Receiver_Fault "Receiver output is inverted": Common_Faults.fail_to_bool {
---				eq fail_val : bool;
---				inputs: val_in <- output, alt_val <- fail_val;     
---				outputs: output <- val_out;    
---				duration: permanent;
---			}	
---		**};
+		annex safety {**
+
+			fault Receiver_Fault "Receiver output is inverted": Common_Faults.fail_to_bool {
+				eq fail_val : bool;
+				inputs: val_in <- output, alt_val <- fail_val;     
+				outputs: output <- val_out;    
+				duration: permanent;
+			}	
+		**};
 	end Receiver;
 end Receiver;

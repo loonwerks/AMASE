@@ -47,7 +47,6 @@ import jkind.lustre.BoolExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
-import jkind.lustre.IfThenElseExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
@@ -629,9 +628,12 @@ public class FaultASTBuilder {
 		// that to the expression (i.e. __fault__nominal__output.VAL = input.VAL)
 		String field = "";
 		String dotField = "";
+		// Save output as full statement (in case of record type)
+		Expr actualFaultOutput = null;
 		if (type instanceof RecordType) {
 			for (Expr faultOutput : fault.faultOutputMap.keySet()) {
 				if (faultOutput instanceof RecordAccessExpr) {
+					actualFaultOutput = faultOutput;
 					RecordAccessExpr rac = (RecordAccessExpr) faultOutput;
 					dotField = "." + rac.field;
 					field = rac.field;
@@ -656,35 +658,28 @@ public class FaultASTBuilder {
 		BinaryExpr binAssume = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binGuar);
 		BinaryExpr binAssumeAndTrue = new BinaryExpr(binAssume, BinaryOp.AND, trueExpr);
 
-		// output = (if fault_trigger then fault_node_val_out else fault_nominal)
-		// If record type, need to perform nesting, hence the call to SafetyUtil.
-		Expr toAssign = null;
+		// output = (fault_node_val_out)
+		// If record type, need to reference "output.VAL"
+		IdExpr toAssign = null;
+		toAssign = new IdExpr(getFaultNodeOutputId(fault));
+		IdExpr output;
 		if (type instanceof RecordType) {
-			toAssign = SafetyUtil.createNestedUpdateExpr(recNominal, new IdExpr(getFaultNodeOutputId(fault)));
+			output = new IdExpr("output" + dotField);
 		} else {
-			toAssign = new IdExpr(getFaultNodeOutputId(fault));
+			output = new IdExpr("output");
 		}
-
-		IdExpr cond = new IdExpr("fault__trigger__" + fault.id);
-		IdExpr elseCond = new IdExpr("__fault__nominal__output");
-		Expr exprITE = new IfThenElseExpr(cond, toAssign, elseCond);
-		// If we have a record type, enter output as entire name.
-		String outputName = "output";
-		Expr output = new IdExpr(outputName);
-		BinaryExpr binOutputEquals = new BinaryExpr(output, BinaryOp.EQUAL, exprITE);
-
-		// true and output = ...
-		BinaryExpr trueAndOutputEquals = new BinaryExpr(binAssumeAndTrue, BinaryOp.AND, binOutputEquals);
+		// output = val_out
+		BinaryExpr outputEqualsValout = new BinaryExpr(output, BinaryOp.EQUAL, toAssign);
 
 		// Final expression
-		BinaryExpr finalExpr = new BinaryExpr(trueAndOutputEquals, BinaryOp.AND, trueExpr);
+		BinaryExpr finalExpr = new BinaryExpr(binAssumeAndTrue, BinaryOp.AND, outputEqualsValout);
 
 		// Before finishing the assert, check to see if we have safetyEqAsserts in the fault
 		// and add those to the finalExpr with "and"
 		if (fault.safetyEqAsserts.isEmpty()) {
 			// Assert:
-			// __ASSERT = (if fault_trigger then fault_node_val_out else fault_nominal)
-			// and (true and (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
+			// __ASSERT = (output = (fault_node_val_out))
+			// and (__ASSUME__HIST => (__GUARANTEE0 and true)))
 			node.addEquation(new IdExpr("__ASSERT"), finalExpr);
 		} else {
 			// Build and expression with all expr in list
