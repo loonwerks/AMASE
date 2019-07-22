@@ -427,9 +427,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// Create nominal id name with key from this map
 			String nomId = createNominalId(lhsWithStmtName + "_" + f.id);
 			// base is the root of the WITH expression.
-			Expr toAssign = new IdExpr(nomId);
+//			Expr toAssign = new IdExpr(nomId);
 			Expr defaultExpr = new IdExpr(nomId);
-			Expr resultExpr = defaultExpr;
+//			Expr resultExpr = defaultExpr;
 			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
 
 			// Go through pairs of the list and create with statements.
@@ -438,21 +438,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// base : replace the expression with nominal expression
 					// repl : go from the fault to the actual
 					// toAssign: createNestedUpdateExpr using base, repl
-					Expr base = replPathIdExpr(pair.ex, toAssign);
-					Expr repl = faultToActual(pair.f, pair.ex);
-					toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
+//					Expr base = replPathIdExpr(pair.ex, toAssign);
+					Expr faultNodeOut = faultToActual(pair.f, pair.ex);
+//					toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
+
+					BinaryExpr outputEqualsValout = new BinaryExpr(pair.ex, BinaryOp.EQUAL, faultNodeOut);
 
 					// Creates Lustre stmt:
 					// (if fault__trigger then fault_1__node__val_out
 					// else __fault__nominal__output
-					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
-					resultExpr = new IfThenElseExpr(ftTrigger, toAssign, defaultExpr);
+//					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
+//					resultExpr = new IfThenElseExpr(ftTrigger, toAssign, defaultExpr);
 					for (Fault curFault : faultsForSameOutput) {
 						mutualExclusiveFaults.add(new FaultPair(curFault, pair.f));
 					}
 					faultsForSameOutput.add(pair.f);
-					nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
-							new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL, resultExpr), null));
+					nb.addAssertion(new AgreeStatement("", outputEqualsValout, null));
 				}
 			}
 		}
