@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.8.13)  19 JUL 2019 14:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.12.8)  22 JUL 2019 09:57
 entering extended mode
 **./main.tex
 (main.tex
@@ -324,7 +324,7 @@ LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
-Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
+Package: multirow 2018/08/03 v2.3 Span multiple rows of a table
 \multirow@colwidth=\skip54
 \multirow@cntb=\count132
 \multirow@dima=\skip55
@@ -337,7 +337,7 @@ LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
 (Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\enumitem\enumitem.sty"
-Package: enumitem 2011/09/28 v3.5.2 Customized lists
+Package: enumitem 2018/11/30 v3.6 Customized lists
 \labelindent=\skip56
 \enit@outerparindent=\dimen150
 \enit@toks=\toks29
@@ -522,7 +522,7 @@ Package csquotes Warning: No multilingual support.
 
 (main.aux
 
-LaTeX Warning: Label `fig:sensorFault' multiply defined.
+LaTeX Warning: Label `subsec:process' multiply defined.
 
 )
 \openout1 = `main.aux'.
@@ -590,11 +590,11 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 )))
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
-Package: pdftexcmds 2018/01/30 v0.27 Utility functions of pdfTeX for LuaTeX (HO
+Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
 )
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
-Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
@@ -646,7 +646,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 
 [1
 
-{C:/Users/Danielle Stewart/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] 
+{C:/Users/jliu29/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 Excluding 'comment' comment.
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 33.
 
@@ -657,41 +657,36 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 33.
 
 Excluding 'comment' comment.) (preliminaries.tex (process.tex [2]
-<images/process1.png, id=15, 620.81938pt x 345.29pt>
-File: images/process1.png Graphic file (type png)
-<use images/process1.png>
-Package pdftex.def Info: images/process1.png  used on input line 19.
-(pdftex.def)             Requested size: 295.05711pt x 159.33354pt.
-<images/process2.png, id=18, 623.83063pt x 343.78438pt>
+Underfull \hbox (badness 4556) in paragraph at lines 4--5
+\OT1/ptm/m/n/10 The tra-di-tional safety as-sess-ment pro-cess at the sys-tem l
+evel is based on
+ []
+
+Excluding 'comment' comment.) (agree.tex
+<images/process2.png, id=15, 623.83063pt x 343.78438pt>
 File: images/process2.png Graphic file (type png)
 <use images/process2.png>
-Package pdftex.def Info: images/process2.png  used on input line 28.
+Package pdftex.def Info: images/process2.png  used on input line 11.
 (pdftex.def)             Requested size: 295.05711pt x 157.85408pt.
-) (agree.tex
-[3] [4 <./images/process1.png> <./images/process2.png>]
-Excluding 'comment' comment.)) (fault_modeling.tex
-<images/wbs_arch4_diagram.pdf, id=30, 1281.78876pt x 638.385pt>
+ [3] Excluding 'comment' comment.)
+(updated_process.tex
+Underfull \vbox (badness 1237) has occurred while \output is active []
+
+ [4 <./images/process2.png>])) (fault_modeling.tex
+<images/wbs_arch4_diagram.pdf, id=26, 1281.78876pt x 638.385pt>
 File: images/wbs_arch4_diagram.pdf Graphic file (type pdf)
 <use images/wbs_arch4_diagram.pdf>
 Package pdftex.def Info: images/wbs_arch4_diagram.pdf  used on input line 8.
 (pdftex.def)             Requested size: 347.12354pt x 169.07692pt.
- [5 <./images/wbs_arch4_diagram.pdf>]
-<images/inadvertent_braking.png, id=201, 347.2975pt x 88.33pt>
+ [5] [6 <./images/wbs_arch4_diagram.pdf>]
+<images/inadvertent_braking.png, id=200, 347.2975pt x 88.33pt>
 File: images/inadvertent_braking.png Graphic file (type png)
 <use images/inadvertent_braking.png>
 Package pdftex.def Info: images/inadvertent_braking.png  used on input line 52.
 
 (pdftex.def)             Requested size: 242.98541pt x 61.80226pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-Underfull \vbox (badness 2181) has occurred while \output is active []
-
- [6]
 [7 <./images/inadvertent_braking.png>]
-<images/system_sensor.pdf, id=210, 597.55246pt x 845.07718pt>
+<images/system_sensor.pdf, id=206, 597.55246pt x 845.07718pt>
 File: images/system_sensor.pdf Graphic file (type pdf)
 <use images/system_sensor.pdf>
 Package pdftex.def Info: images/system_sensor.pdf  used on input line 81.
@@ -701,7 +696,7 @@ Overfull \hbox (88.2035pt too wide) in paragraph at lines 81--85
  [] 
  []
 
-<images/safetyannex_sensorfault.pdf, id=212, 597.55246pt x 845.07718pt>
+<images/safetyannex_sensorfault.pdf, id=208, 597.55246pt x 845.07718pt>
 File: images/safetyannex_sensorfault.pdf Graphic file (type pdf)
 <use images/safetyannex_sensorfault.pdf>
 Package pdftex.def Info: images/safetyannex_sensorfault.pdf  used on input line
@@ -712,68 +707,66 @@ Overfull \hbox (88.2035pt too wide) in paragraph at lines 97--101
  [] 
  []
 
-
+[8 <./images/system_sensor.pdf> <./images/safetyannex_sensorfault.pdf>]
 
 pdfTeX warning: pdflatex.exe (file ./images/Comparison_with_EMV2.pdf): PDF incl
 usion: found PDF version <1.6>, but at most version <1.5> allowed
-<images/Comparison_with_EMV2.pdf, id=214, 794.97pt x 614.295pt>
+<images/Comparison_with_EMV2.pdf, id=246, 794.97pt x 614.295pt>
 File: images/Comparison_with_EMV2.pdf Graphic file (type pdf)
 <use images/Comparison_with_EMV2.pdf>
 Package pdftex.def Info: images/Comparison_with_EMV2.pdf  used on input line 11
 9.
 (pdftex.def)             Requested size: 347.12354pt x 262.10168pt.
-[8 <./images/system_sensor.pdf> <./images/safetyannex_sensorfault.pdf>]
+[9 <./images/Comparison_with_EMV2.pdf, page is rotated 90 degrees>]
 Excluding 'comment' comment.
-<images/hw_fault2.png, id=252, 294.09875pt x 55.70813pt>
+<images/hw_fault2.png, id=322, 294.09875pt x 55.70813pt>
 File: images/hw_fault2.png Graphic file (type png)
 <use images/hw_fault2.png>
 Package pdftex.def Info: images/hw_fault2.png  used on input line 170.
 (pdftex.def)             Requested size: 208.27623pt x 39.45187pt.
- [9 <./images/Comparison_with_EMV2.pdf, page is rotated 90 degrees>]
-<images/hw_prop_stmt.png, id=327, 511.41063pt x 87.82813pt>
+<images/hw_prop_stmt.png, id=323, 511.41063pt x 87.82813pt>
 File: images/hw_prop_stmt.png Graphic file (type png)
 <use images/hw_prop_stmt.png>
 Package pdftex.def Info: images/hw_prop_stmt.png  used on input line 190.
 (pdftex.def)             Requested size: 347.12354pt x 59.61377pt.
  Excluding 'comment' comment.) (implementation.tex
-<images/arch.png, id=328, 462.0462pt x 108.405pt>
+[10 <./images/hw_fault2.png> <./images/hw_prop_stmt.png>]
+<images/arch.png, id=329, 462.0462pt x 108.405pt>
 File: images/arch.png Graphic file (type png)
 <use images/arch.png>
 Package pdftex.def Info: images/arch.png  used on input line 14.
 (pdftex.def)             Requested size: 312.40906pt x 73.29922pt.
- [10 <./images/hw_fault2.png> <./images/hw_prop_stmt.png> <./images/arch.png>]
-<images/lustre.jpg, id=335, 1132.23pt x 559.33969pt>
+<images/lustre.jpg, id=330, 1132.23pt x 559.33969pt>
 File: images/lustre.jpg Graphic file (type jpg)
 <use images/lustre.jpg>
 Package pdftex.def Info: images/lustre.jpg  used on input line 37.
 (pdftex.def)             Requested size: 339.67162pt x 167.80319pt.
 
-Excluding 'comment' comment.) (fault_analysis2.tex [11 <./images/lustre.jpg>]
-[12]) (related_work.tex [13]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+Excluding 'comment' comment.) (fault_analysis2.tex [11 <./images/arch.png>]
+[12 <./images/lustre.jpg>] [13]) (related_work.tex
 Underfull \hbox (badness 1242) in paragraph at lines 20--21
 \OT1/ptm/m/n/10 COM-PASS (Cor-rect-ness, Mod-el-ing project and Per-for-mance o
 f Aerospace Sys-
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [14])
-(conclusion.tex) (main.bbl [15] [16]
+[14]) (conclusion.tex [15]) (main.bbl [16]
 Underfull \hbox (badness 10000) in paragraph at lines 185--188
 []\OT1/ptm/m/n/9 MathWorks.  The Math-Works Inc. Simulink Prod-uct Web Site.
  []
 
-) [17] (main.aux)
+[17]) [18] (main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8099 strings out of 492973
- 114240 string characters out of 3135897
- 218904 words of memory out of 3000000
- 11737 multiletter control sequences out of 15000+200000
+ 8138 strings out of 492970
+ 114604 string characters out of 3135852
+ 219855 words of memory out of 3000000
+ 11776 multiletter control sequences out of 15000+200000
  24562 words of font info for 64 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,7n,35p,1347b,299s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -787,9 +780,9 @@ cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7
 m Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.
 9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw
 /times/utmri8a.pfb>
-Output written on main.pdf (17 pages, 938192 bytes).
+Output written on main.pdf (18 pages, 868888 bytes).
 PDF statistics:
- 391 PDF objects out of 1000 (max. 8388607)
+ 390 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 92 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
