@@ -76,7 +76,7 @@ with WheelSensor;
 	
 	end WBS;
 	
-	system implementation WBS.inst
+	system implementation WBS.inst 
 		subcomponents
 			phys_sys : system PhysicalSystem::PhysicalSystem.inst;
 			ctrl_sys : system ControlSystem::ControlSystem.inst;
@@ -378,8 +378,128 @@ with WheelSensor;
 	 
 		 
 		
-		
-		
+-- cmd_implies_braking_wheel_7_norm_guarantee := (TRUE ->  G 
+			--    (((brake_as_cmd_7 & (green_pressure_in_selector_valve > 0 & system_validity)) 
+			--	  	| ((mechanical_pedal_pos_R & !as_cmd_pair_3_7) & (green_pressure_in_selector_valve = 0 | !system_validity))) 
+					
+			--							-> wheel_braking_force_7 > 0));
+			property GREEN_PRESSURE_VALID = phys_sys.green_pressure_in_selec_valve > 0 and system_validity;
+			
+			property NORMAL1 = phys_sys.brake_as_cmd_1 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE1 = ((phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID)); 
+			
+			lemma "(cmd_implies_braking_wheel_1) Wheel 1 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL1 or ALTERNATE1) => wheel_braking_force1 > 0);
+			
+			property NORMAL2 = phys_sys.brake_as_cmd_2 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE2 = ((phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_2) Wheel 2 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL2 or ALTERNATE2) => wheel_braking_force2 > 0);
+			
+			
+			property NORMAL3 = phys_sys.brake_as_cmd_3 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE3 = ((phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_3) Wheel 3 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL3 or ALTERNATE3) => wheel_braking_force3 > 0);
+			
+			property NORMAL4 = phys_sys.brake_as_cmd_4 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE4 = ((phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_4) Wheel 4 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL4 or ALTERNATE4) => wheel_braking_force4 > 0);
+			
+			property NORMAL5 = phys_sys.brake_as_cmd_5 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE5 = ((phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_1_5) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_5) Wheel 5 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL5 or ALTERNATE5) => wheel_braking_force5 > 0);
+			
+			property NORMAL6 = phys_sys.brake_as_cmd_6 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE6 = ((phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_2_6) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_6) Wheel 6 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL6 or ALTERNATE6) => wheel_braking_force6 > 0);
+			
+			property NORMAL7 = phys_sys.brake_as_cmd_7 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE7 = ((phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_3_7) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_7) Wheel 7 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL7 or ALTERNATE7) => wheel_braking_force7 > 0);
+			
+			property NORMAL8 = phys_sys.brake_as_cmd_8 and (GREEN_PRESSURE_VALID);
+			property ALTERNATE8 = ((phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_4_8) and (not GREEN_PRESSURE_VALID));
+			
+			lemma "(cmd_implies_braking_wheel_8) Wheel 8 braking force: under either normal or alternate operating mode, the wheel brake
+						force is positive." :
+						true -> ((NORMAL8 or ALTERNATE8) => wheel_braking_force8 > 0);
+					
+-- braking_wheel_5_implies_cmd_norm_guarantee := ( G 
+			-- 		(((mechanical_pedal_pos_L & system_validity) & !brake_as_cmd_5) -> as_cmd_pair_1_5) 
+			--		->  G (wheel_braking_force_5 > 0 -> ((brake_as_cmd_5 & (green_pressure_in_selector_valve > 0 & system_validity)) 
+			--											| ((mechanical_pedal_pos_L & !as_cmd_pair_1_5) & (green_pressure_in_selector_valve = 0 | !system_validity)))));
+			
+			property L_PEDAL_VALID = phys_sys.mech_pedal_pos_L and system_validity;
+			property R_PEDAL_VALID = phys_sys.mech_pedal_pos_R and system_validity;
+			
+			
+			lemma "(braking_wheel_1_implies_cmd_norm_guarantee) Wheel 1 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not phys_sys.brake_as_cmd_1) => phys_sys.as_cmd_pair_1_5)
+						=> ((wheel_braking_force1 > 0 => (phys_sys.brake_as_cmd_1 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID))));
+			
+			
+			lemma "(braking_wheel_2_implies_cmd_norm_guarantee) Wheel 2 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not phys_sys.brake_as_cmd_2) => phys_sys.as_cmd_pair_2_6)
+						=> (wheel_braking_force2 > 0 => (phys_sys.brake_as_cmd_2 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID)));
+			
+			lemma "(braking_wheel_3_implies_cmd_norm_guarantee) Wheel 3 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not phys_sys.brake_as_cmd_3) => phys_sys.as_cmd_pair_3_7)
+						=> (wheel_braking_force3 > 0 => (phys_sys.brake_as_cmd_3 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID)));
+			
+			lemma "(braking_wheel_4_implies_cmd_norm_guarantee) Wheel 4 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not phys_sys.brake_as_cmd_4) => phys_sys.as_cmd_pair_4_8)
+						=> (wheel_braking_force4 > 0 => (phys_sys.brake_as_cmd_4 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID)));
+			
+			lemma "(braking_wheel_5_implies_cmd_norm_guarantee) Wheel 5 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not phys_sys.brake_as_cmd_5) => phys_sys.as_cmd_pair_1_5)
+						=> (wheel_braking_force5 > 0 => (phys_sys.brake_as_cmd_5 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_1_5 and not GREEN_PRESSURE_VALID)));
+			
+			lemma "(braking_wheel_6_implies_cmd_norm_guarantee) Wheel 6 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((L_PEDAL_VALID and not phys_sys.brake_as_cmd_6) => phys_sys.as_cmd_pair_2_6)
+						=> (wheel_braking_force6 > 0 => (phys_sys.brake_as_cmd_6 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_L and not phys_sys.as_cmd_pair_2_6 and not GREEN_PRESSURE_VALID)));
+			
+			lemma "(braking_wheel_7_implies_cmd_norm_guarantee) Wheel 7 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not phys_sys.brake_as_cmd_7) => phys_sys.as_cmd_pair_3_7)
+						=> (wheel_braking_force7 > 0 => (phys_sys.brake_as_cmd_7 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_3_7 and not GREEN_PRESSURE_VALID)));
+			
+			lemma "(braking_wheel_8_implies_cmd_norm_guarantee) Wheel 8 force: Antiskid command for pair active implies wheel brake force
+						which implies brake antiskid command in valid system or invalid system" :
+						true -> (((R_PEDAL_VALID and not phys_sys.brake_as_cmd_8) => phys_sys.as_cmd_pair_1_5)
+						=> (wheel_braking_force8 > 0 => (phys_sys.brake_as_cmd_8 and (GREEN_PRESSURE_VALID)) 
+							or (phys_sys.mech_pedal_pos_R and not phys_sys.as_cmd_pair_4_8 and not GREEN_PRESSURE_VALID)));
+							
 	**};
 	
 --   annex safety{**
