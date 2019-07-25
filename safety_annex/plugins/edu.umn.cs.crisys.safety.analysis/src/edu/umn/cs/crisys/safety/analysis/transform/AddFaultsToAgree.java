@@ -163,22 +163,17 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 */
 	public static void setTransformFlag(MenuItem item) {
 
-		// If item.getSelection is false, nothing is selected --> 0
-		// If item.getSelection is true, either safety analysis or SOTERIA is selected:
-		// Get string of menu item:
-		// If string is Safety analysis --> 1
-		// If string is SOTERIA --> 2
+		//
 		if (!item.getSelection()) {
-			transformFlag = 0;
-		} else {
-			String text = item.getText();
-			if (text.contains("Safety Analysis")) {
-				transformFlag = 1;
-			}
-			else if (text.contains("Compositional Fault Analysis")) {
+			if (item.getText().contains("Generate")) {
 				transformFlag = 2;
+			} else {
+				transformFlag = 0;
 			}
-			else {
+		} else {
+			if (item.getText().contains("Verify")) {
+				transformFlag = 1;
+			} else {
 				transformFlag = 0;
 			}
 		}
