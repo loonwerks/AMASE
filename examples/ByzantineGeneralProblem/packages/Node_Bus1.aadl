@@ -5,25 +5,21 @@ with Buses;
 
 	system node1
 		features
-			sensor_input: in data port Base_Types::Float;
-			bus2_input: in data port Buses::commBus.real;
-			bus3_input: in data port Buses::commBus.real;
-			bus4_input: in data port Buses::commBus.real;
+			sensor_input: in data port Base_Types::Boolean;
+			bus2_input: in data port Buses::commBus.bool;
+			bus3_input: in data port Buses::commBus.bool;
+			bus4_input: in data port Buses::commBus.bool;
 				
-			output: out data port Buses::commBus.real;
+			output: out data port Buses::commBus.bool;
 				
 		annex agree {**
-			assume "Sensor input bounded between 0 and 10.":
-				((sensor_input > 0.0) and (sensor_input < 10.0));
-				
 			guarantee "Sensor input equals output to bus 1." :
 				sensor_input = output.NODE_VAL;
 			
 		**};
 		annex safety {**
-			fault Node1_Fault "Asym output node 1": Common_Faults.fail_to_real {
-				eq fail_to : real;
-				inputs: val_in <- output.NODE_VAL, alt_val <- fail_to;     
+			fault Node1_Fault "Asym output node 1": Common_Faults.invert_signal {
+				inputs: val_in <- output.NODE_VAL;     
 				outputs: output.NODE_VAL <- val_out;    
 				duration: permanent;
 				propagate_type: asymmetric;

@@ -3,28 +3,13 @@ public
 with Base_Types;
 	device Sensor
 		features
-			sensed_data : in data port Base_Types::Float;
-			output : out data port Base_Types::Float;
+			sensed_data : in data port Base_Types::Boolean;
+			output : out data port Base_Types::Boolean;
 		
 		annex agree {**
-			assume "Global input bounded between 0 and 10.":
-				((sensed_data > 0.0) and (sensed_data < 10.0));
-				
-			guarantee "Sensed output is bounded between 0 and 10." :
-				((output > 0.0) and (output < 10.0));
-			
 			guarantee "Output equals sensed data." :
 				(output = sensed_data);	
 		**};
 		
---		annex safety {**
---			fault Sensor_Fault "Sensor output is zero": Common_Faults.fail_to_real {
---				eq fail_to : real = 0.0 ;
---				inputs: val_in <- output, alt_val <- fail_to;     
---				outputs: output <- val_out;    
---				duration: permanent;
---				--propagate_type: symmetric;
---			}
---		**};
 	end Sensor;
 end Sensors;
