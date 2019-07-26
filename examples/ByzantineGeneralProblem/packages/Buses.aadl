@@ -4,6 +4,11 @@ with Base_Types;
 	data commBus
 	end commBus;
 
+	data implementation commBus.bool
+ 	 	subcomponents
+    		NODE_VAL : data Base_Types::Boolean;
+	end commBus.bool;
+
 	data implementation commBus.real
  	 	subcomponents
     		NODE_VAL : data Base_Types::Float;

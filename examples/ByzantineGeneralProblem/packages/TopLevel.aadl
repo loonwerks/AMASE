@@ -10,22 +10,32 @@ with Buses;
 
 	system TopLevel
 		features
-			global_input : in data port Base_Types::Float;
+			global_input : in data port Base_Types::Boolean;
 			
-			node1_data : out data port Buses::commBus.real;
-			node2_data : out data port Buses::commBus.real;
-			node3_data : out data port Buses::commBus.real;
-			node4_data : out data port Buses::commBus.real;
+			node1_data : out data port Buses::commBus.bool;
+			node2_data : out data port Buses::commBus.bool;
+			node3_data : out data port Buses::commBus.bool;
+			node4_data : out data port Buses::commBus.bool;
+			
+			top_level_output : out data port Base_Types::Boolean;
 			
 		annex agree{**
-			assume "Global input bounded between 0 and 10.":
-				((global_input > 0.0) and (global_input < 10.0));
+			assume "Global input is true.":
+				((global_input = true));
 			
 			guarantee "(Sym) All node outputs are equal to global input." :
 					(node1_data.NODE_VAL = node2_data.NODE_VAL) 
 				and (node1_data.NODE_VAL = node3_data.NODE_VAL) 
 				and (node1_data.NODE_VAL = node4_data.NODE_VAL) 
 				and (global_input = node1_data.NODE_VAL);	
+		
+			guarantee "Top level output is an AND of all the nodes report." :
+				(node1_data.NODE_VAL 
+					and node2_data.NODE_VAL 
+					and node3_data.NODE_VAL 
+					and node4_data.NODE_VAL
+				);
+		
 		**};
 	end TopLevel;
 	
