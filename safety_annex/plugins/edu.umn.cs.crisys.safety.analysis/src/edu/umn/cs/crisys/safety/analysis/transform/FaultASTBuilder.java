@@ -368,20 +368,24 @@ public class FaultASTBuilder {
 				if (ci.getSource().eContainer() instanceof ComponentInstanceImpl) {
 					ComponentInstanceImpl thisComp = (ComponentInstanceImpl) ci.getSource().eContainer();
 					if (thisComp.getName().equals(compName)) {
-						// Add these connections to the local lists used later
+						// If this matches the fault output saved in senderOutput, then
+						// add these connections to the local lists used later
 						// to create the communication nodes.
-						senderConnections.add(ci.getDestination());
-						if (ci.getDestination().eContainer() instanceof SystemInstanceImpl) {
-							SystemInstanceImpl sysReceiver = (SystemInstanceImpl) ci.getDestination().eContainer();
-							tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
-						} else if (ci.getDestination().eContainer() instanceof ComponentInstanceImpl) {
-							ComponentInstanceImpl sysReceiver = (ComponentInstanceImpl) ci.getDestination()
-									.eContainer();
-							tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
+						if (ci.getSource().getName().equals(senderOutput.getName())) {
+							senderConnections.add(ci.getDestination());
+							if (ci.getDestination().eContainer() instanceof SystemInstanceImpl) {
+								SystemInstanceImpl sysReceiver = (SystemInstanceImpl) ci.getDestination().eContainer();
+								tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
+							} else if (ci.getDestination().eContainer() instanceof ComponentInstanceImpl) {
+								ComponentInstanceImpl sysReceiver = (ComponentInstanceImpl) ci.getDestination()
+										.eContainer();
+								tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
+							} else {
+								new SafetyException("Asymmetric fault linked to non-system instance component. "
+										+ "(Debug FaultASTBuilder 377");
+							}
 						} else {
-							new SafetyException(
-									"Asymmetric fault linked to non-system instance component. "
-											+ "(Debug FaultASTBuilder 377");
+							continue;
 						}
 					}
 				}

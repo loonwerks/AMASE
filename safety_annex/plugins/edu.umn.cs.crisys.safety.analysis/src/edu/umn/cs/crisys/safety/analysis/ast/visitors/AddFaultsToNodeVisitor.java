@@ -303,9 +303,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// If we do not have the component instance, we
 					// cannot perform this removal of connections.
 					if ((sourceName.compInst == null) || (destName.compInst == null)) {
-//						System.out.println("There may be a problem with connections "
-//								+ "for the asymmetric fault. If no results are shown, "
-//								+ "then there is a problem there.");
 						continue;
 					}
 					String senderName = sourceName.compInst.getName() + "." + sourceName.id;
@@ -427,9 +424,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// Create nominal id name with key from this map
 			String nomId = createNominalId(lhsWithStmtName + "_" + f.id);
 			// base is the root of the WITH expression.
-//			Expr toAssign = new IdExpr(nomId);
 			Expr defaultExpr = new IdExpr(nomId);
-//			Expr resultExpr = defaultExpr;
 			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
 
 			// Go through pairs of the list and create with statements.
@@ -438,17 +433,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// base : replace the expression with nominal expression
 					// repl : go from the fault to the actual
 					// toAssign: createNestedUpdateExpr using base, repl
-//					Expr base = replPathIdExpr(pair.ex, toAssign);
 					Expr faultNodeOut = faultToActual(pair.f, pair.ex);
-//					toAssign = SafetyUtil.createNestedUpdateExpr(base, repl);
 
 					BinaryExpr outputEqualsValout = new BinaryExpr(pair.ex, BinaryOp.EQUAL, faultNodeOut);
 
 					// Creates Lustre stmt:
 					// (if fault__trigger then fault_1__node__val_out
 					// else __fault__nominal__output
-//					Expr ftTrigger = localFaultTriggerMap.get(pair.f);
-//					resultExpr = new IfThenElseExpr(ftTrigger, toAssign, defaultExpr);
 					for (Fault curFault : faultsForSameOutput) {
 						mutualExclusiveFaults.add(new FaultPair(curFault, pair.f));
 					}
