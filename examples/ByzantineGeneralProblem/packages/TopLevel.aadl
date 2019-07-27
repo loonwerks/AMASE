@@ -23,18 +23,20 @@ with Buses;
 			assume "Global input is true.":
 				((global_input = true));
 			
-			guarantee "(Sym) All node outputs are equal to global input." :
+			guarantee "All node outputs are equal to global input." :
 					(node1_data.NODE_VAL = node2_data.NODE_VAL) 
 				and (node1_data.NODE_VAL = node3_data.NODE_VAL) 
 				and (node1_data.NODE_VAL = node4_data.NODE_VAL) 
 				and (global_input = node1_data.NODE_VAL);	
 		
-			guarantee "Top level output is an AND of all the nodes report." :
-				(node1_data.NODE_VAL 
+			guarantee "All nodes report true." :
+				((node1_data.NODE_VAL 
 					and node2_data.NODE_VAL 
 					and node3_data.NODE_VAL 
-					and node4_data.NODE_VAL
-				);
+					and node4_data.NODE_VAL));
+		
+			guarantee "Top level output equals global input." :
+				(global_input = top_level_output);
 		
 		**};
 	end TopLevel;
@@ -107,7 +109,11 @@ with Buses;
 			lemma "(Asym) All nodes reading from bus 4 (nodes 1, 2, 3) see the same value." :
 				(node1.bus4_input.NODE_VAL = node2.bus4_input.NODE_VAL) and (node1.bus4_input.NODE_VAL = node3.bus4_input.NODE_VAL);
 			
-				
+			assert "Top level output is an AND of all node reports." :
+					((node1_data.NODE_VAL 
+					and node2_data.NODE_VAL 
+					and node3_data.NODE_VAL 
+					and node4_data.NODE_VAL) = top_level_output);	
 		**}	;
 		
 		annex safety {**

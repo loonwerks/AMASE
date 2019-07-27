@@ -17,6 +17,8 @@ with Buses;
 				sensor_input = output.NODE_VAL;
 			
 		**};
+		
+		
 		annex safety {**
 			fault Node1_Fault "Asym output node 1": Common_Faults.invert_signal {
 				inputs: val_in <- output.NODE_VAL;     
