@@ -1,0 +1,26 @@
+package Common_Faults
+public
+	
+	annex agree {**
+	    node invert_signal(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (not val_in) else val_in;
+		tel;
+		
+		node fail_to_zero(val_in: int, trigger: bool) returns (val_out: int);
+		let
+			val_out = if trigger then (0) else val_in;
+		tel;
+		
+		node fail_to_one(val_in: int, trigger: bool) returns (val_out: int);
+		let
+			val_out = if trigger then (1) else val_in;
+		tel;
+		
+		node fail_to_real(val_in: real, alt_val: real, trigger: bool) returns (val_out: real);
+		let
+			val_out = if trigger then (alt_val) else val_in;
+		tel;		
+		
+**};
+end Common_Faults;

@@ -1,0 +1,123 @@
+package TopLevel
+public
+with Base_Types;
+with Sensors;
+with Nodes;
+with Buses;
+
+	system TopLevel
+		features
+			global_input : in data port Base_Types::Boolean;
+			
+			node1_report : out data port Base_Types::Boolean;
+			node2_report : out data port Base_Types::Boolean;
+			node3_report : out data port Base_Types::Boolean;
+			node4_report : out data port Base_Types::Boolean;
+			
+			top_level_output : out data port Base_Types::Boolean;
+			
+		annex agree{**
+			assume "Global input is true.":
+				((global_input = true));
+			
+			guarantee "All node outputs are equal to global input." :
+					(node1_report = node2_report) 
+				and (node1_report = node3_report) 
+				and (node1_report = node4_report) 
+				and (global_input = node1_report);	
+		
+			guarantee "All nodes report true." :
+				(node1_report 
+					and node2_report 
+					and node3_report 
+					and node4_report
+				);
+				
+			guarantee "Top level output equals global input." :
+				(global_input = top_level_output);
+		
+		**};
+	end TopLevel;
+	
+	system implementation TopLevel.impl
+		subcomponents
+			sensor1 : device Sensors::Sensor;
+			sensor2 : device Sensors::Sensor;
+			sensor3 : device Sensors::Sensor;
+			sensor4 : device Sensors::Sensor;
+			
+			node1 : system Nodes::Node;
+			node2 : system Nodes::Node;
+			node3 : system Nodes::Node;
+			node4 : system Nodes::Node;
+		
+		connections
+			-- Gobal input to sensors
+			GS1 : port global_input -> sensor1.sensed_data;
+			GS2 : port global_input -> sensor2.sensed_data;
+			GS3 : port global_input -> sensor3.sensed_data;
+			GS4 : port global_input -> sensor4.sensed_data;
+			
+			-- Sensor connections to each node
+			S1N1 : port sensor1.output -> node1.sensor_input;
+			S2N2 : port sensor2.output -> node2.sensor_input;
+			S3N3 : port sensor3.output -> node3.sensor_input;
+			S4N4 : port sensor4.output -> node4.sensor_input;
+			
+			-- Node 1 output to nodes 2, 3, 4
+			N1B1 : port node1.output -> node2.in1;
+			N1B2 : port node1.output -> node3.in1;
+			N1B3 : port node1.output -> node4.in1;
+			
+			-- Node 2 output to nodes 1, 3, 4
+			N2B1 : port node2.output -> node1.in1;
+			N2B3 : port node2.output -> node3.in2;
+			N2B4 : port node2.output -> node4.in2;
+			
+			-- Node 3 output to nodes 1, 2, 4
+			N3B1 : port node3.output -> node1.in2;
+			N3B2 : port node3.output -> node2.in2;
+			N3B4 : port node3.output -> node4.in3;
+			
+			-- Node 4 output to nodes 1, 2, 3
+			N4B1 : port node4.output -> node1.in3;
+			N4B2 : port node4.output -> node2.in3;
+			N4B3 : port node4.output -> node3.in3;
+			
+			-- Node outputs to top level
+			N1toTop : port node1.report_to_top -> node1_report;
+			N2toTop : port node2.report_to_top -> node2_report;
+			N3toTop : port node3.report_to_top -> node3_report;
+			N4toTop : port node4.report_to_top -> node4_report;
+		
+		annex agree {**
+			
+			lemma "All node outputs are equal to global input." :
+				(node1.output.NODE_VAL = node2.output.NODE_VAL) and (node1.output.NODE_VAL = node3.output.NODE_VAL) and (node1.output.NODE_VAL = node4.output.NODE_VAL) and (global_input = node1.output.NODE_VAL);
+			
+			lemma "(Asym) All nodes reading from bus 1 (nodes 2, 3, 4) see the same value." :
+				(node2.in1.NODE_VAL = node3.in1.NODE_VAL) and (node2.in1.NODE_VAL = node4.in1.NODE_VAL);
+				
+			lemma "(Asym) All nodes reading from bus 2 (nodes 1, 3, 4) see the same value." :
+				(node1.in1.NODE_VAL = node3.in2.NODE_VAL) and (node1.in1.NODE_VAL = node4.in2.NODE_VAL);
+				
+			lemma "(Asym) All nodes reading from bus 3 (nodes 1, 2, 4) see the same value." :
+				(node1.in2.NODE_VAL = node2.in2.NODE_VAL) and (node1.in2.NODE_VAL = node4.in3.NODE_VAL);
+				
+			lemma "(Asym) All nodes reading from bus 4 (nodes 1, 2, 3) see the same value." :
+				(node1.in3.NODE_VAL = node2.in3.NODE_VAL) and (node1.in3.NODE_VAL = node3.in3.NODE_VAL);
+			
+			assert "Top level output is an AND of all node reports." :
+					((node1_report 
+					and node2_report 
+					and node3_report 
+					and node4_report) = top_level_output);
+		**}	;
+		
+		annex safety {**
+			
+			analyze: max 2 fault
+			
+		**};
+	end TopLevel.impl;
+end TopLevel;
