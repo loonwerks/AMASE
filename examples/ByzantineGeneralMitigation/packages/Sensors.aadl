@@ -1,0 +1,15 @@
+package Sensors
+public
+with Base_Types;
+	device Sensor
+		features
+			sensed_data : in data port Base_Types::Boolean;
+			output : out data port Base_Types::Boolean;
+		
+		annex agree {**
+			guarantee "Output equals sensed data." :
+				(output = sensed_data);	
+		**};
+		
+	end Sensor;
+end Sensors;
