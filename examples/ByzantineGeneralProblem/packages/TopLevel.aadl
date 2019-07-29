@@ -2,10 +2,7 @@ package TopLevel
 public
 with Base_Types;
 with Sensors;
-with Node_Bus1;
-with Node_Bus2;
-with Node_Bus3;
-with Node_Bus4;
+with Nodes;
 with Buses;
 
 	system TopLevel
@@ -48,10 +45,10 @@ with Buses;
 			sensor3 : device Sensors::Sensor;
 			sensor4 : device Sensors::Sensor;
 			
-			node1 : system Node_Bus1::node1;
-			node2 : system Node_Bus2::node2;
-			node3 : system Node_Bus3::node3;
-			node4 : system Node_Bus4::node4;
+			node1 : system Nodes::Node;
+			node2 : system Nodes::Node;
+			node3 : system Nodes::Node;
+			node4 : system Nodes::Node;
 		
 		connections
 			-- Gobal input to sensors
@@ -67,24 +64,24 @@ with Buses;
 			S4N4 : port sensor4.output -> node4.sensor_input;
 			
 			-- Node 1 output to nodes 2, 3, 4
-			N1B1 : port node1.output -> node2.bus1_input;
-			N1B2 : port node1.output -> node3.bus1_input;
-			N1B3 : port node1.output -> node4.bus1_input;
+			N1B1 : port node1.output -> node2.in1;
+			N1B2 : port node1.output -> node3.in1;
+			N1B3 : port node1.output -> node4.in1;
 			
 			-- Node 2 output to nodes 1, 3, 4
-			N2B1 : port node2.output -> node1.bus2_input;
-			N2B3 : port node2.output -> node3.bus2_input;
-			N2B4 : port node2.output -> node4.bus2_input;
+			N2B1 : port node2.output -> node1.in1;
+			N2B3 : port node2.output -> node3.in2;
+			N2B4 : port node2.output -> node4.in2;
 			
 			-- Node 3 output to nodes 1, 2, 4
-			N3B1 : port node3.output -> node1.bus3_input;
-			N3B2 : port node3.output -> node2.bus3_input;
-			N3B4 : port node3.output -> node4.bus3_input;
+			N3B1 : port node3.output -> node1.in2;
+			N3B2 : port node3.output -> node2.in2;
+			N3B4 : port node3.output -> node4.in3;
 			
 			-- Node 4 output to nodes 1, 2, 3
-			N4B1 : port node4.output -> node1.bus4_input;
-			N4B2 : port node4.output -> node2.bus4_input;
-			N4B3 : port node4.output -> node3.bus4_input;
+			N4B1 : port node4.output -> node1.in3;
+			N4B2 : port node4.output -> node2.in3;
+			N4B3 : port node4.output -> node3.in3;
 			
 			-- Node outputs to top level
 			N1toTop : port node1.output -> node1_data;
@@ -98,16 +95,16 @@ with Buses;
 				(node1.output.NODE_VAL = node2.output.NODE_VAL) and (node1.output.NODE_VAL = node3.output.NODE_VAL) and (node1.output.NODE_VAL = node4.output.NODE_VAL) and (global_input = node1.output.NODE_VAL);
 			
 			lemma "(Asym) All nodes reading from bus 1 (nodes 2, 3, 4) see the same value." :
-				(node2.bus1_input.NODE_VAL = node3.bus1_input.NODE_VAL) and (node2.bus1_input.NODE_VAL = node4.bus1_input.NODE_VAL);
+				(node2.in1.NODE_VAL = node3.in1.NODE_VAL) and (node2.in1.NODE_VAL = node4.in1.NODE_VAL);
 				
 			lemma "(Asym) All nodes reading from bus 2 (nodes 1, 3, 4) see the same value." :
-				(node1.bus2_input.NODE_VAL = node3.bus2_input.NODE_VAL) and (node1.bus2_input.NODE_VAL = node4.bus2_input.NODE_VAL);
+				(node1.in1.NODE_VAL = node3.in2.NODE_VAL) and (node1.in1.NODE_VAL = node4.in2.NODE_VAL);
 				
 			lemma "(Asym) All nodes reading from bus 3 (nodes 1, 2, 4) see the same value." :
-				(node1.bus3_input.NODE_VAL = node2.bus3_input.NODE_VAL) and (node1.bus3_input.NODE_VAL = node4.bus3_input.NODE_VAL);
+				(node1.in2.NODE_VAL = node2.in2.NODE_VAL) and (node1.in2.NODE_VAL = node4.in3.NODE_VAL);
 				
 			lemma "(Asym) All nodes reading from bus 4 (nodes 1, 2, 3) see the same value." :
-				(node1.bus4_input.NODE_VAL = node2.bus4_input.NODE_VAL) and (node1.bus4_input.NODE_VAL = node3.bus4_input.NODE_VAL);
+				(node1.in3.NODE_VAL = node2.in3.NODE_VAL) and (node1.in3.NODE_VAL = node3.in3.NODE_VAL);
 			
 			assert "Top level output is an AND of all node reports." :
 					((node1_data.NODE_VAL 
