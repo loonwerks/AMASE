@@ -1,0 +1,46 @@
+ package Nodes
+public
+with Base_Types;
+	system Node
+		features
+			color_from_leader: in data port Base_Types::Boolean; 
+			
+			color_seen_1 : in data port Base_Types::Boolean;
+			color_seen_2 : in data port Base_Types::Boolean; 
+			
+			color_reported_to_me : out data port Base_Types::Boolean;
+			
+			color_results : out data port Base_Types::Boolean;
+			
+		annex agree {**
+			
+			-- Report what was told to this node to the other two nodes.
+			guarantee "Send color told to this node to the other two nodes
+					   in the second time step." :
+				 true -> (pre(color_from_leader) = color_reported_to_me);
+			
+			-- Vote on what I have seen and what the others report.
+			-- Take number seen the most often (majority vote).
+			eq vote_score : int = 
+				(if (color_seen_1) then 1 else 0) +
+				(if (color_seen_2) then 1 else 0) +
+				(if (pre(color_from_leader)) then 1 else 0);
+			
+			guarantee "Pass vote results to top level." :
+				true -> (if (vote_score > 1) then (color_results = true)
+					else (color_results = false)
+				);
+			
+		**};
+		annex safety {**
+			
+			fault Node_Fault "Leader node output is asymmetric": Common_Faults.invert_signal {
+				inputs: val_in <- color_reported_to_me;     
+				outputs: color_reported_to_me <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}
+			
+		**};
+	end Node;
+end Nodes;

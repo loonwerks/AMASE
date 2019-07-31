@@ -1,0 +1,26 @@
+package LeaderNode
+public
+with Base_Types;
+	system leader
+		features 
+			color : out data port Base_Types::Boolean;
+	
+		annex agree {**
+			
+			guarantee "Color remains green (true) from beginning step." :
+				true -> ((color = true) and (color = pre(color))); 
+			
+		**};
+		annex safety {**
+			
+			fault Node_Fault "Leader node output is asymmetric": Common_Faults.invert_signal {
+				inputs: val_in <- color;     
+				outputs: color <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}
+			
+		**};
+	end leader;
+	
+end LeaderNode;

@@ -1,0 +1,9 @@
+package Data_Types
+public
+with Base_Types;
+	
+	annex agree {**
+		
+	**};
+
+end Data_Types;
