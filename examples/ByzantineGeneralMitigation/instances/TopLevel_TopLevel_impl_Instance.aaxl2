@@ -12,7 +12,7 @@
     </ownedPropertyAssociation>
     <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
   </featureInstance>
-  <featureInstance name="node1_data" direction="out">
+  <featureInstance name="node1_report" direction="out">
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
       <ownedValue>
@@ -24,7 +24,7 @@
     </ownedPropertyAssociation>
     <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
   </featureInstance>
-  <featureInstance name="node2_data" direction="out">
+  <featureInstance name="node2_report" direction="out">
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
       <ownedValue>
@@ -36,7 +36,7 @@
     </ownedPropertyAssociation>
     <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
   </featureInstance>
-  <featureInstance name="node3_data" direction="out">
+  <featureInstance name="node3_report" direction="out">
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
       <ownedValue>
@@ -48,7 +48,7 @@
     </ownedPropertyAssociation>
     <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
   </featureInstance>
-  <featureInstance name="node4_data" direction="out">
+  <featureInstance name="node4_report" direction="out">
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
       <ownedValue>
@@ -407,7 +407,7 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.10"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node1.report_to_top -> node1_data" kind="portConnection" destination="//@featureInstance.1" source="//@componentInstance.4/@featureInstance.5">
+  <connectionInstance name="node1.report_to_top -> node1_report" kind="portConnection" destination="//@featureInstance.1" source="//@componentInstance.4/@featureInstance.5">
     <connectionReference context="/" source="//@componentInstance.4/@featureInstance.5" destination="//@featureInstance.1">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.20"/>
     </connectionReference>
@@ -427,7 +427,7 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.13"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node2.report_to_top -> node2_data" kind="portConnection" destination="//@featureInstance.2" source="//@componentInstance.5/@featureInstance.5">
+  <connectionInstance name="node2.report_to_top -> node2_report" kind="portConnection" destination="//@featureInstance.2" source="//@componentInstance.5/@featureInstance.5">
     <connectionReference context="/" source="//@componentInstance.5/@featureInstance.5" destination="//@featureInstance.2">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.21"/>
     </connectionReference>
@@ -447,7 +447,7 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.16"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node3.report_to_top -> node3_data" kind="portConnection" destination="//@featureInstance.3" source="//@componentInstance.6/@featureInstance.5">
+  <connectionInstance name="node3.report_to_top -> node3_report" kind="portConnection" destination="//@featureInstance.3" source="//@componentInstance.6/@featureInstance.5">
     <connectionReference context="/" source="//@componentInstance.6/@featureInstance.5" destination="//@featureInstance.3">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.22"/>
     </connectionReference>
@@ -467,7 +467,7 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.19"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node4.report_to_top -> node4_data" kind="portConnection" destination="//@featureInstance.4" source="//@componentInstance.7/@featureInstance.5">
+  <connectionInstance name="node4.report_to_top -> node4_report" kind="portConnection" destination="//@featureInstance.4" source="//@componentInstance.7/@featureInstance.5">
     <connectionReference context="/" source="//@componentInstance.7/@featureInstance.5" destination="//@featureInstance.4">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.23"/>
     </connectionReference>

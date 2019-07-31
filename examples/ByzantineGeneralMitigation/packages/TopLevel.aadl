@@ -116,7 +116,7 @@ with Buses;
 		
 		annex safety {**
 			
-			analyze: max 2 fault
+			analyze: max 1 fault
 			
 		**};
 	end TopLevel.impl;

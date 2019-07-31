@@ -1,0 +1,63 @@
+package TopLevel
+public
+with Base_Types;
+with LeaderNode;
+with Nodes;
+
+with Nodes;
+
+	system TopLevel
+		features
+			vote_from_n2 : out data port Base_Types::Boolean;
+			vote_from_n3 : out data port Base_Types::Boolean;
+			vote_from_n4 : out data port Base_Types::Boolean;
+			
+		annex agree{**
+			guarantee "All non-failed nodes choose the same color 
+						after one time step." :
+				true -> ((vote_from_n2 = vote_from_n3)
+					and (vote_from_n2 = vote_from_n4)
+				);
+		**};
+	end TopLevel;
+	
+	system implementation TopLevel.impl
+		subcomponents
+			
+			leaderNode : system LeaderNode::leader;
+			node2 : system Nodes::Node;
+			node3 : system Nodes::Node;
+			node4 : system Nodes::Node;
+		
+		connections
+			
+			-- Leader node output to nodes 2, 3, 4
+			N1B1 : port leaderNode.color -> node2.color_from_leader;
+			N1B2 : port leaderNode.color -> node3.color_from_leader;
+			N1B3 : port leaderNode.color -> node4.color_from_leader;
+			
+			-- Node 2 output (what it saw from leader node) to nodes 3, 4
+			N2B3 : port node2.color_reported_to_me -> node3.color_seen_1;
+			N2B4 : port node2.color_reported_to_me -> node4.color_seen_1;
+			
+			-- Node 3 output to nodes 2, 4
+			N3B2 : port node3.color_reported_to_me -> node2.color_seen_1;
+			N3B4 : port node3.color_reported_to_me -> node4.color_seen_2;
+			
+			-- Node 4 output to nodes 2, 3
+			N4B2 : port node4.color_reported_to_me -> node2.color_seen_2;
+			N4B3 : port node4.color_reported_to_me -> node3.color_seen_2;
+			
+			-- Node outputs to top level
+			N2toTop : port node2.color_results -> vote_from_n2;
+			N3toTop : port node3.color_results -> vote_from_n3;
+			N4toTop : port node4.color_results -> vote_from_n4;
+		
+		
+		annex safety {**
+			
+			analyze: max 1 fault
+			
+		**};
+	end TopLevel.impl;
+end TopLevel;
