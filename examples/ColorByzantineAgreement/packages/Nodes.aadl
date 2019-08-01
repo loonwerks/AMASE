@@ -30,6 +30,7 @@ with Base_Types;
 				true -> (if (vote_score > 1) then (color_results = true)
 					else (color_results = false)
 				);
+				 
 			
 		**};
 		annex safety {**

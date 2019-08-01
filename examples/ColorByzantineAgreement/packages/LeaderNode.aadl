@@ -4,11 +4,16 @@ with Base_Types;
 	system leader
 		features 
 			color : out data port Base_Types::Boolean;
+			
+			color_to_top : out data port Base_Types::Boolean;
 	
 		annex agree {**
 			
 			guarantee "Color remains green (true) from beginning step." :
-				true -> ((color = true) and (color = pre(color))); 
+				((color = true) -> (color = pre(color)));
+				
+			guarantee "Color to top is equal to color." :
+				(color_to_top = color); 
 			
 		**};
 		annex safety {**

@@ -8,16 +8,38 @@ with Nodes;
 
 	system TopLevel
 		features
-			vote_from_n2 : out data port Base_Types::Boolean;
-			vote_from_n3 : out data port Base_Types::Boolean;
-			vote_from_n4 : out data port Base_Types::Boolean;
+			color_from_n2 : out data port Base_Types::Boolean;
+			color_from_n3 : out data port Base_Types::Boolean;
+			color_from_n4 : out data port Base_Types::Boolean;
+			
+			color_from_leader : out data port Base_Types::Boolean;
 			
 		annex agree{**
-			guarantee "All non-failed nodes choose the same color 
+			guarantee "All nodes choose the same color 
 						after one time step." :
-				true -> ((vote_from_n2 = vote_from_n3)
-					and (vote_from_n2 = vote_from_n4)
+				true -> ((color_from_leader and color_from_n2) and (color_from_n2 = color_from_n3)
+					and (color_from_n2 = color_from_n4)
 				);
+		
+			eq leader_failed : bool;
+			eq n2_failed : bool;
+			eq n3_failed : bool;
+			eq n4_failed : bool;
+			
+			guarantee "If there are no failed nodes, then all agree on the color in the second step. 
+					   Otherwise all non-failed nodes agree on the color in the second step." :
+				true -> (if leader_failed then ((color_from_n2 = color_from_n3)
+						and (color_from_n2 = color_from_n4))
+					else if n2_failed then ((color_from_leader = color_from_n3)
+						and (color_from_n3 = color_from_n4))
+					else if n3_failed then ((color_from_leader = color_from_n2)
+						and (color_from_n2 = color_from_n4))
+					else if n4_failed then ((color_from_leader = color_from_n2)
+						and (color_from_n2 = color_from_n3))
+					else ((color_from_leader and color_from_n2) and (color_from_n2 = color_from_n3)
+					and (color_from_n2 = color_from_n4))
+				); 
+		
 		**};
 	end TopLevel;
 	
@@ -49,10 +71,11 @@ with Nodes;
 			N4B3 : port node4.color_reported_to_me -> node3.color_seen_2;
 			
 			-- Node outputs to top level
-			N2toTop : port node2.color_results -> vote_from_n2;
-			N3toTop : port node3.color_results -> vote_from_n3;
-			N4toTop : port node4.color_results -> vote_from_n4;
-		
+			N2toTop : port node2.color_results -> color_from_n2;
+			N3toTop : port node3.color_results -> color_from_n3;
+			N4toTop : port node4.color_results -> color_from_n4;
+			
+			LeaderToTop : port leaderNode.color_to_top -> color_from_leader;
 		
 		annex safety {**
 			
