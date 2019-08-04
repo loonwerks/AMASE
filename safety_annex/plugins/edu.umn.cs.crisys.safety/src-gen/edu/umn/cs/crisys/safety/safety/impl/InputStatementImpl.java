@@ -82,7 +82,6 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public EList<String> getFault_in()
   {
     if (fault_in == null)
@@ -97,7 +96,6 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public EList<Expr> getNom_conn()
   {
     if (nom_conn == null)
@@ -212,7 +210,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
+    StringBuffer result = new StringBuffer(super.toString());
     result.append(" (fault_in: ");
     result.append(fault_in);
     result.append(')');

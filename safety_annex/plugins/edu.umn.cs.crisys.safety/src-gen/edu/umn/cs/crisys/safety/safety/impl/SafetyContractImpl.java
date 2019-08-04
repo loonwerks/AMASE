@@ -69,7 +69,6 @@ public class SafetyContractImpl extends ContractImpl implements SafetyContract
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public EList<SpecStatement> getSpecs()
   {
     if (specs == null)

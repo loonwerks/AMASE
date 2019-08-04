@@ -96,7 +96,6 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public Arg getLhs_set()
   {
     return lhs_set;
@@ -124,7 +123,6 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setLhs_set(Arg newLhs_set)
   {
     if (newLhs_set != lhs_set)
@@ -146,7 +144,6 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public Expr getL1()
   {
     return l1;
@@ -174,7 +171,6 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setL1(Expr newL1)
   {
     if (newL1 != l1)
@@ -196,7 +192,6 @@ public class SetEqImpl extends SafetyEqStatementImpl implements SetEq
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public EList<Expr> getList()
   {
     if (list == null)

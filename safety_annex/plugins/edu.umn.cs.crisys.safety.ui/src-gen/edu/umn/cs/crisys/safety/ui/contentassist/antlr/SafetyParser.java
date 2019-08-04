@@ -96,6 +96,8 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getGroup_3(), "rule__SpecStatement__Group_3__0");
 					put(grammarAccess.getSpecStatementAccess().getGroup_3_7(), "rule__SpecStatement__Group_3_7__0");
 					put(grammarAccess.getSpecStatementAccess().getGroup_3_14(), "rule__SpecStatement__Group_3_14__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_4(), "rule__SpecStatement__Group_4__0");
+					put(grammarAccess.getSpecStatementAccess().getGroup_4_4(), "rule__SpecStatement__Group_4_4__0");
 					put(grammarAccess.getAnalysisBehaviorAccess().getGroup_0(), "rule__AnalysisBehavior__Group_0__0");
 					put(grammarAccess.getAnalysisBehaviorAccess().getGroup_1(), "rule__AnalysisBehavior__Group_1__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_0(), "rule__FaultSubcomponent__Group_0__0");
@@ -375,6 +377,10 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getSpecStatementAccess().getDestComp_pathAssignment_3_13(), "rule__SpecStatement__DestComp_pathAssignment_3_13");
 					put(grammarAccess.getSpecStatementAccess().getDestFaultListAssignment_3_14_1(), "rule__SpecStatement__DestFaultListAssignment_3_14_1");
 					put(grammarAccess.getSpecStatementAccess().getDestComp_pathAssignment_3_14_3(), "rule__SpecStatement__DestComp_pathAssignment_3_14_3");
+					put(grammarAccess.getSpecStatementAccess().getAgreeBoolVarNameAssignment_4_3(), "rule__SpecStatement__AgreeBoolVarNameAssignment_4_3");
+					put(grammarAccess.getSpecStatementAccess().getAgreeComp_PathAssignment_4_4_1(), "rule__SpecStatement__AgreeComp_PathAssignment_4_4_1");
+					put(grammarAccess.getSpecStatementAccess().getFaultNameAssignment_4_6(), "rule__SpecStatement__FaultNameAssignment_4_6");
+					put(grammarAccess.getSpecStatementAccess().getFaultComp_PathAssignment_4_8(), "rule__SpecStatement__FaultComp_PathAssignment_4_8");
 					put(grammarAccess.getAnalysisBehaviorAccess().getMaxFaultsAssignment_0_2(), "rule__AnalysisBehavior__MaxFaultsAssignment_0_2");
 					put(grammarAccess.getAnalysisBehaviorAccess().getProbabiltyAssignment_1_2(), "rule__AnalysisBehavior__ProbabiltyAssignment_1_2");
 					put(grammarAccess.getFaultSubcomponentAccess().getFault_inAssignment_0_3(), "rule__FaultSubcomponent__Fault_inAssignment_0_3");

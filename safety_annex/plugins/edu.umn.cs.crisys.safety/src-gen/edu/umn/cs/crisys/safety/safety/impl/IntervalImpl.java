@@ -78,7 +78,6 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public Expr getLow()
   {
     return low;
@@ -106,7 +105,6 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setLow(Expr newLow)
   {
     if (newLow != low)
@@ -128,7 +126,6 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public Expr getHigh()
   {
     return high;
@@ -156,7 +153,6 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setHigh(Expr newHigh)
   {
     if (newHigh != high)

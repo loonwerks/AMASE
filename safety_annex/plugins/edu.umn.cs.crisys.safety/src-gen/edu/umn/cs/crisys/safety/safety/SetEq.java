@@ -30,6 +30,10 @@ public interface SetEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>Lhs set</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Lhs set</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Lhs set</em>' containment reference.
    * @see #setLhs_set(Arg)
@@ -52,6 +56,10 @@ public interface SetEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>L1</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>L1</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>L1</em>' containment reference.
    * @see #setL1(Expr)
@@ -75,6 +83,10 @@ public interface SetEq extends SafetyEqStatement
    * Returns the value of the '<em><b>List</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>List</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>List</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getSetEq_List()

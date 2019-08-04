@@ -65,7 +65,6 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public AnalysisBehavior getBehavior()
   {
     return behavior;
@@ -93,7 +92,6 @@ public class AnalysisStatementImpl extends SpecStatementImpl implements Analysis
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setBehavior(AnalysisBehavior newBehavior)
   {
     if (newBehavior != behavior)

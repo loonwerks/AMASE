@@ -212,6 +212,15 @@ public interface SafetyFactory extends EFactory
   PropagateStatement createPropagateStatement();
 
   /**
+   * Returns a new object of class '<em>Activation Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Activation Statement</em>'.
+   * @generated
+   */
+  ActivationStatement createActivationStatement();
+
+  /**
    * Returns a new object of class '<em>Fault Count Behavior</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

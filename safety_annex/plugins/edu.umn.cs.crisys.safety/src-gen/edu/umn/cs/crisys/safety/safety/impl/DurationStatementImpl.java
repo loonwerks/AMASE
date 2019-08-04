@@ -77,7 +77,6 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public TemporalConstraint getTc()
   {
     return tc;
@@ -105,7 +104,6 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setTc(TemporalConstraint newTc)
   {
     if (newTc != tc)
@@ -127,7 +125,6 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public Interval getInterv()
   {
     return interv;
@@ -155,7 +152,6 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setInterv(Interval newInterv)
   {
     if (newInterv != interv)

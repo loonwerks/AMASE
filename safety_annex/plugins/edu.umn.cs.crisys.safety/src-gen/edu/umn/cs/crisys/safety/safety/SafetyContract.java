@@ -26,6 +26,10 @@ public interface SafetyContract extends Contract
    * Returns the value of the '<em><b>Specs</b></em>' containment reference list.
    * The list contents are of type {@link edu.umn.cs.crisys.safety.safety.SpecStatement}.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Specs</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Specs</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getSafetyContract_Specs()

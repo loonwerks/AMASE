@@ -90,4 +90,9 @@ public class Fault implements BaseFault {
 		this.path = new ArrayList<>(path);
 	}
 
+	@Override
+	public String getID() {
+		return id;
+	}
+
 }

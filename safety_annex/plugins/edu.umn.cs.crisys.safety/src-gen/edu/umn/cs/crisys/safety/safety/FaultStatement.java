@@ -30,6 +30,10 @@ public interface FaultStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Name</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -52,6 +56,10 @@ public interface FaultStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Str</b></em>' attribute.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Str</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Str</em>' attribute.
    * @see #setStr(String)
@@ -74,6 +82,10 @@ public interface FaultStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Fault Def Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Fault Def Name</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fault Def Name</em>' containment reference.
    * @see #setFaultDefName(NestedDotID)
@@ -97,6 +109,10 @@ public interface FaultStatement extends SpecStatement
    * Returns the value of the '<em><b>Fault Definitions</b></em>' containment reference list.
    * The list contents are of type {@link edu.umn.cs.crisys.safety.safety.FaultSubcomponent}.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Fault Definitions</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fault Definitions</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getFaultStatement_FaultDefinitions()

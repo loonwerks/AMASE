@@ -23,8 +23,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexLibrary");
 		private final RuleCall cSafetyLibraryParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@Override
-		//AnnexLibrary:
+		//@ Override AnnexLibrary:
 		//	SafetyLibrary;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -36,8 +35,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "edu.umn.cs.crisys.safety.Safety.AnnexSubclause");
 		private final RuleCall cSafetySubclauseParserRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//@Override
-		//AnnexSubclause:
+		//@ Override AnnexSubclause:
 		//	SafetySubclause;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -212,9 +210,25 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cDestComp_pathNestedDotIDParserRuleCall_3_14_3_0 = (RuleCall)cDestComp_pathAssignment_3_14_3.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_3_15 = (Keyword)cGroup_3.eContents().get(15);
 		private final Keyword cSemicolonKeyword_3_16 = (Keyword)cGroup_3.eContents().get(16);
+		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
+		private final Action cActivationStatementAction_4_0 = (Action)cGroup_4.eContents().get(0);
+		private final Keyword cFault_activationKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
+		private final Keyword cColonKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
+		private final Assignment cAgreeBoolVarNameAssignment_4_3 = (Assignment)cGroup_4.eContents().get(3);
+		private final RuleCall cAgreeBoolVarNameIDTerminalRuleCall_4_3_0 = (RuleCall)cAgreeBoolVarNameAssignment_4_3.eContents().get(0);
+		private final Group cGroup_4_4 = (Group)cGroup_4.eContents().get(4);
+		private final Keyword cCommercialAtKeyword_4_4_0 = (Keyword)cGroup_4_4.eContents().get(0);
+		private final Assignment cAgreeComp_PathAssignment_4_4_1 = (Assignment)cGroup_4_4.eContents().get(1);
+		private final RuleCall cAgreeComp_PathNestedDotIDParserRuleCall_4_4_1_0 = (RuleCall)cAgreeComp_PathAssignment_4_4_1.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_4_5 = (Keyword)cGroup_4.eContents().get(5);
+		private final Assignment cFaultNameAssignment_4_6 = (Assignment)cGroup_4.eContents().get(6);
+		private final RuleCall cFaultNameIDTerminalRuleCall_4_6_0 = (RuleCall)cFaultNameAssignment_4_6.eContents().get(0);
+		private final Keyword cCommercialAtKeyword_4_7 = (Keyword)cGroup_4.eContents().get(7);
+		private final Assignment cFaultComp_PathAssignment_4_8 = (Assignment)cGroup_4.eContents().get(8);
+		private final RuleCall cFaultComp_PathNestedDotIDParserRuleCall_4_8_0 = (RuleCall)cFaultComp_PathAssignment_4_8.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4_9 = (Keyword)cGroup_4.eContents().get(9);
 		
-		//@Override
-		//SpecStatement:
+		//@ Override SpecStatement:
 		//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID
 		//	'{' faultDefinitions+=FaultSubcomponent* '}'
 		//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
@@ -223,14 +237,18 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	| {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (','
 		//	srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}'
 		//	'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}'
-		//	';';
+		//	';'
+		//	| {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=NestedDotID)?
+		//	'=' faultName=ID '@' faultComp_Path=NestedDotID ';';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}' |
 		//{AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior | {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
 		//'{' faultDefinitions+=HWFaultSubcomponent* '}' | {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@'
 		//srcComp_path+=NestedDotID (',' srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 'to' '{' destFaultList+=ID '@'
-		//destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
+		//destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';' | {ActivationStatement}
+		//'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=NestedDotID)? '=' faultName=ID '@'
+		//faultComp_Path=NestedDotID ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID '{' faultDefinitions+=FaultSubcomponent* '}'
@@ -432,6 +450,58 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 		//';'
 		public Keyword getSemicolonKeyword_3_16() { return cSemicolonKeyword_3_16; }
+
+		//{ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=NestedDotID)? '=' faultName=ID '@'
+		//faultComp_Path=NestedDotID ';'
+		public Group getGroup_4() { return cGroup_4; }
+
+		//{ActivationStatement}
+		public Action getActivationStatementAction_4_0() { return cActivationStatementAction_4_0; }
+
+		//'fault_activation'
+		public Keyword getFault_activationKeyword_4_1() { return cFault_activationKeyword_4_1; }
+
+		//':'
+		public Keyword getColonKeyword_4_2() { return cColonKeyword_4_2; }
+
+		//agreeBoolVarName=ID
+		public Assignment getAgreeBoolVarNameAssignment_4_3() { return cAgreeBoolVarNameAssignment_4_3; }
+
+		//ID
+		public RuleCall getAgreeBoolVarNameIDTerminalRuleCall_4_3_0() { return cAgreeBoolVarNameIDTerminalRuleCall_4_3_0; }
+
+		//('@' agreeComp_Path=NestedDotID)?
+		public Group getGroup_4_4() { return cGroup_4_4; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_4_4_0() { return cCommercialAtKeyword_4_4_0; }
+
+		//agreeComp_Path=NestedDotID
+		public Assignment getAgreeComp_PathAssignment_4_4_1() { return cAgreeComp_PathAssignment_4_4_1; }
+
+		//NestedDotID
+		public RuleCall getAgreeComp_PathNestedDotIDParserRuleCall_4_4_1_0() { return cAgreeComp_PathNestedDotIDParserRuleCall_4_4_1_0; }
+
+		//'='
+		public Keyword getEqualsSignKeyword_4_5() { return cEqualsSignKeyword_4_5; }
+
+		//faultName=ID
+		public Assignment getFaultNameAssignment_4_6() { return cFaultNameAssignment_4_6; }
+
+		//ID
+		public RuleCall getFaultNameIDTerminalRuleCall_4_6_0() { return cFaultNameIDTerminalRuleCall_4_6_0; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_4_7() { return cCommercialAtKeyword_4_7; }
+
+		//faultComp_Path=NestedDotID
+		public Assignment getFaultComp_PathAssignment_4_8() { return cFaultComp_PathAssignment_4_8; }
+
+		//NestedDotID
+		public RuleCall getFaultComp_PathNestedDotIDParserRuleCall_4_8_0() { return cFaultComp_PathNestedDotIDParserRuleCall_4_8_0; }
+
+		//';'
+		public Keyword getSemicolonKeyword_4_9() { return cSemicolonKeyword_4_9; }
 	}
 
 	public class AnalysisBehaviorElements extends AbstractParserRuleElementFinder {
@@ -1485,8 +1555,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	
-	//@Override
-	//AnnexLibrary:
+	//@ Override AnnexLibrary:
 	//	SafetyLibrary;
 	public AnnexLibraryElements getAnnexLibraryAccess() {
 		return pAnnexLibrary;
@@ -1496,8 +1565,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getAnnexLibraryAccess().getRule();
 	}
 
-	//@Override
-	//AnnexSubclause:
+	//@ Override AnnexSubclause:
 	//	SafetySubclause;
 	public AnnexSubclauseElements getAnnexSubclauseAccess() {
 		return pAnnexSubclause;
@@ -1549,8 +1617,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		return getElementSafetyAccess().getRule();
 	}
 
-	//@Override
-	//SpecStatement:
+	//@ Override SpecStatement:
 	//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=NestedDotID
 	//	'{' faultDefinitions+=FaultSubcomponent* '}'
 	//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
@@ -1559,7 +1626,9 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	| {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=NestedDotID (','
 	//	srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}'
 	//	'to' '{' destFaultList+=ID '@' destComp_path+=NestedDotID (',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}'
-	//	';';
+	//	';'
+	//	| {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=NestedDotID)?
+	//	'=' faultName=ID '@' faultComp_Path=NestedDotID ';';
 	public SpecStatementElements getSpecStatementAccess() {
 		return pSpecStatement;
 	}

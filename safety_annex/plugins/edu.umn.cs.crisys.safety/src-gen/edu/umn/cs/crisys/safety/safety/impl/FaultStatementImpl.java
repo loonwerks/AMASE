@@ -127,7 +127,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public String getName()
   {
     return name;
@@ -138,7 +137,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -152,7 +150,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public String getStr()
   {
     return str;
@@ -163,7 +160,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setStr(String newStr)
   {
     String oldStr = str;
@@ -177,7 +173,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public NestedDotID getFaultDefName()
   {
     return faultDefName;
@@ -205,7 +200,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setFaultDefName(NestedDotID newFaultDefName)
   {
     if (newFaultDefName != faultDefName)
@@ -227,7 +221,6 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public EList<FaultSubcomponent> getFaultDefinitions()
   {
     if (faultDefinitions == null)
@@ -363,7 +356,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
+    StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(", str: ");

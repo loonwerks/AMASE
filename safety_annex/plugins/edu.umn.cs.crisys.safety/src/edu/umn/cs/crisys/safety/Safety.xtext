@@ -39,6 +39,8 @@ SpecStatement:
 			srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 
 			'to' '{' destFaultList+= ID '@' destComp_path+=NestedDotID 
 			(',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
+	|   {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=NestedDotID)?
+					 '=' faultName= ID '@' faultComp_Path=NestedDotID ';'
 ;
 	
 AnalysisBehavior : 
