@@ -32,7 +32,9 @@ public
 			assume "C2 in2 range": (in2 >0) and (in2 < 10);	
 				
 			guarantee "C2 out2 value":
-			out2 = in2;
+			not(C2_failed) => (out2 = in2);
+			
+			eq C2_failed: bool;
 		**};
 		annex safety {**
 			fault C2_out_fail_to_zero "C2 out2 fail to zero fault": Common_Faults.fail_to_zero {
@@ -85,11 +87,13 @@ public
 			C1_to_C3: port C1.out1 -> C3.in13;
 			C2_to_C3: port C2.out2 -> C3.in23;
 		annex safety {**
-      		--analyze : max 1 fault
+      		analyze : max 1 fault
       		--see C123 out3 value failure with 1E-5 threshold
       		--see both C123 out3 range and out3 value failure with 1E-8 threshold
       		--see both properties pass with 1E-4 threshold
-      		analyze : probability 1.0E-7
+      		--analyze : probability 1.0E-7
+      		
+      		fault_activation: C2_failed@C2 = C2_out_fail_to_zero@C2;
    		**};
 	end C123.impl;
 	

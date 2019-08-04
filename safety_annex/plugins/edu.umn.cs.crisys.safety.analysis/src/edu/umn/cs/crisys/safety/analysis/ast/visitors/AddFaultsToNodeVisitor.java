@@ -776,7 +776,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				NestedDotID agreeComp_Path = as.getAgreeComp_Path();
 				String agreeBoolVarPrefix = "";
 				if (agreeComp_Path != null) {
-					agreeBoolVarPrefix = agreeComp_Path.getBase().getName();
+					agreeBoolVarPrefix = agreeComp_Path.getBase().getName() + "__";
 				}
 				// compose agreeBoolVarName in main node input
 				agreeBoolVarName = agreeBoolVarPrefix + agreeBoolVarName;
