@@ -268,6 +268,16 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.ACTIVATION_STATEMENT:
+      {
+        ActivationStatement activationStatement = (ActivationStatement)theEObject;
+        T result = caseActivationStatement(activationStatement);
+        if (result == null) result = caseSpecStatement(activationStatement);
+        if (result == null) result = caseAgree_SpecStatement(activationStatement);
+        if (result == null) result = caseElement(activationStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.FAULT_COUNT_BEHAVIOR:
       {
         FaultCountBehavior faultCountBehavior = (FaultCountBehavior)theEObject;
@@ -789,6 +799,22 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T casePropagateStatement(PropagateStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Activation Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Activation Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseActivationStatement(ActivationStatement object)
   {
     return null;
   }

@@ -70,7 +70,6 @@ public class EnablerConditionImpl extends TriggerConditionImpl implements Enable
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public EList<Expr> getExprList()
   {
     if (exprList == null)

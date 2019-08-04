@@ -72,7 +72,6 @@ public class FaultCountBehaviorImpl extends AnalysisBehaviorImpl implements Faul
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public String getMaxFaults()
   {
     return maxFaults;
@@ -83,7 +82,6 @@ public class FaultCountBehaviorImpl extends AnalysisBehaviorImpl implements Faul
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setMaxFaults(String newMaxFaults)
   {
     String oldMaxFaults = maxFaults;
@@ -168,7 +166,7 @@ public class FaultCountBehaviorImpl extends AnalysisBehaviorImpl implements Faul
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
+    StringBuffer result = new StringBuffer(super.toString());
     result.append(" (maxFaults: ");
     result.append(maxFaults);
     result.append(')');

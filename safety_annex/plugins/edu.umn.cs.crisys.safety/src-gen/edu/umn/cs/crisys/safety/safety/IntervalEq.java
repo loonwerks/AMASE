@@ -26,6 +26,10 @@ public interface IntervalEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>Lhs int</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Lhs int</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Lhs int</em>' containment reference.
    * @see #setLhs_int(Arg)
@@ -48,6 +52,10 @@ public interface IntervalEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>Interv</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Interv</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interv</em>' containment reference.
    * @see #setInterv(Interval)

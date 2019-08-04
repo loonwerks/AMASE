@@ -28,6 +28,10 @@ public interface EnablerCondition extends TriggerCondition
    * Returns the value of the '<em><b>Expr List</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Expr List</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr List</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getEnablerCondition_ExprList()

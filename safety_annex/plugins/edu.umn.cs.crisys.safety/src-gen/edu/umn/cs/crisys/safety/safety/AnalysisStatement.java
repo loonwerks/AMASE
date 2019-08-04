@@ -24,6 +24,10 @@ public interface AnalysisStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Behavior</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Behavior</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Behavior</em>' containment reference.
    * @see #setBehavior(AnalysisBehavior)

@@ -72,7 +72,6 @@ public class ProbabilityBehaviorImpl extends AnalysisBehaviorImpl implements Pro
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public String getProbabilty()
   {
     return probabilty;
@@ -83,7 +82,6 @@ public class ProbabilityBehaviorImpl extends AnalysisBehaviorImpl implements Pro
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setProbabilty(String newProbabilty)
   {
     String oldProbabilty = probabilty;
@@ -168,7 +166,7 @@ public class ProbabilityBehaviorImpl extends AnalysisBehaviorImpl implements Pro
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
+    StringBuffer result = new StringBuffer(super.toString());
     result.append(" (probabilty: ");
     result.append(probabilty);
     result.append(')');

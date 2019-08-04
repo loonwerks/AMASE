@@ -72,7 +72,6 @@ public class ProbabilityStatementImpl extends FaultSubcomponentImpl implements P
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public String getProbability()
   {
     return probability;
@@ -83,7 +82,6 @@ public class ProbabilityStatementImpl extends FaultSubcomponentImpl implements P
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setProbability(String newProbability)
   {
     String oldProbability = probability;
@@ -168,7 +166,7 @@ public class ProbabilityStatementImpl extends FaultSubcomponentImpl implements P
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
+    StringBuffer result = new StringBuffer(super.toString());
     result.append(" (probability: ");
     result.append(probability);
     result.append(')');

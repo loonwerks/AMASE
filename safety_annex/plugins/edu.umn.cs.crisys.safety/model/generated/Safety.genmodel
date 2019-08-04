@@ -58,6 +58,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//PropagateStatement/faultList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//PropagateStatement/comp_path"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ActivationStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ActivationStatement/agreeBoolVarName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ActivationStatement/agreeComp_Path"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ActivationStatement/faultName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ActivationStatement/faultComp_Path"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ActivationStatement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ActivationStatement/srcFault"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//ActivationStatement/srcComp_path"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ActivationStatement/srcFaultList"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//FaultCountBehavior">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//FaultCountBehavior/maxFaults"/>
     </genClasses>

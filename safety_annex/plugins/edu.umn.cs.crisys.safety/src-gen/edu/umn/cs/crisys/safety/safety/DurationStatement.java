@@ -25,6 +25,10 @@ public interface DurationStatement extends FaultSubcomponent, HWFaultSubcomponen
   /**
    * Returns the value of the '<em><b>Tc</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Tc</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Tc</em>' containment reference.
    * @see #setTc(TemporalConstraint)
@@ -47,6 +51,10 @@ public interface DurationStatement extends FaultSubcomponent, HWFaultSubcomponen
   /**
    * Returns the value of the '<em><b>Interv</b></em>' containment reference.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Interv</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interv</em>' containment reference.
    * @see #setInterv(Interval)

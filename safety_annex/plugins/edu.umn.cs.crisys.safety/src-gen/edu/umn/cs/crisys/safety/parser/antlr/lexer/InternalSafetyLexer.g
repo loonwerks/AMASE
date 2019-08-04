@@ -16,6 +16,8 @@ import org.eclipse.xtext.parser.antlr.Lexer;
 
 
 
+Fault_activation : ('F'|'f')('A'|'a')('U'|'u')('L'|'l')('T'|'t')'_'('A'|'a')('C'|'c')('T'|'t')('I'|'i')('V'|'v')('A'|'a')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
+
 Propagate_from : ('P'|'p')('R'|'r')('O'|'o')('P'|'p')('A'|'a')('G'|'g')('A'|'a')('T'|'t')('E'|'e')'_'('F'|'f')('R'|'r')('O'|'o')('M'|'m');
 
 Propagate_type : ('P'|'p')('R'|'r')('O'|'o')('P'|'p')('A'|'a')('G'|'g')('A'|'a')('T'|'t')('E'|'e')'_'('T'|'t')('Y'|'y')('P'|'p')('E'|'e');

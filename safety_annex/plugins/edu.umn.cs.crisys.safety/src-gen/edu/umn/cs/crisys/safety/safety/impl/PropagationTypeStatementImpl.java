@@ -65,7 +65,6 @@ public class PropagationTypeStatementImpl extends FaultSubcomponentImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public PropagationTypeConstraint getPty()
   {
     return pty;
@@ -93,7 +92,6 @@ public class PropagationTypeStatementImpl extends FaultSubcomponentImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
   public void setPty(PropagationTypeConstraint newPty)
   {
     if (newPty != pty)

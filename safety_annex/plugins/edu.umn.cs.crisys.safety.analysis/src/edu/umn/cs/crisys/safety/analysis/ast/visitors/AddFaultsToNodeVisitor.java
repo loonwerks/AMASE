@@ -29,6 +29,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.FaultActivationAssignment;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyNodeBuilder;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
@@ -37,6 +38,7 @@ import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
 import edu.umn.cs.crisys.safety.analysis.transform.HWFault;
 import edu.umn.cs.crisys.safety.analysis.transform.HWFaultASTBuilder;
+import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
@@ -93,6 +95,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<ComponentInstance, List<HWFault>> hwfaultMap = new HashMap<>();
 	// It is used to store src to dest fault propagations
 	private HashSet<SafetyPropagation> propagations = new HashSet<>();
+	// fault activation assignemnts
+	private HashSet<FaultActivationAssignment> faultActivations = new HashSet<>();
 
 	// I am unsure as to whether this is necessary: it appears to map a fault to a
 	// single
@@ -216,7 +220,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					throw new SafetyException("For fault " + f.id + ", val_out is not correctly defined.");
 				}
 			}
-			if((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
+			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
 				addNominalVars(node, nb, f, compOut.toString());
 				addFaultInputs(f, nb);
 				addHWFaultInputs(hwFaults, nb);
@@ -225,6 +229,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			} else {
 				addFaultInputs(f, nb);
 			}
+
 		}
 
 		if (isTop) {
@@ -233,6 +238,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// gather path information for the faults (for creating names later)
 			collectFaultPath(node, new ArrayList<>());
 			this.gatherFaultPropagation(node);
+			this.gatherFaultActivation(node);
 			// Add top level fault declarations for asymmetric faults if there are any.
 			// This is done in a separate method than the normal call
 			// (addTopLevelFaultDeclarations) due to the recursive nature
@@ -244,6 +250,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// empty path to pass to top level node fault
 			// node id used as the path to pass to sub level node fault
 			addTopLevelFaultDeclarations(node, nb);
+
+			// add top level fault activation assertions
+			addTopLevelFaultActivationAssertions(nb);
 
 			// This checks if we are doing max faults or probability behavior.
 			// It will add the assertion to Lustre representing the required behavior.
@@ -260,7 +269,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			} else if (AddFaultsToAgree.getTransformFlag() == 2) {
 				nb.setFaultTreeFlag(true);
 
-				//only collect fault hypothesis from the upper most level
+				// only collect fault hypothesis from the upper most level
 				if (upperMostLevel) {
 					upperMostLevel = false;
 					// if max fault hypothesis, collect max fault count
@@ -271,16 +280,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// if probabilistic fault hypothesis, collect probabilistic hypothesis
 					else if (maxFaults instanceof ProbabilityBehavior) {
 						probabilisticHypothesis = true;
-						probabilityThreshold = Double
-								.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
+						probabilityThreshold = Double.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
 					}
 				}
 
 				// if probabilistic fault hypothesis, need to collect valid fault combinations from every verification level
 				// but using the probability threshold from the upper most level
 				if (probabilisticHypothesis) {
-					collectTopLevelMaxFaultOccurrenceConstraint(
-							probabilityThreshold, topNode, nb);
+					collectTopLevelMaxFaultOccurrenceConstraint(probabilityThreshold, topNode, nb);
 				}
 			}
 		}
@@ -683,7 +690,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return hwFaults;
 	}
 
-
 	public AnalysisBehavior gatherTopLevelFaultAnalysis(AgreeNode node) {
 
 //		// Make sure this is the top node. We do not need to check
@@ -755,9 +761,41 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 
-
 		return null;
 		// throw new SafetyException("Unable to identify fault for " + faultName + "@" + compPath.getBase().getName());
+	}
+
+	private void gatherFaultActivation(AgreeNode node) {
+		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, true));
+
+		for (SpecStatement s : specs) {
+			if (s instanceof ActivationStatement) {
+				ActivationStatement as = (ActivationStatement) s;
+				String agreeBoolVarName = as.getAgreeBoolVarName();
+				// the following can be null
+				NestedDotID agreeComp_Path = as.getAgreeComp_Path();
+				String agreeBoolVarPrefix = "";
+				if (agreeComp_Path != null) {
+					agreeBoolVarPrefix = agreeComp_Path.getBase().getName();
+				}
+				// compose agreeBoolVarName in main node input
+				agreeBoolVarName = agreeBoolVarPrefix + agreeBoolVarName;
+				String faultName = as.getFaultName();
+				// the following can be null
+				NestedDotID faultComp_Path = as.getFaultComp_Path();
+				BaseFault fault = null;
+				if (faultComp_Path != null) {
+					fault = findFaultInCompInst(faultName, faultComp_Path);
+				}
+				if (fault != null) {
+					FaultActivationAssignment faultActAssign = new FaultActivationAssignment(agreeBoolVarName, fault,
+							faultComp_Path.getBase().getName());
+					faultActivations.add(faultActAssign);
+				} else {
+					throw new SafetyException("Unable to identify fault in fault activation statement.");
+				}
+			}
+		}
 	}
 
 	// Fault propagation statements are associated with hw faults
@@ -978,6 +1016,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		addAsymFaultAssertions(nb);
 		addAsymNodeCalls(nb);
 		changeAsymConnections(nb);
+	}
+
+	private void addTopLevelFaultActivationAssertions(AgreeNodeBuilder nb) {
+		for (FaultActivationAssignment faultAct : faultActivations) {
+			addFaultActivationAssertion(faultAct.agreeBoolVarName, faultAct.faultActivated, faultAct.faultCompName, nb);
+		}
+	}
+
+	private void addFaultActivationAssertion(String agreeVarName, BaseFault f, String faultCompName,
+			AgreeNodeBuilder nb) {
+
+		IdExpr trigger = new IdExpr(faultCompName + "__fault__trigger__" + f.getID());
+		Expr equate = new BinaryExpr(new IdExpr(agreeVarName), BinaryOp.EQUAL, trigger);
+		nb.addAssertion(new AgreeStatement("", equate, topNode.reference));
 	}
 
 	public void addTopLevelFaultDeclarations(AgreeNode currentNode, AgreeNodeBuilder nb) {
@@ -1552,7 +1604,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-
 	/*
 	 * addAsymFaultAssertions method adds assertions associated with the fault event,
 	 * indep/dep active, and sender component fault trigger causing comm node faults to
@@ -1701,6 +1752,5 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			this.ft2 = ft2;
 		}
 	}
-
 
 }

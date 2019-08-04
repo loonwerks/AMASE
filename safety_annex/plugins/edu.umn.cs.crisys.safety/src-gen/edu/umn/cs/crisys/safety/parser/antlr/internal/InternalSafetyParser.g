@@ -675,6 +675,115 @@ ruleSpecStatement returns [EObject current=null]
     {
     	newLeafNode(otherlv_43, grammarAccess.getSpecStatementAccess().getSemicolonKeyword_3_16());
     }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getSpecStatementAccess().getActivationStatementAction_4_0(),
+            $current);
+    }
+)
+	otherlv_45=Fault_activation
+    {
+    	newLeafNode(otherlv_45, grammarAccess.getSpecStatementAccess().getFault_activationKeyword_4_1());
+    }
+
+	otherlv_46=Colon
+    {
+    	newLeafNode(otherlv_46, grammarAccess.getSpecStatementAccess().getColonKeyword_4_2());
+    }
+(
+(
+		lv_agreeBoolVarName_47_0=RULE_ID
+		{
+			newLeafNode(lv_agreeBoolVarName_47_0, grammarAccess.getSpecStatementAccess().getAgreeBoolVarNameIDTerminalRuleCall_4_3_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"agreeBoolVarName",
+        		lv_agreeBoolVarName_47_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)(
+	otherlv_48=CommercialAt
+    {
+    	newLeafNode(otherlv_48, grammarAccess.getSpecStatementAccess().getCommercialAtKeyword_4_4_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getAgreeComp_PathNestedDotIDParserRuleCall_4_4_1_0()); 
+	    }
+		lv_agreeComp_Path_49_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"agreeComp_Path",
+        		lv_agreeComp_Path_49_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))?
+	otherlv_50=EqualsSign
+    {
+    	newLeafNode(otherlv_50, grammarAccess.getSpecStatementAccess().getEqualsSignKeyword_4_5());
+    }
+(
+(
+		lv_faultName_51_0=RULE_ID
+		{
+			newLeafNode(lv_faultName_51_0, grammarAccess.getSpecStatementAccess().getFaultNameIDTerminalRuleCall_4_6_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getSpecStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"faultName",
+        		lv_faultName_51_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.ID");
+	    }
+
+)
+)
+	otherlv_52=CommercialAt
+    {
+    	newLeafNode(otherlv_52, grammarAccess.getSpecStatementAccess().getCommercialAtKeyword_4_7());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultComp_PathNestedDotIDParserRuleCall_4_8_0()); 
+	    }
+		lv_faultComp_Path_53_0=ruleNestedDotID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"faultComp_Path",
+        		lv_faultComp_Path_53_0, 
+        		"com.rockwellcollins.atc.agree.Agree.NestedDotID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_54=Semicolon
+    {
+    	newLeafNode(otherlv_54, grammarAccess.getSpecStatementAccess().getSemicolonKeyword_4_9());
+    }
 ))
 ;
 

@@ -21,10 +21,10 @@ with Base_Types;
 			
 			-- Vote on what I have seen and what the others report.
 			-- Take number seen the most often (majority vote).
-			eq vote_score : int = 
-				(if (color_seen_1) then 1 else 0) +
+			eq vote_score : int = 0 -> 
+				((if (color_seen_1) then 1 else 0) +
 				(if (color_seen_2) then 1 else 0) +
-				(if (pre(color_from_leader)) then 1 else 0);
+				(if (pre(color_from_leader)) then 1 else 0));
 			
 			guarantee "Pass vote results to top level." :
 				true -> (if (vote_score > 1) then (color_results = true)

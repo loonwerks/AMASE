@@ -75,6 +75,7 @@ import com.rockwellcollins.atc.agree.agree.WheneverHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WheneverImpliesStatement;
 import com.rockwellcollins.atc.agree.agree.WheneverOccursStatement;
 import com.rockwellcollins.atc.agree.serializer.AgreeSemanticSequencer;
+import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
@@ -454,6 +455,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			}
 		else if (epackage == SafetyPackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
+			case SafetyPackage.ACTIVATION_STATEMENT:
+				sequence_SpecStatement(context, (ActivationStatement) semanticObject); 
+				return; 
 			case SafetyPackage.ANALYSIS_STATEMENT:
 				sequence_SpecStatement(context, (AnalysisStatement) semanticObject); 
 				return; 
@@ -979,6 +983,19 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSafetySubclauseAccess().getContractSafetyContractParserRuleCall_1_0(), semanticObject.getContract());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SpecStatement returns ActivationStatement
+	 *     Element returns ActivationStatement
+	 *
+	 * Constraint:
+	 *     (agreeBoolVarName=ID agreeComp_Path=NestedDotID? faultName=ID faultComp_Path=NestedDotID)
+	 */
+	protected void sequence_SpecStatement(ISerializationContext context, ActivationStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
