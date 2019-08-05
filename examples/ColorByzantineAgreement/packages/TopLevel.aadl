@@ -15,8 +15,7 @@ with Nodes;
 			color_from_leader : out data port Base_Types::Boolean;
 			
 		annex agree{**
-			guarantee "All nodes agree (i.e., choose the same color 
-						after one time step) - when no fault is present" :
+			guarantee "All nodes agree (i.e., choose the same color after one time step) - when no fault is present" :
 				true -> ((color_from_leader = color_from_n2) and (color_from_n2 = color_from_n3)
 					and (color_from_n2 = color_from_n4)
 				);
@@ -82,7 +81,7 @@ with Nodes;
 			fault_activation: n2_failed = Node_Fault@node2_test;
 			fault_activation: n3_failed = Node_Fault@node3;
 			fault_activation: n4_failed = Node_Fault@node4;
-			analyze: max 1 fault
+			analyze: max 2 fault
 			
 		**};
 	end TopLevel.impl;
