@@ -17,7 +17,7 @@ with Nodes;
 		annex agree{**
 			guarantee "All nodes choose the same color 
 						after one time step." :
-				true -> ((color_from_leader and color_from_n2) and (color_from_n2 = color_from_n3)
+				true -> ((color_from_leader = color_from_n2) and (color_from_n2 = color_from_n3)
 					and (color_from_n2 = color_from_n4)
 				);
 		
