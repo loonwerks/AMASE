@@ -1,0 +1,104 @@
+package Node
+public
+	with Data_Types;
+	renames Data_Types::all;
+	with Library;
+	
+	system Node_With_Mitigation
+		features
+			--inputs
+			Node1_In: in data port Node_Msg.Impl;
+			Node2_In: in data port Node_Msg.Impl;
+			Node3_In: in data port Node_Msg.Impl;
+			--outputs
+			Node1_out: out data port Node_Msg.Impl;
+			Node2_Out: out data port Node_Msg.Impl;
+			Node3_Out: out data port Node_Msg.Impl;
+		annex agree {**
+			eq pid : int = Get_Property(this, AADL_Properties::PID);	
+			eq node_num : int = Get_Property(this, AADL_Properties::Node_Num);
+			
+		**};
+	end Node_With_Mitigation;	
+
+	system Node_No_Mitigation
+		features
+			--inputs
+			Node1_In: in data port Node_Msg.Impl;
+			Node2_In: in data port Node_Msg.Impl;
+			Node3_In: in data port Node_Msg.Impl;
+			--outputs
+			Node1_Out: out data port Node_Msg.Impl;
+			Node2_Out: out data port Node_Msg.Impl;
+			Node3_Out: out data port Node_Msg.Impl;
+		annex agree {**
+			eq pid : int = Get_Property(this, AADL_Properties::PID);
+			eq node_num : int = Get_Property(this, AADL_Properties::Node_Num);
+			eq node1_pid: int;
+			eq node2_pid: int;
+			eq node3_pid: int;
+			eq node4_pid: int;
+			
+			guarantee "each node send out its own PID value and sets local pid - node 1":
+			(node_num = 1) =>
+			((Node1_Out.Node1_PID_from_Node1 = pid) and
+			 (Node2_Out.Node1_PID_from_Node1 = pid) and
+			 (Node3_Out.Node1_PID_from_Node1 = pid) and
+			 (node1_pid = pid)
+			 );
+			 
+			guarantee "each node send out its own PID value and sets local pid - node 2":
+			(node_num = 2) =>
+			((Node1_Out.Node2_PID_from_Node2 = pid) and
+			 (Node2_Out.Node2_PID_from_Node2 = pid) and
+			 (Node3_Out.Node2_PID_from_Node2 = pid) and
+			 (node2_pid = pid)
+			 );
+			 
+			guarantee "each node send out its own PID value and sets local pid - node 3":
+			(node_num = 3) =>
+			((Node1_Out.Node3_PID_from_Node3 = pid) and
+			 (Node2_Out.Node3_PID_from_Node3 = pid) and
+			 (Node3_Out.Node3_PID_from_Node3 = pid) and
+			 (node3_pid = pid)
+			 );
+			 
+			guarantee "each node send out its own PID value and sets local pid - node 4":
+			(node_num = 4) =>
+			((Node1_Out.Node4_PID_from_Node4 = pid) and
+			 (Node2_Out.Node4_PID_from_Node4 = pid) and
+			 (Node3_Out.Node4_PID_from_Node4 = pid) and
+			 (node4_pid = pid)
+			 );
+			 
+			 guarantee "node 1 sends the pid received from node 2 to node 3 and 4":
+			 true -> 
+			((node_num = 1) =>
+			((Node1_Out.Node2_PID_from_Node2 = pre(Node2_In.Node2_PID_from_Node2)) and
+			 (Node2_Out.Node2_PID_from_Node2 = pre(Node2_In.Node2_PID_from_Node2)) and
+			 (Node3_Out.Node2_PID_from_Node2 = pre(Node2_In.Node2_PID_from_Node2))
+			 ));
+			 
+			--to-do: repeat for each node's forwarding, e.g.,
+			--node 1 sends the pid received from node 3 to node 2 and node 4
+			--node 1 sends the pid received from node 4 to node 2 and node 3
+			--node 2 sends the pid received from node 1 to node 3 and node 4
+			--node 2 sends the pid received from node 3 to node 1 and node 4
+			--node 2 sends the pid received from node 4 to node 1 and node 3
+			--etc.
+			
+			guarantee "node 1 votes on the value of pid of node 2 based on 
+			previous node 2 pid values received from node 2, node 3, node 4":
+			 true -> 
+			((node_num = 1) =>
+			  (node2_pid = 
+			  	Library.majority(pre(Node1_In.Node2_PID_from_Node2), 
+			  					 pre(Node2_In.Node2_PID_from_Node3), 
+			  					 pre(Node3_In.Node2_PID_from_Node4)
+			  	)
+			  ));
+			  
+			--to-do: repeat for each node's local voting
+		**};
+	end Node_No_Mitigation;
+end Node;

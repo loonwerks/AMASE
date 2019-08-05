@@ -1,0 +1,4 @@
+property set AADL_Properties is
+	Node_Num: aadlinteger applies to (system);
+	PID: aadlinteger applies to (system);
+end AADL_Properties;
