@@ -11,23 +11,6 @@ public
 			Node2_In: in data port Node_Msg.Impl;
 			Node3_In: in data port Node_Msg.Impl;
 			--outputs
-			Node1_out: out data port Node_Msg.Impl;
-			Node2_Out: out data port Node_Msg.Impl;
-			Node3_Out: out data port Node_Msg.Impl;
-		annex agree {**
-			eq pid : int = Get_Property(this, AADL_Properties::PID);	
-			eq node_num : int = Get_Property(this, AADL_Properties::Node_Num);
-			
-		**};
-	end Node_With_Mitigation;	
-
-	system Node_No_Mitigation
-		features
-			--inputs
-			Node1_In: in data port Node_Msg.Impl;
-			Node2_In: in data port Node_Msg.Impl;
-			Node3_In: in data port Node_Msg.Impl;
-			--outputs
 			Node1_Out: out data port Node_Msg.Impl;
 			Node2_Out: out data port Node_Msg.Impl;
 			Node3_Out: out data port Node_Msg.Impl;
@@ -100,5 +83,17 @@ public
 			  
 			--to-do: repeat for each node's local voting
 		**};
+	end Node_With_Mitigation;	
+
+	system Node_No_Mitigation
+		features
+			--inputs
+			Node1_In: in data port Node_Msg.Impl;
+			Node2_In: in data port Node_Msg.Impl;
+			Node3_In: in data port Node_Msg.Impl;
+			--outputs
+			Node1_Out: out data port Node_Msg.Impl;
+			Node2_Out: out data port Node_Msg.Impl;
+			Node3_Out: out data port Node_Msg.Impl;
 	end Node_No_Mitigation;
 end Node;
