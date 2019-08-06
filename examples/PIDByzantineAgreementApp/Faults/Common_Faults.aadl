@@ -1,0 +1,9 @@
+package Common_Faults
+public
+	with Data_Types;
+	
+--	annex agree {**
+--
+--		
+--**};
+end Common_Faults;

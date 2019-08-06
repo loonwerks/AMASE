@@ -1,0 +1,74 @@
+package AFCS
+--Avionics (and) Flight Control System (Integrated)
+public
+	with Node;
+	with AADL_Properties;
+	renames Node::all;
+	renames Data_Types::all;
+
+	system Top_Level
+	end Top_Level;
+
+	system implementation Top_Level.With_Mitigation
+		subcomponents
+			Node1: system Node_With_Mitigation {AADL_Properties::Node_Num => 1;AADL_Properties::PID => 10;};
+			Node2: system Node_With_Mitigation {AADL_Properties::Node_Num => 2;AADL_Properties::PID => 20;};
+			Node3: system Node_With_Mitigation {AADL_Properties::Node_Num => 3;AADL_Properties::PID => 30;};
+			Node4: system Node_With_Mitigation {AADL_Properties::Node_Num => 4;AADL_Properties::PID => 40;};
+		connections
+			Node1_to_Node2: port Node1.Node1_Out -> Node2.Node1_In;
+			Node1_to_Node3: port Node1.Node2_Out -> Node3.Node1_In;
+			Node1_to_Node4: port Node1.Node3_Out -> Node4.Node1_In;
+			Node2_to_Node1: port Node2.Node1_Out -> Node1.Node1_In;
+			Node2_to_Node3: port Node2.Node2_Out -> Node3.Node2_In;
+			Node2_to_Node4: port Node2.Node3_Out -> Node4.Node2_In;
+			Node3_to_Node1: port Node3.Node1_Out -> Node1.Node2_In;
+			Node3_to_Node2: port Node3.Node2_Out -> Node2.Node2_In;
+			Node3_to_Node4: port Node3.Node3_Out -> Node4.Node3_In;
+			Node4_to_Node1: port Node4.Node1_Out -> Node1.Node3_In;
+			Node4_to_Node2: port Node4.Node2_Out -> Node2.Node3_In;
+			Node4_to_Node3: port Node4.Node3_Out -> Node3.Node3_In;	
+		annex agree{**
+			--to check 
+			--node1_pid from non failed nodes agree
+			--node2_pid from non failed nodes agree
+			--node3_pid from non failed nodes agree
+			--node4_pid from non failed nodes agree
+		**};
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
+	end Top_Level.With_Mitigation;
+	
+		system implementation Top_Level.No_Mitigation
+		subcomponents
+			Node1: system Node_No_Mitigation {AADL_Properties::Node_Num => 1;AADL_Properties::PID => 10;};
+			Node2: system Node_No_Mitigation {AADL_Properties::Node_Num => 2;AADL_Properties::PID => 20;};
+			Node3: system Node_No_Mitigation {AADL_Properties::Node_Num => 3;AADL_Properties::PID => 30;};
+			Node4: system Node_No_Mitigation {AADL_Properties::Node_Num => 4;AADL_Properties::PID => 40;};
+		connections
+			--Data between Nodes
+			Node1_to_Node2: port Node1.Node1_Out -> Node2.Node1_In;
+			Node1_to_Node3: port Node1.Node2_Out -> Node3.Node1_In;
+			Node1_to_Node4: port Node1.Node3_Out -> Node4.Node1_In;
+			Node2_to_Node1: port Node2.Node1_Out -> Node1.Node1_In;
+			Node2_to_Node3: port Node2.Node2_Out -> Node3.Node2_In;
+			Node2_to_Node4: port Node2.Node3_Out -> Node4.Node2_In;
+			Node3_to_Node1: port Node3.Node1_Out -> Node1.Node2_In;
+			Node3_to_Node2: port Node3.Node2_Out -> Node2.Node2_In;
+			Node3_to_Node4: port Node3.Node3_Out -> Node4.Node3_In;
+			Node4_to_Node1: port Node4.Node1_Out -> Node1.Node3_In;
+			Node4_to_Node2: port Node4.Node2_Out -> Node2.Node3_In;
+			Node4_to_Node3: port Node4.Node3_Out -> Node3.Node3_In;	
+		annex agree{**
+			--to check 
+			--node1_pid from non failed nodes agree
+			--node2_pid from non failed nodes agree
+			--node3_pid from non failed nodes agree
+			--node4_pid from non failed nodes agree
+		**};
+		annex safety {**
+      		analyze : max 1 fault
+   		**};
+	end Top_Level.No_Mitigation;
+end AFCS;
