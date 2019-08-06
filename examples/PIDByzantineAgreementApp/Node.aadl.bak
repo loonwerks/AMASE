@@ -2,8 +2,7 @@ package Node
 public
 	with Data_Types;
 	renames Data_Types::all;
-
-	with Base_Types;
+	with Library;
 	
 	system Node_With_Mitigation
 		features
@@ -12,200 +11,120 @@ public
 			Node2_In: in data port Node_Msg.Impl;
 			Node3_In: in data port Node_Msg.Impl;
 			--outputs
-			Node1_out: out data port Node_Msg.Impl;
-			Node2_Out: out data port Node_Msg.Impl;
-			Node3_Out: out data port Node_Msg.Impl;
+			Node_Out: out data port Node_Msg.Impl;
 		annex agree {**
 			eq pid : int = Get_Property(this, AADL_Properties::PID);
-
-			guarantee "Send In Command Status to all other Nodes":
-			(In_Cmd = Node1_Out.Node_In_Cmd) and
-			(In_Cmd = Node2_Out.Node_In_Cmd) and
-			(In_Cmd = FCC3_Out.FCC_In_Cmd);
+			eq node_num : int = Get_Property(this, AADL_Properties::Node_Num);
+			eq node1_pid: int;
+			eq node2_pid: int;
+			eq node3_pid: int;
+			eq node4_pid: int;
 			
-			--Making it not failed in normal behavior
-			guarantee "FCC no failures":
-			not(Failed);
-
-			--Byzantine fault mitigation using full message exchange and voting
-			--following the SPIDER architecture from [1]
-			--[1] Kevin Driscoll, Brendan Hall, Hakan Sivencrona, Phil Zumsteg, "Byantine Fault Tolerance, from Theory to Reality"
-			--SafeComp, 2003, Springer
-		
-	
-		
-			--Vote to get cross channel FCC Failed status
-			eq xchan_fcc1_failed: bool = 
-			false -> 
-			(
-				((if(FCC1_In.FCC1_Failed) then 1 else 0) + 
-			 	 (if(FCC2_In.FCC1_Failed) then 1 else 0) + 
-			 	 (if(FCC3_In.FCC1_Failed) then 1 else 0)
-			 	) > 2
-			);	
+			guarantee "each node send out its own PID value and sets local pid - node 1":
+			(node_num = 1) =>
+			((Node_Out.Node1_PID_from_Node1 = pid)
+			 (node1_pid = pid)
+			 );
+			 
+			guarantee "each node send out its own PID value and sets local pid - node 2":
+			(node_num = 2) =>
+			((Node_Out.Node2_PID_from_Node2 = pid) and
+			 (node2_pid = pid)
+			 );
+			 
+			guarantee "each node send out its own PID value and sets local pid - node 3":
+			(node_num = 3) =>
+			((Node_Out.Node3_PID_from_Node3 = pid) and
+			 (node3_pid = pid)
+			 );
+			 
+			guarantee "each node send out its own PID value and sets local pid - node 4":
+			(node_num = 4) =>
+			((Node_Out.Node4_PID_from_Node4 = pid) and
+			 (node4_pid = pid)
+			 );
+			 
+			 guarantee "node 1 sends the pid previously received from node 2, 3, 4 out":
+			 true -> 
+			 (
+			   (node_num = 1) =>
+			    (
+			     (Node_Out.Node2_PID_from_Node2 = pre(Node1_In.Node2_PID_from_Node2)) and
+			     (Node_Out.Node3_PID_from_Node3 = pre(Node2_In.Node3_PID_from_Node3)) and
+			     (Node_Out.Node4_PID_from_Node4 = pre(Node3_In.Node4_PID_from_Node4)) and
+			    )
+			 );
+			 
+			 guarantee "node 2 sends the pid previously received from node 1, 3, 4 out":
+			 true -> 
+			 (
+			   (node_num = 1) =>
+			    (
+			     (Node_Out.Node1_PID_from_Node1 = pre(Node1_In.Node1_PID_from_Node1)) and
+			     (Node_Out.Node3_PID_from_Node3 = pre(Node2_In.Node3_PID_from_Node3)) and
+			     (Node_Out.Node4_PID_from_Node4 = pre(Node3_In.Node4_PID_from_Node4)) and
+			    )
+			 );
+			 
+			 guarantee "node 3 sends the pid previously received from node 1, 2, 4 out":
+			 true -> 
+			 (
+			   (node_num = 1) =>
+			    (
+			     (Node_Out.Node1_PID_from_Node1 = pre(Node1_In.Node1_PID_from_Node1)) and
+			     (Node_Out.Node2_PID_from_Node2 = pre(Node2_In.Node2_PID_from_Node2)) and
+			     (Node_Out.Node4_PID_from_Node4 = pre(Node3_In.Node4_PID_from_Node4)) and
+			    )
+			 );
+			 
+			 guarantee "node 4 sends the pid previously received from node 1, 2, 3 out":
+			 true -> 
+			 (
+			   (node_num = 1) =>
+			    (
+			     (Node_Out.Node1_PID_from_Node1 = pre(Node1_In.Node1_PID_from_Node1)) and
+			     (Node_Out.Node2_PID_from_Node2 = pre(Node2_In.Node2_PID_from_Node2)) and
+			     (Node_Out.Node3_PID_from_Node3 = pre(Node3_In.Node3_PID_from_Node3)) and
+			    )
+			 );
 			
-			eq xchan_fcc2_failed: bool = 
-			false -> 
-			(
-				((if(FCC1_In.FCC2_Failed) then 1 else 0) + 
-			 	 (if(FCC2_In.FCC2_Failed) then 1 else 0) + 
-			 	 (if(FCC3_In.FCC2_Failed) then 1 else 0)
-			 	) > 2
-			);
-			
-			eq xchan_fcc3_failed: bool = 
-			false -> 
-			(
-				((if(FCC1_In.FCC3_Failed) then 1 else 0) + 
-			 	 (if(FCC2_In.FCC3_Failed) then 1 else 0) + 
-			 	 (if(FCC3_In.FCC3_Failed) then 1 else 0)
-			 	) > 2
-			);
-			
-			eq xchan_fcc4_failed: bool = 
-			false ->
-			(
-				((if(FCC1_In.FCC4_Failed) then 1 else 0) + 
-			 	 (if(FCC2_In.FCC4_Failed) then 1 else 0) + 
-			 	 (if(FCC3_In.FCC4_Failed) then 1 else 0)
-			 	) > 2
-			);
-			
-			guarantee "FCC1 send local and cross-channel Failed Stauts to all other FCCs":
-			(fcc_id = 1)
-			=>
-			(
-				((FCC1_Out.FCC1_Failed = Failed) and 
-			 	 (FCC1_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC1_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC1_Out.FCC4_Failed = xchan_fcc4_failed)) and
-			 	((FCC2_Out.FCC1_Failed = Failed) and 
-			 	 (FCC2_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC2_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC2_Out.FCC4_Failed = xchan_fcc4_failed)) and
-			 	((FCC3_Out.FCC1_Failed = Failed) and 
-			 	 (FCC3_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC3_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC3_Out.FCC4_Failed = xchan_fcc4_failed))
-			 );			 	 			 	 
-
-			guarantee "FCC2 send local and cross-channel Failed Stauts to all other FCCs":
-			(fcc_id = 2)
-			=>
-			(
-				((FCC1_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC1_Out.FCC2_Failed = Failed) and 
-			 	 (FCC1_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC1_Out.FCC4_Failed = xchan_fcc4_failed)) and
-			 	((FCC2_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC2_Out.FCC2_Failed = Failed) and 
-			 	 (FCC2_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC2_Out.FCC4_Failed = xchan_fcc4_failed)) and
-			 	((FCC3_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC3_Out.FCC2_Failed = Failed) and 
-			 	 (FCC3_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC3_Out.FCC4_Failed = xchan_fcc4_failed))
-			 );	
-			
-			guarantee "FCC3 send local and cross-channel Failed Stauts to all other FCCs":
-			(fcc_id = 3)
-			=>
-			(
-				((FCC1_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC1_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC1_Out.FCC3_Failed = Failed) and 
-			 	 (FCC1_Out.FCC4_Failed = xchan_fcc4_failed)) and
-			 	((FCC2_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC2_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC2_Out.FCC3_Failed = Failed) and 
-			 	 (FCC2_Out.FCC4_Failed = xchan_fcc4_failed)) and
-			 	((FCC3_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC3_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC3_Out.FCC3_Failed = Failed) and 
-			 	 (FCC3_Out.FCC4_Failed = xchan_fcc4_failed))
-			 );	
-			
-			guarantee "FCC4 send local and cross-channel Failed Stauts to all other FCCs":
-			(fcc_id = 4)
-			=>
-			(
-				((FCC1_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC1_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC1_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC1_Out.FCC4_Failed = Failed)) and
-			 	((FCC2_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC2_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC2_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC2_Out.FCC4_Failed = Failed)) and
-			 	((FCC3_Out.FCC1_Failed = xchan_fcc1_failed) and 
-			 	 (FCC3_Out.FCC2_Failed = xchan_fcc2_failed) and 
-			 	 (FCC3_Out.FCC3_Failed = xchan_fcc3_failed) and 
-			 	 (FCC3_Out.FCC4_Failed = Failed))
-			 );			
-			
-			guarantee "FCC1 in Cmd Logic":
-			(fcc_id = 1) 
-					=> 
-			(In_Cmd = (
-						true 
-						-> 
-						(pre(not(Failed)))
-						)
-			);
-			
-			guarantee "FCC2 in Cmd Logic":
-			(fcc_id = 2) 
-					=> 
-			(In_Cmd = (
-						false 
-						-> 
-						(pre(not(Failed)) and pre(xchan_fcc1_failed))
-						)
-			);
-			
-			guarantee "FCC3 in Cmd Logic":
-			(fcc_id = 3) 
-					=> 
-			(In_Cmd = (
-						false 
-						-> 
-						(pre(not(Failed)) and pre(xchan_fcc1_failed) and pre(xchan_fcc2_failed))
-						)
-			);
-			
-			guarantee "FCC4 in Cmd Logic":
-			(fcc_id = 4) 
-					=> 
-			(In_Cmd = (
-						false 
-						-> 
-						(pre(not(Failed)) and pre(xchan_fcc1_failed) and pre(xchan_fcc2_failed) and pre(xchan_fcc3_failed))
-						)
-			);		
-			
+			guarantee "node 1 votes on the value of pid of node 2 based on 
+			previous node 2 pid values received from node 2, and
+			node 2 pid values from node 3, node 4 (which are what they received previously)":
+			 true -> 
+			((node_num = 1) =>
+			  (node2_pid = 
+			  	Library.majority(pre(Node1_In.Node2_PID_from_Node2), 
+			  					 Node2_In.Node2_PID_from_Node3, 
+			  					 Node3_In.Node2_PID_from_Node4
+			  	)
+			  ));
+			  
+			guarantee "node 1 votes on the value of pid of node 3 based on 
+			previous node 3 pid values received from node 3, and
+			node 3 pid values from node 2, node 4 (which are what they received previously)":
+			 true -> 
+			((node_num = 1) =>
+			  (node3_pid = 
+			  	Library.majority(pre(Node2_In.Node3_PID_from_Node3), 
+			  					 Node1_In.Node3_PID_from_Node2, 
+			  					 Node3_In.Node3_PID_from_Node4
+			  	)
+			  ));
+			  
+			guarantee "node 1 votes on the value of pid of node 4 based on 
+			previous node 4 pid values received from node 4, and
+			node 4 pid values from node 2, node 3 (which are what they received previously)":
+			 true -> 
+			((node_num = 1) =>
+			  (node4_pid = 
+			  	Library.majority(pre(Node3_In.Node4_PID_from_Node4), 
+			  					 Node1_In.Node4_PID_from_Node2, 
+			  					 Node2_In.Node4_PID_from_Node3
+			  	)
+			  ));
+			  
 		**};
-		annex safety {**
-		--The following invert the output on Fail status the same time before sending to all three other FCCs.
-		--This invalidates the top level property that at most one FCC in command.
-		fault fautl1 "FCC1_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
-			inputs: val_in <- FCC1_Out, id <- fcc_id;     
-			outputs: FCC1_Out <- val_out;    
-			duration: permanent;
-		}		
-
-		fault fautl2 "FCC2_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
-			inputs: val_in <- FCC2_Out, id <- fcc_id;     
-			outputs: FCC2_Out <- val_out;    
-			duration: permanent;
-		}		
-
-		fault fautl3 "FCC3_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
-			inputs: val_in <- FCC3_Out, id <- fcc_id;      
-			outputs: FCC3_Out <- val_out;    
-			duration: permanent;
-		}							
-		
-	**};
 	end Node_With_Mitigation;	
 
 	system Node_No_Mitigation
@@ -218,99 +137,5 @@ public
 			Node1_Out: out data port Node_Msg.Impl;
 			Node2_Out: out data port Node_Msg.Impl;
 			Node3_Out: out data port Node_Msg.Impl;
-		annex agree {**
-			eq pid : int = Get_Property(this, AADL_Properties::PID);
-			
-		  eq node1_pid
-
-			guarantee "Send In Command Status to all other FCCs":
-			(In_Cmd = FCC1_Out.FCC_In_Cmd) and
-			(In_Cmd = FCC2_Out.FCC_In_Cmd) and
-			(In_Cmd = FCC3_Out.FCC_In_Cmd);
-
-		 --Each node sends the local PID and the PIDs received from other nodes from previous time step
-		 --to other nodes
-			guarantee "Node1":
-			true -> 
-			(
-			  (pid = 1) 
-				=> 
-			  ((Node1_Out.Node1_PID = pid) and
-			   (Node1_Out.
-			 )
-			;
-			
-			guarantee "FCC2 in Cmd and Failed Logic":
-			(fcc_id = 2) 
-					=> 
-			(In_Cmd = (
-						false 
-						-> 
-						(pre(not(Failed)) and pre(FCC1_In.FCC1_Failed))
-						)
-			and
-			(Failed = FCC1_Out.FCC2_Failed)
-			and 
-			(Failed = FCC2_Out.FCC2_Failed)
-			and
-			(Failed = FCC3_Out.FCC2_Failed)
-			);
-			
-			guarantee "FCC3 in Cmd and Failed Logic":
-			(fcc_id = 3) 
-					=> 
-			(In_Cmd = (
-						false 
-						-> 
-						(pre(not(Failed)) and pre(FCC1_In.FCC1_Failed) and pre(FCC2_In.FCC2_Failed))
-						)
-			and
-			(Failed = FCC1_Out.FCC3_Failed)
-			and 
-			(Failed = FCC2_Out.FCC3_Failed)
-			and
-			(Failed = FCC3_Out.FCC3_Failed)
-			);
-			
-			guarantee "FCC4 in Cmd and Failed Logic":
-			(fcc_id = 4) 
-					=> 
-			(In_Cmd = (
-						false 
-						-> 
-						(pre(not(Failed)) and pre(FCC1_In.FCC1_Failed) and pre(FCC2_In.FCC2_Failed) and pre(FCC3_In.FCC3_Failed))
-						)
-			and
-			(Failed = FCC1_Out.FCC4_Failed)
-			and 
-			(Failed = FCC2_Out.FCC4_Failed)
-			and
-			(Failed = FCC3_Out.FCC4_Failed)
-			);	
-						
-			
-		**};
-		annex safety {**
-		--The following invert the output on Fail status the same time before sending to all three other FCCs.
-		--This invalidates the top level property that at most one FCC in command.
-		fault fautl1 "FCC1_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
-			inputs: val_in <- FCC1_Out, id <- fcc_id;     
-			outputs: FCC1_Out <- val_out;    
-			duration: permanent;
-		}		
-
-		fault fautl2 "FCC2_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
-			inputs: val_in <- FCC2_Out, id <- fcc_id;     
-			outputs: FCC2_Out <- val_out;    
-			duration: permanent;
-		}		
-
-		fault fautl3 "FCC3_Out FCC Fail Status Inverted": Common_Faults.invert_CCDL_Out_Fail {
-			inputs: val_in <- FCC3_Out, id <- fcc_id;      
-			outputs: FCC3_Out <- val_out;    
-			duration: permanent;
-		}							
-		
-	**};
 	end Node_No_Mitigation;
 end Node;
