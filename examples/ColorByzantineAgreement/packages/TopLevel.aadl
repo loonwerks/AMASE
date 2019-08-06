@@ -46,32 +46,32 @@ with Nodes;
 		subcomponents
 			
 			leaderNode : system LeaderNode::leader;
-			node2_test : system Nodes::Node;
+			node2 : system Nodes::Node;
 			node3 : system Nodes::Node;
 			node4 : system Nodes::Node;
 		
 		connections
 			
 			-- Leader node output to nodes 2, 3, 4
-			N1B1 : port leaderNode.color -> node2_test.color_from_leader;
+			N1B1 : port leaderNode.color -> node2.color_from_leader;
 			N1B2 : port leaderNode.color -> node3.color_from_leader;
 			N1B3 : port leaderNode.color -> node4.color_from_leader;
 			
 			
 			-- Node 2 output (what it saw from leader node) to nodes 3, 4
-			N2B3 : port node2_test.color_reported_to_me -> node3.color_seen_1;
-			N2B4 : port node2_test.color_reported_to_me -> node4.color_seen_1;
+			N2B3 : port node2.color_reported_to_me -> node3.color_seen_1;
+			N2B4 : port node2.color_reported_to_me -> node4.color_seen_1;
 			
 			-- Node 3 output to nodes 2, 4
-			N3B2 : port node3.color_reported_to_me -> node2_test.color_seen_1;
+			N3B2 : port node3.color_reported_to_me -> node2.color_seen_1;
 			N3B4 : port node3.color_reported_to_me -> node4.color_seen_2;
 			
 			-- Node 4 output to nodes 2, 3
-			N4B2 : port node4.color_reported_to_me -> node2_test.color_seen_2;
+			N4B2 : port node4.color_reported_to_me -> node2.color_seen_2;
 			N4B3 : port node4.color_reported_to_me -> node3.color_seen_2;
 			
 			-- Node outputs to top level
-			N2toTop : port node2_test.color_results -> color_from_n2;
+			N2toTop : port node2.color_results -> color_from_n2;
 			N3toTop : port node3.color_results -> color_from_n3;
 			N4toTop : port node4.color_results -> color_from_n4;
 			
@@ -79,10 +79,10 @@ with Nodes;
 		
 		annex safety {**
 			fault_activation: leader_failed = Node_Fault@leaderNode;
-			fault_activation: n2_failed = Node_Fault@node2_test;
+			fault_activation: n2_failed = Node_Fault@node2;
 			fault_activation: n3_failed = Node_Fault@node3;
 			fault_activation: n4_failed = Node_Fault@node4;
-			analyze: max 1 fault
+			analyze: max 2 fault
 			
 		**};
 	end TopLevel.impl;

@@ -77,7 +77,7 @@
     <index>0</index>
     <classifier xsi:type="aadl2:SystemType" href="../packages/LeaderNode.aadl#LeaderNode.leader"/>
   </componentInstance>
-  <componentInstance name="node2_test" category="system">
+  <componentInstance name="node2" category="system">
     <featureInstance name="color_from_leader">
       <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
         <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
@@ -272,7 +272,7 @@
     <index>0</index>
     <classifier xsi:type="aadl2:SystemType" href="../packages/Nodes.aadl#Nodes.Node"/>
   </componentInstance>
-  <connectionInstance name="leaderNode.color -> node2_test.color_from_leader" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@componentInstance.0/@featureInstance.0">
+  <connectionInstance name="leaderNode.color -> node2.color_from_leader" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@componentInstance.0/@featureInstance.0">
     <connectionReference context="/" source="//@componentInstance.0/@featureInstance.0" destination="//@componentInstance.1/@featureInstance.0">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
@@ -292,22 +292,22 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.12"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node2_test.color_reported_to_me -> node3.color_seen_1" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.1" source="//@componentInstance.1/@featureInstance.3">
+  <connectionInstance name="node2.color_reported_to_me -> node3.color_seen_1" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.1" source="//@componentInstance.1/@featureInstance.3">
     <connectionReference context="/" source="//@componentInstance.1/@featureInstance.3" destination="//@componentInstance.2/@featureInstance.1">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node2_test.color_reported_to_me -> node4.color_seen_1" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.1" source="//@componentInstance.1/@featureInstance.3">
+  <connectionInstance name="node2.color_reported_to_me -> node4.color_seen_1" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.1" source="//@componentInstance.1/@featureInstance.3">
     <connectionReference context="/" source="//@componentInstance.1/@featureInstance.3" destination="//@componentInstance.3/@featureInstance.1">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node2_test.color_results -> color_from_n2" kind="portConnection" destination="//@featureInstance.0" source="//@componentInstance.1/@featureInstance.4">
+  <connectionInstance name="node2.color_results -> color_from_n2" kind="portConnection" destination="//@featureInstance.0" source="//@componentInstance.1/@featureInstance.4">
     <connectionReference context="/" source="//@componentInstance.1/@featureInstance.4" destination="//@featureInstance.0">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.9"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node3.color_reported_to_me -> node2_test.color_seen_1" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.1" source="//@componentInstance.2/@featureInstance.3">
+  <connectionInstance name="node3.color_reported_to_me -> node2.color_seen_1" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.1" source="//@componentInstance.2/@featureInstance.3">
     <connectionReference context="/" source="//@componentInstance.2/@featureInstance.3" destination="//@componentInstance.1/@featureInstance.1">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
     </connectionReference>
@@ -322,7 +322,7 @@
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.10"/>
     </connectionReference>
   </connectionInstance>
-  <connectionInstance name="node4.color_reported_to_me -> node2_test.color_seen_2" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.2" source="//@componentInstance.3/@featureInstance.3">
+  <connectionInstance name="node4.color_reported_to_me -> node2.color_seen_2" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.2" source="//@componentInstance.3/@featureInstance.3">
     <connectionReference context="/" source="//@componentInstance.3/@featureInstance.3" destination="//@componentInstance.1/@featureInstance.2">
       <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.7"/>
     </connectionReference>
