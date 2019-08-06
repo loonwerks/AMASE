@@ -1629,6 +1629,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			Expr notBigOrExpr = new UnaryExpr(UnaryOp.NOT, bigOrExpr);
 			Expr ifThenElse = new IfThenElseExpr(trigger, bigOrExpr, notBigOrExpr);
 			nb.addAssertion(new AgreeStatement("", ifThenElse, this.topNode.reference));
+			depIndepList.clear();
 		}
 	}
 
