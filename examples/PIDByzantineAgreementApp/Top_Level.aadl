@@ -7,6 +7,9 @@ public
 	renames Data_Types::all;
 
 	system Top_Level
+		annex agree {**
+			guarantee "True" : true; 
+		**};
 	end Top_Level;
 
 	system implementation Top_Level.With_Mitigation
@@ -29,13 +32,91 @@ public
 			Node4_to_Node2: port Node4.Node_Out -> Node2.Node3_In;
 			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
 		annex agree{**
+				
+			eq n1_failed : bool;
+			eq n2_failed : bool;
+			eq n3_failed : bool;
+			eq n4_failed : bool;
 			--to check 
 			--node1_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 1 pid." : 
+				true -> (if n1_failed 
+						 then ((Node2.node1_pid = Node3.node1_pid)
+						and (Node2.node1_pid = Node4.node1_pid))
+					else if n2_failed 
+						 then ((Node1.node1_pid = Node3.node1_pid)
+							and (Node1.node1_pid = Node4.node1_pid))
+					else if n3_failed 
+						 then ((Node1.node1_pid = Node2.node1_pid)
+							and (Node1.node1_pid = Node4.node1_pid))
+					else if n4_failed 
+						 then ((Node1.node1_pid = Node2.node1_pid)
+							and (Node1.node1_pid = Node3.node1_pid))
+					else ((Node1.node1_pid = Node2.node1_pid) 
+						and (Node1.node1_pid = Node3.node1_pid)
+						and (Node1.node1_pid = Node4.node1_pid))
+				); 
+				
 			--node2_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 2 pid." : 
+				true -> (if n1_failed 
+						 then ((Node2.node2_pid = Node3.node2_pid)
+						and (Node2.node2_pid = Node4.node2_pid))
+					else if n2_failed 
+						 then ((Node1.node2_pid = Node3.node2_pid)
+							and (Node1.node2_pid = Node4.node2_pid))
+					else if n3_failed 
+						 then ((Node1.node2_pid = Node2.node2_pid)
+							and (Node1.node2_pid = Node4.node2_pid))
+					else if n4_failed 
+						 then ((Node1.node2_pid = Node2.node2_pid)
+							and (Node1.node2_pid = Node3.node2_pid))
+					else ((Node1.node2_pid = Node2.node2_pid) 
+						and (Node1.node2_pid = Node3.node2_pid)
+						and (Node1.node2_pid = Node4.node2_pid))
+				);
 			--node3_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 3 pid." : 
+				true -> (if n1_failed 
+						 then ((Node2.node3_pid = Node3.node3_pid)
+						and (Node2.node3_pid = Node4.node3_pid))
+					else if n2_failed 
+						 then ((Node1.node3_pid = Node3.node3_pid)
+							and (Node1.node3_pid = Node4.node3_pid))
+					else if n3_failed 
+						 then ((Node1.node3_pid = Node2.node3_pid)
+							and (Node1.node3_pid = Node4.node3_pid))
+					else if n4_failed 
+						 then ((Node1.node3_pid = Node2.node3_pid)
+							and (Node1.node3_pid = Node3.node3_pid))
+					else ((Node1.node3_pid = Node2.node3_pid) 
+						and (Node1.node3_pid = Node3.node3_pid)
+						and (Node1.node3_pid = Node4.node3_pid))
+				);
 			--node4_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 4 pid." : 
+				true -> (if n1_failed 
+						 then ((Node2.node4_pid = Node3.node4_pid)
+						and (Node2.node4_pid = Node4.node4_pid))
+					else if n2_failed 
+						 then ((Node1.node4_pid = Node3.node4_pid)
+							and (Node1.node4_pid = Node4.node4_pid))
+					else if n3_failed 
+						 then ((Node1.node4_pid = Node2.node4_pid)
+							and (Node1.node4_pid = Node4.node4_pid))
+					else if n4_failed 
+						 then ((Node1.node4_pid = Node2.node4_pid)
+							and (Node1.node4_pid = Node3.node4_pid))
+					else ((Node1.node4_pid = Node2.node4_pid) 
+						and (Node1.node4_pid = Node3.node4_pid)
+						and (Node1.node4_pid = Node4.node4_pid))
+				);
 		**};
 		annex safety {**
+			fault_activation: n1_failed = Node_Fault@Node1;
+			fault_activation: n2_failed = Node_Fault@Node2;
+			fault_activation: n3_failed = Node_Fault@Node3;
+			fault_activation: n4_failed = Node_Fault@Node4;
       		analyze : max 1 fault
    		**};
 	end Top_Level.With_Mitigation;

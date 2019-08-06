@@ -15,27 +15,38 @@ with Nodes;
 			color_from_leader : out data port Base_Types::Boolean;
 			
 		annex agree{**
-			guarantee "All nodes agree (i.e., choose the same color after one time step) - when no fault is present" :
-				true -> ((color_from_leader = color_from_n2) and (color_from_n2 = color_from_n3)
+				
+				
+			guarantee "All nodes agree (i.e., choose the same color after one time step) 
+						- when no fault is present" :
+				true -> ((color_from_leader = color_from_n2) 
+					and (color_from_n2 = color_from_n3)
 					and (color_from_n2 = color_from_n4)
 				);
+		
 		
 			eq leader_failed : bool;
 			eq n2_failed : bool;
 			eq n3_failed : bool;
 			eq n4_failed : bool;
 			
-			guarantee "All non-failing nodes agree (i.e., all agree on the color in the second step)" :
-				true -> (if leader_failed then ((color_from_n2 = color_from_n3)
+			guarantee "All non-failing nodes agree 
+					  (i.e., all agree on the color in the second step)" :
+				true -> (if leader_failed 
+						 then ((color_from_n2 = color_from_n3)
 						and (color_from_n2 = color_from_n4))
-					else if n2_failed then ((color_from_leader = color_from_n3)
-						and (color_from_n3 = color_from_n4))
-					else if n3_failed then ((color_from_leader = color_from_n2)
+					else if n2_failed 
+						 then ((color_from_leader = color_from_n3)
+							and (color_from_n3 = color_from_n4))
+					else if n3_failed 
+						 then ((color_from_leader = color_from_n2)
+							and (color_from_n2 = color_from_n4))
+					else if n4_failed 
+						 then ((color_from_leader = color_from_n2)
+							and (color_from_n2 = color_from_n3))
+					else ((color_from_leader = color_from_n2) 
+						and (color_from_n2 = color_from_n3)
 						and (color_from_n2 = color_from_n4))
-					else if n4_failed then ((color_from_leader = color_from_n2)
-						and (color_from_n2 = color_from_n3))
-					else ((color_from_leader and color_from_n2) and (color_from_n2 = color_from_n3)
-					and (color_from_n2 = color_from_n4))
 				); 
 		
 		**};
