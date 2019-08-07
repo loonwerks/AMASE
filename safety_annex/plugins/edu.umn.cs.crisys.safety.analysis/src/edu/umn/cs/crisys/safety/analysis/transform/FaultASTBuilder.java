@@ -527,11 +527,16 @@ public class FaultASTBuilder {
 		if (fault.faultInputMap.size() <= 0) {
 			return localsForCommNode;
 		} else {
-			for (String key : fault.faultInputMap.keySet()) {
+			for (VarDecl inputVar : fault.faultNode.inputs) {
+				String key = inputVar.id;
+				if (key.equals("trigger")) {
+					continue;
+				}
 				if (key.equalsIgnoreCase("val_in")) {
 					// First add nominal output to argument list.
 					nodeArgs.add(new IdExpr("__fault__nominal__output"));
 				} else {
+
 					// If the value is an IdExpr, get the name and type
 					// from fault node inputs and add to locals.
 					// The value is the same as the fault output type.

@@ -230,29 +230,44 @@ public
 			  )); 
 			  
 		**};
-		annex safety {**
-				
-				
-			--TO-DEBUG: need to debug why the below fault output not supported by asymmetric propagate_type
-			--when changed to symmetric propagate_type, it shows "unable to identify fault in fault activation statement" once
-			--when changed to asymmetric propagate_type, it shows "Type error in fault output (Debug FaultASTBulder 564" continuously
-			fault Node1_PID_Fault "Node1_PID output is asymmetric": Common_Faults.node_out_node1_PID_fail_to_val {
-				eq fail_val : int; --fail to nondeterministic value
-				inputs: val_in <- Node_Out, alt_val <- fail_val;     
+		annex safety {**		
+			--a specified PID sent from Node 1 output can fail to non-deterministic value	
+			--specifying node 1 here so top level can associate individual node failure variable to fault activation status
+			fault n1_PID1_failed "Node1_PID output is asymmetric": Common_Faults.n1_PID_fail_to_val {
+				eq fail_val : int; --fail to non-deterministic value
+				inputs: val_in <- Node_Out, node_num <- node_num, pid_num <- 1, alt_val <- fail_val;     
 				outputs: Node_Out <- val_out;    
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
-
-			--TO-DEBUG: need to debug why the below fault output not supported by asymmetric propagate_type
-			--when changed to asymmetric propagate_type, it shows "Error in defining fault node arguments (debug FaultASTBuilder 539" continuously
---			fault Node1_PID1_Fault "Node1 output asymmetric fault": Common_Faults.node1_PID1_fail_to_val {
---				eq fail_val : int; --fail to nondeterministic value
---				inputs: val_in <- Node_Out.Node1_PID_from_Node1, node_num <-node_num, alt_val <- fail_val;     
---				outputs: Node_Out.Node1_PID_from_Node1 <- val_out;    
+				
+--			fault n1_PID2_failed "Node1_PID output is asymmetric": Common_Faults.n1_PID_fail_to_val {
+--				eq fail_val : int; --fail to non-deterministic value
+--				inputs: val_in <- Node_Out, node_num <- node_num, pid_num <- 2, alt_val <- fail_val;     
+--				outputs: Node_Out <- val_out;    
 --				duration: permanent;
 --				propagate_type: asymmetric;
---			}
+--			}	
+
+--			eq n1_PID2_failed: bool;
+--			eq n1_PID3_failed : bool;
+--			eq n1_PID4_failed: bool;
+--			eq n1_failed : bool = (n1_PID1_failed or n1_PID2_failed or n1_PID3_failed or n1_PID4_failed);
+--			eq n2_PID1_failed : bool;
+--			eq n2_PID2_failed: bool;
+--			eq n2_PID3_failed : bool;
+--			eq n2_PID4_failed: bool;
+--			eq n2_failed : bool = (n2_PID1_failed or n2_PID2_failed or n2_PID3_failed or n2_PID4_failed);
+--			eq n3_PID1_failed : bool;
+--			eq n3_PID2_failed: bool;
+--			eq n3_PID3_failed : bool;
+--			eq n3_PID4_failed: bool;
+--			eq n3_failed : bool = (n3_PID1_failed or n3_PID2_failed or n3_PID3_failed or n3_PID4_failed);
+--			eq n4_PID1_failed : bool;
+--			eq n4_PID2_failed: bool;
+--			eq n4_PID3_failed : bool;
+--			eq n4_PID4_failed: bool;
+--			eq n4_failed : bool = (n4_PID1_failed or n4_PID2_failed or n4_PID3_failed or n4_PID4_failed);
 			
 --			fault Node2_PID_Fault "Node2_PID output is asymmetric": Common_Faults.node_out_node2_PID_fail_to_val {
 --				eq fail_val : int; --fail to nondeterministic value

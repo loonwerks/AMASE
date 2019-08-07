@@ -1536,19 +1536,25 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Access mapCommNodesToInputs to gather inputs for each comm node.
 		for (String commNodes : mapCommNodeToInputs.keySet()) {
 			List<AgreeVar> inputs = mapCommNodeToInputs.get(commNodes);
-			List<AgreeVar> inputsCopy = inputs;
+			List<AgreeVar> inputsToAdd = new ArrayList<AgreeVar>();
+			List<AgreeVar> intputsToRemove = new ArrayList<AgreeVar>();
 
-			// This loop makes sure the naming is correct for all inputs.
-			// Since they are going into main, it must add "nodename__" to the
-			// start of all var ids.
-			for (AgreeVar var : inputsCopy) {
+			for (AgreeVar var : inputs) {
 				if (!(var.id.contains(commNodes))) {
 					// Create new AgreeVar with new id
 					AgreeVar newVar = new AgreeVar(commNodes + "__" + var.id, var.type, var.reference);
 					// Delete old agree var
-					inputs.remove(var);
-					inputs.add(newVar);
+					intputsToRemove.add(var);
+					inputsToAdd.add(newVar);
 				}
+			}
+
+			for (AgreeVar varToAdd : inputsToAdd) {
+				inputs.add(varToAdd);
+			}
+
+			for (AgreeVar varToRemove : intputsToRemove) {
+				inputs.remove(varToRemove);
 			}
 
 			nb.addInput(mapCommNodeToInputs.get(commNodes));
