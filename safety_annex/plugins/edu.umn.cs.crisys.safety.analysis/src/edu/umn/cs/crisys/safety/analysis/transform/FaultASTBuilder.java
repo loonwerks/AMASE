@@ -657,9 +657,10 @@ public class FaultASTBuilder {
 					RecordAccessExpr rac = (RecordAccessExpr) faultOutput;
 					dotField = "." + rac.field;
 					field = rac.field;
-				} else {
-					new SafetyException("Type error in fault output. (Debug FaultASTBuilder 661");
 				}
+//				else {
+//					new SafetyException("Type error in fault output. (Debug FaultASTBuilder 661");
+//				}
 			}
 		}
 		RecordAccessExpr recNominal = new RecordAccessExpr(new IdExpr("__fault__nominal__output"), field);
