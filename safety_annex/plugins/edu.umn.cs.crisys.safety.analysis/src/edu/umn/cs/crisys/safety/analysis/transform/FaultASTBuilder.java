@@ -533,19 +533,34 @@ public class FaultASTBuilder {
 					nodeArgs.add(new IdExpr("__fault__nominal__output"));
 				} else {
 					// If the value is an IdExpr, get the name and type
-					// and add to locals.
+					// from fault node inputs and add to locals.
 					// The value is the same as the fault output type.
 					if (fault.faultInputMap.get(key) instanceof IdExpr) {
 						IdExpr value = (IdExpr) fault.faultInputMap.get(key);
-						// Get type by accessing this in safetyEqVars
+						// Get type by accessing this in fault node input list.
 						Type type = null;
-						for (AgreeVar vars : fault.safetyEqVars) {
+						for (VarDecl vars : fault.faultNode.inputs) {
 							if (value.id.equals(vars.id)) {
 								type = vars.type;
+								break;
 							}
 						}
+						// If the type is still null, that means that this var
+						// was not in the fault node input list and must
+						// be a safety eq statement.
 						if (type == null) {
-							new SafetyException("Error in defining fault node arguments. (debug FaultASTBuilder 539)");
+							for (AgreeVar vars : fault.safetyEqVars) {
+								if (value.id.equals(vars.id)) {
+									type = vars.type;
+									break;
+								}
+							}
+						}
+						// In this last case, we have checked two possible
+						// locations for the input value from the map.
+						// There must have been an error.
+						if (type == null) {
+							new SafetyException("Error in defining fault node arguments. (debug FaultASTBuilder 563)");
 						}
 						AgreeVar local = new AgreeVar(value.id, type, fault.faultStatement);
 						IdExpr newIdForList = new IdExpr(local.id);
@@ -615,7 +630,8 @@ public class FaultASTBuilder {
 		List<VarDecl> faultNodeOutputs = fault.faultNode.outputs;
 		if ((faultNodeOutputs.size() == 0) || (faultNodeOutputs.size() > 1)) {
 			new SafetyException(
-					"Asymmetric fault definitions (" + fault.id + ") " + "must have one and only one output.");
+					"Asymmetric fault definitions (" + fault.id + ") " + "must have one and only one output"
+							+ ". (Debug FaultAST 634)");
 		} else {
 			id = fault.id + "__node__" + faultNodeOutputs.get(0).id;
 		}
@@ -642,7 +658,7 @@ public class FaultASTBuilder {
 					dotField = "." + rac.field;
 					field = rac.field;
 				} else {
-					new SafetyException("Type error in fault output. (Debug FaultASTBuilder 564");
+					new SafetyException("Type error in fault output. (Debug FaultASTBuilder 661");
 				}
 			}
 		}
