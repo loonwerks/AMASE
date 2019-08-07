@@ -236,23 +236,23 @@ public
 			--TO-DEBUG: need to debug why the below fault output not supported by asymmetric propagate_type
 			--when changed to symmetric propagate_type, it shows "unable to identify fault in fault activation statement" once
 			--when changed to asymmetric propagate_type, it shows "Type error in fault output (Debug FaultASTBulder 564" continuously
---			fault Node1_PID_Fault "Node1_PID output is asymmetric": Common_Faults.node_out_node1_PID_fail_to_val {
---				eq fail_val : int; --fail to nondeterministic value
---				inputs: val_in <- Node_Out, alt_val <- fail_val;     
---				outputs: Node_Out <- val_out;    
---				duration: permanent;
---				propagate_type: asymmetric;
---			}
-
-			--TO-DEBUG: need to debug why the below fault output not supported by asymmetric propagate_type
-			--when changed to asymmetric propagate_type, it shows "Error in defining fault node arguments (debug FaultASTBuilder 539" continuously
-			fault Node1_PID1_Fault "Node1 output asymmetric fault": Common_Faults.node1_PID1_fail_to_val {
+			fault Node1_PID_Fault "Node1_PID output is asymmetric": Common_Faults.node_out_node1_PID_fail_to_val {
 				eq fail_val : int; --fail to nondeterministic value
-				inputs: val_in <- Node_Out.Node1_PID_from_Node1, node_num <-node_num, alt_val <- fail_val;     
-				outputs: Node_Out.Node1_PID_from_Node1 <- val_out;    
+				inputs: val_in <- Node_Out, alt_val <- fail_val;     
+				outputs: Node_Out <- val_out;    
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
+
+			--TO-DEBUG: need to debug why the below fault output not supported by asymmetric propagate_type
+			--when changed to asymmetric propagate_type, it shows "Error in defining fault node arguments (debug FaultASTBuilder 539" continuously
+--			fault Node1_PID1_Fault "Node1 output asymmetric fault": Common_Faults.node1_PID1_fail_to_val {
+--				eq fail_val : int; --fail to nondeterministic value
+--				inputs: val_in <- Node_Out.Node1_PID_from_Node1, node_num <-node_num, alt_val <- fail_val;     
+--				outputs: Node_Out.Node1_PID_from_Node1 <- val_out;    
+--				duration: permanent;
+--				propagate_type: asymmetric;
+--			}
 			
 --			fault Node2_PID_Fault "Node2_PID output is asymmetric": Common_Faults.node_out_node2_PID_fail_to_val {
 --				eq fail_val : int; --fail to nondeterministic value
