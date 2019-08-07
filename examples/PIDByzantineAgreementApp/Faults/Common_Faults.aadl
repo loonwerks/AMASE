@@ -1,5 +1,7 @@
 package Common_Faults
 public
+	with Data_Types;
+	renames Data_Types::all;
 	
 	annex agree {**
 	    node invert_signal(val_in: bool, trigger: bool) returns (val_out:bool);
@@ -25,7 +27,37 @@ public
 		node fail_to_int(val_in: int, alt_val: int, trigger: bool) returns (val_out: int);
 		let
 			val_out = if trigger then (alt_val) else val_in;
-		tel;		
+		tel;	
+		
+		node node_out_node1_PID_fail_to_val (val_in: Node_Msg.Impl, alt_val: int, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   val_out = if (trigger) then (val_in{Node1_PID_from_Node1 := alt_val}) else val_in;
+		tel;
+		
+		node node_out_node2_PID_fail_to_val (val_in: Node_Msg.Impl, alt_val: int, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   val_out = if (trigger) then (val_in{Node2_PID_from_Node2 := alt_val}) else val_in;
+		tel;
+		
+		node node_out_node3_PID_fail_to_val (val_in: Node_Msg.Impl, alt_val: int, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   val_out = if (trigger) then (val_in{Node3_PID_from_Node3 := alt_val}) else val_in;
+		tel;
+		
+		node node_out_node4_PID_fail_to_val (val_in: Node_Msg.Impl, alt_val: int, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   val_out = if (trigger) then (val_in{Node4_PID_from_Node4 := alt_val}) else val_in;
+		tel;	
+		
+		node node1_PID1_field_fail_to_val (val_in: Node_Msg.Impl, node_num: int, alt_val: int, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   val_out = if (trigger and (node_num = 1)) then (val_in{Node1_PID_from_Node1 := alt_val}) else val_in;
+		tel;	
+		
+		node node1_PID1_fail_to_val (val_in: int, node_num: int, alt_val: int, trigger: bool) returns (val_out: int); 
+		let
+	   val_out = if (trigger and (node_num = 1)) then alt_val else val_in;
+		tel;
 		
 **};
 end Common_Faults;
