@@ -39,6 +39,7 @@ public
 			eq n4_failed : bool;
 			--to check 
 			--node1_pid from non failed nodes agree
+			
 			lemma "All non-failed nodes agree on node 1 pid." : 
 				true -> (if n1_failed 
 						 then ((Node2.node1_pid = Node3.node1_pid)
