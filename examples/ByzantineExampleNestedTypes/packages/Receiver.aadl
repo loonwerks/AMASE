@@ -3,9 +3,9 @@ public
 with Datatypes;
 	system Receiver
 		features
-			sender_input : in data port Datatypes::commBus.real;
+			sender_input : in data port Datatypes::commBus.impl;
 			
-			output : out data port Datatypes::commBus.real;
+			output : out data port Datatypes::commBus.impl;
 		
 		annex agree {**
 			

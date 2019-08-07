@@ -3,10 +3,10 @@ public
 with Datatypes;
 	system Sender
 		features
-			in1 : in data port Datatypes::commBus.real;
-			in2 : in data port Datatypes::commBus.real;
+			in1 : in data port Datatypes::commBus.impl;
+			in2 : in data port Datatypes::commBus.impl;
 			
-			sender_out : out data port Datatypes::commBus.real;
+			sender_out : out data port Datatypes::commBus.impl;
 		
 		annex agree {** 
 			
@@ -17,9 +17,9 @@ with Datatypes;
 		
 		annex safety {**
 
-			fault Sender_Fault "Or output is zero": Common_Faults.fail_to_real {
-				inputs: val_in <- sender_out.NODE_VAL, alt_val <- 0.0;     
-				outputs: sender_out.NODE_VAL <- val_out;    
+			fault Sender_Fault "Or output is zero": Common_Faults.nested_test {
+				inputs: val_in <- sender_out, alt_val <- 0.0;     
+				outputs: sender_out <- val_out;    
 				duration: permanent;
 				propagate_type: asymmetric;
 			}	

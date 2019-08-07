@@ -6,9 +6,9 @@ with Datatypes;
 
 	system TopSystem
 		features
-			receiver1_output : out data port Datatypes::commBus.real;
-			receiver2_output : out data port Datatypes::commBus.real;
-			receiver3_output : out data port Datatypes::commBus.real;
+			receiver1_output : out data port Datatypes::commBus.impl;
+			receiver2_output : out data port Datatypes::commBus.impl;
+			receiver3_output : out data port Datatypes::commBus.impl;
 		
 		annex agree {**
 			
