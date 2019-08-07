@@ -33,7 +33,11 @@ public
 			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
 		annex agree{**
 				
-			eq n1_failed : bool;
+			eq n1_PID1_failed : bool;
+			eq n1_PID2_failed: bool;
+			eq n1_PID3_failed : bool;
+			eq n1_PID4_failed: bool;
+			eq n1_failed : bool = (n1_PID1_failed or n1_PID2_failed or n1_PID3_failed or n1_PID4_failed);
 			eq n2_failed : bool;
 			eq n3_failed : bool;
 			eq n4_failed : bool;
@@ -114,10 +118,10 @@ public
 				);
 		**};
 		annex safety {**
-			fault_activation: n1_failed = Node_Fault@Node1;
-			fault_activation: n2_failed = Node_Fault@Node2;
-			fault_activation: n3_failed = Node_Fault@Node3;
-			fault_activation: n4_failed = Node_Fault@Node4;
+			fault_activation: n1_PID1_failed = Node1_PID1_Fault@Node1;
+--			fault_activation: n2_failed = Node2_PID_Fault@Node2;
+--			fault_activation: n3_failed = Node3_PID_Fault@Node3;
+--			fault_activation: n4_failed = Node4_PID_Fault@Node4;
       		analyze : max 1 fault
    		**};
 	end Top_Level.With_Mitigation;
@@ -142,15 +146,15 @@ public
 			Node4_to_Node1: port Node4.Node_Out -> Node1.Node3_In;
 			Node4_to_Node2: port Node4.Node_Out -> Node2.Node3_In;
 			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
-		annex agree{**
-			--to check 
-			--node1_pid from non failed nodes agree
-			--node2_pid from non failed nodes agree
-			--node3_pid from non failed nodes agree
-			--node4_pid from non failed nodes agree
-		**};
-		annex safety {**
-      		analyze : max 1 fault
-   		**};
+--		annex agree{**
+--			--to check 
+--			--node1_pid from non failed nodes agree
+--			--node2_pid from non failed nodes agree
+--			--node3_pid from non failed nodes agree
+--			--node4_pid from non failed nodes agree
+--		**};
+--		annex safety {**
+--      		analyze : max 1 fault
+--   		**};
 	end Top_Level.No_Mitigation;
 end AFCS;
