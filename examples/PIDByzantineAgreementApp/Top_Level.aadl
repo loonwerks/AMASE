@@ -38,12 +38,24 @@ public
 			eq n1_PID3_failed : bool;
 			eq n1_PID4_failed: bool;
 			eq n1_failed : bool = (n1_PID1_failed or n1_PID2_failed or n1_PID3_failed or n1_PID4_failed);
-			eq n2_failed : bool;
-			eq n3_failed : bool;
-			eq n4_failed : bool;
+			eq n2_PID1_failed : bool;
+			eq n2_PID2_failed: bool;
+			eq n2_PID3_failed : bool;
+			eq n2_PID4_failed: bool;
+			eq n2_failed : bool = (n2_PID1_failed or n2_PID2_failed or n2_PID3_failed or n2_PID4_failed);
+			eq n3_PID1_failed : bool;
+			eq n3_PID2_failed: bool;
+			eq n3_PID3_failed : bool;
+			eq n3_PID4_failed: bool;
+			eq n3_failed : bool = (n3_PID1_failed or n3_PID2_failed or n3_PID3_failed or n3_PID4_failed);
+			eq n4_PID1_failed : bool;
+			eq n4_PID2_failed: bool;
+			eq n4_PID3_failed : bool;
+			eq n4_PID4_failed: bool;
+			eq n4_failed : bool = (n4_PID1_failed or n4_PID2_failed or n4_PID3_failed or n4_PID4_failed);
+			
 			--to check 
 			--node1_pid from non failed nodes agree
-			
 			lemma "All non-failed nodes agree on node 1 pid." : 
 				true -> (if n1_failed 
 						 then ((Node2.node1_pid = Node3.node1_pid)
@@ -118,7 +130,8 @@ public
 				);
 		**};
 		annex safety {**
-			fault_activation: n1_PID1_failed = Node1_PID1_Fault@Node1;
+			fault_activation: n1_PID1_failed = n1_PID1_failed@Node1;
+--			fault_activation: n1_PID2_failed = n1_PID2_failed@Node2;
 --			fault_activation: n2_failed = Node2_PID_Fault@Node2;
 --			fault_activation: n3_failed = Node3_PID_Fault@Node3;
 --			fault_activation: n4_failed = Node4_PID_Fault@Node4;
