@@ -33,26 +33,35 @@ public
 			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
 		annex agree{**
 				
+--Will use the following after we added the support of multiple faults for the same output for asymmetric faults
+--			eq n1_PID1_failed : bool;
+--			eq n1_PID2_failed: bool;
+--			eq n1_PID3_failed : bool;
+--			eq n1_PID4_failed: bool;
+--			eq n1_failed : bool = (n1_PID1_failed or n1_PID2_failed or n1_PID3_failed or n1_PID4_failed);
+--			eq n2_PID1_failed : bool;
+--			eq n2_PID2_failed: bool;
+--			eq n2_PID3_failed : bool;
+--			eq n2_PID4_failed: bool;
+--			eq n2_failed : bool = (n2_PID1_failed or n2_PID2_failed or n2_PID3_failed or n2_PID4_failed);
+--			eq n3_PID1_failed : bool;
+--			eq n3_PID2_failed: bool;
+--			eq n3_PID3_failed : bool;
+--			eq n3_PID4_failed: bool;
+--			eq n3_failed : bool = (n3_PID1_failed or n3_PID2_failed or n3_PID3_failed or n3_PID4_failed);
+--			eq n4_PID1_failed : bool;
+--			eq n4_PID2_failed: bool;
+--			eq n4_PID3_failed : bool;
+--			eq n4_PID4_failed: bool;
+--			eq n4_failed : bool = (n4_PID1_failed or n4_PID2_failed or n4_PID3_failed or n4_PID4_failed);
+		
+-- the following are temporary assignments before the above mentioned support is added
 			eq n1_PID1_failed : bool;
-			eq n1_PID2_failed: bool;
-			eq n1_PID3_failed : bool;
-			eq n1_PID4_failed: bool;
-			eq n1_failed : bool = (n1_PID1_failed or n1_PID2_failed or n1_PID3_failed or n1_PID4_failed);
-			eq n2_PID1_failed : bool;
-			eq n2_PID2_failed: bool;
-			eq n2_PID3_failed : bool;
-			eq n2_PID4_failed: bool;
-			eq n2_failed : bool = (n2_PID1_failed or n2_PID2_failed or n2_PID3_failed or n2_PID4_failed);
-			eq n3_PID1_failed : bool;
-			eq n3_PID2_failed: bool;
-			eq n3_PID3_failed : bool;
-			eq n3_PID4_failed: bool;
-			eq n3_failed : bool = (n3_PID1_failed or n3_PID2_failed or n3_PID3_failed or n3_PID4_failed);
-			eq n4_PID1_failed : bool;
-			eq n4_PID2_failed: bool;
-			eq n4_PID3_failed : bool;
-			eq n4_PID4_failed: bool;
-			eq n4_failed : bool = (n4_PID1_failed or n4_PID2_failed or n4_PID3_failed or n4_PID4_failed);
+			eq n1_failed : bool = n1_PID1_failed;
+			eq n2_failed : bool = false;
+			eq n3_failed : bool = false;
+			eq n4_failed : bool = false;			
+			
 			
 			--to check 
 			--node1_pid from non failed nodes agree
