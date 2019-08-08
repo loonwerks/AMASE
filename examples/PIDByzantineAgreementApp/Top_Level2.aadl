@@ -1,10 +1,11 @@
-package Top_Level
+package Top_Level2
 --Avionics (and) Flight Control System (Integrated)
 public
-	with Node;
+	with Node2;
 	with AADL_Properties;
-	renames Node::all;
+	renames Node2::all;
 	renames Data_Types::all;
+	
 
 	system Top_Level
 		annex agree {**
@@ -14,10 +15,10 @@ public
 
 	system implementation Top_Level.With_Mitigation
 		subcomponents
-			Node1: system Node_With_Mitigation {AADL_Properties::Node_Num => 1;AADL_Properties::PID => 10;};
-			Node2: system Node_With_Mitigation {AADL_Properties::Node_Num => 2;AADL_Properties::PID => 20;};
-			Node3: system Node_With_Mitigation {AADL_Properties::Node_Num => 3;AADL_Properties::PID => 30;};
-			Node4: system Node_With_Mitigation {AADL_Properties::Node_Num => 4;AADL_Properties::PID => 40;};
+			Node1: system Node1 {AADL_Properties::PID => 10;};
+			Node2: system Node2 {AADL_Properties::PID => 20;};
+			Node3: system Node3 {AADL_Properties::PID => 30;};
+			Node4: system Node4 {AADL_Properties::PID => 40;};
 		connections
 			Node1_to_Node2: port Node1.Node_Out -> Node2.Node1_In;
 			Node1_to_Node3: port Node1.Node_Out -> Node3.Node1_In;
@@ -32,36 +33,10 @@ public
 			Node4_to_Node2: port Node4.Node_Out -> Node2.Node3_In;
 			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
 		annex agree{**
-				
---Will use the following after we added the support of multiple faults for the same output for asymmetric faults
---			eq n1_PID1_failed : bool;
---			eq n1_PID2_failed: bool;
---			eq n1_PID3_failed : bool;
---			eq n1_PID4_failed: bool;
---			eq n1_failed : bool = (n1_PID1_failed or n1_PID2_failed or n1_PID3_failed or n1_PID4_failed);
---			eq n2_PID1_failed : bool;
---			eq n2_PID2_failed: bool;
---			eq n2_PID3_failed : bool;
---			eq n2_PID4_failed: bool;
---			eq n2_failed : bool = (n2_PID1_failed or n2_PID2_failed or n2_PID3_failed or n2_PID4_failed);
---			eq n3_PID1_failed : bool;
---			eq n3_PID2_failed: bool;
---			eq n3_PID3_failed : bool;
---			eq n3_PID4_failed: bool;
---			eq n3_failed : bool = (n3_PID1_failed or n3_PID2_failed or n3_PID3_failed or n3_PID4_failed);
---			eq n4_PID1_failed : bool;
---			eq n4_PID2_failed: bool;
---			eq n4_PID3_failed : bool;
---			eq n4_PID4_failed: bool;
---			eq n4_failed : bool = (n4_PID1_failed or n4_PID2_failed or n4_PID3_failed or n4_PID4_failed);
-		
--- the following are temporary assignments before the above mentioned support is added
-			eq n1_PID1_failed : bool;
-			eq n1_failed : bool = n1_PID1_failed;
-			eq n2_failed : bool = false;
-			eq n3_failed : bool = false;
-			eq n4_failed : bool = false;			
-			
+			eq n1_failed : bool;
+			eq n2_failed : bool;
+			eq n3_failed : bool;
+			eq n4_failed : bool;			
 			
 			--to check 
 			--node1_pid from non failed nodes agree
@@ -139,44 +114,12 @@ public
 				);
 		**};
 		annex safety {**
-			fault_activation: n1_PID1_failed = n1_PID1_failed@Node1;
---			fault_activation: n1_PID2_failed = n1_PID2_failed@Node2;
---			fault_activation: n2_failed = Node2_PID_Fault@Node2;
---			fault_activation: n3_failed = Node3_PID_Fault@Node3;
---			fault_activation: n4_failed = Node4_PID_Fault@Node4;
-      		analyze : max 1 fault
+			fault_activation: n1_failed = n1_PID1_failed@Node1;
+			fault_activation: n2_failed = n2_PID1_failed@Node2;
+			fault_activation: n3_failed = n3_PID1_failed@Node3;
+			fault_activation: n4_failed = n4_PID1_failed@Node4;
+      analyze : max 1 fault
    		**};
 	end Top_Level.With_Mitigation;
-	
-		system implementation Top_Level.No_Mitigation
-		subcomponents
-			Node1: system Node_No_Mitigation {AADL_Properties::Node_Num => 1;AADL_Properties::PID => 10;};
-			Node2: system Node_No_Mitigation {AADL_Properties::Node_Num => 2;AADL_Properties::PID => 20;};
-			Node3: system Node_No_Mitigation {AADL_Properties::Node_Num => 3;AADL_Properties::PID => 30;};
-			Node4: system Node_No_Mitigation {AADL_Properties::Node_Num => 4;AADL_Properties::PID => 40;};
-		connections
-			--Data between Nodes
-			Node1_to_Node2: port Node1.Node_Out -> Node2.Node1_In;
-			Node1_to_Node3: port Node1.Node_Out -> Node3.Node1_In;
-			Node1_to_Node4: port Node1.Node_Out -> Node4.Node1_In;
-			Node2_to_Node1: port Node2.Node_Out -> Node1.Node1_In;
-			Node2_to_Node3: port Node2.Node_Out -> Node3.Node2_In;
-			Node2_to_Node4: port Node2.Node_Out -> Node4.Node2_In;
-			Node3_to_Node1: port Node3.Node_Out -> Node1.Node2_In;
-			Node3_to_Node2: port Node3.Node_Out -> Node2.Node2_In;
-			Node3_to_Node4: port Node3.Node_Out -> Node4.Node3_In;
-			Node4_to_Node1: port Node4.Node_Out -> Node1.Node3_In;
-			Node4_to_Node2: port Node4.Node_Out -> Node2.Node3_In;
-			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
---		annex agree{**
---			--to check 
---			--node1_pid from non failed nodes agree
---			--node2_pid from non failed nodes agree
---			--node3_pid from non failed nodes agree
---			--node4_pid from non failed nodes agree
---		**};
---		annex safety {**
---      		analyze : max 1 fault
---   		**};
-	end Top_Level.No_Mitigation;
-end Top_Level;
+
+end Top_Level2;
