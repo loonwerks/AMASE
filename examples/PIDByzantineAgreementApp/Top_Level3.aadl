@@ -1,0 +1,127 @@
+package Top_Level3
+public
+	with Node3;
+	with AADL_Properties;
+	renames Node3::all;
+	renames Data_Types::all;
+	
+
+	system Top_Level
+		annex agree {**
+			guarantee "True" : true; 
+		**};
+	end Top_Level;
+
+	system implementation Top_Level.With_Mitigation
+		subcomponents
+			Node1: system Node1 {AADL_Properties::PID => 10;};
+			Node2: system Node2 {AADL_Properties::PID => 20;};
+			Node3: system Node3 {AADL_Properties::PID => 30;};
+			Node4: system Node4 {AADL_Properties::PID => 40;};
+		connections
+			Node1_to_Node2: port Node1.Node_Out -> Node2.Node1_In;
+			Node1_to_Node3: port Node1.Node_Out -> Node3.Node1_In;
+			Node1_to_Node4: port Node1.Node_Out -> Node4.Node1_In;
+			Node2_to_Node1: port Node2.Node_Out -> Node1.Node1_In;
+			Node2_to_Node3: port Node2.Node_Out -> Node3.Node2_In;
+			Node2_to_Node4: port Node2.Node_Out -> Node4.Node2_In;
+			Node3_to_Node1: port Node3.Node_Out -> Node1.Node2_In;
+			Node3_to_Node2: port Node3.Node_Out -> Node2.Node2_In;
+			Node3_to_Node4: port Node3.Node_Out -> Node4.Node3_In;
+			Node4_to_Node1: port Node4.Node_Out -> Node1.Node3_In;
+			Node4_to_Node2: port Node4.Node_Out -> Node2.Node3_In;
+			Node4_to_Node3: port Node4.Node_Out -> Node3.Node3_In;	
+		annex agree{**
+			eq n1_failed : bool;
+			eq n2_failed : bool;
+			eq n3_failed : bool;
+			eq n4_failed : bool;	
+			
+			eq init_cnt : int = 0 -> (pre(init_cnt)+1);		
+			
+			--to check 
+			--node1_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 1 pid." : 
+				(init_cnt >=1) => 
+				(if n1_failed 
+						 then ((Node2.node1_pid = Node3.node1_pid)
+						and (Node2.node1_pid = Node4.node1_pid))
+					else if n2_failed 
+						 then ((Node1.node1_pid = Node3.node1_pid)
+							and (Node1.node1_pid = Node4.node1_pid))
+					else if n3_failed 
+						 then ((Node1.node1_pid = Node2.node1_pid)
+							and (Node1.node1_pid = Node4.node1_pid))
+					else if n4_failed 
+						 then ((Node1.node1_pid = Node2.node1_pid)
+							and (Node1.node1_pid = Node3.node1_pid))
+					else ((Node1.node1_pid = Node2.node1_pid) 
+						and (Node1.node1_pid = Node3.node1_pid)
+						and (Node1.node1_pid = Node4.node1_pid))
+				); 
+				
+			--node2_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 2 pid." : 
+				(init_cnt >=1) => (if n1_failed 
+						 then ((Node2.node2_pid = Node3.node2_pid)
+						and (Node2.node2_pid = Node4.node2_pid))
+					else if n2_failed 
+						 then ((Node1.node2_pid = Node3.node2_pid)
+							and (Node1.node2_pid = Node4.node2_pid))
+					else if n3_failed 
+						 then ((Node1.node2_pid = Node2.node2_pid)
+							and (Node1.node2_pid = Node4.node2_pid))
+					else if n4_failed 
+						 then ((Node1.node2_pid = Node2.node2_pid)
+							and (Node1.node2_pid = Node3.node2_pid))
+					else ((Node1.node2_pid = Node2.node2_pid) 
+						and (Node1.node2_pid = Node3.node2_pid)
+						and (Node1.node2_pid = Node4.node2_pid))
+				);
+			--node3_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 3 pid." : 
+				(init_cnt >=1) =>(if n1_failed 
+						 then ((Node2.node3_pid = Node3.node3_pid)
+						and (Node2.node3_pid = Node4.node3_pid))
+					else if n2_failed 
+						 then ((Node1.node3_pid = Node3.node3_pid)
+							and (Node1.node3_pid = Node4.node3_pid))
+					else if n3_failed 
+						 then ((Node1.node3_pid = Node2.node3_pid)
+							and (Node1.node3_pid = Node4.node3_pid))
+					else if n4_failed 
+						 then ((Node1.node3_pid = Node2.node3_pid)
+							and (Node1.node3_pid = Node3.node3_pid))
+					else ((Node1.node3_pid = Node2.node3_pid) 
+						and (Node1.node3_pid = Node3.node3_pid)
+						and (Node1.node3_pid = Node4.node3_pid))
+				);
+			--node4_pid from non failed nodes agree
+			lemma "All non-failed nodes agree on node 4 pid." : 
+				(init_cnt >=1) =>(if n1_failed 
+						 then ((Node2.node4_pid = Node3.node4_pid)
+						and (Node2.node4_pid = Node4.node4_pid))
+					else if n2_failed 
+						 then ((Node1.node4_pid = Node3.node4_pid)
+							and (Node1.node4_pid = Node4.node4_pid))
+					else if n3_failed 
+						 then ((Node1.node4_pid = Node2.node4_pid)
+							and (Node1.node4_pid = Node4.node4_pid))
+					else if n4_failed 
+						 then ((Node1.node4_pid = Node2.node4_pid)
+							and (Node1.node4_pid = Node3.node4_pid))
+					else ((Node1.node4_pid = Node2.node4_pid) 
+						and (Node1.node4_pid = Node3.node4_pid)
+						and (Node1.node4_pid = Node4.node4_pid))
+				);
+		**};
+		annex safety {**
+			fault_activation: n1_failed = n1_PID1_failed@Node1;
+			fault_activation: n2_failed = n2_PID1_failed@Node2;
+			fault_activation: n3_failed = n3_PID1_failed@Node3;
+			fault_activation: n4_failed = n4_PID1_failed@Node4;
+      analyze : max 1 fault
+   		**};
+	end Top_Level.With_Mitigation;
+
+end Top_Level3;
