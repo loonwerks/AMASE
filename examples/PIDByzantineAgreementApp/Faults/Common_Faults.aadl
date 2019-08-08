@@ -76,5 +76,25 @@ public
 	   					);
 		tel;	
 		
+	 node node_PID_fail_to_val2 (val_in: Node_Msg.Impl, pid_num: int, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   		val_out = 
+	   				if(pid_num = 1)
+	   				then(val_in{Node1_PID_from_Node1 := 60}) 
+	   				else(
+	   					if(pid_num = 2)
+	   					then(val_in{Node2_PID_from_Node2 := 50}) 
+	   					else(
+	   						if(pid_num = 3)
+	   						then(val_in{Node3_PID_from_Node3 := 50})  
+	   						else (
+	   							if(pid_num = 4)
+	   							then(val_in{Node4_PID_from_Node4 := 50}) 
+	   							else(val_in)
+	   						  )	
+	   					    )
+	   					);
+		tel;
+		
 **};
 end Common_Faults;
