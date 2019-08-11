@@ -1,10 +1,8 @@
 package TopLevel
 public
 with Base_Types;
-with LeaderNode;
 with Nodes;
-
-with Nodes;
+renames Nodes::all;
 
 	system TopLevel
 		features
@@ -55,10 +53,10 @@ with Nodes;
 	system implementation TopLevel.impl
 		subcomponents
 			
-			leaderNode : system LeaderNode::leader;
-			node2 : system Nodes::Node;
-			node3 : system Nodes::Node;
-			node4 : system Nodes::Node;
+			leaderNode : system leader;
+			node2 : system Node;
+			node3 : system Node;
+			node4 : system Node;
 		
 		connections
 			
@@ -92,7 +90,7 @@ with Nodes;
 			fault_activation: n2_failed = Node_Output_Asym_Fail_To_One@node2;
 			fault_activation: n3_failed = Node_Output_Asym_Fail_To_One@node3;
 			fault_activation: n4_failed = Node_Output_Asym_Fail_To_One@node4;
-			analyze: max 2 fault
+			analyze: max 1 fault
 			
 		**};
 	end TopLevel.impl;
