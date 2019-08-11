@@ -9,8 +9,7 @@ with AADL_Properties;
 			
 		annex agree{**
 			guarantee "true": true;
-				
-		
+
 		**};
 	end TopLevel;
 	
