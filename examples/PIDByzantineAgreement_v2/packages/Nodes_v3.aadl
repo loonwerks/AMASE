@@ -21,16 +21,14 @@ public
 			guarantee "Node1_PID_from_Node1 remains node1_pid1 from beginning step." :
 				(node_num = 1)
 				=>
-				((Node_Out.Node1_PID_from_Node1 = node1_pid1) 
-				 -> (Node_Out.Node1_PID_from_Node1 = pre(Node_Out.Node1_PID_from_Node1))
-				);
+				(Node_Out.Node1_PID_from_Node1 = node1_pid1);
 			
 			-- if not node 1, Report what was told to this node to the other two nodes.
 			guarantee "if non node 1, Send color told to this node to the other two nodes
 					   in the second time step." :
 				 not(node_num = 1)   
 				 =>
-				 (true -> (pre(Node1_In.Node1_PID_from_Node1) = Node_Out.Node1_PID_from_Node1));
+				 (true -> (Node_Out.Node1_PID_from_Node1 = pre(Node1_In.Node1_PID_from_Node1)));
 			
 			-- if not node 1, Vote on what I have seen and what the others report.
 			-- Take number seen the most often (majority vote).
