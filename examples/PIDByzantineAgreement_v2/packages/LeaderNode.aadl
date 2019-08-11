@@ -1,0 +1,31 @@
+package LeaderNode
+public
+with Base_Types;
+	system leader
+		features 
+			color : out data port Base_Types::Integer;
+			
+			color_to_top : out data port Base_Types::Integer;
+	
+		annex agree {**
+			
+			guarantee "Color remains green (2) from beginning step." :
+				((color = 2) -> (color = pre(color)));
+				
+			guarantee "Color to top is equal to color." :
+				(color_to_top = color); 
+			
+		**};
+		annex safety {**
+			
+			fault Leader_Output_Asym_Fail_To_One "Leader node output is asymmetric": Common_Faults.fail_to_one {
+				inputs: val_in <- color;     
+				outputs: color <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}
+			
+		**};
+	end leader;
+	
+end LeaderNode;

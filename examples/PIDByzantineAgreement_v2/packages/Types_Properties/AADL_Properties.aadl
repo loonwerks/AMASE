@@ -1,0 +1,3 @@
+property set AADL_Properties is
+	PID: aadlinteger applies to (system);
+end AADL_Properties;
