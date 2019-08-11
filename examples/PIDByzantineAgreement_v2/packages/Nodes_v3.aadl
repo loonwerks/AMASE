@@ -1,0 +1,81 @@
+package Nodes_v3
+public
+	with Base_Types;
+	with Data_Types;
+	renames Data_Types::all;
+		
+	system leader
+		features 
+			--outputs
+			Node_Out: out data port Node_Msg.Impl;
+		annex agree {**
+				
+			eq node1_pid1: int = 10;
+			
+			guarantee "Node1_PID_from_Node1 remains node1_pid1 from beginning step." :
+				((Node_Out.Node1_PID_from_Node1 = node1_pid1) -> (Node_Out.Node1_PID_from_Node1 = pre(Node_Out.Node1_PID_from_Node1)));
+			
+		**};
+		annex safety {**
+			
+			fault Leader_Node1_PID_Asym_Fail_To_One "Leader node output is asymmetric": Common_Faults.fail_to_one {
+				inputs: val_in <- Node_Out.Node1_PID_from_Node1;     
+				outputs: Node_Out.Node1_PID_from_Node1 <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}
+			
+		**};
+	end leader;
+
+	system Node
+		features
+			--inputs
+			Node1_In: in data port Node_Msg.Impl;
+			Node2_In: in data port Node_Msg.Impl;
+			Node3_In: in data port Node_Msg.Impl;
+			--outputs
+			Node_Out: out data port Node_Msg.Impl;
+
+		annex agree {**
+			eq pid : int = Get_Property(this, AADL_Properties::PID);
+			eq node_num : int = Get_Property(this, AADL_Properties::Node_Num);
+			
+			-- if node 1, report its own pid
+			guarantee "Node1_PID_from_Node1 remains node1_pid1 from beginning step." :
+				(node_num = 1)
+				=>
+				((Node_Out.Node1_PID_from_Node1 = node1_pid1) 
+				 -> (Node_Out.Node1_PID_from_Node1 = pre(Node_Out.Node1_PID_from_Node1))
+				);
+			
+			-- if not node 1, Report what was told to this node to the other two nodes.
+			guarantee "if non node 1, Send color told to this node to the other two nodes
+					   in the second time step." :
+				 not(node_num = 1)   
+				 =>
+				 (true -> (pre(Node1_In.Node1_PID_from_Node1) = Node_Out.Node1_PID_from_Node1));
+			
+			-- if not node 1, Vote on what I have seen and what the others report.
+			-- Take number seen the most often (majority vote).
+			eq node1_pid1: int = 
+				if(node_num = 1) then pid
+				else(
+			    0 -> Library.majority(Node2_In.Node1_PID_from_Node1, 
+				Node3_In.Node1_PID_from_Node1, pre(Node1_In.Node1_PID_from_Node1)
+				));
+
+		**};
+		annex safety {**
+
+			fault Node1_PID_Asym_Fail_To_One "Node output is asymmetric": Common_Faults.fail_to_one {
+				inputs: val_in <- Node_Out.Node1_PID_from_Node1;     
+				outputs: Node_Out.Node1_PID_from_Node1 <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}
+			
+		**};
+	end Node;
+	
+end Nodes_v3;
