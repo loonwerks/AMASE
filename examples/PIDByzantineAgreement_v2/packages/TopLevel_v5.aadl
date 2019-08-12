@@ -22,33 +22,35 @@ with AADL_Properties;
 		
 		connections
 			
-			-- Leader node output to nodes 2, 3, 4
+			-- Node 1 output to nodes 2, 3, 4
 			N1B1 : port node1.Node_Out -> node2.Node1_In;
 			N1B2 : port node1.Node_Out -> node3.Node1_In;
 			N1B3 : port node1.Node_Out -> node4.Node1_In;
-			
-			
-			-- Node 2 output (what it saw from leader node) to nodes 3, 4
+				
+			-- Node 2 output to nodes 1, 3, 4
+	        N2B1 : port node2.Node_Out -> node1.Node1_In;
 			N2B3 : port node2.Node_Out -> node3.Node2_In;
 			N2B4 : port node2.Node_Out -> node4.Node2_In;
 			
-			-- Node 3 output to nodes 2, 4
+			-- Node 3 output to nodes 1, 2, 4
+			N3B1 : port node3.Node_Out -> node1.Node2_In;
 			N3B2 : port node3.Node_Out -> node2.Node2_In;
 			N3B4 : port node3.Node_Out -> node4.Node3_In;
 			
-			-- Node 4 output to nodes 2, 3
+			-- Node 4 output to nodes 1, 2, 3
+			N4B1 : port node4.Node_Out -> node1.Node3_In;
 			N4B2 : port node4.Node_Out -> node2.Node3_In;
 			N4B3 : port node4.Node_Out -> node3.Node3_In;
 	   annex agree{**
 			
-			eq n1_pid1_failed: bool;
-			eq n1_pid2_failed: bool;
+			eq n1_pid1_failed: bool ;
+			eq n1_pid2_failed: bool= false;
 			eq n2_pid1_failed: bool;
-			eq n2_pid2_failed: bool;
+			eq n2_pid2_failed: bool= false;
 			eq n3_pid1_failed: bool;
-			eq n3_pid2_failed: bool;
+			eq n3_pid2_failed: bool= false;
 			eq n4_pid1_failed: bool;
-			eq n4_pid2_failed: bool;	
+			eq n4_pid2_failed: bool= false;	
 			
 			eq n1_failed : bool = n1_pid1_failed or n1_pid2_failed;
 			eq n2_failed : bool = n2_pid1_failed or n2_pid2_failed;
@@ -89,13 +91,13 @@ with AADL_Properties;
 		
 		annex safety {**
 			fault_activation: n1_pid1_failed = PID1_Asym_Fail_To_One@node1;
-			fault_activation: n1_pid2_failed = PID2_Asym_Fail_To_One@node1;
+			--fault_activation: n1_pid2_failed = PID2_Asym_Fail_To_One@node1;
 			fault_activation: n2_pid1_failed = PID1_Asym_Fail_To_One@node2;
-			fault_activation: n2_pid2_failed = PID2_Asym_Fail_To_One@node2;
+			--fault_activation: n2_pid2_failed = PID2_Asym_Fail_To_One@node2;
 			fault_activation: n3_pid1_failed = PID1_Asym_Fail_To_One@node3;
-			fault_activation: n3_pid2_failed = PID2_Asym_Fail_To_One@node3;
+			--fault_activation: n3_pid2_failed = PID2_Asym_Fail_To_One@node3;
 			fault_activation: n4_pid1_failed = PID1_Asym_Fail_To_One@node4;
-			fault_activation: n4_pid2_failed = PID2_Asym_Fail_To_One@node4;
+		    --fault_activation: n4_pid2_failed = PID2_Asym_Fail_To_One@node4;
 
 			analyze: max 1 fault
 			
