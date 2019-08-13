@@ -1,0 +1,48 @@
+package Common_Faults
+public
+	with Data_Types;
+	renames Data_Types::all;
+	annex agree {**
+	    node invert_signal(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (not val_in) else val_in;
+		tel;
+		
+		node fail_to_zero(val_in: int, trigger: bool) returns (val_out: int);
+		let
+			val_out = if trigger then (0) else val_in;
+		tel;
+		
+		node fail_to_one(val_in: int, trigger: bool) returns (val_out: int);
+		let
+			val_out = if trigger then (1) else val_in;
+		tel;
+		
+		node fail_PID1_to_one (val_in: Node_Msg.Impl, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   		val_out = 
+	   			if (trigger) 
+	   				then(val_in{Node1_PID_from_Node1 := 1}) 
+	   			 else val_in;
+		tel;
+		
+		node fail_PID2_to_one (val_in: Node_Msg.Impl, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   		val_out = 
+	   			if (trigger) 
+	   				then(val_in{Node2_PID_from_Node2 := 1}) 
+	   			 else val_in;
+		tel;
+		
+		node fail_to_real(val_in: real, alt_val: real, trigger: bool) returns (val_out: real);
+		let
+			val_out = if trigger then (alt_val) else val_in;
+		tel;
+		
+		node fail_to_int(val_in: int, alt_val: int, trigger: bool) returns (val_out: int);
+		let
+			val_out = if trigger then (alt_val) else val_in;
+		tel;		
+		
+**};
+end Common_Faults;
