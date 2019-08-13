@@ -1,18 +1,16 @@
 package TopLevel
 public
 with Base_Types;
-with LeaderNode;
 with Nodes;
-
-with Nodes;
+renames Nodes::all;
 
 	system TopLevel
 		features
-			color_from_n2 : out data port Base_Types::Boolean;
-			color_from_n3 : out data port Base_Types::Boolean;
-			color_from_n4 : out data port Base_Types::Boolean;
+			color_from_n2 : out data port Base_Types::Integer;
+			color_from_n3 : out data port Base_Types::Integer;
+			color_from_n4 : out data port Base_Types::Integer;
 			
-			color_from_leader : out data port Base_Types::Boolean;
+			color_from_leader : out data port Base_Types::Integer;
 			
 		annex agree{**
 				
@@ -55,10 +53,10 @@ with Nodes;
 	system implementation TopLevel.impl
 		subcomponents
 			
-			leaderNode : system LeaderNode::leader;
-			node2 : system Nodes::Node;
-			node3 : system Nodes::Node;
-			node4 : system Nodes::Node;
+			leaderNode : system leader;
+			node2 : system Node;
+			node3 : system Node;
+			node4 : system Node;
 		
 		connections
 			
@@ -88,10 +86,10 @@ with Nodes;
 			LeaderToTop : port leaderNode.color_to_top -> color_from_leader;
 		
 		annex safety {**
-			fault_activation: leader_failed = Node_Fault@leaderNode;
-			fault_activation: n2_failed = Node_Fault@node2;
-			fault_activation: n3_failed = Node_Fault@node3;
-			fault_activation: n4_failed = Node_Fault@node4;
+			fault_activation: leader_failed = Leader_Output_Asym_Fail_To_One@leaderNode;
+			fault_activation: n2_failed = Node_Output_Asym_Fail_To_One@node2;
+			fault_activation: n3_failed = Node_Output_Asym_Fail_To_One@node3;
+			fault_activation: n4_failed = Node_Output_Asym_Fail_To_One@node4;
 			analyze: max 1 fault
 			
 		**};
