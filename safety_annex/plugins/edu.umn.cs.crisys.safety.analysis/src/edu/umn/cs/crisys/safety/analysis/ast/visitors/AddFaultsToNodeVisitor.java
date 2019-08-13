@@ -221,16 +221,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 			}
 			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
-				addNominalVars(node, nb, f, compOut.toString());
+//				addNominalVars(node, nb, f, compOut.toString());
 				addFaultInputs(f, nb);
 				addHWFaultInputs(hwFaults, nb);
 				addFaultLocalEqsAndAsserts(f, nb);
-				addFaultNodeEqs(f, nb);
+//				addFaultNodeEqs(f, nb);
 			} else {
 				addFaultInputs(f, nb);
 			}
 
 		}
+		addNominalVars(node, nb);
+		addFaultNodeEqs(faults, nb);
 
 		if (isTop) {
 			topNode = node;
@@ -348,22 +350,31 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * called in a loop for all faults defined for this agree node, we use that
 	 * fault information to create unique nominal id.
 	 */
-	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb, Fault f, String faultyId) {
-		if (faultyId.contains(".")) {
-			String[] spl = faultyId.split("\\.");
-			if (spl.length != 0) {
-				faultyId = spl[0];
+	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
+//		if (faultyId.contains(".")) {
+//			String[] spl = faultyId.split("\\.");
+//			if (spl.length != 0) {
+//				faultyId = spl[0];
+//			} else {
+//				throw new SafetyException("The component output (" + faultyId + ") this fault (" + f.id + ") is "
+//						+ "attached to is erroneous.");
+//			}
+//		}
+//		AgreeVar out = findVar(node.outputs, (faultyId));
+//		if (out == null) {
+//			throw new SafetyException("A fault defined for " + node.id + " has a connection"
+//					+ " that is not a valid output for this component.");
+//		} else {
+//			nb.addInput(new AgreeVar(createNominalId((faultyId + "_" + f.id)), out.type, out.reference));
+//		}
+		for (String faultyId : faultyVarsExpr.keySet()) {
+			AgreeVar out = findVar(node.outputs, (faultyId));
+			if (out == null) {
+				throw new SafetyException("A fault defined for " + node.id + " has a connection"
+						+ " that is not a valid output for this component.");
 			} else {
-				throw new SafetyException("The component output (" + faultyId + ") this fault (" + f.id + ") is "
-						+ "attached to is erroneous.");
+				nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
 			}
-		}
-		AgreeVar out = findVar(node.outputs, (faultyId));
-		if (out == null) {
-			throw new SafetyException("A fault defined for " + node.id + " has a connection"
-					+ " that is not a valid output for this component.");
-		} else {
-			nb.addInput(new AgreeVar(createNominalId((faultyId + "_" + f.id)), out.type, out.reference));
 		}
 	}
 
@@ -408,52 +419,133 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return actuals;
 	}
 
-	public void addFaultNodeEqs(Fault f, AgreeNodeBuilder nb) {
-		Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
-		List<IdExpr> lhs = new ArrayList<IdExpr>();
-		for (VarDecl v : f.faultNode.outputs) {
-			String lhsId = this.createFaultNodeEqId(f.id, v.id);
-			AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
-			nb.addLocal(actual);
-			lhs.add(new IdExpr(lhsId));
-			f.outputParamToActualMap.put(v.id, actual);
-		}
-		AgreeEquation eq = new AgreeEquation(lhs,
-				new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
-		nb.addLocalEquation(eq);
-
-		// Binding happens HERE and is based on the map faultyVarsExpr.
-		// Create an equality between the id and a nested WITH expression for each expr
-		// in the list.
-		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
-
-			List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
-			// Create nominal id name with key from this map
-			String nomId = createNominalId(lhsWithStmtName + "_" + f.id);
-			// base is the root of the WITH expression.
-			Expr defaultExpr = new IdExpr(nomId);
-			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
-
-			// Go through pairs of the list and create with statements.
-			for (Pair pair : list) {
-				if (pair.f.id.equals(f.id)) {
-					// base : replace the expression with nominal expression
-					// repl : go from the fault to the actual
-					// toAssign: createNestedUpdateExpr using base, repl
-					Expr faultNodeOut = faultToActual(pair.f, pair.ex);
-
-					BinaryExpr outputEqualsValout = new BinaryExpr(pair.ex, BinaryOp.EQUAL, faultNodeOut);
-
-					// Creates Lustre stmt:
-					// (if fault__trigger then fault_1__node__val_out
-					// else __fault__nominal__output
-					for (Fault curFault : faultsForSameOutput) {
-						mutualExclusiveFaults.add(new FaultPair(curFault, pair.f));
-					}
-					faultsForSameOutput.add(pair.f);
-					nb.addAssertion(new AgreeStatement("", outputEqualsValout, null));
+	public void addFaultNodeEqs(List<Fault> faults, AgreeNodeBuilder nb) {
+		Map<String, List<Pair>> localMultipleFaultMap = new HashMap<String, List<Pair>>();
+		// Loop through all faults in this node
+		for (Fault f : faults) {
+			// If this fault is asymmetric, move to the next fault in the list.
+			if (f.propType != null) {
+				if (f.propType.getPty() instanceof asymmetric) {
+					continue;
 				}
 			}
+
+			// if we have multiple faults on a single output,
+			// we want to handle these differently.
+			for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
+				List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
+				if (list.size() > 1) {
+					// Then we have multiple faults on a single output.
+					// Save these to handle later.
+					localMultipleFaultMap.put(lhsWithStmtName, list);
+				} else {
+					// Else single fault case.
+					Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
+					List<IdExpr> lhs = new ArrayList<IdExpr>();
+					Expr nominal;
+
+					// make locals for fault node outputs
+					// populate outputParamToActualMap
+					for (VarDecl v : f.faultNode.outputs) {
+						String lhsId = this.createFaultNodeEqId(f.id, v.id);
+						AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
+						nb.addLocal(actual);
+						lhs.add(new IdExpr(lhsId));
+						f.outputParamToActualMap.put(v.id, actual);
+					}
+					// Call fault node and put this into lustre node as local equation.
+					AgreeEquation eq = new AgreeEquation(lhs,
+							new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)),
+							f.faultStatement);
+					nb.addLocalEquation(eq);
+
+					// Create nominal id name with key from this map
+					String nomId = createNominalId(lhsWithStmtName);
+					Expr defaultExpr = new IdExpr(nomId);
+					nominal = defaultExpr;
+					List<TriggerFaultOutPair> triggerList = new ArrayList<>();
+					// Go through pairs of the list and create with statements.
+					for (Pair pair : list) {
+						Expr faultNodeOut = faultToActual(pair.f, pair.ex);
+						// Creates Lustre stmt:
+						// (if fault__trigger then fault_1__node__val_out
+						// else __fault__nominal__output
+						// Collect elements to build the nested if then else stmt described above.
+						Expr ftTrigger = localFaultTriggerMap.get(pair.f);
+						triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
+					}
+					// Now that all trigger output pairs have been added to the local map,
+					// we put together then nested if-then-else statement.
+					// Send the list of triggers with associated fault out statements
+					// to a recursive function that builds the nested if-then-else statement.
+					nb.addAssertion(
+							new AgreeStatement(
+									"Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(lhsWithStmtName),
+											BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, nominal, 0)),
+									null));
+				}
+			}
+		}
+
+		// Now that we have completed all single fault outputs, we
+		// handle the multiple fault outputs.
+		for (String key : localMultipleFaultMap.keySet()) {
+			// Nominal id will be the same for all these faults.
+			String nomId = createNominalId(key);
+			Expr defaultExpr = new IdExpr(nomId);
+			Expr resultExpr = defaultExpr;
+			List<TriggerFaultOutPair> triggerList = new ArrayList<>();
+			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
+
+			List<Pair> pairs = localMultipleFaultMap.get(key);
+			// For each fault in the pairs list...
+			for (Pair p : pairs) {
+				Fault f = p.f;
+				// make locals for fault node outputs
+				// populate outputParamToActualMap
+				Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
+				List<IdExpr> lhs = new ArrayList<IdExpr>();
+
+				for (VarDecl v : f.faultNode.outputs) {
+					String lhsId = this.createFaultNodeEqId(f.id, v.id);
+					AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
+					nb.addLocal(actual);
+					lhs.add(new IdExpr(lhsId));
+					f.outputParamToActualMap.put(v.id, actual);
+				}
+				// Create node call expression for this fault.
+				AgreeEquation eq = new AgreeEquation(lhs,
+						new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)),
+						f.faultStatement);
+				nb.addLocalEquation(eq);
+
+				Expr faultNodeOut = faultToActual(p.f, p.ex);
+				// Collect elements to build the nested if then else stmt.
+				// (if fault__trigger then fault_1__node__val_out
+				// else __fault__nominal__output
+				Expr ftTrigger = localFaultTriggerMap.get(p.f);
+				triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
+				for (Fault curFault : faultsForSameOutput) {
+					mutualExclusiveFaults.add(new FaultPair(curFault, p.f));
+				}
+				faultsForSameOutput.add(p.f);
+			}
+			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(key),
+					BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)), null));
+		}
+	}
+
+	/*
+	 * Recursive function creates nested if-then-else expression
+	 */
+	private Expr createNestedIfThenElseExpr(List<TriggerFaultOutPair> list, Expr nominal, int index) {
+		if (index > list.size() - 1) {
+			return nominal;
+		} else if (index == list.size() - 1) {
+			return new IfThenElseExpr(list.get(index).trigger, list.get(index).faultOut, nominal);
+		} else {
+			return new IfThenElseExpr(list.get(index).trigger, list.get(index).faultOut,
+					createNestedIfThenElseExpr(list, nominal, index + 1));
 		}
 	}
 
@@ -555,7 +647,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			List<Pair> lp = faultyVarsExpr.get(e.id);
 			for (Pair p : lp) {
 				if (p.ex.toString().equals(e.id)) {
-					return new IdExpr(e.location, createNominalId(e.id + "_" + p.f.id));
+					return new IdExpr(e.location, createNominalId(e.id));
 				}
 			}
 		}
@@ -1757,6 +1849,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		public FaultPair(Fault ft1, Fault ft2) {
 			this.ft1 = ft1;
 			this.ft2 = ft2;
+		}
+	}
+
+	public class TriggerFaultOutPair {
+		private Expr trigger;
+		private Expr faultOut;
+
+		public TriggerFaultOutPair(Expr trigger, Expr faultOut) {
+			this.trigger = trigger;
+			this.faultOut = faultOut;
 		}
 	}
 
