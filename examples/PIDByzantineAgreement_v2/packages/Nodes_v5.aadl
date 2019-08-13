@@ -120,12 +120,12 @@ public
 				propagate_type: asymmetric;
 			}
 			
---			fault PID2_Asym_Fail_To_One "Node output is asymmetric": Common_Faults.fail_PID2_to_one {
---				inputs: val_in <- Node_Out;     
---				outputs: Node_Out <- val_out;    
---				duration: permanent;
---				propagate_type: asymmetric;
---			}
+			fault PID2_Asym_Fail_To_One "Node output is asymmetric": Common_Faults.fail_PID2_to_one {
+				inputs: val_in <- Node_Out;     
+				outputs: Node_Out <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}
 			
 		**};
 	end Node;
