@@ -44,13 +44,13 @@ with AADL_Properties;
 	   annex agree{**
 			
 			eq n1_pid1_failed: bool ;
-			eq n1_pid2_failed: bool= false;
+			eq n1_pid2_failed: bool ;
 			eq n2_pid1_failed: bool;
-			eq n2_pid2_failed: bool= false;
+			eq n2_pid2_failed: bool ;
 			eq n3_pid1_failed: bool;
-			eq n3_pid2_failed: bool= false;
+			eq n3_pid2_failed: bool ;
 			eq n4_pid1_failed: bool;
-			eq n4_pid2_failed: bool= false;	
+			eq n4_pid2_failed: bool;	
 			
 			eq n1_failed : bool = n1_pid1_failed or n1_pid2_failed;
 			eq n2_failed : bool = n2_pid1_failed or n2_pid2_failed;
@@ -91,13 +91,13 @@ with AADL_Properties;
 		
 		annex safety {**
 			fault_activation: n1_pid1_failed = PID1_Asym_Fail_To_One@node1;
-			--fault_activation: n1_pid2_failed = PID2_Asym_Fail_To_One@node1;
+			fault_activation: n1_pid2_failed = PID2_Asym_Fail_To_One@node1;
 			fault_activation: n2_pid1_failed = PID1_Asym_Fail_To_One@node2;
-			--fault_activation: n2_pid2_failed = PID2_Asym_Fail_To_One@node2;
+			fault_activation: n2_pid2_failed = PID2_Asym_Fail_To_One@node2;
 			fault_activation: n3_pid1_failed = PID1_Asym_Fail_To_One@node3;
-			--fault_activation: n3_pid2_failed = PID2_Asym_Fail_To_One@node3;
+			fault_activation: n3_pid2_failed = PID2_Asym_Fail_To_One@node3;
 			fault_activation: n4_pid1_failed = PID1_Asym_Fail_To_One@node4;
-		    --fault_activation: n4_pid2_failed = PID2_Asym_Fail_To_One@node4;
+		    fault_activation: n4_pid2_failed = PID2_Asym_Fail_To_One@node4;
 
 			analyze: max 1 fault
 			
