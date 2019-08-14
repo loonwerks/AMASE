@@ -84,7 +84,7 @@ with AADL_Properties;
 			fault_activation: n2_failed = Node1_PID_Asym_Fail_To_One@node2;
 			fault_activation: n3_failed = Node1_PID_Asym_Fail_To_One@node3;
 			fault_activation: n4_failed = Node1_PID_Asym_Fail_To_One@node4;
-			analyze: max 1 fault
+			analyze: max 2 fault
 			
 		**};
 	end TopLevel.impl;
