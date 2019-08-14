@@ -221,11 +221,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 			}
 			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
-//				addNominalVars(node, nb, f, compOut.toString());
 				addFaultInputs(f, nb);
 				addHWFaultInputs(hwFaults, nb);
 				addFaultLocalEqsAndAsserts(f, nb);
-//				addFaultNodeEqs(f, nb);
 			} else {
 				addFaultInputs(f, nb);
 			}

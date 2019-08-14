@@ -63,217 +63,55 @@ public class FaultASTBuilder {
 
 	// globalLustreNodes will be updated occasionally as faults are added
 	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
-	private List<Node> globalLustreNodes;
+	protected List<Node> globalLustreNodes;
+	protected AgreeNode agreeNode;
+	private AgreeASTBuilder builder = new AgreeASTBuilder();
 	// Maps the asymmetric fault statement to corresponding comm node inputs
-	private static Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
+	protected static Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
 	// map comm node outputs to AADL connections
-	private static Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
+	protected static Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
-	private static Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
+	protected static Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
 	// Map asym fault to their corresponding component instance names
 	// Used in isTop to find trigger and make assert statement
-	private static Map<String, List<String>> mapCompNameToCommNodes = new HashMap<String, List<String>>();
+	protected static Map<String, List<String>> mapCompNameToCommNodes = new HashMap<String, List<String>>();
 	// Map string of sender.sender_output to receiver.input for all connections
-	private static Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
+	protected static Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
 	// List of expressions used as input for node call expression.
 	private List<Expr> nodeArgs = new ArrayList<>();
 
-	private AgreeNode agreeNode;
-	private AgreeASTBuilder builder = new AgreeASTBuilder();
-
+	/**
+	 * Constructor
+	 *
+	 * @param globalLustreNodes		List of global nodes
+	 * @param agreeNode		This agree node
+	 */
 	public FaultASTBuilder(List<Node> globalLustreNodes, AgreeNode agreeNode) {
 		this.globalLustreNodes = globalLustreNodes;
 		this.agreeNode = agreeNode;
 	}
 
-	// To reset fault counter when going through faults for a new Agree Node
+	/** Reset fault counter when going through faults for a new Agree Node
+	 */
 	public static void resetFaultCounter() {
 		faultCounter = 0;
 	}
 
+	/**
+	 * Add global lustre node
+	 * @param node
+	 */
 	public void addGlobalLustreNode(Node node) {
 		globalLustreNodes.add(node);
 	}
 
-	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
-		NodeDefExpr defExpr = SafetyUtil.getFaultNode(faultStatement);
-
-		// to keep consistent with AGREE, we will use the AGREE functions
-		// to construct names
-		String fnName = AgreeTypeUtils.getNodeName(defExpr);
-		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
-		if (fault.faultNode == null) {
-			// if we can get AgreeASTBuilder to
-			// build us a node, we will add it to our list and return it.
-			builder.caseNodeDefExpr(defExpr);
-			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
-			if (fault.faultNode != null) {
-				this.addGlobalLustreNode(fault.faultNode);
-			} else {
-				throw new SafetyException("for fault node: " + defExpr.getFullName() + " unable to find it in AgreeProgram.  As a temporary hack, please add a call to this node somewhere in your AGREE annex.");
-			}
-		}
-	}
-
-	public static int findParam(String param, List<jkind.lustre.VarDecl> theList) {
-		for (int i = 0; i < theList.size(); i++) {
-			if (theList.get(i).id.equals(param)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	private void setInput(Fault fault, InputStatement input) {
-		for (int i = 0; i < input.getFault_in().size(); i++) {
-			String param = input.getFault_in().get(i);
-
-			// translating expression HERE.
-			Expr result = builder.doSwitch(input.getNom_conn().get(i));
-			fault.faultInputMap.put(param, result);
-		}
-	}
-
-	private void setOutput(Fault fault, OutputStatement output) {
-		for (int i = 0; i < output.getFault_out().size(); i++) {
-			String param = output.getFault_out().get(i);
-			NestedDotID compOut = output.getNom_conn().get(i);
-			Expr result = builder.caseNestedDotID(compOut);
-			Expr resultRecord = null;
-
-			if(result instanceof RecordAccessExpr) {
-				resultRecord = ((RecordAccessExpr) result).record;
-				fault.faultOutputMap.put(result, param);
-			}else if(result instanceof IdExpr) {
-				fault.faultOutputMap.put(result, param);
-			}
-			else  {
-				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
-			}
-		}
-	}
-
-
-	private void setDuration(Fault fault, DurationStatement duration) {
-		fault.duration = duration;
-	}
-
-	private Expr constructEqLhsExpr(EqValue stmt) {
-		EList<Arg> lhs = stmt.getLhs();
-		if (lhs.size() != 1) {
-			List<Expr> ids = new ArrayList<>();
-			for (Arg arg : lhs) {
-				ids.add(new IdExpr(arg.getName()));
-			}
-			return new TupleExpr(ids);
-		} else {
-			return new IdExpr(lhs.get(0).getName());
-		}
-	}
-
-	private void addSafetyEqVal(Fault fault, EqValue stmt) {
-		if (stmt.getExpr() != null) {
-			Expr lhsExpr = constructEqLhsExpr(stmt);
-			Expr rhsExpr = builder.doSwitch(stmt.getExpr());
-			Expr expr = new BinaryExpr(lhsExpr, BinaryOp.EQUAL, rhsExpr);
-			fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
-		}
-		List<VarDecl> vars =
-			builder.agreeVarsFromArgs(stmt.getLhs(), agreeNode.compInst);
-		for (VarDecl var : vars) {
-			fault.safetyEqVars.add((AgreeVar) var);
-		}
-	}
-
-
-	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
-		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
-		Interval iv =stmt.getInterv();
-		BinaryOp leftOp =
-				((iv instanceof ClosedInterval) ||
-				(iv instanceof OpenRightInterval)) ?
-						BinaryOp.GREATEREQUAL :
-						BinaryOp.GREATER;
-		BinaryOp rightOp =
-				((iv instanceof ClosedInterval) ||
-				 (iv instanceof OpenLeftInterval)) ?
-						 BinaryOp.LESSEQUAL :
-						 BinaryOp.LESS;
-		Expr leftSideExpr =
-				new BinaryExpr(lhsIdExpr, leftOp, builder.doSwitch(iv.getLow()));
-		Expr rightSideExpr =
-				new BinaryExpr(lhsIdExpr, rightOp, builder.doSwitch(iv.getHigh()));
-		Expr expr =
-				new BinaryExpr(leftSideExpr, BinaryOp.AND, rightSideExpr);
-		fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
-		fault.safetyEqVars.add(
-			(AgreeVar)builder.agreeVarFromArg(
-				stmt.getLhs_int(), this.agreeNode.compInst));
-	}
-
-	private void addSafetyRangeEq(Fault fault, RangeEq stmt) {
-		throw new SafetyException("Error: range equations are not yet implemented in translator!");
-	}
-
-	private void addSafetySetEq(Fault fault, SetEq stmt) {
-		throw new SafetyException("Error: set equations are not yet implemented in translator!");
-	}
-
-	public void addSafetyEq(Fault fault, SafetyEqStatement stmt) {
-		if (stmt instanceof EqValue) {
-			addSafetyEqVal(fault, (EqValue)stmt);
-		} else if (stmt instanceof IntervalEq) {
-			addSafetyEqInterval(fault, (IntervalEq)stmt);
-		} else if (stmt instanceof RangeEq) {
-			addSafetyRangeEq(fault, (RangeEq)stmt);
-		} else if (stmt instanceof SetEq) {
-			addSafetySetEq(fault, (SetEq)stmt);
-		}
-	}
-
-	public void addTrigger(Fault fault, TriggerStatement stmt) {
-		throw new SafetyException("Error: trigger equations are not yet implemented in translator!");
-	}
-
-	public void addProbability(Fault fault, ProbabilityStatement stmt) {
-		fault.probability = Double.parseDouble(stmt.getProbability());
-	}
-
-	private void addPropagationType(Fault fault, PropagationTypeStatement pts) {
-		fault.propType = pts;
-
-	}
-
-	public void processFaultSubcomponents(Fault fault) {
-		for (FaultSubcomponent fs : fault.faultStatement.getFaultDefinitions()) {
-			if (fs instanceof DurationStatement) {
-				setDuration(fault, (DurationStatement)fs);
-			} else if (fs instanceof InputStatement) {
-				setInput(fault, (InputStatement)fs);
-			} else if (fs instanceof OutputStatement) {
-				setOutput(fault, (OutputStatement)fs);
-			} else if (fs instanceof SafetyEqStatement) {
-				addSafetyEq(fault, (SafetyEqStatement)fs);
-			} else if (fs instanceof TriggerStatement) {
-				addTrigger(fault, (TriggerStatement)fs);
-			} else if (fs instanceof ProbabilityStatement) {
-				addProbability(fault, (ProbabilityStatement)fs);
-			} else if (fs instanceof PropagationTypeStatement) {
-				addPropagationType(fault, (PropagationTypeStatement) fs);
-			} else {
-				throw new SafetyException("Unrecognized Fault Statement type");
-			}
-		}
-	}
-
-
-	public String mkUniqueFaultId(FaultStatement fstmt) {
-		faultCounter++;
-		String elem = this.agreeNode.id + "__" + "fault_" + faultCounter;
-		return elem;
-	}
-
+	/** Process a fault given a fault statement:
+	 *  Determine if it is sym or asym and build the fault.
+	 *
+	 * @param fstmt 	Definition from annex of fault that will be built.
+	 * @return Fault	The fault built and processed from this fault stmt.
+	 */
 	public Fault processFault(FaultStatement fstmt) {
 
 		// If one of the fault subcomponents in this statement
@@ -298,11 +136,14 @@ public class FaultASTBuilder {
 		}
 	}
 
-	/*
+	/**
 	 * buildSymmetricFault creates unique string name,
 	 * creates new fault for this fault statement,
 	 * builds the fault node for Lustre, and processes the
 	 * fault subcomponents. Returns symmetric fault.
+	 *
+	 * @param fstmt 	The fault statement used to build this symmetric fault
+	 * @return Fault	The symmetric fault built from this fstmt.
 	 */
 	private Fault buildSymmetricFault(FaultStatement fstmt) {
 
@@ -316,30 +157,117 @@ public class FaultASTBuilder {
 		return fault;
 	}
 
-	/*
-	 * buildAsymmetricFault
-	 */
+	/**
+	   * Build asymmetric fault from a fault statement
+	   *
+	   * @param	fstmt				The statement defining the fault
+	   * 							to be built.
+	   *
+	*/
 	private Fault buildAsymmetricFault(FaultStatement fstmt) {
 
 		DataPortImpl senderOutput = null;
 		List<ConnectionInstanceEnd> senderConnections = new ArrayList<>();
 
 		// 1. Create fault for Sender node
+		Fault fault = createSenderFault(fstmt);
+
+		// 2. Find out how many components the node is connected to.
+		// First, get the output from the sender agree node.
+		senderOutput = findSenderOutput(fstmt);
+
+		// 3. Populate mapSenderToReceiver with fanned out connections.
+		senderConnections = populateMapSenderToReceiver(senderOutput);
+
+		// 4. Create the communication nodes and add to Lustre program.
+		createCommNodes(senderConnections, fstmt, fault, senderOutput);
+
+		return fault;
+	}
+
+	/**
+	   * Process the subcomponents of a fault and set their values
+	   *
+	   * @param	fault	this fault containing subcomponents that must be processed
+	   *
+	*/
+	private void processFaultSubcomponents(Fault fault) {
+		for (FaultSubcomponent fs : fault.faultStatement.getFaultDefinitions()) {
+			if (fs instanceof DurationStatement) {
+				setDuration(fault, (DurationStatement) fs);
+			} else if (fs instanceof InputStatement) {
+				setInput(fault, (InputStatement) fs);
+			} else if (fs instanceof OutputStatement) {
+				setOutput(fault, (OutputStatement) fs);
+			} else if (fs instanceof SafetyEqStatement) {
+				addSafetyEq(fault, (SafetyEqStatement) fs);
+			} else if (fs instanceof TriggerStatement) {
+				addTrigger(fault, (TriggerStatement) fs);
+			} else if (fs instanceof ProbabilityStatement) {
+				addProbability(fault, (ProbabilityStatement) fs);
+			} else if (fs instanceof PropagationTypeStatement) {
+				addPropagationType(fault, (PropagationTypeStatement) fs);
+			} else {
+				throw new SafetyException("Unrecognized Fault Statement type");
+			}
+		}
+	}
+
+	/**
+	  * Add the fault node to Lustre program.
+	  *
+	  * @param faultStatement 	the fault statement from the annex
+	  * @param	fault				the fault built using the fault stmt
+	  *
+	*/
+	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
+		NodeDefExpr defExpr = SafetyUtil.getFaultNode(faultStatement);
+
+		// to keep consistent with AGREE, we will use the AGREE functions
+		// to construct names
+		String fnName = AgreeTypeUtils.getNodeName(defExpr);
+		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
+		if (fault.faultNode == null) {
+			// if we can get AgreeASTBuilder to
+			// build us a node, we will add it to our list and return it.
+			builder.caseNodeDefExpr(defExpr);
+			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
+			if (fault.faultNode != null) {
+				this.addGlobalLustreNode(fault.faultNode);
+			} else {
+				throw new SafetyException("for fault node: " + defExpr.getFullName() + " unable to find it in AgreeProgram.  As a temporary hack, please add a call to this node somewhere in your AGREE annex.");
+			}
+		}
+	}
+
+	/**
+	 * Creates fault in asym case for the sender component.
+	 *
+	 * @param fstmt 	the asymmetric fault statement
+	 * @return Fault 	the created fault node
+	 */
+	private Fault createSenderFault(FaultStatement fstmt) {
 		// We will use this fault to help define each communication
 		// node.
 		String faultId = mkUniqueFaultId(fstmt);
 		// incorporate user-given fault name in the fault info
 		String faultName = fstmt.getName();
-		// containing component name used in creation of comm node name
-		String compName = "";
 
 		Fault fault = new Fault(fstmt, faultId, faultName);
 		setFaultNode(fstmt, fault);
 		processFaultSubcomponents(fault);
 
-		// 2. Find out how many components the node is connected to.
-		// This is how many communication nodes we need to make.
+		return fault;
+	}
 
+	/**
+	 * Find the output of the sender component that this fault statement references.
+	 *
+	 * @param fstmt	 	The fault statement that is on the sender component.
+	 * @return	DataTypeImpl	The output of this sender component.
+	 */
+	private DataPortImpl findSenderOutput(FaultStatement fstmt) {
+		DataPortImpl senderOutput = null;
 		// Get output that fault statement is linked to
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof OutputStatement) {
@@ -352,11 +280,23 @@ public class FaultASTBuilder {
 				break;
 			}
 		}
+		return senderOutput;
+	}
+
+	/**
+	 * Collect all connections from sender to receivers and add to map.
+	 *
+	 * @param senderOutput The DataPortImpl associated with the output from sender.
+	 * @return Return a list of all the connection instance ends.
+	 */
+	private List<ConnectionInstanceEnd> populateMapSenderToReceiver(DataPortImpl senderOutput) {
 
 		// Get list of connections from parent component that senderOutput is connected to.
 		String searchFor = senderOutput.getFullName();
 		// Will be key for mapSenderToReceiver
 		String tempSend = this.agreeNode.compInst.getName() + "." + searchFor;
+		String compName = "";
+		List<ConnectionInstanceEnd> senderConnections = new ArrayList<>();
 		List<String> tempReceive = new ArrayList<String>();
 		// Name of sender component (the one with the fanned output)
 		compName = this.agreeNode.compInst.getName();
@@ -394,14 +334,31 @@ public class FaultASTBuilder {
 			}
 		}
 
-		// 3. Create the communication nodes.
-		// For loop goes through the connections collected in step 2
+		return senderConnections;
+	}
+
+	/**
+	 * Create communication nodes for each of the connections from sender
+	 * to receiver.
+	 *
+	 * @param senderConnections	List of all connections from the faulty output.
+	 * @param fstmt		Defines fault and all subcomponents
+	 * @param fault		The fault on the sender output
+	 * @param senderOutput	The DataPortImpl output on sender component
+	 */
+	private void createCommNodes(List<ConnectionInstanceEnd> senderConnections, FaultStatement fstmt, Fault fault,
+			DataPortImpl senderOutput) {
+
+		// For loop goes through the connections
 		// and creates a commNode specific for each connection.
 		// The fault is passed into the creation method in order to
 		// link the fault to the comm node as it is inserted into Lustre.
-		//
-		// 4. Add node to Lustre as it is created (inside loop).
+
 		String nodeName = "";
+		// Get list of connections from parent component that senderOutput is connected to.
+		String searchFor = senderOutput.getFullName();
+		// Name of sender component (the one with the fanned output)
+		String compName = this.agreeNode.compInst.getName();
 		List<String> commNodeNamesInput = new ArrayList<>();
 		List<String> commNodeNames = new ArrayList<>();
 		for (int i = 0; i < senderConnections.size(); i++) {
@@ -418,32 +375,234 @@ public class FaultASTBuilder {
 		String senderOut = this.agreeNode.id + "__" + searchFor;
 		mapAsymCompOutputToCommNodeIn.put(senderOut, commNodeNamesInput);
 		mapCompNameToCommNodes.put(compName, commNodeNames);
-		return fault;
 	}
 
-	// Create Lustre node for asymmetric fault connection nodes.
-	// Method parameter "node" corresponds to the "sender" node
-	// that has the fan out connections.
-	// This is needed to access the type of connection for input/output
-	// of this node.
-	public Node createCommNode(AgreeNode node, FaultStatement fstmt, Fault fault, String nodeName, int connNumber) {
+	/**
+	 * Populate the fault input map
+	 *
+	 * @param fault 	the fault in question
+	 * @param input		the input to be added to the map
+	 */
+	private void setInput(Fault fault, InputStatement input) {
+		for (int i = 0; i < input.getFault_in().size(); i++) {
+			String param = input.getFault_in().get(i);
+
+			// translating expression HERE.
+			Expr result = builder.doSwitch(input.getNom_conn().get(i));
+			fault.faultInputMap.put(param, result);
+		}
+	}
+
+	/**
+	 * Populate the fault output map
+	 *
+	 * @param fault		the fault in question
+	 * @param output	the output to go into the map
+	 */
+	private void setOutput(Fault fault, OutputStatement output) {
+		for (int i = 0; i < output.getFault_out().size(); i++) {
+			String param = output.getFault_out().get(i);
+			NestedDotID compOut = output.getNom_conn().get(i);
+			Expr result = builder.caseNestedDotID(compOut);
+			Expr resultRecord = null;
+
+			if(result instanceof RecordAccessExpr) {
+				resultRecord = ((RecordAccessExpr) result).record;
+				fault.faultOutputMap.put(result, param);
+			}else if(result instanceof IdExpr) {
+				fault.faultOutputMap.put(result, param);
+			}
+			else  {
+				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
+			}
+		}
+	}
+
+	/**
+	 * Set duration of the fault based on duration stmt
+	 *
+	 * @param fault 	fault in question
+	 * @param duration	duration statement
+	 */
+	private void setDuration(Fault fault, DurationStatement duration) {
+		fault.duration = duration;
+	}
+
+	private Expr constructEqLhsExpr(EqValue stmt) {
+		EList<Arg> lhs = stmt.getLhs();
+		if (lhs.size() != 1) {
+			List<Expr> ids = new ArrayList<>();
+			for (Arg arg : lhs) {
+				ids.add(new IdExpr(arg.getName()));
+			}
+			return new TupleExpr(ids);
+		} else {
+			return new IdExpr(lhs.get(0).getName());
+		}
+	}
+
+	/**
+	 * Adds Safety Eq statements: val, interval, range, set.
+	 * Note: Range and Set are not yet implemented and will throw exception.
+	 *
+	 * @param fault This fault
+	 * @param stmt This SafetyEqStatement
+	 */
+	private void addSafetyEq(Fault fault, SafetyEqStatement stmt) {
+		if (stmt instanceof EqValue) {
+			addSafetyEqVal(fault, (EqValue) stmt);
+		} else if (stmt instanceof IntervalEq) {
+			addSafetyEqInterval(fault, (IntervalEq) stmt);
+		} else if (stmt instanceof RangeEq) {
+			addSafetyRangeEq(fault, (RangeEq) stmt);
+		} else if (stmt instanceof SetEq) {
+			addSafetySetEq(fault, (SetEq) stmt);
+		}
+	}
+
+	/**
+	 * Add safety eq statements to the safetyEqVars list for this fault
+	 *
+	 * @param fault	The fault with these associated safety eq stmts
+	 * @param stmt	The EqValue statements to be added to the safetyEqVars list.
+	 */
+	private void addSafetyEqVal(Fault fault, EqValue stmt) {
+		if (stmt.getExpr() != null) {
+			Expr lhsExpr = constructEqLhsExpr(stmt);
+			Expr rhsExpr = builder.doSwitch(stmt.getExpr());
+			Expr expr = new BinaryExpr(lhsExpr, BinaryOp.EQUAL, rhsExpr);
+			fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
+		}
+		List<VarDecl> vars =
+			builder.agreeVarsFromArgs(stmt.getLhs(), agreeNode.compInst);
+		for (VarDecl var : vars) {
+			fault.safetyEqVars.add((AgreeVar) var);
+		}
+	}
+
+	/**
+	 * Add saftey eq intervals to the safetyEqAsserts and safetyEqVars lists.
+	 *
+	 * @param fault	The fault with these interval eq stmts.
+	 * @param stmt	The IntervalEq statement
+	 */
+	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
+		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
+		Interval iv =stmt.getInterv();
+		BinaryOp leftOp =
+				((iv instanceof ClosedInterval) ||
+				(iv instanceof OpenRightInterval)) ?
+						BinaryOp.GREATEREQUAL :
+						BinaryOp.GREATER;
+		BinaryOp rightOp =
+				((iv instanceof ClosedInterval) ||
+				 (iv instanceof OpenLeftInterval)) ?
+						 BinaryOp.LESSEQUAL :
+						 BinaryOp.LESS;
+		Expr leftSideExpr =
+				new BinaryExpr(lhsIdExpr, leftOp, builder.doSwitch(iv.getLow()));
+		Expr rightSideExpr =
+				new BinaryExpr(lhsIdExpr, rightOp, builder.doSwitch(iv.getHigh()));
+		Expr expr =
+				new BinaryExpr(leftSideExpr, BinaryOp.AND, rightSideExpr);
+		fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
+		fault.safetyEqVars.add(
+			(AgreeVar)builder.agreeVarFromArg(
+				stmt.getLhs_int(), this.agreeNode.compInst));
+	}
+
+	/**
+	 * Not yet implemented, will throw exception.
+	 *
+	 * @param fault
+	 * @param stmt
+	 */
+	private void addSafetyRangeEq(Fault fault, RangeEq stmt) {
+		throw new SafetyException("Error: range equations are not yet implemented in translator!");
+	}
+
+	/**
+	 * Not yet implemented, will throw exception.
+	 *
+	 * @param fault
+	 * @param stmt
+	 */
+	private void addSafetySetEq(Fault fault, SetEq stmt) {
+		throw new SafetyException("Error: set equations are not yet implemented in translator!");
+	}
+
+	/**
+	 * User defined triggers are not yet implemented: will throw exception.
+	 *
+	 * @param fault
+	 * @param stmt
+	 */
+	private void addTrigger(Fault fault, TriggerStatement stmt) {
+		throw new SafetyException("Error: trigger equations are not yet implemented in translator!");
+	}
+
+	/**
+	 * Adds probability statement to the fault.
+	 *
+	 * @param fault This fault with given probability.
+	 * @param stmt	The ProbabilityStatement given in fault stmt.
+	 */
+	private void addProbability(Fault fault, ProbabilityStatement stmt) {
+		fault.probability = Double.parseDouble(stmt.getProbability());
+	}
+
+	/**
+	 * Adds propagation type to fault.
+	 *
+	 * @param fault 	This fault built from fstmt
+	 * @param pts		The PropagationTypeStatement associated with this fault.
+	 */
+	private void addPropagationType(Fault fault, PropagationTypeStatement pts) {
+		fault.propType = pts;
+
+	}
+
+	/**
+	 * Create unique fault id name
+	 *
+	 * @param fstmt Create name for fault defined in this FaultStatement
+	 * @return	unique String giving name of this fault
+	 */
+	private String mkUniqueFaultId(FaultStatement fstmt) {
+		faultCounter++;
+		String elem = this.agreeNode.id + "__" + "fault_" + faultCounter;
+		return elem;
+	}
+
+
+	/**
+	 * Create Lustre node for asymmetric fault connection nodes.
+	 *
+	 * @param node AgreeNode corresponds to the "sender" node that has the fan out connections.
+	 * 			   This is needed to access the type of connection for input/output of this node.
+	 * @param fstmt FaultStatement associated with the sender component output.
+	 * @param fault	Fault built from fault statement.
+	 * @param nodeName Name of asymmetric node.
+	 * @param connNumber How many connections from sender to receivers (used in naming).
+	 * @return Node : lustre node of this communication node.
+	 */
+	private Node createCommNode(AgreeNode node, FaultStatement fstmt, Fault fault, String nodeName, int connNumber) {
 
 		// 1. Create unique node name
 		NodeBuilder newNode = new NodeBuilder(nodeName);
-
 		// 2. Get the output/input type from the node and the fstmt
 		List<AgreeVar> nodeOutputs = node.outputs;
 		AgreeVar outputOfInterest = null;
 		// Assume asymmetric fault first in list.
 		// Will have to display this to user somewhere.
 		List<NestedDotID> nomFaultConn = new ArrayList<NestedDotID>();
-
+		// Get the nominal connection
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof OutputStatement) {
 				nomFaultConn = ((OutputStatement) fs).getNom_conn();
 			}
 		}
-
+		// Get the agree node output that this fault is connected to
 		for (AgreeVar agreeVar : nodeOutputs) {
 			String temp = agreeVar.id;
 			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
@@ -452,25 +611,22 @@ public class FaultASTBuilder {
 				outputOfInterest = agreeVar;
 			}
 		}
-
 		// Now the same type on the AgreeNode outputOfInterest
 		// is the same as what we will create for the type of
 		// both input and output of commNode.
 		Type type = outputOfInterest.type;
-
 		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type,
 				nodeName);
 		newNode = createOutputForCommNode(newNode);
 		newNode = createLocalsForCommNode(newNode, fault, type);
 		newNode = createEquationsForCommNode(newNode, fault, type, nodeName);
-
 		return newNode.build();
 	}
 
 	/*
 	 * creates inputs for new communication node.
 	 */
-	public NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
+	private NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
 		// This list is used to map the fault to the top node locals that
 		// will reference this node name with its corresponding inputs and outputs.
 		// Hence the AgreeVars that are created are specifically named for this purpose.
@@ -497,17 +653,17 @@ public class FaultASTBuilder {
 
 		// The fault node may have more than one argument. These all need to be
 		// added as locals to this node and put into the map for main.
-		// They will also be used in the node call expression (line 625).
+		// They will also be used in the node call expression.
 		// This helper method will add all locals as needed as well as associated
 		// safetyEqAssert statements. These correspond to "eq" stmts in the fault definition.
-		localsForCommNode.addAll(addInputListAndEqAsserts(node, fault, nodeName));
+		localsForCommNode.addAll(addInputListAndEqAsserts(node, fault));
 
 		// Add to map between node and list of locals in lustre
 		mapCommNodeToInputs.put(nodeName, localsForCommNode);
 		return node;
 	}
 
-	/*
+	/**
 	 * In the case when the fault node has multiple arguments, these must be added
 	 * to the locals list for this commNode, added to the list of locals for main node
 	 * information, and all safetyEqAsserts corresponding to them added to equations as well.
@@ -518,8 +674,12 @@ public class FaultASTBuilder {
 	 * The first argument is taken care of previously (__fault__nominal__output).
 	 * The last argument is also taken care of (fault__trigger).
 	 * We do the rest here.
+	 *
+	 * @param node NodeBuilder will have input added to it.
+	 * @param fault Fault that was made from this fstmt.
+	 * @return  List<AgreeVar> List of ordered args for the node call.
 	 */
-	private List<AgreeVar> addInputListAndEqAsserts(NodeBuilder node, Fault fault, String nodename) {
+	private List<AgreeVar> addInputListAndEqAsserts(NodeBuilder node, Fault fault) {
 		List<AgreeVar> localsForCommNode = new ArrayList<AgreeVar>();
 		nodeArgs.clear();
 
@@ -585,10 +745,13 @@ public class FaultASTBuilder {
 		return localsForCommNode;
 	}
 
-	/*
+	/**
 	 * Find named type of output on fault node
+	 *
+	 * @param fault Fault defining this fault node.
+	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	public NamedType getOutputTypeForFaultNode(Fault fault) {
+	private NamedType getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
@@ -604,19 +767,27 @@ public class FaultASTBuilder {
 		return nominalOutputType;
 	}
 
-	/*
+	/**
 	 * creates outputs for new communication node.
+	 *
+	 * @param node NodeBuilder used to build this node
+	 * @return NodeBuilder with output added.
 	 */
-	public NodeBuilder createOutputForCommNode(NodeBuilder node) {
+	private NodeBuilder createOutputForCommNode(NodeBuilder node) {
 
 		node.createOutput("__ASSERT", NamedType.BOOL);
 		return node;
 	}
 
-	/*
+	/**
 	 * creates locals for new communication node.
+	 *
+	 * @param node The NodeBuilder
+	 * @param fault The Fault connected to the sender component output.
+	 * @param type The type of the faulty output.
+	 * @return NodeBuilder with locals added.
 	 */
-	public NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault, Type type) {
+	private NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault, Type type) {
 
 		node.createLocal("__GUARANTEE0", NamedType.BOOL);
 
@@ -630,45 +801,49 @@ public class FaultASTBuilder {
 		return node;
 	}
 
-	public String getFaultNodeOutputId(Fault fault) {
+	/**
+	 * Get the output id from the fault node.
+	 * @param fault Fault associated with the fault node
+	 * @return String output id
+	 */
+	private String getFaultNodeOutputId(Fault fault) {
 		String id = "";
 		List<VarDecl> faultNodeOutputs = fault.faultNode.outputs;
 		if ((faultNodeOutputs.size() == 0) || (faultNodeOutputs.size() > 1)) {
 			new SafetyException(
 					"Asymmetric fault definitions (" + fault.id + ") " + "must have one and only one output"
-							+ ". (Debug FaultAST 634)");
+							+ ". (Debug FaultAST 822)");
 		} else {
 			id = fault.id + "__node__" + faultNodeOutputs.get(0).id;
 		}
 		return id;
 	}
 
-	/*
+	/**
 	 * creates equations for new communication node.
+	 *
+	 * @param node NodeBuilder
+	 * @param fault Fault
+	 * @param type Type on faulty output
+	 * @param nodeName Name of the communication node
+	 * @return NodeBuilder with equations added
 	 */
-	public NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
+	private NodeBuilder createEquationsForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
 		// assign __GUARANTEE0 : fault__nominal__output = input
 		// Simple case is when it is bool, real. Otherwise if it is a record
 		// type, we need to access the field of the fault node input and append
 		// that to the expression (i.e. __fault__nominal__output.VAL = input.VAL)
 		String field = "";
 		String dotField = "";
-		// Save output as full statement (in case of record type)
-		Expr actualFaultOutput = null;
 		if (type instanceof RecordType) {
 			for (Expr faultOutput : fault.faultOutputMap.keySet()) {
 				if (faultOutput instanceof RecordAccessExpr) {
-					actualFaultOutput = faultOutput;
 					RecordAccessExpr rac = (RecordAccessExpr) faultOutput;
 					dotField = "." + rac.field;
 					field = rac.field;
 				}
-//				else {
-//					new SafetyException("Type error in fault output. (Debug FaultASTBuilder 661");
-//				}
 			}
 		}
-		RecordAccessExpr recNominal = new RecordAccessExpr(new IdExpr("__fault__nominal__output"), field);
 		IdExpr faultNominalOut = new IdExpr("__fault__nominal__output" + dotField);
 		Expr binEx = new BinaryExpr(faultNominalOut, BinaryOp.EQUAL,
 				new IdExpr("input" + dotField));
@@ -676,14 +851,7 @@ public class FaultASTBuilder {
 		// This links fault nominal with node input :
 		// assert (__fault__nominal__output.NODE_VAL = input.NODE_VAL)
 		node.addEquation(guar, binEx);
-
-		// (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
-		IdExpr assumeHist = new IdExpr("__ASSUME__HIST");
-		BoolExpr trueExpr = new BoolExpr(true);
-		BinaryExpr binGuar = new BinaryExpr(guar, BinaryOp.AND, trueExpr);
-		BinaryExpr binAssume = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binGuar);
-		BinaryExpr binAssumeAndTrue = new BinaryExpr(binAssume, BinaryOp.AND, trueExpr);
-
+		BinaryExpr binAssumeAndTrue = createAssumeHistStmt(guar);
 		// output = (fault_node_val_out)
 		// If record type, need to reference "output.VAL"
 		IdExpr toAssign = null;
@@ -696,26 +864,71 @@ public class FaultASTBuilder {
 		}
 		// output = val_out
 		BinaryExpr outputEqualsValout = new BinaryExpr(output, BinaryOp.EQUAL, toAssign);
-
 		// Final expression
 		BinaryExpr finalExpr = new BinaryExpr(binAssumeAndTrue, BinaryOp.AND, outputEqualsValout);
-
 		// Before finishing the assert, check to see if we have safetyEqAsserts in the fault
 		// and add those to the finalExpr with "and"
+		addSafetyEqAssertStmts(node, fault, finalExpr);
+		// Construct the node call expression
+		// If record type, add to fault nominal expression
+		constructNodeCallExpr(node, fault, dotField);
+		return node;
+	}
+
+	/**
+	 * Creates expr: (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
+	 *
+	 * @param guar Reference to the guarantee within this statement
+	 */
+	private BinaryExpr createAssumeHistStmt(Expr guar) {
+		// (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
+		IdExpr assumeHist = new IdExpr("__ASSUME__HIST");
+		BoolExpr trueExpr = new BoolExpr(true);
+		BinaryExpr binGuar = new BinaryExpr(guar, BinaryOp.AND, trueExpr);
+		BinaryExpr binAssume = new BinaryExpr(assumeHist, BinaryOp.IMPLIES, binGuar);
+		BinaryExpr binAssumeAndTrue = new BinaryExpr(binAssume, BinaryOp.AND, trueExpr);
+		return binAssumeAndTrue;
+	}
+
+	/**
+	 * Add any safety eq stmts to the main assert for this node.
+	 *
+	 * @param node NodeBuilder for this lustre node
+	 * @param fault Fault associated with the sender component
+	 * @param assertExpr  The main assert stmt linking the output to the fault val out
+	 */
+	private void addSafetyEqAssertStmts(NodeBuilder node, Fault fault, BinaryExpr assertExpr) {
 		if (fault.safetyEqAsserts.isEmpty()) {
 			// Assert:
 			// __ASSERT = (output = (fault_node_val_out))
 			// and (__ASSUME__HIST => (__GUARANTEE0 and true)))
-			node.addEquation(new IdExpr("__ASSERT"), finalExpr);
+			node.addEquation(new IdExpr("__ASSERT"), assertExpr);
 		} else {
 			// Build and expression with all expr in list
 			Expr safetyEqExpr = buildBigAndExpr(fault.safetyEqAsserts, 0);
-			BinaryExpr finalExpr2 = new BinaryExpr(safetyEqExpr, BinaryOp.AND, finalExpr);
+			BinaryExpr finalExpr2 = new BinaryExpr(safetyEqExpr, BinaryOp.AND, assertExpr);
 			node.addEquation(new IdExpr("__ASSERT"), finalExpr2);
 		}
+	}
 
-		// Construct the node call expression
-		// If record type, add to fault nominal expression
+	/**
+	 * Construct the node call expression using the class list nodeArgs.
+	 * Take into account any record types by accessing info collected previously in
+	 * "dotField." If dotField is an empty string, there is no record field. If not,
+	 * this holds the referenced field. For instance, if the total name is:
+	 * sender.output
+	 * then dotField = output
+	 * If the total name is simply
+	 * sender
+	 * then dotField = ""
+	 * The node call expression is added to the node builder at the end of this
+	 * method.
+	 *
+	 * @param node NodeBuilder
+	 * @param fault Fault
+	 * @param dotField String
+	 */
+	private void constructNodeCallExpr(NodeBuilder node, Fault fault, String dotField) {
 		if (dotField.isEmpty()) {
 			NodeCallExpr nodeCall = new NodeCallExpr(fault.faultNode.id, nodeArgs);
 			node.addEquation(new Equation(new IdExpr(getFaultNodeOutputId(fault)), nodeCall));
@@ -737,16 +950,17 @@ public class FaultASTBuilder {
 			NodeCallExpr nodeCall = new NodeCallExpr(fault.faultNode.id, newList);
 			node.addEquation(new Equation(new IdExpr(getFaultNodeOutputId(fault)), nodeCall));
 		}
-
-		return node;
 	}
 
-	/*
-	 * helper method that builds an AND expression of all things in list
+	/**
+	 * Method builds an AND expression of all things in list
 	 * Base case: list is empty : append false to AND list
 	 * Base case 2: list has one element : return that element.
 	 * Recursive case: make AND of element of list with recursive call
 	 *
+	 * @param exprList List<AgreeStatement> of expressions for conjunction
+	 * @param index Assumed integer is zero on function call
+	 * @return Expr that is a conjunction of all elements in list
 	 */
 	private Expr buildBigAndExpr(List<AgreeStatement> exprList, int index) {
 		if (index > exprList.size() - 1) {
@@ -758,26 +972,59 @@ public class FaultASTBuilder {
 		}
 	}
 
+	/**
+	 * Getter method.
+	 *
+	 * @return Map<String, List<AgreeVar>> map
+	 */
 	public Map<String, List<AgreeVar>> getMapCommNodeToInputs() {
 		return mapCommNodeToInputs;
 	}
 
+	/**
+	 * Getter method.
+	 *
+	 * @return Map<String, List<String>> map
+	 */
 	public Map<String, List<String>> getMapAsymCompOutputToCommNodeIn() {
 		return mapAsymCompOutputToCommNodeIn;
 	}
 
+	/**
+	 * Getter method.
+	 *
+	 * @return Map<String, List<String>>
+	 */
 	public Map<String, List<String>> getMapCompNameToCommNodes() {
 		return mapCompNameToCommNodes;
 	}
 
+	/**
+	 * Getter method.
+	 *
+	 * @return Map<String, ConnectionInstanceEnd>
+	 */
 	public Map<String, ConnectionInstanceEnd> getMapCommNodeOutputToConnections() {
 		return mapCommNodeOutputToConnections;
 	}
 
+	/**
+	 * Getter method
+	 *
+	 * @return Map<String, List<String>>
+	 */
 	public Map<String, List<String>> getMapSenderToReceiver() {
 		return mapSenderToReceiver;
 	}
 
+	/**
+	 * Reset all static maps:
+	 * mapCommNodeToInputs
+	 * mapAsymCompOutputToCommNodeIn
+	 * mapCompNameToCommNodes
+	 * mapCommNodeOutputToConnections
+	 * mapSenderToReceiver
+	 */
 	public static void resetAsymMaps() {
 		mapCommNodeToInputs.clear();
 		mapAsymCompOutputToCommNodeIn.clear();
