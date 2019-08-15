@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
 import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
@@ -45,6 +46,7 @@ import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
+import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
@@ -727,8 +729,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		List<Fault> faults = new ArrayList<>();
 		// reset fault count for the new Agree Node
-		// reset maps for asymmetric fault info
 		FaultASTBuilder.resetFaultCounter();
+
+		// Before looping through spec statements, separate out the asymmetric multiple
+		// faults on a single output with the sym/asym single faults on a single output.
+		// 1. Collect all fault statements and put into list.
+		// 2. Separate out multiple asym faults on one output and single faults on one output.
+		// 3. Perform necessary processing on each of these lists.
+		List<FaultStatement> allFaultStmts = new ArrayList<FaultStatement>();
+		for (SpecStatement s : specs) {
+			if (s instanceof FaultStatement) {
+				allFaultStmts.add((FaultStatement) s);
+			}
+		}
+		List<FaultStatement> remainderFS = new ArrayList<FaultStatement>();
+		List<FaultStatement> multipleAsymFS = new ArrayList<FaultStatement>();
+		separateFaultStmts(allFaultStmts, remainderFS, multipleAsymFS);
 
 		for (SpecStatement s : specs) {
 			if (s instanceof FaultStatement) {
@@ -762,6 +778,94 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return faults;
+	}
+
+	/**
+	 * This method uses a list of fault statements and divides them into multiple asym faults on
+	 * a single output and everything else.
+	 *
+	 * @param allFS List<FaultStatement> All fault statements in this agree node
+	 * @param remainderFS List<FaultStatement> List to add all single asym faults on single output AND
+	 * 							sym faults.
+	 * @param multipleAsymFS List<FaultStatement> List to add all multiple asym faults on single output.
+	 */
+	private void separateFaultStmts(List<FaultStatement> allFS, List<FaultStatement> remainderFS,
+			List<FaultStatement> multipleAsymFS) {
+
+		// 1. Add sym faults to remainder list and process asym faults such that they
+		// are inserted into a map from outputName -> List(fault statements).
+		// 2. If the list of fault statements associated with an output is of size 1,
+		// append these to remainderFS list.
+		// Else append to multipleAsymFS list.
+		Map<String, List<FaultStatement>> asymMap = new HashMap<String, List<FaultStatement>>();
+		for (FaultStatement fs : allFS) {
+			int count = fs.getFaultDefinitions().size();
+			for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
+				count--;
+				if (fc instanceof PropagationTypeStatement) {
+					if (((PropagationTypeStatement) fc).getPty() instanceof asymmetric) {
+						// Asym fault needs to be processed further and added to map.
+						String outputName = getOutputNameFromFaultStatement(fs);
+						if (outputName.isEmpty()) {
+							new SafetyException(
+									"Error processing asymmetric fault. (Debug: AddFaultsToNodeVisitor 808)");
+						} else {
+							List<FaultStatement> tempAsymFaults = new ArrayList<FaultStatement>();
+							tempAsymFaults.add(fs);
+							if (asymMap.containsKey(outputName)) {
+								asymMap.get(outputName).addAll(tempAsymFaults);
+							} else {
+								asymMap.put(outputName, tempAsymFaults);
+							}
+							break;
+						}
+					} else {
+						// symmetric faults added to remainderFS list
+						remainderFS.add(fs);
+						break;
+					}
+				}
+				// If we haven't broken out of the loop and we have traversed
+				// all definitions, then we have no prop type stmt. It is sym.
+				if (count == 0) {
+					remainderFS.add(fs);
+				}
+			}
+		}
+		// Now all sym faults in remainder list and all asym faults in map.
+		// Process map and add single asym faults to remainder list.
+		// Add multiples to multiple list.
+		for (String key : asymMap.keySet()) {
+			if (asymMap.get(key).size() > 1) {
+				multipleAsymFS.addAll(asymMap.get(key));
+			} else {
+				remainderFS.addAll(asymMap.get(key));
+			}
+		}
+	}
+
+	/**
+	 * Given a fault statement, returns the string name of the output this fault stmt is connected to.
+	 *
+	 * @param fs FaultStatement in question
+	 * @return String name of the output
+	 */
+	private String getOutputNameFromFaultStatement(FaultStatement fs) {
+		String output = "";
+		for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
+			if (fc instanceof OutputStatement) {
+				EList<NestedDotID> outputType = ((OutputStatement) fc).getNom_conn();
+				// TODO: Assume the output is first in list. (????)
+				if (outputType.size() > 0) {
+					NestedDotID id = outputType.get(0);
+					output = id.getBase().getName();
+					return output;
+				}
+				break;
+			}
+		}
+
+		return output;
 	}
 
 	public List<HWFault> gatherHWFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
