@@ -404,10 +404,9 @@ public class FaultASTBuilder {
 			String param = output.getFault_out().get(i);
 			NestedDotID compOut = output.getNom_conn().get(i);
 			Expr result = builder.caseNestedDotID(compOut);
-			Expr resultRecord = null;
 
 			if(result instanceof RecordAccessExpr) {
-				resultRecord = ((RecordAccessExpr) result).record;
+				Expr resultRecord = ((RecordAccessExpr) result).record;
 				fault.faultOutputMap.put(result, param);
 			}else if(result instanceof IdExpr) {
 				fault.faultOutputMap.put(result, param);
