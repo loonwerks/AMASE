@@ -6,6 +6,11 @@ renames Nodes_v5::all;
 with AADL_Properties;
 
 	system TopLevel
+		features
+			testNodeOutput1 : out data port Base_Types::Boolean;
+			testNodeOutput2 : out data port Base_Types::Boolean;
+			testNodeOutput3 : out data port Base_Types::Boolean;
+			testNodeOutput4 : out data port Base_Types::Boolean;
 			
 		annex agree{**
 			guarantee "true": true;
@@ -41,6 +46,11 @@ with AADL_Properties;
 			N4B1 : port node4.Node_Out -> node1.Node3_In;
 			N4B2 : port node4.Node_Out -> node2.Node3_In;
 			N4B3 : port node4.Node_Out -> node3.Node3_In;
+			
+			test1 : port node1.testOutput -> testNodeOutput1;
+			test2 : port node2.testOutput -> testNodeOutput2;
+			test3 : port node3.testOutput -> testNodeOutput3;
+			test4 : port node4.testOutput -> testNodeOutput4;
 	   annex agree{**
 			
 			eq n1_pid1_failed: bool ;
