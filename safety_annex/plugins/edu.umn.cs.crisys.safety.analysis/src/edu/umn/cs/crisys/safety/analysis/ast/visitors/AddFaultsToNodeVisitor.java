@@ -1831,7 +1831,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			nb.addAssertion(new AgreeStatement("", equate, topNode.reference));
 
 			// Restrict to less than the total number of connections
-			Expr restrict = new BinaryExpr(new IdExpr(id), BinaryOp.LESS, new IntExpr(nodes.size()));
+			Expr restrict = new BinaryExpr(new IdExpr(id), BinaryOp.LESSEQUAL, new IntExpr(nodes.size()));
 			nb.addAssertion(new AgreeStatement("", restrict, topNode.reference));
 		}
 	}
