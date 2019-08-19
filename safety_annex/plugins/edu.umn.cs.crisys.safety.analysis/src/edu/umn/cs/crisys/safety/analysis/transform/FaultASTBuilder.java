@@ -246,7 +246,7 @@ public class FaultASTBuilder {
 	 * @param fstmt 	the asymmetric fault statement
 	 * @return Fault 	the created fault node
 	 */
-	private Fault createSenderFault(FaultStatement fstmt) {
+	protected Fault createSenderFault(FaultStatement fstmt) {
 		// We will use this fault to help define each communication
 		// node.
 		String faultId = mkUniqueFaultId(fstmt);
@@ -266,7 +266,7 @@ public class FaultASTBuilder {
 	 * @param fstmt	 	The fault statement that is on the sender component.
 	 * @return	DataTypeImpl	The output of this sender component.
 	 */
-	private DataPortImpl findSenderOutput(FaultStatement fstmt) {
+	protected DataPortImpl findSenderOutput(FaultStatement fstmt) {
 		DataPortImpl senderOutput = null;
 		// Get output that fault statement is linked to
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
@@ -289,7 +289,7 @@ public class FaultASTBuilder {
 	 * @param senderOutput The DataPortImpl associated with the output from sender.
 	 * @return Return a list of all the connection instance ends.
 	 */
-	private List<ConnectionInstanceEnd> populateMapSenderToReceiver(DataPortImpl senderOutput) {
+	protected List<ConnectionInstanceEnd> populateMapSenderToReceiver(DataPortImpl senderOutput) {
 
 		// Get list of connections from parent component that senderOutput is connected to.
 		String searchFor = senderOutput.getFullName();
@@ -617,7 +617,7 @@ public class FaultASTBuilder {
 		newNode = createInputForCommNode(newNode, fault, outputOfInterest.type,
 				nodeName);
 		newNode = createOutputForCommNode(newNode);
-		newNode = createLocalsForCommNode(newNode, fault, type);
+		newNode = createLocalsForCommNode(newNode, fault);
 		newNode = createEquationsForCommNode(newNode, fault, type, nodeName);
 		return newNode.build();
 	}
@@ -750,7 +750,7 @@ public class FaultASTBuilder {
 	 * @param fault Fault defining this fault node.
 	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	private NamedType getOutputTypeForFaultNode(Fault fault) {
+	protected NamedType getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
@@ -772,7 +772,7 @@ public class FaultASTBuilder {
 	 * @param node NodeBuilder used to build this node
 	 * @return NodeBuilder with output added.
 	 */
-	private NodeBuilder createOutputForCommNode(NodeBuilder node) {
+	protected NodeBuilder createOutputForCommNode(NodeBuilder node) {
 
 		node.createOutput("__ASSERT", NamedType.BOOL);
 		return node;
@@ -786,7 +786,7 @@ public class FaultASTBuilder {
 	 * @param type The type of the faulty output.
 	 * @return NodeBuilder with locals added.
 	 */
-	private NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault, Type type) {
+	private NodeBuilder createLocalsForCommNode(NodeBuilder node, Fault fault) {
 
 		node.createLocal("__GUARANTEE0", NamedType.BOOL);
 
@@ -805,7 +805,7 @@ public class FaultASTBuilder {
 	 * @param fault Fault associated with the fault node
 	 * @return String output id
 	 */
-	private String getFaultNodeOutputId(Fault fault) {
+	protected String getFaultNodeOutputId(Fault fault) {
 		String id = "";
 		List<VarDecl> faultNodeOutputs = fault.faultNode.outputs;
 		if ((faultNodeOutputs.size() == 0) || (faultNodeOutputs.size() > 1)) {
@@ -879,7 +879,7 @@ public class FaultASTBuilder {
 	 *
 	 * @param guar Reference to the guarantee within this statement
 	 */
-	private BinaryExpr createAssumeHistStmt(Expr guar) {
+	protected BinaryExpr createAssumeHistStmt(Expr guar) {
 		// (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
 		IdExpr assumeHist = new IdExpr("__ASSUME__HIST");
 		BoolExpr trueExpr = new BoolExpr(true);
@@ -896,7 +896,7 @@ public class FaultASTBuilder {
 	 * @param fault Fault associated with the sender component
 	 * @param assertExpr  The main assert stmt linking the output to the fault val out
 	 */
-	private void addSafetyEqAssertStmts(NodeBuilder node, Fault fault, BinaryExpr assertExpr) {
+	protected void addSafetyEqAssertStmts(NodeBuilder node, Fault fault, BinaryExpr assertExpr) {
 		if (fault.safetyEqAsserts.isEmpty()) {
 			// Assert:
 			// __ASSERT = (output = (fault_node_val_out))
@@ -961,7 +961,7 @@ public class FaultASTBuilder {
 	 * @param index Assumed integer is zero on function call
 	 * @return Expr that is a conjunction of all elements in list
 	 */
-	private Expr buildBigAndExpr(List<AgreeStatement> exprList, int index) {
+	protected Expr buildBigAndExpr(List<AgreeStatement> exprList, int index) {
 		if (index > exprList.size() - 1) {
 			return new BoolExpr(false);
 		} else if (index == exprList.size() - 1) {

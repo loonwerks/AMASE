@@ -34,6 +34,7 @@ import edu.umn.cs.crisys.safety.analysis.ast.FaultActivationAssignment;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyNodeBuilder;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyPropagation;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
+import edu.umn.cs.crisys.safety.analysis.transform.AsymFaultASTBuilder;
 import edu.umn.cs.crisys.safety.analysis.transform.BaseFault;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
@@ -743,10 +744,42 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		List<FaultStatement> remainderFS = new ArrayList<FaultStatement>();
-		List<FaultStatement> multipleAsymFS = new ArrayList<FaultStatement>();
+		Map<String, List<FaultStatement>> multipleAsymFS = new HashMap<String, List<FaultStatement>>();
 		separateFaultStmts(allFaultStmts, remainderFS, multipleAsymFS);
 
-		for (SpecStatement s : specs) {
+		// the map multipleAsymFS holds output name as key with a list of fault
+		// stmts associated with that output. We loop through these keys and
+		// for each fault group, create an AsymFaultASTBuilder object which
+		// processes these stmts, creates faults, and creates associated comm nodes.
+		for (String output : multipleAsymFS.keySet()) {
+			if (multipleAsymFS.get(output).size() == 1) {
+				continue;
+			}
+			AsymFaultASTBuilder asymBuilder = new AsymFaultASTBuilder(globalLustreNodes, node);
+			List<Fault> safetyFaults = asymBuilder.processFaults(multipleAsymFS.get(output));
+			mapAsymCompOutputToCommNodeIn = asymBuilder.getMapAsymCompOutputToCommNodeIn();
+			mapCommNodeToInputs = asymBuilder.getMapCommNodeToInputs();
+			mapCommNodeOutputToConnections = asymBuilder.getMapCommNodeOutputToConnections();
+			mapSenderToReceiver = asymBuilder.getMapSenderToReceiver();
+			mapCompNameToCommNodes = asymBuilder.getMapCompNameToCommNodes();
+
+			// Create local mapAsymFaultToCompName
+			if (node.compInst instanceof ComponentInstance) {
+				ComponentInstance comp = node.compInst;
+				String name = comp.getName();
+				for (Fault safetyFault : safetyFaults) {
+					mapAsymFaultToCompName.put(safetyFault, name);
+					// Create mapping from fault to associated commNodes.
+					// Use mapping from fault to comp name, then map from comp name to
+					// comm nodes.
+					mapAsymFaultToCommNodes.put(safetyFault, mapCompNameToCommNodes.get(name));
+				}
+			}
+			faults.addAll(safetyFaults);
+		}
+
+		// Now process all the rest of the fault stmts.
+		for (SpecStatement s : remainderFS) {
 			if (s instanceof FaultStatement) {
 				FaultStatement fs = (FaultStatement) s;
 				FaultASTBuilder builder = new FaultASTBuilder(globalLustreNodes, node);
@@ -790,14 +823,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param multipleAsymFS List<FaultStatement> List to add all multiple asym faults on single output.
 	 */
 	private void separateFaultStmts(List<FaultStatement> allFS, List<FaultStatement> remainderFS,
-			List<FaultStatement> multipleAsymFS) {
+			Map<String, List<FaultStatement>> asymMap) {
 
 		// 1. Add sym faults to remainder list and process asym faults such that they
 		// are inserted into a map from outputName -> List(fault statements).
 		// 2. If the list of fault statements associated with an output is of size 1,
 		// append these to remainderFS list.
 		// Else append to multipleAsymFS list.
-		Map<String, List<FaultStatement>> asymMap = new HashMap<String, List<FaultStatement>>();
 		for (FaultStatement fs : allFS) {
 			int count = fs.getFaultDefinitions().size();
 			for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
@@ -836,9 +868,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Process map and add single asym faults to remainder list.
 		// Add multiples to multiple list.
 		for (String key : asymMap.keySet()) {
-			if (asymMap.get(key).size() > 1) {
-				multipleAsymFS.addAll(asymMap.get(key));
-			} else {
+			if (asymMap.get(key).size() == 1) {
 				remainderFS.addAll(asymMap.get(key));
 			}
 		}
@@ -1760,17 +1790,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * fault events to the top level node.
 	 */
 	private void addAsymFaultInputs(AgreeNodeBuilder nb) {
+		Map<String, FaultStatement> inputsToAdd = new HashMap<String, FaultStatement>();
 		// Access fault from map that collected all asym faults,
 		// use this to create base for event, indep/dep active variable names.
 		// For each fault, create event, indep, and dep active vars and add to inputs.
 		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
 			for (String node : mapAsymFaultToCommNodes.get(fault)) {
-//				nb.addInput(
-//						new AgreeVar(this.createFaultIndependentActiveId(node), NamedType.BOOL, fault.faultStatement));
-				nb.addInput(
-						new AgreeVar(this.createFaultDependentActiveId(node), NamedType.BOOL, fault.faultStatement));
-				nb.addInput(new AgreeVar(this.createFaultEventId(node), NamedType.BOOL, fault.faultStatement));
+				inputsToAdd.put(node, fault.faultStatement);
 			}
+		}
+
+		for (String var : inputsToAdd.keySet()) {
+			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(var), NamedType.BOOL, inputsToAdd.get(var)));
+			nb.addInput(new AgreeVar(this.createFaultEventId(var), NamedType.BOOL, inputsToAdd.get(var)));
 		}
 	}
 
