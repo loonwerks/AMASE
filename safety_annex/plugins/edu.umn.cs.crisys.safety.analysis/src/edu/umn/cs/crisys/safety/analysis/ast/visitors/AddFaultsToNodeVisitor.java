@@ -352,22 +352,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * fault information to create unique nominal id.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
-//		if (faultyId.contains(".")) {
-//			String[] spl = faultyId.split("\\.");
-//			if (spl.length != 0) {
-//				faultyId = spl[0];
-//			} else {
-//				throw new SafetyException("The component output (" + faultyId + ") this fault (" + f.id + ") is "
-//						+ "attached to is erroneous.");
-//			}
-//		}
-//		AgreeVar out = findVar(node.outputs, (faultyId));
-//		if (out == null) {
-//			throw new SafetyException("A fault defined for " + node.id + " has a connection"
-//					+ " that is not a valid output for this component.");
-//		} else {
-//			nb.addInput(new AgreeVar(createNominalId((faultyId + "_" + f.id)), out.type, out.reference));
-//		}
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			AgreeVar out = findVar(node.outputs, (faultyId));
 			if (out == null) {
@@ -1254,7 +1238,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Add information into top level regarding asymmetric faults.
 		addAssumeHistStmts(nb);
 		addLocalsForCommNodes(nb);
-		addAsymFaultInputs(nb);
+//		addAsymFaultInputs(nb);
 		addAsymCountConstraints(nb);
 		addAsymFaultAssertions(nb);
 		addAsymNodeCalls(nb);
@@ -1811,8 +1795,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private void addAsymFaultInputs(AgreeNodeBuilder nb) {
 		Map<String, FaultStatement> inputsToAdd = new HashMap<String, FaultStatement>();
 		// Access fault from map that collected all asym faults,
-		// use this to create base for event, indep/dep active variable names.
-		// For each fault, create event, indep, and dep active vars and add to inputs.
+		// use this to create base for event, dep active variable names.
+		// For each fault, create event and dep active vars and add to inputs.
 		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
 			for (String node : mapAsymFaultToCommNodes.get(fault)) {
 				inputsToAdd.put(node, fault.faultStatement);
@@ -1842,7 +1826,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			List<String> nodes = mapAsymFaultToCommNodes.get(f);
 			List<Expr> sumExprs = new ArrayList<>();
 			for (String n : nodes) {
-				sumExprs.add(createSumExpr(new IdExpr(this.createFaultDependentActiveId(n))));
+				sumExprs.add(createSumExpr(new IdExpr(n + "__fault__trigger__" + f.id)));
 			}
 			Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
 			Expr equate = new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
@@ -1862,25 +1846,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 */
 	private void addAsymFaultAssertions(AgreeNodeBuilder nb) {
 		// List of idExpr holding dep ids and list for indep ids
-		List<Expr> depIndepList = new ArrayList<>();
+		List<Expr> triggerList = new ArrayList<>();
 		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
 			for (String nodeName : mapAsymFaultToCommNodes.get(fault)) {
-				// Create permanent expressions for dep faults on comm nodes
-				IdExpr depId = new IdExpr(this.createFaultDependentActiveId(nodeName));
-				depIndepList.add(depId);
-				// Create and add trigger assertion
+				// Create trigger statements for each of the faults comm nodes
 				IdExpr trigger = new IdExpr(nodeName + "__fault__trigger__" + fault.id);
-				BinaryExpr equate = new BinaryExpr(trigger, BinaryOp.EQUAL, depId);
-				nb.addAssertion(new AgreeStatement("", equate, this.topNode.reference));
+				triggerList.add(trigger);
 			}
-			// Create trigger expression that links fault of sender node to comm node fault action.
+			// Create trigger expression that links fault of sender node to comm node trigger.
 			String compName = mapAsymFaultToCompName.get(fault);
 			IdExpr trigger = new IdExpr(compName + "__fault__trigger__" + fault.id);
-			Expr bigOrExpr = buildBigOrExpr(depIndepList, 0);
+			Expr bigOrExpr = buildBigOrExpr(triggerList, 0);
 			Expr notBigOrExpr = new UnaryExpr(UnaryOp.NOT, bigOrExpr);
 			Expr ifThenElse = new IfThenElseExpr(trigger, bigOrExpr, notBigOrExpr);
 			nb.addAssertion(new AgreeStatement("", ifThenElse, this.topNode.reference));
-			depIndepList.clear();
+			triggerList.clear();
 		}
 	}
 

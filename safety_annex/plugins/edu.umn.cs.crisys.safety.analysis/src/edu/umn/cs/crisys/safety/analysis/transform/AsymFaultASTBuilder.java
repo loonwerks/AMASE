@@ -73,7 +73,24 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		// 3. Create communication nodes
 		createCommNodes(senderConnections, senderOutput, faultList);
 
+		setPathForFaults(faultList, agreeNode);
+
 		return faultList;
+	}
+
+	/**
+	 * Set the path as the agree node name for each fault.
+	 *
+	 * @param faultList All faults that were created for this agree node output.
+	 * @param agreeNode The agree node with these faults associated.
+	 */
+	private void setPathForFaults(List<Fault> faultList, AgreeNode agreeNode) {
+		for (Fault f : faultList) {
+			ArrayList<String> pathName = new ArrayList<String>();
+			pathName.add(agreeNode.id);
+			f.setPath(pathName);
+		}
+
 	}
 
 	/**
