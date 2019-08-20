@@ -71,15 +71,47 @@ with AADL_Properties;
 			eq n2_node1_pid1 : int = node2.node1_pid1;
 			eq n3_node1_pid1 : int = node3.node1_pid1;
 			eq n4_node1_pid1 : int = node4.node1_pid1;
+			
+			eq n1_node2_pid2 : int = node1.node2_pid2;
+			eq n2_node2_pid2 : int = node2.node2_pid2;
+			eq n3_node2_pid2 : int = node3.node2_pid2;
+			eq n4_node2_pid2 : int = node4.node2_pid2;
+			
+			eq n1_node3_pid3 : int = node1.node3_pid3;
+			eq n2_node3_pid3 : int = node2.node3_pid3;
+			eq n3_node3_pid3 : int = node3.node3_pid3;
+			eq n4_node3_pid3 : int = node4.node3_pid3;
+			
+			eq n1_node4_pid4 : int = node1.node4_pid4;
+			eq n2_node4_pid4 : int = node2.node4_pid4;
+			eq n3_node4_pid4 : int = node3.node4_pid4;
+			eq n4_node4_pid4 : int = node4.node4_pid4;
 	   		
-	   		lemma "All nodes agree (i.e., choose the same color after one time step) 
-						- when no fault is present" :
+	   		lemma "All nodes agree on node1_pid1 value - when no fault is present" :
 				true -> ((n1_node1_pid1 = n2_node1_pid1) 
 					and (n2_node1_pid1 = n3_node1_pid1)
 					and (n3_node1_pid1 = n4_node1_pid1)
 				);
+				
+	   		lemma "All nodes agree on node2_pid2 value - when no fault is present" :
+				true -> ((n1_node2_pid2 = n2_node2_pid2) 
+					and (n2_node2_pid2 = n3_node2_pid2)
+					and (n3_node2_pid2 = n4_node2_pid2)
+				);
+				
+	   		lemma "All nodes agree on node3_pid3 value - when no fault is present" :
+				true -> ((n1_node3_pid3 = n2_node3_pid3) 
+					and (n2_node3_pid3 = n3_node3_pid3)
+					and (n3_node3_pid3 = n4_node3_pid3)
+				);
+				
+	   		lemma "All nodes agree on node4_pid4 value - when no fault is present" :
+				true -> ((n1_node4_pid4 = n2_node4_pid4) 
+					and (n2_node4_pid4 = n3_node4_pid4)
+					and (n3_node4_pid4 = n4_node4_pid4)
+				);
 		
-			lemma "All non-failing nodes agree 
+			lemma "All non-failing nodes agree on node1_pid1 value
 					  (i.e., all agree on the color in the second step)" :
 				true -> (if n1_failed 
 						 then ((n2_node1_pid1 = n3_node1_pid1)
@@ -96,6 +128,63 @@ with AADL_Properties;
 					else ((n1_node1_pid1 = n2_node1_pid1) 
 					and (n2_node1_pid1 = n3_node1_pid1)
 					and (n3_node1_pid1 = n4_node1_pid1))
+				); 
+				
+			lemma "All non-failing nodes agree on node2_pid2 value
+					  (i.e., all agree on the color in the second step)" :
+				true -> (if n1_failed 
+						 then ((n2_node2_pid2 = n3_node2_pid2)
+						and (n3_node2_pid2 = n4_node2_pid2))
+					else if n2_failed 
+						 then ((n1_node2_pid2 = n3_node2_pid2)
+							and (n3_node2_pid2 = n4_node2_pid2))
+					else if n3_failed 
+						 then ((n1_node2_pid2 = n2_node2_pid2) 
+							and (n2_node2_pid2 = n4_node2_pid2))
+					else if n4_failed 
+						 then ((n1_node2_pid2 = n2_node2_pid2) 
+							and (n2_node2_pid2 = n3_node2_pid2))
+					else ((n1_node2_pid2 = n2_node2_pid2) 
+					and (n2_node2_pid2 = n3_node2_pid2)
+					and (n3_node2_pid2 = n4_node2_pid2))
+				); 
+				
+			lemma "All non-failing nodes agree on node3_pid3 value
+					  (i.e., all agree on the color in the second step)" :
+				true -> (if n1_failed 
+						 then ((n2_node3_pid3 = n3_node3_pid3)
+						and (n3_node3_pid3 = n4_node3_pid3))
+					else if n2_failed 
+						 then ((n1_node3_pid3 = n3_node3_pid3)
+							and (n3_node3_pid3 = n4_node3_pid3))
+					else if n3_failed 
+						 then ((n1_node3_pid3 = n2_node3_pid3) 
+							and (n2_node3_pid3 = n4_node3_pid3))
+					else if n4_failed 
+						 then ((n1_node3_pid3 = n2_node3_pid3) 
+							and (n2_node3_pid3 = n3_node3_pid3))
+					else ((n1_node3_pid3 = n2_node3_pid3) 
+					and (n2_node3_pid3 = n3_node3_pid3)
+					and (n3_node3_pid3 = n4_node3_pid3))
+				); 
+				
+			lemma "All non-failing nodes agree on node4_pid4 value
+					  (i.e., all agree on the color in the second step)" :
+				true -> (if n1_failed 
+						 then ((n2_node4_pid4 = n3_node4_pid4)
+						and (n3_node4_pid4 = n4_node4_pid4))
+					else if n2_failed 
+						 then ((n1_node4_pid4 = n3_node4_pid4)
+							and (n3_node4_pid4 = n4_node4_pid4))
+					else if n3_failed 
+						 then ((n1_node4_pid4 = n2_node4_pid4) 
+							and (n2_node4_pid4 = n4_node4_pid4))
+					else if n4_failed 
+						 then ((n1_node4_pid4 = n2_node4_pid4) 
+							and (n2_node4_pid4 = n3_node4_pid4))
+					else ((n1_node4_pid4 = n2_node4_pid4) 
+					and (n2_node4_pid4 = n3_node4_pid4)
+					and (n3_node4_pid4 = n4_node4_pid4))
 				); 
 	   **};
 		

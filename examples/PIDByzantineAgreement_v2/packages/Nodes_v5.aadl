@@ -129,12 +129,12 @@ public
 				propagate_type: asymmetric;
 			}
 			
-			fault testSymFault "Node output is symmetric": Common_Faults.invert_signal {
-				inputs: val_in <- testOutput;     
-				outputs: testOutput <- val_out;    
-				duration: permanent;
---				propagate_type: asymmetric;
-			}
+--			fault testSymFault "Node output is symmetric": Common_Faults.invert_signal {
+--				inputs: val_in <- testOutput;     
+--				outputs: testOutput <- val_out;    
+--				duration: permanent;
+----				propagate_type: asymmetric;
+--			}
 			
 		**};
 	end Node;
