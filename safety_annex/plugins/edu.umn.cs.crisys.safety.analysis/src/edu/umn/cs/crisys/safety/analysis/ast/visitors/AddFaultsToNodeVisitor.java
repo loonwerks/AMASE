@@ -757,6 +757,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 			AsymFaultASTBuilder asymBuilder = new AsymFaultASTBuilder(globalLustreNodes, node);
 			List<Fault> safetyFaults = asymBuilder.processFaults(multipleAsymFS.get(output));
+
+			addMutualExclusiveFaultPairs(safetyFaults);
+
 			mapAsymCompOutputToCommNodeIn = asymBuilder.getMapAsymCompOutputToCommNodeIn();
 			mapCommNodeToInputs = asymBuilder.getMapCommNodeToInputs();
 			mapCommNodeOutputToConnections = asymBuilder.getMapCommNodeOutputToConnections();
@@ -811,6 +814,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return faults;
+	}
+
+	/**
+	 * Add mutually exclusive faults in pairs to the mutualExclusiveFault list.
+	 *
+	 * @param safetyFaults List of Faults to add in pairs.
+	 */
+	private void addMutualExclusiveFaultPairs(List<Fault> safetyFaults) {
+		for (int i = 0; i < safetyFaults.size() - 1; i++) {
+			for (int j = 1; j < safetyFaults.size(); j++) {
+				if (i != j) {
+					mutualExclusiveFaults.add(new FaultPair(safetyFaults.get(i), safetyFaults.get(j)));
+				}
+			}
+		}
+
 	}
 
 	/**
