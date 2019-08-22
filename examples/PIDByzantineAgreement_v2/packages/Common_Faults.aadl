@@ -34,6 +34,22 @@ public
 	   			 else val_in;
 		tel;
 		
+		node fail_PID3_to_one (val_in: Node_Msg.Impl, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   		val_out = 
+	   			if (trigger) 
+	   				then(val_in{Node3_PID_from_Node3 := 1}) 
+	   			 else val_in;
+		tel;
+		
+		node fail_PID4_to_one (val_in: Node_Msg.Impl, trigger: bool) returns (val_out: Node_Msg.Impl); 
+		let
+	   		val_out = 
+	   			if (trigger) 
+	   				then(val_in{Node4_PID_from_Node4 := 1}) 
+	   			 else val_in;
+		tel;
+		
 		--allow each field of the output record to fail to random value
 		node fail_any_PID_to_any_value (val_in: Node_Msg.Impl, pid1_val: int, pid2_val: int, 
 			pid3_val: int, pid4_val: int, trigger: bool
