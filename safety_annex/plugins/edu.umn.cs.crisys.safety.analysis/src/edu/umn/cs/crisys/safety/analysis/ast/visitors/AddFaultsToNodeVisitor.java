@@ -58,7 +58,6 @@ import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.asymmetric;
 import edu.umn.cs.crisys.safety.safety.symmetric;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
-import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.BoolExpr;
@@ -69,7 +68,6 @@ import jkind.lustre.IntExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
-import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
@@ -206,13 +204,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faultyVarsExpr = gatherFaultyOutputs(faults, node);
 		// this will traverse through the child nodes
 		node = super.visit(node);
-
-		// All fault info added to this node builder object.
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
 		if (AddFaultsToAgree.getTransformFlag() == 2) {
 			nb.setFaultTreeFlag(true);
 		}
+		// If symmetric, add fault info to agree node.
+		// If asymmetric, only add fault triggers to agree node.
 		for (Fault f : faults) {
 			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
 				addFaultInputs(f, nb);
@@ -228,63 +226,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		addFaultNodeEqs(faults, nb);
 
 		if (isTop) {
-			topNode = node;
-			AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
-			// gather path information for the faults (for creating names later)
-			collectFaultPath(node, new ArrayList<>());
-			this.gatherFaultPropagation(node);
-			this.gatherFaultActivation(node);
-			// Add top level fault declarations for asymmetric faults if there are any.
-			// This is done in a separate method than the normal call
-			// (addTopLevelFaultDeclarations) due to the recursive nature
-			// of that method. We only add declarations for asym faults once
-			// and do not want recursive calls on this activity for subnodes.
-			if (!this.mapCommNodeToInputs.isEmpty()) {
-				addTopLevelAsymFaultDeclarations(nb);
-			}
-			// empty path to pass to top level node fault
-			// node id used as the path to pass to sub level node fault
-			addTopLevelFaultDeclarations(node, nb);
-
-			// add top level fault activation assertions
-			addTopLevelFaultActivationAssertions(nb);
-
-			// This checks if we are doing max faults or probability behavior.
-			// It will add the assertion to Lustre representing the required behavior.
-			// If we want to generate the fault tree, this method changes in order
-			// to not add assertions regarding behavior (i.e. no assertion about
-			// max # faults).
-			// The reason that the maxFault nullity check is here is because when we
-			// are not at a top node (SystemInstanceImpl), we do not care about the
-			// top level analysis constraints and hence maxFaults (the return value
-			// from gatherTopLevelFaultAnalysis) is null.
-			// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
-			if (AddFaultsToAgree.getTransformFlag() == 1) {
-				addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
-			} else if (AddFaultsToAgree.getTransformFlag() == 2) {
-				nb.setFaultTreeFlag(true);
-
-				// only collect fault hypothesis from the upper most level
-				if (upperMostLevel) {
-					upperMostLevel = false;
-					// if max fault hypothesis, collect max fault count
-					if (maxFaults instanceof FaultCountBehavior) {
-						maxFaultHypothesis = true;
-						maxFaultCount = Integer.parseInt(((FaultCountBehavior) maxFaults).getMaxFaults());
-					}
-					// if probabilistic fault hypothesis, collect probabilistic hypothesis
-					else if (maxFaults instanceof ProbabilityBehavior) {
-						probabilisticHypothesis = true;
-						probabilityThreshold = Double.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
-					}
-				}
-
-				// if probabilistic fault hypothesis, need to collect valid fault combinations from every verification level
-				// but using the probability threshold from the upper most level
-				if (probabilisticHypothesis) {
-					collectTopLevelMaxFaultOccurrenceConstraint(probabilityThreshold, topNode, nb);
-				}
-			}
+			topNodeVisit(nb, node);
 		}
 		node = nb.build();
 		faultyVarsExpr = parentFaultyVarsExpr;
@@ -293,47 +235,127 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// information. We do this so we can access connections
 		// for asymmetric faults.
 		if (!this.mapSenderToReceiver.isEmpty() && isTop) {
-			SafetyNodeBuilder sb = new SafetyNodeBuilder(node);
-			List<AgreeConnection> agreeConns = new ArrayList<AgreeConnection>();
-			int i = 0;
-			// Make sure we have AgreeAADLConnection and cast to access AgreeVar
-			for (AgreeConnection ac : sb.getConnections()) {
-				if (ac instanceof AgreeAADLConnection) {
-					AgreeAADLConnection aac = (AgreeAADLConnection) ac;
-					AgreeVar sourceName = aac.sourceVarName;
-					AgreeVar destName = aac.destinationVarName;
-					// If we do not have the component instance, we
-					// cannot perform this removal of connections.
-					if ((sourceName.compInst == null) || (destName.compInst == null)) {
-						continue;
-					}
-					String senderName = sourceName.compInst.getName() + "." + sourceName.id;
-					String receiverName = destName.compInst.getName() + "." + destName.id;
-					// Now check the map and if we have a match,
-					// remove that element from agreeConns.
-					for (String sendKey : mapSenderToReceiver.keySet()) {
-						if (senderName.contentEquals(sendKey)) {
-							for (String receiveVal : mapSenderToReceiver.get(sendKey)) {
-								if (receiverName.equals(receiveVal)) {
-									agreeConns.add(ac);
-									break;
-								}
+			SafetyNodeBuilder sb = changeTopNodeAsymConnections(nb, node);
+			return sb.build();
+		} else {
+			return node;
+		}
+	}
+
+	/**
+	 * Visit tasks for the top node.
+	 *
+	 * @param nb NodeBuilder : fault info added here.
+	 * @param node Agree node that is the top node.
+	 */
+	private void topNodeVisit(AgreeNodeBuilder nb, AgreeNode node) {
+		topNode = node;
+		AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
+		// gather path information for the faults (for creating names later)
+		collectFaultPath(node, new ArrayList<>());
+		this.gatherFaultPropagation(node);
+		this.gatherFaultActivation(node);
+		// Add top level fault declarations for asymmetric faults if there are any.
+		// This is done in a separate method than the normal call
+		// (addTopLevelFaultDeclarations) due to the recursive nature
+		// of that method. We only add declarations for asym faults once
+		// and do not want recursive calls on this activity for subnodes.
+		if (!this.mapCommNodeToInputs.isEmpty()) {
+			addTopLevelAsymFaultDeclarations(nb);
+		}
+		// empty path to pass to top level node fault
+		// node id used as the path to pass to sub level node fault
+		addTopLevelFaultDeclarations(node, nb);
+
+		// add top level fault activation assertions
+		addTopLevelFaultActivationAssertions(nb);
+
+		// This checks if we are doing max faults or probability behavior.
+		// It will add the assertion to Lustre representing the required behavior.
+		// If we want to generate the fault tree, this method changes in order
+		// to not add assertions regarding behavior (i.e. no assertion about
+		// max # faults).
+		// The reason that the maxFault nullity check is here is because when we
+		// are not at a top node (SystemInstanceImpl), we do not care about the
+		// top level analysis constraints and hence maxFaults (the return value
+		// from gatherTopLevelFaultAnalysis) is null.
+		// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
+		if (AddFaultsToAgree.getTransformFlag() == 1) {
+			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
+		} else if (AddFaultsToAgree.getTransformFlag() == 2) {
+			nb.setFaultTreeFlag(true);
+
+			// only collect fault hypothesis from the upper most level
+			if (upperMostLevel) {
+				upperMostLevel = false;
+				// if max fault hypothesis, collect max fault count
+				if (maxFaults instanceof FaultCountBehavior) {
+					maxFaultHypothesis = true;
+					maxFaultCount = Integer.parseInt(((FaultCountBehavior) maxFaults).getMaxFaults());
+				}
+				// if probabilistic fault hypothesis, collect probabilistic hypothesis
+				else if (maxFaults instanceof ProbabilityBehavior) {
+					probabilisticHypothesis = true;
+					probabilityThreshold = Double.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
+				}
+			}
+			// if probabilistic fault hypothesis, need to collect valid fault combinations from every verification level
+			// but using the probability threshold from the upper most level
+			if (probabilisticHypothesis) {
+				collectTopLevelMaxFaultOccurrenceConstraint(probabilityThreshold, topNode, nb);
+			}
+		}
+	}
+
+	/**
+	 * Method changes top level connections to reflect communication nodes for
+	 * asymmetric faults.
+	 * Finds old connections from sender to receiver and removes them.
+	 * Then adds new connections from sender to communication nodes and from
+	 * communication nodes to receivers.
+	 *
+	 * @param nb NodeBuilder for this top node.
+	 * @param node The top node of the program.
+	 * @return SafetyNodeBuilder with connections changed.
+	 */
+	private SafetyNodeBuilder changeTopNodeAsymConnections(AgreeNodeBuilder nb, AgreeNode node) {
+		SafetyNodeBuilder sb = new SafetyNodeBuilder(node);
+		List<AgreeConnection> agreeConns = new ArrayList<AgreeConnection>();
+		int i = 0;
+		// Make sure we have AgreeAADLConnection and cast to access AgreeVar
+		for (AgreeConnection ac : sb.getConnections()) {
+			if (ac instanceof AgreeAADLConnection) {
+				AgreeAADLConnection aac = (AgreeAADLConnection) ac;
+				AgreeVar sourceName = aac.sourceVarName;
+				AgreeVar destName = aac.destinationVarName;
+				// If we do not have the component instance, we
+				// cannot perform this removal of connections.
+				if ((sourceName.compInst == null) || (destName.compInst == null)) {
+					continue;
+				}
+				String senderName = sourceName.compInst.getName() + "." + sourceName.id;
+				String receiverName = destName.compInst.getName() + "." + destName.id;
+				// Now check the map and if we have a match,
+				// remove that element from agreeConns.
+				for (String sendKey : mapSenderToReceiver.keySet()) {
+					if (senderName.contentEquals(sendKey)) {
+						for (String receiveVal : mapSenderToReceiver.get(sendKey)) {
+							if (receiverName.equals(receiveVal)) {
+								agreeConns.add(ac);
+								break;
 							}
 						}
 					}
 				}
-				i++;
 			}
-			List<AgreeConnection> connList = sb.getConnections();
-			for (AgreeConnection j : agreeConns) {
-				connList.remove(j);
-			}
-			FaultASTBuilder.resetAsymMaps();
-			return sb.build();
-
-		} else {
-			return node;
+			i++;
 		}
+		List<AgreeConnection> connList = sb.getConnections();
+		for (AgreeConnection j : agreeConns) {
+			connList.remove(j);
+		}
+		FaultASTBuilder.resetAsymMaps();
+		return sb;
 	}
 
 	/**
@@ -354,12 +376,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * addNominalVars
-	 * Inputs: AgreeNode, AgreeNodeBuilder, Fault, String with faulty output name
-	 * Creates fault nominal input to the lustre node. Since this method is
-	 * called in a loop for all faults defined for this agree node, we use that
-	 * fault information to create unique nominal id.
+	/**
+	 * Creates fault nominal input to the lustre node. Only add this if there is
+	 * at least one symmetric fault defined for this node. If only asymmetric,
+	 * then fault nominal does not exist in the agree node, only in comm nodes.
+	 *
+	 * @param node Agree node with these faults.
+	 * @param nb NodeBuilder will have nominal vars added to locals.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
 		for (String faultyId : faultyVarsExpr.keySet()) {
@@ -382,16 +405,34 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
+	/**
+	 * Adds trigger statements to inputs for this node.
+	 *
+	 * @param f Fault defined on the node.
+	 * @param nb NodeBuilder has this input added.
+	 */
 	public void addFaultInputs(Fault f, AgreeNodeBuilder nb) {
 		nb.addInput(new AgreeVar(createFaultNodeTriggerId(f.id), NamedType.BOOL, f.faultStatement));
 	}
 
+	/**
+	 * Create trigger stmts for hardware faults.
+	 *
+	 * @param hwfaults List of hardware faults for this node.
+	 * @param nb NodeBuilder will have triggers added to inputs.
+	 */
 	public void addHWFaultInputs(List<HWFault> hwfaults, AgreeNodeBuilder nb) {
 		for (HWFault hwf : hwfaults) {
 			nb.addInput(new AgreeVar(createFaultNodeTriggerId(hwf.id), NamedType.BOOL, hwf.hwFaultStatement));
 		}
 	}
 
+	/**
+	 * Add inputs and assert statements for any SafetyEqVars or SafetyEqAsserts in this fault.
+	 *
+	 * @param f Fault with (possibly) eq stmts.
+	 * @param nb NodeBuilder has this info added.
+	 */
 	public void addFaultLocalEqsAndAsserts(Fault f, AgreeNodeBuilder nb) {
 		nb.addInput(f.safetyEqVars);
 		nb.addAssertion(f.safetyEqAsserts);
@@ -530,9 +571,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Go through pairs of the list and create with statements.
 		for (Pair pair : list) {
 			if (isAsymmetric(pair.f)) {
-//				if (pair.f.propType.getPty() instanceof asymmetric) {
-					continue;
-//				}
+				continue;
 			}
 			Expr faultNodeOut = faultToActual(pair.f, pair.ex);
 			// Collect elements to build the nested if then else stmt described above.
@@ -572,29 +611,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * Replace AgreeVar id with nominal id
-	 */
-	private Expr replPathIdExpr(Expr original, Expr toAssign) {
-
-		if (original instanceof IdExpr) {
-			return toAssign;
-		} else if (original instanceof RecordAccessExpr) {
-			RecordAccessExpr rae = (RecordAccessExpr) original;
-			Expr newBase = replPathIdExpr(rae.record, toAssign);
-			return new RecordAccessExpr(newBase, rae.field);
-		} else if (original instanceof ArrayAccessExpr) {
-			ArrayAccessExpr aae = (ArrayAccessExpr) original;
-			Expr newBase = replPathIdExpr(aae.array, aae.index);
-			return new ArrayAccessExpr(newBase, aae.index);
-		} else {
-			new Exception("Problem with record expressions in safety analysis");
-			return null;
-		}
-	}
-
-	/*
-	 * Used to traverse two maps: fault -> output param -> actuals
+	/**
+	 * Finds the lustre expr for output that fault is attached to.
+	 * Ex:
+	 * val_out -> Sender__fault_3__node__val_out
+	 *
+	 * @param f Fault in question
+	 * @param ex Expression of output
+	 * @return Lustre expression with id set correctly.
 	 */
 	private Expr faultToActual(Fault f, Expr ex) {
 		// Match pair.ex -> key of faultOutputMap
@@ -612,6 +636,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return new IdExpr(actual.id);
 	}
 
+	/**
+	 * Returns mapping from eq vars to lustre names.
+	 *
+	 * @param f Fault in question.
+	 * @param eqVars safety eq vars in this fault statement
+	 * @return Map<String, String> maps the fault id to the safetyEqVars
+	 */
 	public Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
 		HashMap<String, String> theMap = new HashMap<>();
 		for (AgreeVar eqVar : eqVars) {
