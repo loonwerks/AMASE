@@ -232,6 +232,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 
 		}
+		addToMutualExclusionList();
 		addNominalVars(node, nb);
 		addFaultNodeEqs(faults, nb);
 
@@ -344,6 +345,24 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
+	/**
+	 * Use faultyVarsExpr list to create mutual exclusion between all
+	 * faults on a single output.
+	 *
+	 */
+	private void addToMutualExclusionList() {
+
+		for (String output : faultyVarsExpr.keySet()) {
+			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
+			for (Pair p : faultyVarsExpr.get(output)) {
+				for (Fault curFault : faultsForSameOutput) {
+					mutualExclusiveFaults.add(new FaultPair(curFault, p.f));
+				}
+				faultsForSameOutput.add(p.f);
+			}
+		}
+	}
+
 	/*
 	 * addNominalVars
 	 * Inputs: AgreeNode, AgreeNodeBuilder, Fault, String with faulty output name
@@ -423,8 +442,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// Then we have multiple faults on a single output.
 					// Save these to handle later.
 					localMultipleFaultMap.put(lhsWithStmtName, list);
+//					addToMutualExclusionList(list);
 				} else {
 					// Else single fault case.
+					// Don't add extra info to node if asym
+//					if (f.propType != null) {
+//						if (f.propType.getPty() instanceof asymmetric) {
+//							continue;
+//						}
+//					}
 					Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
 					List<IdExpr> lhs = new ArrayList<IdExpr>();
 					Expr nominal;
@@ -476,16 +502,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// handle the multiple fault outputs.
 		for (String key : localMultipleFaultMap.keySet()) {
 			// Nominal id will be the same for all these faults.
-			String nomId = createNominalId(key);
-			Expr defaultExpr = new IdExpr(nomId);
-			Expr resultExpr = defaultExpr;
+//			String nomId = createNominalId(key);
+			Expr defaultExpr = new IdExpr(createNominalId(key));
+//			Expr resultExpr = defaultExpr;
 			List<TriggerFaultOutPair> triggerList = new ArrayList<>();
-			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
+//			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
 
 			List<Pair> pairs = localMultipleFaultMap.get(key);
 			// For each fault in the pairs list...
 			for (Pair p : pairs) {
 				Fault f = p.f;
+				if (f.propType != null) {
+					if (f.propType.getPty() instanceof asymmetric) {
+						continue;
+					}
+				}
 				// make locals for fault node outputs
 				// populate outputParamToActualMap
 				Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
@@ -510,13 +541,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// else __fault__nominal__output
 				Expr ftTrigger = localFaultTriggerMap.get(p.f);
 				triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
-				for (Fault curFault : faultsForSameOutput) {
-					mutualExclusiveFaults.add(new FaultPair(curFault, p.f));
-				}
-				faultsForSameOutput.add(p.f);
+//				for (Fault curFault : faultsForSameOutput) {
+//					mutualExclusiveFaults.add(new FaultPair(curFault, p.f));
+//				}
+//				faultsForSameOutput.add(p.f);
 			}
-			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(key),
-					BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)), null));
+			if (!triggerList.isEmpty()) {
+				nb.addAssertion(
+						new AgreeStatement("Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(key),
+								BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)), null));
+			}
 		}
 	}
 
@@ -652,19 +686,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		HashMap<String, List<Pair>> outputMap = new HashMap<String, List<Pair>>();
 		String id = "";
 		for (Fault f : faults) {
-			// If the fault is asymmetric, we do not
-			// want to add the fault information
-			// to the output. We only add this information to the
-			// outputMap when it is symmetric propagation type.
 			// The formulation of the if statement is "not (null or symmetric)"
 			// Because for now I would like to avoid forcing the
 			// user to specify the prop statement.
-			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
+//			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
 				for (Expr ide : f.faultOutputMap.keySet()) {
 					id = AgreeUtils.getExprRoot(ide).id;
 					addIdToMap(outputMap, ide, id, f);
 				}
-			}
+//			}
 		}
 		return outputMap;
 	}
@@ -742,7 +772,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			AsymFaultASTBuilder asymBuilder = new AsymFaultASTBuilder(globalLustreNodes, node);
 			List<Fault> safetyFaults = asymBuilder.processFaults(multipleAsymFS.get(output));
 
-			addMutualExclusiveFaultPairs(safetyFaults);
+//			addMutualExclusiveFaultPairs(safetyFaults);
 
 			mapAsymCompOutputToCommNodeIn = asymBuilder.getMapAsymCompOutputToCommNodeIn();
 			mapCommNodeToInputs = asymBuilder.getMapCommNodeToInputs();
