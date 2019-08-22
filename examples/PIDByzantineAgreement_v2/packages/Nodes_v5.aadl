@@ -12,8 +12,8 @@ public
 			Node3_In: in data port Node_Msg.Impl;
 			--outputs
 			Node_Out: out data port Node_Msg.Impl;
-			
-			testOutput : out data port Base_Types::Boolean;
+--			
+--			testOutput : out data port Base_Types::Boolean;
 
 		annex agree {**
 			eq pid : int = Get_Property(this, AADL_Properties::PID);
@@ -129,11 +129,18 @@ public
 				propagate_type: asymmetric;
 			}
 			
-			fault PID2_Asym_Fail_To_One_sym "Node output is symmetric": Common_Faults.fail_PID2_to_one {
+			fault PID3_Asym_Fail_To_One "Node output is asymmetric": Common_Faults.fail_PID3_to_one {
 				inputs: val_in <- Node_Out;     
 				outputs: Node_Out <- val_out;    
 				duration: permanent;
-				propagate_type: symmetric;
+				propagate_type: asymmetric;
+			}
+			
+			fault PID4_Asym_Fail_To_One "Node output is asymmetric": Common_Faults.fail_PID4_to_one {
+				inputs: val_in <- Node_Out;     
+				outputs: Node_Out <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
 			}
 			
 --			fault testSymFault "Node output is symmetric": Common_Faults.invert_signal {
