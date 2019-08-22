@@ -148,12 +148,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean probabilisticHypothesis = false;
 
 	/**
-	 *
+	 * Call to super class.
 	 */
 	public AddFaultsToNodeVisitor() {
 		super(new jkind.lustre.visitors.TypeMapVisitor());
 	}
 
+	/**
+	 * Method initializes static vars for this class.
+	 */
 	public static void init() {
 		maxFaultCount = 0;
 		probabilityThreshold = 0.0;
@@ -168,16 +171,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public AgreeProgram visit(AgreeProgram program) {
 		globalLustreNodes = new ArrayList<>(program.globalLustreNodes);
 		this.topNode = program.topNode;
-
-		// do not call back to 'super'. This is BROKEN!
 		AgreeNode topNode = this.visit(program.topNode);
-
 		program = new AgreeProgram(program.agreeNodes, globalLustreNodes, program.globalTypes, topNode,
 				program.containsRealTimePatterns);
 		return program;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////
 	//
 	// AGREENODE TRAVERSAL STARTS HERE.
 	//
@@ -185,17 +185,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// want to replace in a single node, we need to store the
 	// 'stacked' inNode, then restore it after a traversal.
 	//
-	////////////////////////////////////////////////////////////////////////////////////////////////
-
+	///////////////////////////////////////////////////////////////////
 	@Override
 	public AgreeNode visit(AgreeNode node) {
 		Map<String, List<Pair>> parentFaultyVarsExpr = faultyVarsExpr;
 		boolean isTop = (node == this.topNode);
-		// gather SW/SYS faults
+		// Gather non-hardware (dependent) faults
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop);
-		// gather HW faults
+		// Gather HW faults
 		List<HWFault> hwFaults = gatherHWFaults(globalLustreNodes, node, isTop);
-		// rename var names in faults, like faultname_varname
+		// Rename var names in faults: fault_varName
 		faults = renameFaultEqs(faults);
 
 		if (faultMap.containsKey(node.compInst) || hwfaultMap.containsKey(node.compInst)) {
@@ -205,24 +204,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		hwfaultMap.put(node.compInst, hwFaults);
 
 		faultyVarsExpr = gatherFaultyOutputs(faults, node);
-		// this will traverse through the decendent nodes
+		// this will traverse through the child nodes
 		node = super.visit(node);
 
+		// All fault info added to this node builder object.
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
 		if (AddFaultsToAgree.getTransformFlag() == 2) {
 			nb.setFaultTreeFlag(true);
 		}
 		for (Fault f : faults) {
-			// Get output associated with this fault
-			Expr compOut = null;
-			for (Expr output : f.faultOutputMap.keySet()) {
-				if (f.faultOutputMap.get(output).equals("val_out")) {
-					compOut = output;
-				} else {
-					throw new SafetyException("For fault " + f.id + ", val_out is not correctly defined.");
-				}
-			}
 			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
 				addFaultInputs(f, nb);
 				addHWFaultInputs(hwFaults, nb);
@@ -373,13 +364,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
-			boolean onlySym = true;
+			boolean onlyAsym = true;
 			for (Pair p : faultPairs) {
-				if (isAsymmetric(p.f)) {
-					onlySym = false;
+				if (!isAsymmetric(p.f)) {
+					onlyAsym = false;
 				}
 			}
-			if (onlySym) {
+			if (!onlyAsym) {
 				AgreeVar out = findVar(node.outputs, (faultyId));
 				if (out == null) {
 					throw new SafetyException("A fault defined for " + node.id + " has a connection"
@@ -678,9 +669,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (faultyVarsExpr.containsKey(e.id)) {
 			List<Pair> lp = faultyVarsExpr.get(e.id);
 			for (Pair p : lp) {
+				// If fault is asym, do not change expression to fault nominal.
 				if (!isAsymmetric(p.f)) {
 					if (p.ex.toString().equals(e.id)) {
-						return new IdExpr(e.location, createNominalId(e.id));
+						IdExpr nom = new IdExpr(e.location, createNominalId(e.id));
+						return nom;
 					}
 				}
 			}
@@ -697,23 +690,37 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return null;
 	}
 
+	/**
+	 * Method populates faultyVarsExpr map with faults associated with outputs
+	 * they are attached to.
+	 * Return map is :
+	 * 		output1 -> {(outputExpr, fault1), (outputExpr, fault2)...}
+	 *
+	 * @param faults List of all faults in this agree node.
+	 * @param node The agree node.
+	 * @return HashMap<String, List<Pair>> faultyVarsExpr map.
+	 */
 	private HashMap<String, List<Pair>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
 		HashMap<String, List<Pair>> outputMap = new HashMap<String, List<Pair>>();
 		String id = "";
 		for (Fault f : faults) {
-			// The formulation of the if statement is "not (null or symmetric)"
-			// Because for now I would like to avoid forcing the
-			// user to specify the prop statement.
-//			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
-				for (Expr ide : f.faultOutputMap.keySet()) {
-					id = AgreeUtils.getExprRoot(ide).id;
-					addIdToMap(outputMap, ide, id, f);
-				}
-//			}
+			for (Expr ide : f.faultOutputMap.keySet()) {
+				id = AgreeUtils.getExprRoot(ide).id;
+				addIdToMap(outputMap, ide, id, f);
+			}
 		}
 		return outputMap;
 	}
 
+	/**
+	 * Method adds the output expression to the output map pair list.
+	 * (output1 -> {(outputExpr, fault1), (outputExpr, fault2)...})
+	 *
+	 * @param outputMap The map to populate.
+	 * @param ex Output expression
+	 * @param id String "output"
+	 * @param f Fault that will be in pair for this output.
+	 */
 	private void addIdToMap(HashMap<String, List<Pair>> outputMap, Expr ex, String id, Fault f) {
 		Pair pair = new Pair(ex, f);
 		if (outputMap.containsKey(id)) {

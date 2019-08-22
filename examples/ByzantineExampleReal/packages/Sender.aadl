@@ -28,7 +28,7 @@ with Base_Types;
 				inputs: val_in <- sender_out, alt_val <- 0.0;     
 				outputs: sender_out <- val_out;    
 				duration: permanent;
-				propagate_type: symmetric;
+				propagate_type: asymmetric;
 			}
 			
 			fault Sender_Fault3 "Or output is asymmetric, one": Common_Faults.fail_to_real {
