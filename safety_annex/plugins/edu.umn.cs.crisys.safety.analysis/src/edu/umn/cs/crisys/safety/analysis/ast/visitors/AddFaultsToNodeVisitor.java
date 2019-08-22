@@ -74,21 +74,31 @@ import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
 
-// If agreeNode is non-null, then we scope the replacement to only occur in one node.
-// Otherwise, we do id replacement across all nodes.
 
+/**
+ * AddFaultsToNodeVisitor visits each agree node and adds fault information
+ * to the lustre code. This is accomplished by creating a NodeBuilder object and
+ * adding the extra fault information here. That node builder is then inserted into
+ * the program. After this visit is called, the agree node visitor has added all
+ * necessary fault information to each node.
+ * If the node visited is the top node, additional information is added to the main
+ * lustre node. This includes assertions that restrict behavior based on the fault
+ * information.
+ *
+ * @author Danielle Stewart, Janet Liu, Mike Whalen
+ *
+ */
 public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
-	// Global data structures for traversal
+	// Global data structures for traversal:
 
 	// This is the list of Lustre nodes that are used by the safety analysis that
-	// may not
-	// be part of the set of nodes used by AGREE
+	// may not be part of the set of nodes used by AGREE
 	private List<Node> globalLustreNodes;
 	// Top of the node hierarchy in AGREE
 	private AgreeNode topNode;
 	// This map is used to track, for each fault, a list of paths to instances of
 	// that fault (since nodes may be used in multiple locations), in order
-	// to produce the top-level variables to activate faults. (Global)
+	// to produce the top-level global variables to activate faults.
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
 	// It is used to properly set up the top-level node for triggering faults.
 	// Fault map: stores the faults associated with a node.
@@ -98,24 +108,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<ComponentInstance, List<HWFault>> hwfaultMap = new HashMap<>();
 	// It is used to store src to dest fault propagations
 	private HashSet<SafetyPropagation> propagations = new HashSet<>();
-	// fault activation assignemnts
+	// fault activation assignments
 	private HashSet<FaultActivationAssignment> faultActivations = new HashSet<>();
-
 	// I am unsure as to whether this is necessary: it appears to map a fault to a
 	// single
 	// string. As such, I believe it is incorrectly constructed.
 	private Map<Fault, String> mapFaultToPath = new HashMap<>();
 
-	// Per node data structures: must be stored when visiting new node
-	// This maps id to a pair consisting of the expression with the fault associated
-	// with that
-	// id and expression.
-	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
-	private List<FaultPair> mutualExclusiveFaults = new ArrayList<FaultPair>();
+	// Per node data structures: must be stored when visiting new node:
 
+	// This maps output id to a pair consisting of the output expression and a fault.
+	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
+	// List of fault pairs that cannot occur together (i.e. they are on the same output).
+	private List<FaultPair> mutualExclusiveFaults = new ArrayList<FaultPair>();
 	// Map from asymmetric fault to associated connections -
 	// ex: sender.out -> receiver1.in, receiver2.in, receiver3.in.
-	// We need the receiver connections in this list.
 	private Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
 	// Map the name of the communication node for asymmetric faults to its list of local
 	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
@@ -140,16 +147,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean maxFaultHypothesis = false;
 	public static boolean probabilisticHypothesis = false;
 
-	/*
-	 * public accessor for faultMap: faultMap is used to properly set up the
-	 * top-level node for triggering faults. fault map: stores the faults associated
-	 * with a node. Keying off component instance rather than AgreeNode, just so we
-	 * don't have problems with "stale" AgreeNode references during transformations.
+	/**
+	 *
 	 */
-	public Map<ComponentInstance, List<Fault>> getFaultMap() {
-		return faultMap;
-	}
-
 	public AddFaultsToNodeVisitor() {
 		super(new jkind.lustre.visitors.TypeMapVisitor());
 	}
@@ -383,12 +383,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	public void addFaultInputs(Fault f, AgreeNodeBuilder nb) {
-		nb.addInput(new AgreeVar(createFaultNodeInputId(f.id), NamedType.BOOL, f.faultStatement));
+		nb.addInput(new AgreeVar(createFaultNodeTriggerId(f.id), NamedType.BOOL, f.faultStatement));
 	}
 
 	public void addHWFaultInputs(List<HWFault> hwfaults, AgreeNodeBuilder nb) {
 		for (HWFault hwf : hwfaults) {
-			nb.addInput(new AgreeVar(createFaultNodeInputId(hwf.id), NamedType.BOOL, hwf.hwFaultStatement));
+			nb.addInput(new AgreeVar(createFaultNodeTriggerId(hwf.id), NamedType.BOOL, hwf.hwFaultStatement));
 		}
 	}
 
@@ -397,22 +397,40 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		nb.addAssertion(f.safetyEqAsserts);
 	}
 
+	/**
+	 * Create fault nominal, trigger, and other input expressions for agree node.
+	 * Ex: Lustre fault node has input args: {val_out, alt_val, trigger}
+	 * 	   f.faultInputMap contains:
+	 * 			val_out = sender_out (agree node output),
+	 * 			alt_val = 1.0 (fail to value)
+	 * This method will create the list "actuals" which contains:
+	 *  [__fault__nominal__val_out, 1.0, __fault__trigger__sender__fault_1]
+	 *
+	 * These are the actual lustre values that are passed to the fault node call.
+	 *
+	 *
+	 * @param f The fault for this agree node - uses inputs for this fault node
+	 * 			to construct lustre names.
+	 * @param localFaultTriggerMap Map<Fault, Expr> from fault to trigger expression.
+	 * @return List of expressions for trigger, nominal, etc.
+	 */
 	public List<Expr> constructNodeInputs(Fault f, Map<Fault, Expr> localFaultTriggerMap) {
+		// List will hold in order all inputs for fault node.
 		List<Expr> actuals = new ArrayList<>();
 		for (VarDecl vd : f.faultNode.inputs) {
-			// there is an extra "trigger" input
 			Expr actual;
+			// If user attempted to define a trigger, throw exception.
 			if (vd.id.equalsIgnoreCase("trigger")) {
 				if (f.faultInputMap.containsKey(vd.id)) {
 					throw new SafetyException(
 							"Trigger input for fault node should not be explicitly assigned by user.");
 				}
-				actual = new IdExpr(createFaultNodeInputId(f.id));
+				// Lustre name of trigger
+				actual = new IdExpr(createFaultNodeTriggerId(f.id));
 				localFaultTriggerMap.put(f, actual);
 			} else {
 				actual = f.faultInputMap.get(vd.id);
-				// do any name conversions on the stored expression.
-				// create nominal id
+				// Do any name conversions on the stored expression and create nominal id.
 				actual = actual.accept(this);
 				if (actual == null) {
 					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
@@ -423,139 +441,125 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return actuals;
 	}
 
+	/**
+	 * Adds fault node eqs to agree node. Will add the fault node call and
+	 * the nested trigger statement to the node builder.
+	 * Ex fault node call:
+	 * Sender__fault_1__node__val_out =
+	 * 	Common_Faults__fail_to_real(__fault__nominal__sender_out, 1.0, fault__trigger__Sender__fault_1);
+	 *
+	 * Ex nested trigger expr:
+	 * agree_node_output =
+	 * 				if fault__trigger_1 then fault__node_1__val_out
+	 * 				else if fault__trigger_2 then fault__node_2__val_out
+	 * 				...
+	 * 				else __fault__nominal__output)
+	 * @param faults List of faults for this agree node.
+	 * @param nb NodeBuilder that will have these things added.
+	 */
 	public void addFaultNodeEqs(List<Fault> faults, AgreeNodeBuilder nb) {
-		Map<String, List<Pair>> localMultipleFaultMap = new HashMap<String, List<Pair>>();
 		// Loop through all faults in this node
 		for (Fault f : faults) {
 			// If this fault is asymmetric, move to the next fault in the list.
-			if (f.propType != null) {
-				if (f.propType.getPty() instanceof asymmetric) {
-					continue;
-				}
+			if (isAsymmetric(f)) {
+				continue;
+
 			}
-
-			// if we have multiple faults on a single output,
-			// we want to handle these differently.
-			for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
-				List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
-				if (list.size() > 1) {
-					// Then we have multiple faults on a single output.
-					// Save these to handle later.
-					localMultipleFaultMap.put(lhsWithStmtName, list);
-//					addToMutualExclusionList(list);
-				} else {
-					// Else single fault case.
-					// Don't add extra info to node if asym
-//					if (f.propType != null) {
-//						if (f.propType.getPty() instanceof asymmetric) {
-//							continue;
-//						}
-//					}
-					Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
-					List<IdExpr> lhs = new ArrayList<IdExpr>();
-					Expr nominal;
-
-					// make locals for fault node outputs
-					// populate outputParamToActualMap
-					for (VarDecl v : f.faultNode.outputs) {
-						String lhsId = this.createFaultNodeEqId(f.id, v.id);
-						AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
-						nb.addLocal(actual);
-						lhs.add(new IdExpr(lhsId));
-						f.outputParamToActualMap.put(v.id, actual);
-					}
-					// Call fault node and put this into lustre node as local equation.
-					AgreeEquation eq = new AgreeEquation(lhs,
-							new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)),
-							f.faultStatement);
-					nb.addLocalEquation(eq);
-
-					// Create nominal id name with key from this map
-					String nomId = createNominalId(lhsWithStmtName);
-					Expr defaultExpr = new IdExpr(nomId);
-					nominal = defaultExpr;
-					List<TriggerFaultOutPair> triggerList = new ArrayList<>();
-					// Go through pairs of the list and create with statements.
-					for (Pair pair : list) {
-						Expr faultNodeOut = faultToActual(pair.f, pair.ex);
-						// Creates Lustre stmt:
-						// (if fault__trigger then fault_1__node__val_out
-						// else __fault__nominal__output
-						// Collect elements to build the nested if then else stmt described above.
-						Expr ftTrigger = localFaultTriggerMap.get(pair.f);
-						triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
-					}
-					// Now that all trigger output pairs have been added to the local map,
-					// we put together then nested if-then-else statement.
-					// Send the list of triggers with associated fault out statements
-					// to a recursive function that builds the nested if-then-else statement.
-					nb.addAssertion(
-							new AgreeStatement(
-									"Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(lhsWithStmtName),
-											BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, nominal, 0)),
-									null));
-				}
-			}
-		}
-
-		// Now that we have completed all single fault outputs, we
-		// handle the multiple fault outputs.
-		for (String key : localMultipleFaultMap.keySet()) {
-			// Nominal id will be the same for all these faults.
-//			String nomId = createNominalId(key);
-			Expr defaultExpr = new IdExpr(createNominalId(key));
-//			Expr resultExpr = defaultExpr;
-			List<TriggerFaultOutPair> triggerList = new ArrayList<>();
-//			List<Fault> faultsForSameOutput = new ArrayList<Fault>();
-
-			List<Pair> pairs = localMultipleFaultMap.get(key);
-			// For each fault in the pairs list...
-			for (Pair p : pairs) {
-				Fault f = p.f;
-				if (f.propType != null) {
-					if (f.propType.getPty() instanceof asymmetric) {
-						continue;
-					}
-				}
-				// make locals for fault node outputs
-				// populate outputParamToActualMap
-				Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
-				List<IdExpr> lhs = new ArrayList<IdExpr>();
-
-				for (VarDecl v : f.faultNode.outputs) {
-					String lhsId = this.createFaultNodeEqId(f.id, v.id);
-					AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
-					nb.addLocal(actual);
-					lhs.add(new IdExpr(lhsId));
-					f.outputParamToActualMap.put(v.id, actual);
-				}
-				// Create node call expression for this fault.
-				AgreeEquation eq = new AgreeEquation(lhs,
-						new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)),
-						f.faultStatement);
-				nb.addLocalEquation(eq);
-
-				Expr faultNodeOut = faultToActual(p.f, p.ex);
-				// Collect elements to build the nested if then else stmt.
-				// (if fault__trigger then fault_1__node__val_out
-				// else __fault__nominal__output
-				Expr ftTrigger = localFaultTriggerMap.get(p.f);
-				triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
-//				for (Fault curFault : faultsForSameOutput) {
-//					mutualExclusiveFaults.add(new FaultPair(curFault, p.f));
-//				}
-//				faultsForSameOutput.add(p.f);
-			}
-			if (!triggerList.isEmpty()) {
-				nb.addAssertion(
-						new AgreeStatement("Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(key),
-								BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)), null));
-			}
+			addNodeCallAndTriggerExpr(nb, f);
 		}
 	}
 
-	/*
-	 * Recursive function creates nested if-then-else expression
+	/**
+	 * Method adds fault node call and nested trigger expression to the node builder.
+	 * Ex fault node call:
+	 * Sender__fault_1__node__val_out =
+	 * 	Common_Faults__fail_to_real(__fault__nominal__sender_out, 1.0, fault__trigger__Sender__fault_1);
+	 *
+	 * Ex nested trigger expr:
+	 * agree_node_output =
+	 * 				if fault__trigger_1 then fault__node_1__val_out
+	 * 				else if fault__trigger_2 then fault__node_2__val_out
+	 * 				...
+	 * 				else __fault__nominal__output)
+	 *
+	 * @param nb NodeBuilder has these expressions added in assert stmts.
+	 * @param f Fault that holds this fault node call information.
+	 */
+	private void addNodeCallAndTriggerExpr(AgreeNodeBuilder nb, Fault f) {
+
+		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
+			Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
+			List<IdExpr> lhsOfNodeCall = new ArrayList<IdExpr>();
+
+			// make locals for fault node outputs
+			// populate outputParamToActualMap
+			for (VarDecl v : f.faultNode.outputs) {
+				String lhsId = this.createFaultNodeEqId(f.id, v.id);
+				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
+				nb.addLocal(actual);
+				lhsOfNodeCall.add(new IdExpr(lhsId));
+				f.outputParamToActualMap.put(v.id, actual);
+			}
+			// Call fault node and put this into lustre node as local equation.
+			AgreeEquation eq = new AgreeEquation(lhsOfNodeCall,
+					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
+			nb.addLocalEquation(eq);
+			// Add nested trigger expression.
+			addTriggerExpr(nb, localFaultTriggerMap, lhsWithStmtName);
+		}
+	}
+
+	/**
+	 * Adds the nested lustre stmt that constrains agree node output based
+	 * on which fault trigger is active. Thus, the agree node output reflects
+	 * the fault node call linked to a specific trigger.
+	 * assert (agree_node_output =
+	 * 				if fault__trigger then fault__node__val_out
+	 * 				else __fault__nominal__output)
+	 *
+	 * @param nb NodeBuilder that will have this assertion added to it.
+	 * @param localFaultTriggerMap Map<Fault, Expr> from fault to trigger expr.
+	 * @param lhsWithStmtName String of agree_node_output.
+	 */
+	private void addTriggerExpr(AgreeNodeBuilder nb, Map<Fault, Expr> localFaultTriggerMap,
+			String lhsWithStmtName) {
+		List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
+		String nomId = createNominalId(lhsWithStmtName);
+		Expr defaultExpr = new IdExpr(nomId);
+		List<TriggerFaultOutPair> triggerList = new ArrayList<>();
+		// Go through pairs of the list and create with statements.
+		for (Pair pair : list) {
+			if (isAsymmetric(pair.f)) {
+//				if (pair.f.propType.getPty() instanceof asymmetric) {
+					continue;
+//				}
+			}
+			Expr faultNodeOut = faultToActual(pair.f, pair.ex);
+			// Collect elements to build the nested if then else stmt described above.
+			Expr ftTrigger = localFaultTriggerMap.get(pair.f);
+			triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
+		}
+		// Send the list of triggers with associated fault out statements
+		// to a recursive function that builds the nested if-then-else statement.
+		nb.addAssertion(
+				new AgreeStatement("Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(lhsWithStmtName),
+						BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)), null));
+	}
+
+	/**
+	 * Recursive function creates nested if-then-else expression given a list of pairs
+	 * linking the trigger and fault output.
+	 * agree_node_output =
+	 * 				if fault__trigger_1 then fault__node_1__val_out
+	 * 				else if fault__trigger_2 then fault__node_2__val_out
+	 * 				...
+	 * 				else __fault__nominal__output)
+	 *
+	 * @param list List<TriggerFaultOutPair> links the trigger stmt with the
+	 * 				fault node output.
+	 * @param nominal Expr of __fault__nominal__output for the "else" portion.
+	 * @param index Recursive function begins at index 0.
+	 * @return Expr holding nested IfThenElseExpr.
 	 */
 	private Expr createNestedIfThenElseExpr(List<TriggerFaultOutPair> list, Expr nominal, int index) {
 		if (index > list.size() - 1) {
@@ -722,7 +726,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return "__fault__dependently__active__" + base;
 	}
 
-	public String createFaultNodeInputId(String base) {
+	public String createFaultNodeTriggerId(String base) {
 		return "fault__trigger__" + base;
 	}
 
@@ -1202,7 +1206,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * statement equated to the active var id.
 	 */
 	public void mapFaultActiveToNodeInterface(Fault f, List<String> path, String base, AgreeNodeBuilder builder) {
-		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(f.id));
+		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeTriggerId(f.id));
 		String indepentlyActiveVarId = this.createFaultIndependentActiveId(base);
 		String depentlyActiveVarId = this.createFaultDependentActiveId(base);
 
@@ -1217,7 +1221,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	public void mapFaultActiveToNodeInterface(HWFault hwf, List<String> path, String base, AgreeNodeBuilder builder) {
-		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeInputId(hwf.id));
+		String interfaceVarId = addPathDelimiters(path, this.createFaultNodeTriggerId(hwf.id));
 		String indepentlyActiveVarId = this.createFaultIndependentActiveId(base);
 		String depentlyActiveVarId = this.createFaultDependentActiveId(base);
 
@@ -1268,7 +1272,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Add information into top level regarding asymmetric faults.
 		addAssumeHistStmts(nb);
 		addLocalsForCommNodes(nb);
-//		addAsymFaultInputs(nb);
 		addAsymCountConstraints(nb);
 		addAsymFaultAssertions(nb);
 		addAsymNodeCalls(nb);
@@ -1403,7 +1406,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					// effect
 					// from both hw dependent and hw independent faults
 					String interfaceVarId = addPathDelimiters(((HWFault) propagation.srcFault).path,
-							this.createFaultNodeInputId(((HWFault) propagation.srcFault).id));
+							this.createFaultNodeTriggerId(((HWFault) propagation.srcFault).id));
 					faultExprs.add(new IdExpr(interfaceVarId));
 				} else if (propagation.srcFault instanceof Fault) {
 					String base = addPathDelimiters(((Fault) propagation.srcFault).path,
@@ -1749,27 +1752,52 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
-	/*
-	 * private method that checks to see if a fault is an asymmetric fault
+	/**
+	 * Method checks to see if a fault stmt defines an asymmetric fault.
+	 *
+	 * @param fstmt FaultStatement to be checked for symmetry.
+	 * @return Boolean isAsymmetric value
 	 */
 	private boolean isAsymmetric(FaultStatement fstmt) {
 		boolean isAsym = false;
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof PropagationTypeStatement) {
-				if (((PropagationTypeStatement) fs).getPty() instanceof asymmetric) {
-					isAsym = true;
-				} else {
-					isAsym = false;
+				if (fs != null) {
+					if (((PropagationTypeStatement) fs).getPty() instanceof asymmetric) {
+						isAsym = true;
+					} else {
+						isAsym = false;
+					}
+					break;
 				}
-				break;
 			}
 		}
 		return isAsym;
 	}
 
-	/*
-	 * addAssumeHistStmts is used to assert that the assume hist statements
+	/**
+	 * Method checks to see if a fault is an asymmetric fault.
+	 *
+	 * @param f Fault that is either symmetric or asymmetric.
+	 * @return Boolean isAsymmetric value
+	 */
+	private boolean isAsymmetric(Fault f) {
+		boolean isAsym = false;
+		if (f.propType != null) {
+			if (f.propType.getPty() instanceof asymmetric) {
+				isAsym = true;
+			}
+		}
+		return isAsym;
+	}
+
+	/**
+	 * Method is used to assert that the assume hist statements
 	 * for each comm node is true. This is added to main.
+	 * Ex:
+	 * assert (asym_node_0__Sender__sender_out____ASSUME__HIST = __HIST(true));
+	 *
+	 * @param nb NodeBuilder that will have these assertions added.
 	 */
 	private void addAssumeHistStmts(AgreeNodeBuilder nb) {
 		for (String commNodes : mapCommNodeToInputs.keySet()) {
@@ -1785,17 +1813,24 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * addLocalsForCommNode is used when asymmetric fault is being added to the top node.
+	/**
+	 * Method is used when asymmetric fault is being added to the top node.
 	 * It adds all locals to the top node that are present in new comm nodes.
+	 * Ex:
+	 * asym_node_1__Sender__input : Base_Types__Float;
+	 * asym_node_1__Sender__output : Base_Types__Float;
+	 * asym_node_1__Sender____ASSUME__HIST : bool;
+	 *
+	 * ... etc
+	 *
+	 * @param nb NodeBuilder that will have this information added.
 	 */
 	private void addLocalsForCommNodes(AgreeNodeBuilder nb) {
-		// Access mapCommNodesToInputs to gather inputs for each comm node.
+		// Access inputs for each comm node.
 		for (String commNodes : mapCommNodeToInputs.keySet()) {
 			List<AgreeVar> inputs = mapCommNodeToInputs.get(commNodes);
 			List<AgreeVar> inputsToAdd = new ArrayList<AgreeVar>();
 			List<AgreeVar> intputsToRemove = new ArrayList<AgreeVar>();
-
 			for (AgreeVar var : inputs) {
 				if (!(var.id.contains(commNodes))) {
 					// Create new AgreeVar with new id
@@ -1805,47 +1840,32 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					inputsToAdd.add(newVar);
 				}
 			}
-
 			for (AgreeVar varToAdd : inputsToAdd) {
 				inputs.add(varToAdd);
 			}
-
 			for (AgreeVar varToRemove : intputsToRemove) {
 				inputs.remove(varToRemove);
 			}
-
 			nb.addInput(mapCommNodeToInputs.get(commNodes));
 		}
 	}
 
-	/*
-	 * addAsymFaultInputs will add all fault dep/indep inputs and
-	 * fault events to the top level node.
-	 */
-	private void addAsymFaultInputs(AgreeNodeBuilder nb) {
-		Map<String, FaultStatement> inputsToAdd = new HashMap<String, FaultStatement>();
-		// Access fault from map that collected all asym faults,
-		// use this to create base for event, dep active variable names.
-		// For each fault, create event and dep active vars and add to inputs.
-		for (Fault fault : mapAsymFaultToCommNodes.keySet()) {
-			for (String node : mapAsymFaultToCommNodes.get(fault)) {
-				inputsToAdd.put(node, fault.faultStatement);
-			}
-		}
-
-		for (String var : inputsToAdd.keySet()) {
-			nb.addInput(new AgreeVar(this.createFaultDependentActiveId(var), NamedType.BOOL, inputsToAdd.get(var)));
-			nb.addInput(new AgreeVar(this.createFaultEventId(var), NamedType.BOOL, inputsToAdd.get(var)));
-		}
-	}
-
-	/*
-	 * addAsymCountConstraints will add the local variable for
-	 * the count of asymmetric faults. Then will add constraints to
-	 * the top node accordingly.
+	/**
+	 * Method adds the local variable for the count of asymmetric faults.
+	 * Constraints for this count are added in assertions.
+	 * Ex:
+	 * 	__fault__Sender__fault_1_count : int; (as local in main)
+	 *
+	 * assert (__fault__Sender__fault_1_count =
+	 * 		((if asym_node_0__fault__trigger__Sender__fault_1
+	 * 		  then 1
+	 * 		  else 0)
+	 *
+	 * assert (__fault__Sender__fault_1_count <= 3); (where 3 is total no. of connections)
+	 *
+	 * @param nb NodeBuilder that will have this information added.
 	 */
 	private void addAsymCountConstraints(AgreeNodeBuilder nb) {
-		// Each asym fault has its own count restrictions that depend on its number of connections.
 		// Access the asym faults through map and create count for each.
 		// Make local map saving said count with its fault.
 		for (Fault f : mapAsymFaultToCommNodes.keySet()) {
@@ -1858,9 +1878,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			for (String n : nodes) {
 				sumExprs.add(createSumExpr(new IdExpr(n + "__fault__trigger__" + f.id)));
 			}
+			// Add the constraints associated with the count.
 			Expr faultCountExpr = buildFaultCountExpr(sumExprs, 0);
 			Expr equate = new BinaryExpr(new IdExpr(id), BinaryOp.EQUAL, faultCountExpr);
-			// Add the constraints associated with the count.
 			nb.addAssertion(new AgreeStatement("", equate, topNode.reference));
 
 			// Restrict to less than the total number of connections
@@ -1869,10 +1889,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * addAsymFaultAssertions method adds assertions associated with the fault event,
-	 * indep/dep active, and sender component fault trigger causing comm node faults to
-	 * become active.
+	/**
+	 * Method adds assertions associated with the asym fault event.
+	 * Adds triggers for the communication node faults:
+	 * 		__fault__trigger__Sender__fault_1 : bool;
+	 * Adds trigger expression linking fault of sender node to the comm node
+	 * behavior:
+	 * 		output = if __fault__trigger__Sender__fault_1
+	 * 				 then Sender__fault_1__node__val_out
+	 * 				 else __fault__nominal__output
+	 *
+	 * @param nb NodeBuilder that will have these assertions added.
 	 */
 	private void addAsymFaultAssertions(AgreeNodeBuilder nb) {
 		// List of idExpr holding dep ids and list for indep ids
@@ -1894,51 +1921,57 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * addAsymNodeCalls adds the node calls into main node in lustre.
+	/**
+	 * Method adds the asym communication node calls into main node in lustre.
+	 *
+	 * @param nb NodeBuilder has these node calls added.
 	 */
 	private void addAsymNodeCalls(AgreeNodeBuilder nb) {
-		// For each key in map, get name of node and list
-		// of lustre inputs. Enter these into node call expr
-		// and insert into assertions in node builder.
+		// For each key in map, get name of node and list of lustre inputs.
 		List<Expr> tempIds = new ArrayList<>();
 		for (String nodeName : mapCommNodeToInputs.keySet()) {
 			for (AgreeVar av : mapCommNodeToInputs.get(nodeName)) {
 				IdExpr id = new IdExpr(av.id);
 				tempIds.add(id);
 			}
+			// Create node call expression
 			NodeCallExpr nodeCall = new NodeCallExpr(nodeName, tempIds);
 			nb.addAssertion(new AgreeStatement("", nodeCall, this.topNode.reference));
 			tempIds.clear();
 		}
 	}
 
-	/*
-	 * changeAsymConnections will remove the previous connections from sender to
-	 * receivers and add in the new connections from sender to commNode and
-	 * from commNode to receiver.
+	/**
+	 * Method will remove the previous connections in the main lustre node
+	 * from sender to receivers and add in the new connections from sender
+	 * to commNode and from commNode to receiver.
+	 * Ex: What used to be:
+	 * 	   Sender_out = reciever1.in
+	 * 	   Sender_out = reciever2.in
+	 * 	   Sender_out = reciever3.in
+	 * Is now:
+	 * 	   Sender_out = asym0.in
+	 * 	   Sender_out = asym1.in
+	 * 	   Sender_out = asym2.in
+	 * 	   asym0.out = reciever1.in
+	 * 	   asym1.out = reciever2.in
+	 * 	   asym2.out = reciever3.in
+	 *
+	 * @param nb NodeBuilder for the main lustre node.
 	 */
 	private void changeAsymConnections(AgreeNodeBuilder nb) {
-		// Remove old connections
-
-		// Insert new connections sender_output = commNode_input
+		// Insert connections sender_output = commNode_input
 		for (String output : mapAsymCompOutputToCommNodeIn.keySet()) {
 			for (String nodeName : mapAsymCompOutputToCommNodeIn.get(output)) {
 				Expr eq = new BinaryExpr(new IdExpr(output), BinaryOp.EQUAL, new IdExpr(nodeName));
 				nb.addAssertion(new AgreeStatement("", eq, this.topNode.reference));
 			}
 		}
-
-		// Insert connections commNode_output = receiver_input
-		// We save these connection names in a local list for use in
-		// changing the assertions with preexisting connections.
-		// First access name of receiving component and its input
-		// then create lustre connection name, put these together in an
-		// "equals" binary expression, and add to assertions.
-		List<String> receivingConns = new ArrayList<String>();
+		// Insert connections commNode_output = receiver_input.
 		for (String output : mapCommNodeOutputToConnections.keySet()) {
 			String featureName = "";
 			String componentName = "";
+			// First access name of receiving component and its input
 			if (mapCommNodeOutputToConnections.get(output).eContainer() instanceof SystemInstanceImpl) {
 				FeatureInstanceImpl fi = (FeatureInstanceImpl) mapCommNodeOutputToConnections.get(output);
 				componentName = "";
@@ -1955,19 +1988,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			} else {
 				new SafetyException("Asymmetric fault must have an allowable connection.");
 			}
+			// Create lustre connection name, add to builder.
 			IdExpr connectionName = new IdExpr(componentName + featureName);
-			receivingConns.add(componentName + featureName);
 			Expr eq = new BinaryExpr(new IdExpr(output), BinaryOp.EQUAL, connectionName);
 			nb.addAssertion(new AgreeStatement("", eq, this.topNode.reference));
 		}
 	}
 
-	/*
-	 * helper method that builds an or expression of all things in list
+	/**
+	 * Method builds an OR expression of all things in list.
 	 * Base case: list is empty : append false to or list
 	 * Base case 2: list has one element : return that element.
-	 * Recursive case: make or of element of list with recursive call
+	 * Recursive case: make or of element of list with recursive call.
 	 *
+	 * @param exprList List of expressions for disjunction.
+	 * @param index Recursive function begins with 0 as index.
+	 * @return Expr: disjunction of all expr in list.
 	 */
 	private Expr buildBigOrExpr(List<Expr> exprList, int index) {
 		if (index > exprList.size() - 1) {
@@ -1979,20 +2015,31 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 	}
 
-	/*
-	 * Public accessor for the Map<Fault, String: LustreName> This map is created in
-	 * mapFaultToActiveNodeInterface (line 410).
+	/**
+	 * Public accessor for the mapping from a fault to its corresponding lustre name.
+	 * @return Map<Fault, List<String>> faultToLustreNameMap
 	 */
 	public Map<Fault, List<String>> getFaultToLustreNameMap() {
 		return mapFaultToLustreNames;
 	}
 
-	/*
-	 * Public accessor for the Map<Fault,String:faultyOutputName> This map is
-	 * created in gatherFaultyOutputs (line 270).
+	/**
+	 * Public accessor for the map from a fault to its associated agree node name.
+	 *
+	 * @return Map<Fault, String> mapFaultToPath
 	 */
 	public Map<Fault, String> getMapFaultToPath() {
 		return mapFaultToPath;
+	}
+
+	/**
+	 * Public accessor for faultMap: faultMap is used to properly set up the
+	 * top-level node for triggering faults - faultMap stores the faults associated
+	 * with a node.
+	 * @return Map<ComponentInstance, List<Fault>> faultMap
+	 */
+	public Map<ComponentInstance, List<Fault>> getFaultMap() {
+		return faultMap;
 	}
 
 	public class Pair {
