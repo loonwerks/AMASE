@@ -372,12 +372,21 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
 		for (String faultyId : faultyVarsExpr.keySet()) {
-			AgreeVar out = findVar(node.outputs, (faultyId));
-			if (out == null) {
-				throw new SafetyException("A fault defined for " + node.id + " has a connection"
-						+ " that is not a valid output for this component.");
-			} else {
-				nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
+			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
+			boolean onlySym = true;
+			for (Pair p : faultPairs) {
+				if (isAsymmetric(p.f)) {
+					onlySym = false;
+				}
+			}
+			if (onlySym) {
+				AgreeVar out = findVar(node.outputs, (faultyId));
+				if (out == null) {
+					throw new SafetyException("A fault defined for " + node.id + " has a connection"
+							+ " that is not a valid output for this component.");
+				} else {
+					nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
+				}
 			}
 		}
 	}
@@ -669,8 +678,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (faultyVarsExpr.containsKey(e.id)) {
 			List<Pair> lp = faultyVarsExpr.get(e.id);
 			for (Pair p : lp) {
-				if (p.ex.toString().equals(e.id)) {
-					return new IdExpr(e.location, createNominalId(e.id));
+				if (!isAsymmetric(p.f)) {
+					if (p.ex.toString().equals(e.id)) {
+						return new IdExpr(e.location, createNominalId(e.id));
+					}
 				}
 			}
 		}
@@ -1734,6 +1745,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				pq);
 	}
 
+	/**
+	 *
+	 * @param topNode
+	 * @param builder
+	 * @param elementProbabilities
+	 * @param faultCombinationsAboveThreshold
+	 */
 	private void buildNonFaultCombinationAssertions(AgreeNode topNode, AgreeNodeBuilder builder,
 			ArrayList<FaultProbability> elementProbabilities,
 			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold) {
