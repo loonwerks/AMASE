@@ -499,6 +499,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb NodeBuilder that will have these things added.
 	 */
 	public void addFaultNodeEqs(List<Fault> faults, AgreeNodeBuilder nb) {
+		Map<Fault, Expr> faultTriggerMap = new HashMap<>();
 		// Loop through all faults in this node
 		for (Fault f : faults) {
 			// If this fault is asymmetric, move to the next fault in the list.
@@ -506,7 +507,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				continue;
 
 			}
-			addNodeCallAndTriggerExpr(nb, f);
+			addNodeCall(nb, f, faultTriggerMap);
+		}
+		// Add trigger expression for each output.
+		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
+			addTriggerExpr(nb, faultTriggerMap, lhsWithStmtName);
 		}
 	}
 
@@ -526,36 +531,32 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb NodeBuilder has these expressions added in assert stmts.
 	 * @param f Fault that holds this fault node call information.
 	 */
-	private void addNodeCallAndTriggerExpr(AgreeNodeBuilder nb, Fault f) {
-
-		for (String lhsWithStmtName : faultyVarsExpr.keySet()) {
-			Map<Fault, Expr> localFaultTriggerMap = new HashMap<>();
-			List<IdExpr> lhsOfNodeCall = new ArrayList<IdExpr>();
-
-			// make locals for fault node outputs
-			// populate outputParamToActualMap
-			for (VarDecl v : f.faultNode.outputs) {
-				String lhsId = this.createFaultNodeEqId(f.id, v.id);
-				AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
-				nb.addLocal(actual);
-				lhsOfNodeCall.add(new IdExpr(lhsId));
-				f.outputParamToActualMap.put(v.id, actual);
-			}
-			// Call fault node and put this into lustre node as local equation.
-			AgreeEquation eq = new AgreeEquation(lhsOfNodeCall,
-					new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
-			nb.addLocalEquation(eq);
-			// Add nested trigger expression.
-			addTriggerExpr(nb, localFaultTriggerMap, lhsWithStmtName);
+	private void addNodeCall(AgreeNodeBuilder nb, Fault f, Map<Fault, Expr> localFaultTriggerMap) {
+		List<IdExpr> lhsOfNodeCall = new ArrayList<IdExpr>();
+		// make locals for fault node outputs
+		// populate outputParamToActualMap
+		for (VarDecl v : f.faultNode.outputs) {
+			String lhsId = this.createFaultNodeEqId(f.id, v.id);
+			AgreeVar actual = new AgreeVar(lhsId, v.type, f.faultStatement);
+			nb.addLocal(actual);
+			lhsOfNodeCall.add(new IdExpr(lhsId));
+			f.outputParamToActualMap.put(v.id, actual);
 		}
+		// Call fault node and put this into lustre node as local equation.
+		AgreeEquation eq = new AgreeEquation(lhsOfNodeCall,
+				new NodeCallExpr(f.faultNode.id, constructNodeInputs(f, localFaultTriggerMap)), f.faultStatement);
+		nb.addLocalEquation(eq);
 	}
 
 	/**
 	 * Adds the nested lustre stmt that constrains agree node output based
 	 * on which fault trigger is active. Thus, the agree node output reflects
 	 * the fault node call linked to a specific trigger.
-	 * assert (agree_node_output =
-	 * 				if fault__trigger then fault__node__val_out
+	 * Ex nested trigger expr:
+	 * agree_node_output =
+	 * 				if fault__trigger_1 then fault__node_1__val_out
+	 * 				else if fault__trigger_2 then fault__node_2__val_out
+	 * 				...
 	 * 				else __fault__nominal__output)
 	 *
 	 * @param nb NodeBuilder that will have this assertion added to it.
@@ -625,12 +626,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// If this expression is not in map, return exception message
 		String outputName = f.faultOutputMap.get(ex);
 		if (outputName == null) {
-			new Exception("Cannot find expression in mapping: faultToActual (Debug: AddFaultsToNodeVisitor 484)");
+			new SafetyException("Cannot find expression in mapping: faultToActual (Debug: AddFaultsToNodeVisitor 484)");
 		}
 		// Use outputName to get value from outputParamToActualMap
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
 		if (f.outputParamToActualMap.isEmpty()) {
-			System.out.println("Map is empty. Fault is: " + f.id + " and expr is: " + ex.toString());
+			new SafetyException("Map is empty. Fault is: " + f.id + " and expr is: " + ex.toString());
 		}
 		// Create IdExpr out of actual string
 		return new IdExpr(actual.id);
