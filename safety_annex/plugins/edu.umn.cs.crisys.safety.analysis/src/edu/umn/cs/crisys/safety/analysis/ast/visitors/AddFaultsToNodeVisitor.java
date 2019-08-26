@@ -569,11 +569,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		String nomId = createNominalId(lhsWithStmtName);
 		Expr defaultExpr = new IdExpr(nomId);
 		List<TriggerFaultOutPair> triggerList = new ArrayList<>();
+		boolean isOnlyAsym = true;
 		// Go through pairs of the list and create with statements.
 		for (Pair pair : list) {
 			if (isAsymmetric(pair.f)) {
 				continue;
 			}
+			isOnlyAsym = false;
 			Expr faultNodeOut = faultToActual(pair.f, pair.ex);
 			// Collect elements to build the nested if then else stmt described above.
 			Expr ftTrigger = localFaultTriggerMap.get(pair.f);
@@ -581,9 +583,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 		// Send the list of triggers with associated fault out statements
 		// to a recursive function that builds the nested if-then-else statement.
-		nb.addAssertion(
-				new AgreeStatement("Adding new safety analysis BinaryExpr", new BinaryExpr(new IdExpr(lhsWithStmtName),
-						BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)), null));
+		// If there are only asym faults here, then we do not want to add
+		// anything in the sender node regarding fault nominal.
+		if (!isOnlyAsym) {
+			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
+					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL,
+							createNestedIfThenElseExpr(triggerList, defaultExpr, 0)),
+					null));
+		}
 	}
 
 	/**
@@ -1846,6 +1853,27 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return isAsym;
+	}
+
+	/**
+	 * Takes list of faults and checks to see if they are all
+	 * asymmetric.
+	 *
+	 * @param faults List of faults to check.
+	 * @return true if all faults in list are asym, false otherwise.
+	 */
+	private boolean hasOnlyAsymmetric(List<Fault> faults) {
+		boolean hasSym = false;
+		for (Fault f : faults) {
+			if (f.propType != null) {
+				if (f.propType.getPty() instanceof symmetric) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		return !hasSym;
 	}
 
 	/**

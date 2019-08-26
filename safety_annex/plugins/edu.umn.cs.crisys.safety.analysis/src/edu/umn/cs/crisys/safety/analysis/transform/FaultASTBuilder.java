@@ -22,6 +22,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.ReplaceIdVisitor;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
@@ -179,8 +180,11 @@ public class FaultASTBuilder {
 		// 3. Populate mapSenderToReceiver with fanned out connections.
 		senderConnections = populateMapSenderToReceiver(senderOutput);
 
-		// 4. Create the communication nodes and add to Lustre program.
-		createCommNodes(senderConnections, fstmt, fault, senderOutput);
+		// 4. Rename safety eq stmts in fault
+		Fault newFault = renameFaultEqs(fault);
+
+		// 5. Create the communication nodes and add to Lustre program.
+		createCommNodes(senderConnections, fstmt, newFault, senderOutput);
 
 		return fault;
 	}
@@ -335,6 +339,84 @@ public class FaultASTBuilder {
 		}
 
 		return senderConnections;
+	}
+
+	/**
+	 *
+	 * @param faults
+	 * @return
+	 */
+	private Fault renameFaultEqs(Fault f) {
+		Map<String, String> idMap = constructEqIdMap(f, f.safetyEqVars);
+		Fault newFault = renameEqId(f, idMap);
+
+		return newFault;
+	}
+
+	/**
+	 * Returns mapping from eq vars to lustre names.
+	 *
+	 * @param f Fault in question.
+	 * @param eqVars safety eq vars in this fault statement
+	 * @return Map<String, String> maps the fault id to the safetyEqVars
+	 */
+	private Map<String, String> constructEqIdMap(Fault f, List<AgreeVar> eqVars) {
+		HashMap<String, String> theMap = new HashMap<>();
+		for (AgreeVar eqVar : eqVars) {
+			theMap.put(eqVar.id, createFaultEqId(f.id, eqVar.id));
+		}
+		return theMap;
+	}
+
+	/**
+	 *
+	 * @param fault
+	 * @param var
+	 * @return
+	 */
+	private String createFaultEqId(String fault, String var) {
+		return fault + "__" + var;
+	}
+
+	/**
+	 *
+	 * @param f
+	 * @param idMap
+	 * @return
+	 */
+	private Fault renameEqId(Fault f, Map<String, String> idMap) {
+		Fault newFault = new Fault(f);
+		newFault.safetyEqVars.clear();
+		newFault.safetyEqAsserts.clear();
+		newFault.faultOutputMap.clear();
+		newFault.faultInputMap.clear();
+
+		if (!f.triggers.isEmpty()) {
+			throw new SafetyException("Triggers are currently unsupported for translation");
+		}
+
+		// update the variable declarations
+		for (AgreeVar eq : f.safetyEqVars) {
+			if (idMap.containsKey(eq.id)) {
+				eq = new AgreeVar(idMap.get(eq.id), eq.type, eq.reference);
+			}
+			newFault.safetyEqVars.add(eq);
+		}
+
+		ReplaceIdVisitor visitor = new ReplaceIdVisitor(idMap);
+		for (AgreeStatement s : f.safetyEqAsserts) {
+			newFault.safetyEqAsserts.add(visitor.visit(s));
+		}
+
+		for (Map.Entry<Expr, String> element : f.faultOutputMap.entrySet()) {
+			newFault.faultOutputMap.put(element.getKey().accept(visitor), element.getValue());
+		}
+
+		for (Map.Entry<String, Expr> element : f.faultInputMap.entrySet()) {
+			newFault.faultInputMap.put(element.getKey(), element.getValue().accept(visitor));
+		}
+
+		return newFault;
 	}
 
 	/**
