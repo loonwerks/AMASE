@@ -30,9 +30,21 @@ import jkind.lustre.Type;
 import jkind.lustre.VarDecl;
 import jkind.lustre.builders.NodeBuilder;
 
+/**
+ * Builds fault objects associated with multiple asymmetric faults on a single output.
+ * All communication nodes have all fault node calls, mutual exclusion, and other
+ * fault information within them.
+ * Main method that performs these actions is:
+ * processFaults: takes in list of FaultStatements and returns a list of associated Faults.
+ *
+ * @author Danielle Stewart
+ */
 public class AsymFaultASTBuilder extends FaultASTBuilder {
-
+	// Local list of expressions used as input for node call expression.
+	private Map<Fault, List<Expr>> nodeArguments = new HashMap<Fault, List<Expr>>();
+	List<TriggerFaultPair> triggerList = new ArrayList<>();
 	/**
+	 * Constructor
 	 *
 	 * @param globalLustreNodes
 	 * @param agreeNode
@@ -41,9 +53,6 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		super(globalLustreNodes, agreeNode);
 		// TODO Auto-generated constructor stub
 	}
-	// List of expressions used as input for node call expression.
-	private Map<Fault, List<Expr>> nodeArguments = new HashMap<Fault, List<Expr>>();
-	List<TriggerFaultPair> triggerList = new ArrayList<>();
 
 	/**
 	 * Process all faults in the list of fault statements and return a list of
@@ -94,10 +103,15 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 	}
 
 	/**
+	 * Method creates comm nodes (one for each connection). Each comm node has all
+	 * fault node calls, mutual exclusion, and other fault information within.
+	 * If a particular fault is active, it is active in all comm nodes and no other
+	 * fault is active at the same time.
 	 *
-	 * @param senderConnections
-	 * @param senderOutput
-	 * @param faults
+	 * @param senderConnections list of connection instance ends that
+	 * 		  describe sender connections.
+	 * @param senderOutput Output that faults are connected to.
+	 * @param faults All faults defined on that output.
 	 */
 	private void createCommNodes(List<ConnectionInstanceEnd> senderConnections, DataPortImpl senderOutput,
 			List<Fault> faults) {
@@ -192,14 +206,12 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		// Simple case is when it is bool, real. Otherwise if it is a record
 		// type, we need to access the field of the fault node input and append
 		// that to the expression (i.e. __fault__nominal__output.VAL = input.VAL)
-		String field = "";
 		String dotField = "";
 		if (type instanceof RecordType) {
 			for (Expr faultOutput : faults.get(0).faultOutputMap.keySet()) {
 				if (faultOutput instanceof RecordAccessExpr) {
 					RecordAccessExpr rac = (RecordAccessExpr) faultOutput;
 					dotField = "." + rac.field;
-					field = rac.field;
 				}
 			}
 		}
@@ -212,16 +224,12 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		BinaryExpr binAssumeAndTrue = super.createAssumeHistStmt(guar);
 		Expr assertStmt = null;
 		IdExpr output = null;
-		for (Fault fault : faults) {
-			// output = (fault_node_val_out)
-			// If record type, need to reference "output.VAL"
-			IdExpr toAssign = null;
-			toAssign = new IdExpr(getFaultNodeOutputId(fault));
-			if (type instanceof RecordType) {
-				output = new IdExpr("output" + dotField);
-			} else {
-				output = new IdExpr("output");
-			}
+		// output = (fault_node_val_out)
+		// If record type, need to reference "output.VAL"
+		if (type instanceof RecordType) {
+			output = new IdExpr("output" + dotField);
+		} else {
+			output = new IdExpr("output");
 		}
 
 		// Go through trigger list and add a nested if-then-else stmt
@@ -233,7 +241,6 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		// Before finishing the assert, check to see if we have safetyEqAsserts in the fault
 		// and add those to the finalExpr with "and"
 		assertStmt = addSafetyEqStmts(newNode, faults, new BoolExpr(true));
-
 		BinaryExpr finalExpr2 = new BinaryExpr(finalExpr1, BinaryOp.AND, assertStmt);
 
 		// Assert:
@@ -476,12 +483,20 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 	}
 
 	/**
+	 * Recursive function creates nested if-then-else expression given a list of pairs
+	 * linking the trigger and fault output.
+	 * agree_node_output =
+	 * 				if fault__trigger_1 then fault__node_1__val_out
+	 * 				else if fault__trigger_2 then fault__node_2__val_out
+	 * 				...
+	 * 				else __fault__nominal__output)
 	 *
-	 * @param list
-	 * @param nominal
-	 * @param index
-	 * @return
-	 */
+	 * @param list List<TriggerFaultOutPair> links the trigger stmt with the
+	 * 				fault node output.
+	 * @param nominal Expr of __fault__nominal__output for the "else" portion.
+	 * @param index Recursive function begins at index 0.
+	 * @return Expr holding nested IfThenElseExpr.
+	*/
 	private Expr createNestedIfThenElseExpr(List<TriggerFaultPair> list, Expr nominal, int index) {
 		if (index > list.size() - 1) {
 			return nominal;
@@ -493,6 +508,11 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		}
 	}
 
+	/**
+	 * Pair: trigger expr, faultOut expr
+	 * @author Danielle Stewart
+	 *
+	 */
 	public class TriggerFaultPair {
 		private Expr trigger;
 		private Expr faultOut;

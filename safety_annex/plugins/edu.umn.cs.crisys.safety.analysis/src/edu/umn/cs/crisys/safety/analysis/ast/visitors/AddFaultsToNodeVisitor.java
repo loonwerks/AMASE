@@ -978,22 +978,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Add mutually exclusive faults in pairs to the mutualExclusiveFault list.
-	 *
-	 * @param safetyFaults List of Faults to add in pairs.
-	 */
-	private void addMutualExclusiveFaultPairs(List<Fault> safetyFaults) {
-		for (int i = 0; i < safetyFaults.size() - 1; i++) {
-			for (int j = 1; j < safetyFaults.size(); j++) {
-				if (i != j) {
-					mutualExclusiveFaults.add(new FaultPair(safetyFaults.get(i), safetyFaults.get(j)));
-				}
-			}
-		}
-
-	}
-
-	/**
 	 * This method uses a list of fault statements and divides them into multiple asym faults on
 	 * a single output and everything else.
 	 *
@@ -1413,7 +1397,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 *   assert (Sender__fault__trigger__Sender__fault_2 =
 	 *   (__fault__independently__active__Sender__Sender__fault_2
 	 *   or __fault__dependently__active__Sender__Sender__fault_2));
-	
+
 	 *
 	 * @param hwf
 	 * @param path
