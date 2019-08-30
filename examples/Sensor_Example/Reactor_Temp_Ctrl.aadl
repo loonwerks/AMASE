@@ -16,7 +16,7 @@ public
 		annex agree {**
 				
 			guarantee "shut down when and only when we should": 
-			Shut_Down_Cmd = (Env_Temp > Constants.HIGHT_TEMPERATURE_THRESHOLD);	
+			Shut_Down_Cmd = (Env_Temp > Constants.HIGH_TEMPERATURE_THRESHOLD);	
 			
 --with the above guarantee split into the following two, with temperature sensor stuck at high,
 --for the non voting implementation, it takes the max 1 fault to make the "don't shut down when we shouldn't'" to fail		

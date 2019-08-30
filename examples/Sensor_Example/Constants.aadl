@@ -1,7 +1,7 @@
 package Constants
 public
 	annex agree {**
- 	const HIGHT_TEMPERATURE_THRESHOLD	: int = 300; --300 celsius
+ 	const HIGH_TEMPERATURE_THRESHOLD	: int = 300; --300 celsius
  	const HIGH_PRESSURE_THRESHOLD	: int = 1200; --1200 psi
  	const HIGH_RADIATION_THRESHOLD  : int = 400; --400 mSv
 
