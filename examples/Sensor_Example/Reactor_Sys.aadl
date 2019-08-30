@@ -16,13 +16,14 @@ public
 			Env_Pressure: in data port Integer;
 			Env_Radiation: in data port Integer;
 			Shut_Down_Cmd: out data port Boolean;
+			
 		annex agree{**
 				
-			guarantee "shut down when and only when we should": 
-			Shut_Down_Cmd = 
-			((Env_Temp> Constants.HIGHT_TEMPERATURE_THRESHOLD)  and 
-			(Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD) and
-			(Env_Radiation > Constants.HIGH_RADIATION_THRESHOLD));	
+			guarantee "Shut down when and only when we should": 
+				Shut_Down_Cmd = 
+					((Env_Temp> Constants.HIGH_TEMPERATURE_THRESHOLD)  and 
+					(Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD) and
+					(Env_Radiation > Constants.HIGH_RADIATION_THRESHOLD));	
 			
 		**};
 	end Reactor_Ctrl;
@@ -71,7 +72,7 @@ public
 			assign Shut_Down_Cmd = Reactor_Temp_Ctrl.Shut_Down_Cmd and Reactor_Pressure_Ctrl.Shut_Down_Cmd and Reactor_Radiation_Ctrl.Shut_Down_Cmd;		    						
 		**};
 		annex safety {**
-      		analyze : max 3 fault
+      		analyze : max 2 fault
    		**};
 	end Reactor_Ctrl.W_Voting;
 	
