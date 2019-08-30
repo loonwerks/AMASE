@@ -355,6 +355,8 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 							// add the child node to curNode
 							curNode.addChildNode(curChildName, childNode);
 						}
+						// set curNode as resolved as its child nodes are leaf nodes
+						curNode.resolved = true;
 						returnNode.addChildNode(curNodeName, curNode);
 					}
 				} else {
