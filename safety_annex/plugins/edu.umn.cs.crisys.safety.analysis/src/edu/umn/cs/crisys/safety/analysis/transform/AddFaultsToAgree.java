@@ -16,6 +16,14 @@ import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import jkind.api.results.AnalysisResult;
 
+/**
+ * Intercepts the program before JKind analysis is performed. If safety analysis
+ * is selected as a menu item, performs associated analysis. If not,
+ * program is returned unchanged.
+ *
+ * @author Danielle Stewart, Mike Whalen
+ *
+ */
 public class AddFaultsToAgree implements AgreeAutomater {
 
 	private static int transformFlag = 0;
@@ -34,82 +42,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * The AddFaultsToNodeVisitor.visit(node) method will set the "FaultTreeFlag" for that node
 	 * to true. This tells us in later agree methods that we are generating the soteria model
 	 * and hence we add the ivcs differently for that node. (Lines 159-161)
-	 *
-	 * This visit(node) method also adds top level fault analysis results depending on
-	 * what type of analysis is being run. If max no. faults or probabilistic, lines 183-185
-	 * add top level constraints. These are not added when generating soteria model.
-	 *
-	 * Another thing of import that occurs in visit(node) method is that the method:
-	 * addTopLevelFaultDeclarations is called (on line 176) on the node and node builder.
-	 * Here is where fault declarations are added differently depending on what type
-	 * of analysis is run.
-	 * --> If max/prob, then independent faults added to inputs. (Line 775-778)
-	 * --> If soteria generation, then independent faults are added locally,
-	 * assigned to false, and given the --%IVC command. This takes place in lines 778-793.
-	 *
-	 * The dependent faults are added the same in any type of fault analysis (796).
-	 *
-	 * (3) Once the program is changed with fault information added, we send it back to
-	 * AgreeASTBuilder.getAgreeProgram.
-	 *
-	 * (4) From here, the program is returned to SoteriaGenHandler.wrapVerificationResults (434)
-	 *
-	 * (5) Depending on the type of analysis selected, a different LustreASTBuilder is called.
-	 * When it is not monolithic analysis, wrapVerificationResults makes a call to
-	 * LustreASTBuilder.getAssumeGuaranteeLustreProgram.
-	 * The string of calls is as follows in that class:
-	 * - getAssumeGuaranteeLustreProgram (173)
-	 * - flattenAgreeNode (644)
-	 * - addSubnodeLustre (877)
-	 * - getLustreNode (535)
-	 * Here is where we add the guarantee ivcs based on whether or not the node
-	 * has subcomponents. This addition is found on lines 571-585.
-	 *
-	 */
-
-	/*
-	 * For each AgreeNode:
-	 * *** Note: This is specific to max/prob analysis. This changes in different ways when
-	 * *** performing soteria/fault tree generation. See notes above for those details.
-	 *
-	 * ! 1. Find the set of "faulty" outputs. Ensure that only one fault occurs per output
-	 * (test: print them & verify)
-	 * We need to map "faulty" outputs as they are define in the error
-	 * annex to their names in AGREE.
-	 *
-	 * ! 2. For each of these outputs define a "nominal" value
-	 * (test: print updated AST)
-	 * ! 3. For each property involving a faulty output, replace the faulty output id with the
-	 * nominal output id.
-	 * (test: print updated AST)
-	 * ! 4. For each fault, define a "fault_occurred" input (unique name?)
-	 * ! 4a. Create eq with unique name for each local eq. in the fault
-	 * (test: print updated AST)
-	 * ! 5. For each fault, define an assignment equation that assigns unique "fault" names
-	 * to the fault node outputs.
-	 * (test: print updated AST)
-	 * ! 6. For each of the "faulty" outputs assign it to the appropriate "fault" name node output.
-	 * (test: print updated AST)
-	 *
-	 * For the top-level node:
-	 *
-	 * ! 1. For each subcomponent node
-	 * For each subcomponent fault (depth-first)
-	 * 0. Perform a traversal to find all the node/fault pairs
-	 * 1a. Define an unconstrained local eq. to represent each fault-event
-	 * 1b. Define a constrained local eq. to assign fault-active value depending on
-	 * fault duration in node.
-	 * 1c. Assign subcomponent fault input to fault-active eq with assertions (yay!)
-	 * (test: print updated AST)
-	 * ! 2. Assign faults-active equation to sum of all fault-active values
-	 * (test: print updated AST)
-	 * 3. Assert that this value is <= 1 (FOR NOW!)
-	 * (test: print updated AST)
-	 * 4. Use shiny new fault annex to perform safety analysis
-	 * (test: analysis results)
-	 *
-	 *
-	 *
 	 */
 
 	/*
@@ -118,6 +50,14 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * @return AgreeProgram: this is either the unmodified original program,
 	 * or a transformed program (safety analysis)
 	 *
+	 */
+
+	/**
+	 * Transform program.
+	 * If safety analysis selected as menu item, pass program to AddFaultsToNodeVisitor.
+	 * If not, return unchanged program.
+	 *
+	 * @param program The AgreeProgram.
 	 */
 	@Override
 	public AgreeProgram transform(AgreeProgram program) {
@@ -150,16 +90,14 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return program;
 	}
 
-	/*
+	/**
 	 * setTransformFlag:
-	 *
-	 * @param none
-	 *
-	 * @return none
 	 * Sets the transform flag to int value:
 	 * 0 -> No SA performed
-	 * 1 -> SA selected
-	 * 2 -> SOTERIA model generation selected
+	 * 1 -> Peform analysis with faults present
+	 * 2 -> Generate minimal cut sets
+	 *
+	 * @param item menu item stating which kind of analysis to perform.
 	 */
 	public static void setTransformFlag(MenuItem item) {
 
@@ -179,24 +117,27 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 	}
 
-	/*
+	/**
 	 * getTransformFlag
-	 * @param none
-	 * @return boolean flag
-	 * Returns the value of the flag.
+	 * Returns the value of the flag:
+	 * 0 -> No SA performed
+	 * 1 -> Peform analysis with faults present
+	 * 2 -> Generate minimal cut sets
+	 *
+	 * @param int flag
 	 */
 	public static int getTransformFlag() {
 		return transformFlag;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater#rename(com.rockwellcollins.atc.agree.analysis.AgreeRenaming)
 	 *
 	 *  (1) Gets the fault Lustre names and renames them as the explanatory text
 	 *  associated with that fault statement.
 	 *  (2) Add to reference map: Lustre fault -> FaultStatementImpl
 	 *
+	 * @param renaming renaming map to find lustre names
 	 */
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
@@ -218,12 +159,21 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return renaming;
 	}
 
+	/**
+	 * Transform analysis result: only returns unchanged analysis result
+	 *
+	 * @param res analysis result
+	 */
 	@Override
 	public AnalysisResult transformResult(AnalysisResult res) {
 		return res;
 	}
 
-	// @Override
+	/**
+	 * Transform layout used for counterexample information.
+	 *
+	 * @param layout
+	 */
 	@Override
 	public AgreeLayout transformLayout(AgreeLayout layout) {
 
@@ -234,7 +184,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			// is required. This full path is stored in the fault.
 			// First, construct the path in dot form.
 			// Then find the corresponding key in the layout map.
-			// Add this fault explanitory text to the value (array list)
+			// Add this fault explanatory text to the value (array list)
 			// associated with that key.
 			layout.addElement(pathToString(key.path), key.explanitoryText + " (" + key.id + ")",
 					SigType.INPUT);
@@ -244,10 +194,12 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return layout;
 	}
 
-	// Takes in list of strings corresponding to a path
-	// and returns path in dot form:
-	// list = [a, b, c]
-	// return string = a.b.c
+	/** Takes in list of strings corresponding to a path
+	 * and returns path in dot form: list = [a, b, c] return string = a.b.c
+	 *
+	 * @param list of strings
+	 * @return string in dot form
+	 */
 	public String pathToString(List<String> list) {
 
 		String path = "";
@@ -260,6 +212,4 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 		return path;
 	}
-
-
 }
