@@ -23,7 +23,9 @@ Require-Bundle: org.eclipse.ui,
  com.rockwellcollins.atc.agree;bundle-version="2.0.0",
  com.rockwellcollins.atc.agree.analysis;bundle-version="2.0.0",
  edu.uah.rsesc.aadlsimulator.agree;bundle-version="0.1.0";resolution:=optional,
- com.rockwellcollins.atc.z3;bundle-version="4.7.1"
+ com.rockwellcollins.atc.z3;bundle-version="4.7.1",
+ org.eclipse.jface,
+ org.eclipse.swt
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.rockwellcollins.atc.agree.agree,
