@@ -36,10 +36,10 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 		for (SoteriaFTNode root : ft.resolvedRootNodes) {
 			String rootName = root.nodeName;
 			if (root.nodeValue == true) {
-				printRootNode(rootName);
+				printRootNode(root, rootName);
 				root.accept(this);
 			} else {
-				printNoTreeRootNode(rootName);
+				printNoTreeRootNode(root, rootName);
 			}
 		}
 		return null;
@@ -60,8 +60,10 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	@Override
 	public Void visit(SoteriaFTOrNode orNode) {
 		writeln("Total " + orNode.childNodes.size() + " Minimal Cut Sets");
+		int minCutSetNum = 0;
 		for (SoteriaFTNode child : orNode.childNodes.values()) {
-			writeln("Minimal Cut Set:");
+			minCutSetNum++;
+			writeln("Minimal Cut Set # " + minCutSetNum);
 			child.accept(this);
 		}
 		return null;
@@ -71,35 +73,40 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	public Void visit(SoteriaFTAndNode andNode) {
 		writeln("Cardinality " + andNode.childNodes.size());
 		writeln("[");
+		int faultNum = 0;
 		for (SoteriaFTNode child : andNode.childNodes.values()) {
+			faultNum++;
+			writeln("Fault # " + faultNum);
 			child.accept(this);
 		}
 		writeln("];");
 		return null;
 	}
 
-	private void printNoTreeRootNode(String rootName) {
-		writeln("----- NO CUTSET for " + rootName + "-----");
+	private void printNoTreeRootNode(SoteriaFTNode root, String rootName) {
+		writeln("No Minimal Cut Sets for property:");
+		writeln("property lustre name: " + rootName);
+		if (root instanceof SoteriaFTNonLeafNode) {
+			String propertyDescription = ((SoteriaFTNonLeafNode) root).propertyDescription;
+			writeln("property description: " + propertyDescription);
+		}
 		newline();
 	}
 
-	private void printRootNode(String rootName) {
-		writeln("----- CUTSET with probabilities for " + rootName + " -----");
+	private void printRootNode(SoteriaFTNode root, String rootName) {
+		writeln("Minimal Cut Sets for property:");
+		writeln("property lustre name: " + rootName);
+		if (root instanceof SoteriaFTNonLeafNode) {
+			String propertyDescription = ((SoteriaFTNonLeafNode) root).propertyDescription;
+			writeln("property description: " + propertyDescription);
+		}
 	}
 
-//	[
-//	--temp_sensor_stuck_at_high "temp sensor stuck at high"
-//	 (("Reactor_Temp_Ctrl","reactor_Temp_Ctrl_fault__independently__active__Temp_Sensor3__Temp_Sensor3__fault_1"),1.0E-5, 1.0);
-//	 --temp_sensor_stuck_at_high "temp sensor stuck at high"
-//	 (("Reactor_Temp_Ctrl","reactor_Temp_Ctrl_fault__independently__active__Temp_Sensor2__Temp_Sensor2__fault_1"),1.0E-5, 1.0)
-//	]
-
 	private void printLeafNode(SoteriaFTLeafNode leaf) {
-		writeln("-- ");
-		write("    ((\"" + leaf.compName + "\",");
-		write("\"" + leaf.soteriaFaultName + "\"),");
-		write(leaf.failureRate + ", ");
-		writeln(leaf.exposureTime + ");");
+		writeln("original fault name, description: " + leaf.faultUserName + ", \"" + leaf.faultUserExplanation
+				+ "\"");
+		writeln("lustre component, fault name: " + leaf.compName + ", " + leaf.soteriaFaultName);
+		writeln("failureRate, default exposure time: " + leaf.failureRate + ", " + leaf.exposureTime);
 	}
 
 }

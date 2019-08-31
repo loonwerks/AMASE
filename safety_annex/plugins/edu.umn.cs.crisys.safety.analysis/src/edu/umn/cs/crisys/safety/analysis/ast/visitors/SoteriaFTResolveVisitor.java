@@ -298,9 +298,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			if ((oppositeChildNum == 1) && (siblingLeafNum == 0)) {
 				String newNodeName = node.nodeName; // MHSUtils.createUniqueElemName(node.nodeName);
 				if (originalAndNode) {
-					returnNode = new SoteriaFTOrNode(newNodeName);
+					returnNode = new SoteriaFTOrNode(newNodeName, "");
 				} else {
-					returnNode = new SoteriaFTAndNode(newNodeName);
+					returnNode = new SoteriaFTAndNode(newNodeName, "");
 				}
 
 				for (SoteriaFTNode child : nodesMap.values()) {
@@ -335,9 +335,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			} else {
 				String newNodeName = node.nodeName; // MHSUtils.createUniqueElemName(node.nodeName);
 				if (originalAndNode) {
-					returnNode = new SoteriaFTOrNode(newNodeName);
+					returnNode = new SoteriaFTOrNode(newNodeName, "");
 				} else {
-					returnNode = new SoteriaFTAndNode(newNodeName);
+					returnNode = new SoteriaFTAndNode(newNodeName, "");
 				}
 
 				if (destSets.size() > 1) {
@@ -345,9 +345,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 						SoteriaFTNonLeafNode curNode;
 						String curNodeName = MHSUtils.createUniqueElemName(node.nodeName);
 						if (originalAndNode) {
-							curNode = new SoteriaFTAndNode(curNodeName);
+							curNode = new SoteriaFTAndNode(curNodeName, "");
 						} else {
-							curNode = new SoteriaFTOrNode(curNodeName);
+							curNode = new SoteriaFTOrNode(curNodeName, "");
 						}
 						for (String curChildName : curSet) {
 							// get original FT node corresponding to the string

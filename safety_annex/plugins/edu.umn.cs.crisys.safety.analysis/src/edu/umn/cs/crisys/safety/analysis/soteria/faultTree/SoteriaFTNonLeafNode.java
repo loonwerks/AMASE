@@ -7,12 +7,15 @@ import jkind.Assert;
 
 public class SoteriaFTNonLeafNode extends SoteriaFTNode {
 	public final String propertyName;
+	public final String propertyDescription;
 	public boolean isRoot = false;
 
-	public SoteriaFTNonLeafNode(String propertyName) {
+	public SoteriaFTNonLeafNode(String propertyName, String propertyDescription) {
 		super(propertyName);
 		Assert.isNotNull(propertyName);
+		Assert.isNotNull(propertyDescription);
 		this.propertyName = propertyName;
+		this.propertyDescription = propertyDescription;
 	}
 
 	public void addChildNode(String nodeName, SoteriaFTNode childNode) {

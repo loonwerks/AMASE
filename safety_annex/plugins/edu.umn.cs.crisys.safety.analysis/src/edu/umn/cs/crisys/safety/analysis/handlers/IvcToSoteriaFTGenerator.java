@@ -92,7 +92,8 @@ public class IvcToSoteriaFTGenerator {
 		if (lustreName.startsWith("__GUARANTEE")) {
 			// if it's a valid guarantee
 			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
-
+				// TODO: get user specified property name if exists
+				String propertyDescription = propertyResult.getName();
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 				// check if there is timeout in MIVC analysis
 				if (property.getMivcTimedOut()) {
@@ -109,18 +110,18 @@ public class IvcToSoteriaFTGenerator {
 					boolean createOrNode = (mcsSets.size() > 1);
 					if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
 						if (createOrNode) {
-							propertyNode = new SoteriaFTOrNode(propertyName);
+							propertyNode = new SoteriaFTOrNode(propertyName, propertyDescription);
 						} else {
-							propertyNode = new SoteriaFTAndNode(propertyName);
+							propertyNode = new SoteriaFTAndNode(propertyName, propertyDescription);
 						}
 					} else {
 						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
 						// if the no child node has been populated for this node yet
 						if (!(propertyNode instanceof SoteriaFTOrNode) && !(propertyNode instanceof SoteriaFTAndNode)) {
 							if (createOrNode) {
-								propertyNode = new SoteriaFTOrNode(propertyName);
+								propertyNode = new SoteriaFTOrNode(propertyName, propertyNode.propertyDescription);
 							} else {
-								propertyNode = new SoteriaFTAndNode(propertyName);
+								propertyNode = new SoteriaFTAndNode(propertyName, propertyNode.propertyDescription);
 							}
 						} else {
 							isNewNode = false;
@@ -131,7 +132,7 @@ public class IvcToSoteriaFTGenerator {
 						int index = 0;
 						for (List<String> mcsSet : mcsSets) {
 							String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
-							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName);
+							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName, "");
 							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
 							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
 							// mcsSetNode.addParentNode(propertyNode);
@@ -182,7 +183,7 @@ public class IvcToSoteriaFTGenerator {
 	private void extractContractMCSElem(String compName, SoteriaFTAndNode mcsSetNode, String propertyName) {
 		SoteriaFTNonLeafNode nonLeafNode;
 		if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
-			nonLeafNode = new SoteriaFTNonLeafNode(propertyName);
+			nonLeafNode = new SoteriaFTNonLeafNode(propertyName, "");
 			soteriaFT.addIntermediateNode(propertyName, nonLeafNode);
 		} else {
 			nonLeafNode = soteriaFT.intermediateNodes.get(propertyName);
@@ -202,22 +203,30 @@ public class IvcToSoteriaFTGenerator {
 		// if mcsElem is not yet in leaf nodes
 		if (!soteriaFT.leafNodes.containsKey(updatedFaultName)) {
 			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(faultRefName);
+			// original fault name specified by the user
+			String faultUserName = faultStmtImpl.getName();
+			// original fault explanation specified by the user
+			String faultUserExplanation = faultStmtImpl.getStr();
+			// probability string
+			String probStr = "";
+			// failure probability
+			float failureProb = (float) 0.0;
 			for (FaultSubcomponent faultSub : faultStmtImpl.getFaultDefinitions()) {
 				if (faultSub instanceof ProbabilityStatementImpl) {
-					String probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
-					float failureProb = Float.parseFloat(probStr);
-					// TODO: need to have component specify failure rate and exposure time in the future
-					// currently treat exposure time as (float) 1.0
-					// and treat the failure probability from the fault statement as the failure rate
-					SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, failureProb,
-							(float) 1.0, originalFaultName);
-					soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
-					mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
-					// update intermediate node
-					soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
-					// ftLeafNode.addParentNode(mcsSetNode);
+					probStr = ((ProbabilityStatementImpl) faultSub).getProbability();
+					failureProb = Float.parseFloat(probStr);
 				}
 			}
+			// TODO: need to have component specify failure rate and exposure time in the future
+			// currently treat exposure time as (float) 1.0
+			// and treat the failure probability from the fault statement as the failure rate
+			SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, failureProb, (float) 1.0,
+					originalFaultName, faultUserName, faultUserExplanation);
+			soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
+			mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
+			// update intermediate node
+			soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+			// ftLeafNode.addParentNode(mcsSetNode);
 		} else {
 			SoteriaFTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
 			mcsSetNode.addChildNode(updatedFaultName, leafNode);
