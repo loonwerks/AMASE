@@ -5,8 +5,8 @@ import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTAstVisitor;
 public class SoteriaFTOrNode extends SoteriaFTNonLeafNode {
 	public final String nodeOpStr = "SUM";
 
-	public SoteriaFTOrNode(String propertyName) {
-		super(propertyName);
+	public SoteriaFTOrNode(String propertyName, String propertyDescription) {
+		super(propertyName, propertyDescription);
 	}
 
 	@Override
