@@ -64,6 +64,9 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 		for (SoteriaFTNode child : orNode.childNodes.values()) {
 			minCutSetNum++;
 			writeln("Minimal Cut Set # " + minCutSetNum);
+			if (child instanceof SoteriaFTLeafNode) {
+				writeln("Cardinality 1");
+			}
 			child.accept(this);
 		}
 		return null;
