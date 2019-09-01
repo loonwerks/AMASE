@@ -84,7 +84,7 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	}
 
 	private void printNoTreeRootNode(SoteriaFTNode root, String rootName) {
-		writeln("No Minimal Cut Sets for property:");
+		writeln("No Minimal Cut Sets for property violation:");
 		writeln("property lustre name: " + rootName);
 		if (root instanceof SoteriaFTNonLeafNode) {
 			String propertyDescription = ((SoteriaFTNonLeafNode) root).propertyDescription;
@@ -94,7 +94,7 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	}
 
 	private void printRootNode(SoteriaFTNode root, String rootName) {
-		writeln("Minimal Cut Sets for property:");
+		writeln("Minimal Cut Sets for property violation:");
 		writeln("property lustre name: " + rootName);
 		if (root instanceof SoteriaFTNonLeafNode) {
 			String propertyDescription = ((SoteriaFTNonLeafNode) root).propertyDescription;
@@ -106,7 +106,7 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 		writeln("original fault name, description: " + leaf.faultUserName + ", \"" + leaf.faultUserExplanation
 				+ "\"");
 		writeln("lustre component, fault name: " + leaf.compName + ", " + leaf.soteriaFaultName);
-		writeln("failureRate, default exposure time: " + leaf.failureRate + ", " + leaf.exposureTime);
+		writeln("failure rate, default exposure time: " + leaf.failureRate + ", " + leaf.exposureTime);
 	}
 
 }
