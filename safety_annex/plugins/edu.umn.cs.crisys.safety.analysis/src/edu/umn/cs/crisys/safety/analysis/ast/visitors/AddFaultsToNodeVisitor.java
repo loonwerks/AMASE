@@ -1836,7 +1836,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			AgreeNodeBuilder builder) {
 
 		ArrayList<FaultProbability> elementProbabilities = new ArrayList<>();
-		ArrayList<FaultSetProbability> faultCombinationsAboveThreshold = new ArrayList<>();
 		PriorityQueue<FaultSetProbability> pq = new PriorityQueue<>();
 
 		collectFaultOccurrenceConstraint(minProbability, topNode, elementProbabilities, faultCombinationsAboveThreshold,
@@ -1946,6 +1945,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			for (int i = 0; i < remainder.size(); i++) {
 				FaultProbability fp = remainder.get(i);
 				double setProbability = fp.probability * fsp.probability;
+				// once we found out that the reminder's first element (when combined with fsp),
+				// does not yield a probability result that is higher than the threshold
+				// that means we no longer needs to check the rest of the remainder,
+				// and we can clear the remainder list from the element onward
 				if (setProbability < minProbability) {
 					remainder.subList(i, remainder.size()).clear();
 				} else if (!fsp.elements.contains(fp)) {
@@ -2079,8 +2082,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
 			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
 			goodElements.removeAll(fsp.elements);
-			Expr local = getNoFaultProposition(goodElements);
-			faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
+			if (!goodElements.isEmpty()) {
+				Expr local = getNoFaultProposition(goodElements);
+				faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
+			}
 		}
 
 		// Add this fault hypothesis as an assertion.
