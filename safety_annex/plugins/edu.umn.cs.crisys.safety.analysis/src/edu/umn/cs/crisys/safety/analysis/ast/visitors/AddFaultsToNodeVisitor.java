@@ -1951,14 +1951,37 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// and we can clear the remainder list from the element onward
 				if (setProbability < minProbability) {
 					remainder.subList(i, remainder.size()).clear();
-				} else if (!fsp.elements.contains(fp)) {
+				}
+				//add to faultCombinationAboveThreshold only when
+				//fp is not a subset of fsp
+				// and fsp, fp are not an existing set (disregard the order of faults) in faultCombinationAboveThreshold
+				else if (!fsp.elements.contains(fp)) {
 					FaultSetProbability newSet = new FaultSetProbability(setProbability, fsp, fp);
-					pq.add(newSet);
-					faultCombinationsAboveThreshold.add(newSet);
+					if (!isContained(newSet, faultCombinationsAboveThreshold)) {
+						pq.add(newSet);
+						faultCombinationsAboveThreshold.add(newSet);
+					}
 				}
 			}
 		}
 
+	}
+
+	private boolean isContained(FaultSetProbability newSet,
+			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold) {
+		boolean isContained = false;
+
+		HashSet<String> newSetStrSet = newSet.toStringSet();
+
+		for (FaultSetProbability faultCombination : faultCombinationsAboveThreshold) {
+			HashSet<String> faultCombinationSet = faultCombination.toStringSet();
+			if (faultCombinationSet.equals(newSetStrSet)) {
+				isContained = true;
+				return isContained;
+			}
+		}
+
+		return isContained;
 	}
 
 	/**
