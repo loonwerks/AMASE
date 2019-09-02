@@ -68,6 +68,7 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 				writeln("Cardinality 1");
 			}
 			child.accept(this);
+			newline();
 		}
 		return null;
 	}
