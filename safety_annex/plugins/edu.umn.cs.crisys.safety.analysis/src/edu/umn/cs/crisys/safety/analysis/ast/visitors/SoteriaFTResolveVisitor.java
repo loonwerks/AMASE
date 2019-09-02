@@ -173,8 +173,13 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 	}
 
 	private SoteriaFTNonLeafNode prune(SoteriaFTNonLeafNode node) {
-		// only prune AND node
+		// only prune AND node with all leaf child nodes
 		if (node instanceof SoteriaFTAndNode) {
+			for (SoteriaFTNode child : node.childNodes.values()) {
+				if (!(child instanceof SoteriaFTLeafNode)) {
+					return node;
+				}
+			}
 			if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
 				if (node.childNodes.size() > AddFaultsToNodeVisitor.maxFaultCount) {
 					node.nodeValue = false;
@@ -315,20 +320,23 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			// TODO: set mhs set size according to fault hypothesis
 			Set<List<String>> destSets = new HashSet<List<String>>();
 
-			// if original AND node, transform to an OR node with child nodes as AND nodes connecting leaf nodes
-			// the child nodes for each AND node corresponds to a mhs returned
-			// - they can be pruned according to fault hypothesis
-			if (originalAndNode) {
-				if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
-					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount, false);
-				} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
-					destSets = MHSUtils.computeMHS(sourceSets, 0, true);
-				}
-			}
-			// else no pruning
-			else {
-				destSets = MHSUtils.computeMHS(sourceSets, 0, false);
-			}
+			// TODO: remove the following commented out code once tested ok
+//			// if original AND node, transform to an OR node with child nodes as AND nodes connecting leaf nodes
+//			// the child nodes for each AND node corresponds to a mhs returned
+//			// - they can be pruned according to fault hypothesis
+//			if (originalAndNode) {
+//				if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
+//					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount, false);
+//				} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+//					destSets = MHSUtils.computeMHS(sourceSets, 0, true);
+//				}
+//			}
+//			// else no pruning
+//			else {
+//				destSets = MHSUtils.computeMHS(sourceSets, 0, false);
+//			}
+
+			destSets = MHSUtils.computeMHS(sourceSets, 0, false);
 
 			if (destSets.size() == 0) {
 				return returnNode;
