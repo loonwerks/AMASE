@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
 import org.osate.aadl2.Element;
 
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 
 public class VerifyHandler extends AadlHandler {
@@ -36,8 +35,6 @@ public class VerifyHandler extends AadlHandler {
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
-		// clear static fields
-		AddFaultsToNodeVisitor.init();
 
 		return null;
 	}
