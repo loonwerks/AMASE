@@ -1824,6 +1824,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return noFaultExpr;
 	}
 
+	private Expr getAllFaultProposition(Set<FaultProbability> elements) {
+		Expr allFaultExpr = null;
+		for (FaultProbability fp : elements) {
+			Expr local = new IdExpr(fp.faultName);
+			if (allFaultExpr == null) {
+				allFaultExpr = local;
+			} else {
+				allFaultExpr = new BinaryExpr(local, BinaryOp.AND, allFaultExpr);
+			}
+		}
+		assert (allFaultExpr != null);
+		return allFaultExpr;
+	}
+
 	/**
 	 * Method collects max fault occurrance constraints then builds
 	 * the associated assertions for the node.
@@ -2101,12 +2115,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// With the valid fault combinations including dependent faults, and
 		// noFaultExpr has the default (no-fault) case. Let's construct a proposition.
 		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
+		// the default (no-fault) case
 		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
 		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
 			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
 			goodElements.removeAll(fsp.elements);
+			// if there are only a subset of faults in the current combination
+			// add the assertion that the rest of the faults are not to happen
 			if (!goodElements.isEmpty()) {
 				Expr local = getNoFaultProposition(goodElements);
+				faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
+			}
+			// if there are all faults in the current combination
+			// add the assertion that all faults are allowed to happen
+			// which will be ORed with the default no fault case
+			else {
+				Expr local = getAllFaultProposition(fsp.elements);
 				faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
 			}
 		}
