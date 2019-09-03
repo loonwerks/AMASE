@@ -389,7 +389,8 @@ public class SoteriaGenHandler extends VerifyHandler {
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
-
+		// clear static variables before each run
+		AddFaultsToNodeVisitor.init();
 		// If the transform flag is 2, then the user selected
 		// 'Compositional Fault Analysis for All Layers' option and we should execute event.
 		// Else, return null.
