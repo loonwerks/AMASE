@@ -7,18 +7,31 @@ public
 		features
 			Env_Pressure: in data port Integer;
 			High_Pressure_Indicator: out data port Boolean;
+			
 		annex agree{**
-			guarantee "if env pressure higher than pressure threshold then indicate high pressure":
+				
+			guarantee "If pressure is above threshold, then indicate high pressure.":
 			High_Pressure_Indicator = (Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD);
+			
 		**};
+		
 		annex safety {**
-			fault pressure_sensor_stuck_at_low "pressure sensor stuck at low": Common_Faults.stuck_false {
+			fault pressure_sensor_stuck_at_low "Pressure sensor stuck low": 
+								Common_Faults.stuck_false {
+				inputs: val_in <- High_Pressure_Indicator;     
+				outputs: High_Pressure_Indicator <- val_out;   
+         		probability: 1.0E-5 ;
+				duration: permanent;
+			}	
+			
+			fault pressure_sensor_stuck_at_high "Pressure sensor stuck high": Common_Faults.stuck_true {
 			inputs: val_in <- High_Pressure_Indicator;     
 			outputs: High_Pressure_Indicator <- val_out;   
-         	probability: 1.0E-6 ;
+         	probability: 1.0E-5 ;
 			duration: permanent;
-			}	
+			}
 		**};
+		
 	end Pressure_Sensor;
 
 end Pressure_Sensors;
