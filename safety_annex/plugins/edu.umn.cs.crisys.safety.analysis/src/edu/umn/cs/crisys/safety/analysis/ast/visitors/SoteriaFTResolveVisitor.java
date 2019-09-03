@@ -186,14 +186,21 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				} else {
 					node.nodeValue = true;
 				}
-			} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
-				// System.out.println("pruning for probablity analysis");
-				if (isSubset(node, AddFaultsToNodeVisitor.faultCombinationsAboveThreshold)) {
-					node.nodeValue = true;
-				} else {
-					node.nodeValue = false;
-				}
 			}
+			// TODO: uncomment the following after being able to store
+			// faultCombinationsAboveThreshold per property/root node
+			// as for different layers/properties, the faultCombinationsAboveThreshold change
+			// and we clear need to clear faultCombinationsAboveThreshold
+			// per different layers/properties
+			// we current clear per layer, we would like to clear per properties
+//			else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+//				// System.out.println("pruning for probablity analysis");
+//				if (isSubset(node, AddFaultsToNodeVisitor.faultCombinationsAboveThreshold)) {
+//					node.nodeValue = true;
+//				} else {
+//					node.nodeValue = false;
+//				}
+//			}
 		}
 		return node;
 	}
