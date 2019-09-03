@@ -249,6 +249,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param node Agree node that is the top node.
 	 */
 	private void topNodeVisit(AgreeNodeBuilder nb, AgreeNode node) {
+		// clear static variables
+		init();
 		topNode = node;
 		AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
 		// gather path information for the faults (for creating names later)
