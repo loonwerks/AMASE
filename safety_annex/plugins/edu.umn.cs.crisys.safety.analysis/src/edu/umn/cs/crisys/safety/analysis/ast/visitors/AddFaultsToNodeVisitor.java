@@ -249,8 +249,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param node Agree node that is the top node.
 	 */
 	private void topNodeVisit(AgreeNodeBuilder nb, AgreeNode node) {
-		// clear static variables
-		init();
 		topNode = node;
 		AnalysisBehavior maxFaults = this.gatherTopLevelFaultAnalysis(node);
 		// gather path information for the faults (for creating names later)
@@ -283,11 +281,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// from gatherTopLevelFaultAnalysis) is null.
 		// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
 		if (AddFaultsToAgree.getTransformFlag() == 1) {
+			// clear static variables for every verification layer
+			// when verifying with AGREE in the presence of faults
+			init();
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		} else if (AddFaultsToAgree.getTransformFlag() == 2) {
 			nb.setFaultTreeFlag(true);
 
 			// only collect fault hypothesis from the upper most level
+			// note that upperMostLevel is a static variable that gets cleared
+			// in init() which is invoked when clicking the Generate Minimal Cutsets button
 			if (upperMostLevel) {
 				upperMostLevel = false;
 				// if max fault hypothesis, collect max fault count
