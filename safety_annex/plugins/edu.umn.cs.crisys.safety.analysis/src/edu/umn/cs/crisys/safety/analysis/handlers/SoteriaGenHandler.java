@@ -20,8 +20,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -293,6 +297,9 @@ public class SoteriaGenHandler extends VerifyHandler {
 				while (!queue.isEmpty()) {
 					queue.remove().cancel();
 				}
+				// Create progress bar to display to users on long analysis runs.
+				Display display = new Display();
+				Shell shell = createProgressBar(display);
 
 //				// generate soteria model from the result
 //				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
@@ -335,6 +342,15 @@ public class SoteriaGenHandler extends VerifyHandler {
 					}
 				}
 				else {
+					// open progress bar
+					shell.open();
+					// uncomment to see progress bar until user closes it
+					// (for testing purposes)
+//					while (!shell.isDisposed()) {
+//						if (!display.readAndDispatch()) {
+//							display.sleep();
+//						}
+//					}
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 //					try {
@@ -367,8 +383,11 @@ public class SoteriaGenHandler extends VerifyHandler {
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
 						bw.write(soteriaFT.printMinCutSetTxt());
 						bw.close();
+						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
 					} catch (IOException e) {
+						// close progress bar
+						display.dispose();
 						Dialog.showError("Unable to open file", e.getMessage());
 						e.printStackTrace();
 					}
@@ -382,6 +401,20 @@ public class SoteriaGenHandler extends VerifyHandler {
 		};
 		analysisThread.start();
 		return Status.OK_STATUS;
+	}
+
+	private Shell createProgressBar(Display display) {
+		Shell shell = new Shell();
+		shell.setText("Compositional Safety Analysis");
+		shell.setSize(450, 200);
+
+		ProgressBar progressBar = new ProgressBar(shell, SWT.INDETERMINATE);
+		progressBar.setBounds(50, 80, 250, 20);
+		Label label = new Label(shell, SWT.NULL);
+		label.setText("Minimal Cut Set Generation");
+		label.setAlignment(SWT.LEFT);
+		label.setBounds(50, 30, 450, 20);
+		return shell;
 	}
 
 	@Override
