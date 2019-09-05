@@ -47,9 +47,7 @@ with Base_Types;
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
 		annex safety{**
 	
-		analyze : max 1 fault
-		-- MWW: END HACK!
-		-- ---------------------------------------------------------------------------	
+		analyze : max 2 fault
 		**}	;		
 		
 	end WheelBrake.inst;
@@ -104,18 +102,18 @@ with Base_Types;
         		probability: 3.3E-5 ;
 				duration: permanent;
 			}
---			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
---				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
---				outputs: force_out <- val_out;    
---        		probability: 3.3E-5 ;
---				duration: permanent;
---			}	
---			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
---				inputs: val_in <- force_out, alt_val <- pre(force_out); 
---				outputs: force_out <- val_out;    
---        		probability: 3.3E-5 ;
---				duration: permanent;
---			}
+			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
+				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
+				outputs: force_out <- val_out;    
+        		probability: 3.3E-5 ;
+				duration: permanent;
+			}	
+			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
+				inputs: val_in <- force_out, alt_val <- pre(force_out); 
+				outputs: force_out <- val_out;    
+        		probability: 3.3E-5 ;
+				duration: permanent;
+			}
 		**};		
 	end HydraulicPiston;
 	
@@ -153,19 +151,19 @@ with Base_Types;
         		probability: 3.3E-6 ;
 				duration: permanent;
 			}
---			fault BrakeActuator_FailedFullOpen "(BrakeActuator) Stuck open fault." : faults.fail_to {
---				
---				inputs: val_in <- braking_force, alt_val <- fail_value; 
---				outputs: braking_force <- val_out;    
---        		probability: 3.3E-6 ;
---				duration: permanent;
---			}		
---			fault BrakeActuator_StuckAtLastPosition "(BrakeActuator) Stuck at last value fault." : faults.fail_to {
---				inputs: val_in <- braking_force, alt_val <- pre(braking_force); 
---				outputs: braking_force <- val_out;    
---        		probability: 3.3E-6 ;
---				duration: permanent;
---			}
+			fault BrakeActuator_FailedFullOpen "(BrakeActuator) Stuck open fault." : faults.fail_to {
+				
+				inputs: val_in <- braking_force, alt_val <- fail_value; 
+				outputs: braking_force <- val_out;    
+        		probability: 3.3E-6 ;
+				duration: permanent;
+			}		
+			fault BrakeActuator_StuckAtLastPosition "(BrakeActuator) Stuck at last value fault." : faults.fail_to {
+				inputs: val_in <- braking_force, alt_val <- pre(braking_force); 
+				outputs: braking_force <- val_out;    
+        		probability: 3.3E-6 ;
+				duration: permanent;
+			}
 		**};		
 	end BrakeActuator;
 	
