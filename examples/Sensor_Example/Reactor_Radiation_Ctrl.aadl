@@ -69,7 +69,8 @@ public
 			Radiation_Sensor3_To_Voter: port Radiation_Sensor3.High_Radiation_Indicator -> Radiation_Voter.Sensor3_High;
 			Radiation_Voter_To_Shut_Down: port Radiation_Voter.High_Out -> Shut_Down_Cmd;
 		annex safety {**
-      		analyze : max 1 fault
+      		--analyze : max 1 fault
+      		analyze : probability 1.0E-10
    		**};
 	end Reactor_Radiation_Ctrl.W_Voting;
 end Reactor_Radiation_Ctrl;
