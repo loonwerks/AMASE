@@ -1,4 +1,4 @@
-package Common_Faults
+package Fault_Library
 public
 	with Datatypes;
 	
@@ -30,4 +30,4 @@ public
 		tel;
 		
 **};
-end Common_Faults;
+end Fault_Library;

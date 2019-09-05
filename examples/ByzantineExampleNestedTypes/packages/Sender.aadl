@@ -17,14 +17,14 @@ with Datatypes;
 		
 		annex safety {**
 
-			fault Sender_Fault_1 "Output field is zero": Common_Faults.fail_to_real {
+			fault Sender_Fault_1 "Output field is zero": Fault_Library.fail_to_real {
 				inputs: val_in <- sender_out.NODE_VAL, alt_val <- 0.0;     
 				outputs: sender_out.NODE_VAL <- val_out;    
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
 
-			fault Sender_Fault_2 "Datatype output is zero": Common_Faults.nested_fault {
+			fault Sender_Fault_2 "Datatype output is zero": Fault_Library.nested_fault {
 				inputs: val_in <- sender_out, alt_val <- 0.0;     
 				outputs: sender_out <- val_out;    
 				duration: permanent;
