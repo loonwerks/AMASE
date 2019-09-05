@@ -7,5 +7,6 @@ with Base_Types;
 	data implementation commBus.impl
  	 	subcomponents
     		NODE_VAL : data Base_Types::Float;
-	end commBus.real;
+	end commBus.impl;
+	
 end Datatypes;

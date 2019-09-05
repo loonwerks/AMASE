@@ -72,8 +72,8 @@ public
 			assign Shut_Down_Cmd = Reactor_Temp_Ctrl.Shut_Down_Cmd and Reactor_Pressure_Ctrl.Shut_Down_Cmd and Reactor_Radiation_Ctrl.Shut_Down_Cmd;		    						
 		**};
 		annex safety {**
-      		--analyze : max 4 fault
-      		analyze : probability 1.0E-10
+      		analyze : max 3 fault
+      		--analyze : probability 1.0E-10
    		**};
 	end Reactor_Ctrl.W_Voting;
 	

@@ -35,7 +35,7 @@ with Base_Types;
 		**};
 		annex safety {**
 			
-			fault Node_Fault "Leader node output is asymmetric": Common_Faults.invert_signal {
+			fault Node_Fault "Node output is asymmetric": Common_Faults.invert_signal {
 				inputs: val_in <- color_reported_to_me;     
 				outputs: color_reported_to_me <- val_out;    
 				duration: permanent;

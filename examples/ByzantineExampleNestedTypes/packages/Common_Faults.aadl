@@ -23,7 +23,8 @@ public
 			val_out = if trigger then alt_val else val_in;
 		tel;	
 		
-		node nested_test (val_in: Datatypes::commBus.impl, alt_val: real, trigger: bool) returns (val_out: Datatypes::commBus.impl); 
+		node nested_fault (val_in: Datatypes::commBus.impl, alt_val: real, trigger: bool) 
+				  returns (val_out: Datatypes::commBus.impl); 
 		let
 	   		val_out = if (trigger) then (val_in{NODE_VAL := alt_val}) else val_in;
 		tel;
