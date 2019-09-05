@@ -16,8 +16,6 @@ with Base_Types;
 							either normal or alternate pressure is positive." :
 							true -> (brake_force > 0 <=> (normal_hyd_pressure_in > 0 or alt_hyd_pressure_in > 0));			
 				
-				
-				
 			**};
 			
 	end WheelBrake;
