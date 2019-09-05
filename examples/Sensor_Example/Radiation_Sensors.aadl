@@ -14,18 +14,27 @@ public
 					
 		**};
 		annex safety {**
-			fault radiation_sensor_stuck_at_low "radiation sensor stuck at low": Common_Faults.stuck_false {
-			inputs: val_in <- High_Radiation_Indicator;     
-			outputs: High_Radiation_Indicator <- val_out;   
-         	probability: 1.0E-5 ;
-			duration: permanent;
+				
+--			fault Radiation_sensor_nondeterministic "Radiation sensor fails": Common_Faults.fail_to_bool {
+--				eq fail_to: bool;
+--				inputs: val_in <- High_Radiation_Indicator, alt_val <- fail_to;     
+--				outputs: High_Radiation_Indicator <- val_out;   
+--         		probability: 1.0E-5 ;
+--				duration: permanent;
+--			}
+			
+			fault Radiation_sensor_stuck_at_low "Radiation sensor stuck at low": Common_Faults.stuck_false {
+				inputs: val_in <- High_Radiation_Indicator;     
+				outputs: High_Radiation_Indicator <- val_out;   
+         		probability: 1.0E-5 ;
+				duration: permanent;
 			}
 			
-			fault radiation_sensor_stuck_at_high "radiation sensor stuck at high": Common_Faults.stuck_true {
-			inputs: val_in <- High_Radiation_Indicator;     
-			outputs: High_Radiation_Indicator <- val_out;   
-         	probability: 1.0E-5 ;
-			duration: permanent;
+			fault Radiation_sensor_stuck_at_high "Radiation sensor stuck at high": Common_Faults.stuck_true {
+				inputs: val_in <- High_Radiation_Indicator;     
+				outputs: High_Radiation_Indicator <- val_out;   
+         		probability: 1.0E-5 ;
+				duration: permanent;
 			}	
 		**};
 	end Radiation_Sensor;	
