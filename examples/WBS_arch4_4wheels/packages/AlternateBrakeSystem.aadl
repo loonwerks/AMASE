@@ -56,7 +56,7 @@ with Base_Types;
 			
 			-- Pedal pos to meter valves
 			pedal_pos_to_mv1_L : port mech_pedal_pos_L -> mv1.mech_cmd;
-			pedal_pos_to_mv2_R : port mech_pedal_pos_L -> mv2.mech_cmd;
+			pedal_pos_to_mv2_R : port mech_pedal_pos_R -> mv2.mech_cmd;
 			
 			-- pressure to mvs
 			pressure_to_mv_1 : port antiskid_shutoff_valve_1.hyd_pressure_out -> mv1.hyd_pressure_in;
@@ -71,6 +71,36 @@ with Base_Types;
 			false_to_mv_2 : port false_to_mv -> mv2.elec_cmd;
 			
 
+		annex agree {**
+				
+				lemma "(AntiskidShutoffValve 1) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
+							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
+							to the hyd pressure in." :
+							
+							true -> (
+								if ((antiskid_shutoff_valve_1.hyd_pressure_in = 0) or antiskid_shutoff_valve_1.antiskid_cmd) then (antiskid_shutoff_valve_1.hyd_pressure_out = 0)
+									else (antiskid_shutoff_valve_1.hyd_pressure_out = antiskid_shutoff_valve_1.hyd_pressure_in)
+								);
+								
+				lemma "(AntiskidShutoffValve 2) If pressure in is zero and antiskid commanded then hyd pressure out is zero.
+							And if hyd pressure in is positive and antiskid is not commanded, then pressure out is positive and equal
+							to the hyd pressure in." :
+							
+							true -> (
+								if ((antiskid_shutoff_valve_2.hyd_pressure_in = 0) or antiskid_shutoff_valve_2.antiskid_cmd) then (antiskid_shutoff_valve_2.hyd_pressure_out = 0)
+									else (antiskid_shutoff_valve_2.hyd_pressure_out = antiskid_shutoff_valve_2.hyd_pressure_in)
+								);
+							
+				lemma "(AntiskidShutoff 1) Output from 0 to 10" : true -> (antiskid_shutoff_valve_1.hyd_pressure_out <= 10 and antiskid_shutoff_valve_1.hyd_pressure_out >= 0);			
+			
+				lemma "(AntiskidShutoff 2) Output from 0 to 10" : true -> (antiskid_shutoff_valve_2.hyd_pressure_out <= 10 and antiskid_shutoff_valve_2.hyd_pressure_out >= 0);			
+			
+				lemma "(MeterValve 1) Hydraulic pressure out is positive if and only if
+				 we have either electrical or mechanical command and positive pressure." :
+					true -> (((mv1.elec_cmd or mv1.mech_cmd) and mv1.hyd_pressure_in > 0) <=> mv1.hyd_pressure_out > 0);
+				
+			
+		**};
 		annex safety{**
 	
 		analyze : max 2 fault
