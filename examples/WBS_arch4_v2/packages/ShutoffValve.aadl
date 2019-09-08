@@ -30,12 +30,20 @@ with Base_Types;
 		**};
 
 		annex safety {**
-			fault ShutoffValve_FailedClosed "(ShutoffValve) Stuck closed fault." : faults.fail_to {
-				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+				
+			fault ShutoffValve_Failed "(ShutoffValve) Stuck nondet fault." : faults.fail_to {
+				eq fail_val : int;
+				inputs: val_in <- hyd_pressure_out, alt_val <- fail_val; 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 5.0E-6 ;
 				duration: permanent;
 			}
+--			fault ShutoffValve_FailedClosed "(ShutoffValve) Stuck closed fault." : faults.fail_to {
+--				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+--				outputs: hyd_pressure_out <- val_out;    
+--        		probability: 5.0E-6 ;
+--				duration: permanent;
+--			}
 			
 --			fault ShutoffValve_FailedOpen "(ShutoffValve) Stuck open fault." : faults.fail_to {
 --				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in; 
@@ -44,6 +52,7 @@ with Base_Types;
 --				duration: permanent;
 --			}
 		**};
+
 
 	end ShutoffValve;
 	

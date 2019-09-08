@@ -28,14 +28,15 @@ with Base_Types;
 		**};
 		
 		
-		-- Fault defined as "Fail off" 
 		annex safety {**
-			fault HydPump_FailedOff "(HydraulicPump) Stuck off fault." : faults.fail_to {
-				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
+			fault HydPump_Failed "(HydraulicPump) Stuck nondeterministic fault." : faults.fail_to {
+				eq fail_val : int;
+				inputs: val_in <- hyd_pressure_out, alt_val <- fail_val; 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 3.0E-5 ;
 				duration: permanent;
 			}
+
 			
 			
 --		HW_fault Pump_HW_Fault "Colocated pump failure": {
