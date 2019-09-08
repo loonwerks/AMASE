@@ -94,20 +94,28 @@ with Base_Types;
 			
 			
 		annex safety {**
-			fault HydraulicPiston_FailedFullOff "(HydraulicPiston) Stuck closed fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- 0; 
-				outputs: force_out <- val_out;    
-        		probability: 3.3E-5 ;
-				duration: permanent;
-			}
-			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
-				outputs: force_out <- val_out;    
-        		probability: 3.3E-5 ;
-				duration: permanent;
-			}	
-			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
-				inputs: val_in <- force_out, alt_val <- pre(force_out); 
+--			fault HydraulicPiston_FailedFullOff "(HydraulicPiston) Stuck closed fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- 0; 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}
+--			fault HydraulicPiston_FailedFullOpen "(HydraulicPiston) Stuck open fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- hyd_pressure_in; 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}	
+--			fault HydraulicPiston_StuckAtLastPosition "(HydraulicPiston) Stuck at last value fault." : faults.fail_to {
+--				inputs: val_in <- force_out, alt_val <- pre(force_out); 
+--				outputs: force_out <- val_out;    
+--        		probability: 3.3E-5 ;
+--				duration: permanent;
+--			}
+
+			fault HydraulicPiston_Failed "(HydraulicPiston) Stuck nondet fault." : faults.fail_to {
+				eq fail_val : int;
+				inputs: val_in <- force_out, alt_val <- fail_val; 
 				outputs: force_out <- val_out;    
         		probability: 3.3E-5 ;
 				duration: permanent;
@@ -143,21 +151,28 @@ with Base_Types;
 			**};
 			
 		annex safety {**
-			fault BrakeActuator_FailedFullOff "(BrakeActuator) Stuck closed fault." : faults.fail_to {
-				inputs: val_in <- braking_force, alt_val <- 0; 
-				outputs: braking_force <- val_out;    
-        		probability: 3.3E-6 ;
-				duration: permanent;
-			}
-			fault BrakeActuator_FailedFullOpen "(BrakeActuator) Stuck open fault." : faults.fail_to {
-				
-				inputs: val_in <- braking_force, alt_val <- fail_value; 
-				outputs: braking_force <- val_out;    
-        		probability: 3.3E-6 ;
-				duration: permanent;
-			}		
-			fault BrakeActuator_StuckAtLastPosition "(BrakeActuator) Stuck at last value fault." : faults.fail_to {
-				inputs: val_in <- braking_force, alt_val <- pre(braking_force); 
+--			fault BrakeActuator_FailedFullOff "(BrakeActuator) Stuck closed fault." : faults.fail_to {
+--				inputs: val_in <- braking_force, alt_val <- 0; 
+--				outputs: braking_force <- val_out;    
+--        		probability: 3.3E-6 ;
+--				duration: permanent;
+--			}
+--			fault BrakeActuator_FailedFullOpen "(BrakeActuator) Stuck open fault." : faults.fail_to {
+--				
+--				inputs: val_in <- braking_force, alt_val <- fail_value; 
+--				outputs: braking_force <- val_out;    
+--        		probability: 3.3E-6 ;
+--				duration: permanent;
+--			}		
+--			fault BrakeActuator_StuckAtLastPosition "(BrakeActuator) Stuck at last value fault." : faults.fail_to {
+--				inputs: val_in <- braking_force, alt_val <- pre(braking_force); 
+--				outputs: braking_force <- val_out;    
+--        		probability: 3.3E-6 ;
+--				duration: permanent;
+--			}
+			fault BrakeActuator_Stuck "(BrakeActuator) Stuck nondet fault." : faults.fail_to {
+				eq fail_val: int;
+				inputs: val_in <- braking_force, alt_val <- fail_val; 
 				outputs: braking_force <- val_out;    
         		probability: 3.3E-6 ;
 				duration: permanent;

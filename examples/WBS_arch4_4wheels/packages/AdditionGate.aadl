@@ -23,7 +23,5 @@ with util;
 			**};
 	end AdditionGate;
 	
-	system implementation AdditionGate.inst
-	end AdditionGate.inst;
 	
 end AdditionGate;

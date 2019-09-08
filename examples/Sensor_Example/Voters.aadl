@@ -10,8 +10,11 @@ public
 			Sensor3_High: in data port Boolean;
 			High_Out: out data port Boolean;
 		annex agree {**
-			guarantee "voter output high if at least 2 out of 3 sensors reported high":
-			High_Out = Utilities_Lib.Vote_2_of_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
+				
+			guarantee "Voter output high if at least 2 out of 3 sensors reported high.":
+				High_Out = 
+					Utilities_Lib.Vote_2_of_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
+		
 		**};
 	end Two_Of_Three_Agree_Voter;
 
@@ -22,8 +25,11 @@ public
 			Sensor3_High: in data port Boolean;
 			High_Out: out data port Boolean;
 		annex agree {**
-			guarantee "voter output high if all 3 sensors reported high":
-			High_Out = Utilities_Lib.Vote_all_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
+				
+			guarantee "Voter output high if all 3 sensors reported high.":
+				High_Out = 
+					Utilities_Lib.Vote_all_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
+		
 		**};
 	end All_Three_Agree_Voter;
 end Voters;
