@@ -38,7 +38,15 @@ with Base_Types;
 --				duration: permanent;
 --			}
 			
-			fault Accumulator_FailedOpen "(Accumulator) Stuck open fault." : faults.fail_to {
+--			fault Accumulator_FailedOpen "(Accumulator) Stuck open fault." : faults.fail_to {
+--				eq fail_value : int = 10;
+--				inputs: val_in <- reserve_out, alt_val <- fail_value; 
+--				outputs: reserve_out <- val_out;    
+--        		probability: 5.0E-5 ;
+--				duration: permanent;
+--			}
+
+			fault Accumulator_Failed "(Accumulator) Stuck nondet fault." : faults.fail_to {
 				eq nondet_value : int;
 				inputs: val_in <- reserve_out, alt_val <- nondet_value; 
 				outputs: reserve_out <- val_out;    
