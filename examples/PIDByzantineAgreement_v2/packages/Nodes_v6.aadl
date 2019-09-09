@@ -28,7 +28,7 @@ public
 				else
 				(0->pre(Node1_In.Node1_PID_from_Node1)));
 				
-			guarantee "if node 2, Node2_PID_from_Node2 remains pid from beginning step;
+			guarantee "If node 2, Node2_PID_from_Node2 remains pid from beginning step;
 			else, forward node2_pid2 previously received from the node 2 with init value 0" :
 				Node_Out.Node2_PID_from_Node2 = 
 				(if(node_num = 2)
@@ -40,7 +40,7 @@ public
 					)
 				);
 				
-			guarantee "if node 3, Node3_PID_from_Node3 remains pid from beginning step;
+			guarantee "If node 3, Node3_PID_from_Node3 remains pid from beginning step;
 			else, forward node3_pid3 previously received from the node 3 with init value 0" :
 				Node_Out.Node3_PID_from_Node3 = 
 				(if(node_num = 3)
@@ -52,7 +52,7 @@ public
 					)
 				);
 				
-			guarantee "if node 4, Node4_PID_from_Node4 remains pid from beginning step;
+			guarantee "If node 4, Node4_PID_from_Node4 remains pid from beginning step;
 			else, forward node4_pid4 previously received from the node 4 with init value 0" :
 				Node_Out.Node4_PID_from_Node4 = 
 				(if(node_num = 4)

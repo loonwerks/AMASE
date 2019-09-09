@@ -95,9 +95,9 @@ with AADL_Properties;
 					and (n2_node4_pid4 = n3_node4_pid4)
 					and (n3_node4_pid4 = n4_node4_pid4)
 				);
-		
+			
 			lemma "All non-failing nodes agree on node1_pid1 value
-					  (i.e., all agree on the color in the second step)" :
+					  (i.e., all agree on pid in the second step)" :
 				true -> (if n1_failed 
 						 then ((n2_node1_pid1 = n3_node1_pid1)
 						and (n3_node1_pid1 = n4_node1_pid1))
@@ -116,7 +116,7 @@ with AADL_Properties;
 				); 
 				
 			lemma "All non-failing nodes agree on node2_pid2 value
-					  (i.e., all agree on the color in the second step)" :
+					  (i.e., all agree on pid in the second step)" :
 				true -> (if n1_failed 
 						 then ((n2_node2_pid2 = n3_node2_pid2)
 						and (n3_node2_pid2 = n4_node2_pid2))
@@ -135,7 +135,7 @@ with AADL_Properties;
 				); 
 				
 			lemma "All non-failing nodes agree on node3_pid3 value
-					  (i.e., all agree on the color in the second step)" :
+					  (i.e., all agree on pid in the second step)" :
 				true -> (if n1_failed 
 						 then ((n2_node3_pid3 = n3_node3_pid3)
 						and (n3_node3_pid3 = n4_node3_pid3))
@@ -154,7 +154,7 @@ with AADL_Properties;
 				); 
 				
 			lemma "All non-failing nodes agree on node4_pid4 value
-					  (i.e., all agree on the color in the second step)" :
+					  (i.e., all agree on pid in the second step)" :
 				true -> (if n1_failed 
 						 then ((n2_node4_pid4 = n3_node4_pid4)
 						and (n3_node4_pid4 = n4_node4_pid4))
@@ -179,7 +179,7 @@ with AADL_Properties;
 		    fault_activation: n3_failed = Asym_Fail_Any_PID_To_Any_Val@node3;
 		    fault_activation: n4_failed = Asym_Fail_Any_PID_To_Any_Val@node4;
 		    
-			analyze: max 2 fault
+			analyze: max 1 fault
 			
 		**};
 	end TopLevel.impl;
