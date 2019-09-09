@@ -186,8 +186,7 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				} else {
 					node.nodeValue = true;
 				}
-			}
-			else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+			} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
 				// System.out.println("pruning for probablity analysis");
 				if (isSubset(node, AddFaultsToNodeVisitor.faultCombinationsAboveThreshold)) {
 					node.nodeValue = true;
@@ -289,10 +288,6 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				oppositeChildNum++;
 				List<String> curList = new ArrayList<>();
 				for (SoteriaFTNode curNode : child.childNodes.values()) {
-					if (!(curNode instanceof SoteriaFTLeafNode)) {
-						throw new SafetyException("Error: attempting to transform a node " + child.nodeName
-								+ " with non leaf child node " + curNode.nodeName);
-					}
 					nodesMap.put(curNode.nodeName, curNode);
 					curList.add(curNode.nodeName);
 				}
@@ -325,15 +320,14 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			// TODO: set mhs set size according to fault hypothesis
 			Set<List<String>> destSets = new HashSet<List<String>>();
 
-			// At this point all grand children nodes should be of leaf nodes (otherwise exception thrown before)
 			// if original AND node, transform to an OR node with child nodes as AND nodes connecting leaf nodes
 			// the child nodes for each AND node corresponds to a mhs returned
 			// - they can be pruned according to fault hypothesis
+
 			if (originalAndNode) {
 				if (AddFaultsToNodeVisitor.maxFaultCount != 0) {
 					destSets = MHSUtils.computeMHS(sourceSets, AddFaultsToNodeVisitor.maxFaultCount, false);
-				}
-				else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
+				} else if (!AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty()) {
 					destSets = MHSUtils.computeMHS(sourceSets, 0, true);
 				}
 			}
@@ -370,6 +364,13 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 							curNode.addChildNode(curChildName, childNode);
 						}
 						// set curNode as resolved as its child nodes are leaf nodes
+						// throw an exception if not the case
+						for (SoteriaFTNode curChild : curNode.childNodes.values()) {
+							if (!(curChild instanceof SoteriaFTLeafNode)) {
+								throw new SafetyException("Error: attempting to resolve a node " + curChild.nodeName
+										+ " with non leaf child node " + curChild.nodeName);
+							}
+						}
 						curNode.resolved = true;
 						returnNode.addChildNode(curNodeName, curNode);
 					}
