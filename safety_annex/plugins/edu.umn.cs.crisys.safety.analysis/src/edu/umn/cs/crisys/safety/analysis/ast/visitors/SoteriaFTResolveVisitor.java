@@ -336,8 +336,6 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				destSets = MHSUtils.computeMHS(sourceSets, 0, false);
 			}
 
-			destSets = MHSUtils.computeMHS(sourceSets, 0, false);
-
 			if (destSets.size() == 0) {
 				return returnNode;
 			} else {
@@ -363,14 +361,8 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 							// add the child node to curNode
 							curNode.addChildNode(curChildName, childNode);
 						}
-						// set curNode as resolved as its child nodes are leaf nodes
-						// throw an exception if not the case
-						for (SoteriaFTNode curChild : curNode.childNodes.values()) {
-							if (!(curChild instanceof SoteriaFTLeafNode)) {
-								throw new SafetyException("Error: attempting to resolve a node " + curChild.nodeName
-										+ " with non leaf child node " + curChild.nodeName);
-							}
-						}
+						// set curNode as resolved as its child nodes are either leaf nodes
+						// or resolve node
 						curNode.resolved = true;
 						returnNode.addChildNode(curNodeName, curNode);
 					}
