@@ -73,10 +73,17 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				returnNode = resolveOrNode(node, isRoot);
 			}
 		}
-		if (returnNode != null) {
-			return prune(returnNode);
+		// only prune the node when nodeValue is true
+		// otherwise just return the node to preserve the false nodeValue
+		// so it can be eliminated when returned to the upper level
+		if (node.nodeValue) {
+			if (returnNode != null) {
+				return prune(returnNode);
+			} else {
+				return prune(node);
+			}
 		} else {
-			return prune(node);
+			return node;
 		}
 	}
 
@@ -113,11 +120,19 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			}
 		}
 
-		if (returnNode != null) {
-			return prune(returnNode);
+		// only prune the node when nodeValue is true
+		// otherwise just return the node to preserve the false nodeValue
+		// so it can be eliminated when returned to the upper level
+		if (node.nodeValue) {
+			if (returnNode != null) {
+				return prune(returnNode);
+			} else {
+				return prune(node);
+			}
 		} else {
-			return prune(node);
+			return node;
 		}
+
 	}
 
 	// An root OR node is resolved if
@@ -336,9 +351,11 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				destSets = MHSUtils.computeMHS(sourceSets, 0, false);
 			}
 
-			destSets = MHSUtils.computeMHS(sourceSets, 0, false);
-
 			if (destSets.size() == 0) {
+				// Different from previous null returnNode scenario
+				// in this case the nodeValue of the original node will be set to false
+				// as there is no min cut set for this node
+				node.nodeValue = false;
 				return returnNode;
 			} else {
 				String newNodeName = node.nodeName; // MHSUtils.createUniqueElemName(node.nodeName);
@@ -363,14 +380,8 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 							// add the child node to curNode
 							curNode.addChildNode(curChildName, childNode);
 						}
-						// set curNode as resolved as its child nodes are leaf nodes
-						// throw an exception if not the case
-						for (SoteriaFTNode curChild : curNode.childNodes.values()) {
-							if (!(curChild instanceof SoteriaFTLeafNode)) {
-								throw new SafetyException("Error: attempting to resolve a node " + curChild.nodeName
-										+ " with non leaf child node " + curChild.nodeName);
-							}
-						}
+						// set curNode as resolved as its child nodes are either leaf nodes
+						// or resolve node
 						curNode.resolved = true;
 						returnNode.addChildNode(curNodeName, curNode);
 					}

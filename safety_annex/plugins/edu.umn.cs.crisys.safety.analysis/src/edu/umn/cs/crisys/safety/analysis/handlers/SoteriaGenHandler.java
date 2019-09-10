@@ -353,30 +353,30 @@ public class SoteriaGenHandler extends VerifyHandler {
 //					}
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-					try {
-						File file = File.createTempFile("soteriaFT_", ".ml");
-						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-						bw.write(soteriaFT.toString());
-						bw.close();
-						org.eclipse.swt.program.Program.launch(file.toString());
-					} catch (IOException e) {
-						Dialog.showError("Unable to open file", e.getMessage());
-						e.printStackTrace();
-					}
+//					try {
+//						File file = File.createTempFile("soteriaFT_", ".ml");
+//						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+//						bw.write(soteriaFT.toString());
+//						bw.close();
+//						org.eclipse.swt.program.Program.launch(file.toString());
+//					} catch (IOException e) {
+//						Dialog.showError("Unable to open file", e.getMessage());
+//						e.printStackTrace();
+//					}
 
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
 					resolveVisitor.visit(soteriaFT);
 
-					try {
-						File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
-						BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
-						bw.write(soteriaFT.printMinCutSet());
-						bw.close();
-						org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
-					} catch (IOException e) {
-						Dialog.showError("Unable to open file", e.getMessage());
-						e.printStackTrace();
-					}
+//					try {
+//						File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
+//						BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
+//						bw.write(soteriaFT.printMinCutSet());
+//						bw.close();
+//						org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
+//					} catch (IOException e) {
+//						Dialog.showError("Unable to open file", e.getMessage());
+//						e.printStackTrace();
+//					}
 
 					try {
 						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
@@ -385,6 +385,20 @@ public class SoteriaGenHandler extends VerifyHandler {
 						bw.close();
 						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
+					} catch (IOException e) {
+						// close progress bar
+						display.dispose();
+						Dialog.showError("Unable to open file", e.getMessage());
+						e.printStackTrace();
+					}
+
+					try {
+						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_", ".txt");
+						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
+						bw.write(soteriaFT.printMinCutSetTally());
+						bw.close();
+						display.dispose();
+						org.eclipse.swt.program.Program.launch(minCutSetTallyFile.toString());
 					} catch (IOException e) {
 						// close progress bar
 						display.dispose();

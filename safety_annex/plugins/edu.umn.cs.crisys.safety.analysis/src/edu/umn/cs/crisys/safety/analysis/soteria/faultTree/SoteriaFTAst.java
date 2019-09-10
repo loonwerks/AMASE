@@ -2,6 +2,7 @@ package edu.umn.cs.crisys.safety.analysis.soteria.faultTree;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTAstVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTMinCutSetPrintVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTMinCutSetTallyPrintVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTMinCutSetTxtPrintVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTPrettyPrintVisitor;
 
@@ -21,6 +22,12 @@ public abstract class SoteriaFTAst {
 
 	public String printMinCutSetTxt() {
 		SoteriaFTMinCutSetTxtPrintVisitor visitor = new SoteriaFTMinCutSetTxtPrintVisitor();
+		accept(visitor);
+		return visitor.toString();
+	}
+
+	public String printMinCutSetTally() {
+		SoteriaFTMinCutSetTallyPrintVisitor visitor = new SoteriaFTMinCutSetTallyPrintVisitor();
 		accept(visitor);
 		return visitor.toString();
 	}
