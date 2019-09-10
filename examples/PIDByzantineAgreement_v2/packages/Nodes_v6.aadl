@@ -125,7 +125,8 @@ public
 						pid2_val <- pid2_val, 
 						pid3_val <- pid3_val,
 						pid4_val <- pid4_val;     
-				outputs: Node_Out <- val_out;    
+				outputs: Node_Out <- val_out;
+				probability: 1.0E-5;    
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
