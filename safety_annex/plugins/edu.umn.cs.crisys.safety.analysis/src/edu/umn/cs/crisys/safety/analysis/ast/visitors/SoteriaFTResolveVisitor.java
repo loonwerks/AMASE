@@ -73,6 +73,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				returnNode = resolveOrNode(node, isRoot);
 			}
 		}
+		// only prune the node when nodeValue is true
+		// otherwise just return the node to preserve the false nodeValue
+		// so it can be eliminated when returned to the upper level
 		if (node.nodeValue) {
 			if (returnNode != null) {
 				return prune(returnNode);
@@ -117,6 +120,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			}
 		}
 
+		// only prune the node when nodeValue is true
+		// otherwise just return the node to preserve the false nodeValue
+		// so it can be eliminated when returned to the upper level
 		if (node.nodeValue) {
 			if (returnNode != null) {
 				return prune(returnNode);
