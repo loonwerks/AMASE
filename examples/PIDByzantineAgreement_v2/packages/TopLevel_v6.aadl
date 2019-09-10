@@ -180,7 +180,7 @@ with AADL_Properties;
 		    fault_activation: n4_failed = Asym_Fail_Any_PID_To_Any_Val@node4;
 		    
 			analyze: max 1 fault
-			
+			--analyze: probability 1.0E-9
 		**};
 	end TopLevel.impl;
 end TopLevel_v6;
