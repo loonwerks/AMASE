@@ -73,10 +73,14 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 				returnNode = resolveOrNode(node, isRoot);
 			}
 		}
-		if (returnNode != null) {
-			return prune(returnNode);
+		if (node.nodeValue) {
+			if (returnNode != null) {
+				return prune(returnNode);
+			} else {
+				return prune(node);
+			}
 		} else {
-			return prune(node);
+			return node;
 		}
 	}
 
@@ -113,11 +117,16 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			}
 		}
 
-		if (returnNode != null) {
-			return prune(returnNode);
+		if (node.nodeValue) {
+			if (returnNode != null) {
+				return prune(returnNode);
+			} else {
+				return prune(node);
+			}
 		} else {
-			return prune(node);
+			return node;
 		}
+
 	}
 
 	// An root OR node is resolved if
@@ -337,6 +346,10 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			}
 
 			if (destSets.size() == 0) {
+				// Different from previous null returnNode scenario
+				// in this case the nodeValue of the original node will be set to false
+				// as there is no min cut set for this node
+				node.nodeValue = false;
 				return returnNode;
 			} else {
 				String newNodeName = node.nodeName; // MHSUtils.createUniqueElemName(node.nodeName);
