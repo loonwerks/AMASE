@@ -420,7 +420,8 @@ with ShutoffValve;
 --   **};
    
       annex safety{**
-	  analyze : max 1 fault 
+	  --analyze : max 1 fault 
+	  analyze : probability 1.0E-9
    **};
 	end PhysicalSystem.inst; 
 

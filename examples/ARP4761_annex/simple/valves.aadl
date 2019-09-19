@@ -12,16 +12,6 @@ system generic
 features
 	input : in data port common::pressure.i;
 	output : out data port common::pressure.i;
-annex EMV2 {**
-	use types     error_library;
-	use behavior  error_library::simple;
-	error propagations
-		input  : in propagation {NoService};
-		output : out propagation {NoService};
-	flows
-		f1 : error path input{NoService} -> output; 
-	end propagations;
-**};
 end generic;
 
 system implementation generic.i

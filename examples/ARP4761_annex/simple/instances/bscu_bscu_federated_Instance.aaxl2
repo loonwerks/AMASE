@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="ASCII"?>
+<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="bscu_federated_Instance" category="system">
+  <featureInstance name="pwr1" category="busAccess" direction="in out">
+    <feature xsi:type="aadl2:BusAccess" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedBusAccess.0"/>
+  </featureInstance>
+  <featureInstance name="pwr2" category="busAccess" direction="in out">
+    <feature xsi:type="aadl2:BusAccess" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedBusAccess.1"/>
+  </featureInstance>
+  <featureInstance name="pedal1">
+    <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.0"/>
+  </featureInstance>
+  <featureInstance name="pedal2">
+    <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.1"/>
+  </featureInstance>
+  <featureInstance name="wheel_pressure">
+    <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.2"/>
+  </featureInstance>
+  <featureInstance name="Select_Alternate" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.3"/>
+  </featureInstance>
+  <featureInstance name="cmd_nor" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.4"/>
+  </featureInstance>
+  <featureInstance name="cmd_alt" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.8/@ownedDataPort.5"/>
+  </featureInstance>
+  <componentInstance name="sub1" category="system">
+    <featureInstance name="pwr" category="busAccess" direction="in out">
+      <feature xsi:type="aadl2:BusAccess" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedBusAccess.0"/>
+    </featureInstance>
+    <featureInstance name="pedal">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="cmd_skid" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="cmd_brk" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="valid" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.3"/>
+    </featureInstance>
+    <componentInstance name="mon" category="process">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:ListValue">
+            <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.3/@componentInstance.0"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPropertyAssociation.1"/>
+      </ownedPropertyAssociation>
+      <featureInstance name="brake">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.0"/>
+      </featureInstance>
+      <featureInstance name="skid">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.1"/>
+      </featureInstance>
+      <featureInstance name="valid" direction="out">
+        <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <ownedValue>
+            <ownedValue xsi:type="aadl2:NamedValue">
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+            </ownedValue>
+          </ownedValue>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+        </ownedPropertyAssociation>
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.2"/>
+      </featureInstance>
+      <subcomponent xsi:type="aadl2:ProcessSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedProcessSubcomponent.0"/>
+      <index>0</index>
+      <classifier xsi:type="aadl2:ProcessImplementation" href="../bscu.aadl#bscu.monitor.i"/>
+    </componentInstance>
+    <componentInstance name="cmd" category="process">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:ListValue">
+            <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.3/@componentInstance.0"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <featureInstance name="brake" direction="out">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+      </featureInstance>
+      <featureInstance name="skid" direction="out">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+      </featureInstance>
+      <featureInstance name="pedalvalue">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+      </featureInstance>
+      <subcomponent xsi:type="aadl2:ProcessSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedProcessSubcomponent.1"/>
+      <index>0</index>
+      <classifier xsi:type="aadl2:ProcessImplementation" href="../bscu.aadl#bscu.command.i"/>
+    </componentInstance>
+    <connectionInstance name="cmd.brake -> mon.brake" complete="true" kind="portConnection" destination="//@componentInstance.0/@componentInstance.0/@featureInstance.0" source="//@componentInstance.0/@componentInstance.1/@featureInstance.0">
+      <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.1/@featureInstance.0" destination="//@componentInstance.0/@componentInstance.0/@featureInstance.0">
+        <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.1"/>
+      </connectionReference>
+    </connectionInstance>
+    <connectionInstance name="cmd.skid -> mon.skid" complete="true" kind="portConnection" destination="//@componentInstance.0/@componentInstance.0/@featureInstance.1" source="//@componentInstance.0/@componentInstance.1/@featureInstance.1">
+      <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.0/@componentInstance.0/@featureInstance.1">
+        <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.4"/>
+      </connectionReference>
+    </connectionInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedSystemSubcomponent.0"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemImplementation" href="../bscu.aadl#bscu.bscu_subsystem.generic"/>
+  </componentInstance>
+  <componentInstance name="sub2" category="system">
+    <featureInstance name="pwr" category="busAccess" direction="in out">
+      <feature xsi:type="aadl2:BusAccess" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedBusAccess.0"/>
+    </featureInstance>
+    <featureInstance name="pedal">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="cmd_skid" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="cmd_brk" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="valid" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.4/@ownedDataPort.3"/>
+    </featureInstance>
+    <componentInstance name="mon" category="process">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:ListValue">
+            <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.3/@componentInstance.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPropertyAssociation.3"/>
+      </ownedPropertyAssociation>
+      <featureInstance name="brake">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.0"/>
+      </featureInstance>
+      <featureInstance name="skid">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.1"/>
+      </featureInstance>
+      <featureInstance name="valid" direction="out">
+        <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+          <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+          <ownedValue>
+            <ownedValue xsi:type="aadl2:NamedValue">
+              <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+            </ownedValue>
+          </ownedValue>
+          <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+        </ownedPropertyAssociation>
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedDataPort.2"/>
+      </featureInstance>
+      <subcomponent xsi:type="aadl2:ProcessSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedProcessSubcomponent.0"/>
+      <index>0</index>
+      <classifier xsi:type="aadl2:ProcessImplementation" href="../bscu.aadl#bscu.monitor.i"/>
+    </componentInstance>
+    <componentInstance name="cmd" category="process">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.workspace/resources/properties/Predeclared_Property_Sets/Deployment_Properties.aadl#Deployment_Properties.Actual_Processor_Binding"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:ListValue">
+            <ownedListElement xsi:type="instance:InstanceReferenceValue" referencedInstanceObject="//@componentInstance.3/@componentInstance.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPropertyAssociation.2"/>
+      </ownedPropertyAssociation>
+      <featureInstance name="brake" direction="out">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+      </featureInstance>
+      <featureInstance name="skid" direction="out">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+      </featureInstance>
+      <featureInstance name="pedalvalue">
+        <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+      </featureInstance>
+      <subcomponent xsi:type="aadl2:ProcessSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedProcessSubcomponent.1"/>
+      <index>0</index>
+      <classifier xsi:type="aadl2:ProcessImplementation" href="../bscu.aadl#bscu.command.i"/>
+    </componentInstance>
+    <connectionInstance name="cmd.brake -> mon.brake" complete="true" kind="portConnection" destination="//@componentInstance.1/@componentInstance.0/@featureInstance.0" source="//@componentInstance.1/@componentInstance.1/@featureInstance.0">
+      <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.1/@featureInstance.0" destination="//@componentInstance.1/@componentInstance.0/@featureInstance.0">
+        <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.1"/>
+      </connectionReference>
+    </connectionInstance>
+    <connectionInstance name="cmd.skid -> mon.skid" complete="true" kind="portConnection" destination="//@componentInstance.1/@componentInstance.0/@featureInstance.1" source="//@componentInstance.1/@componentInstance.1/@featureInstance.1">
+      <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.1/@componentInstance.0/@featureInstance.1">
+        <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.4"/>
+      </connectionReference>
+    </connectionInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedSystemSubcomponent.1"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemImplementation" href="../bscu.aadl#bscu.bscu_subsystem.generic"/>
+  </componentInstance>
+  <componentInstance name="select" category="system">
+    <featureInstance name="input1">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="input2">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="result" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.6/@ownedDataPort.2"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedSystemSubcomponent.2"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../bscu.aadl#bscu.select_alternate"/>
+  </componentInstance>
+  <componentInstance name="platform" category="system">
+    <componentInstance name="cpu1" category="processor">
+      <subcomponent xsi:type="aadl2:ProcessorSubcomponent" href="../platform.aadl#/0/@ownedPublicSection/@ownedClassifier.7/@ownedProcessorSubcomponent.0"/>
+      <index>0</index>
+      <classifier xsi:type="aadl2:ProcessorImplementation" href="../platform.aadl#platform.cpu.single"/>
+    </componentInstance>
+    <componentInstance name="cpu2" category="processor">
+      <subcomponent xsi:type="aadl2:ProcessorSubcomponent" href="../platform.aadl#/0/@ownedPublicSection/@ownedClassifier.7/@ownedProcessorSubcomponent.1"/>
+      <index>0</index>
+      <classifier xsi:type="aadl2:ProcessorImplementation" href="../platform.aadl#platform.cpu.single"/>
+    </componentInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedSystemSubcomponent.3"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemImplementation" href="../platform.aadl#platform.platform.federated"/>
+  </componentInstance>
+  <componentInstance name="select_accumulator" category="system">
+    <featureInstance name="wheel_pressure">
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.7/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="select_alt_accumulator" direction="out">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:NamedValue">
+            <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <feature xsi:type="aadl2:DataPort" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.7/@ownedDataPort.1"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedSystemSubcomponent.4"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../bscu.aadl#bscu.select_accumulator_valve"/>
+  </componentInstance>
+  <connectionInstance name="pwr1 &lt;-> sub1.pwr" kind="accessConnection" destination="//@componentInstance.0/@featureInstance.0" bidirectional="true" source="//@featureInstance.0">
+    <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.0/@featureInstance.0">
+      <connection xsi:type="aadl2:AccessConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedAccessConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="pwr2 &lt;-> sub2.pwr" kind="accessConnection" destination="//@componentInstance.1/@featureInstance.0" bidirectional="true" source="//@featureInstance.1">
+    <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.1/@featureInstance.0">
+      <connection xsi:type="aadl2:AccessConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedAccessConnection.1"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="pedal1 -> sub1.cmd.pedalvalue" kind="portConnection" destination="//@componentInstance.0/@componentInstance.1/@featureInstance.2" source="//@featureInstance.2">
+    <connectionReference context="/" source="//@featureInstance.2" destination="//@componentInstance.0/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.0"/>
+    </connectionReference>
+    <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@featureInstance.1" destination="//@componentInstance.0/@componentInstance.1/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="pedal2 -> sub2.cmd.pedalvalue" kind="portConnection" destination="//@componentInstance.1/@componentInstance.1/@featureInstance.2" source="//@featureInstance.3">
+    <connectionReference context="/" source="//@featureInstance.3" destination="//@componentInstance.1/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.1"/>
+    </connectionReference>
+    <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@featureInstance.1" destination="//@componentInstance.1/@componentInstance.1/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="sub1.mon.valid -> select.input1" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.0" source="//@componentInstance.0/@componentInstance.0/@featureInstance.2">
+    <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.0/@featureInstance.2" destination="//@componentInstance.0/@featureInstance.4">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.5"/>
+    </connectionReference>
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.4" destination="//@componentInstance.2/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.2"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="sub1.cmd.skid -> cmd_nor" kind="portConnection" destination="//@featureInstance.6" source="//@componentInstance.0/@componentInstance.1/@featureInstance.1">
+    <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.0/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.3"/>
+    </connectionReference>
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.2" destination="//@featureInstance.6">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.5"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="sub2.mon.valid -> select.input2" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.1" source="//@componentInstance.1/@componentInstance.0/@featureInstance.2">
+    <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.0/@featureInstance.2" destination="//@componentInstance.1/@featureInstance.4">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.5"/>
+    </connectionReference>
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.4" destination="//@componentInstance.2/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.3"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="sub2.cmd.skid -> cmd_alt" kind="portConnection" destination="//@featureInstance.7" source="//@componentInstance.1/@componentInstance.1/@featureInstance.1">
+    <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.1/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.5/@ownedPortConnection.3"/>
+    </connectionReference>
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.2" destination="//@featureInstance.7">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.6"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="select.result -> Select_Alternate" kind="portConnection" destination="//@featureInstance.5" source="//@componentInstance.2/@featureInstance.2">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.2" destination="//@featureInstance.5">
+      <connection xsi:type="aadl2:PortConnection" href="../bscu.aadl#/0/@ownedPublicSection/@ownedClassifier.9/@ownedPortConnection.4"/>
+    </connectionReference>
+  </connectionInstance>
+  <systemOperationMode name="No Modes"/>
+  <componentImplementation xsi:type="aadl2:SystemImplementation" href="../bscu.aadl#bscu.bscu.federated"/>
+</instance:SystemInstance>

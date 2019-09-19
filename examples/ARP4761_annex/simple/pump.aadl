@@ -11,7 +11,8 @@ features
 	pressure_output : out data port common::pressure.i;
 
 	annex AGREE {**
-		guarantee "Pump always outputs something" : pressure_output.val > 0.0 ;
+		guarantee "Pump output is positive." : 
+			pressure_output.val > 0.0 ;
 	**}	;
 
 	annex safety {**

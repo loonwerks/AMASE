@@ -1,0 +1,32 @@
+package common_methods
+public
+annex agree {**	
+	
+	-- Change boolean to integer 
+	-- TRUE == 1
+	-- FALSE == 0
+	node bool_to_int(b: bool) returns (i: int); 
+	let
+		i = if (b) then 1 else 0;
+	tel; 
+	
+	-- If historically the case, return true
+	-- else false
+	node historically(b: bool) returns (h: bool); 
+	let
+	   h = b -> b or pre(h); 
+	tel;
+	
+	-- Return minimum of two values passed in
+	node min(m: real, n: real) returns (r:real);
+	let
+	   r = if (m < n) then m else n;
+	tel;
+
+	node ramp_down(val_in: real, delt: real, val_max: real, trigger: bool) returns (val_out: real);
+	let
+ 	  val_out = val_in -> if (trigger) then min(val_max, pre(val_out - delt)) else val_in; 
+	tel;	
+
+**};
+end common_methods;

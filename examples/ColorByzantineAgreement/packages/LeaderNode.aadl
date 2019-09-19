@@ -20,7 +20,8 @@ with Base_Types;
 			
 			fault Node_Fault "Leader node output is asymmetric": Common_Faults.invert_signal {
 				inputs: val_in <- color;     
-				outputs: color <- val_out;    
+				outputs: color <- val_out;
+				probability: 1.0E-5;    
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
