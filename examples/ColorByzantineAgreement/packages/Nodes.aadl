@@ -37,7 +37,8 @@ with Base_Types;
 			
 			fault Node_Fault "Node output is asymmetric": Common_Faults.invert_signal {
 				inputs: val_in <- color_reported_to_me;     
-				outputs: color_reported_to_me <- val_out;    
+				outputs: color_reported_to_me <- val_out; 
+				probability: 1.0E-5;   
 				duration: permanent;
 				propagate_type: asymmetric;
 			}

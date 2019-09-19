@@ -283,7 +283,7 @@ with ShutoffValve;
 		**}	;
    
      	annex safety{**
-	  		analyze : max 1 fault 
+	  		analyze : max 4 fault 
    		**};
 	end PhysicalSystem.inst; 
 

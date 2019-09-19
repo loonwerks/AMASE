@@ -19,7 +19,7 @@ system A
 		fault stuck_at_fault_A "Component A output stuck" : faults.fail_to {
 			inputs: val_in <- Output, alt_val <- prev(Output, 0); 
 			outputs: Output <- val_out;    
-        	probability: 5.0E-5 ;
+        	probability: 5.0E-9 ;
 			duration: permanent;
 		}
 	**};
@@ -40,7 +40,7 @@ system B
 			eq nondet_val : int;
 			inputs: val_in <- Output, alt_val <- nondet_val; 
 			outputs: Output <- val_out;    
-        	probability: 5.0E-9 ;
+        	probability: 5.0E-5 ;
 			duration: permanent;
 		}
 	**};	
@@ -90,8 +90,8 @@ system implementation top_level.Impl
 	**};
 	
     annex safety{**
-	  -- analyze : probability 1.0E-7
-	  analyze : max 1 fault
+	  analyze : probability 1.0E-7
+	  --analyze : max 2 fault
    **};
 end top_level.Impl;
 	
