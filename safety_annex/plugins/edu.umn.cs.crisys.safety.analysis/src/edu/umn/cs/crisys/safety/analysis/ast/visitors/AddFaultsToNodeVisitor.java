@@ -58,6 +58,7 @@ import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.asymmetric;
 import edu.umn.cs.crisys.safety.safety.symmetric;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
+import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.BoolExpr;
@@ -68,6 +69,7 @@ import jkind.lustre.IntExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
+import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
@@ -413,10 +415,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
 			boolean onlyAsym = true;
+			Fault f = null;
 			for (Pair p : faultPairs) {
 				if (!isAsymmetric(p.f)) {
 					onlyAsym = false;
 				}
+				f = p.f;
 			}
 			if (!onlyAsym) {
 				AgreeVar out = findVar(node.outputs, (faultyId));
@@ -424,10 +428,33 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					throw new SafetyException("A fault defined for " + node.id + " has a connection"
 							+ " that is not a valid output for this component.");
 				} else {
-					nb.addInput(new AgreeVar(createNominalId((faultyId)), out.type, out.reference));
+					nb.addInput(new AgreeVar(createNominalId((faultyId)), getOutputTypeForFaultNode(f),
+							out.reference));
 				}
 			}
 		}
+	}
+
+	/**
+	 * Find named type of output on fault node
+	 *
+	 * @param fault Fault defining this fault node.
+	 * @return NamedType The type on the output the fault is connected to.
+	 */
+	protected NamedType getOutputTypeForFaultNode(Fault fault) {
+		// The type of __fault__nominal__output is the same as what the fault node
+		// takes as input. Will have statement: fault__nominal = input
+		// First find this in order to create that
+		// variable later.
+		NamedType nominalOutputType = null;
+		if (fault.faultNode.outputs.size() > 1) {
+			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
+		} else {
+			for (VarDecl output : fault.faultNode.outputs) {
+				nominalOutputType = (NamedType) output.type;
+			}
+		}
+		return nominalOutputType;
 	}
 
 	/**
@@ -595,12 +622,20 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		Expr defaultExpr = new IdExpr(nomId);
 		List<TriggerFaultOutPair> triggerList = new ArrayList<>();
 		boolean isOnlyAsym = true;
+		Expr outputExpr = null;
 		// Go through pairs of the list and create with statements.
 		for (Pair pair : list) {
 			if (isAsymmetric(pair.f)) {
 				continue;
 			}
 			isOnlyAsym = false;
+			outputExpr = pair.ex;
+			// base : replace the expression with nominal expression
+			// repl : go from the fault to the actual
+			// toAssign: createNestedUpdateExpr using base, repl
+			//Expr base = replPathIdExpr(pair.ex, defaultExpr);
+			//Expr repl = faultToActual(pair.f, pair.ex);
+			//defaultExpr = SafetyUtil.createNestedUpdateExpr(base, repl);
 			Expr faultNodeOut = faultToActual(pair.f, pair.ex);
 			// Collect elements to build the nested if then else stmt described above.
 			Expr ftTrigger = localFaultTriggerMap.get(pair.f);
@@ -612,9 +647,34 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// anything in the sender node regarding fault nominal.
 		if (!isOnlyAsym) {
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
-					new BinaryExpr(new IdExpr(lhsWithStmtName), BinaryOp.EQUAL,
+					new BinaryExpr(outputExpr, BinaryOp.EQUAL,
 							createNestedIfThenElseExpr(triggerList, defaultExpr, 0)),
 					null));
+		}
+	}
+
+	/**
+	 * Replaces original expression with a nested record update expr.
+	 * ex: fault__nominal -> output{val:= fault__nominal}
+	 *
+	 * @param original Original expression
+	 * @param toAssign What needs to be replaced and assigned in original
+	 * @return returns completed expression
+	 */
+	private Expr replPathIdExpr(Expr original, Expr toAssign) {
+		if (original instanceof IdExpr) {
+			return toAssign;
+		} else if (original instanceof RecordAccessExpr) {
+			RecordAccessExpr rae = (RecordAccessExpr) original;
+			Expr newBase = replPathIdExpr(rae.record, toAssign);
+			return new RecordAccessExpr(newBase, rae.field);
+		} else if (original instanceof ArrayAccessExpr) {
+			ArrayAccessExpr aae = (ArrayAccessExpr) original;
+			Expr newBase = replPathIdExpr(aae.array, aae.index);
+			return new ArrayAccessExpr(newBase, aae.index);
+		} else {
+			new Exception("Problem with record expressions in safety analysis");
+			return null;
 		}
 	}
 
@@ -699,6 +759,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 		return newFaults;
 	}
+
 	/**
 	 * Renames eq var id to match lustre name.
 	 * Ex:
@@ -706,7 +767,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Sender_fault_1_some_var : bool;
 	 *
 	 * @param f Fault with safety eq var stmts.
-	 * @param idMap Map from user defined var to lustre name.
+	 * @param idMap Map<String, String> from user defined var to lustre name.
 	 * @return Returns fault with var renamed.
 	 */
 	public Fault renameEqId(Fault f, Map<String, String> idMap) {
@@ -1044,7 +1105,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Given a fault statement, returns the string name of the output this fault stmt is connected to.
+	 * Given a fault statement, returns the string name of the
+	 * output this fault stmt is connected to.
 	 *
 	 * @param fs FaultStatement in question
 	 * @return String name of the output
@@ -1829,6 +1891,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		return noFaultExpr;
 	}
 
+	/**
+	 * Sets eqn local AND fault1 AND fault2 AND ...
+	 *
+	 * @param elements All fault probability elements
+	 * @return Returns the conjunction of all these elements.
+	 */
 	private Expr getAllFaultProposition(Set<FaultProbability> elements) {
 		Expr allFaultExpr = null;
 		for (FaultProbability fp : elements) {
@@ -1986,6 +2054,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	}
 
+	/**
+	 * Checks to see if fault combination is an allowed combination
+	 * based on combined probabilities.
+	 *
+	 * @param newSet FaultSetProbability to check if allowed combination
+	 * @param faultCombinationsAboveThreshold List of FaultSetProbability
+	 * 		  elements that are allowed combinations.
+	 * @return boolean - is contained or not.
+	 */
 	private boolean isContained(FaultSetProbability newSet,
 			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold) {
 		boolean isContained = false;
