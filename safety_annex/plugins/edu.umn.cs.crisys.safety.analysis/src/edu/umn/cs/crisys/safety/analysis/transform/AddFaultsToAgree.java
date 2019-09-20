@@ -13,6 +13,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import jkind.api.results.AnalysisResult;
 
@@ -83,7 +84,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			}
 		}
 		catch (Throwable t) {
-			System.out.println("Something went wrong during safety analysis: " + t.toString());
+			new SafetyException("Something went wrong during safety analysis: " + t.toString());
 
 		}
 
