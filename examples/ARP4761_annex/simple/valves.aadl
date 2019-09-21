@@ -57,10 +57,10 @@ features
 			duration: permanent;
 		}
 		
-		HW_fault valve_failed "Valve failed": {
-			probability: 1.0E-5;
-			duration: permanent;
-		}
+--		HW_fault valve_failed "Valve failed": {
+--			probability: 1.0E-5;
+--			duration: permanent;
+--		}
 		
 	**};
 
