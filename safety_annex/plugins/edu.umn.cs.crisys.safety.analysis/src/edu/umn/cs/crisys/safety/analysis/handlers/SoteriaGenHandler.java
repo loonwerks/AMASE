@@ -71,6 +71,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
@@ -283,6 +284,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 							api.execute(program, result, subMonitor);
 						}
 					} catch (JKindException e) {
+						new SafetyException("JKind exception.");
 						System.out.println("******** JKindException Text ********");
 						e.printStackTrace(System.out);
 						System.out.println("******** JKind Output ********");
@@ -367,16 +369,16 @@ public class SoteriaGenHandler extends VerifyHandler {
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
 					resolveVisitor.visit(soteriaFT);
 
-//					try {
-//						File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
-//						BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
-//						bw.write(soteriaFT.printMinCutSet());
-//						bw.close();
-//						org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
-//					} catch (IOException e) {
-//						Dialog.showError("Unable to open file", e.getMessage());
-//						e.printStackTrace();
-//					}
+					try {
+						File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
+						BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
+						bw.write(soteriaFT.printMinCutSet());
+						bw.close();
+						org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
+					} catch (IOException e) {
+						Dialog.showError("Unable to open file", e.getMessage());
+						e.printStackTrace();
+					}
 
 					try {
 						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
