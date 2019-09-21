@@ -97,7 +97,7 @@ public class IvcToSoteriaFTGenerator {
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 				// check if there is timeout in MIVC analysis
 				if (property.getMivcTimedOut()) {
-					System.err.println("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
+					new SafetyException("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
 				}
 
 				// turn MIVC sets to MCS sets
