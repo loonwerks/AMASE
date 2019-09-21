@@ -13,15 +13,22 @@ with Datatypes;
 				sender_input.NODE_VAL = output.NODE_VAL;
 			
 		**}	;
---		annex safety {**
---
---			fault Receiver_Fault "Receiver output fail to zero.": Common_Faults.fail_to_real {
---				eq test : real; 
---				inputs: val_in <- output, alt_val <- test;     
---				outputs: output <- val_out;    
---				duration: permanent;
---				--propagate_type: asymmetric;
---			}	
---		**};
+		
+		annex safety {**
+
+			fault Receiver_Fault "Receiver output fail to zero.": Fault_Library.fail_to_real {
+				eq test : real; 
+				inputs: val_in <- output.NODE_VAL, alt_val <- test;     
+				outputs: output.NODE_VAL <- val_out;    
+				duration: permanent;
+			}
+			
+			fault Receiver_Fault_2 "Datatype output is zero": Fault_Library.nested_fault {
+				inputs: val_in <- output, alt_val <- 0.0;     
+				outputs: output <- val_out;    
+				duration: permanent;
+			}	
+		**};
+		
 	end Receiver;
 end Receiver;
