@@ -143,6 +143,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	@Override
 	public AgreeRenaming rename(AgreeRenaming renaming) {
 		Map<Fault, List<String>> mapFaultToLustreName = faultVisitor.getFaultToLustreNameMap();
+		Map<HWFault, List<String>> mapHWFaultToLustreName = faultVisitor.getHWFaultToLustreNameMap();
 
 		for(Fault key : mapFaultToLustreName.keySet()) {
 			// Add to explicit renames map
@@ -151,6 +152,18 @@ public class AddFaultsToAgree implements AgreeAutomater {
 						key.explanitoryText + " (" + key.id + ")");
 				// Add to reference map
 				renaming.addToRefMap(name, key.faultStatement);
+				// Add to supportRenames
+				renaming.addSupportRename(name, name);
+				// Add to supportRefString
+				renaming.addSupportRefString(name, key.explanitoryText + " (" + key.id + ")");
+			}
+		}
+		for (HWFault key : mapHWFaultToLustreName.keySet()) {
+			// Add to explicit renames map
+			for (String name : mapHWFaultToLustreName.get(key)) {
+				renaming.addExplicitRename(name, key.explanitoryText + " (" + key.id + ")");
+				// Add to reference map
+				renaming.addToRefMap(name, key.hwFaultStatement);
 				// Add to supportRenames
 				renaming.addSupportRename(name, name);
 				// Add to supportRefString
