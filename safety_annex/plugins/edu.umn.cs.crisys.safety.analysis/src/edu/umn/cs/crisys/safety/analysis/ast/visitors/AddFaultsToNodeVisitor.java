@@ -217,7 +217,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (Fault f : faults) {
 			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
 				addFaultInputs(f, nb);
-				// addHWFaultInputs(hwFaults, nb);
 				addFaultLocalEqsAndAsserts(f, nb);
 			} else {
 				addFaultInputs(f, nb);
@@ -225,10 +224,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 		}
 		// Then do the hardware fault inputs
-		for (HWFault hwf : hwFaults) {
-			// addHWFaultInputs(hwf, nb);
-			addHWFaultInputs(hwFaults, nb);
-		}
+		addHWFaultInputs(hwFaults, nb);
+
 		addToMutualExclusionList();
 		addNominalVars(node, nb);
 		addFaultNodeEqs(faults, nb);
