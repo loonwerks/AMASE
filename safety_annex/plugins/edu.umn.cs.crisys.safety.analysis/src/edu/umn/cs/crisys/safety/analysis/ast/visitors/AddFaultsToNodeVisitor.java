@@ -211,17 +211,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		if (AddFaultsToAgree.getTransformFlag() == 2) {
 			nb.setFaultTreeFlag(true);
 		}
+		// Go through fault list first.
 		// If symmetric, add fault info to agree node.
 		// If asymmetric, only add fault triggers to agree node.
 		for (Fault f : faults) {
 			if ((f.propType == null) || (f.propType.getPty() instanceof symmetric)) {
 				addFaultInputs(f, nb);
-				addHWFaultInputs(hwFaults, nb);
+				// addHWFaultInputs(hwFaults, nb);
 				addFaultLocalEqsAndAsserts(f, nb);
 			} else {
 				addFaultInputs(f, nb);
 			}
 
+		}
+		// Then do the hardware fault inputs
+		for (HWFault hwf : hwFaults) {
+			// addHWFaultInputs(hwf, nb);
+			addHWFaultInputs(hwFaults, nb);
 		}
 		addToMutualExclusionList();
 		addNominalVars(node, nb);
@@ -1722,6 +1728,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		for (Fault f : faults) {
 			// only add independently active fault to sumExprs
 			String base = addPathDelimiters(f.path, f.id);
+			sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(base))));
+		}
+		for (HWFault hwf : this.hwfaultMap.get(currentNode.compInst)) {
+			String base = addPathDelimiters(hwf.path, hwf.id);
 			sumExprs.add(createSumExpr(new IdExpr(this.createFaultIndependentActiveId(base))));
 		}
 		for (AgreeNode n : currentNode.subNodes) {
