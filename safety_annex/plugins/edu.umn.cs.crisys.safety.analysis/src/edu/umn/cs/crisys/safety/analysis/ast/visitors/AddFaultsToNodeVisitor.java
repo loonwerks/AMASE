@@ -100,6 +100,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// that fault (since nodes may be used in multiple locations), in order
 	// to produce the top-level global variables to activate faults.
 	private Map<Fault, List<String>> mapFaultToLustreNames = new HashMap<Fault, List<String>>();
+	// This map is used to track, for each hwfault, a list of paths to instances of
+	// that hwfault (since nodes may be used in multiple locations), in order
+	// to produce the top-level global variables to activate faults.
+	private Map<HWFault, List<String>> mapHWFaultToLustreNames = new HashMap<HWFault, List<String>>();
 	// It is used to properly set up the top-level node for triggering faults.
 	// Fault map: stores the faults associated with a node.
 	// Keying off component instance rather than AgreeNode, just so we don't
@@ -1613,6 +1617,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<HWFault> hwfaults = this.hwfaultMap.get(currentNode.compInst);
 
 		addLocalsAndInputForHWFaults(hwfaults, nb);
+		// Add hw faults to lustre fault mapping
+		for (HWFault hwf : hwfaults) {
+			String base = addPathDelimiters(hwf.path, hwf.id);
+			addToLustreHWFaultMap(base, hwf);
+		}
 
 		for (AgreeNode n : currentNode.subNodes) {
 			addTopLevelFaultDeclarations(n, nb);
@@ -1659,6 +1668,26 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			names.add(this.createFaultIndependentActiveId(base));
 			names.add(this.createFaultDependentActiveId(base));
 			mapFaultToLustreNames.put(f, names);
+		}
+	}
+
+	/**
+	 * Method adds hw fault to lustre names mapping for later use.
+	 *
+	 * @param base nodeName__hwfaultName used to make lustre name.
+	 * @param f HWFault to add to map.
+	 */
+	private void addToLustreHWFaultMap(String base, HWFault f) {
+		// add to lustre fault map with the explanatory text (string given for fault
+		// definition)
+		if (mapHWFaultToLustreNames.containsKey(f)) {
+			mapHWFaultToLustreNames.get(f).add(this.createFaultIndependentActiveId(base));
+			mapHWFaultToLustreNames.get(f).add(this.createFaultDependentActiveId(base));
+		} else {
+			List<String> names = new ArrayList<>();
+			names.add(this.createFaultIndependentActiveId(base));
+			names.add(this.createFaultDependentActiveId(base));
+			mapHWFaultToLustreNames.put(f, names);
 		}
 	}
 
@@ -2497,6 +2526,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 */
 	public Map<Fault, List<String>> getFaultToLustreNameMap() {
 		return mapFaultToLustreNames;
+	}
+
+	/**
+	 * Public accessor for the mapping from a hwfault to its
+	 * corresponding lustre name.
+	 * @return Map<HWFault, List<String>> faultToLustreNameMap
+	 */
+	public Map<HWFault, List<String>> getHWFaultToLustreNameMap() {
+		return mapHWFaultToLustreNames;
 	}
 
 	/**

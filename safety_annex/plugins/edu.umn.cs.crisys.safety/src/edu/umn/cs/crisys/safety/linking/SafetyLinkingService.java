@@ -41,6 +41,7 @@ import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
 
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 
 public class SafetyLinkingService extends PropertiesLinkingService{
@@ -71,11 +72,14 @@ public class SafetyLinkingService extends PropertiesLinkingService{
                 || context instanceof OrderStatement
                 || context instanceof ConnectionStatement
                 || context instanceof SpecStatement
-                || context instanceof FaultSubcomponent) {
+				|| context instanceof FaultSubcomponent || context instanceof HWFaultSubcomponent) {
 
             //EObject e = findClassifier(context, reference, name);
         	EObject e = getIndexedObject(context, reference, name);
 
+			if (context instanceof FaultSubcomponent || context instanceof HWFaultSubcomponent) {
+				System.out.println("Here");
+			}
             //hack to fix some strange linking behavior by osate
             if(e instanceof DataType){
             	e = null;
