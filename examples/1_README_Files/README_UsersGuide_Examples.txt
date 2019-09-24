@@ -26,7 +26,17 @@ developed by Danielle Stewart and Janet Liu
 	the overall behavior in terms of shutting down when we should vs. shutting down when it is 
 	unnecessary. More information about the results can be found in the Users Guide.
 	
-(3) PIDByzantineAgreement: Four nodes share with each other their Process IDs (PIDs) in the first time step. 
+(3) ColorByzantineAgreement: This model is used to illustrate the mitigation strategy using	
+	AGREE contracts. The architecture is of 4 nodes. One is the leader node and sends its color
+	(represented as boolean) to 3 other nodes. The other nodes must reach agreement on the color.
+	Contracts used in mitigation are found in LeaderNode.aadl (color sent in first time step and 
+	always remains the same) and in Nodes.aadl (send other nodes what was seen in step 1). 
+	
+	The faults can occur on the LeaderNode output and the Nodes output (since all are 1-n connections.)
+	The top level contracts state that all nodes agree on the color after one time step.
+	Property regarding non-failed nodes pass with 1 active fault and fail with anything more than 1.
+	
+(4) PIDByzantineAgreement: Four nodes share with each other their Process IDs (PIDs) in the first time step. 
 	They share with each other what they have seen from everyone else in the second time step. 
 	An agreement strategy of majority voting is implemented to determine PIDs of each node. 
 	If majority does not work, then a default PID of 0 is assigned. 

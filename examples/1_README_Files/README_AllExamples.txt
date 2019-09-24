@@ -35,7 +35,6 @@ Regression Testing
 ------------------
 	- Toy_Example_Safety
 	- ARP4761_annex
-	- Test_Example
 	- Sensor_Example
 	- ColorByzantineAgreement
 	- PIDByzantineAgreement

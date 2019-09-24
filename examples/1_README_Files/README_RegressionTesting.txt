@@ -1,5 +1,8 @@
+Regression Testing Examples
+developed by Danielle Stewart and Janet Liu
 
-
+These are used to occasionally test the Safety Annex when larger changes
+are made to the implementation. 
 
 (1) Toy_Example_Safety: This simple example is used in the Users Guide to illustrate
 	grammatical structures and show how to run the tool. 
@@ -28,9 +31,7 @@
 
 (2) ARP4761_annex: The first simplified WBS version has two wheel
 
-(3) Test_Example:
-
-(4) Sensor_Example: The reactor system is composed of three subsystems: temperature
+(3) Sensor_Example: The reactor system is composed of three subsystems: temperature
 	sensors, radiation sensors, and pressure sensors. Each of these subsystems contain
 	three related sensors which monitor the environmental inputs (to the top level reactor
 	system) and send a shutdown command when necessary. 
@@ -127,7 +128,7 @@
 			then we do not shut down when we should. 
 			(3 cut sets, one for each sensor) 
 	
-(5) ColorByzantineAgreement: This model is used to illustrate the mitigation strategy using	
+(4) ColorByzantineAgreement: This model is used to illustrate the mitigation strategy using	
 	AGREE contracts. The architecture is of 4 nodes. One is the leader node and sends its color
 	(represented as boolean) to 3 other nodes. The other nodes must reach agreement on the color.
 	Contracts used in mitigation are found in LeaderNode.aadl (color sent in first time step and 
@@ -166,7 +167,7 @@
 		- If the threshold is 1.0E-10, then this matches max 1 fault cut sets.
 		- If the threshold is 1.0E-9, then this matches max 2 fault cut sets.
 	
-(6) PIDByzantineAgreement: This model is described in detail in the Users Guide and briefly here.
+(5) PIDByzantineAgreement: This model is described in detail in the Users Guide and briefly here.
 	Four nodes share with each other their Process IDs (PIDs) in the first time step. They share with each 
 	other what they have seen from everyone else in the second time step. An agreement strategy of majority 
 	voting is implemented to determine PIDs of each node. If majority does not work, then a default PID of 0
@@ -212,7 +213,7 @@
 		- If the threshold is 1.0E-10, then this matches max 1 fault cut sets.
 		- If the threshold is 1.0E-9, then this matches max 2 fault cut sets.
 	
-(7) WBS_arch4_v2: The AADL model is based on the NuSMV model created by FBK in the AIR6110 case study 
+(6) WBS_arch4_v2: The AADL model is based on the NuSMV model created by FBK in the AIR6110 case study 
 	(Formal Design and Safety Analysis of AIR6110 Wheel Brake System). The fault model is
 	based on the xSAP fault model of the same project. 
 
