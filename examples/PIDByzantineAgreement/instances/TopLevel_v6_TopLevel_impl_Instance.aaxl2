@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="ASCII"?>
+<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="TopLevel_impl_Instance" category="system">
+  <featureInstance name="testNodeOutput1" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+  </featureInstance>
+  <featureInstance name="testNodeOutput2" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+  </featureInstance>
+  <featureInstance name="testNodeOutput3" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+  </featureInstance>
+  <featureInstance name="testNodeOutput4" direction="out">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#Data_Model.Data_Representation"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:NamedValue">
+          <namedValue xsi:type="aadl2:EnumerationLiteral" href="../../../plugin/org.osate.contribution.sei/resources/properties/Data_Model.aadl#/0/@ownedProperty.4/@ownedPropertyType/@ownedLiteral.1"/>
+        </ownedValue>
+      </ownedValue>
+      <propertyAssociation href="../../../plugin/org.osate.contribution.sei/resources/packages/Base_Types.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <feature xsi:type="aadl2:DataPort" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+  </featureInstance>
+  <componentInstance name="node1" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.Node_Num"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="1"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.PID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="10"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0/@ownedPropertyAssociation.1"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="Node1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="Node2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="Node3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="Node_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/Nodes_v6.aadl#Nodes_v6.Node"/>
+  </componentInstance>
+  <componentInstance name="node2" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.Node_Num"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="2"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.PID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="20"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1/@ownedPropertyAssociation.1"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="Node1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="Node2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="Node3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="Node_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/Nodes_v6.aadl#Nodes_v6.Node"/>
+  </componentInstance>
+  <componentInstance name="node3" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.Node_Num"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="3"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.PID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="30"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2/@ownedPropertyAssociation.1"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="Node1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="Node2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="Node3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="Node_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/Nodes_v6.aadl#Nodes_v6.Node"/>
+  </componentInstance>
+  <componentInstance name="node4" category="system">
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.Node_Num"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="4"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3/@ownedPropertyAssociation.0"/>
+    </ownedPropertyAssociation>
+    <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+      <property href="../packages/Type_Properties/AADL_Properties.aadl#AADL_Properties.PID"/>
+      <ownedValue>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="40"/>
+      </ownedValue>
+      <propertyAssociation href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3/@ownedPropertyAssociation.1"/>
+    </ownedPropertyAssociation>
+    <featureInstance name="Node1_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="Node2_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="Node3_In">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="Node_Out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../packages/Nodes_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+    </featureInstance>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:SystemType" href="../packages/Nodes_v6.aadl#Nodes_v6.Node"/>
+  </componentInstance>
+  <connectionInstance name="node1.Node_Out -> node2.Node1_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.0" source="//@componentInstance.0/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.3" destination="//@componentInstance.1/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node1.Node_Out -> node3.Node1_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.0" source="//@componentInstance.0/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.3" destination="//@componentInstance.2/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node1.Node_Out -> node4.Node1_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.0" source="//@componentInstance.0/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.0/@featureInstance.3" destination="//@componentInstance.3/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node2.Node_Out -> node1.Node1_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.0" source="//@componentInstance.1/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.3" destination="//@componentInstance.0/@featureInstance.0">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node2.Node_Out -> node3.Node2_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.1" source="//@componentInstance.1/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.3" destination="//@componentInstance.2/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node2.Node_Out -> node4.Node2_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.1" source="//@componentInstance.1/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.1/@featureInstance.3" destination="//@componentInstance.3/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node3.Node_Out -> node1.Node2_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.1" source="//@componentInstance.2/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.3" destination="//@componentInstance.0/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.6"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node3.Node_Out -> node2.Node2_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.1" source="//@componentInstance.2/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.3" destination="//@componentInstance.1/@featureInstance.1">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.7"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node3.Node_Out -> node4.Node3_In" complete="true" kind="portConnection" destination="//@componentInstance.3/@featureInstance.2" source="//@componentInstance.2/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.2/@featureInstance.3" destination="//@componentInstance.3/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.8"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node4.Node_Out -> node1.Node3_In" complete="true" kind="portConnection" destination="//@componentInstance.0/@featureInstance.2" source="//@componentInstance.3/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.3" destination="//@componentInstance.0/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.9"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node4.Node_Out -> node2.Node3_In" complete="true" kind="portConnection" destination="//@componentInstance.1/@featureInstance.2" source="//@componentInstance.3/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.3" destination="//@componentInstance.1/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.10"/>
+    </connectionReference>
+  </connectionInstance>
+  <connectionInstance name="node4.Node_Out -> node3.Node3_In" complete="true" kind="portConnection" destination="//@componentInstance.2/@featureInstance.2" source="//@componentInstance.3/@featureInstance.3">
+    <connectionReference context="/" source="//@componentInstance.3/@featureInstance.3" destination="//@componentInstance.2/@featureInstance.2">
+      <connection xsi:type="aadl2:PortConnection" href="../packages/TopLevel_v6.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.11"/>
+    </connectionReference>
+  </connectionInstance>
+  <systemOperationMode name="No Modes"/>
+  <componentImplementation xsi:type="aadl2:SystemImplementation" href="../packages/TopLevel_v6.aadl#TopLevel_v6.TopLevel.impl"/>
+</instance:SystemInstance>

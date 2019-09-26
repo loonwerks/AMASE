@@ -1,0 +1,19 @@
+package Library
+public
+		annex agree {**
+
+		--choose majority values agreed by three inputs
+		--if all disagree, default to 0
+		node majority(val_in1: int, val_in2: int, val_in3: int) returns (val_out:int);
+		let
+	  		val_out = if ((val_in1 = val_in2) or (val_in1 = val_in3)) then (val_in1) 
+	  				  else
+	  				  	(if(val_in2 = val_in3) then (val_in2) else 0);
+		tel;
+
+		node score(val_in: int) returns (val_out:int);
+		let
+	  		val_out = if (val_in = 1) then (1) else 0;
+		tel;
+	**};
+end Library;
