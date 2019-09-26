@@ -22,7 +22,7 @@ Other Examples
 	
 	We just made these examples to be sure our idea of scoping was accurate. 
 	A complete write-up of this exploration is found in the example 
-	directory of GitHub under the folder name: 2_Other_model_descriptions/Scoping_in_Agree
+	directory of GitHub under the folder name: 2_Other_model_descriptions/Contract_Scoping_in_Agree
 	
 (3) QFCS_V3
 	The original QFCS was made by John Backes and this is a simplified form used

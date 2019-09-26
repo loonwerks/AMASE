@@ -20,8 +20,8 @@ The AADL model is based on the NuSMV model created by FBK in the AIR6110 case st
 (Formal Design and Safety Analysis of AIR6110 Wheel Brake System). The fault model is
 based on the xSAP fault model of the same project. 
 
-An overall description of the behavior and architecture of the model can be found in 
-this repository directory examples/WBS/docs/WBS_description.
+A description of parts of the behavior and architecture of the model can be found 
+in this repository directory examples/WBS/docs/WBS_description.
 
 Version differences:
 Version 1 (WBS_arch4): This was the closest match to the NuSMV model in terms of the top 
