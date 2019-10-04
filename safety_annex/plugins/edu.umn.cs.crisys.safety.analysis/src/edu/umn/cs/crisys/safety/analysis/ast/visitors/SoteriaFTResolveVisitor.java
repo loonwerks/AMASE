@@ -318,9 +318,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			if ((oppositeChildNum == 1) && (siblingLeafNum == 0)) {
 				String newNodeName = node.nodeName; // MHSUtils.createUniqueElemName(node.nodeName);
 				if (originalAndNode) {
-					returnNode = new SoteriaFTOrNode(newNodeName, "");
+					returnNode = new SoteriaFTOrNode(newNodeName, node.propertyDescription);
 				} else {
-					returnNode = new SoteriaFTAndNode(newNodeName, "");
+					returnNode = new SoteriaFTAndNode(newNodeName, node.propertyDescription);
 				}
 
 				for (SoteriaFTNode child : nodesMap.values()) {
@@ -360,9 +360,9 @@ public class SoteriaFTResolveVisitor implements SoteriaFTAstVisitor<SoteriaFTNod
 			} else {
 				String newNodeName = node.nodeName; // MHSUtils.createUniqueElemName(node.nodeName);
 				if (originalAndNode) {
-					returnNode = new SoteriaFTOrNode(newNodeName, "");
+					returnNode = new SoteriaFTOrNode(newNodeName, node.propertyDescription);
 				} else {
-					returnNode = new SoteriaFTAndNode(newNodeName, "");
+					returnNode = new SoteriaFTAndNode(newNodeName, node.propertyDescription);
 				}
 
 				if (destSets.size() > 1) {
