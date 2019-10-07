@@ -374,10 +374,11 @@ with sensor;
 --						or (not SPEED) 
 --						or (wheel_braking_force8 <= 0) 
 --						or (not W8ROLL)));
-	 
-		 
-		
-		
+
+--	 
+--		 
+--		
+	
 		
 	**};
 	
@@ -390,8 +391,7 @@ with sensor;
 --   **};
    
    annex safety{**
-	  analyze : max 1 fault
-	  --analyze : probability 1.0E-9 
+	  analyze : max 1 fault 
    **};
    
 end WBS.inst;
