@@ -65,6 +65,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TriggerCondition getCond()
   {
     return cond;
@@ -92,6 +93,7 @@ public class TriggerStatementImpl extends FaultSubcomponentImpl implements Trigg
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCond(TriggerCondition newCond)
   {
     if (newCond != cond)

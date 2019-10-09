@@ -3,12 +3,17 @@
  */
 package edu.umn.cs.crisys.safety.scoping;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.FilteringScope;
@@ -21,45 +26,55 @@ import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.DataImplementation;
-import org.osate.aadl2.DataPort;
-import org.osate.aadl2.DefaultAnnexSubclause;
+import org.osate.aadl2.DataType;
 import org.osate.aadl2.Element;
-import org.osate.aadl2.EventDataPort;
+import org.osate.aadl2.Feature;
 import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.PackageRename;
+import org.osate.aadl2.Property;
+import org.osate.aadl2.PropertyAssociation;
+import org.osate.aadl2.PropertySet;
 import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
-import org.osate.aadl2.ThreadSubcomponent;
-import org.osate.aadl2.impl.FeatureGroupImpl;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.rockwellcollins.atc.agree.AgreeTypeSystem;
+import com.rockwellcollins.atc.agree.AgreeTypeSystem.RecordTypeDef;
+import com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef;
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
 import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
-import com.rockwellcollins.atc.agree.agree.AgreeLibrary;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
-import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.AssignStatement;
+import com.rockwellcollins.atc.agree.agree.ComponentRef;
 import com.rockwellcollins.atc.agree.agree.ConnectionStatement;
-import com.rockwellcollins.atc.agree.agree.ConstStatement;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.EventExpr;
-import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.FnDefExpr;
+import com.rockwellcollins.atc.agree.agree.ExistsExpr;
+import com.rockwellcollins.atc.agree.agree.FlatmapExpr;
+import com.rockwellcollins.atc.agree.agree.FnDef;
+import com.rockwellcollins.atc.agree.agree.FoldLeftExpr;
+import com.rockwellcollins.atc.agree.agree.FoldRightExpr;
+import com.rockwellcollins.atc.agree.agree.ForallExpr;
+import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
 import com.rockwellcollins.atc.agree.agree.InputStatement;
-import com.rockwellcollins.atc.agree.agree.LibraryFnDefExpr;
-import com.rockwellcollins.atc.agree.agree.LinearizationDefExpr;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
-import com.rockwellcollins.atc.agree.agree.NodeEq;
+import com.rockwellcollins.atc.agree.agree.LibraryFnDef;
+import com.rockwellcollins.atc.agree.agree.LinearizationDef;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.OrderStatement;
-import com.rockwellcollins.atc.agree.agree.RecordDefExpr;
-import com.rockwellcollins.atc.agree.agree.RecordExpr;
-import com.rockwellcollins.atc.agree.agree.RecordType;
+import com.rockwellcollins.atc.agree.agree.RecordDef;
+import com.rockwellcollins.atc.agree.agree.RecordLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
+import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.SpecStatement;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
-import com.rockwellcollins.atc.agree.agree.Type;
-import com.rockwellcollins.atc.agree.scoping.RecordExprScoper;
+import com.rockwellcollins.atc.agree.agree.ThisRef;
+import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
+import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
+import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 
 /**
  * This class contains custom scoping description.
@@ -70,102 +85,146 @@ import com.rockwellcollins.atc.agree.scoping.RecordExprScoper;
 
 public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scoping.PropertiesScopeProvider {
 
-	IScope scope_NamedElement(FnDefExpr ctx, EReference ref) {
-		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
-	}
+	private Set<NamedElement> getNamedElementsFromSpecs(EList<SpecStatement> specs) {
+		Set<NamedElement> nelms = new HashSet<>();
+		for (SpecStatement spec : specs) {
+			if (spec instanceof NamedElement) {
+				nelms.add((NamedElement) spec);
+			}
 
-	IScope scope_NamedElement(LinearizationDefExpr ctx, EReference ref) {
-		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
-	}
-
-	IScope scope_NamedElement(LibraryFnDefExpr ctx, EReference ref) {
-		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
-	}
-
-	IScope scope_NamedElement(EventExpr ctx, EReference ref) {
-		Set<Element> result = getCorrespondingAadlElement(ctx.getId(), ref);
-		return Scopes.scopeFor(result, getScope(ctx.eContainer(), ref));
-	}
-
-	IScope scope_NamedElement(RecordType ctx, EReference ref) {
-		return getScope(ctx.eContainer(), ref);
-	}
-
-	IScope scope_NamedElement(RecordExpr ctx, EReference ref) {
-		NestedDotID record = (NestedDotID) ctx.getRecord();
-		while (record.getSub() != null) {
-			record = record.getSub();
+			if (spec instanceof EqStatement) {
+				EqStatement eq = (EqStatement) spec;
+				nelms.addAll(eq.getLhs());
+			} else if (spec instanceof InputStatement) {
+				nelms.addAll(((InputStatement) spec).getLhs());
+			} else if (spec instanceof EnumStatement) {
+				nelms.addAll(((EnumStatement) spec).getEnums());
+			}
 		}
-		NamedElement recDef = record.getBase();
-		return getRecordComponents(recDef);
+		return nelms;
 	}
 
-	IScope scope_NamedElement(RecordUpdateExpr ctx, EReference ref) {
-		Expr recordExpr = ctx.getRecord();
-		return RecordExprScoper.getScope(ctx.getRecord(), IScope.NULLSCOPE);
-	}
+	private Set<NamedElement> getNamedElementsFromClassifier(Classifier ctx, boolean fromCompImpl) {
 
-	public static IScope getRecordComponents(NamedElement recDef) {
-		Set<Element> components = new HashSet<>();
-		if (recDef instanceof DataImplementation) {
-			components.addAll(((DataImplementation) recDef).getAllSubcomponents());
-			return Scopes.scopeFor(components, IScope.NULLSCOPE);
-		} else if (recDef instanceof RecordDefExpr) {
-			components.addAll(((RecordDefExpr) recDef).getArgs());
-			return Scopes.scopeFor(components, IScope.NULLSCOPE);
+		Set<NamedElement> components = new HashSet<>();
+
+		for (AnnexSubclause annex : AnnexUtil.getAllAnnexSubclauses(ctx,
+				AgreePackage.eINSTANCE.getAgreeContractSubclause())) {
+			AgreeContract contract = (AgreeContract) ((AgreeContractSubclause) annex).getContract();
+			components.addAll(getNamedElementsFromSpecs(contract.getSpecs()));
+
 		}
-		return IScope.NULLSCOPE;
+
+		if (ctx instanceof ComponentImplementation) {
+			components.addAll(((ComponentImplementation) ctx).getAllSubcomponents());
+			components.addAll(((ComponentImplementation) ctx).getAllConnections());
+			components.addAll(getNamedElementsFromClassifier(((ComponentImplementation) ctx).getType(), true));
+
+		} else if (ctx instanceof ComponentType) {
+			if (fromCompImpl) {
+				List<Feature> fs = ((ComponentType) ctx).getAllFeatures();
+				components.addAll(fs);
+			} else {
+				List<Feature> fs = ((ComponentType) ctx).getOwnedFeatures();
+
+				components.addAll(fs);
+			}
+
+		}
+
+		components.addAll(getNamedElements(getAadlContainer(ctx)));
+		return components;
+
 	}
 
-	IScope scope_NamedElement(NodeDefExpr ctx, EReference ref) {
+	private Set<NamedElement> getNamedElements(EObject ctx) {
+
+		Set<NamedElement> components = new HashSet<>();
+		if (ctx instanceof AadlPackage) {
+			PublicPackageSection pubSec = ((AadlPackage) ctx).getPublicSection();
+			for (Element el : pubSec.getOwnedElements()) {
+				if (el instanceof DataImplementation || el instanceof DataType) {
+					components.add((NamedElement) el);
+				}
+			}
+
+			for (AnnexLibrary annex : AnnexUtil.getAllActualAnnexLibraries(((AadlPackage) ctx),
+					AgreePackage.eINSTANCE.getAgreeContractLibrary())) {
+
+				AgreeContract contract = (AgreeContract) ((AgreeContractLibrary) annex).getContract();
+				components.addAll(getNamedElementsFromSpecs(contract.getSpecs()));
+
+			}
+
+			components.add((AadlPackage) ctx);
+
+		} else {
+
+			components.addAll(getNamedElementsFromClassifier((Classifier) ctx, false));
+
+		}
+
+		return components;
+
+	}
+
+	private EObject getAadlContainer(EObject o) {
+
+		EObject container = o.eContainer();
+		if (container == null) {
+			return null;
+		} else if (container instanceof AadlPackage) {
+			return container;
+		} else if (container instanceof Classifier) {
+			return container;
+		} else {
+			return getAadlContainer(o.eContainer());
+		}
+	}
+
+	private AadlPackage getContainingPackage(EObject o) {
+
+		EObject container = o.eContainer();
+		if (container == null) {
+			return null;
+		} else if (container instanceof AadlPackage) {
+			return (AadlPackage) container;
+		} else {
+			return getContainingPackage(o.eContainer());
+		}
+	}
+
+
+	IScope scope_NamedElement(AgreeContract ctx, EReference ref) {
+		EObject container = getAadlContainer(ctx);
+		AadlPackage pkg = getContainingPackage(container);
+
+		List<NamedElement> elems = new ArrayList<>();
+
+		for (PackageRename rename : EcoreUtil2.getAllContentsOfType(pkg, PackageRename.class)) {
+			if (rename.isRenameAll()) {
+				AadlPackage renamedPackage = rename.getRenamedPackage();
+				elems.addAll(getNamedElements(renamedPackage));
+			}
+		}
+
+		elems.addAll(getNamedElements(container));
+
+		return Scopes.scopeFor(elems, getScope(ctx.eContainer().eContainer(), ref));
+	}
+
+	IScope scope_NamedElement(NodeDef ctx, EReference ref) {
 		Set<Element> components = new HashSet<>();
 		components.addAll(ctx.getArgs());
 		components.addAll(ctx.getRets());
 		components.addAll(ctx.getNodeBody().getLocs());
 		IScope outer = new FilteringScope(getScope(ctx.eContainer(), ref),
-				input -> (AgreePackage.eINSTANCE.getNodeDefExpr().isSuperTypeOf(input.getEClass())
-						|| AgreePackage.eINSTANCE.getRecordDefExpr().isSuperTypeOf(input.getEClass())
+				input -> (AgreePackage.eINSTANCE.getNodeDef().isSuperTypeOf(input.getEClass())
+						|| AgreePackage.eINSTANCE.getRecordDef().isSuperTypeOf(input.getEClass())
+						|| AgreePackage.eINSTANCE.getConstStatement().isSuperTypeOf(input.getEClass())
 						|| Aadl2Package.eINSTANCE.getAadlPackage().isSuperTypeOf(input.getEClass())
 						|| Aadl2Package.eINSTANCE.getComponentClassifier().isSuperTypeOf(input.getEClass())));
 		return Scopes.scopeFor(components, outer);
-	}
-
-	IScope scope_NamedElement(AgreeContract ctx, EReference ref) {
-		EObject container = ctx.eContainer().eContainer();
-		while (container != null && !(container instanceof ComponentClassifier)) {
-			container = container.eContainer();
-		}
-
-		if (container != null && container instanceof ComponentImplementation) {
-			ComponentType compType = ((ComponentImplementation) container).getType();
-			for (AnnexSubclause subclause : AnnexUtil.getAllAnnexSubclauses(compType,
-					AgreePackage.eINSTANCE.getAgreeContractSubclause())) {
-				if (subclause instanceof AgreeContractSubclause) {
-					IScope scopeOfType = getScope(((AgreeContractSubclause) subclause).getContract(), ref);
-					return Scopes.scopeFor(getAllElementsFromSpecs(ctx.getSpecs()), scopeOfType);
-				}
-			}
-		}
-		return Scopes.scopeFor(getAllElementsFromSpecs(ctx.getSpecs()), getScope(ctx.eContainer(), ref));
-
-	}
-
-	private Set<Element> getAllElementsFromSpecs(EList<SpecStatement> specs) {
-		Set<Element> result = new HashSet<>();
-		for (SpecStatement spec : specs) {
-			if (spec instanceof EqStatement) {
-				EqStatement eq = (EqStatement) spec;
-				result.addAll(eq.getLhs());
-			} else if (spec instanceof InputStatement) {
-				result.addAll(((InputStatement) spec).getLhs());
-			} else if (spec instanceof EnumStatement) {
-				result.addAll(((EnumStatement) spec).getEnums());
-				result.add(spec);
-			} else {
-				result.add(spec);
-			}
-		}
-		return result;
 	}
 
 	IScope scope_NamedElement(ConnectionStatement ctx, EReference ref) {
@@ -173,230 +232,345 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 		IScope outerScope = IScope.NULLSCOPE;
 		if (container instanceof ComponentImplementation) {
 			ComponentImplementation compImpl = (ComponentImplementation) container;
-			outerScope = Scopes.scopeFor(compImpl.getAllConnections());
+			outerScope = getScope(ctx.eContainer(), ref);
+			outerScope = Scopes.scopeFor(compImpl.getAllSubcomponents(), outerScope);
+			outerScope = Scopes.scopeFor(compImpl.getAllConnections(), outerScope);
 		}
 		return outerScope;
 	}
 
 	IScope scope_NamedElement(OrderStatement ctx, EReference ref) {
-
 		EObject container = ctx.getContainingClassifier();
 
 		IScope outerScope = IScope.NULLSCOPE;
 		if (container instanceof ComponentImplementation) {
 			ComponentImplementation compImpl = (ComponentImplementation) container;
-			outerScope = Scopes.scopeFor(compImpl.getAllSubcomponents());
+			outerScope = Scopes.scopeFor(compImpl.getAllSubcomponents(), getScope(ctx.eContainer(), ref));
 		}
 		return outerScope;
 	}
 
 	IScope scope_NamedElement(SynchStatement ctx, EReference ref) {
-
 		EObject container = ctx.getContainingClassifier();
 		while (!(container instanceof ComponentClassifier)) {
 			container = container.eContainer();
 		}
 
 		if (container instanceof ComponentImplementation) {
-			return Scopes.scopeFor(((ComponentImplementation) container).getAllSubcomponents());
+			return Scopes.scopeFor(((ComponentImplementation) container).getAllSubcomponents(),
+					getScope(ctx.eContainer(), ref));
 		}
+
 		return IScope.NULLSCOPE;
 	}
 
-	protected IScope scope_NamedElement(NestedDotID ctx, EReference ref) {
-		Set<Element> components = getCorrespondingAadlElement(ctx, ref);
-		EObject container = ctx.eContainer();
+	IScope scope_NamedElement(FnDef ctx, EReference ref) {
+		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
+	}
 
-		// so this strange check make sure that we are
-		// not trying to link inside of a RecordExpr
-		// or a RecordUpdateExpr. If we are then we
-		// do not try to grab the containers scope otherwise
-		// we will have a cyclic linking error
-		while (!(container instanceof NestedDotID) && !(container instanceof RecordExpr)
-				&& !(container instanceof RecordUpdateExpr) && !(container instanceof AgreeContract)
-				&& !(container instanceof AadlPackage)) {
+	IScope scope_NamedElement(LinearizationDef ctx, EReference ref) {
+		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
+	}
+
+
+	IScope scope_NamedElement(LibraryFnDef ctx, EReference ref) {
+		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
+	}
+
+	IScope scope_NamedElement(SpecStatement ctx, EReference ref) {
+		return getScope(ctx.eContainer(), ref);
+	}
+
+	IScope scope_NamedElement(AssignStatement ctx, EReference ref) {
+		return getScope(ctx.eContainer(), ref);
+	}
+
+	// Expressions
+
+	private List<NamedElement> getAadlComponentElements(EObject ctx) {
+		List<NamedElement> components = new ArrayList<>();
+		if (ctx instanceof ComponentType) {
+			components.addAll(((ComponentType) ctx).getAllFeatures());
+
+		} else if (ctx instanceof ComponentImplementation) {
+			components.addAll(((ComponentImplementation) ctx).getAllSubcomponents());
+			components.addAll(((ComponentImplementation) ctx).getAllConnections());
+			components.addAll(getAadlComponentElements(((ComponentImplementation) ctx).getType()));
+		}
+		return components;
+	}
+
+	IScope scope_NamedElement(EventExpr ctx, EReference ref) {
+		EObject container = ctx.getContainingClassifier();
+		return Scopes.scopeFor(getAadlComponentElements(container));
+	}
+
+	IScope scope_NamedElement(TimeOfExpr ctx, EReference ref) {
+		EObject container = ctx.getContainingClassifier();
+		return Scopes.scopeFor(getAadlComponentElements(container));
+	}
+
+	IScope scope_NamedElement(TimeRiseExpr ctx, EReference ref) {
+		EObject container = ctx.getContainingClassifier();
+		return Scopes.scopeFor(getAadlComponentElements(container));
+	}
+
+	IScope scope_NamedElement(TimeFallExpr ctx, EReference ref) {
+		EObject container = ctx.getContainingClassifier();
+		return Scopes.scopeFor(getAadlComponentElements(container));
+	}
+
+	IScope scope_NamedElement(ForallExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+		List<EObject> bs = new ArrayList<EObject>();
+		bs.add(ctx.getBinding());
+		for (IEObjectDescription ieod : prevScope.getAllElements()) {
+			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
+				bs.add(ieod.getEObjectOrProxy());
+			}
+		}
+		return Scopes.scopeFor(bs);
+	}
+
+	IScope scope_NamedElement(ExistsExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+		List<EObject> bs = new ArrayList<EObject>();
+		bs.add(ctx.getBinding());
+		for (IEObjectDescription ieod : prevScope.getAllElements()) {
+			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
+				bs.add(ieod.getEObjectOrProxy());
+			}
+		}
+		return Scopes.scopeFor(bs);
+	}
+
+	IScope scope_NamedElement(FlatmapExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+		List<EObject> bs = new ArrayList<EObject>();
+		bs.add(ctx.getBinding());
+		for (IEObjectDescription ieod : prevScope.getAllElements()) {
+			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
+				bs.add(ieod.getEObjectOrProxy());
+			}
+		}
+		return Scopes.scopeFor(bs);
+	}
+
+	IScope scope_NamedElement(FoldLeftExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+
+		List<EObject> bs = new ArrayList<EObject>();
+
+		bs.add(ctx.getAccumulator());
+		bs.add(ctx.getBinding());
+		for (IEObjectDescription ieod : prevScope.getAllElements()) {
+			if (!ieod.getName().toString().equals(ctx.getBinding().getName())
+					&& !ieod.getName().toString().equals(ctx.getAccumulator().getName())) {
+				bs.add(ieod.getEObjectOrProxy());
+			}
+		}
+		return Scopes.scopeFor(bs);
+	}
+
+	IScope scope_NamedElement(FoldRightExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+
+		List<EObject> bs = new ArrayList<EObject>();
+
+		bs.add(ctx.getAccumulator());
+		bs.add(ctx.getBinding());
+		for (IEObjectDescription ieod : prevScope.getAllElements()) {
+			if (!ieod.getName().toString().equals(ctx.getBinding().getName())
+					&& !ieod.getName().toString().equals(ctx.getAccumulator().getName())) {
+				bs.add(ieod.getEObjectOrProxy());
+			}
+		}
+		return Scopes.scopeFor(bs);
+	}
+
+	protected IScope scope_GetPropertyExpr_prop(GetPropertyExpr ctx, EReference ref) {
+
+		IScope prevScope = prevScope(ctx, ref);
+
+		ComponentRef cr = ctx.getComponentRef();
+		if (cr instanceof ThisRef) {
+			List<Property> ps = new ArrayList<>();
+
+			EObject container = ctx.getContainingClassifier();
+			while (container != null) {
+				if (container instanceof Classifier) {
+					List<PropertyAssociation> pas = ((Classifier) container).getAllPropertyAssociations();
+					for (PropertyAssociation pa : pas) {
+						ps.add(pa.getProperty());
+					}
+					container = ((Classifier) container).eContainer();
+				} else if (container instanceof AadlPackage) {
+					for (PropertySet propSet : EcoreUtil2.getAllContentsOfType(container, PropertySet.class)) {
+						for (Property p : propSet.getOwnedProperties()) {
+							ps.add(p);
+						}
+//								=======
+//										EList<EObject> refs  = null;
+//
+//								if (container instanceof NestedDotID) {
+//									NestedDotID parent = (NestedDotID) container;
+//									refs = parent.eCrossReferences();
+//
+//									if (refs.size() != 1) {
+//										return new HashSet<>(); // this will throw a parsing error
+//									}
+//									container = refs.get(0); // figure out what this type this portion
+//
+//									// of the nest id is so we can figure out
+//									// what we could possibly link to
+//
+//									if (container instanceof ThreadSubcomponent) {
+//										container = ((ThreadSubcomponent) container).getComponentType();
+//										result.addAll(getAadlElements(container));
+//									} else if (container instanceof Subcomponent) {
+//										container = ((Subcomponent) container).getComponentImplementation();
+//										if (container == null) { // no implementation is provided
+//											container = refs.get(0);
+//											container = ((Subcomponent) container).getClassifier();
+//										}
+//										result.addAll(getAadlElements(container));
+//									} else if (container instanceof DataPort) {
+//										container = ((DataPort) container).getDataFeatureClassifier();
+//										result.addAll(getAadlElements(container));
+//									} else if (container instanceof EventDataPort) {
+//										container = ((EventDataPort) container).getDataFeatureClassifier();
+//										result.addAll(getAadlElements(container));
+//									} else if (container instanceof AadlPackage) {
+//										result.addAll(getAadlElements(container));
+//									} else if (container instanceof FeatureGroupImpl) {
+//										container = ((FeatureGroupImpl) container).getAllFeatureGroupType();
+//										result.addAll(getAadlElements(container));
+//									} else if (container instanceof Arg || container instanceof ConstStatement) {
+//										Type type;
+//
+//										if (container instanceof Arg) {
+//											type = ((Arg) container).getType();
+//										} else {
+//											type = ((ConstStatement) container).getType();
+//										}
+//
+//										if (type instanceof RecordType) {
+//											DoubleDotRef elID = ((RecordType) type).getRecord();
+//											NamedElement namedEl = elID.getElm();
+//
+//											if (namedEl instanceof ComponentImplementation) {
+//												ComponentImplementation componentImplementation = (ComponentImplementation) namedEl;
+//												EList<Subcomponent> subs = componentImplementation.getAllSubcomponents();
+//												result.addAll(subs);
+//											} else if (namedEl instanceof RecordDefExpr) {
+//												result.addAll(((RecordDefExpr) namedEl).getArgs());
+//												>>>>>>> origin/develop
+					}
+					container = null;
+				} else {
+					container = container.eContainer();
+				}
+			}
+
+			return Scopes.scopeFor(ps, prevScope);
+
+		} else if (cr instanceof DoubleDotRef) {
+			NamedElement ne = ((DoubleDotRef) cr).getElm();
+			if (ne instanceof Subcomponent) {
+				List<PropertyAssociation> pas = ((Subcomponent) ne).getOwnedPropertyAssociations();
+				List<Property> ps = new ArrayList<>();
+				for (PropertyAssociation pa : pas) {
+					ps.add(pa.getProperty());
+				}
+				return Scopes.scopeFor(ps, prevScope);
+			}
+		}
+
+		return IScope.NULLSCOPE;
+	}
+
+	protected IScope scope_DoubleDotRef_elm(DoubleDotRef ctx, EReference ref) {
+
+		IScope prevScope = prevScope(ctx, ref);
+		EObject container = ((GetPropertyExpr) ctx.eContainer()).getContainingComponentImpl();
+		if (container instanceof ComponentImplementation) {
+			return Scopes.scopeFor(((ComponentImplementation) ctx).getAllSubcomponents(), prevScope);
+		}
+		return prevScope;
+	}
+
+	private List<NamedElement> getFieldsOfNE(NamedElement leaf) {
+
+		if (leaf instanceof RecordDef) {
+			List<NamedElement> result = new LinkedList<>();
+			result.addAll(((RecordDef) leaf).getArgs());
+			return result;
+
+		} else if (leaf instanceof DataImplementation) {
+			List<NamedElement> result = new LinkedList<>();
+			ComponentImplementation componentImplementation = (ComponentImplementation) leaf;
+			List<Subcomponent> subs = componentImplementation.getAllSubcomponents();
+			result.addAll(subs);
+			return result;
+
+		} else {
+
+			return new ArrayList<NamedElement>(getNamedElements(leaf));
+
+		}
+
+	}
+
+	IScope scope_RecordLitExpr_args(RecordLitExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+		NamedElement recDef = ctx.getRecordType().getElm();
+		Set<Element> components = new HashSet<>();
+		if (recDef instanceof DataImplementation) {
+			components.addAll(((DataImplementation) recDef).getAllSubcomponents());
+			return Scopes.scopeFor(components, prevScope);
+		} else if (recDef instanceof RecordDef) {
+			components.addAll(((RecordDef) recDef).getArgs());
+			return Scopes.scopeFor(components, prevScope);
+		}
+		return prevScope;
+	}
+
+	IScope scope_RecordUpdateExpr_key(RecordUpdateExpr ctx, EReference ref) {
+		IScope prevScope = prevScope(ctx, ref);
+		TypeDef typ = AgreeTypeSystem.infer(ctx.getRecord());
+		if (typ instanceof RecordTypeDef) {
+			NamedElement ne = ((RecordTypeDef) typ).namedElement;
+			return Scopes.scopeFor(getFieldsOfNE(ne), prevScope);
+		} else {
+			return IScope.NULLSCOPE;
+		}
+	}
+
+	private IScope prevScope(EObject ctx, EReference ref) {
+		EObject container = ctx.eContainer();
+		while (container instanceof SelectionExpr) {
 			container = container.eContainer();
 		}
+		IScope prevScope = getScope(container, ref);
+		return prevScope;
 
-		if (container instanceof NestedDotID || container instanceof RecordExpr
-				|| container instanceof RecordUpdateExpr) {
-			return Scopes.scopeFor(components, IScope.NULLSCOPE);
-		} else {
-			return Scopes.scopeFor(components, getScope(ctx.eContainer(), ref));
-		}
 	}
 
-	IScope scope_NamedElement(Arg ctx, EReference ref) {
+	protected IScope scope_NamedElmExpr_elm(NamedElmExpr ctx, EReference ref) {
+		return prevScope(ctx, ref);
+	}
+
+	protected IScope scope_SelectionExpr_field(SelectionExpr ctx, EReference ref) {
+
+		TypeDef typ = AgreeTypeSystem.infer(ctx.getTarget());
+
+		if (typ instanceof RecordTypeDef) {
+			NamedElement ne = ((RecordTypeDef) typ).namedElement;
+			return Scopes.scopeFor(getFieldsOfNE(ne));
+		}
+
 		return IScope.NULLSCOPE;
-	}
 
-	private Set<Element> getCorrespondingAadlElement(NestedDotID id, EReference ref) {
-		EObject container = id.eContainer();
-		Set<Element> result = new HashSet<>();
-
-		if (container instanceof NestedDotID) {
-			NestedDotID parent = (NestedDotID) container;
-			EList<EObject> refs = parent.eCrossReferences();
-
-			if (refs.size() != 1) {
-				return new HashSet<>(); // this will throw a parsing error
-			}
-			container = refs.get(0); // figure out what this type this portion
-			// of the nest id is so we can figure out
-			// what we could possibly link to
-			if (container instanceof ThreadSubcomponent) {
-				container = ((ThreadSubcomponent) container).getComponentType();
-			} else if (container instanceof Subcomponent) {
-				container = ((Subcomponent) container).getComponentImplementation();
-				if (container == null) { // no implementation is provided
-					container = refs.get(0);
-					container = ((Subcomponent) container).getClassifier();
-				}
-			} else if (container instanceof DataPort) {
-				container = ((DataPort) container).getDataFeatureClassifier();
-			} else if (container instanceof EventDataPort) {
-				container = ((EventDataPort) container).getDataFeatureClassifier();
-			} else if (container instanceof AadlPackage) {
-
-				AadlPackage aadlPackage = (AadlPackage) container;
-				for (AnnexLibrary annex : AnnexUtil.getAllActualAnnexLibraries(aadlPackage,
-						AgreePackage.eINSTANCE.getAgreeContractLibrary())) {
-					if (annex instanceof AgreeLibrary) {
-						container = ((AgreeContractLibrary) annex).getContract();
-					}
-				}
-			} else if (container instanceof FeatureGroupImpl) {
-				container = ((FeatureGroupImpl) container).getAllFeatureGroupType();
-			} else if (container instanceof Arg || container instanceof ConstStatement) {
-				Type type;
-
-				if (container instanceof Arg) {
-					type = ((Arg) container).getType();
-				} else {
-					type = ((ConstStatement) container).getType();
-				}
-
-				if (type instanceof RecordType) {
-					NestedDotID elID = (NestedDotID) ((RecordType) type).getRecord();
-					while (elID.getSub() != null) {
-						elID = elID.getSub();
-					}
-					NamedElement namedEl = elID.getBase();
-
-					if (namedEl instanceof ComponentImplementation) {
-						ComponentImplementation componentImplementation = (ComponentImplementation) namedEl;
-						EList<Subcomponent> subs = componentImplementation.getAllSubcomponents();
-						result.addAll(subs);
-					} else if (namedEl instanceof RecordDefExpr) {
-						result.addAll(((RecordDefExpr) namedEl).getArgs());
-					}
-					return result;
-				}
-
-			} else {
-				return result; // this will throw a parsing error
-			}
-		} else if (container instanceof NodeEq) {
-			return result;
-
-		} else if (container instanceof RecordType || container instanceof RecordExpr) {
-
-			while (!(container instanceof AgreeContract)) {
-				container = container.eContainer();
-			}
-
-			if (container instanceof AgreeContract) {
-				Set<Element> specs = getAllElementsFromSpecs(((AgreeContract) container).getSpecs());
-				result.addAll(specs);
-			}
-
-			while (!(container instanceof AadlPackage)) {
-				container = container.eContainer();
-			}
-			result.add((AadlPackage) container);
-
-			return result;
-
-		} else if (container instanceof RecordUpdateExpr) {
-
-			while (!(container instanceof AgreeContract)) {
-				container = container.eContainer();
-			}
-			if (container instanceof AgreeContract) {
-				Set<Element> specs = getAllElementsFromSpecs(((AgreeContract) container).getSpecs());
-				result.addAll(specs);
-			}
-
-			while (!(container instanceof ComponentClassifier) && !(container instanceof AadlPackage)) {
-				container = container.eContainer();
-			}
-		} else {
-
-			// check if the type of this statement is enumerated. If so add enums for scope
-			// addEnums(container, result, ref);
-			// travel out of the annex and get the component
-			// classifier that the annex is contained in.
-			// If the annex is in a library (not a component),
-			// then stop once you hit the contract library
-			while (!(container instanceof ComponentClassifier) && !(container instanceof AgreeContractLibrary)
-					&& !(container instanceof NodeDefExpr)) {
-				container = container.eContainer();
-			}
-		}
-
-		// check to see what the type the container is and behave accordingly
-		if (container instanceof Classifier) {
-			Classifier component = (Classifier) container;
-			for (Element el : component.getOwnedElements()) {
-				if (!(el instanceof DefaultAnnexSubclause)) {
-					result.add(el);
-				}
-			}
-			for (Element el : component.getAllFeatures()) {
-				result.add(el);
-			}
-			// if the classifier is a component implementation, get all the elements
-			// from the implementation as well as the type
-			if (component instanceof ComponentImplementation) {
-				getAllAgreeElements(result, component);
-				component = ((ComponentImplementation) component).getType();
-			}
-			getAllAgreeElements(result, component);
-
-		} else if (container instanceof AadlPackage) {
-			AadlPackage aadlPack = (AadlPackage) container;
-			PublicPackageSection pubSec = aadlPack.getPublicSection();
-
-			for (Element el : pubSec.getOwnedElements()) {
-				if (el instanceof DataImplementation) {
-					result.add(el);
-				}
-			}
-		} else {
-
-			if (container instanceof AgreeContractLibrary) {
-				container = ((AgreeContractLibrary) container).getContract();
-			}
-
-			if (!(container instanceof AgreeContract)) {
-				throw new IllegalArgumentException("something went wrong in the AGREE scope provider");
-			}
-			result.addAll(getAllElementsFromSpecs(((AgreeContract) container).getSpecs()));
-
-		}
-
-		return result;
-	}
-
-	private void getAllAgreeElements(Set<Element> result, Classifier component) {
-		for (AnnexSubclause subclause : AnnexUtil.getAllAnnexSubclauses(component,
-				AgreePackage.eINSTANCE.getAgreeContractSubclause())) {
-			if (subclause instanceof AgreeContractSubclause) {
-				AgreeContractSubclause agreeSubclause = (AgreeContractSubclause) subclause;
-				AgreeContract contract = (AgreeContract) agreeSubclause.getContract();
-				result.addAll(getAllElementsFromSpecs(contract.getSpecs()));
-			}
-		}
 	}
 
 }

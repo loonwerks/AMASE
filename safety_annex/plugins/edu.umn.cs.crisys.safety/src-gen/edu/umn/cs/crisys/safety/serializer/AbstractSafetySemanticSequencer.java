@@ -4,13 +4,16 @@
 package edu.umn.cs.crisys.safety.serializer;
 
 import com.google.inject.Inject;
-import com.rockwellcollins.atc.agree.agree.AADLEnumerator;
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
 import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.agree.AlwaysStatement;
 import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.ArrayLiteralExpr;
+import com.rockwellcollins.atc.agree.agree.ArraySubExpr;
+import com.rockwellcollins.atc.agree.agree.ArrayType;
+import com.rockwellcollins.atc.agree.agree.ArrayUpdateExpr;
 import com.rockwellcollins.atc.agree.agree.AssertStatement;
 import com.rockwellcollins.atc.agree.agree.AssignStatement;
 import com.rockwellcollins.atc.agree.agree.AssumeStatement;
@@ -18,30 +21,38 @@ import com.rockwellcollins.atc.agree.agree.AsynchStatement;
 import com.rockwellcollins.atc.agree.agree.BinaryExpr;
 import com.rockwellcollins.atc.agree.agree.BoolLitExpr;
 import com.rockwellcollins.atc.agree.agree.CalenStatement;
+import com.rockwellcollins.atc.agree.agree.CallExpr;
 import com.rockwellcollins.atc.agree.agree.ClosedTimeInterval;
 import com.rockwellcollins.atc.agree.agree.ConstStatement;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
+import com.rockwellcollins.atc.agree.agree.EnumLitExpr;
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.EventExpr;
+import com.rockwellcollins.atc.agree.agree.ExistsExpr;
+import com.rockwellcollins.atc.agree.agree.FlatmapExpr;
 import com.rockwellcollins.atc.agree.agree.FloorCast;
-import com.rockwellcollins.atc.agree.agree.FnCallExpr;
-import com.rockwellcollins.atc.agree.agree.FnDefExpr;
+import com.rockwellcollins.atc.agree.agree.FnDef;
+import com.rockwellcollins.atc.agree.agree.FoldLeftExpr;
+import com.rockwellcollins.atc.agree.agree.FoldRightExpr;
+import com.rockwellcollins.atc.agree.agree.ForallExpr;
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 import com.rockwellcollins.atc.agree.agree.IfThenElseExpr;
+import com.rockwellcollins.atc.agree.agree.IndicesExpr;
 import com.rockwellcollins.atc.agree.agree.InputStatement;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.LatchedExpr;
 import com.rockwellcollins.atc.agree.agree.LatchedStatement;
 import com.rockwellcollins.atc.agree.agree.LemmaStatement;
-import com.rockwellcollins.atc.agree.agree.LibraryFnDefExpr;
-import com.rockwellcollins.atc.agree.agree.LinearizationDefExpr;
+import com.rockwellcollins.atc.agree.agree.LibraryFnDef;
+import com.rockwellcollins.atc.agree.agree.LinearizationDef;
 import com.rockwellcollins.atc.agree.agree.LinearizationInterval;
 import com.rockwellcollins.atc.agree.agree.MNSynchStatement;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NamedID;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeBodyExpr;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.NodeEq;
 import com.rockwellcollins.atc.agree.agree.NodeLemma;
 import com.rockwellcollins.atc.agree.agree.OpenLeftTimeInterval;
@@ -55,18 +66,18 @@ import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
-import com.rockwellcollins.atc.agree.agree.RecordDefExpr;
-import com.rockwellcollins.atc.agree.agree.RecordExpr;
-import com.rockwellcollins.atc.agree.agree.RecordType;
+import com.rockwellcollins.atc.agree.agree.RecordDef;
+import com.rockwellcollins.atc.agree.agree.RecordLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
+import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.SporadicStatement;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
-import com.rockwellcollins.atc.agree.agree.ThisExpr;
+import com.rockwellcollins.atc.agree.agree.TagExpr;
+import com.rockwellcollins.atc.agree.agree.ThisRef;
 import com.rockwellcollins.atc.agree.agree.TimeExpr;
 import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
-import com.rockwellcollins.atc.agree.agree.TypeID;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.agree.WhenHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WhenOccursStatment;
@@ -245,9 +256,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			}
 		else if (epackage == AgreePackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
-			case AgreePackage.AADL_ENUMERATOR:
-				sequence_TermExpr(context, (AADLEnumerator) semanticObject); 
-				return; 
 			case AgreePackage.AGREE_CONTRACT:
 				sequence_AgreeContract(context, (AgreeContract) semanticObject); 
 				return; 
@@ -262,6 +270,18 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case AgreePackage.ARG:
 				sequence_Arg(context, (Arg) semanticObject); 
+				return; 
+			case AgreePackage.ARRAY_LITERAL_EXPR:
+				sequence_ArrayLiteralExpr(context, (ArrayLiteralExpr) semanticObject); 
+				return; 
+			case AgreePackage.ARRAY_SUB_EXPR:
+				sequence_ArraySubExpr(context, (ArraySubExpr) semanticObject); 
+				return; 
+			case AgreePackage.ARRAY_TYPE:
+				sequence_Type(context, (ArrayType) semanticObject); 
+				return; 
+			case AgreePackage.ARRAY_UPDATE_EXPR:
+				sequence_ArrayUpdateExpr(context, (ArrayUpdateExpr) semanticObject); 
 				return; 
 			case AgreePackage.ASSERT_STATEMENT:
 				sequence_NamedSpecStatement(context, (AssertStatement) semanticObject); 
@@ -284,11 +304,20 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.CALEN_STATEMENT:
 				sequence_SynchStatement(context, (CalenStatement) semanticObject); 
 				return; 
+			case AgreePackage.CALL_EXPR:
+				sequence_TermExpr(context, (CallExpr) semanticObject); 
+				return; 
 			case AgreePackage.CLOSED_TIME_INTERVAL:
 				sequence_TimeInterval(context, (ClosedTimeInterval) semanticObject); 
 				return; 
 			case AgreePackage.CONST_STATEMENT:
 				sequence_ConstStatement(context, (ConstStatement) semanticObject); 
+				return; 
+			case AgreePackage.DOUBLE_DOT_REF:
+				sequence_DoubleDotRef(context, (DoubleDotRef) semanticObject); 
+				return; 
+			case AgreePackage.ENUM_LIT_EXPR:
+				sequence_TermExpr(context, (EnumLitExpr) semanticObject); 
 				return; 
 			case AgreePackage.ENUM_STATEMENT:
 				sequence_EnumStatement(context, (EnumStatement) semanticObject); 
@@ -299,14 +328,26 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.EVENT_EXPR:
 				sequence_TermExpr(context, (EventExpr) semanticObject); 
 				return; 
+			case AgreePackage.EXISTS_EXPR:
+				sequence_ExistsExpr(context, (ExistsExpr) semanticObject); 
+				return; 
+			case AgreePackage.FLATMAP_EXPR:
+				sequence_FlatmapExpr(context, (FlatmapExpr) semanticObject); 
+				return; 
 			case AgreePackage.FLOOR_CAST:
 				sequence_TermExpr(context, (FloorCast) semanticObject); 
 				return; 
-			case AgreePackage.FN_CALL_EXPR:
-				sequence_ComplexExpr(context, (FnCallExpr) semanticObject); 
+			case AgreePackage.FN_DEF:
+				sequence_FnDef(context, (FnDef) semanticObject); 
 				return; 
-			case AgreePackage.FN_DEF_EXPR:
-				sequence_FnDefExpr(context, (FnDefExpr) semanticObject); 
+			case AgreePackage.FOLD_LEFT_EXPR:
+				sequence_FoldLeftExpr(context, (FoldLeftExpr) semanticObject); 
+				return; 
+			case AgreePackage.FOLD_RIGHT_EXPR:
+				sequence_FoldRightExpr(context, (FoldRightExpr) semanticObject); 
+				return; 
+			case AgreePackage.FORALL_EXPR:
+				sequence_ForallExpr(context, (ForallExpr) semanticObject); 
 				return; 
 			case AgreePackage.GET_PROPERTY_EXPR:
 				sequence_PreDefFnExpr(context, (GetPropertyExpr) semanticObject); 
@@ -316,6 +357,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case AgreePackage.IF_THEN_ELSE_EXPR:
 				sequence_IfThenElseExpr(context, (IfThenElseExpr) semanticObject); 
+				return; 
+			case AgreePackage.INDICES_EXPR:
+				sequence_TermExpr(context, (IndicesExpr) semanticObject); 
 				return; 
 			case AgreePackage.INPUT_STATEMENT:
 				sequence_InputStatement(context, (InputStatement) semanticObject); 
@@ -332,11 +376,11 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.LEMMA_STATEMENT:
 				sequence_NamedSpecStatement(context, (LemmaStatement) semanticObject); 
 				return; 
-			case AgreePackage.LIBRARY_FN_DEF_EXPR:
-				sequence_LibraryFnDefExpr(context, (LibraryFnDefExpr) semanticObject); 
+			case AgreePackage.LIBRARY_FN_DEF:
+				sequence_LibraryFnDef(context, (LibraryFnDef) semanticObject); 
 				return; 
-			case AgreePackage.LINEARIZATION_DEF_EXPR:
-				sequence_LinearizationDefExpr(context, (LinearizationDefExpr) semanticObject); 
+			case AgreePackage.LINEARIZATION_DEF:
+				sequence_LinearizationDef(context, (LinearizationDef) semanticObject); 
 				return; 
 			case AgreePackage.LINEARIZATION_INTERVAL:
 				sequence_LinearizationInterval(context, (LinearizationInterval) semanticObject); 
@@ -344,17 +388,17 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.MN_SYNCH_STATEMENT:
 				sequence_SynchStatement(context, (MNSynchStatement) semanticObject); 
 				return; 
+			case AgreePackage.NAMED_ELM_EXPR:
+				sequence_TermExpr(context, (NamedElmExpr) semanticObject); 
+				return; 
 			case AgreePackage.NAMED_ID:
 				sequence_NamedID(context, (NamedID) semanticObject); 
-				return; 
-			case AgreePackage.NESTED_DOT_ID:
-				sequence_NestedDotID(context, (NestedDotID) semanticObject); 
 				return; 
 			case AgreePackage.NODE_BODY_EXPR:
 				sequence_NodeBodyExpr(context, (NodeBodyExpr) semanticObject); 
 				return; 
-			case AgreePackage.NODE_DEF_EXPR:
-				sequence_NodeDefExpr(context, (NodeDefExpr) semanticObject); 
+			case AgreePackage.NODE_DEF:
+				sequence_NodeDef(context, (NodeDef) semanticObject); 
 				return; 
 			case AgreePackage.NODE_EQ:
 				sequence_NodeStmt(context, (NodeEq) semanticObject); 
@@ -384,7 +428,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				sequence_PreDefFnExpr(context, (PrevExpr) semanticObject); 
 				return; 
 			case AgreePackage.PRIM_TYPE:
-				sequence_Type(context, (PrimType) semanticObject); 
+				sequence_BaseType(context, (PrimType) semanticObject); 
 				return; 
 			case AgreePackage.PROPERTY_STATEMENT:
 				sequence_PropertyStatement(context, (PropertyStatement) semanticObject); 
@@ -395,17 +439,17 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.REAL_LIT_EXPR:
 				sequence_TermExpr(context, (RealLitExpr) semanticObject); 
 				return; 
-			case AgreePackage.RECORD_DEF_EXPR:
-				sequence_RecordDefExpr(context, (RecordDefExpr) semanticObject); 
+			case AgreePackage.RECORD_DEF:
+				sequence_RecordDef(context, (RecordDef) semanticObject); 
 				return; 
-			case AgreePackage.RECORD_EXPR:
-				sequence_ComplexExpr(context, (RecordExpr) semanticObject); 
-				return; 
-			case AgreePackage.RECORD_TYPE:
-				sequence_Type(context, (RecordType) semanticObject); 
+			case AgreePackage.RECORD_LIT_EXPR:
+				sequence_TermExpr(context, (RecordLitExpr) semanticObject); 
 				return; 
 			case AgreePackage.RECORD_UPDATE_EXPR:
 				sequence_RecordUpdateExpr(context, (RecordUpdateExpr) semanticObject); 
+				return; 
+			case AgreePackage.SELECTION_EXPR:
+				sequence_SelectionExpr(context, (SelectionExpr) semanticObject); 
 				return; 
 			case AgreePackage.SPORADIC_STATEMENT:
 				sequence_RealTimeStatement(context, (SporadicStatement) semanticObject); 
@@ -413,8 +457,11 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case AgreePackage.SYNCH_STATEMENT:
 				sequence_SynchStatement(context, (SynchStatement) semanticObject); 
 				return; 
-			case AgreePackage.THIS_EXPR:
-				sequence_TermExpr(context, (ThisExpr) semanticObject); 
+			case AgreePackage.TAG_EXPR:
+				sequence_TagExpr(context, (TagExpr) semanticObject); 
+				return; 
+			case AgreePackage.THIS_REF:
+				sequence_ComponentRef(context, (ThisRef) semanticObject); 
 				return; 
 			case AgreePackage.TIME_EXPR:
 				sequence_TermExpr(context, (TimeExpr) semanticObject); 
@@ -427,9 +474,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				return; 
 			case AgreePackage.TIME_RISE_EXPR:
 				sequence_TermExpr(context, (TimeRiseExpr) semanticObject); 
-				return; 
-			case AgreePackage.TYPE_ID:
-				sequence_TypeID(context, (TypeID) semanticObject); 
 				return; 
 			case AgreePackage.UNARY_EXPR:
 				sequence_UnaryExpr(context, (UnaryExpr) semanticObject); 
@@ -639,7 +683,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (nom_conn+=NestedDotID fault_out+=ID (nom_conn+=NestedDotID fault_out+=ID)*)
+	 *     (nom_conn+=[NamedElement|QCPREF] fault_out+=ID (nom_conn+=[NamedElement|QCPREF] fault_out+=ID)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -992,7 +1036,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     Element returns ActivationStatement
 	 *
 	 * Constraint:
-	 *     (agreeBoolVarName=ID agreeComp_Path=NestedDotID? faultName=ID faultComp_Path=NestedDotID)
+	 *     (agreeBoolVarName=ID agreeComp_Path=[NamedElement|QCPREF]? faultName=ID faultComp_Path=[NamedElement|QCPREF])
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, ActivationStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1024,7 +1068,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     Element returns FaultStatement
 	 *
 	 * Constraint:
-	 *     (name=ID str=STRING? faultDefName=NestedDotID faultDefinitions+=FaultSubcomponent*)
+	 *     (name=ID str=STRING? faultDefName=[NamedElement|QCPREF] faultDefinitions+=FaultSubcomponent*)
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, FaultStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1052,11 +1096,11 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Constraint:
 	 *     (
 	 *         srcFaultList+=ID 
-	 *         srcComp_path+=NestedDotID 
-	 *         (srcFaultList+=ID srcComp_path+=NestedDotID)* 
+	 *         srcComp_path+=[NamedElement|QCPREF] 
+	 *         (srcFaultList+=ID srcComp_path+=[NamedElement|QCPREF])* 
 	 *         destFaultList+=ID 
-	 *         destComp_path+=NestedDotID 
-	 *         (destFaultList+=ID destComp_path+=NestedDotID)*
+	 *         destComp_path+=[NamedElement|QCPREF] 
+	 *         (destFaultList+=ID destComp_path+=[NamedElement|QCPREF])*
 	 *     )
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, PropagateStatement semanticObject) {

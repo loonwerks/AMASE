@@ -8,8 +8,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
 
+import com.collins.trustedsystems.z3.Z3Plugin;
 import com.rockwellcollins.atc.agree.analysis.Activator;
-import com.rockwellcollins.atc.z3.Z3Plugin;
 
 import jkind.JKindException;
 import jkind.SolverOption;
@@ -29,8 +29,8 @@ public class PreferencesUtil {
 //			api.setApiDebug();
 //		}
 		if (api instanceof JKindApi) {
-			((JKindApi) api).setAllIvcs();
-			((JKindApi) api).setAllIvcsJkindTimeout(30);
+//			((JKindApi) api).setAllIvcs();
+//			((JKindApi) api).setAllIvcsJkindTimeout(30);
 		}
 
 		return api;
@@ -114,7 +114,7 @@ public class PreferencesUtil {
 		JRealizabilityApi api = new JRealizabilityApi();
 		api.setJKindJar(getJKindJar());
 		try {
-			api.setEnvironment("Z3_HOME", Z3Plugin.getZ3Directory());
+			api.setEnvironment("Z3_HOME", com.collins.trustedsystems.z3.Z3Plugin.getZ3Directory());
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			// Z3Plugin not present

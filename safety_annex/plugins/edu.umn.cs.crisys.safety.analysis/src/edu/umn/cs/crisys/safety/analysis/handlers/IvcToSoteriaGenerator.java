@@ -8,13 +8,11 @@ import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
-import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompContractViolation;
 import edu.umn.cs.crisys.safety.analysis.soteria.CompFaultActivation;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaComp;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaCompLib;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFault;
-import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormulaSubgroup;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
@@ -25,7 +23,6 @@ import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
 import jkind.api.results.PropertyResult;
 import jkind.api.results.Renaming;
-import jkind.results.ValidProperty;
 
 public class IvcToSoteriaGenerator {
 	SoteriaCompLib compLib = new SoteriaCompLib();
@@ -89,58 +86,58 @@ public class IvcToSoteriaGenerator {
 
 	private void extractPropertyResult(SoteriaComp comp, AgreeRenaming renaming, PropertyResult propertyResult) {
 		// get original property name
-		String origPropertyName = propertyResult.getName();
-		String lustreName = renaming.getLustreNameFromAgreeVar(origPropertyName);
-		String propertyName = updateElemName(comp.componentName + "_" + lustreName);
-		// if it is a guarantee
-		if (lustreName.startsWith("__GUARANTEE")) {
-			// if it's a valid guarantee
-			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
-				// add property as an output to the soteria map
-				comp.addOutput(propertyName);
-				// add property violation as a top level fault to the model
-				if (!isLowerLevel) {
-					CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
-							propertyName);
-					model.addTopLevelFault(contractViolation);
-				}
-				ValidProperty property = (ValidProperty) propertyResult.getProperty();
-				SoteriaFormula formula = new SoteriaFormula(propertyName);
-//				for (String ivc : property.getIvc()) {
-//					System.out.println("current ivc is" + ivc);
+//		String origPropertyName = propertyResult.getName();
+//		String lustreName = renaming.getLustreNameFromAgreeVar(origPropertyName);
+//		String propertyName = updateElemName(comp.componentName + "_" + lustreName);
+//		// if it is a guarantee
+//		if (lustreName.startsWith("__GUARANTEE")) {
+//			// if it's a valid guarantee
+//			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
+//				// add property as an output to the soteria map
+//				comp.addOutput(propertyName);
+//				// add property violation as a top level fault to the model
+//				if (!isLowerLevel) {
+//					CompContractViolation contractViolation = new CompContractViolation(comp.componentName,
+//							propertyName);
+//					model.addTopLevelFault(contractViolation);
 //				}
-
-				// handle multiple ivc sets
-				for (List<String> ivcSet : property.getIvcSets()) {
-					SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
-					extractIvcSets(comp, renaming, formulaSubgroup, ivcSet);
-					if (!formulaSubgroup.elmeList.isEmpty()) {
-						formula.addFormulaSubgroup(formulaSubgroup);
-					}
-				}
-				if (!formula.formulaBody.isEmpty()) {
-					comp.addFormula(propertyName, formula);
-				}
-			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
-
-//				JOptionPane.showMessageDialog(null,
-//						"One of the properties was canceled in the process of model checking."
-//								+ " Rerun this analysis to proceed.",
-//						"Safety Analysis Error", JOptionPane.ERROR_MESSAGE);
-
-				throw new SafetyException("One of the properties was canceled in the process of model checking."
-						+ " Rerun this analysis to proceed.");
-			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
-//				JOptionPane.showMessageDialog(null,
-//						"One of the properties is invalid. The model must be valid using AGREE Verify All Layers."
-//								+ " The invalid property is shown in the AGREE console.",
-//						"Safety Analysis Error",
-//						JOptionPane.ERROR_MESSAGE);
-
-				throw new SafetyException(
-						"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
-			}
-		}
+//				ValidProperty property = (ValidProperty) propertyResult.getProperty();
+//				SoteriaFormula formula = new SoteriaFormula(propertyName);
+////				for (String ivc : property.getIvc()) {
+////					System.out.println("current ivc is" + ivc);
+////				}
+//
+//				// handle multiple ivc sets
+//				for (List<String> ivcSet : property.getIvcSets()) {
+//					SoteriaFormulaSubgroup formulaSubgroup = new SoteriaFormulaSubgroup(propertyName);
+//					extractIvcSets(comp, renaming, formulaSubgroup, ivcSet);
+//					if (!formulaSubgroup.elmeList.isEmpty()) {
+//						formula.addFormulaSubgroup(formulaSubgroup);
+//					}
+//				}
+//				if (!formula.formulaBody.isEmpty()) {
+//					comp.addFormula(propertyName, formula);
+//				}
+//			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
+//
+////				JOptionPane.showMessageDialog(null,
+////						"One of the properties was canceled in the process of model checking."
+////								+ " Rerun this analysis to proceed.",
+////						"Safety Analysis Error", JOptionPane.ERROR_MESSAGE);
+//
+//				throw new SafetyException("One of the properties was canceled in the process of model checking."
+//						+ " Rerun this analysis to proceed.");
+//			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
+////				JOptionPane.showMessageDialog(null,
+////						"One of the properties is invalid. The model must be valid using AGREE Verify All Layers."
+////								+ " The invalid property is shown in the AGREE console.",
+////						"Safety Analysis Error",
+////						JOptionPane.ERROR_MESSAGE);
+//
+//				throw new SafetyException(
+//						"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
+//			}
+//		}
 	}
 
 	private void extractIvcSets(SoteriaComp comp, AgreeRenaming renaming, SoteriaFormulaSubgroup formulaSubgroup,

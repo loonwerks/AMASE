@@ -20,40 +20,38 @@ import org.osate.annexsupport.AnnexUtil;
 import org.osate.xtext.aadl2.properties.ui.contentassist.PropertiesProposalProvider;
 
 import com.google.inject.Injector;
+import com.rockwellcollins.atc.agree.agree.AgreeContract;
+import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
+import com.rockwellcollins.atc.agree.agree.AgreeLibrary;
+import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.ConstStatement;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.RecordDefExpr;
-import com.rockwellcollins.atc.agree.agree.RecordType;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
+import com.rockwellcollins.atc.agree.agree.RecordDef;
+import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.SpecStatement;
 import com.rockwellcollins.atc.agree.agree.Type;
-
-import edu.umn.cs.crisys.safety.safety.SafetyContract;
-import edu.umn.cs.crisys.safety.safety.SafetyContractLibrary;
-import edu.umn.cs.crisys.safety.safety.SafetyLibrary;
-import edu.umn.cs.crisys.safety.safety.SafetyPackage;
-import edu.umn.cs.crisys.safety.ui.contentassist.SafetyProposalProvider;
-import edu.umn.cs.crisys.safety.ui.internal.SafetyActivator;
+import com.rockwellcollins.atc.agree.ui.contentassist.AgreeProposalProvider;
+import com.rockwellcollins.atc.agree.ui.internal.AgreeActivator;
 
 public class SafetyAnnexContentAssist implements AnnexContentAssist{
 
-	final private Injector injector = SafetyActivator.getInstance().getInjector(
-			SafetyActivator.EDU_UMN_CS_CRISYS_SAFETY_SAFETY);
-
+	final private Injector injector = AgreeActivator.getInstance()
+			.getInjector(AgreeActivator.COM_ROCKWELLCOLLINS_ATC_AGREE_AGREE);
 
 	private PropertiesProposalProvider propPropProv;
 	private EObjectAtOffsetHelper offsetHelper;
 
-
 	protected PropertiesProposalProvider getLinkingService() {
 		if (propPropProv == null) {
-			propPropProv = injector.getInstance(SafetyProposalProvider.class);
+			propPropProv = injector.getInstance(AgreeProposalProvider.class);
 		}
 		return propPropProv;
 	}
 
 	protected EObjectAtOffsetHelper getOffsetHelper() {
-		if(offsetHelper == null){
+		if (offsetHelper == null) {
 			offsetHelper = injector.getInstance(EObjectAtOffsetHelper.class);
 		}
 		return offsetHelper;
@@ -62,23 +60,23 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 	@Override
 	public List<String> annexCompletionSuggestions(EObject defaultAnnex, int offset) {
 
-		offset = (offset <= 0) ? 0 : offset - 1; //get one character back
+		offset = (offset <= 0) ? 0 : offset - 1; // get one character back
 		EObjectAtOffsetHelper helper = getOffsetHelper();
 		EObject grammerObject = null;
-		//EObjectAtOffsetHelper
-		if(defaultAnnex instanceof DefaultAnnexLibrary){
-			AnnexLibrary annexLib = ((DefaultAnnexLibrary)defaultAnnex).getParsedAnnexLibrary();
-			XtextResource resource = (XtextResource)annexLib.eResource();
+		// EObjectAtOffsetHelper
+		if (defaultAnnex instanceof DefaultAnnexLibrary) {
+			AnnexLibrary annexLib = ((DefaultAnnexLibrary) defaultAnnex).getParsedAnnexLibrary();
+			XtextResource resource = (XtextResource) annexLib.eResource();
 			grammerObject = helper.resolveContainedElementAt(resource, offset);
-		}else if(defaultAnnex instanceof DefaultAnnexSubclause){
-			AnnexSubclause annexSub = ((DefaultAnnexSubclause)defaultAnnex).getParsedAnnexSubclause();
-			XtextResource resource = (XtextResource)annexSub.eResource();
+		} else if (defaultAnnex instanceof DefaultAnnexSubclause) {
+			AnnexSubclause annexSub = ((DefaultAnnexSubclause) defaultAnnex).getParsedAnnexSubclause();
+			XtextResource resource = (XtextResource) annexSub.eResource();
 			grammerObject = helper.resolveContainedElementAt(resource, offset);
 		}
 
 		List<String> results = new ArrayList<>();
-		if(grammerObject instanceof NestedDotID){
-			results.addAll(getNestedDotIDCandidates((NestedDotID)grammerObject));
+		if (grammerObject instanceof SelectionExpr) {
+			results.addAll(getNestedDotIDCandidates((SelectionExpr) grammerObject));
 		}
 
 		return results;
@@ -86,17 +84,18 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 
 	private List<String> getNestedDotIDCandidates(AadlPackage aadlPackage) {
 
-		SafetyContract contract = null;
+		AgreeContract contract = null;
 		List<String> results = new ArrayList<>();
-		for (AnnexLibrary annex :  AnnexUtil.getAllActualAnnexLibraries(aadlPackage, SafetyPackage.eINSTANCE.getSafetyContractLibrary())) {
-            if (annex instanceof SafetyLibrary) {
-            	contract = (SafetyContract) ((SafetyContractLibrary) annex).getContract();
-            }
-        }
+		for (AnnexLibrary annex : AnnexUtil.getAllActualAnnexLibraries(aadlPackage,
+				AgreePackage.eINSTANCE.getAgreeContractLibrary())) {
+			if (annex instanceof AgreeLibrary) {
+				contract = (AgreeContract) ((AgreeContractLibrary) annex).getContract();
+			}
+		}
 
-		if(contract != null){
-			for(SpecStatement spec : contract.getSpecs()){
-				if(spec instanceof ConstStatement){
+		if (contract != null) {
+			for (SpecStatement spec : contract.getSpecs()) {
+				if (spec instanceof ConstStatement) {
 					results.add(((ConstStatement) spec).getName());
 				}
 			}
@@ -109,34 +108,39 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 	private List<String> getNestedDotIDCandidates(NamedElement namedEl) {
 		List<String> results = new ArrayList<>();
 
-		List<NamedElement> namedEls = new ArrayList<NamedElement>();
-		if(namedEl instanceof ComponentImplementation){
+		List<NamedElement> namedEls = new ArrayList<>();
+		if (namedEl instanceof ComponentImplementation) {
 			namedEls.addAll(((ComponentImplementation) namedEl).getAllSubcomponents());
-		}else if(namedEl instanceof RecordDefExpr){
-			namedEls.addAll(((RecordDefExpr) namedEl).getArgs());
+		} else if (namedEl instanceof RecordDef) {
+			namedEls.addAll(((RecordDef) namedEl).getArgs());
 		}
-		for(NamedElement el : namedEls){
+		for (NamedElement el : namedEls) {
 			results.add(el.getName());
 		}
 		return results;
 	}
 
-	private List<String> getNestedDotIDCandidates(NestedDotID id) {
+	private List<String> getNestedDotIDCandidates(SelectionExpr id) {
 
-		NamedElement base = id.getBase();
+		NamedElement base = ((NamedElmExpr) id).getElm();
 		NamedElement namedEl = null;
 
-		if(base instanceof Arg){
+		if (base instanceof Arg) {
 			Type type = ((Arg) base).getType();
-			NestedDotID elID = (NestedDotID) ((RecordType) type).getRecord();
-    		namedEl = elID.getBase();
-		}else if(base instanceof DataPort){
+
+			DoubleDotRef elID = ((DoubleDotRef) type);
+			namedEl = elID.getElm();
+//=======
+//			DoubleDotRef elID = ((RecordType) type).getRecord();
+//			namedEl = elID.getElm();
+//>>>>>>> origin/develop
+		} else if (base instanceof DataPort) {
 			namedEl = ((DataPort) base).getDataFeatureClassifier();
-		}else if(base instanceof EventDataPort){
+		} else if (base instanceof EventDataPort) {
 			namedEl = ((EventDataPort) base).getDataFeatureClassifier();
-		}else if(base instanceof AadlPackage){
-			return getNestedDotIDCandidates((AadlPackage)base);
-		}else{
+		} else if (base instanceof AadlPackage) {
+			return getNestedDotIDCandidates((AadlPackage) base);
+		} else {
 			return new ArrayList<>();
 		}
 

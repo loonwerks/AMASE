@@ -78,6 +78,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Arg getLhs_int()
   {
     return lhs_int;
@@ -105,6 +106,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLhs_int(Arg newLhs_int)
   {
     if (newLhs_int != lhs_int)
@@ -126,6 +128,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Interval getInterv()
   {
     return interv;
@@ -153,6 +156,7 @@ public class IntervalEqImpl extends SafetyEqStatementImpl implements IntervalEq
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInterv(Interval newInterv)
   {
     if (newInterv != interv)

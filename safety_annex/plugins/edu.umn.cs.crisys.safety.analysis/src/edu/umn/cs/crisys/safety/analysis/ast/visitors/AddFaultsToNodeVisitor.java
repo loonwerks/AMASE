@@ -11,13 +11,13 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
 import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.FeatureInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeAADLConnection;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeConnection;
@@ -213,7 +213,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
 		if (AddFaultsToAgree.getTransformFlag() == 2) {
-			nb.setFaultTreeFlag(true);
+//			nb.setFaultTreeFlag(true);
 		}
 		// Go through fault list first.
 		// If symmetric, add fault info to agree node.
@@ -295,7 +295,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			init();
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		} else if (AddFaultsToAgree.getTransformFlag() == 2) {
-			nb.setFaultTreeFlag(true);
+//			nb.setFaultTreeFlag(true);
 
 			// only collect fault hypothesis from the upper most level
 			// note that upperMostLevel is a static variable that gets cleared
@@ -1122,11 +1122,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		String output = "";
 		for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
 			if (fc instanceof OutputStatement) {
-				EList<NestedDotID> outputType = ((OutputStatement) fc).getNom_conn();
+				EList<NamedElement> outputType = ((OutputStatement) fc).getNom_conn();
 				// TODO: Assume the output is first in list. (????)
 				if (outputType.size() > 0) {
-					NestedDotID id = outputType.get(0);
-					output = id.getBase().getName();
+					NamedElement id = outputType.get(0);
+//					output = id.getBase().getName();
+					output = id.getName();
 					return output;
 				}
 				break;
@@ -1207,11 +1208,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param compPath Component instance path
 	 * @return Fault with name matching string.
 	 */
-	public BaseFault findFaultInCompInst(String faultName, NestedDotID compPath) {
+	public BaseFault findFaultInCompInst(String faultName, NamedElement compPath) {
 		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(faultMap.keySet());
 
 		for (ComponentInstance compInst : compInsts) {
-			if (compInst.getName().equals(compPath.getBase().getName())) {
+//			if (compInst.getName().equals(compPath.getBase().getName())) {
+			if (compInst.getName().equals(compPath.getName())) {
 				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
 				for (Fault fault : faults) {
 					if (fault.name.equals(faultName)) {
@@ -1223,7 +1225,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
 		for (ComponentInstance compInst : compInsts) {
-			if (compInst.getName().equals(compPath.getBase().getName())) {
+//			if (compInst.getName().equals(compPath.getBase().getName())) {
+			if (compInst.getName().equals(compPath.getName())) {
 				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
 				for (HWFault hwfault : hwfaults) {
 					if (hwfault.name.equals(faultName)) {
@@ -1249,23 +1252,25 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				ActivationStatement as = (ActivationStatement) s;
 				String agreeBoolVarName = as.getAgreeBoolVarName();
 				// the following can be null
-				NestedDotID agreeComp_Path = as.getAgreeComp_Path();
+				NamedElement agreeComp_Path = as.getAgreeComp_Path();
 				String agreeBoolVarPrefix = "";
 				if (agreeComp_Path != null) {
-					agreeBoolVarPrefix = agreeComp_Path.getBase().getName() + "__";
+//					agreeBoolVarPrefix = agreeComp_Path.getBase().getName() + "__";
+					agreeBoolVarPrefix = agreeComp_Path.getName() + "__";
 				}
 				// compose agreeBoolVarName in main node input
 				agreeBoolVarName = agreeBoolVarPrefix + agreeBoolVarName;
 				String faultName = as.getFaultName();
 				// the following can be null
-				NestedDotID faultComp_Path = as.getFaultComp_Path();
+				NamedElement faultComp_Path = as.getFaultComp_Path();
 				BaseFault fault = null;
 				if (faultComp_Path != null) {
 					fault = findFaultInCompInst(faultName, faultComp_Path);
 				}
 				if (fault != null) {
 					FaultActivationAssignment faultActAssign = new FaultActivationAssignment(agreeBoolVarName, fault,
-							faultComp_Path.getBase().getName());
+//							faultComp_Path.getBase().getName());
+							faultComp_Path.getName());
 					faultActivations.add(faultActAssign);
 				} else {
 					throw new SafetyException("Unable to identify fault in fault activation statement.");
@@ -1286,22 +1291,22 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (s instanceof PropagateStatement) {
 				PropagateStatement ps = (PropagateStatement) s;
 				Iterator<String> srcFaultIt = ps.getSrcFaultList().iterator();
-				Iterator<NestedDotID> srcCompPathIt = ps.getSrcComp_path().iterator();
+				Iterator<NamedElement> srcCompPathIt = ps.getSrcComp_path().iterator();
 
 				// create a SafetyPropagation
 				BaseFault srcFault = null;
 				// for each src fault name and path, locate the fault
 				while (srcFaultIt.hasNext() && srcCompPathIt.hasNext()) {
-					NestedDotID srcCompPath = srcCompPathIt.next();
+					NamedElement srcCompPath = srcCompPathIt.next();
 					String srcFaultName = srcFaultIt.next();
 					srcFault = findFaultInCompInst(srcFaultName, srcCompPath);
 					if (srcFault != null) {
 						// for each destination fault name and path, locate the fault
 						BaseFault destFault = null;
 						Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
-						Iterator<NestedDotID> destCompPathIt = ps.getDestComp_path().iterator();
+						Iterator<NamedElement> destCompPathIt = ps.getDestComp_path().iterator();
 						while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
-							NestedDotID destCompPath = destCompPathIt.next();
+							NamedElement destCompPath = destCompPathIt.next();
 							String destFaultName = destFaultIt.next();
 							destFault = findFaultInCompInst(destFaultName, destCompPath);
 							SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);
@@ -1717,7 +1722,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// And add as a local equation
 			nb.addLocalEquation(ae);
 			// Add independent fault as ivc element
-			nb.addIvcElement(this.createFaultIndependentActiveId(base));
+//			nb.addIvcElement(this.createFaultIndependentActiveId(base));
 		}
 
 	}
