@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.impl.DataPortImpl;
 import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
@@ -13,9 +14,8 @@ import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
-import com.rockwellcollins.atc.agree.analysis.AgreeTypeUtils;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
+import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -225,16 +225,16 @@ public class FaultASTBuilder {
 	  *
 	*/
 	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
-		NodeDefExpr defExpr = SafetyUtil.getFaultNode(faultStatement);
+		NodeDef defExpr = SafetyUtil.getFaultNode(faultStatement);
 
 		// to keep consistent with AGREE, we will use the AGREE functions
 		// to construct names
-		String fnName = AgreeTypeUtils.getNodeName(defExpr);
+		String fnName = AgreeUtils.getNodeName(defExpr);
 		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
 		if (fault.faultNode == null) {
 			// if we can get AgreeASTBuilder to
 			// build us a node, we will add it to our list and return it.
-			builder.caseNodeDefExpr(defExpr);
+			builder.caseNodeDef(defExpr);
 			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
 			if (fault.faultNode != null) {
 				this.addGlobalLustreNode(fault.faultNode);
@@ -275,11 +275,11 @@ public class FaultASTBuilder {
 		// Get output that fault statement is linked to
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof OutputStatement) {
-				List<NestedDotID> nominalConns = ((OutputStatement) fs).getNom_conn();
+				List<NamedElement> nominalConns = ((OutputStatement) fs).getNom_conn();
 				if ((nominalConns.isEmpty()) || (nominalConns.size() > 1)) {
 					new SafetyException("Cannot define asymmetric fault on zero OR more than one output.");
 				} else {
-					senderOutput = (DataPortImpl) nominalConns.get(0).getBase();
+//					senderOutput = (DataPortImpl) nominalConns.get(0).getBase();
 				}
 				break;
 			}
@@ -484,18 +484,18 @@ public class FaultASTBuilder {
 	private void setOutput(Fault fault, OutputStatement output) {
 		for (int i = 0; i < output.getFault_out().size(); i++) {
 			String param = output.getFault_out().get(i);
-			NestedDotID compOut = output.getNom_conn().get(i);
-			Expr result = builder.caseNestedDotID(compOut);
-
-			if(result instanceof RecordAccessExpr) {
-				Expr resultRecord = ((RecordAccessExpr) result).record;
-				fault.faultOutputMap.put(result, param);
-			}else if(result instanceof IdExpr) {
-				fault.faultOutputMap.put(result, param);
-			}
-			else  {
-				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
-			}
+			NamedElement compOut = output.getNom_conn().get(i);
+//			Expr result = builder.caseNestedDotID(compOut);
+//
+//			if(result instanceof RecordAccessExpr) {
+//				Expr resultRecord = ((RecordAccessExpr) result).record;
+//				fault.faultOutputMap.put(result, param);
+//			}else if(result instanceof IdExpr) {
+//				fault.faultOutputMap.put(result, param);
+//			}
+//			else  {
+//				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
+//			}
 		}
 	}
 
@@ -676,7 +676,7 @@ public class FaultASTBuilder {
 		AgreeVar outputOfInterest = null;
 		// Assume asymmetric fault first in list.
 		// Will have to display this to user somewhere.
-		List<NestedDotID> nomFaultConn = new ArrayList<NestedDotID>();
+		List<NamedElement> nomFaultConn = new ArrayList<NamedElement>();
 		// Get the nominal connection
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof OutputStatement) {
@@ -686,7 +686,8 @@ public class FaultASTBuilder {
 		// Get the agree node output that this fault is connected to
 		for (AgreeVar agreeVar : nodeOutputs) {
 			String temp = agreeVar.id;
-			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
+//			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
+			if (temp.contentEquals(nomFaultConn.get(0).getName())) {
 				// This agreeVar is the sender var we want to save for the
 				// later mapping to the receiver var.
 				outputOfInterest = agreeVar;

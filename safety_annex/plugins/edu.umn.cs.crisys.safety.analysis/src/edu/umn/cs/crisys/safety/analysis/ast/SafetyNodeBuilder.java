@@ -72,8 +72,8 @@ public class SafetyNodeBuilder {
 		reference = node.reference;
 		timing = node.timing;
 		compInst = node.compInst;
-		ivcElements = node.ivcElements;
-		faultTreeFlag = node.faultTreeFlag;
+//		ivcElements = node.ivcElements;
+//		faultTreeFlag = node.faultTreeFlag;
 	}
 
 	public void setId(String id) {
@@ -296,7 +296,7 @@ public class SafetyNodeBuilder {
 	public AgreeNode build() {
 		return new AgreeNode(id, inputs, outputs, locals, equations, connections, subNodes, assertions, assumptions,
 				guarantees, lemmas, patternProps, clockConstraint, initialConstraint, clockVar, reference, timing,
-				eventTimes, timeOfMap, timeRiseMap, timeFallMap, compInst, ivcElements, faultTreeFlag);
+				eventTimes, timeOfMap, timeRiseMap, timeFallMap, compInst);// , ivcElements, faultTreeFlag);
 	}
 
 	public List<String> getIvcElements() {

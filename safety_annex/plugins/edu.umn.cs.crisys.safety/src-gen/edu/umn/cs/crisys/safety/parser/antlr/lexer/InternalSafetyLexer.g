@@ -94,7 +94,11 @@ Compute : ('C'|'c')('O'|'o')('M'|'m')('P'|'p')('U'|'u')('T'|'t')('E'|'e');
 
 Enabled : ('E'|'e')('N'|'n')('A'|'a')('B'|'b')('L'|'l')('E'|'e')('D'|'d');
 
+Flatmap : ('F'|'f')('L'|'l')('A'|'a')('T'|'t')('M'|'m')('A'|'a')('P'|'p');
+
 Implies : ('I'|'i')('M'|'m')('P'|'p')('L'|'l')('I'|'i')('E'|'e')('S'|'s');
+
+Indices : ('I'|'i')('N'|'n')('D'|'d')('I'|'i')('C'|'c')('E'|'e')('S'|'s');
 
 Latched : ('L'|'l')('A'|'a')('T'|'t')('C'|'c')('H'|'h')('E'|'e')('D'|'d');
 
@@ -113,6 +117,10 @@ Assign : ('A'|'a')('S'|'s')('S'|'s')('I'|'i')('G'|'g')('N'|'n');
 Assume : ('A'|'a')('S'|'s')('S'|'s')('U'|'u')('M'|'m')('E'|'e');
 
 During : ('D'|'d')('U'|'u')('R'|'r')('I'|'i')('N'|'n')('G'|'g');
+
+Exists : ('E'|'e')('X'|'x')('I'|'i')('S'|'s')('T'|'t')('S'|'s');
+
+Forall : ('F'|'f')('O'|'o')('R'|'r')('A'|'a')('L'|'l')('L'|'l');
 
 Inputs : ('I'|'i')('N'|'n')('P'|'p')('U'|'u')('T'|'t')('S'|'s');
 
@@ -142,6 +150,10 @@ Fault : ('F'|'f')('A'|'a')('U'|'u')('L'|'l')('T'|'t');
 
 Floor : ('F'|'f')('L'|'l')('O'|'o')('O'|'o')('R'|'r');
 
+Foldl : ('F'|'f')('O'|'o')('L'|'l')('D'|'d')('L'|'l');
+
+Foldr : ('F'|'f')('O'|'o')('L'|'l')('D'|'d')('R'|'r');
+
 Holds : ('H'|'h')('O'|'o')('L'|'l')('D'|'d')('S'|'s');
 
 Lemma : ('L'|'l')('E'|'e')('M'|'m')('M'|'m')('A'|'a');
@@ -163,6 +175,8 @@ Each : ('E'|'e')('A'|'a')('C'|'c')('H'|'h');
 Else : ('E'|'e')('L'|'l')('S'|'s')('E'|'e');
 
 Enum : ('E'|'e')('N'|'n')('U'|'u')('M'|'m');
+
+Into : ('I'|'i')('N'|'n')('T'|'t')('O'|'o');
 
 Node : ('N'|'n')('O'|'o')('D'|'d')('E'|'e');
 
@@ -236,6 +250,8 @@ EqualsSignGreaterThanSign : '=''>';
 
 GreaterThanSignEqualsSign : '>''=';
 
+LeftSquareBracketVerticalLine : '[''|';
+
 By : ('B'|'b')('Y'|'y');
 
 Eq : ('E'|'e')('Q'|'q');
@@ -247,6 +263,8 @@ In : ('I'|'i')('N'|'n');
 Or : ('O'|'o')('R'|'r');
 
 To : ('T'|'t')('O'|'o');
+
+VerticalLineRightSquareBracket : '|'']';
 
 LeftParenthesis : '(';
 

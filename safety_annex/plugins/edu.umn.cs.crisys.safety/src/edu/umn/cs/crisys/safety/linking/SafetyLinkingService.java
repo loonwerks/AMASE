@@ -27,18 +27,22 @@ import org.osate.aadl2.modelsupport.scoping.Aadl2GlobalScopeUtil;
 import org.osate.aadl2.util.Aadl2Util;
 import org.osate.xtext.aadl2.properties.linking.PropertiesLinkingService;
 
+import com.rockwellcollins.atc.agree.agree.AssignStatement;
 import com.rockwellcollins.atc.agree.agree.ConnectionStatement;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
 import com.rockwellcollins.atc.agree.agree.EventExpr;
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NamedID;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.agree.NodeEq;
 import com.rockwellcollins.atc.agree.agree.OrderStatement;
-import com.rockwellcollins.atc.agree.agree.RecordExpr;
-import com.rockwellcollins.atc.agree.agree.RecordType;
+import com.rockwellcollins.atc.agree.agree.RecordLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
+import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
+import com.rockwellcollins.atc.agree.agree.TagExpr;
+import com.rockwellcollins.atc.agree.agree.ThisRef;
 
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
@@ -61,16 +65,12 @@ public class SafetyLinkingService extends PropertiesLinkingService{
             return findUnitLiteralAsList((Element) context, name);
         }
 
-        if (context instanceof NestedDotID
-                || context instanceof NodeEq
-                || context instanceof SynchStatement
-                || context instanceof RecordExpr
-                || context instanceof RecordType
-                || context instanceof GetPropertyExpr
-                || context instanceof RecordUpdateExpr
-                || context instanceof EventExpr
-                || context instanceof OrderStatement
-                || context instanceof ConnectionStatement
+		if (context instanceof DoubleDotRef || context instanceof ThisRef || context instanceof TagExpr
+				|| context instanceof SelectionExpr || context instanceof NamedElmExpr
+				|| context instanceof AssignStatement || context instanceof NodeEq || context instanceof SynchStatement
+				|| context instanceof RecordLitExpr || context instanceof GetPropertyExpr
+				|| context instanceof RecordUpdateExpr || context instanceof EventExpr
+				|| context instanceof OrderStatement || context instanceof ConnectionStatement
                 || context instanceof SpecStatement
 				|| context instanceof FaultSubcomponent || context instanceof HWFaultSubcomponent) {
 
