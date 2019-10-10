@@ -30,7 +30,7 @@ ElementSafety returns aadl2::Element:
 
 @Override 
 SpecStatement: 
-		{FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=[aadl2::NamedElement|QCPREF]  
+		{FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=DoubleDotRef  
 			'{' faultDefinitions+=(FaultSubcomponent)* '}' 
 	|	{AnalysisStatement} 'analyze' ':' behavior = AnalysisBehavior 
 	|   {HWFaultStatement} 'HW_fault' name = ID (str=STRING)? ':' 

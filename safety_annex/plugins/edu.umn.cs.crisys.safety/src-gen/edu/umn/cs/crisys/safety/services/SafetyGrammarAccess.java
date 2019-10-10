@@ -155,8 +155,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cStrSTRINGTerminalRuleCall_0_3_0 = (RuleCall)cStrAssignment_0_3.eContents().get(0);
 		private final Keyword cColonKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cFaultDefNameAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final CrossReference cFaultDefNameNamedElementCrossReference_0_5_0 = (CrossReference)cFaultDefNameAssignment_0_5.eContents().get(0);
-		private final RuleCall cFaultDefNameNamedElementQCPREFParserRuleCall_0_5_0_1 = (RuleCall)cFaultDefNameNamedElementCrossReference_0_5_0.eContents().get(1);
+		private final RuleCall cFaultDefNameDoubleDotRefParserRuleCall_0_5_0 = (RuleCall)cFaultDefNameAssignment_0_5.eContents().get(0);
 		private final Keyword cLeftCurlyBracketKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Assignment cFaultDefinitionsAssignment_0_7 = (Assignment)cGroup_0.eContents().get(7);
 		private final RuleCall cFaultDefinitionsFaultSubcomponentParserRuleCall_0_7_0 = (RuleCall)cFaultDefinitionsAssignment_0_7.eContents().get(0);
@@ -239,7 +238,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//@Override
 		//SpecStatement:
-		//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=[aadl2::NamedElement|QCPREF]
+		//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=DoubleDotRef
 		//	'{' faultDefinitions+=FaultSubcomponent* '}'
 		//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
 		//	| {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
@@ -252,18 +251,17 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	'=' faultName=ID '@' faultComp_Path=[aadl2::NamedElement|QCPREF] ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=[aadl2::NamedElement|QCPREF] '{'
-		//faultDefinitions+=FaultSubcomponent* '}' | {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior |
-		//{HWFaultStatement} 'HW_fault' name=ID str=STRING? ':' '{' faultDefinitions+=HWFaultSubcomponent* '}' |
-		//{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@' srcComp_path+=[aadl2::NamedElement|QCPREF] (','
-		//srcFaultList+=ID '@' srcComp_path+=[aadl2::NamedElement|QCPREF])* '}' 'to' '{' destFaultList+=ID '@'
-		//destComp_path+=[aadl2::NamedElement|QCPREF] (',' destFaultList+=ID '@' destComp_path+=[aadl2::NamedElement|QCPREF])*
-		//'}' ';' | {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@'
-		//agreeComp_Path=[aadl2::NamedElement|QCPREF])? '=' faultName=ID '@' faultComp_Path=[aadl2::NamedElement|QCPREF] ';'
+		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=DoubleDotRef '{' faultDefinitions+=FaultSubcomponent* '}'
+		//| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior | {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'
+		//'{' faultDefinitions+=HWFaultSubcomponent* '}' | {PropagateStatement} 'propagate_from' ':' '{' srcFaultList+=ID '@'
+		//srcComp_path+=[aadl2::NamedElement|QCPREF] (',' srcFaultList+=ID '@' srcComp_path+=[aadl2::NamedElement|QCPREF])* '}'
+		//'to' '{' destFaultList+=ID '@' destComp_path+=[aadl2::NamedElement|QCPREF] (',' destFaultList+=ID '@'
+		//destComp_path+=[aadl2::NamedElement|QCPREF])* '}' ';' | {ActivationStatement} 'fault_activation' ':'
+		//agreeBoolVarName=ID ('@' agreeComp_Path=[aadl2::NamedElement|QCPREF])? '=' faultName=ID '@'
+		//faultComp_Path=[aadl2::NamedElement|QCPREF] ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=[aadl2::NamedElement|QCPREF] '{'
-		//faultDefinitions+=FaultSubcomponent* '}'
+		//{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=DoubleDotRef '{' faultDefinitions+=FaultSubcomponent* '}'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{FaultStatement}
@@ -287,14 +285,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_4() { return cColonKeyword_0_4; }
 
-		//faultDefName=[aadl2::NamedElement|QCPREF]
+		//faultDefName=DoubleDotRef
 		public Assignment getFaultDefNameAssignment_0_5() { return cFaultDefNameAssignment_0_5; }
 
-		//[aadl2::NamedElement|QCPREF]
-		public CrossReference getFaultDefNameNamedElementCrossReference_0_5_0() { return cFaultDefNameNamedElementCrossReference_0_5_0; }
-
-		//QCPREF
-		public RuleCall getFaultDefNameNamedElementQCPREFParserRuleCall_0_5_0_1() { return cFaultDefNameNamedElementQCPREFParserRuleCall_0_5_0_1; }
+		//DoubleDotRef
+		public RuleCall getFaultDefNameDoubleDotRefParserRuleCall_0_5_0() { return cFaultDefNameDoubleDotRefParserRuleCall_0_5_0; }
 
 		//'{'
 		public Keyword getLeftCurlyBracketKeyword_0_6() { return cLeftCurlyBracketKeyword_0_6; }
@@ -1664,7 +1659,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//@Override
 	//SpecStatement:
-	//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=[aadl2::NamedElement|QCPREF]
+	//	{FaultStatement} 'fault' name=ID str=STRING? ':' faultDefName=DoubleDotRef
 	//	'{' faultDefinitions+=FaultSubcomponent* '}'
 	//	| {AnalysisStatement} 'analyze' ':' behavior=AnalysisBehavior
 	//	| {HWFaultStatement} 'HW_fault' name=ID str=STRING? ':'

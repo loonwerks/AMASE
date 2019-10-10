@@ -2,6 +2,8 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
+
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
@@ -14,15 +16,12 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -83,14 +82,14 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   protected String str = STR_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getFaultDefName() <em>Fault Def Name</em>}' reference.
+   * The cached value of the '{@link #getFaultDefName() <em>Fault Def Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getFaultDefName()
    * @generated
    * @ordered
    */
-  protected NamedElement faultDefName;
+  protected DoubleDotRef faultDefName;
 
   /**
    * The cached value of the '{@link #getFaultDefinitions() <em>Fault Definitions</em>}' containment reference list.
@@ -179,18 +178,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * @generated
    */
   @Override
-  public NamedElement getFaultDefName()
+  public DoubleDotRef getFaultDefName()
   {
-    if (faultDefName != null && ((EObject)faultDefName).eIsProxy())
-    {
-      InternalEObject oldFaultDefName = (InternalEObject)faultDefName;
-      faultDefName = (NamedElement)eResolveProxy(oldFaultDefName);
-      if (faultDefName != oldFaultDefName)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, oldFaultDefName, faultDefName));
-      }
-    }
     return faultDefName;
   }
 
@@ -199,9 +188,16 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public NamedElement basicGetFaultDefName()
+  public NotificationChain basicSetFaultDefName(DoubleDotRef newFaultDefName, NotificationChain msgs)
   {
-    return faultDefName;
+    DoubleDotRef oldFaultDefName = faultDefName;
+    faultDefName = newFaultDefName;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, oldFaultDefName, newFaultDefName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -210,12 +206,20 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * @generated
    */
   @Override
-  public void setFaultDefName(NamedElement newFaultDefName)
+  public void setFaultDefName(DoubleDotRef newFaultDefName)
   {
-    NamedElement oldFaultDefName = faultDefName;
-    faultDefName = newFaultDefName;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, oldFaultDefName, faultDefName));
+    if (newFaultDefName != faultDefName)
+    {
+      NotificationChain msgs = null;
+      if (faultDefName != null)
+        msgs = ((InternalEObject)faultDefName).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, null, msgs);
+      if (newFaultDefName != null)
+        msgs = ((InternalEObject)newFaultDefName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, null, msgs);
+      msgs = basicSetFaultDefName(newFaultDefName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME, newFaultDefName, newFaultDefName));
   }
 
   /**
@@ -243,6 +247,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     switch (featureID)
     {
+      case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
+        return basicSetFaultDefName(null, msgs);
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         return ((InternalEList<?>)getFaultDefinitions()).basicRemove(otherEnd, msgs);
     }
@@ -264,8 +270,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
       case SafetyPackage.FAULT_STATEMENT__STR:
         return getStr();
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        if (resolve) return getFaultDefName();
-        return basicGetFaultDefName();
+        return getFaultDefName();
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         return getFaultDefinitions();
     }
@@ -290,7 +295,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr((String)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((NamedElement)newValue);
+        setFaultDefName((DoubleDotRef)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
@@ -317,7 +322,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr(STR_EDEFAULT);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((NamedElement)null);
+        setFaultDefName((DoubleDotRef)null);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
