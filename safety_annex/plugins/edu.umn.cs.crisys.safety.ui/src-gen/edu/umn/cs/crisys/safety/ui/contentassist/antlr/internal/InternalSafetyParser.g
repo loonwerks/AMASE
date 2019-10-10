@@ -34620,12 +34620,8 @@ rule__SpecStatement__FaultDefNameAssignment_0_5
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameNamedElementCrossReference_0_5_0()); }
-(
-{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameNamedElementQCPREFParserRuleCall_0_5_0_1()); }
-	ruleQCPREF{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameNamedElementQCPREFParserRuleCall_0_5_0_1()); }
-)
-{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameNamedElementCrossReference_0_5_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getFaultDefNameDoubleDotRefParserRuleCall_0_5_0()); }
+	ruleDoubleDotRef{ after(grammarAccess.getSpecStatementAccess().getFaultDefNameDoubleDotRefParserRuleCall_0_5_0()); }
 )
 
 ;

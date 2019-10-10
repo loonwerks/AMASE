@@ -2,9 +2,9 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import org.eclipse.emf.common.util.EList;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 
-import org.osate.aadl2.NamedElement;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -72,26 +72,26 @@ public interface FaultStatement extends SpecStatement
   void setStr(String value);
 
   /**
-   * Returns the value of the '<em><b>Fault Def Name</b></em>' reference.
+   * Returns the value of the '<em><b>Fault Def Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fault Def Name</em>' reference.
-   * @see #setFaultDefName(NamedElement)
+   * @return the value of the '<em>Fault Def Name</em>' containment reference.
+   * @see #setFaultDefName(DoubleDotRef)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getFaultStatement_FaultDefName()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  NamedElement getFaultDefName();
+  DoubleDotRef getFaultDefName();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}' reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Fault Def Name</em>' reference.
+   * @param value the new value of the '<em>Fault Def Name</em>' containment reference.
    * @see #getFaultDefName()
    * @generated
    */
-  void setFaultDefName(NamedElement value);
+  void setFaultDefName(DoubleDotRef value);
 
   /**
    * Returns the value of the '<em><b>Fault Definitions</b></em>' containment reference list.

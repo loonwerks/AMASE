@@ -294,16 +294,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameNamedElementCrossReference_0_5_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultDefNameDoubleDotRefParserRuleCall_0_5_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_faultDefName_5_0=ruleDoubleDotRef		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"faultDefName",
+        		lv_faultDefName_5_0, 
+        		"com.rockwellcollins.atc.agree.Agree.DoubleDotRef");
 	        afterParserOrEnumRuleCall();
 	    }
 

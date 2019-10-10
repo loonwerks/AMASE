@@ -826,7 +826,7 @@ public interface SafetyPackage extends EPackage
   int FAULT_STATEMENT__STR = SPEC_STATEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Fault Def Name</b></em>' reference.
+   * The feature id for the '<em><b>Fault Def Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2216,10 +2216,10 @@ public interface SafetyPackage extends EPackage
   EAttribute getFaultStatement_Str();
 
   /**
-   * Returns the meta object for the reference '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}'.
+   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName <em>Fault Def Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Fault Def Name</em>'.
+   * @return the meta object for the containment reference '<em>Fault Def Name</em>'.
    * @see edu.umn.cs.crisys.safety.safety.FaultStatement#getFaultDefName()
    * @see #getFaultStatement()
    * @generated
@@ -3121,7 +3121,7 @@ public interface SafetyPackage extends EPackage
     EAttribute FAULT_STATEMENT__STR = eINSTANCE.getFaultStatement_Str();
 
     /**
-     * The meta object literal for the '<em><b>Fault Def Name</b></em>' reference feature.
+     * The meta object literal for the '<em><b>Fault Def Name</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

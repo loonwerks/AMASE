@@ -11,8 +11,8 @@ import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
-import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
@@ -34,15 +34,13 @@ public class SafetyUtil {
 
 	public static NodeDef getFaultNode(FaultStatement faultStatement) {
 		// defName: faults.fail_to
-		NamedElement defName;
+		DoubleDotRef defName = faultStatement.getFaultDefName();
+		;
 		// defNameSub: fail_to
 		NamedElement defNameField = null;
 
-		defName = faultStatement.getFaultDefName();
-
-		if ((defName instanceof SelectionExpr) && (defName != null)) {
-			SelectionExpr name = (SelectionExpr) defName;
-			defNameField = name.getField();
+		if (defName != null) {
+			defNameField = defName.getElm();
 		} else {
 			new IllegalArgumentException("Fault definition name in " + faultStatement.getName() + " is not allowed.");
 		}

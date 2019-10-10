@@ -35,7 +35,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="FaultStatement" eSuperTypes="#//SpecStatement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="str" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefName" eType="ecore:EClass platform:/resource/org.osate.aadl2/model/aadl2.ecore#//NamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefName" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//DoubleDotRef"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="faultDefinitions" upperBound="-1"
         eType="#//FaultSubcomponent" containment="true"/>
   </eClassifiers>
