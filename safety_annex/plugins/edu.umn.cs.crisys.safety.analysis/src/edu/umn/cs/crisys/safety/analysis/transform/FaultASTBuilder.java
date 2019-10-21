@@ -470,8 +470,8 @@ public class FaultASTBuilder {
 			String param = input.getFault_in().get(i);
 
 			// translating expression HERE.
-			// Expr result = builder.doSwitch(input.getNom_conn().get(i));
-			IdExpr result = new IdExpr(input.getNom_conn().get(i).getName());
+			Expr result = builder.doSwitch(input.getNom_conn().get(i));
+			// IdExpr result = new IdExpr(input.getNom_conn().get(i).getElementRoot().getName());
 			fault.faultInputMap.put(param, result);
 		}
 	}

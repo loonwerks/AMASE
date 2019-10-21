@@ -49,8 +49,8 @@ AnalysisBehavior :
 ;	
 
 FaultSubcomponent returns FaultSubcomponent: 
-		{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID]
-			(','fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID])*';' 
+		{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
+			(','fault_in+=ID '<-' nom_conn+=Expr)*';' 
 	| 	{OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID 
 			(','nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)*';'
  	| 	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  

@@ -1,6 +1,7 @@
 package Emergency
 public
 with Base_Types;
+with faults;
 	system Emergency
 		features
 			cmd_to_activate : in data port Base_Types::Boolean;
@@ -17,7 +18,7 @@ with Base_Types;
 		**};
 		annex safety {**
 			
-			fault Emergency_Mode_Fault "Emergency supply at zero." : faults.fail_to{
+			fault Emergency_Mode_Fault "Emergency supply at zero." : faults::fail_to{
 				
 				eq fail_val : int = 0;
 				

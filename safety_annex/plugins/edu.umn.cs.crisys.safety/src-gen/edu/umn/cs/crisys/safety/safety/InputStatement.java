@@ -2,9 +2,9 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import org.eclipse.emf.common.util.EList;
+import com.rockwellcollins.atc.agree.agree.Expr;
 
-import org.osate.aadl2.NamedElement;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,15 +38,15 @@ public interface InputStatement extends FaultSubcomponent
   EList<String> getFault_in();
 
   /**
-   * Returns the value of the '<em><b>Nom conn</b></em>' reference list.
-   * The list contents are of type {@link org.osate.aadl2.NamedElement}.
+   * Returns the value of the '<em><b>Nom conn</b></em>' containment reference list.
+   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Nom conn</em>' reference list.
+   * @return the value of the '<em>Nom conn</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getInputStatement_Nom_conn()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  EList<NamedElement> getNom_conn();
+  EList<Expr> getNom_conn();
 
 } // InputStatement

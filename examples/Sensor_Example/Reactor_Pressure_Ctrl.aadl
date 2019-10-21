@@ -8,6 +8,8 @@ public
 
 	with Voters;
 	renames Voters::all;
+	with Constants;
+	with Common_Faults;
 
 	system Reactor_Pressure_Ctrl
 		features
@@ -16,7 +18,7 @@ public
 		annex agree {**
 				
 			guarantee "shut down when and only when we should": 
-			Shut_Down_Cmd = (Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD);		
+			Shut_Down_Cmd = (Env_Pressure > Constants::HIGH_PRESSURE_THRESHOLD);		
 			
 --with the above guarantee split into the following two, with pressure sensor stuck at low,
 --for the non voting implementation, it takes the max 3 fault to make the "shut down when we should" to fail						
