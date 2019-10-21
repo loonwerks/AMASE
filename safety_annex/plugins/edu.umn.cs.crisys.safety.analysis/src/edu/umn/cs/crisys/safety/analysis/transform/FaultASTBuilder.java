@@ -470,7 +470,8 @@ public class FaultASTBuilder {
 			String param = input.getFault_in().get(i);
 
 			// translating expression HERE.
-			Expr result = builder.doSwitch(input.getNom_conn().get(i));
+			// Expr result = builder.doSwitch(input.getNom_conn().get(i));
+			IdExpr result = new IdExpr(input.getNom_conn().get(i).getName());
 			fault.faultInputMap.put(param, result);
 		}
 	}
@@ -485,17 +486,13 @@ public class FaultASTBuilder {
 		for (int i = 0; i < output.getFault_out().size(); i++) {
 			String param = output.getFault_out().get(i);
 			NamedElement compOut = output.getNom_conn().get(i);
-//			Expr result = builder.caseNestedDotID(compOut);
-//
-//			if(result instanceof RecordAccessExpr) {
-//				Expr resultRecord = ((RecordAccessExpr) result).record;
-//				fault.faultOutputMap.put(result, param);
-//			}else if(result instanceof IdExpr) {
-//				fault.faultOutputMap.put(result, param);
-//			}
-//			else  {
-//				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
-//			}
+
+			if (compOut == null) {
+				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr");
+			} else {
+				IdExpr result = new IdExpr(compOut.getName());
+				fault.faultOutputMap.put(result, param);
+			}
 		}
 	}
 

@@ -7,9 +7,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
+import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -31,30 +33,19 @@ import jkind.lustre.RecordUpdateExpr;
 public class SafetyUtil {
 
 	public static NodeDef getFaultNode(FaultStatement faultStatement) {
-		return null;
+
 		// defName: faults.fail_to
-//		NamedElement defName = faultStatement.getFaultDefName();
-//
-//		// defNameSub: fail_to
-//		String defNameField = null;
-//
-//		if (defName != null) {
-//			defNameField = defName.getFullName();
-//		} else {
-//			new IllegalArgumentException("Fault definition name in " + faultStatement.getName() + " is not allowed.");
-//		}
-////		while(defName.getSub() != null){
-////			defName = defName.getSub();
-////		}
-////
-////		defNameSub = defName.getBase();
-////
-////		if (!(defNameSub instanceof NodeDef)) {
-////			throw new IllegalArgumentException("Fault definition name must be an instance of NodeDefExpr."
-////					+" It is: "+defNameSub.getFullName()+".");
-////		}
-//
-//		return (NodeDef) defNameField;
+		DoubleDotRef defName = faultStatement.getFaultDefName();
+
+		// defNameSub: fail_to
+		NamedElement defNameField = null;
+
+		if (defName != null) {
+			defNameField = defName.getElm();
+		} else {
+			new IllegalArgumentException("Fault definition name in " + faultStatement.getName() + " is not allowed.");
+		}
+		return (NodeDef) defNameField;
 	}
 
 

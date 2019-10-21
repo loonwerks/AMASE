@@ -153,7 +153,7 @@ public
 			C123_to_C0: port C123.out3 -> C0.in0;
 			C0_to_out0: port C0.out0 -> out0;
 		annex safety {**
-      		analyze : max  3 fault
+      		analyze : max 3 fault
       		--analyze : probability 1.0E-7
    		**};
 	end C0123.impl;
