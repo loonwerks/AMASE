@@ -931,16 +931,18 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_5_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); 
 	    }
-		ruleDCID
-		{ 
+		lv_nom_conn_5_0=ruleExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	        }
+       		add(
+       			$current, 
+       			"nom_conn",
+        		lv_nom_conn_5_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -975,16 +977,18 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_6_3_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_6_3_0()); 
 	    }
-		ruleDCID
-		{ 
+		lv_nom_conn_9_0=ruleExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	        }
+       		add(
+       			$current, 
+       			"nom_conn",
+        		lv_nom_conn_9_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
 	        afterParserOrEnumRuleCall();
 	    }
 

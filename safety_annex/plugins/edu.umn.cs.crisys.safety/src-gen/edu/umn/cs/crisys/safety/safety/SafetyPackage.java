@@ -1202,7 +1202,7 @@ public interface SafetyPackage extends EPackage
   int INPUT_STATEMENT__FAULT_IN = FAULT_SUBCOMPONENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Nom conn</b></em>' reference list.
+   * The feature id for the '<em><b>Nom conn</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2473,10 +2473,10 @@ public interface SafetyPackage extends EPackage
   EAttribute getInputStatement_Fault_in();
 
   /**
-   * Returns the meta object for the reference list '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn <em>Nom conn</em>}'.
+   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn <em>Nom conn</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference list '<em>Nom conn</em>'.
+   * @return the meta object for the containment reference list '<em>Nom conn</em>'.
    * @see edu.umn.cs.crisys.safety.safety.InputStatement#getNom_conn()
    * @see #getInputStatement()
    * @generated
@@ -3327,7 +3327,7 @@ public interface SafetyPackage extends EPackage
     EAttribute INPUT_STATEMENT__FAULT_IN = eINSTANCE.getInputStatement_Fault_in();
 
     /**
-     * The meta object literal for the '<em><b>Nom conn</b></em>' reference list feature.
+     * The meta object literal for the '<em><b>Nom conn</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

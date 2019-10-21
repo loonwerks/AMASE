@@ -670,7 +670,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (fault_in+=ID nom_conn+=[NamedElement|DCID] (fault_in+=ID nom_conn+=[NamedElement|DCID])*)
+	 *     (fault_in+=ID nom_conn+=Expr (fault_in+=ID nom_conn+=Expr)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

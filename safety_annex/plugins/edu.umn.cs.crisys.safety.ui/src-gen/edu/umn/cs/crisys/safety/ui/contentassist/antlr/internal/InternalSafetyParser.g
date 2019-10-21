@@ -34935,12 +34935,8 @@ rule__FaultSubcomponent__Nom_connAssignment_0_5
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_5_0()); }
-(
-{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementDCIDParserRuleCall_0_5_0_1()); }
-	ruleDCID{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementDCIDParserRuleCall_0_5_0_1()); }
-)
-{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_5_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); }
+	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); }
 )
 
 ;
@@ -34969,12 +34965,8 @@ rule__FaultSubcomponent__Nom_connAssignment_0_6_3
     }
 :
 (
-{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_6_3_0()); }
-(
-{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementDCIDParserRuleCall_0_6_3_0_1()); }
-	ruleDCID{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementDCIDParserRuleCall_0_6_3_0_1()); }
-)
-{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_6_3_0()); }
+{ before(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_6_3_0()); }
+	ruleExpr{ after(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_6_3_0()); }
 )
 
 ;

@@ -8,15 +8,16 @@ public
 
 	with Voters;
 	renames Voters::all;
+	with Constants;
 
 	system Reactor_Temp_Ctrl
 		features
 			Env_Temp: in data port Integer;
 			Shut_Down_Cmd: out data port Boolean;
 		annex agree {**
-				
+			eq test : bool;	
 			guarantee "shut down when and only when we should": 
-			Shut_Down_Cmd = (Env_Temp > Constants.HIGH_TEMPERATURE_THRESHOLD);	
+			Shut_Down_Cmd = (Env_Temp > Constants::HIGH_TEMPERATURE_THRESHOLD);	
 			
 --with the above guarantee split into the following two, with temperature sensor stuck at high,
 --for the non voting implementation, it takes the max 1 fault to make the "don't shut down when we shouldn't'" to fail		

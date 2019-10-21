@@ -2,19 +2,23 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.EDataTypeEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
-import org.osate.aadl2.NamedElement;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,14 +47,14 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
   protected EList<String> fault_in;
 
   /**
-   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' reference list.
+   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getNom_conn()
    * @generated
    * @ordered
    */
-  protected EList<NamedElement> nom_conn;
+  protected EList<Expr> nom_conn;
 
   /**
    * <!-- begin-user-doc -->
@@ -94,13 +98,29 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
    * @generated
    */
   @Override
-  public EList<NamedElement> getNom_conn()
+  public EList<Expr> getNom_conn()
   {
     if (nom_conn == null)
     {
-      nom_conn = new EObjectResolvingEList<NamedElement>(NamedElement.class, this, SafetyPackage.INPUT_STATEMENT__NOM_CONN);
+      nom_conn = new EObjectContainmentEList<Expr>(Expr.class, this, SafetyPackage.INPUT_STATEMENT__NOM_CONN);
     }
     return nom_conn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.INPUT_STATEMENT__NOM_CONN:
+        return ((InternalEList<?>)getNom_conn()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -138,7 +158,7 @@ public class InputStatementImpl extends FaultSubcomponentImpl implements InputSt
         return;
       case SafetyPackage.INPUT_STATEMENT__NOM_CONN:
         getNom_conn().clear();
-        getNom_conn().addAll((Collection<? extends NamedElement>)newValue);
+        getNom_conn().addAll((Collection<? extends Expr>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

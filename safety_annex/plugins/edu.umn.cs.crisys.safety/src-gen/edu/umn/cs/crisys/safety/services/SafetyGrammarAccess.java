@@ -575,16 +575,14 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFault_inIDTerminalRuleCall_0_3_0 = (RuleCall)cFault_inAssignment_0_3.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cNom_connAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
-		private final CrossReference cNom_connNamedElementCrossReference_0_5_0 = (CrossReference)cNom_connAssignment_0_5.eContents().get(0);
-		private final RuleCall cNom_connNamedElementDCIDParserRuleCall_0_5_0_1 = (RuleCall)cNom_connNamedElementCrossReference_0_5_0.eContents().get(1);
+		private final RuleCall cNom_connExprParserRuleCall_0_5_0 = (RuleCall)cNom_connAssignment_0_5.eContents().get(0);
 		private final Group cGroup_0_6 = (Group)cGroup_0.eContents().get(6);
 		private final Keyword cCommaKeyword_0_6_0 = (Keyword)cGroup_0_6.eContents().get(0);
 		private final Assignment cFault_inAssignment_0_6_1 = (Assignment)cGroup_0_6.eContents().get(1);
 		private final RuleCall cFault_inIDTerminalRuleCall_0_6_1_0 = (RuleCall)cFault_inAssignment_0_6_1.eContents().get(0);
 		private final Keyword cLessThanSignHyphenMinusKeyword_0_6_2 = (Keyword)cGroup_0_6.eContents().get(2);
 		private final Assignment cNom_connAssignment_0_6_3 = (Assignment)cGroup_0_6.eContents().get(3);
-		private final CrossReference cNom_connNamedElementCrossReference_0_6_3_0 = (CrossReference)cNom_connAssignment_0_6_3.eContents().get(0);
-		private final RuleCall cNom_connNamedElementDCIDParserRuleCall_0_6_3_0_1 = (RuleCall)cNom_connNamedElementCrossReference_0_6_3_0.eContents().get(1);
+		private final RuleCall cNom_connExprParserRuleCall_0_6_3_0 = (RuleCall)cNom_connAssignment_0_6_3.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_7 = (Keyword)cGroup_0.eContents().get(7);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cOutputStatementAction_1_0 = (Action)cGroup_1.eContents().get(0);
@@ -637,8 +635,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSafetyEqStatementParserRuleCall_6 = (RuleCall)cAlternatives.eContents().get(6);
 		
 		//FaultSubcomponent:
-		//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID] (',' fault_in+=ID '<-'
-		//	nom_conn+=[aadl2::NamedElement|DCID])* ';'
+		//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
 		//	| {OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID (','
 		//	nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)* ';'
 		//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
@@ -648,16 +645,15 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//	| SafetyEqStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID] (',' fault_in+=ID '<-'
-		//nom_conn+=[aadl2::NamedElement|DCID])* ';' | {OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-'
-		//fault_out+=ID (',' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)* ';' | {DurationStatement} 'duration' ':'
+		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';' |
+		//{OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID (','
+		//nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)* ';' | {DurationStatement} 'duration' ':'
 		//tc=TemporalConstraint interv=Interval? ';' | {ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';' |
 		//{TriggerStatement} 'enabled' cond=TriggerCondition ';' | {PropagationTypeStatement} 'propagate_type' ':'
 		//pty=PropagationTypeConstraint ';' | SafetyEqStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID] (',' fault_in+=ID '<-'
-		//nom_conn+=[aadl2::NamedElement|DCID])* ';'
+		//{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{InputStatement}
@@ -678,16 +674,13 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_0_4() { return cLessThanSignHyphenMinusKeyword_0_4; }
 
-		//nom_conn+=[aadl2::NamedElement|DCID]
+		//nom_conn+=Expr
 		public Assignment getNom_connAssignment_0_5() { return cNom_connAssignment_0_5; }
 
-		//[aadl2::NamedElement|DCID]
-		public CrossReference getNom_connNamedElementCrossReference_0_5_0() { return cNom_connNamedElementCrossReference_0_5_0; }
+		//Expr
+		public RuleCall getNom_connExprParserRuleCall_0_5_0() { return cNom_connExprParserRuleCall_0_5_0; }
 
-		//DCID
-		public RuleCall getNom_connNamedElementDCIDParserRuleCall_0_5_0_1() { return cNom_connNamedElementDCIDParserRuleCall_0_5_0_1; }
-
-		//(',' fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID])*
+		//(',' fault_in+=ID '<-' nom_conn+=Expr)*
 		public Group getGroup_0_6() { return cGroup_0_6; }
 
 		//','
@@ -702,14 +695,11 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'<-'
 		public Keyword getLessThanSignHyphenMinusKeyword_0_6_2() { return cLessThanSignHyphenMinusKeyword_0_6_2; }
 
-		//nom_conn+=[aadl2::NamedElement|DCID]
+		//nom_conn+=Expr
 		public Assignment getNom_connAssignment_0_6_3() { return cNom_connAssignment_0_6_3; }
 
-		//[aadl2::NamedElement|DCID]
-		public CrossReference getNom_connNamedElementCrossReference_0_6_3_0() { return cNom_connNamedElementCrossReference_0_6_3_0; }
-
-		//DCID
-		public RuleCall getNom_connNamedElementDCIDParserRuleCall_0_6_3_0_1() { return cNom_connNamedElementDCIDParserRuleCall_0_6_3_0_1; }
+		//Expr
+		public RuleCall getNom_connExprParserRuleCall_0_6_3_0() { return cNom_connExprParserRuleCall_0_6_3_0; }
 
 		//';'
 		public Keyword getSemicolonKeyword_0_7() { return cSemicolonKeyword_0_7; }
@@ -1674,8 +1664,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FaultSubcomponent:
-	//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=[aadl2::NamedElement|DCID] (',' fault_in+=ID '<-'
-	//	nom_conn+=[aadl2::NamedElement|DCID])* ';'
+	//	{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr (',' fault_in+=ID '<-' nom_conn+=Expr)* ';'
 	//	| {OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID (','
 	//	nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)* ';'
 	//	| {DurationStatement} 'duration' ':' tc=TemporalConstraint interv=Interval? ';'
