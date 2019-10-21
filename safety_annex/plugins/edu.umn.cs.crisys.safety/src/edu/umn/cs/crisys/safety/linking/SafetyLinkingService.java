@@ -1,42 +1,52 @@
 package edu.umn.cs.crisys.safety.linking;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.linking.impl.IllegalNodeException;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.osate.aadl2.Aadl2Package;
-import org.osate.aadl2.DataType;
+import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.Element;
+import org.osate.aadl2.Namespace;
+import org.osate.aadl2.PackageRename;
+import org.osate.aadl2.PropertySet;
 import org.osate.aadl2.PropertyValue;
 import org.osate.aadl2.UnitLiteral;
 import org.osate.aadl2.UnitsType;
 import org.osate.aadl2.modelsupport.scoping.Aadl2GlobalScopeUtil;
-import org.osate.aadl2.util.Aadl2Util;
+import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.annexsupport.AnnexUtil;
 import org.osate.xtext.aadl2.properties.linking.PropertiesLinkingService;
 
+import com.rockwellcollins.atc.agree.agree.AgreeContract;
+import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
+import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.agree.AssignStatement;
 import com.rockwellcollins.atc.agree.agree.ConnectionStatement;
+import com.rockwellcollins.atc.agree.agree.ConstStatement;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
 import com.rockwellcollins.atc.agree.agree.EventExpr;
+import com.rockwellcollins.atc.agree.agree.FnDef;
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
+import com.rockwellcollins.atc.agree.agree.LibraryFnDef;
+import com.rockwellcollins.atc.agree.agree.LinearizationDef;
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NamedID;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.NodeEq;
 import com.rockwellcollins.atc.agree.agree.OrderStatement;
+import com.rockwellcollins.atc.agree.agree.RecordDef;
 import com.rockwellcollins.atc.agree.agree.RecordLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
 import com.rockwellcollins.atc.agree.agree.SelectionExpr;
@@ -44,6 +54,7 @@ import com.rockwellcollins.atc.agree.agree.SynchStatement;
 import com.rockwellcollins.atc.agree.agree.TagExpr;
 import com.rockwellcollins.atc.agree.agree.ThisRef;
 
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
@@ -57,13 +68,16 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 	@Override
     public List<EObject> getLinkedObjects(EObject context, EReference reference, INode node)
             throws IllegalNodeException {
-        String name = getCrossRefNodeAsString(node);
-        //TODO This will have to be changed in the develop branch
-        name = name.replaceAll("::", ".");
+		String name = getCrossRefNodeAsString(node);
 
-        if (context instanceof PropertyValue) {
-            return findUnitLiteralAsList((Element) context, name);
-        }
+		if (context instanceof PropertyValue) {
+
+			return findUnitLiteralAsList((Element) context, name);
+		}
+
+		if (context instanceof DoubleDotRef) {
+			System.out.println("ref");
+		}
 
 		if (context instanceof DoubleDotRef || context instanceof ThisRef || context instanceof TagExpr
 				|| context instanceof SelectionExpr || context instanceof NamedElmExpr
@@ -71,102 +85,144 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 				|| context instanceof RecordLitExpr || context instanceof GetPropertyExpr
 				|| context instanceof RecordUpdateExpr || context instanceof EventExpr
 				|| context instanceof OrderStatement || context instanceof ConnectionStatement
-                || context instanceof SpecStatement
+				|| context instanceof SpecStatement || context instanceof FaultStatement
 				|| context instanceof FaultSubcomponent || context instanceof HWFaultSubcomponent) {
 
-            //EObject e = findClassifier(context, reference, name);
-        	EObject e = getIndexedObject(context, reference, name);
-
-			if (context instanceof FaultSubcomponent || context instanceof HWFaultSubcomponent) {
-				System.out.println("Here");
+			EObject e = getIndexedObject(context, reference, name);
+			if (e == null) {
+				e = findClassifier(context, reference, name);
 			}
-            //hack to fix some strange linking behavior by osate
-            if(e instanceof DataType){
-            	e = null;
-            }
-            if (e != null) {
-                return Collections.singletonList(e);
-            }
 
-            // This code will only link to objects in the projects visible from the current project
-			Iterable<IEObjectDescription> allObjectTypes = Aadl2GlobalScopeUtil.getAllEObjectDescriptions(context,
-					reference.getEReferenceType());
-
-			String contextProject = context.eResource().getURI().segment(1);
-			List<String> visibleProjects = getVisibleProjects(contextProject);
-
-			for (IEObjectDescription eod : allObjectTypes) {
-				if (isVisible(eod, visibleProjects)) {
-					EObject res = eod.getEObjectOrProxy();
-					res = EcoreUtil.resolve(res, context.eResource().getResourceSet());
-					if (res.eContainer() instanceof EnumStatement && res instanceof NamedID) {
-						// special code for AGREE enumerated types
-						if (((NamedID) res).getName().equals(name)) {
-							return Collections.singletonList(res);
-						}
-					}
-					if (sameName(eod, name)) {
-						if (!Aadl2Util.isNull(res)) {
-							return Collections.singletonList(res);
-						}
-					}
-				}
+			if (e == null) {
+				e = getElm(context, reference, name);
 			}
+
+			if (e == null) {
+				e = findPropertySetElement(context, reference, name);
+			}
+
+			if (e != null) {
+				return Collections.singletonList(e);
+			}
+
 		}
 
 		return super.getLinkedObjects(context, reference, node);
 	}
 
-	private static boolean sameName(IEObjectDescription eod, String name) {
-        return eod.getName().toString().equalsIgnoreCase(name);
-    }
+	private Element getElm(EObject context, EReference reference, String name) {
+		String[] segments = name.split("::");
 
-    private static boolean isVisible(IEObjectDescription eod, List<String> visibleProjects) {
-        URI uri = eod.getEObjectURI();
-        String project = uri.segment(1);
-        return visibleProjects.contains(project);
-    }
+		if (segments.length >= 2) {
+			String pkgName = String.join("::", Arrays.copyOf(segments, segments.length - 1));
 
-    private static List<String> getVisibleProjects(String contextProjectName) {
-        List<String> result = new ArrayList<>();
-        result.add(contextProjectName);
+			String statementName = segments[segments.length - 1];
 
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        IProject contextProject = root.getProject(URI.decode(contextProjectName));
-        try {
-            IProjectDescription description = contextProject.getDescription();
-            for (IProject referencedProject : description.getReferencedProjects()) {
-                result.add(URI.encodeSegment(referencedProject.getName(), false));
-            }
-        } catch (CoreException ex) {
-            ex.printStackTrace();
-        }
+			Namespace namespace = AadlUtil.getContainingTopLevelNamespace(context);
 
-        return result;
-    }
+			PropertySet propSet = AadlUtil.findImportedPropertySet(pkgName, namespace);
 
-    private static List<EObject> findUnitLiteralAsList(Element context, String name) {
-        EObject e = findUnitLiteral(context, name);
-        if (e == null) {
-            return Collections.<EObject> emptyList();
-        }
-        return Collections.singletonList(e);
-    }
+			if (propSet != null) {
+				Element elm = propSet.findNamedElement(statementName);
+				return elm;
+			}
 
-    final private static EClass UNITS_TYPE = Aadl2Package.eINSTANCE.getUnitsType();
+			AadlPackage aadlPackage = AadlUtil.findImportedPackage(pkgName, namespace);
 
-    private static UnitLiteral findUnitLiteral(Element context, String name) {
-        // TODO: Scope literals by type, but how to do we know the type of an
-        // expression?
+			if (aadlPackage == null) {
+
+				for (PackageRename rename : EcoreUtil2.getAllContentsOfType(namespace.getElementRoot(),
+						PackageRename.class)) {
+					if (rename.getName() != null && pkgName.equals(rename.getName())) {
+						aadlPackage = rename.getRenamedPackage();
+					}
+				}
+
+			}
+
+			if (aadlPackage != null) {
+
+				for (AnnexLibrary annex : AnnexUtil.getAllActualAnnexLibraries(aadlPackage,
+						AgreePackage.eINSTANCE.getAgreeContractLibrary())) {
+
+					AgreeContract contract = (AgreeContract) ((AgreeContractLibrary) annex).getContract();
+					for (com.rockwellcollins.atc.agree.agree.SpecStatement spec : contract.getSpecs()) {
+						if (spec instanceof RecordDef) {
+							if (((RecordDef) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+						} else if (spec instanceof FnDef) {
+							if (((FnDef) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+						} else if (spec instanceof LibraryFnDef) {
+							if (((LibraryFnDef) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+						} else if (spec instanceof NodeDef) {
+							if (((NodeDef) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+						} else if (spec instanceof LinearizationDef) {
+							if (((LinearizationDef) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+						} else if (spec instanceof ConstStatement) {
+							if (((ConstStatement) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+						} else if (spec instanceof EnumStatement) {
+							if (((EnumStatement) spec).getName().equals(statementName)) {
+								return (spec);
+							}
+
+							EList<NamedID> enums = ((EnumStatement) spec).getEnums();
+							for (NamedID nid : enums) {
+								if (nid.getName().contentEquals(statementName)) {
+									return nid;
+								}
+							}
+
+						}
+					}
+
+				}
+			}
+		}
+
+
+
+		return null;
+	}
+
+	private static List<EObject> findUnitLiteralAsList(Element context, String name) {
+		EObject e = findUnitLiteral(context, name);
+		if (e == null) {
+			return Collections.<EObject> emptyList();
+		}
+		return Collections.singletonList(e);
+	}
+
+	final private static EClass UNITS_TYPE = Aadl2Package.eINSTANCE.getUnitsType();
+
+	private static UnitLiteral findUnitLiteral(Element context, String name) {
+		// TODO: Scope literals by type, but how to do we know the type of an
+		// expression?
 		for (IEObjectDescription desc : Aadl2GlobalScopeUtil.getAllEObjectDescriptions(context, UNITS_TYPE)) {
-            UnitsType unitsType = (UnitsType) EcoreUtil.resolve(desc.getEObjectOrProxy(), context);
-            UnitLiteral literal = unitsType.findLiteral(name);
-            if (literal != null) {
-                return literal;
-            }
-        }
+			UnitsType unitsType = (UnitsType) EcoreUtil.resolve(desc.getEObjectOrProxy(), context);
+			UnitLiteral literal = unitsType.findLiteral(name);
+			if (literal != null) {
+				return literal;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

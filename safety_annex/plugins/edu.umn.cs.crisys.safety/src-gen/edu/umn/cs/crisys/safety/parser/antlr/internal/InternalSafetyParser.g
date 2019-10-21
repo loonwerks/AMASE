@@ -501,16 +501,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementCrossReference_3_6_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getSrcComp_pathSelectionExprParserRuleCall_3_6_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_srcComp_path_27_0=ruleSelectionExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"srcComp_path",
+        		lv_srcComp_path_27_0, 
+        		"com.rockwellcollins.atc.agree.Agree.SelectionExpr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -545,16 +547,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementCrossReference_3_7_3_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getSrcComp_pathSelectionExprParserRuleCall_3_7_3_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_srcComp_path_31_0=ruleSelectionExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"srcComp_path",
+        		lv_srcComp_path_31_0, 
+        		"com.rockwellcollins.atc.agree.Agree.SelectionExpr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -599,16 +603,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementCrossReference_3_13_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getDestComp_pathSelectionExprParserRuleCall_3_13_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_destComp_path_37_0=ruleSelectionExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"destComp_path",
+        		lv_destComp_path_37_0, 
+        		"com.rockwellcollins.atc.agree.Agree.SelectionExpr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -643,16 +649,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementCrossReference_3_14_3_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getDestComp_pathSelectionExprParserRuleCall_3_14_3_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_destComp_path_41_0=ruleSelectionExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		add(
+       			$current, 
+       			"destComp_path",
+        		lv_destComp_path_41_0, 
+        		"com.rockwellcollins.atc.agree.Agree.SelectionExpr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -709,16 +717,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getAgreeComp_PathNamedElementCrossReference_4_4_1_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getAgreeComp_PathSelectionExprParserRuleCall_4_4_1_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_agreeComp_Path_49_0=ruleSelectionExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"agreeComp_Path",
+        		lv_agreeComp_Path_49_0, 
+        		"com.rockwellcollins.atc.agree.Agree.SelectionExpr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -753,16 +763,18 @@ ruleSpecStatement returns [EObject current=null]
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getSpecStatementRule());
-	        }
-        }
 		{ 
-	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultComp_PathNamedElementCrossReference_4_8_0()); 
+	        newCompositeNode(grammarAccess.getSpecStatementAccess().getFaultComp_PathSelectionExprParserRuleCall_4_8_0()); 
 	    }
-		ruleQCPREF
-		{ 
+		lv_faultComp_Path_53_0=ruleSelectionExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getSpecStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"faultComp_Path",
+        		lv_faultComp_Path_53_0, 
+        		"com.rockwellcollins.atc.agree.Agree.SelectionExpr");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -919,18 +931,16 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_5_0()); 
-	    }
-		lv_nom_conn_5_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+		{
+			if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		add(
-       			$current, 
-       			"nom_conn",
-        		lv_nom_conn_5_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
+        }
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_5_0()); 
+	    }
+		ruleDCID
+		{ 
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -965,18 +975,16 @@ ruleFaultSubcomponent returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connExprParserRuleCall_0_6_3_0()); 
-	    }
-		lv_nom_conn_9_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+		{
+			if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFaultSubcomponentRule());
 	        }
-       		add(
-       			$current, 
-       			"nom_conn",
-        		lv_nom_conn_9_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
+        }
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_0_6_3_0()); 
+	    }
+		ruleDCID
+		{ 
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1013,7 +1021,7 @@ ruleFaultSubcomponent returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_1_3_0()); 
 	    }
-		ruleQCPREF
+		ruleDCID
 		{ 
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1057,7 +1065,7 @@ ruleFaultSubcomponent returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getNom_connNamedElementCrossReference_1_6_1_0()); 
 	    }
-		ruleQCPREF
+		ruleDCID
 		{ 
 	        afterParserOrEnumRuleCall();
 	    }
@@ -8851,15 +8859,20 @@ LeftParenthesis
     }
 (
 (
-		{
-			if ($current==null) {
-	            $current = createModelElement(grammarAccess.getTermExprRule());
+		{ 
+	        newCompositeNode(grammarAccess.getTermExprAccess().getPortExprParserRuleCall_9_3_0()); 
+	    }
+		lv_port_45_0=ruleExpr		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTermExprRule());
 	        }
-        }
-	otherlv_45=RULE_ID
-	{
-		newLeafNode(otherlv_45, grammarAccess.getTermExprAccess().getIdNamedElementCrossReference_9_3_0()); 
-	}
+       		set(
+       			$current, 
+       			"port",
+        		lv_port_45_0, 
+        		"com.rockwellcollins.atc.agree.Agree.Expr");
+	        afterParserOrEnumRuleCall();
+	    }
 
 )
 )

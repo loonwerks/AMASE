@@ -2,9 +2,9 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import org.eclipse.emf.common.util.EList;
+import com.rockwellcollins.atc.agree.agree.Expr;
 
-import org.osate.aadl2.NamedElement;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,16 +40,16 @@ public interface PropagateStatement extends SpecStatement
   EList<String> getSrcFaultList();
 
   /**
-   * Returns the value of the '<em><b>Src Comp path</b></em>' reference list.
-   * The list contents are of type {@link org.osate.aadl2.NamedElement}.
+   * Returns the value of the '<em><b>Src Comp path</b></em>' containment reference list.
+   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Src Comp path</em>' reference list.
+   * @return the value of the '<em>Src Comp path</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getPropagateStatement_SrcComp_path()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  EList<NamedElement> getSrcComp_path();
+  EList<Expr> getSrcComp_path();
 
   /**
    * Returns the value of the '<em><b>Dest Fault List</b></em>' attribute list.
@@ -64,15 +64,15 @@ public interface PropagateStatement extends SpecStatement
   EList<String> getDestFaultList();
 
   /**
-   * Returns the value of the '<em><b>Dest Comp path</b></em>' reference list.
-   * The list contents are of type {@link org.osate.aadl2.NamedElement}.
+   * Returns the value of the '<em><b>Dest Comp path</b></em>' containment reference list.
+   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Dest Comp path</em>' reference list.
+   * @return the value of the '<em>Dest Comp path</em>' containment reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getPropagateStatement_DestComp_path()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  EList<NamedElement> getDestComp_path();
+  EList<Expr> getDestComp_path();
 
 } // PropagateStatement
