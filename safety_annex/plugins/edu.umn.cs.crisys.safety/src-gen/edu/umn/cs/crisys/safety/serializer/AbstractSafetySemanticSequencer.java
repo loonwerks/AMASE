@@ -670,7 +670,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns InputStatement
 	 *
 	 * Constraint:
-	 *     (fault_in+=ID nom_conn+=Expr (fault_in+=ID nom_conn+=Expr)*)
+	 *     (fault_in+=ID nom_conn+=[NamedElement|DCID] (fault_in+=ID nom_conn+=[NamedElement|DCID])*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, edu.umn.cs.crisys.safety.safety.InputStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -683,7 +683,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns OutputStatement
 	 *
 	 * Constraint:
-	 *     (nom_conn+=[NamedElement|QCPREF] fault_out+=ID (nom_conn+=[NamedElement|QCPREF] fault_out+=ID)*)
+	 *     (nom_conn+=[NamedElement|DCID] fault_out+=ID (nom_conn+=[NamedElement|DCID] fault_out+=ID)*)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, OutputStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1036,7 +1036,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     Element returns ActivationStatement
 	 *
 	 * Constraint:
-	 *     (agreeBoolVarName=ID agreeComp_Path=[NamedElement|QCPREF]? faultName=ID faultComp_Path=[NamedElement|QCPREF])
+	 *     (agreeBoolVarName=ID agreeComp_Path=SelectionExpr? faultName=ID faultComp_Path=SelectionExpr)
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, ActivationStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1096,11 +1096,11 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Constraint:
 	 *     (
 	 *         srcFaultList+=ID 
-	 *         srcComp_path+=[NamedElement|QCPREF] 
-	 *         (srcFaultList+=ID srcComp_path+=[NamedElement|QCPREF])* 
+	 *         srcComp_path+=SelectionExpr 
+	 *         (srcFaultList+=ID srcComp_path+=SelectionExpr)* 
 	 *         destFaultList+=ID 
-	 *         destComp_path+=[NamedElement|QCPREF] 
-	 *         (destFaultList+=ID destComp_path+=[NamedElement|QCPREF])*
+	 *         destComp_path+=SelectionExpr 
+	 *         (destFaultList+=ID destComp_path+=SelectionExpr)*
 	 *     )
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, PropagateStatement semanticObject) {

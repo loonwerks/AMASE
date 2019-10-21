@@ -76,6 +76,8 @@ import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 
+import edu.umn.cs.crisys.safety.safety.SafetyContract;
+
 /**
  * This class contains custom scoping description.
  *
@@ -207,7 +209,25 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 				elems.addAll(getNamedElements(renamedPackage));
 			}
 		}
+		System.out.println("Here in agree.");
+		elems.addAll(getNamedElements(container));
 
+		return Scopes.scopeFor(elems, getScope(ctx.eContainer().eContainer(), ref));
+	}
+
+	IScope scope_NamedElement(SafetyContract ctx, EReference ref) {
+		EObject container = getAadlContainer(ctx);
+		AadlPackage pkg = getContainingPackage(container);
+
+		List<NamedElement> elems = new ArrayList<>();
+
+		for (PackageRename rename : EcoreUtil2.getAllContentsOfType(pkg, PackageRename.class)) {
+			if (rename.isRenameAll()) {
+				AadlPackage renamedPackage = rename.getRenamedPackage();
+				elems.addAll(getNamedElements(renamedPackage));
+			}
+		}
+		System.out.println("Here in safety.");
 		elems.addAll(getNamedElements(container));
 
 		return Scopes.scopeFor(elems, getScope(ctx.eContainer().eContainer(), ref));

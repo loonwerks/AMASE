@@ -2,19 +2,23 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.EDataTypeEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
-import org.osate.aadl2.NamedElement;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -45,14 +49,14 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
   protected EList<String> srcFaultList;
 
   /**
-   * The cached value of the '{@link #getSrcComp_path() <em>Src Comp path</em>}' reference list.
+   * The cached value of the '{@link #getSrcComp_path() <em>Src Comp path</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getSrcComp_path()
    * @generated
    * @ordered
    */
-  protected EList<NamedElement> srcComp_path;
+  protected EList<Expr> srcComp_path;
 
   /**
    * The cached value of the '{@link #getDestFaultList() <em>Dest Fault List</em>}' attribute list.
@@ -65,14 +69,14 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
   protected EList<String> destFaultList;
 
   /**
-   * The cached value of the '{@link #getDestComp_path() <em>Dest Comp path</em>}' reference list.
+   * The cached value of the '{@link #getDestComp_path() <em>Dest Comp path</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getDestComp_path()
    * @generated
    * @ordered
    */
-  protected EList<NamedElement> destComp_path;
+  protected EList<Expr> destComp_path;
 
   /**
    * <!-- begin-user-doc -->
@@ -116,11 +120,11 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
    * @generated
    */
   @Override
-  public EList<NamedElement> getSrcComp_path()
+  public EList<Expr> getSrcComp_path()
   {
     if (srcComp_path == null)
     {
-      srcComp_path = new EObjectResolvingEList<NamedElement>(NamedElement.class, this, SafetyPackage.PROPAGATE_STATEMENT__SRC_COMP_PATH);
+      srcComp_path = new EObjectContainmentEList<Expr>(Expr.class, this, SafetyPackage.PROPAGATE_STATEMENT__SRC_COMP_PATH);
     }
     return srcComp_path;
   }
@@ -146,13 +150,31 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
    * @generated
    */
   @Override
-  public EList<NamedElement> getDestComp_path()
+  public EList<Expr> getDestComp_path()
   {
     if (destComp_path == null)
     {
-      destComp_path = new EObjectResolvingEList<NamedElement>(NamedElement.class, this, SafetyPackage.PROPAGATE_STATEMENT__DEST_COMP_PATH);
+      destComp_path = new EObjectContainmentEList<Expr>(Expr.class, this, SafetyPackage.PROPAGATE_STATEMENT__DEST_COMP_PATH);
     }
     return destComp_path;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.PROPAGATE_STATEMENT__SRC_COMP_PATH:
+        return ((InternalEList<?>)getSrcComp_path()).basicRemove(otherEnd, msgs);
+      case SafetyPackage.PROPAGATE_STATEMENT__DEST_COMP_PATH:
+        return ((InternalEList<?>)getDestComp_path()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -194,7 +216,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
         return;
       case SafetyPackage.PROPAGATE_STATEMENT__SRC_COMP_PATH:
         getSrcComp_path().clear();
-        getSrcComp_path().addAll((Collection<? extends NamedElement>)newValue);
+        getSrcComp_path().addAll((Collection<? extends Expr>)newValue);
         return;
       case SafetyPackage.PROPAGATE_STATEMENT__DEST_FAULT_LIST:
         getDestFaultList().clear();
@@ -202,7 +224,7 @@ public class PropagateStatementImpl extends SpecStatementImpl implements Propaga
         return;
       case SafetyPackage.PROPAGATE_STATEMENT__DEST_COMP_PATH:
         getDestComp_path().clear();
-        getDestComp_path().addAll((Collection<? extends NamedElement>)newValue);
+        getDestComp_path().addAll((Collection<? extends Expr>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

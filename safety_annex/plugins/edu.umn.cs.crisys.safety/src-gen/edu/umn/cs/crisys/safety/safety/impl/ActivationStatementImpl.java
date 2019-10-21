@@ -2,18 +2,18 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
+import com.rockwellcollins.atc.agree.agree.Expr;
+
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -54,14 +54,14 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
   protected String agreeBoolVarName = AGREE_BOOL_VAR_NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getAgreeComp_Path() <em>Agree Comp Path</em>}' reference.
+   * The cached value of the '{@link #getAgreeComp_Path() <em>Agree Comp Path</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getAgreeComp_Path()
    * @generated
    * @ordered
    */
-  protected NamedElement agreeComp_Path;
+  protected Expr agreeComp_Path;
 
   /**
    * The default value of the '{@link #getFaultName() <em>Fault Name</em>}' attribute.
@@ -84,14 +84,14 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
   protected String faultName = FAULT_NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getFaultComp_Path() <em>Fault Comp Path</em>}' reference.
+   * The cached value of the '{@link #getFaultComp_Path() <em>Fault Comp Path</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getFaultComp_Path()
    * @generated
    * @ordered
    */
-  protected NamedElement faultComp_Path;
+  protected Expr faultComp_Path;
 
   /**
    * <!-- begin-user-doc -->
@@ -145,18 +145,8 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
    * @generated
    */
   @Override
-  public NamedElement getAgreeComp_Path()
+  public Expr getAgreeComp_Path()
   {
-    if (agreeComp_Path != null && ((EObject)agreeComp_Path).eIsProxy())
-    {
-      InternalEObject oldAgreeComp_Path = (InternalEObject)agreeComp_Path;
-      agreeComp_Path = (NamedElement)eResolveProxy(oldAgreeComp_Path);
-      if (agreeComp_Path != oldAgreeComp_Path)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH, oldAgreeComp_Path, agreeComp_Path));
-      }
-    }
     return agreeComp_Path;
   }
 
@@ -165,9 +155,16 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
    * <!-- end-user-doc -->
    * @generated
    */
-  public NamedElement basicGetAgreeComp_Path()
+  public NotificationChain basicSetAgreeComp_Path(Expr newAgreeComp_Path, NotificationChain msgs)
   {
-    return agreeComp_Path;
+    Expr oldAgreeComp_Path = agreeComp_Path;
+    agreeComp_Path = newAgreeComp_Path;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH, oldAgreeComp_Path, newAgreeComp_Path);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -176,12 +173,20 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
    * @generated
    */
   @Override
-  public void setAgreeComp_Path(NamedElement newAgreeComp_Path)
+  public void setAgreeComp_Path(Expr newAgreeComp_Path)
   {
-    NamedElement oldAgreeComp_Path = agreeComp_Path;
-    agreeComp_Path = newAgreeComp_Path;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH, oldAgreeComp_Path, agreeComp_Path));
+    if (newAgreeComp_Path != agreeComp_Path)
+    {
+      NotificationChain msgs = null;
+      if (agreeComp_Path != null)
+        msgs = ((InternalEObject)agreeComp_Path).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH, null, msgs);
+      if (newAgreeComp_Path != null)
+        msgs = ((InternalEObject)newAgreeComp_Path).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH, null, msgs);
+      msgs = basicSetAgreeComp_Path(newAgreeComp_Path, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH, newAgreeComp_Path, newAgreeComp_Path));
   }
 
   /**
@@ -215,18 +220,8 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
    * @generated
    */
   @Override
-  public NamedElement getFaultComp_Path()
+  public Expr getFaultComp_Path()
   {
-    if (faultComp_Path != null && ((EObject)faultComp_Path).eIsProxy())
-    {
-      InternalEObject oldFaultComp_Path = (InternalEObject)faultComp_Path;
-      faultComp_Path = (NamedElement)eResolveProxy(oldFaultComp_Path);
-      if (faultComp_Path != oldFaultComp_Path)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH, oldFaultComp_Path, faultComp_Path));
-      }
-    }
     return faultComp_Path;
   }
 
@@ -235,9 +230,16 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
    * <!-- end-user-doc -->
    * @generated
    */
-  public NamedElement basicGetFaultComp_Path()
+  public NotificationChain basicSetFaultComp_Path(Expr newFaultComp_Path, NotificationChain msgs)
   {
-    return faultComp_Path;
+    Expr oldFaultComp_Path = faultComp_Path;
+    faultComp_Path = newFaultComp_Path;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH, oldFaultComp_Path, newFaultComp_Path);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -246,12 +248,38 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
    * @generated
    */
   @Override
-  public void setFaultComp_Path(NamedElement newFaultComp_Path)
+  public void setFaultComp_Path(Expr newFaultComp_Path)
   {
-    NamedElement oldFaultComp_Path = faultComp_Path;
-    faultComp_Path = newFaultComp_Path;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH, oldFaultComp_Path, faultComp_Path));
+    if (newFaultComp_Path != faultComp_Path)
+    {
+      NotificationChain msgs = null;
+      if (faultComp_Path != null)
+        msgs = ((InternalEObject)faultComp_Path).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH, null, msgs);
+      if (newFaultComp_Path != null)
+        msgs = ((InternalEObject)newFaultComp_Path).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH, null, msgs);
+      msgs = basicSetFaultComp_Path(newFaultComp_Path, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH, newFaultComp_Path, newFaultComp_Path));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH:
+        return basicSetAgreeComp_Path(null, msgs);
+      case SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH:
+        return basicSetFaultComp_Path(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -267,13 +295,11 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
       case SafetyPackage.ACTIVATION_STATEMENT__AGREE_BOOL_VAR_NAME:
         return getAgreeBoolVarName();
       case SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH:
-        if (resolve) return getAgreeComp_Path();
-        return basicGetAgreeComp_Path();
+        return getAgreeComp_Path();
       case SafetyPackage.ACTIVATION_STATEMENT__FAULT_NAME:
         return getFaultName();
       case SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH:
-        if (resolve) return getFaultComp_Path();
-        return basicGetFaultComp_Path();
+        return getFaultComp_Path();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -292,13 +318,13 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
         setAgreeBoolVarName((String)newValue);
         return;
       case SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH:
-        setAgreeComp_Path((NamedElement)newValue);
+        setAgreeComp_Path((Expr)newValue);
         return;
       case SafetyPackage.ACTIVATION_STATEMENT__FAULT_NAME:
         setFaultName((String)newValue);
         return;
       case SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH:
-        setFaultComp_Path((NamedElement)newValue);
+        setFaultComp_Path((Expr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -318,13 +344,13 @@ public class ActivationStatementImpl extends SpecStatementImpl implements Activa
         setAgreeBoolVarName(AGREE_BOOL_VAR_NAME_EDEFAULT);
         return;
       case SafetyPackage.ACTIVATION_STATEMENT__AGREE_COMP_PATH:
-        setAgreeComp_Path((NamedElement)null);
+        setAgreeComp_Path((Expr)null);
         return;
       case SafetyPackage.ACTIVATION_STATEMENT__FAULT_NAME:
         setFaultName(FAULT_NAME_EDEFAULT);
         return;
       case SafetyPackage.ACTIVATION_STATEMENT__FAULT_COMP_PATH:
-        setFaultComp_Path((NamedElement)null);
+        setFaultComp_Path((Expr)null);
         return;
     }
     super.eUnset(featureID);
