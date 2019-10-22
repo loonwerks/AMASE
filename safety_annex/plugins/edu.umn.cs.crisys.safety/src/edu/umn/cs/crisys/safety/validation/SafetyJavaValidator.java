@@ -3,17 +3,26 @@
  */
 package edu.umn.cs.crisys.safety.validation;
 
+import java.util.ArrayList;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.validation.CheckType;
 //import org.osate.aadl2.AadlInteger;
 import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.NamedElement;
 
+import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
@@ -32,119 +41,111 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
-//
-//	@Check
-//	/*
-//	 * Puts out a warning if the fault description is an empty string.
-//	 * The description is optional, but shouldn't be ""
-//	 *
-//	 * Checks that the nested dot id used as the fault name is a valid
-//	 * node definition.
-//	 */
-//	public void checkFaultSpecStmt(FaultStatement specStmt){
-//
-//		NestedDotID nodeName = specStmt.getFaultDefName();
-//
-//		// Check on fault description
-//		if(specStmt.getStr().isEmpty()) {
-//			warning(specStmt, "Fault description is optional, but should "
-//					+ "not be an empty string.");
-//		}
-//
-//		// Check that the nested dot id (fault node name) is a valid node definition
-//		NamedElement finalNodeName = getFinalNestId(nodeName);
-//		if(!(finalNodeName instanceof NodeDefExpr)){
-//			error(nodeName, "The fault name must be a valid node definition.");
-//		}
-//
-//		// The check done on node arg list and input list is done in checkInput
-//	}
-//
-//
-//	/* Input Statements
-//	 * (1): Get container - check to see if it is a fault statement.
-//	 * 		Then gather the deepest sub of the fault definition name
-//	 * 		and get it's base. For instance: fault.fail_to
-//	 * 		The base of that deepest sub should be "fail_to."
-//	 * 		Make sure this is a valid NodeDefExpr and then collect the arguments.
-//	 * 		These arguments must match all input fault values (by name).
-//	 * (2): Make sure the types of arguments match the types of expressions
-//	 * 		passed in as fault inputs (connections or otherwise).
-//	 * (3) Type check Expr (right side) with arguments to node (left side)
-//	 */
-//	@Check(CheckType.FAST)
-//	public void checkInput(InputStatement inputs){
-//
-//		// Get container of inputs (FaultSpecStmt)
-//		EObject container = inputs.eContainer();
-//		NamedElement defNameSub;
-//		NestedDotID defName;
-//
-//		// Gather expression list from rhs of '<-'
-//		EList<Expr> exprList = inputs.getNom_conn();
-//
-//		// (1) : if the container is a fault statement:
-//		// Grab the nested dot id (fault node name: faults.fail_to) and
-//		// get the base of the deepest sub (fail_to)
-//		if (container instanceof FaultStatement) {
-//			FaultStatement faultStatement = (FaultStatement) container;
-//			defName = faultStatement.getFaultDefName();
-//
-//			while(defName.getSub() != null){
-//				defName = defName.getSub();
-//			}
-//
-//			// This should be fail_to (NodeDefExpr)
-//			defNameSub = defName.getBase();
-//
-//			// Make sure we have a NodeDefExpr
-//			if(defNameSub instanceof NodeDefExpr){
-//
-//				// Cast to NodeDefExpr
-//				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
-//				// Gather the arguments from node def
-//				EList<Arg> args = nodeDef.getArgs();
-//				EList<String> inputList = inputs.getFault_in();
-//
-//				// Make an easy string list to access that contains the argument names
-//				// from the node defintion
-//				ArrayList<String> argNames = new ArrayList<String>();
-//
-//				for(Arg arg : args){
-//					argNames.add(arg.getFullName());
-//				}
-//
-//				// (2) : If the sizes are accurate, make sure names match
-//				if(args.size()-1 == (inputList.size())){
-//
-//					// Go through input list and make sure each name is in the arg list
-//					for(String inputName : inputList){
-//
-//			    		// String inputName = input.getFullName();
-//
-//			    		//Check to see if the input name is in the arg list
-//			    		if(!argNames.contains(inputName)){
-//			    			error(inputs, "Input names must match fault node definition names. "
-//			    					+"The input name "+inputName+" is not an input in the node definition. "
-//			    					+"All possible input names are: "+argNames.toString());
-//			    		}
-//			    	}
-//				}else{
-//			    	// Wrong number of arguments/inputs
-//					// To print list of inputs, I need to remove "trigger" from the list
-//					ArrayList<String> noTrigger = new ArrayList<String>();
-//					for(String item : argNames){
-//						if(!(item.equals("trigger"))){
-//							noTrigger.add(item);
-//						}
-//					}
-//					error(inputs, "With this fault definition, you must have "+(argNames.size()-1)+" inputs."
-//							+ " These are called: "+noTrigger.toString());
-//				}
-//
-//
-//				// (3) : Type check arguments to node with Expr on rhs
-//				// Go through expression list
+
+	@Check
+	/*
+	 * Puts out a warning if the fault description is an empty string.
+	 * The description is optional, but shouldn't be ""
+	 *
+	 * Checks that the nested dot id used as the fault name is a valid
+	 * node definition.
+	 */
+	public void checkFaultSpecStmt(FaultStatement specStmt) {
+
+		DoubleDotRef nodeName = specStmt.getFaultDefName();
+
+		// Check on fault description
+		if (specStmt.getStr().isEmpty()) {
+			warning(specStmt, "Fault description is optional, but should " + "not be an empty string.");
+		}
+
+		// Check that the nested dot id (fault node name) is a valid node definition
+		NamedElement finalNodeName = nodeName.getElm();
+		if (!(finalNodeName instanceof NodeDef)) {
+			error(nodeName, "The fault name must be a valid node definition.");
+		}
+	}
+
+	/*
+	 * Input Statements
+	 * (1): Get container - check to see if it is a fault statement.
+	 * Then gather the deepest sub of the fault definition name
+	 * and get it's base. For instance: fault.fail_to
+	 * The base of that deepest sub should be "fail_to."
+	 * Make sure this is a valid NodeDefExpr and then collect the arguments.
+	 * These arguments must match all input fault values (by name).
+	 * (2): Make sure the types of arguments match the types of expressions
+	 * passed in as fault inputs (connections or otherwise).
+	 * (3) Type check Expr (right side) with arguments to node (left side)
+	 */
+	@Check(CheckType.FAST)
+	public void checkInput(InputStatement inputs) {
+
+		// Get container of inputs (FaultSpecStmt)
+		EObject container = inputs.eContainer();
+		NamedElement defNameSub;
+
+		// Gather expression list from rhs of '<-'
+		EList<Expr> exprList = inputs.getNom_conn();
+
+		// (1) : if the container is a fault statement:
+		// Grab the nested dot id (fault node name: faults.fail_to) and
+		// get the base of the deepest sub (fail_to)
+		if (container instanceof FaultStatement) {
+			FaultStatement faultStatement = (FaultStatement) container;
+			DoubleDotRef defName = faultStatement.getFaultDefName();
+
+			// This should be fail_to (NodeDefExpr)
+			defNameSub = defName.getElm();
+
+			// Make sure we have a NodeDefExpr
+			if (defNameSub instanceof NodeDef) {
+
+				// Cast to NodeDefExpr
+				NodeDef nodeDef = (NodeDef) defNameSub;
+				// Gather the arguments from node def
+				EList<Arg> args = nodeDef.getArgs();
+				EList<String> inputList = inputs.getFault_in();
+
+				// Make an easy string list to access that contains the argument names
+				// from the node defintion
+				ArrayList<String> argNames = new ArrayList<String>();
+
+				for (Arg arg : args) {
+					argNames.add(arg.getFullName());
+				}
+
+				// (2) : If the sizes are accurate, make sure names match
+				if (args.size() - 1 == (inputList.size())) {
+
+					// Go through input list and make sure each name is in the arg list
+					for (String inputName : inputList) {
+
+						// String inputName = input.getFullName();
+
+						// Check to see if the input name is in the arg list
+						if (!argNames.contains(inputName)) {
+							error(inputs,
+									"Input names must match fault node definition names. " + "The input name "
+											+ inputName + " is not an input in the node definition. "
+											+ "All possible input names are: " + argNames.toString());
+						}
+					}
+				} else {
+					// Wrong number of arguments/inputs
+					// To print list of inputs, I need to remove "trigger" from the list
+					ArrayList<String> noTrigger = new ArrayList<String>();
+					for (String item : argNames) {
+						if (!(item.equals("trigger"))) {
+							noTrigger.add(item);
+						}
+					}
+					error(inputs, "With this fault definition, you must have " + (argNames.size() - 1) + " inputs."
+							+ " These are called: " + noTrigger.toString());
+				}
+
+				// (3) : Type check arguments to node with Expr on rhs
+				// Go through expression list
 //				for(int i = 0; i < exprList.size(); i++){
 //
 //					// Save expr and arg
@@ -161,17 +162,17 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 //						+" but right side is of type "+typeExpr.toString());
 //					}
 //				}
-//
-//			}else{
-//				// Not a node def expr
-//				error(defName, "Fault definition name must be an instance of NodeDefExpr."
-//						+" It is: "+defNameSub.getFullName()+".");
-//			}
-//		}else{
-//			// Not in fault statement
-//			error(inputs, "Fault inputs must be in a fault statement, not a "+container.toString()+".");
-//		}
-//	}
+
+			} else {
+				// Not a node def expr
+				error(defName, "Fault definition name must be an instance of NodeDefExpr." + " It is: "
+						+ defNameSub.getFullName() + ".");
+			}
+		} else {
+			// Not in fault statement
+			error(inputs, "Fault inputs must be in a fault statement, not a " + container.toString() + ".");
+		}
+	}
 //
 //	/* Output Statements
 //	 * (1): Get container of the output in order to check the fault node for

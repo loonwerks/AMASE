@@ -57,8 +57,6 @@ import com.rockwellcollins.atc.agree.agree.ThisRef;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.HWFaultSubcomponent;
-import edu.umn.cs.crisys.safety.safety.InputStatement;
-import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 
 public class SafetyLinkingService extends PropertiesLinkingService{
@@ -88,7 +86,6 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 				|| context instanceof RecordUpdateExpr || context instanceof EventExpr
 				|| context instanceof OrderStatement || context instanceof ConnectionStatement
 				|| context instanceof SpecStatement || context instanceof FaultStatement
-				|| context instanceof OutputStatement || context instanceof InputStatement
 				|| context instanceof FaultSubcomponent || context instanceof HWFaultSubcomponent) {
 
 			EObject e = getIndexedObject(context, reference, name);

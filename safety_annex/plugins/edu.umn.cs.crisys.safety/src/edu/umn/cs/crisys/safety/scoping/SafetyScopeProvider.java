@@ -76,7 +76,11 @@ import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 
+import edu.umn.cs.crisys.safety.safety.EqValue;
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
+import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 
 /**
  * This class contains custom scoping description.
@@ -87,9 +91,9 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 
 public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scoping.PropertiesScopeProvider {
 
-	private Set<NamedElement> getNamedElementsFromSpecs(EList<SpecStatement> specs) {
+	private Set<NamedElement> getNamedElementsFromSpecs(EList<SpecStatement> agreeSpecs) {
 		Set<NamedElement> nelms = new HashSet<>();
-		for (SpecStatement spec : specs) {
+		for (SpecStatement spec : agreeSpecs) {
 			if (spec instanceof NamedElement) {
 				nelms.add((NamedElement) spec);
 			}
@@ -101,6 +105,29 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 				nelms.addAll(((InputStatement) spec).getLhs());
 			} else if (spec instanceof EnumStatement) {
 				nelms.addAll(((EnumStatement) spec).getEnums());
+			}
+		}
+		return nelms;
+	}
+
+	private Set<NamedElement> getNamedElementsFromSafetySpecs(
+			EList<edu.umn.cs.crisys.safety.safety.SpecStatement> safetySpecs) {
+		Set<NamedElement> nelms = new HashSet<>();
+		EList<FaultSubcomponent> faultDefs = null;
+		for (SpecStatement spec : safetySpecs) {
+			if (spec instanceof FaultStatement) {
+				FaultStatement fs = (FaultStatement) spec;
+				faultDefs = fs.getFaultDefinitions();
+				for (FaultSubcomponent fsub : faultDefs) {
+					if (fsub instanceof SafetyEqStatement) {
+						SafetyEqStatement seq = (SafetyEqStatement) fsub;
+						if (seq instanceof EqValue) {
+							EqValue eqVal = (EqValue) seq;
+							nelms.addAll(eqVal.getLhs());
+						}
+					}
+				}
+				// nelms.add((NamedElement) spec);
 			}
 		}
 		return nelms;
@@ -229,6 +256,7 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 		}
 		System.out.println("Here in safety.");
 		elems.addAll(getNamedElements(container));
+		elems.addAll(getNamedElementsFromSafetySpecs(ctx.getSpecs()));
 
 		return Scopes.scopeFor(elems, getScope(ctx.eContainer().eContainer(), ref));
 	}
