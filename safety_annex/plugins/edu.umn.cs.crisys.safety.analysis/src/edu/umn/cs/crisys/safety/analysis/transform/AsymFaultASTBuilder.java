@@ -332,7 +332,7 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 		// returns as its output. First find this in order to create that
 		// variable later.
 		for (Fault fault : faults) {
-			NamedType nominalOutputType = super.getOutputTypeForFaultNode(fault);
+			Type nominalOutputType = super.getOutputTypeForFaultNode(fault);
 			newNode.createLocal(super.getFaultNodeOutputId(fault), nominalOutputType);
 		}
 

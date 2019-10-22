@@ -70,6 +70,7 @@ import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
 import jkind.lustre.RecordAccessExpr;
+import jkind.lustre.Type;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
@@ -448,17 +449,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param fault Fault defining this fault node.
 	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	protected NamedType getOutputTypeForFaultNode(Fault fault) {
+	protected Type getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
 		// variable later.
-		NamedType nominalOutputType = null;
+		Type nominalOutputType = null;
 		if (fault.faultNode.outputs.size() > 1) {
 			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
 		} else {
 			for (VarDecl output : fault.faultNode.outputs) {
-				nominalOutputType = (NamedType) output.type;
+				nominalOutputType = output.type;
 			}
 		}
 		return nominalOutputType;
