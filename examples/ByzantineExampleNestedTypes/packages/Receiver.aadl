@@ -1,6 +1,7 @@
 package Receiver
 public
 with Datatypes;
+with Fault_Library;
 	system Receiver
 		features
 			sender_input : in data port Datatypes::commBus.impl;
@@ -14,14 +15,14 @@ with Datatypes;
 			
 		**}	;
 		
-		annex safety {**
-
-			fault Receiver_Fault_2 "Datatype output is zero": Fault_Library.nested_fault {
-				inputs: val_in <- output, alt_val <- 0.0;     
-				outputs: output <- val_out;    
-				duration: permanent;
-			}	
-		**};
+--		annex safety {**
+--
+--			fault Receiver_Fault_2 "Datatype output is zero": Fault_Library::nested_fault {
+--				inputs: val_in <- output, alt_val <- 0.0;     
+--				outputs: output <- val_out;    
+--				duration: permanent;
+--			}	
+--		**};
 		
 	end Receiver;
 end Receiver;

@@ -1,6 +1,7 @@
 package Sender
 public
 with Base_Types;
+with Common_Faults;
 	system Sender
 		features
 			in1 : in data port Base_Types::Boolean;
@@ -15,15 +16,15 @@ with Base_Types;
 			
 		**};
 		
---		annex safety {**
---
---			fault Sender_Fault "Or output is asymmetric": Common_Faults.invert_signal {
---				inputs: val_in <- sender_out;     
---				outputs: sender_out <- val_out;    
---				duration: permanent;
---				propagate_type: asymmetric;
---			}	
---		**};
+		annex safety {**
+
+			fault Sender_Fault "Or output is asymmetric": Common_Faults::invert_signal {
+				inputs: val_in <- sender_out;     
+				outputs: sender_out <- val_out;    
+				duration: permanent;
+				propagate_type: asymmetric;
+			}	
+		**};
 		
 	end Sender;
 end Sender;

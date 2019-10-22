@@ -822,8 +822,10 @@ public class FaultASTBuilder {
 		if (!fault.safetyEqVars.isEmpty()) {
 			for (AgreeVar eqVar : fault.safetyEqVars) {
 				AgreeVar newIn = new AgreeVar(eqVar.id, eqVar.type, fault.faultStatement);
-				localsForCommNode.add(newIn);
-				node.addInput(newIn);
+				if (!localsForCommNode.contains(newIn)) {
+					localsForCommNode.add(newIn);
+					node.createInput(eqVar.id, eqVar.type);
+				}
 			}
 		}
 		// Lastly, add the trigger
@@ -832,22 +834,22 @@ public class FaultASTBuilder {
 	}
 
 	/**
-	 * Find named type of output on fault node
+	 * Find type of output on fault node
 	 *
 	 * @param fault Fault defining this fault node.
 	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	protected NamedType getOutputTypeForFaultNode(Fault fault) {
+	protected Type getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
 		// variable later.
-		NamedType nominalOutputType = null;
+		Type nominalOutputType = null;
 		if (fault.faultNode.outputs.size() > 1) {
 			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
 		} else {
 			for (VarDecl output : fault.faultNode.outputs) {
-				nominalOutputType = (NamedType) output.type;
+				nominalOutputType = output.type;
 			}
 		}
 		return nominalOutputType;
@@ -881,7 +883,7 @@ public class FaultASTBuilder {
 		// The type of fault output id is the same as what the fault node
 		// returns as its output. First find this in order to create that
 		// variable later.
-		NamedType nominalOutputType = getOutputTypeForFaultNode(fault);
+		Type nominalOutputType = getOutputTypeForFaultNode(fault);
 		node.createLocal(getFaultNodeOutputId(fault), nominalOutputType);
 
 		return node;
