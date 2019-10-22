@@ -279,7 +279,7 @@ public class FaultASTBuilder {
 				if ((nominalConns.isEmpty()) || (nominalConns.size() > 1)) {
 					new SafetyException("Cannot define asymmetric fault on zero OR more than one output.");
 				} else {
-//					senderOutput = (DataPortImpl) nominalConns.get(0).getBase();
+					senderOutput = (DataPortImpl) nominalConns.get(0);
 				}
 				break;
 			}
@@ -684,7 +684,7 @@ public class FaultASTBuilder {
 		for (AgreeVar agreeVar : nodeOutputs) {
 			String temp = agreeVar.id;
 //			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
-			if (temp.contentEquals(nomFaultConn.get(0).toString())) {
+			if (temp.contentEquals(nomFaultConn.get(0).getName())) {
 				// This agreeVar is the sender var we want to save for the
 				// later mapping to the receiver var.
 				outputOfInterest = agreeVar;
