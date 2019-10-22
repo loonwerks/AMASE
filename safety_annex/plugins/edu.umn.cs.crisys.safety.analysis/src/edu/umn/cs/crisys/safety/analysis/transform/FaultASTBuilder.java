@@ -683,7 +683,6 @@ public class FaultASTBuilder {
 		// Get the agree node output that this fault is connected to
 		for (AgreeVar agreeVar : nodeOutputs) {
 			String temp = agreeVar.id;
-//			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
 			if (temp.contentEquals(nomFaultConn.get(0).getName())) {
 				// This agreeVar is the sender var we want to save for the
 				// later mapping to the receiver var.
@@ -817,6 +816,14 @@ public class FaultASTBuilder {
 						nodeArgs.add(fault.faultInputMap.get(key));
 					}
 				}
+			}
+		}
+		// Check for any SafetyEqStmts and add these to input
+		if (!fault.safetyEqVars.isEmpty()) {
+			for (AgreeVar eqVar : fault.safetyEqVars) {
+				AgreeVar newIn = new AgreeVar(eqVar.id, eqVar.type, fault.faultStatement);
+				localsForCommNode.add(newIn);
+				node.addInput(newIn);
 			}
 		}
 		// Lastly, add the trigger

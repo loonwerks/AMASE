@@ -19,6 +19,7 @@ with Common_Faults;
 		annex safety {**
 
 			fault Sender_Fault "Or output is asymmetric": Common_Faults::invert_boolean {
+				eq testing : int = 0;
 				inputs: val_in <- sender_out;     
 				outputs: sender_out <- val_out;    
 				duration: permanent;
