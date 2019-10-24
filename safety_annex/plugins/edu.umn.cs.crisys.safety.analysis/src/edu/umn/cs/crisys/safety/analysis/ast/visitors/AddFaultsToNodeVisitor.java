@@ -1209,25 +1209,37 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param faultComp_Path Component instance path
 	 * @return Fault with name matching string.
 	 */
-	public BaseFault findFaultInCompInst(String faultName, com.rockwellcollins.atc.agree.agree.Expr faultComp_Path) {
+	public BaseFault findFaultInCompInst(String faultName, NamedElement faultComp_Path) {
 		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(faultMap.keySet());
 
 		for (ComponentInstance compInst : compInsts) {
-//			if (compInst.getName().equals(compPath.getBase().getName())) {
-			if (compInst.getName().equals(faultComp_Path.toString())) {
+//	if (compInst.getName().equals(compPath.getBase().getName())) {
+			if (compInst.getName().equals(faultComp_Path.getName())) {
 				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
 				for (Fault fault : faults) {
 					if (fault.name.equals(faultName)) {
 						return fault;
 					}
 				}
-
 			}
 		}
+
+//		for (ComponentInstance compInst : compInsts) {
+////			if (compInst.getName().equals(compPath.getBase().getName())) {
+//			if (compInst.getName().equals(faultComp_Path.toString())) {
+//				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
+//				for (Fault fault : faults) {
+//					if (fault.name.equals(faultName)) {
+//						return fault;
+//					}
+//				}
+//
+//			}
+//		}
 		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
 		for (ComponentInstance compInst : compInsts) {
 //			if (compInst.getName().equals(compPath.getBase().getName())) {
-			if (compInst.getName().equals(faultComp_Path.toString())) {
+			if (compInst.getName().equals(faultComp_Path.getName())) {
 				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
 				for (HWFault hwfault : hwfaults) {
 					if (hwfault.name.equals(faultName)) {
@@ -1253,17 +1265,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				ActivationStatement as = (ActivationStatement) s;
 				String agreeBoolVarName = as.getAgreeBoolVarName();
 				// the following can be null
-				com.rockwellcollins.atc.agree.agree.Expr agreeComp_Path = as.getAgreeComp_Path();
+				NamedElement agreeComp_Path = as.getAgreeComp_Path();
 				String agreeBoolVarPrefix = "";
 				if (agreeComp_Path != null) {
 //					agreeBoolVarPrefix = agreeComp_Path.getBase().getName() + "__";
-					agreeBoolVarPrefix = agreeComp_Path.toString() + "__";
+					agreeBoolVarPrefix = agreeComp_Path.getName() + "__";
 				}
 				// compose agreeBoolVarName in main node input
 				agreeBoolVarName = agreeBoolVarPrefix + agreeBoolVarName;
 				String faultName = as.getFaultName();
 				// the following can be null
-				com.rockwellcollins.atc.agree.agree.Expr faultComp_Path = as.getFaultComp_Path();
+				NamedElement faultComp_Path = as.getFaultComp_Path();
 				BaseFault fault = null;
 				if (faultComp_Path != null) {
 					fault = findFaultInCompInst(faultName, faultComp_Path);
@@ -1271,7 +1283,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if (fault != null) {
 					FaultActivationAssignment faultActAssign = new FaultActivationAssignment(agreeBoolVarName, fault,
 //							faultComp_Path.getBase().getName());
-							faultComp_Path.toString());
+							faultComp_Path.getName());
 					faultActivations.add(faultActAssign);
 				} else {
 					throw new SafetyException("Unable to identify fault in fault activation statement.");
@@ -1292,23 +1304,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (s instanceof PropagateStatement) {
 				PropagateStatement ps = (PropagateStatement) s;
 				Iterator<String> srcFaultIt = ps.getSrcFaultList().iterator();
-				Iterator<com.rockwellcollins.atc.agree.agree.Expr> srcCompPathIt = ps.getSrcComp_path().iterator();
+				Iterator<NamedElement> srcCompPathIt = ps.getSrcComp_path().iterator();
 
 				// create a SafetyPropagation
 				BaseFault srcFault = null;
 				// for each src fault name and path, locate the fault
 				while (srcFaultIt.hasNext() && srcCompPathIt.hasNext()) {
-					com.rockwellcollins.atc.agree.agree.Expr srcCompPath = srcCompPathIt.next();
+					NamedElement srcCompPath = srcCompPathIt.next();
 					String srcFaultName = srcFaultIt.next();
 					srcFault = findFaultInCompInst(srcFaultName, srcCompPath);
 					if (srcFault != null) {
 						// for each destination fault name and path, locate the fault
 						BaseFault destFault = null;
 						Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
-						Iterator<com.rockwellcollins.atc.agree.agree.Expr> destCompPathIt = ps.getDestComp_path()
+						Iterator<NamedElement> destCompPathIt = ps.getDestComp_path()
 								.iterator();
 						while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
-							com.rockwellcollins.atc.agree.agree.Expr destCompPath = destCompPathIt.next();
+							NamedElement destCompPath = destCompPathIt.next();
 							String destFaultName = destFaultIt.next();
 							destFault = findFaultInCompInst(destFaultName, destCompPath);
 							SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);

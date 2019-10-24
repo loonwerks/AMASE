@@ -34725,8 +34725,12 @@ rule__SpecStatement__SrcComp_pathAssignment_3_6
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getSrcComp_pathSelectionExprParserRuleCall_3_6_0()); }
-	ruleSelectionExpr{ after(grammarAccess.getSpecStatementAccess().getSrcComp_pathSelectionExprParserRuleCall_3_6_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementCrossReference_3_6_0()); }
+(
+{ before(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementDCIDParserRuleCall_3_6_0_1()); }
+	ruleDCID{ after(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementDCIDParserRuleCall_3_6_0_1()); }
+)
+{ after(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementCrossReference_3_6_0()); }
 )
 
 ;
@@ -34755,8 +34759,12 @@ rule__SpecStatement__SrcComp_pathAssignment_3_7_3
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getSrcComp_pathSelectionExprParserRuleCall_3_7_3_0()); }
-	ruleSelectionExpr{ after(grammarAccess.getSpecStatementAccess().getSrcComp_pathSelectionExprParserRuleCall_3_7_3_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementCrossReference_3_7_3_0()); }
+(
+{ before(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementDCIDParserRuleCall_3_7_3_0_1()); }
+	ruleDCID{ after(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementDCIDParserRuleCall_3_7_3_0_1()); }
+)
+{ after(grammarAccess.getSpecStatementAccess().getSrcComp_pathNamedElementCrossReference_3_7_3_0()); }
 )
 
 ;
@@ -34785,8 +34793,12 @@ rule__SpecStatement__DestComp_pathAssignment_3_13
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getDestComp_pathSelectionExprParserRuleCall_3_13_0()); }
-	ruleSelectionExpr{ after(grammarAccess.getSpecStatementAccess().getDestComp_pathSelectionExprParserRuleCall_3_13_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementCrossReference_3_13_0()); }
+(
+{ before(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementDCIDParserRuleCall_3_13_0_1()); }
+	ruleDCID{ after(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementDCIDParserRuleCall_3_13_0_1()); }
+)
+{ after(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementCrossReference_3_13_0()); }
 )
 
 ;
@@ -34815,8 +34827,12 @@ rule__SpecStatement__DestComp_pathAssignment_3_14_3
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getDestComp_pathSelectionExprParserRuleCall_3_14_3_0()); }
-	ruleSelectionExpr{ after(grammarAccess.getSpecStatementAccess().getDestComp_pathSelectionExprParserRuleCall_3_14_3_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementCrossReference_3_14_3_0()); }
+(
+{ before(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementDCIDParserRuleCall_3_14_3_0_1()); }
+	ruleDCID{ after(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementDCIDParserRuleCall_3_14_3_0_1()); }
+)
+{ after(grammarAccess.getSpecStatementAccess().getDestComp_pathNamedElementCrossReference_3_14_3_0()); }
 )
 
 ;
@@ -34845,8 +34861,12 @@ rule__SpecStatement__AgreeComp_PathAssignment_4_4_1
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getAgreeComp_PathSelectionExprParserRuleCall_4_4_1_0()); }
-	ruleSelectionExpr{ after(grammarAccess.getSpecStatementAccess().getAgreeComp_PathSelectionExprParserRuleCall_4_4_1_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getAgreeComp_PathNamedElementCrossReference_4_4_1_0()); }
+(
+{ before(grammarAccess.getSpecStatementAccess().getAgreeComp_PathNamedElementDCIDParserRuleCall_4_4_1_0_1()); }
+	ruleDCID{ after(grammarAccess.getSpecStatementAccess().getAgreeComp_PathNamedElementDCIDParserRuleCall_4_4_1_0_1()); }
+)
+{ after(grammarAccess.getSpecStatementAccess().getAgreeComp_PathNamedElementCrossReference_4_4_1_0()); }
 )
 
 ;
@@ -34875,8 +34895,12 @@ rule__SpecStatement__FaultComp_PathAssignment_4_8
     }
 :
 (
-{ before(grammarAccess.getSpecStatementAccess().getFaultComp_PathSelectionExprParserRuleCall_4_8_0()); }
-	ruleSelectionExpr{ after(grammarAccess.getSpecStatementAccess().getFaultComp_PathSelectionExprParserRuleCall_4_8_0()); }
+{ before(grammarAccess.getSpecStatementAccess().getFaultComp_PathNamedElementCrossReference_4_8_0()); }
+(
+{ before(grammarAccess.getSpecStatementAccess().getFaultComp_PathNamedElementDCIDParserRuleCall_4_8_0_1()); }
+	ruleDCID{ after(grammarAccess.getSpecStatementAccess().getFaultComp_PathNamedElementDCIDParserRuleCall_4_8_0_1()); }
+)
+{ after(grammarAccess.getSpecStatementAccess().getFaultComp_PathNamedElementCrossReference_4_8_0()); }
 )
 
 ;
