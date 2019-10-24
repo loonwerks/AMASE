@@ -3,15 +3,18 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.MHSUtils;
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNonLeafNode;
+import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTOrNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl;
@@ -21,6 +24,7 @@ import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
 import jkind.api.results.PropertyResult;
 import jkind.api.results.Renaming;
+import jkind.results.ValidProperty;
 
 public class IvcToSoteriaFTGenerator {
 	SoteriaFaultTree soteriaFT = new SoteriaFaultTree();
@@ -81,81 +85,81 @@ public class IvcToSoteriaFTGenerator {
 
 	private void extractPropertyResult(String compName, AgreeRenaming renaming, PropertyResult propertyResult) {
 		// get original property name
-//		String origPropertyName = propertyResult.getName();
-//		String lustreName = renaming.getLustreNameFromAgreeVar(origPropertyName);
-//		String propertyName = MHSUtils.updateElemName(compName + "_" + lustreName);
-//		// if it is a guarantee
-//		if (lustreName.startsWith("__GUARANTEE")) {
-//			// if it's a valid guarantee
-//			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
-//				// TODO: get user specified property name if exists
-//				String propertyDescription = propertyResult.getName();
-//				ValidProperty property = (ValidProperty) propertyResult.getProperty();
-//				// check if there is timeout in MIVC analysis
-//
-//				if (property.getMivcTimedOut()) {
-//					new SafetyException("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
-//				}
-//
-//				// turn MIVC sets to MCS sets
-//				// no limit on mhs set size
-//				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0, false);
-//				// create node when mcsSets is not empty
-//				if (!mcsSets.isEmpty()) {
-//					SoteriaFTNonLeafNode propertyNode;
-//					boolean isNewNode = true;
-//					boolean createOrNode = (mcsSets.size() > 1);
-//					if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
-//						if (createOrNode) {
-//							propertyNode = new SoteriaFTOrNode(propertyName, propertyDescription);
-//						} else {
-//							propertyNode = new SoteriaFTAndNode(propertyName, propertyDescription);
-//						}
-//					} else {
-//						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
-//						// if the no child node has been populated for this node yet
-//						if (!(propertyNode instanceof SoteriaFTOrNode) && !(propertyNode instanceof SoteriaFTAndNode)) {
-//							if (createOrNode) {
-//								propertyNode = new SoteriaFTOrNode(propertyName, propertyNode.propertyDescription);
-//							} else {
-//								propertyNode = new SoteriaFTAndNode(propertyName, propertyNode.propertyDescription);
-//							}
-//						} else {
-//							isNewNode = false;
-//						}
-//					}
-//
-//					if (isNewNode) {
-//						int index = 0;
-//						for (List<String> mcsSet : mcsSets) {
-//							String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
-//							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName, "");
-//							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
-//							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
-//							// mcsSetNode.addParentNode(propertyNode);
-//							soteriaFT.addIntermediateNode(mcsSetNodeName, mcsSetNode);
-//							// update intermediate node
-//							soteriaFT.addIntermediateNode(propertyNode.nodeName, propertyNode);
-//							index++;
-//						}
-//					}
-//					if (!isLowerLevel) {
-//						soteriaFT.addRootNode(propertyName, propertyNode);
-//						propertyNode.setRoot();
-//					}
-//					soteriaFT.addIntermediateNode(propertyName, propertyNode);
-//				}
-//			}
-//
-//		} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
-//			// TODO: throw exception in the GUI
-//			throw new SafetyException("One of the properties was canceled in the process of model checking."
-//					+ " Rerun this analysis to proceed.");
-//		} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
-//			// TODO: throw exception in the GUI
-//			throw new SafetyException(
-//					"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
-//		}
+		String origPropertyName = propertyResult.getName();
+		String lustreName = renaming.getLustreNameFromAgreeVar(origPropertyName);
+		String propertyName = MHSUtils.updateElemName(compName + "_" + lustreName);
+		// if it is a guarantee
+		if (lustreName.startsWith("__GUARANTEE")) {
+			// if it's a valid guarantee
+			if (propertyResult.getStatus().equals(jkind.api.results.Status.VALID)) {
+				// TODO: get user specified property name if exists
+				String propertyDescription = propertyResult.getName();
+				ValidProperty property = (ValidProperty) propertyResult.getProperty();
+				// check if there is timeout in MIVC analysis
+
+				if (property.getMivcTimedOut()) {
+					new SafetyException("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
+				}
+
+				// turn MIVC sets to MCS sets
+				// no limit on mhs set size
+				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0, false);
+				// create node when mcsSets is not empty
+				if (!mcsSets.isEmpty()) {
+					SoteriaFTNonLeafNode propertyNode;
+					boolean isNewNode = true;
+					boolean createOrNode = (mcsSets.size() > 1);
+					if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
+						if (createOrNode) {
+							propertyNode = new SoteriaFTOrNode(propertyName, propertyDescription);
+						} else {
+							propertyNode = new SoteriaFTAndNode(propertyName, propertyDescription);
+						}
+					} else {
+						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
+						// if the no child node has been populated for this node yet
+						if (!(propertyNode instanceof SoteriaFTOrNode) && !(propertyNode instanceof SoteriaFTAndNode)) {
+							if (createOrNode) {
+								propertyNode = new SoteriaFTOrNode(propertyName, propertyNode.propertyDescription);
+							} else {
+								propertyNode = new SoteriaFTAndNode(propertyName, propertyNode.propertyDescription);
+							}
+						} else {
+							isNewNode = false;
+						}
+					}
+
+					if (isNewNode) {
+						int index = 0;
+						for (List<String> mcsSet : mcsSets) {
+							String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
+							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName, "");
+							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
+							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
+							// mcsSetNode.addParentNode(propertyNode);
+							soteriaFT.addIntermediateNode(mcsSetNodeName, mcsSetNode);
+							// update intermediate node
+							soteriaFT.addIntermediateNode(propertyNode.nodeName, propertyNode);
+							index++;
+						}
+					}
+					if (!isLowerLevel) {
+						soteriaFT.addRootNode(propertyName, propertyNode);
+						propertyNode.setRoot();
+					}
+					soteriaFT.addIntermediateNode(propertyName, propertyNode);
+				}
+			}
+
+		} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
+			// TODO: throw exception in the GUI
+			throw new SafetyException("One of the properties was canceled in the process of model checking."
+					+ " Rerun this analysis to proceed.");
+		} else if (propertyResult.getStatus().equals(jkind.api.results.Status.INVALID)) {
+			// TODO: throw exception in the GUI
+			throw new SafetyException(
+					"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
+		}
 
 	}
 
