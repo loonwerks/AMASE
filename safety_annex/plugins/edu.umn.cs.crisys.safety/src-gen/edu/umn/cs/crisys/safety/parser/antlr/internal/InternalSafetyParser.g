@@ -8851,20 +8851,15 @@ LeftParenthesis
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getTermExprAccess().getPortExprParserRuleCall_9_3_0()); 
-	    }
-		lv_port_45_0=ruleExpr		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getTermExprRule());
+		{
+			if ($current==null) {
+	            $current = createModelElement(grammarAccess.getTermExprRule());
 	        }
-       		set(
-       			$current, 
-       			"port",
-        		lv_port_45_0, 
-        		"com.rockwellcollins.atc.agree.Agree.Expr");
-	        afterParserOrEnumRuleCall();
-	    }
+        }
+	otherlv_45=RULE_ID
+	{
+		newLeafNode(otherlv_45, grammarAccess.getTermExprAccess().getIdNamedElementCrossReference_9_3_0()); 
+	}
 
 )
 )

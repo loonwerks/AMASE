@@ -29129,9 +29129,9 @@ rule__TermExpr__Group_9__3__Impl
     }
 :
 (
-{ before(grammarAccess.getTermExprAccess().getPortAssignment_9_3()); }
-(rule__TermExpr__PortAssignment_9_3)
-{ after(grammarAccess.getTermExprAccess().getPortAssignment_9_3()); }
+{ before(grammarAccess.getTermExprAccess().getIdAssignment_9_3()); }
+(rule__TermExpr__IdAssignment_9_3)
+{ after(grammarAccess.getTermExprAccess().getIdAssignment_9_3()); }
 )
 
 ;
@@ -38425,14 +38425,18 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__TermExpr__PortAssignment_9_3
+rule__TermExpr__IdAssignment_9_3
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getTermExprAccess().getPortExprParserRuleCall_9_3_0()); }
-	ruleExpr{ after(grammarAccess.getTermExprAccess().getPortExprParserRuleCall_9_3_0()); }
+{ before(grammarAccess.getTermExprAccess().getIdNamedElementCrossReference_9_3_0()); }
+(
+{ before(grammarAccess.getTermExprAccess().getIdNamedElementIDTerminalRuleCall_9_3_0_1()); }
+	RULE_ID{ after(grammarAccess.getTermExprAccess().getIdNamedElementIDTerminalRuleCall_9_3_0_1()); }
+)
+{ after(grammarAccess.getTermExprAccess().getIdNamedElementCrossReference_9_3_0()); }
 )
 
 ;

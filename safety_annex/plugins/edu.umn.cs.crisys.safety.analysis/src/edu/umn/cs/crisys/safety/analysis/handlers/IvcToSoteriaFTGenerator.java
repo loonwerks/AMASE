@@ -92,6 +92,7 @@ public class IvcToSoteriaFTGenerator {
 //				String propertyDescription = propertyResult.getName();
 //				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 //				// check if there is timeout in MIVC analysis
+//
 //				if (property.getMivcTimedOut()) {
 //					new SafetyException("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
 //				}

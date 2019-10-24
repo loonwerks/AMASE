@@ -2433,7 +2433,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	| ArrayLiteralExpr
 	//	| {IntLitExpr} val=INTEGER_LIT
 	//	| {PreExpr} 'pre' '(' expr=Expr ')'
-	//	| {EventExpr} 'event' '(' port=Expr ')'
+	//	| {EventExpr} 'event' '(' id=[aadl2::NamedElement] ')'
 	//	| {LatchedExpr} 'latched' '(' expr=Expr ')'
 	//	| {TimeOfExpr} 'timeof' '(' id=[aadl2::NamedElement] ')'
 	//	| {TimeRiseExpr} 'timerise' '(' id=[aadl2::NamedElement] ')'
