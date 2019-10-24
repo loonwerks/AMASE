@@ -1000,7 +1000,7 @@ public interface SafetyPackage extends EPackage
   int PROPAGATE_STATEMENT__SRC_FAULT_LIST = SPEC_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Src Comp path</b></em>' containment reference list.
+   * The feature id for the '<em><b>Src Comp path</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1018,7 +1018,7 @@ public interface SafetyPackage extends EPackage
   int PROPAGATE_STATEMENT__DEST_FAULT_LIST = SPEC_STATEMENT_FEATURE_COUNT + 2;
 
   /**
-   * The feature id for the '<em><b>Dest Comp path</b></em>' containment reference list.
+   * The feature id for the '<em><b>Dest Comp path</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1073,7 +1073,7 @@ public interface SafetyPackage extends EPackage
   int ACTIVATION_STATEMENT__AGREE_BOOL_VAR_NAME = SPEC_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Agree Comp Path</b></em>' containment reference.
+   * The feature id for the '<em><b>Agree Comp Path</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1091,7 +1091,7 @@ public interface SafetyPackage extends EPackage
   int ACTIVATION_STATEMENT__FAULT_NAME = SPEC_STATEMENT_FEATURE_COUNT + 2;
 
   /**
-   * The feature id for the '<em><b>Fault Comp Path</b></em>' containment reference.
+   * The feature id for the '<em><b>Fault Comp Path</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2323,10 +2323,10 @@ public interface SafetyPackage extends EPackage
   EAttribute getPropagateStatement_SrcFaultList();
 
   /**
-   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcComp_path <em>Src Comp path</em>}'.
+   * Returns the meta object for the reference list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcComp_path <em>Src Comp path</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Src Comp path</em>'.
+   * @return the meta object for the reference list '<em>Src Comp path</em>'.
    * @see edu.umn.cs.crisys.safety.safety.PropagateStatement#getSrcComp_path()
    * @see #getPropagateStatement()
    * @generated
@@ -2345,10 +2345,10 @@ public interface SafetyPackage extends EPackage
   EAttribute getPropagateStatement_DestFaultList();
 
   /**
-   * Returns the meta object for the containment reference list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestComp_path <em>Dest Comp path</em>}'.
+   * Returns the meta object for the reference list '{@link edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestComp_path <em>Dest Comp path</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Dest Comp path</em>'.
+   * @return the meta object for the reference list '<em>Dest Comp path</em>'.
    * @see edu.umn.cs.crisys.safety.safety.PropagateStatement#getDestComp_path()
    * @see #getPropagateStatement()
    * @generated
@@ -2377,10 +2377,10 @@ public interface SafetyPackage extends EPackage
   EAttribute getActivationStatement_AgreeBoolVarName();
 
   /**
-   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path <em>Agree Comp Path</em>}'.
+   * Returns the meta object for the reference '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path <em>Agree Comp Path</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Agree Comp Path</em>'.
+   * @return the meta object for the reference '<em>Agree Comp Path</em>'.
    * @see edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path()
    * @see #getActivationStatement()
    * @generated
@@ -2399,10 +2399,10 @@ public interface SafetyPackage extends EPackage
   EAttribute getActivationStatement_FaultName();
 
   /**
-   * Returns the meta object for the containment reference '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path <em>Fault Comp Path</em>}'.
+   * Returns the meta object for the reference '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path <em>Fault Comp Path</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Fault Comp Path</em>'.
+   * @return the meta object for the reference '<em>Fault Comp Path</em>'.
    * @see edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path()
    * @see #getActivationStatement()
    * @generated
@@ -3207,7 +3207,7 @@ public interface SafetyPackage extends EPackage
     EAttribute PROPAGATE_STATEMENT__SRC_FAULT_LIST = eINSTANCE.getPropagateStatement_SrcFaultList();
 
     /**
-     * The meta object literal for the '<em><b>Src Comp path</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Src Comp path</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -3223,7 +3223,7 @@ public interface SafetyPackage extends EPackage
     EAttribute PROPAGATE_STATEMENT__DEST_FAULT_LIST = eINSTANCE.getPropagateStatement_DestFaultList();
 
     /**
-     * The meta object literal for the '<em><b>Dest Comp path</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Dest Comp path</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -3249,7 +3249,7 @@ public interface SafetyPackage extends EPackage
     EAttribute ACTIVATION_STATEMENT__AGREE_BOOL_VAR_NAME = eINSTANCE.getActivationStatement_AgreeBoolVarName();
 
     /**
-     * The meta object literal for the '<em><b>Agree Comp Path</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Agree Comp Path</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -3265,7 +3265,7 @@ public interface SafetyPackage extends EPackage
     EAttribute ACTIVATION_STATEMENT__FAULT_NAME = eINSTANCE.getActivationStatement_FaultName();
 
     /**
-     * The meta object literal for the '<em><b>Fault Comp Path</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Fault Comp Path</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

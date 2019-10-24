@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.Expr;
+import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -48,26 +48,26 @@ public interface ActivationStatement extends SpecStatement
   void setAgreeBoolVarName(String value);
 
   /**
-   * Returns the value of the '<em><b>Agree Comp Path</b></em>' containment reference.
+   * Returns the value of the '<em><b>Agree Comp Path</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Agree Comp Path</em>' containment reference.
-   * @see #setAgreeComp_Path(Expr)
+   * @return the value of the '<em>Agree Comp Path</em>' reference.
+   * @see #setAgreeComp_Path(NamedElement)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getActivationStatement_AgreeComp_Path()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  Expr getAgreeComp_Path();
+  NamedElement getAgreeComp_Path();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path <em>Agree Comp Path</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path <em>Agree Comp Path</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Agree Comp Path</em>' containment reference.
+   * @param value the new value of the '<em>Agree Comp Path</em>' reference.
    * @see #getAgreeComp_Path()
    * @generated
    */
-  void setAgreeComp_Path(Expr value);
+  void setAgreeComp_Path(NamedElement value);
 
   /**
    * Returns the value of the '<em><b>Fault Name</b></em>' attribute.
@@ -92,25 +92,25 @@ public interface ActivationStatement extends SpecStatement
   void setFaultName(String value);
 
   /**
-   * Returns the value of the '<em><b>Fault Comp Path</b></em>' containment reference.
+   * Returns the value of the '<em><b>Fault Comp Path</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fault Comp Path</em>' containment reference.
-   * @see #setFaultComp_Path(Expr)
+   * @return the value of the '<em>Fault Comp Path</em>' reference.
+   * @see #setFaultComp_Path(NamedElement)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getActivationStatement_FaultComp_Path()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  Expr getFaultComp_Path();
+  NamedElement getFaultComp_Path();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path <em>Fault Comp Path</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path <em>Fault Comp Path</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Fault Comp Path</em>' containment reference.
+   * @param value the new value of the '<em>Fault Comp Path</em>' reference.
    * @see #getFaultComp_Path()
    * @generated
    */
-  void setFaultComp_Path(Expr value);
+  void setFaultComp_Path(NamedElement value);
 
 } // ActivationStatement

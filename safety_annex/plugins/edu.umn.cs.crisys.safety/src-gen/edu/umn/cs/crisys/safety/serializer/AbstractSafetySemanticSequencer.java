@@ -1036,7 +1036,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     Element returns ActivationStatement
 	 *
 	 * Constraint:
-	 *     (agreeBoolVarName=ID agreeComp_Path=SelectionExpr? faultName=ID faultComp_Path=SelectionExpr)
+	 *     (agreeBoolVarName=ID agreeComp_Path=[NamedElement|DCID]? faultName=ID faultComp_Path=[NamedElement|DCID])
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, ActivationStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1096,11 +1096,11 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 * Constraint:
 	 *     (
 	 *         srcFaultList+=ID 
-	 *         srcComp_path+=SelectionExpr 
-	 *         (srcFaultList+=ID srcComp_path+=SelectionExpr)* 
+	 *         srcComp_path+=[NamedElement|DCID] 
+	 *         (srcFaultList+=ID srcComp_path+=[NamedElement|DCID])* 
 	 *         destFaultList+=ID 
-	 *         destComp_path+=SelectionExpr 
-	 *         (destFaultList+=ID destComp_path+=SelectionExpr)*
+	 *         destComp_path+=[NamedElement|DCID] 
+	 *         (destFaultList+=ID destComp_path+=[NamedElement|DCID])*
 	 *     )
 	 */
 	protected void sequence_SpecStatement(ISerializationContext context, PropagateStatement semanticObject) {

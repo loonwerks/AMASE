@@ -35,12 +35,12 @@ SpecStatement:
 	|	{AnalysisStatement} 'analyze' ':' behavior = AnalysisBehavior 
 	|   {HWFaultStatement} 'HW_fault' name = ID (str=STRING)? ':' 
 			'{' faultDefinitions+=(HWFaultSubcomponent)* '}'
-	| 	{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+= ID '@' srcComp_path+=SelectionExpr (',' 
-			srcFaultList+=ID '@' srcComp_path+=SelectionExpr)* '}' 
-			'to' '{' destFaultList+= ID '@' destComp_path+=SelectionExpr 
-			(',' destFaultList+=ID '@' destComp_path+=SelectionExpr)* '}' ';'
-	|   {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=SelectionExpr)?
-					 '=' faultName= ID '@' faultComp_Path=SelectionExpr ';'
+	| 	{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+= ID '@' srcComp_path+=[aadl2::NamedElement|DCID] (',' 
+			srcFaultList+=ID '@' srcComp_path+=[aadl2::NamedElement|DCID])* '}' 
+			'to' '{' destFaultList+= ID '@' destComp_path+=[aadl2::NamedElement|DCID] 
+			(',' destFaultList+=ID '@' destComp_path+=[aadl2::NamedElement|DCID])* '}' ';'
+	|   {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=[aadl2::NamedElement|DCID])?
+					 '=' faultName= ID '@' faultComp_Path=[aadl2::NamedElement|DCID] ';'
 ;
 	
 AnalysisBehavior : 

@@ -70,7 +70,7 @@ public
 
 		node fail_to_int(val_in: int, alt_val: int, trigger: bool) returns (val_out: int);
 		let
-			val_out = if trigger then (alt_val) else val_in;
+			val_out = if trigger then (alt_val) else val_in; 
 		tel;		
 
 **};
