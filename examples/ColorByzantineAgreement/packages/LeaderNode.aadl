@@ -1,6 +1,7 @@
 package LeaderNode
 public
 with Base_Types;
+with Common_Faults;
 	system leader
 		features 
 			color : out data port Base_Types::Boolean;
@@ -18,7 +19,7 @@ with Base_Types;
 		**};
 		annex safety {**
 			
-			fault Node_Fault "Leader node output is asymmetric": Common_Faults.invert_signal {
+			fault Node_Fault "Leader node output is asymmetric": Common_Faults::invert_signal {
 				inputs: val_in <- color;     
 				outputs: color <- val_out;
 				probability: 1.0E-5;    
