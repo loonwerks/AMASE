@@ -1213,7 +1213,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(faultMap.keySet());
 
 		for (ComponentInstance compInst : compInsts) {
-//	if (compInst.getName().equals(compPath.getBase().getName())) {
 			if (compInst.getName().equals(faultComp_Path.getName())) {
 				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
 				for (Fault fault : faults) {
@@ -1224,21 +1223,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 
-//		for (ComponentInstance compInst : compInsts) {
-////			if (compInst.getName().equals(compPath.getBase().getName())) {
-//			if (compInst.getName().equals(faultComp_Path.toString())) {
-//				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
-//				for (Fault fault : faults) {
-//					if (fault.name.equals(faultName)) {
-//						return fault;
-//					}
-//				}
-//
-//			}
-//		}
 		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
 		for (ComponentInstance compInst : compInsts) {
-//			if (compInst.getName().equals(compPath.getBase().getName())) {
 			if (compInst.getName().equals(faultComp_Path.getName())) {
 				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
 				for (HWFault hwfault : hwfaults) {
@@ -1268,7 +1254,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				NamedElement agreeComp_Path = as.getAgreeComp_Path();
 				String agreeBoolVarPrefix = "";
 				if (agreeComp_Path != null) {
-//					agreeBoolVarPrefix = agreeComp_Path.getBase().getName() + "__";
 					agreeBoolVarPrefix = agreeComp_Path.getName() + "__";
 				}
 				// compose agreeBoolVarName in main node input
@@ -1282,7 +1267,6 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				}
 				if (fault != null) {
 					FaultActivationAssignment faultActAssign = new FaultActivationAssignment(agreeBoolVarName, fault,
-//							faultComp_Path.getBase().getName());
 							faultComp_Path.getName());
 					faultActivations.add(faultActAssign);
 				} else {
