@@ -92,7 +92,7 @@ with Nodes;
 			fault_activation: n2_failed = Node_Fault@node2;
 			fault_activation: n3_failed = Node_Fault@node3;
 			fault_activation: n4_failed = Node_Fault@node4;
-			analyze: max 1 fault
+			analyze: max 2 fault
 			--analyze: probability 1.0E-10
 		**};
 	end TopLevel.impl;
