@@ -1,6 +1,7 @@
 package Sensor
 public
 with Base_Types;
+with faults;
 
 	system SensorPedalPosition
 		features
@@ -20,7 +21,7 @@ with Base_Types;
 		**};
 			
 		annex safety {**
-			fault SensorPedalPosition_ErroneousData "(SensorPedalPosition) Inverted boolean fault." : faults.inverted_fail {
+			fault SensorPedalPosition_ErroneousData "(SensorPedalPosition) Inverted boolean fault." : faults::inverted_fail {
 				inputs: val_in <- elec_pedal_pos; 
 				outputs: elec_pedal_pos <- val_out;    
         		probability: 1.0E-2 ;
@@ -60,7 +61,7 @@ with Base_Types;
 				-- Erroneous data I will model as inverted boolean... not sure about no data...
 				
 				
-			fault Sensor_ErroneousData "(Sensor) Inverted boolean (Erroneous data) fault." : faults.inverted_fail {
+			fault Sensor_ErroneousData "(Sensor) Inverted boolean (Erroneous data) fault." : faults::inverted_fail {
 				inputs: val_in <- wheel_rolling; 
 				outputs: wheel_rolling <- val_out;    
         		probability: 1.0E-2 ;
