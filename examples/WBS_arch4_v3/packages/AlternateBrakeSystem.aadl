@@ -2,6 +2,7 @@ package AlternateBrakeSystem
 public
 with MeterValve;
 with Base_Types;
+with faults;
 
 	system AlternateBrakeSystem
 		features
@@ -142,28 +143,28 @@ with Base_Types;
 			
 		annex safety {**
 
-			fault AntiskidShutoffValve_FailedOpen "(AntiskidShutoff) Stuck open fault.": faults.fail_to {
+			fault AntiskidShutoffValve_FailedOpen "(AntiskidShutoff) Stuck open fault.": faults::fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in;     
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			
-			fault AntiskidShutoffValve_FailedClosed "(AntiskidShutoff) Stuck closed fault." : faults.fail_to {
+			fault AntiskidShutoffValve_FailedClosed "(AntiskidShutoff) Stuck closed fault." : faults::fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			
-			fault AntiskidShutoffValve_FailedLastPosition "(AntiskidShutoff) Stuck at last position fault." : faults.fail_to {
+			fault AntiskidShutoffValve_FailedLastPosition "(AntiskidShutoff) Stuck at last position fault." : faults::fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- pre(hyd_pressure_out); 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 3.25E-6 ;
 				duration: permanent;
 			}
 			
-			fault AntiskidShutoffValve_FailedRandomPosition "(AntiskidShutoff) Stuck at nondeterministic fault." : faults.fail_to {
+			fault AntiskidShutoffValve_FailedRandomPosition "(AntiskidShutoff) Stuck at nondeterministic fault." : faults::fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- rangeval; 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 3.25E-6 ;
