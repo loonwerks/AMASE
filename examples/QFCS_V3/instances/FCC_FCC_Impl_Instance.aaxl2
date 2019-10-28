@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ASCII"?>
+<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="FCC_Impl_Instance" category="system">
+  <featureInstance name="elevators">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.0"/>
+  </featureInstance>
+  <featureInstance name="ailerons">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
+  </featureInstance>
+  <featureInstance name="rudders">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.2"/>
+  </featureInstance>
+  <featureInstance name="flaps">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
+  </featureInstance>
+  <featureInstance name="aoa">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.4"/>
+  </featureInstance>
+  <featureInstance name="air_data">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.5"/>
+  </featureInstance>
+  <featureInstance name="egi">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.6"/>
+  </featureInstance>
+  <featureInstance name="spoilers">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.7"/>
+  </featureInstance>
+  <featureInstance name="stabilizers">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.8"/>
+  </featureInstance>
+  <featureInstance name="elevators_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.9"/>
+  </featureInstance>
+  <featureInstance name="ailerons_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.10"/>
+  </featureInstance>
+  <featureInstance name="rudders_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.11"/>
+  </featureInstance>
+  <featureInstance name="flaps_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.12"/>
+  </featureInstance>
+  <featureInstance name="aoa_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.13"/>
+  </featureInstance>
+  <featureInstance name="air_data_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.14"/>
+  </featureInstance>
+  <featureInstance name="egi_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.15"/>
+  </featureInstance>
+  <featureInstance name="spoilers_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.16"/>
+  </featureInstance>
+  <featureInstance name="stabilizers_faults" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.17"/>
+  </featureInstance>
+  <featureInstance name="elevators_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.18"/>
+  </featureInstance>
+  <featureInstance name="ailerons_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.19"/>
+  </featureInstance>
+  <featureInstance name="rudders_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.20"/>
+  </featureInstance>
+  <featureInstance name="flaps_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.21"/>
+  </featureInstance>
+  <featureInstance name="aoa_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.22"/>
+  </featureInstance>
+  <featureInstance name="air_data_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.23"/>
+  </featureInstance>
+  <featureInstance name="egi_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.24"/>
+  </featureInstance>
+  <featureInstance name="spoilers_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.25"/>
+  </featureInstance>
+  <featureInstance name="stabilizers_select" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.26"/>
+  </featureInstance>
+  <featureInstance name="acts_ret">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.27"/>
+  </featureInstance>
+  <featureInstance name="num_valid_acts">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.28"/>
+  </featureInstance>
+  <featureInstance name="acts_fail" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.29"/>
+  </featureInstance>
+  <featureInstance name="acts_out" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.30"/>
+  </featureInstance>
+  <featureInstance name="sovs1" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.31"/>
+  </featureInstance>
+  <featureInstance name="sovs2" direction="out">
+    <feature xsi:type="aadl2:DataPort" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.32"/>
+  </featureInstance>
+  <componentInstance name="ISAS_comp" category="system">
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:AbstractType" href="../packages/FCC.aadl#|::0.5.9.1.53.0::18::/6"/>
+  </componentInstance>
+  <componentInstance name="OSAS_comp" category="system">
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:AbstractType" href="../packages/FCC.aadl#|::0.5.9.1.53.1::18::/6"/>
+  </componentInstance>
+  <componentInstance name="CLAW_comp" category="system">
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../packages/FCC.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
+    <index>0</index>
+    <classifier xsi:type="aadl2:AbstractType" href="../packages/FCC.aadl#|::0.5.9.1.53.2::18::/6"/>
+  </componentInstance>
+  <systemOperationMode name="No Modes"/>
+  <componentImplementation xsi:type="aadl2:SystemImplementation" href="../packages/FCC.aadl#FCC.FCC.Impl"/>
+</instance:SystemInstance>

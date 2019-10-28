@@ -3,7 +3,7 @@ public
 with Base_Types;
 with util;
 	system AdditionGate
-		features
+		features 
 			--Inputs
 			in_1 : in data port Base_Types::Integer;
 			in_2 : in data port Base_Types::Integer;
@@ -18,7 +18,7 @@ with util;
 				-- addition_behavior_norm_guarantee := 
 				--		(TRUE ->  G (out = 10 <-> in_1 + in_2 >= 10) & (out = in_1 + in_2 <-> in_1 + in_2 <= 10)));
 				guarantee "(AdditionGate) Output is min {in_1+in_2, 10}" : 
-					true -> (out_pressure = util.min(in_1+in_2, 10));
+					true -> (out_pressure = util::min(in_1+in_2, 10));
 				
 			**};
 	end AdditionGate;
