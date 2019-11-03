@@ -75,9 +75,9 @@ public class SafetyLinkingService extends PropertiesLinkingService{
 			return findUnitLiteralAsList((Element) context, name);
 		}
 
-		if (context instanceof FaultSubcomponent) {
-			System.out.println("fs");
-		}
+		//if (context instanceof FaultSubcomponent) {
+		//	System.out.println("fs");
+		//}
 
 		if (context instanceof DoubleDotRef || context instanceof ThisRef || context instanceof TagExpr
 				|| context instanceof SelectionExpr || context instanceof NamedElmExpr
