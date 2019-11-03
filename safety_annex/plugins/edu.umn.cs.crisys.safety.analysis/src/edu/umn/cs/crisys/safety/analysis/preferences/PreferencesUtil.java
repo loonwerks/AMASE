@@ -29,8 +29,8 @@ public class PreferencesUtil {
 //			api.setApiDebug();
 //		}
 		if (api instanceof JKindApi) {
-//			((JKindApi) api).setAllIvcs();
-//			((JKindApi) api).setAllIvcsJkindTimeout(30);
+			((JKindApi) api).setAllIvcs();
+			((JKindApi) api).setAllIvcsJkindTimeout(30);
 		}
 
 		return api;
