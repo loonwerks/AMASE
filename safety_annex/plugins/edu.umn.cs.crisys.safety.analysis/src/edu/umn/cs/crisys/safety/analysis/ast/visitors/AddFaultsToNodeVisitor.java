@@ -214,7 +214,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
 		if (AddFaultsToAgree.getTransformFlag() == 2) {
-//			nb.setFaultTreeFlag(true);
+			nb.setFaultTreeFlag(true);
 		}
 		// Go through fault list first.
 		// If symmetric, add fault info to agree node.
@@ -296,7 +296,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			init();
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
 		} else if (AddFaultsToAgree.getTransformFlag() == 2) {
-//			nb.setFaultTreeFlag(true);
+			nb.setFaultTreeFlag(true);
 
 			// only collect fault hypothesis from the upper most level
 			// note that upperMostLevel is a static variable that gets cleared
@@ -1720,7 +1720,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// And add as a local equation
 			nb.addLocalEquation(ae);
 			// Add independent fault as ivc element
-//			nb.addIvcElement(this.createFaultIndependentActiveId(base));
+			nb.addIvcElement(this.createFaultIndependentActiveId(base));
 		}
 
 	}
