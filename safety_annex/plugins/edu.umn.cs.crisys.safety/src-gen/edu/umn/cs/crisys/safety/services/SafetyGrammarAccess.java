@@ -1189,7 +1189,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//'eq'
 		public Keyword getEqKeyword_0_1() { return cEqKeyword_0_1; }
 
-		//lhs+=Arg (',' lhs+=Arg)*
+		//(lhs+=Arg (',' lhs+=Arg)*)
 		public Group getGroup_0_2() { return cGroup_0_2; }
 
 		//lhs+=Arg
@@ -1396,7 +1396,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({ClosedInterval} '[' low=Expr ',' high=Expr ']')
 		public Group getGroup_0() { return cGroup_0; }
 
-		//{ClosedInterval} '[' low=Expr ',' high=Expr ']'
+		//({ClosedInterval} '[' low=Expr ',' high=Expr ']')
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
 		//{ClosedInterval}
@@ -1426,7 +1426,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({OpenLeftInterval} '(' low=Expr ',' high=Expr ']')
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{OpenLeftInterval} '(' low=Expr ',' high=Expr ']'
+		//({OpenLeftInterval} '(' low=Expr ',' high=Expr ']')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//{OpenLeftInterval}
@@ -1456,7 +1456,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({OpenRightInterval} '[' low=Expr ',' high=Expr ')')
 		public Group getGroup_2() { return cGroup_2; }
 
-		//{OpenRightInterval} '[' low=Expr ',' high=Expr ')'
+		//({OpenRightInterval} '[' low=Expr ',' high=Expr ')')
 		public Group getGroup_2_0() { return cGroup_2_0; }
 
 		//{OpenRightInterval}
@@ -1486,7 +1486,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({OpenInterval} '(' low=Expr ',' high=Expr ')')
 		public Group getGroup_3() { return cGroup_3; }
 
-		//{OpenInterval} '(' low=Expr ',' high=Expr ')'
+		//({OpenInterval} '(' low=Expr ',' high=Expr ')')
 		public Group getGroup_3_0() { return cGroup_3_0; }
 
 		//{OpenInterval}
@@ -2433,7 +2433,7 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	//	| ArrayLiteralExpr
 	//	| {IntLitExpr} val=INTEGER_LIT
 	//	| {PreExpr} 'pre' '(' expr=Expr ')'
-	//	| {EventExpr} 'event' '(' id=[aadl2::NamedElement] ')'
+	//	| {EventExpr} 'event' '(' port=Expr ')'
 	//	| {LatchedExpr} 'latched' '(' expr=Expr ')'
 	//	| {TimeOfExpr} 'timeof' '(' id=[aadl2::NamedElement] ')'
 	//	| {TimeRiseExpr} 'timerise' '(' id=[aadl2::NamedElement] ')'

@@ -254,7 +254,7 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 				elems.addAll(getNamedElements(renamedPackage));
 			}
 		}
-		System.out.println("Here in safety.");
+		//System.out.println("Here in safety.");
 		elems.addAll(getNamedElements(container));
 		elems.addAll(getNamedElementsFromSafetySpecs(ctx.getSpecs()));
 

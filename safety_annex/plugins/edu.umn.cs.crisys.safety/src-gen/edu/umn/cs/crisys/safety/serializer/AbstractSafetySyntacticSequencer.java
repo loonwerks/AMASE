@@ -54,7 +54,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	protected String getAppliesToKeywordsToken(EObject semanticObject, RuleCall ruleCall, INode node) {
 		if (node != null)
 			return getTokenText(node);
-		return "appliesto";
+		return "applies to";
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	protected String getInBindingKeywordsToken(EObject semanticObject, RuleCall ruleCall, INode node) {
 		if (node != null)
 			return getTokenText(node);
-		return "inbinding";
+		return "in binding";
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	protected String getInModesKeywordsToken(EObject semanticObject, RuleCall ruleCall, INode node) {
 		if (node != null)
 			return getTokenText(node);
-		return "inmodes";
+		return "in modes";
 	}
 	
 	@Override
@@ -105,7 +105,7 @@ public abstract class AbstractSafetySyntacticSequencer extends AbstractSyntactic
 	 *     (rule start) (ambiguity) 'Get_Property' '(' componentRef=ComponentRef
 	 *     (rule start) (ambiguity) '[|' elems+=Expr
 	 *     (rule start) (ambiguity) 'enum' '(' enumType=DoubleDotRef
-	 *     (rule start) (ambiguity) 'event' '(' id=[NamedElement|ID]
+	 *     (rule start) (ambiguity) 'event' '(' port=Expr
 	 *     (rule start) (ambiguity) 'exists' binding=NamedID
 	 *     (rule start) (ambiguity) 'flatmap' binding=NamedID
 	 *     (rule start) (ambiguity) 'floor' '(' expr=Expr
