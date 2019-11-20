@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Analysis
 Bundle-SymbolicName: edu.umn.cs.crisys.safety.analysis;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: edu.umn.cs.crisys.safety.analysis.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -22,7 +22,6 @@ Require-Bundle: org.eclipse.ui,
  org.osate.annexsupport;bundle-version="1.0.0",
  com.rockwellcollins.atc.agree;bundle-version="2.0.0",
  com.rockwellcollins.atc.agree.analysis;bundle-version="2.0.0",
- edu.uah.rsesc.aadlsimulator.agree;bundle-version="0.1.0";resolution:=optional,
  org.eclipse.jface,
  org.eclipse.swt
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
