@@ -104,6 +104,12 @@
 						<goals>
 							<goal>source-feature</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<feature id="com.collins.trustedsystems.z3.feature" />
+								<feature id="com.rockwellcollins.atc.agree.feature" />
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -360,6 +366,11 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>z3-plugin</id>
+			<url>https://raw.githubusercontent.com/loonwerks/z3-plugin/master/com.collins.trustedsystems.z3.updates/target/repository</url>
+			<layout>p2</layout>
 		</repository>
 	</repositories>
 	<pluginRepositories>
