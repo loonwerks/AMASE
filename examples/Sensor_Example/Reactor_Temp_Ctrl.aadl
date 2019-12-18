@@ -42,14 +42,14 @@ public
 			Temp_Sensor1_High_Temp_To_Shut_Down: port Temp_Sensor1.High_Temp_Indicator -> Shut_Down_Cmd;
 			Temp_Sensor2_High_Temp_To_Shut_Down: port Temp_Sensor2.High_Temp_Indicator -> Shut_Down_Cmd;
 			Temp_Sensor3_High_Temp_To_Shut_Down: port Temp_Sensor3.High_Temp_Indicator -> Shut_Down_Cmd;
-		annex agree {**
-			connection Temp_Sensor1_High_Temp_To_Shut_Down: true;
-			connection Temp_Sensor2_High_Temp_To_Shut_Down: true;
-			connection Temp_Sensor3_High_Temp_To_Shut_Down: true;
-			
-			assign Shut_Down_Cmd = Temp_Sensor1.High_Temp_Indicator or Temp_Sensor2.High_Temp_Indicator or Temp_Sensor3.High_Temp_Indicator;
-							
-		**};
+--		annex agree {**
+--			connection Temp_Sensor1_High_Temp_To_Shut_Down: true;
+--			connection Temp_Sensor2_High_Temp_To_Shut_Down: true;
+--			connection Temp_Sensor3_High_Temp_To_Shut_Down: true;
+--			
+--			assign Shut_Down_Cmd = Temp_Sensor1.High_Temp_Indicator or Temp_Sensor2.High_Temp_Indicator or Temp_Sensor3.High_Temp_Indicator;
+--							
+--		**};
 		annex safety {**
       		analyze : max 1 fault
    		**};
@@ -70,8 +70,8 @@ public
 			Temp_Sensor3_To_Voter: port Temp_Sensor3.High_Temp_Indicator -> Temp_Voter.Sensor3_High;
 			Temp_Voter_To_Shut_Down: port Temp_Voter.High_Out -> Shut_Down_Cmd;
 		annex safety {**
-      		-- analyze : max 1 fault
-      		analyze : probability 1.0E-10
+      		analyze : max 3 fault
+      		--analyze : probability 1.0E-10
    		**};
 	end Reactor_Temp_Ctrl.W_Voting;
 	

@@ -32,12 +32,12 @@ public
 				duration: permanent;
 			}
 			
-			fault Radiation_sensor_stuck_at_high "Radiation sensor stuck at high": Common_Faults::stuck_true {
-				inputs: val_in <- High_Radiation_Indicator;     
-				outputs: High_Radiation_Indicator <- val_out;   
-         		probability: 1.0E-5 ;
-				duration: permanent;
-			}	
+--			fault Radiation_sensor_stuck_at_high "Radiation sensor stuck at high": Common_Faults.stuck_true {
+--				inputs: val_in <- High_Radiation_Indicator;     
+--				outputs: High_Radiation_Indicator <- val_out;   
+--         		probability: 1.0E-5 ;
+--				duration: permanent;
+--			}	
 		**};
 	end Radiation_Sensor;	
 	

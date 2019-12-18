@@ -137,8 +137,8 @@ with Selector;
 		**};
 		annex safety {**
 			
-			--analyze : max 3 fault
-	  		analyze : probability 1.0E-6
+			analyze : max 3 fault
+	  		--analyze : probability 1.0E-6
 			
 		**};	 
 	end ThreeModeSys.simple;
