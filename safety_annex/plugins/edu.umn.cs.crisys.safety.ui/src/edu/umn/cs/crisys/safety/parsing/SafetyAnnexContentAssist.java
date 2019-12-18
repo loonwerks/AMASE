@@ -130,10 +130,6 @@ public class SafetyAnnexContentAssist implements AnnexContentAssist{
 
 			DoubleDotRef elID = ((DoubleDotRef) type);
 			namedEl = elID.getElm();
-//=======
-//			DoubleDotRef elID = ((RecordType) type).getRecord();
-//			namedEl = elID.getElm();
-//>>>>>>> origin/develop
 		} else if (base instanceof DataPort) {
 			namedEl = ((DataPort) base).getDataFeatureClassifier();
 		} else if (base instanceof EventDataPort) {
