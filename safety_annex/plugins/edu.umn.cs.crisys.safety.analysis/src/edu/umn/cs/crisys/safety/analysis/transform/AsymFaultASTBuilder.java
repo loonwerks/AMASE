@@ -64,7 +64,7 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 	 */
 	public List<Fault> processFaults(List<FaultStatement> faultGroup) {
 		if (faultGroup.isEmpty()) {
-			new SafetyException("Problem with multiple faults (Debug: AsymFaultASTBuilder)");
+			new SafetyException("Problem with multiple faults on the same output.");
 		}
 
 		List<Fault> faultList = new ArrayList<Fault>();
@@ -176,7 +176,7 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 			}
 		}
 		if(outputOfInterest == null) {
-			new SafetyException("Cannot locate output on agree var for asym fault. (Debug: AsymFaultASTBuilder)");
+			new SafetyException("Cannot locate output for asymmetric fault in Agree: " + senderOutput.getName());
 		}
 		// Now the same type on the AgreeNode outputOfInterest
 		// is the same as what we will create for the type of
@@ -461,7 +461,7 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 						// locations for the input value from the map.
 						// There must have been an error.
 						if (type == null) {
-							new SafetyException("Error in defining fault node arguments. (debug FaultASTBuilder 563)");
+							new SafetyException("Error in defining fault node arguments for fault " + fault.id);
 						}
 						AgreeVar local = new AgreeVar(value.id, type, fault.faultStatement);
 						IdExpr newIdForList = new IdExpr(local.id);

@@ -203,7 +203,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faults = renameFaultEqs(faults);
 
 		if (faultMap.containsKey(node.compInst) || hwfaultMap.containsKey(node.compInst)) {
-			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
+			throw new SafetyException("Node: " + node.id + " has been visited twice.");
 		}
 		faultMap.put(node.compInst, faults);
 		hwfaultMap.put(node.compInst, hwFaults);
@@ -434,7 +434,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				AgreeVar out = findVar(node.outputs, (faultyId));
 				if (out == null) {
 					throw new SafetyException("A fault defined for " + node.id + " has a connection"
-							+ " that is not a valid output for this component.");
+							+ " that is not a valid output for this component." + " Valid connections include {"
+							+ node.outputs + "}");
 				} else {
 					nb.addInput(new AgreeVar(createNominalId((faultyId)), getOutputTypeForFaultNode(f),
 							out.reference));
@@ -534,7 +535,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// Do any name conversions on the stored expression and create nominal id.
 				actual = actual.accept(this);
 				if (actual == null) {
-					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
+					throw new SafetyException("Fault node input: '" + vd.id + "' is not assigned.");
 				}
 			}
 			actuals.add(actual);
@@ -726,12 +727,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// If this expression is not in map, return exception message
 		String outputName = f.faultOutputMap.get(ex);
 		if (outputName == null) {
-			new SafetyException("Cannot find expression in mapping: faultToActual (Debug: AddFaultsToNodeVisitor 484)");
+			new SafetyException("Cannot find fault output for fault " + f.id);
 		}
 		// Use outputName to get value from outputParamToActualMap
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
 		if (f.outputParamToActualMap.isEmpty()) {
-			new SafetyException("Map is empty. Fault is: " + f.id + " and expr is: " + ex.toString());
+			new SafetyException("Something went wrong with fault output parameter. Fault is: " + f.id + " and expr is: "
+					+ ex.toString());
 		}
 		// Create IdExpr out of actual string
 		return new IdExpr(actual.id);
@@ -786,7 +788,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		newFault.faultInputMap.clear();
 
 		if (!f.triggers.isEmpty()) {
-			throw new SafetyException("Triggers are currently unsupported for translation");
+			throw new SafetyException("User-defined triggers are currently unsupported.");
 		}
 
 		// update the variable declarations
@@ -1078,7 +1080,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 						String outputName = getOutputNameFromFaultStatement(fs);
 						if (outputName.isEmpty()) {
 							new SafetyException(
-									"Error processing asymmetric fault. (Debug: AddFaultsToNodeVisitor 808)");
+									"Error processing asymmetric fault: the output name is undefined for fault statement:"
+											+ fs.getName());
 						} else {
 							List<FaultStatement> tempAsymFaults = new ArrayList<FaultStatement>();
 							tempAsymFaults.add(fs);
@@ -1190,7 +1193,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					}
 				}
 				if (found) {
-					throw new SafetyException("Multiple analysis specifications found.  Only one can be processed");
+					throw new SafetyException(
+							"Multiple analysis specification statements found.  Only one can be processed");
 				}
 				found = true;
 			}
@@ -1393,7 +1397,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			assertIndependentExpr = createTransientExpr(independentlyActiveExpr, independentEventExpr);
 			assertDependentExpr = createTransientExpr(dependentlyActiveExpr, dependentEventExpr);
 		} else {
-			throw new SafetyException("Unknown constraint type during translation of fault " + f.id);
+			throw new SafetyException("Unknown constraint type during translation of fault " + f.id
+					+ ". Constraint must be 'permanent'.");
 		}
 		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, f.faultStatement));
 		builder.addAssertion(new AgreeStatement("", assertDependentExpr, f.faultStatement));
@@ -1433,7 +1438,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			assertIndependentExpr = createTransientExpr(independentlyActiveExpr, independentEventExpr);
 			assertDependentExpr = createTransientExpr(dependentlyActiveExpr, dependentEventExpr);
 		} else {
-			throw new SafetyException("Unknown constraint type during translation of fault " + hwf.id);
+			throw new SafetyException("Unknown constraint type during translation of fault " + hwf.id
+					+ ". Constraint must be 'permanent'.");
 		}
 		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, hwf.hwFaultStatement));
 		builder.addAssertion(new AgreeStatement("", assertDependentExpr, hwf.hwFaultStatement));

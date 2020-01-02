@@ -14,32 +14,32 @@ import jkind.lustre.Node;
 
 public class HWFaultASTBuilder {
 
-	private static int faultCounter = 0; 
-	
+	private static int faultCounter = 0;
+
 	// globalLustreNodes will be updated occasionally as faults are added
 	// if "fault" Lustre nodes are not used by the non-faulty AGREE nodes.
 	private List<Node> globalLustreNodes;
 
 
 	private AgreeNode agreeNode;
-	
+
 	public HWFaultASTBuilder(List<Node> globalLustreNodes, AgreeNode agreeNode) {
 		this.globalLustreNodes = globalLustreNodes;
 		this.agreeNode = agreeNode;
 	}
-	
+
 	public void addGlobalLustreNode(Node node) {
 		globalLustreNodes.add(node);
 	}
-	
+
 	private void setDuration(HWFault hwfault, DurationStatement duration) {
 		hwfault.duration = duration;
 	}
-	
+
 	public void addTrigger(HWFault fault, TriggerStatement stmt) {
-		throw new SafetyException("Error: trigger equations are not yet implemented in translator!");
+		throw new SafetyException("User-defined trigger statements are not yet implemented.");
 	}
-	
+
 	public void addProbability(HWFault hwfault, ProbabilityStatement stmt) {
 		hwfault.probability = Double.parseDouble(stmt.getProbability());
 	}
@@ -47,31 +47,31 @@ public class HWFaultASTBuilder {
 	public void processHWFaultSubcomponents(HWFault hwfault) {
 		for (HWFaultSubcomponent hwfs : hwfault.hwFaultStatement.getFaultDefinitions()) {
 			if (hwfs instanceof DurationStatement) {
-				setDuration(hwfault, (DurationStatement)hwfs); 
+				setDuration(hwfault, (DurationStatement)hwfs);
 			} else if (hwfs instanceof TriggerStatement) {
 				addTrigger(hwfault, (TriggerStatement)hwfs);
 			} else if (hwfs instanceof ProbabilityStatement) {
 				addProbability(hwfault, (ProbabilityStatement)hwfs);
 			} else {
-				throw new SafetyException("Unrecognized HW_fault Statement type");
+				throw new SafetyException("Unrecognized HW_fault statement type");
 			}
 		}
 	}
-	
+
 	public String mkUniqueHWFaultId(HWFaultStatement hwfstmt) {
-		faultCounter++; 
+		faultCounter++;
 		String elem = this.agreeNode.id + "__" + "hwfault_" + faultCounter;
 		return elem;
 	}
-	
+
 	public HWFault buildHWFault(HWFaultStatement hwfstmt) {
-		String faultId = mkUniqueHWFaultId(hwfstmt); 
+		String faultId = mkUniqueHWFaultId(hwfstmt);
 		//incorporate user-given fault name in the fault info
 		String faultName = hwfstmt.getName();
-		
+
 		HWFault hwfault = new HWFault(hwfstmt, faultId, faultName);
 		processHWFaultSubcomponents(hwfault);
-		
+
 		return hwfault;
 	}
 
