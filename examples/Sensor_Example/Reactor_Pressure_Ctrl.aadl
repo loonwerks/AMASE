@@ -43,14 +43,14 @@ public
 			Pressure_Sensor1_High_Temp_To_Shut_Down: port Pressure_Sensor1.High_Pressure_Indicator -> Shut_Down_Cmd;
 			Pressure_Sensor2_High_Temp_To_Shut_Down: port Pressure_Sensor2.High_Pressure_Indicator -> Shut_Down_Cmd;
 			Pressure_Sensor3_High_Temp_To_Shut_Down: port Pressure_Sensor3.High_Pressure_Indicator -> Shut_Down_Cmd;
---		annex agree {**
---			connection Pressure_Sensor1_High_Temp_To_Shut_Down: true;
---			connection Pressure_Sensor2_High_Temp_To_Shut_Down: true;
---			connection Pressure_Sensor3_High_Temp_To_Shut_Down: true;
---			
---			assign Shut_Down_Cmd = Pressure_Sensor1.High_Pressure_Indicator or Pressure_Sensor2.High_Pressure_Indicator or Pressure_Sensor3.High_Pressure_Indicator;
---			
---		**};
+		annex agree {**
+			connection Pressure_Sensor1_High_Temp_To_Shut_Down: true;
+			connection Pressure_Sensor2_High_Temp_To_Shut_Down: true;
+			connection Pressure_Sensor3_High_Temp_To_Shut_Down: true;
+			
+			assign Shut_Down_Cmd = Pressure_Sensor1.High_Pressure_Indicator or Pressure_Sensor2.High_Pressure_Indicator or Pressure_Sensor3.High_Pressure_Indicator;
+			
+		**};
 		annex safety {**
       		analyze : max 3 fault
    		**};
