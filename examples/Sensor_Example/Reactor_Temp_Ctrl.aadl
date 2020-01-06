@@ -42,14 +42,14 @@ public
 			Temp_Sensor1_High_Temp_To_Shut_Down: port Temp_Sensor1.High_Temp_Indicator -> Shut_Down_Cmd;
 			Temp_Sensor2_High_Temp_To_Shut_Down: port Temp_Sensor2.High_Temp_Indicator -> Shut_Down_Cmd;
 			Temp_Sensor3_High_Temp_To_Shut_Down: port Temp_Sensor3.High_Temp_Indicator -> Shut_Down_Cmd;
---		annex agree {**
---			connection Temp_Sensor1_High_Temp_To_Shut_Down: true;
---			connection Temp_Sensor2_High_Temp_To_Shut_Down: true;
---			connection Temp_Sensor3_High_Temp_To_Shut_Down: true;
---			
---			assign Shut_Down_Cmd = Temp_Sensor1.High_Temp_Indicator or Temp_Sensor2.High_Temp_Indicator or Temp_Sensor3.High_Temp_Indicator;
---							
---		**};
+		annex agree {**
+			connection Temp_Sensor1_High_Temp_To_Shut_Down: true;
+			connection Temp_Sensor2_High_Temp_To_Shut_Down: true;
+			connection Temp_Sensor3_High_Temp_To_Shut_Down: true;
+			
+			assign Shut_Down_Cmd = Temp_Sensor1.High_Temp_Indicator or Temp_Sensor2.High_Temp_Indicator or Temp_Sensor3.High_Temp_Indicator;
+							
+		**};
 		annex safety {**
       		analyze : max 1 fault
    		**};
