@@ -8,12 +8,13 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 //import org.osate.aadl2.AadlInteger;
 import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.NamedElement;
-import org.osate.aadl2.SystemImplementation;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
@@ -114,6 +115,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 	}
 
+	/**
+	 * Checks for empty description string and makes sure hw fault
+	 * is declared in system type, not implementation.
+	 * @param hwStmt
+	 */
 	@Check(CheckType.FAST)
 	public void checkHWFaultStmt(HWFaultStatement hwStmt) {
 
@@ -121,18 +127,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if (hwStmt.getStr().isEmpty()) {
 			warning(hwStmt, "HW fault description is optional, but should not be an empty string.");
 		}
-		// Organization:
-		// hwStmt eCont: SafetyContractImpl
-		// .eCont: SafetyContractSubclauseImpl
-		// .eCont: DefaultAnnexSubclauseImpl
-		// .eCont:SystemImplementation (or SystemType)
-		// Need 4 levels to get to type or impl.
-		EObject system = hwStmt.eContainer().eContainer().eContainer().eContainer();
-		if (system instanceof SystemImplementation) {
+
+		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(hwStmt, ComponentImplementation.class);
+		if (!(compImpl == null)) {
 			error(hwStmt, "HW faults can only be defined in system types, not implementations.");
 		}
-
-		System.out.println();
 	}
 
 	/*
