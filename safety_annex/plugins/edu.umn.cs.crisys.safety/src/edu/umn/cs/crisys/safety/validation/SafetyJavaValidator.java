@@ -21,8 +21,12 @@ import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 
+import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
+import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
+import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
@@ -42,7 +46,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 
-	@Check
+
 	/*
 	 * Puts out a warning if the fault description is an empty string.
 	 * The description is optional, but shouldn't be ""
@@ -50,6 +54,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * Checks that the nested dot id used as the fault name is a valid
 	 * node definition.
 	 */
+	@Check(CheckType.FAST)
 	public void checkFaultSpecStmt(FaultStatement specStmt) {
 
 		DoubleDotRef nodeName = specStmt.getFaultDefName();
@@ -63,6 +68,41 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		NamedElement finalNodeName = nodeName.getElm();
 		if (!(finalNodeName instanceof NodeDef)) {
 			error(nodeName, "The fault name must be a valid node definition.");
+		}
+
+		// TODO: Do I need to check anything here?
+		// List<FaultSubcomponent> subcomps = specStmt.getFaultDefinitions();
+
+	}
+
+	@Check(CheckType.FAST)
+	public void checkAnalysisStatement(AnalysisStatement analysisStmt) {
+		AnalysisBehavior behavior = analysisStmt.getBehavior();
+		if (behavior instanceof FaultCountBehavior) {
+			FaultCountBehavior fc = (FaultCountBehavior) behavior;
+			String maxFaults = fc.getMaxFaults();
+			try {
+				int n = Integer.parseInt(maxFaults);
+				if (n < 0) {
+					error(analysisStmt, "The value for max number of faults must be positive.");
+				}
+			} catch (NumberFormatException nfe) {
+				error(analysisStmt, "The value for max number of faults needs to be a valid integer.");
+			}
+		} else if (behavior instanceof ProbabilityBehavior) {
+			ProbabilityBehavior prob = (ProbabilityBehavior) behavior;
+			String probability = prob.getProbabilty();
+			try {
+				double p = Double.parseDouble(probability);
+				if ((p < 0.0) || (p > 1.0)) {
+					error(analysisStmt,
+							"Probability value must be greater than or equal to 0 and less than or equal to one.");
+				}
+			} catch (NumberFormatException nfe) {
+				error(analysisStmt, "The value for probability needs to be a valid decimal between 0 and 1 inclusive.");
+			}
+		} else {
+			error(analysisStmt, "Analysis behavior must be either 'max n fault' or 'probability q'.");
 		}
 	}
 
