@@ -25,6 +25,7 @@ import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
@@ -47,12 +48,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 
-	/*
-	 * Puts out a warning if the fault description is an empty string.
-	 * The description is optional, but shouldn't be ""
+	/**
+	 * Puts out a warning if the fault description is an empty
+	 * string. The description is optional, hence warning.
 	 *
-	 * Checks that the nested dot id used as the fault name is a valid
-	 * node definition.
+	 * Checks that the NamedElement used as the fault def name is
+	 * a valid node definition.
+	 * @param specStmt
 	 */
 	@Check(CheckType.FAST)
 	public void checkFaultSpecStmt(FaultStatement specStmt) {
@@ -64,7 +66,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			warning(specStmt, "Fault description is optional, but should " + "not be an empty string.");
 		}
 
-		// Check that the nested dot id (fault node name) is a valid node definition
+		// Check that the NamedElement (fault node name) is a valid node definition
 		NamedElement finalNodeName = nodeName.getElm();
 		if (!(finalNodeName instanceof NodeDef)) {
 			error(nodeName, "The fault name must be a valid node definition.");
@@ -75,6 +77,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 
 	}
 
+	/**
+	 * Check behavior of analysis statements and values for n and
+	 * probability.
+	 * @param analysisStmt
+	 */
 	@Check(CheckType.FAST)
 	public void checkAnalysisStatement(AnalysisStatement analysisStmt) {
 		AnalysisBehavior behavior = analysisStmt.getBehavior();
@@ -103,6 +110,15 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		} else {
 			error(analysisStmt, "Analysis behavior must be either 'max n fault' or 'probability q'.");
+		}
+	}
+
+	@Check(CheckType.FAST)
+	public void checkHWFaultStmt(HWFaultStatement hwStmt) {
+
+		// Check on fault description
+		if (hwStmt.getStr().isEmpty()) {
+			warning(hwStmt, "HW fault description is optional, but should not be an empty string.");
 		}
 	}
 
