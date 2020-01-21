@@ -4,6 +4,8 @@
 package edu.umn.cs.crisys.safety.validation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -13,8 +15,13 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 //import org.osate.aadl2.AadlInteger;
 import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentImplementation;
+import org.osate.aadl2.Element;
 import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.PublicPackageSection;
+import org.osate.aadl2.SystemType;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
@@ -30,8 +37,12 @@ import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
+import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
+import edu.umn.cs.crisys.safety.safety.SafetyContract;
+import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
+import edu.umn.cs.crisys.safety.safety.SpecStatement;
 
 /**
  * This class contains custom validation rules.
@@ -130,8 +141,57 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 
 		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(hwStmt, ComponentImplementation.class);
 		if (!(compImpl == null)) {
-			error(hwStmt, "HW faults can only be defined in system types, not implementations.");
+			error(hwStmt, "HW faults can only be defined in component type, not implementations.");
 		}
+	}
+
+	@Check(CheckType.FAST)
+	public void checkPropagateStmt(PropagateStatement pStmt) {
+		List<NamedElement> destinationList = pStmt.getDestComp_path();
+		List<NamedElement> sourceList = pStmt.getSrcComp_path();
+		List<String> sourceFaults = pStmt.getSrcFaultList();
+		List<String> destFaults = pStmt.getDestFaultList();
+
+		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(pStmt, ComponentImplementation.class);
+		// Test for propagate stmt in non-implementation
+		if (compImpl == null) {
+			error(pStmt, "Propagate statements can only be defined in component implementation");
+		} else {
+			// Get all faults and comp names in program
+			Map<String, String> mapFaultNameToCompName = collectFaultsInProgram(
+					EcoreUtil2.getContainerOfType(pStmt, ComponentImplementation.class));
+			// Check length of source and dest lists
+			if (sourceList.size() != sourceFaults.size()) {
+				error(pStmt, "Each source fault name must have a component name that it is connected to.");
+			} else if (destinationList.size() != destFaults.size()) {
+				error(pStmt, "Each destination fault name must have a component name that it is connected to.");
+			} else {
+				for (int i = 0; i < sourceList.size(); i++) {
+					// Check source faults and components
+					if (mapFaultNameToCompName.containsKey(sourceFaults.get(i))) {
+						if (!mapFaultNameToCompName.get(sourceFaults.get(i)).equals(sourceList.get(i).getName())) {
+							error(pStmt, "Not a valid mapping from fault name: " + sourceFaults.get(i)
+									+ " to component name: " + sourceList.get(i).getName());
+						}
+					} else {
+						// map does not contain source fault
+						error(pStmt, "The fault name: " + sourceFaults.get(i) + " is unrecognized.");
+					}
+					// Check that dest faults and components are good
+					if (mapFaultNameToCompName.containsKey(destFaults.get(i))) {
+						// Check dest faults and components
+						if (!mapFaultNameToCompName.get(destFaults.get(i)).equals(destinationList.get(i).getName())) {
+							error(pStmt, "Not a valid mapping from fault name: " + destFaults.get(i)
+									+ " to component name: " + destinationList.get(i).getName());
+						}
+					} else {
+						error(pStmt, "The fault name: " + destFaults.get(i) + " is unrecognized.");
+					}
+				}
+			}
+		}
+
+
 	}
 
 	/*
@@ -688,5 +748,44 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 
 		return intResult;
+	}
+
+	private Map<String, String> collectFaultsInProgram(ComponentImplementation compImpl) {
+		Map<String, String> mapFaultNameToCompName = new HashMap<String, String>();
+
+		EObject container = compImpl.eContainer();
+		if (container instanceof PublicPackageSection) {
+			PublicPackageSection pps = (PublicPackageSection) container;
+			List<Classifier> classifiers = pps.getOwnedClassifiers();
+			for (Classifier cl : classifiers) {
+				if (cl instanceof SystemType) {
+					List<AnnexSubclause> ass = cl.getOwnedAnnexSubclauses();
+					String compName = cl.getName();
+					for (AnnexSubclause as : ass) {
+						if (as.getName().contains("safety")) {
+							List<Element> children = as.getChildren();
+							for (Element child : children) {
+								if (child instanceof SafetyContractSubclause) {
+									SafetyContractSubclause safetyChild = (SafetyContractSubclause) child;
+									SafetyContract cont = (SafetyContract) safetyChild.getContract();
+									List<SpecStatement> specs = cont.getSpecs();
+
+									for (SpecStatement sp : specs) {
+										if (sp instanceof FaultStatement) {
+											FaultStatement fs = (FaultStatement) sp;
+											mapFaultNameToCompName.put(fs.getName(), compName);
+										} else if (sp instanceof HWFaultStatement) {
+											HWFaultStatement hwfs = (HWFaultStatement) sp;
+											mapFaultNameToCompName.put(hwfs.getName(), compName);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return mapFaultNameToCompName;
 	}
 }
