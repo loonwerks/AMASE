@@ -50,7 +50,7 @@ import edu.umn.cs.crisys.safety.safety.SpecStatement;
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
-
+	private List<String> definedHWFaultsInProgram = new ArrayList<String>();
 	/*
 	 * (non-Javadoc)
 	 * @see com.rockwellcollins.atc.agree.validation.AgreeJavaValidator#isResponsible(java.util.Map, org.eclipse.emf.ecore.EObject)
@@ -84,10 +84,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if (!(finalNodeName instanceof NodeDef)) {
 			error(nodeName, "The fault name must be a valid node definition.");
 		}
-
-		// TODO: Do I need to check anything here?
-		// List<FaultSubcomponent> subcomps = specStmt.getFaultDefinitions();
-
 	}
 
 	/**
@@ -151,11 +147,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		List<NamedElement> sourceList = pStmt.getSrcComp_path();
 		List<String> sourceFaults = pStmt.getSrcFaultList();
 		List<String> destFaults = pStmt.getDestFaultList();
-
 		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(pStmt, ComponentImplementation.class);
+
 		// Test for propagate stmt in non-implementation
 		if (compImpl == null) {
-			error(pStmt, "Propagate statements can only be defined in component implementation");
+			error(pStmt, "Propagation statements can only be defined in component implementation");
 		} else {
 			// Get all faults and comp names in program
 			Map<String, String> mapFaultNameToCompName = collectFaultsInProgram(
@@ -187,6 +183,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					} else {
 						error(pStmt, "The fault name: " + destFaults.get(i) + " is unrecognized.");
 					}
+				}
+			}
+			// Check that all source faults are hw faults
+			for (String sf : sourceFaults) {
+				if (!definedHWFaultsInProgram.contains(sf)) {
+					error(pStmt,
+							"The fault: " + sf + " is not a HW fault. All source faults must be defined as HW Faults.");
 				}
 			}
 		}
@@ -777,6 +780,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 										} else if (sp instanceof HWFaultStatement) {
 											HWFaultStatement hwfs = (HWFaultStatement) sp;
 											mapFaultNameToCompName.put(hwfs.getName(), compName);
+											definedHWFaultsInProgram.add(hwfs.getName());
 										}
 									}
 								}
