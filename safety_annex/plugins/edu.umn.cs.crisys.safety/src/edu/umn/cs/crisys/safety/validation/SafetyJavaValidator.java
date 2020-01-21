@@ -19,9 +19,11 @@ import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
+import org.osate.aadl2.ModelUnit;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.SystemType;
+import org.osate.aadl2.impl.AadlPackageImpl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
@@ -30,6 +32,7 @@ import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 
+import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
@@ -154,8 +157,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(pStmt, "Propagation statements can only be defined in component implementation");
 		} else {
 			// Get all faults and comp names in program
-			Map<String, String> mapFaultNameToCompName = collectFaultsInProgram(
-					EcoreUtil2.getContainerOfType(pStmt, ComponentImplementation.class));
+			Map<String, String> mapFaultNameToCompName = collectFaultsInProgram(compImpl);
 			// Check length of source and dest lists
 			if (sourceList.size() != sourceFaults.size()) {
 				error(pStmt, "Each source fault name must have a component name that it is connected to.");
@@ -193,9 +195,26 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				}
 			}
 		}
+	}
 
+	@Check(CheckType.FAST)
+	public void checkActivationStatement(ActivationStatement actStmt) {
+		NamedElement faultComp = actStmt.getFaultComp_Path();
+		String faultName = actStmt.getFaultName();
+		NamedElement agreeComp = actStmt.getAgreeComp_Path();
+		String agreeVarName = actStmt.getAgreeBoolVarName();
+
+		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(actStmt, ComponentImplementation.class);
+		// Test for propagate stmt in non-implementation
+		if (compImpl == null) {
+			error(actStmt, "Activation statements can only be defined in component implementation");
+		} else {
+			Map<String, String> mapFaultNameToCompName = collectFaultsInProgram(compImpl);
+			Map<String, String> mapAgreeVarNameToCompName = collectAgreeVarsInImpl(compImpl);
+		}
 
 	}
+
 
 	/*
 	 * Input Statements
@@ -755,7 +774,41 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 
 	private Map<String, String> collectFaultsInProgram(ComponentImplementation compImpl) {
 		Map<String, String> mapFaultNameToCompName = new HashMap<String, String>();
+		List<AadlPackageImpl> packages = new ArrayList<AadlPackageImpl>();
+		AadlPackageImpl aadlPackage = getAadlPackageImpl(compImpl);
+		packages.add(aadlPackage);
+		PublicPackageSection pps = aadlPackage.getOwnedPublicSection();
+		// Collect all imported packages and iterate through
+		// annexes to find safety annexes with faults.
+		List<ModelUnit> imports = pps.getImportedUnits();
+		for (ModelUnit imp : imports) {
+			if (imp instanceof AadlPackageImpl) {
+				packages.add((AadlPackageImpl) imp);
+			}
+		}
+		for (AadlPackageImpl aadlPack : packages) {
+			PublicPackageSection pub = aadlPack.getPublicSection();
+			for (Classifier cl : pub.getOwnedClassifiers()) {
+				if (cl instanceof SystemType) {
+					for (AnnexSubclause as : cl.getOwnedAnnexSubclauses()) {
+						if (as.getName().contains("safety")) {
+							for (Element child : as.getChildren()) {
+								if (child instanceof SafetyContractSubclause) {
+									SafetyContractSubclause safetyChild = (SafetyContractSubclause) child;
+									SafetyContract cont = (SafetyContract) safetyChild.getContract();
+									mapFaultNameToCompName
+											.putAll(populateMapFaultNameToCompName(cont.getSpecs(), cl.getName()));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return mapFaultNameToCompName;
+	}
 
+	private Map<String, String> collectAgreeVarsInImpl(ComponentImplementation compImpl) {
 		EObject container = compImpl.eContainer();
 		if (container instanceof PublicPackageSection) {
 			PublicPackageSection pps = (PublicPackageSection) container;
@@ -765,31 +818,39 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					List<AnnexSubclause> ass = cl.getOwnedAnnexSubclauses();
 					String compName = cl.getName();
 					for (AnnexSubclause as : ass) {
-						if (as.getName().contains("safety")) {
-							List<Element> children = as.getChildren();
-							for (Element child : children) {
-								if (child instanceof SafetyContractSubclause) {
-									SafetyContractSubclause safetyChild = (SafetyContractSubclause) child;
-									SafetyContract cont = (SafetyContract) safetyChild.getContract();
-									List<SpecStatement> specs = cont.getSpecs();
+						if (as.getName().contains("agree")) {
 
-									for (SpecStatement sp : specs) {
-										if (sp instanceof FaultStatement) {
-											FaultStatement fs = (FaultStatement) sp;
-											mapFaultNameToCompName.put(fs.getName(), compName);
-										} else if (sp instanceof HWFaultStatement) {
-											HWFaultStatement hwfs = (HWFaultStatement) sp;
-											mapFaultNameToCompName.put(hwfs.getName(), compName);
-											definedHWFaultsInProgram.add(hwfs.getName());
-										}
-									}
-								}
-							}
 						}
 					}
 				}
 			}
 		}
-		return mapFaultNameToCompName;
+		return null;
+	}
+
+	private AadlPackageImpl getAadlPackageImpl(EObject compImpl) {
+		EObject cont = compImpl.eContainer();
+		if (cont instanceof AadlPackageImpl) {
+			return (AadlPackageImpl) cont;
+		} else {
+			return getAadlPackageImpl(cont);
+		}
+	}
+
+	private Map<String, String> populateMapFaultNameToCompName(List<SpecStatement> specs, String compName) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (SpecStatement sp : specs) {
+			if (sp instanceof FaultStatement) {
+				FaultStatement fs = (FaultStatement) sp;
+				map.put(fs.getName(), compName);
+			} else if (sp instanceof HWFaultStatement) {
+				HWFaultStatement hwfs = (HWFaultStatement) sp;
+				map.put(hwfs.getName(), compName);
+				if (!definedHWFaultsInProgram.contains(hwfs.getName())) {
+					definedHWFaultsInProgram.add(hwfs.getName());
+				}
+			}
+		}
+		return map;
 	}
 }
