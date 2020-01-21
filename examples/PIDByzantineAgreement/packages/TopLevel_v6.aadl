@@ -20,10 +20,10 @@ with AADL_Properties;
 
 	system implementation TopLevel.impl
 		subcomponents
-			node1 : system Node{AADL_Properties::Node_Num => 1;AADL_Properties::PID => 10;};
-			node2 : system Node{AADL_Properties::Node_Num => 2;AADL_Properties::PID => 20;};
-			node3 : system Node{AADL_Properties::Node_Num => 3;AADL_Properties::PID => 30;};
-			node4 : system Node{AADL_Properties::Node_Num => 4;AADL_Properties::PID => 40;};
+			node1 : system Nodes{AADL_Properties::Node_Num => 1;AADL_Properties::PID => 10;};
+			node2 : system Nodes{AADL_Properties::Node_Num => 2;AADL_Properties::PID => 20;};
+			node3 : system Nodes{AADL_Properties::Node_Num => 3;AADL_Properties::PID => 30;};
+			node4 : system Nodes{AADL_Properties::Node_Num => 4;AADL_Properties::PID => 40;};
 
 		connections
 
@@ -181,6 +181,8 @@ with AADL_Properties;
 
 			analyze: max 2 fault
 			--analyze: probability 1.0E-9
+			propagate_from :   
+      		{testFault@Nodes} to {Asym_Fail_Any_PID_To_Any_Val@Nodes};
 		**};
 	end TopLevel.impl;
 end TopLevel_v6;

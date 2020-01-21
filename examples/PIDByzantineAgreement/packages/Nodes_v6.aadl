@@ -6,7 +6,7 @@ package Nodes_v6
 	with Library;
 	with Common_Faults;
 
-	system Node
+	system Nodes
 		features
 			--inputs
 			Node1_In: in data port Node_Msg.Impl;
@@ -133,8 +133,14 @@ package Nodes_v6
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
+			HW_fault testFault "Testing validation":     
+			{ 
+				duration: transient;
+				probability: 0.1;
+				propagate_type: symmetric;
+			}
 
 		**};
-	end Node;
+	end Nodes;
 
 end Nodes_v6;
