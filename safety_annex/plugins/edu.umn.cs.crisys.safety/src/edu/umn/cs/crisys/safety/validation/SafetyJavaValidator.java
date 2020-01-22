@@ -59,7 +59,8 @@ import edu.umn.cs.crisys.safety.safety.SpecStatement;
  */
 public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	private List<String> definedHWFaultsInProgram = new ArrayList<String>();
-	/*
+
+	/**
 	 * (non-Javadoc)
 	 * @see com.rockwellcollins.atc.agree.validation.AgreeJavaValidator#isResponsible(java.util.Map, org.eclipse.emf.ecore.EObject)
 	 */
@@ -70,23 +71,17 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 
 
 	/**
-	 * Puts out a warning if the fault description is an empty
-	 * string. The description is optional, hence warning.
-	 *
-	 * Checks that the NamedElement used as the fault def name is
-	 * a valid node definition.
+	 * Checks description string, warning if empty, and checks that the
+	 * fault node name is valid.
 	 * @param specStmt
 	 */
 	@Check(CheckType.FAST)
 	public void checkFaultSpecStmt(FaultStatement specStmt) {
-
 		DoubleDotRef nodeName = specStmt.getFaultDefName();
-
 		// Check on fault description
 		if (specStmt.getStr().isEmpty()) {
 			warning(specStmt, "Fault description is optional, but should " + "not be an empty string.");
 		}
-
 		// Check that the NamedElement (fault node name) is a valid node definition
 		NamedElement finalNodeName = nodeName.getElm();
 		if (!(finalNodeName instanceof NodeDef)) {
@@ -131,29 +126,33 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 	/**
-	 * Checks for empty description string and makes sure hw fault
+	 * Checks for empty hw fault description string and makes sure hw fault
 	 * is declared in system type, not implementation.
 	 * @param hwStmt
 	 */
 	@Check(CheckType.FAST)
 	public void checkHWFaultStmt(HWFaultStatement hwStmt) {
-
 		// Check on fault description
 		if (hwStmt.getStr().isEmpty()) {
 			warning(hwStmt, "HW fault description is optional, but should not be an empty string.");
 		}
-
 		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(hwStmt, ComponentImplementation.class);
 		if (!(compImpl == null)) {
 			error(hwStmt, "HW faults can only be defined in component type, not implementations.");
 		}
 	}
 
+	/**
+	 * Checks that propagate stmt defined in implementation,
+	 * source fault names correct for designated component names,
+	 * destination faults correct for designated component names,
+	 * and the source faults are indeed hw faults.
+	 * @param pStmt
+	 */
 	@Check(CheckType.FAST)
 	public void checkPropagateStmt(PropagateStatement pStmt) {
 		List<NamedElement> destinationList = pStmt.getDestComp_path();
 		List<NamedElement> sourceList = pStmt.getSrcComp_path();
-		List<String> sourceListString = collectStringsFromNamedElements(sourceList);
 		List<String> sourceFaults = pStmt.getSrcFaultList();
 		List<String> destFaults = pStmt.getDestFaultList();
 		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(pStmt, ComponentImplementation.class);
@@ -195,31 +194,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					}
 				}
 			}
-
-
-//				for (int i = 0; i < sourceList.size(); i++) {
-//					// Check source faults and components
-//					if (mapCompNameToFaultName.containsKey(sourceList.get(i).getName())) {
-//						if (!mapCompNameToFaultName.get(sourceList.get(i).getName()).equals(sourceFaults.get(i))) {
-//							error(pStmt, "Not a valid mapping from fault name: " + sourceFaults.get(i)
-//									+ " to component name: " + sourceList.get(i).getName());
-//						}
-//					} else {
-//						// map does not contain source fault
-//						error(pStmt, "The fault name: " + sourceFaults.get(i) + " is unrecognized.");
-//					}
-//					// Check that dest faults and components are good
-//					if (mapCompNameToFaultName.containsKey(destinationList.get(i).getName())) {
-//						// Check dest faults and components
-//						if (!mapCompNameToFaultName.get(destinationList.get(i).getName()).equals(destFaults.get(i))) {
-//							error(pStmt, "Not a valid mapping from fault name: " + destFaults.get(i)
-//									+ " to component name: " + destinationList.get(i).getName());
-//						}
-//					} else {
-//						error(pStmt, "The fault name: " + destFaults.get(i) + " is unrecognized.");
-//					}
-//				}
-//			}
 			// Check that all source faults are hw faults
 			for (String sf : sourceFaults) {
 				if (!definedHWFaultsInProgram.contains(sf)) {
@@ -230,11 +204,16 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 	}
 
+	/**
+	 * Checks that activation stmt defined in implementation,
+	 * the agree var is defined in agree annex of this implementation,
+	 * and the faults are defined on the designated components.
+	 * @param actStmt
+	 */
 	@Check(CheckType.FAST)
 	public void checkActivationStatement(ActivationStatement actStmt) {
 		NamedElement faultComp = actStmt.getFaultComp_Path();
 		String faultName = actStmt.getFaultName();
-		NamedElement agreeComp = actStmt.getAgreeComp_Path();
 		String agreeVarName = actStmt.getAgreeBoolVarName();
 
 		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(actStmt, ComponentImplementation.class);
@@ -242,26 +221,29 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if (compImpl == null) {
 			error(actStmt, "Activation statements can only be defined in component implementation");
 		} else {
-			Map<String, List<String>> mapFaultNameToCompName = collectFaultsInProgram(compImpl);
-			Map<String, String> mapAgreeVarNameToCompName = collectAgreeVarsInImpl(actStmt, compImpl);
-			System.out.println();
+			Map<String, List<String>> mapCompNameToFaultNames = collectFaultsInProgram(compImpl);
+			List<String> agreeVars = collectAgreeVarsInImpl(compImpl);
+
 			// Check AgreeVar name
-			if (!mapAgreeVarNameToCompName.containsKey(agreeVarName)) {
+			if (!agreeVars.contains(agreeVarName)) {
 				error(actStmt, "The eq statement: " + agreeVarName
 						+ " does not match an eq statement defined in this Agree annex implementation.");
 			}
 			// Check fault names and components
-			if (!mapFaultNameToCompName.containsKey(faultName)) {
-				error(actStmt, "The fault: " + faultName + " does not match a fault defined in this program.");
-			} else if (!mapFaultNameToCompName.get(faultName).equals(faultComp.getName())) {
+			if (!mapCompNameToFaultNames.containsKey(faultComp.getName())) {
 				error(actStmt, "The fault component: " + faultComp.getName()
 						+ " is not a valid component name for the fault: " + faultName);
+			} else {
+				if (!mapCompNameToFaultNames.get(faultComp.getName()).contains(faultName)) {
+					error(actStmt, "The fault: " + faultName + " does not match a fault defined in component: "
+							+ faultComp.getName());
+				}
 			}
 		}
 	}
 
 
-	/*
+	/**
 	 * Input Statements
 	 * (1): Get container - check to see if it is a fault statement.
 	 * Then gather the deepest sub of the fault definition name
@@ -272,6 +254,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * (2): Make sure the types of arguments match the types of expressions
 	 * passed in as fault inputs (connections or otherwise).
 	 * (3) Type check Expr (right side) with arguments to node (left side)
+	 * @param inputs
 	 */
 	@Check(CheckType.FAST)
 	public void checkInput(InputStatement inputs) {
@@ -817,6 +800,14 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return intResult;
 	}
 
+	/**
+	 * Collects all faults in the program. First through the subcomponents
+	 * defined for this implementation and then goes through each included package
+	 * and gathers those.
+	 * @param compImpl
+	 * @return Map<String, List<String>> mapping from component instance name
+	 * to a list of associated faults.
+	 */
 	private Map<String, List<String>> collectFaultsInProgram(ComponentImplementation compImpl) {
 		Map<String, List<String>> mapCompNameToFaultNames = new HashMap<String, List<String>>();
 		mapCompNameToFaultNames.putAll(collectFaultsFromSubcomponents(compImpl));
@@ -824,6 +815,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return mapCompNameToFaultNames;
 	}
 
+	/**
+	 * Collect all subcomponents of this component implementation and
+	 * iterate through them finding the faults defined for each.
+	 * @param compImpl
+	 * @return Map<String, List<String>> mapping from component instance name
+	 * to a list of associated faults.
+	 */
 	private Map<String, List<String>> collectFaultsFromSubcomponents(ComponentImplementation compImpl) {
 		Map<String, List<String>> mapCompNameToFaultNames = new HashMap<String, List<String>>();
 		for (Subcomponent sub : compImpl.getAllSubcomponents()) {
@@ -848,6 +846,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 
 	}
 
+	/**
+	 * Get packages defined in this component impl and collect all faults from
+	 * all included packages.
+	 * @param compImpl
+	 * @return Map<String, List<String>> mapping from component instance name
+	 * to a list of associated faults.
+	 */
 	private Map<String, List<String>> collectFaultsFromPackages(ComponentImplementation compImpl) {
 		Map<String, List<String>> mapCompNameToFaultNames = new HashMap<String, List<String>>();
 		List<AadlPackageImpl> packages = new ArrayList<AadlPackageImpl>();
@@ -885,8 +890,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return mapCompNameToFaultNames;
 	}
 
-	private Map<String, String> collectAgreeVarsInImpl(ActivationStatement actStmt, ComponentImplementation compImpl) {
-		Map<String, String> mapAgreeVarToCompName = new HashMap<String, String>();
+	/**
+	 * Gets all agree vars defined in this component implementation.
+	 * @param compImpl
+	 * @return List<String> of agree var names.
+	 */
+	private List<String> collectAgreeVarsInImpl(ComponentImplementation compImpl) {
+		List<String> agreeVars = new ArrayList<String>();
 		if (compImpl instanceof SystemImplementation) {
 			SystemImplementation sysImpl = (SystemImplementation) compImpl;
 			for (AnnexSubclause as : sysImpl.getOwnedAnnexSubclauses()) {
@@ -894,16 +904,21 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					for (Element child : as.getChildren()) {
 						if (child instanceof AgreeContractSubclause) {
 							AgreeContractSubclause agreeChild = (AgreeContractSubclause) child;
-							mapAgreeVarToCompName.putAll(populateMapAgreeVarToCompName(
-									((AgreeContract) agreeChild.getContract()).getSpecs(), compImpl.getName()));
+							agreeVars.addAll(
+									populateAgreeVarList(((AgreeContract) agreeChild.getContract()).getSpecs()));
 						}
 					}
 				}
 			}
 		}
-		return mapAgreeVarToCompName;
+		return agreeVars;
 	}
 
+	/**
+	 * Collects the AadlPackageImpl of this component impl.
+	 * @param compImpl
+	 * @return AadlPackageImpl of this component impl.
+	 */
 	private AadlPackageImpl getAadlPackageImpl(EObject compImpl) {
 		EObject cont = compImpl.eContainer();
 		if (cont instanceof AadlPackageImpl) {
@@ -913,6 +928,11 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 	}
 
+	/**
+	 * Collects fault names from the safety spec statements.
+	 * @param specs Safety SpecStatements
+	 * @return List<String> of all fault names defined in these specs.
+	 */
 	private List<String> getFaultNamesFromSpecs(List<SpecStatement> specs) {
 		List<String> faultNames = new ArrayList<String>();
 		for (SpecStatement sp : specs) {
@@ -930,24 +950,20 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return faultNames;
 	}
 
-	private Map<String, String> populateMapAgreeVarToCompName(
-			List<com.rockwellcollins.atc.agree.agree.SpecStatement> specs, String compName) {
-		Map<String, String> map = new HashMap<String, String>();
+	/**
+	 * Collects all agree vars defined in the spec statements parameter.
+	 * @param specs The Agree SpecStatements
+	 * @return List<String> of all agree var names in these specs.
+	 */
+	private List<String> populateAgreeVarList(List<com.rockwellcollins.atc.agree.agree.SpecStatement> specs) {
+		List<String> agreeVarList = new ArrayList<String>();
 		for (com.rockwellcollins.atc.agree.agree.SpecStatement sp : specs) {
 			if (sp instanceof EqStatement) {
 				for (Arg left : ((EqStatement) sp).getLhs()) {
-					map.put(left.getName(), compName);
+					agreeVarList.add(left.getName());
 				}
 			}
 		}
-		return map;
-	}
-
-	private List<String> collectStringsFromNamedElements(List<NamedElement> list) {
-		List<String> stringList = new ArrayList<String>();
-		for (NamedElement el : list) {
-			stringList.add(el.getName());
-		}
-		return stringList;
+		return agreeVarList;
 	}
 }
