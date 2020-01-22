@@ -42,10 +42,12 @@ import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
+import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
@@ -54,6 +56,8 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
+import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 /**
@@ -402,50 +406,24 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return returnArgs;
 	}
 
-//	/*
-//	 * Check Duration:
-//	 * (1) : If transient, check for interval (there must be one).
-//	 * 		 Checks for valid integer interval,
-//	 * 		 that the lower and upper integers in the interval are not constants.
-//	 * (2) : If permanent, there cannot be an interval associated with it.
-//	 */
-//	@Check
-//	public void checkDuration(DurationStatement durationStmt){
-//
-//		TemporalConstraint tc = durationStmt.getTc();
-//
-//		// (1): See if we have a transient duration
-//		// If so, there must be a duration interval associated with it.
-//		if(tc instanceof TransientConstraint){
-//			// Check for valid integer interval
-//			Interval interval = durationStmt.getInterv();
-//			if(interval != null){
-//				Expr lower = interval.getLow();
-//			    Expr higher = interval.getHigh();
-//
-//			    // Lower value is integer valued literal and not a const
-//			    if(!(lower instanceof IntLitExpr || isConst(lower))){
-//			        error(lower, "Lower interval must be an integer valued literal.");
-//			    }
-//
-//			    // Higher value is integer valued literal
-//			    if(!(higher instanceof IntLitExpr || isConst(higher))){
-//		            error(higher, "Higher interval must be an integer valued literal.");
-//		        }
-//			}else{
-//				error(tc, "There must be a duration interval associated with transient faults.");
-//			}
-//
-//		// (2): Else we have a permanent fault and hence should have no duration interval.
-//		}else{
-//			Interval interval = durationStmt.getInterv();
-//			if(interval != null){
-//				error(tc, "It makes no sense to have a duration interval on a permanent fault.");
-//			}
-//		}
-//	}
-//
-//
+	/**
+	 * Check that only permanent is used and no interval is associated with it.
+	 * @param durationStmt
+	 */
+	@Check
+	public void checkDuration(DurationStatement durationStmt) {
+		TemporalConstraint tc = durationStmt.getTc();
+		if (tc instanceof TransientConstraint) {
+			error(durationStmt, "Transient faults are currently not supported. Duration must be 'permanent.'");
+
+		} else {
+			Interval interval = durationStmt.getInterv();
+			if (interval != null) {
+				error(tc, "It makes no sense to have a duration interval on a permanent fault.");
+			}
+		}
+	}
+
 //	/*
 //	 *  Trigger Statements:
 //	 *  Calls helper function to check trigger condition.
