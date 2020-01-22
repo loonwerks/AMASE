@@ -33,31 +33,34 @@ import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.PrimType;
-import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
+import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.Interval;
+import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
+import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
+import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
+import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 /**
@@ -107,26 +110,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		AnalysisBehavior behavior = analysisStmt.getBehavior();
 		if (behavior instanceof FaultCountBehavior) {
 			FaultCountBehavior fc = (FaultCountBehavior) behavior;
-			String maxFaults = fc.getMaxFaults();
-			try {
-				int n = Integer.parseInt(maxFaults);
-				if (n < 0) {
-					error(analysisStmt, "The value for max number of faults must be positive.");
-				}
-			} catch (NumberFormatException nfe) {
-				error(analysisStmt, "The value for max number of faults needs to be a valid integer.");
+			if (!testIntegerString(fc.getMaxFaults())) {
+				error(analysisStmt, "Max N value must be a valid string representing a positive integer.");
 			}
 		} else if (behavior instanceof ProbabilityBehavior) {
 			ProbabilityBehavior prob = (ProbabilityBehavior) behavior;
-			String probability = prob.getProbabilty();
-			try {
-				double p = Double.parseDouble(probability);
-				if ((p < 0.0) || (p > 1.0)) {
-					error(analysisStmt,
-							"Probability value must be greater than or equal to 0 and less than or equal to one.");
-				}
-			} catch (NumberFormatException nfe) {
-				error(analysisStmt, "The value for probability needs to be a valid decimal between 0 and 1 inclusive.");
+			if (!testProbabilityString(prob.getProbabilty())) {
+				error(analysisStmt, "Probability must be a valid string between 0 and 1 inclusive.");
 			}
 		} else {
 			error(analysisStmt, "Analysis behavior must be either 'max n fault' or 'probability q'.");
@@ -277,6 +267,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		NamedElement defNameSub;
 		List<Expr> exprList = inputs.getNom_conn();
 		EList<String> inputList = inputs.getFault_in();
+		ArrayList<String> argNames = new ArrayList<String>();
 
 		if (container instanceof FaultStatement) {
 			FaultStatement faultStatement = (FaultStatement) container;
@@ -286,7 +277,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			// Make sure we have a NodeDefExpr
 			if (defNameSub instanceof NodeDef) {
 				List<Arg> nodeArgs = ((NodeDef) defNameSub).getArgs();
-				ArrayList<String> argNames = new ArrayList<String>();
 				for (Arg arg : nodeArgs) {
 					argNames.add(arg.getFullName());
 				}
@@ -307,31 +297,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					error(inputs, "With this fault definition, you must have " + (argNames.size() - 1) + " inputs."
 							+ " These are called: " + argNames.toString());
 				}
-
-				// Type check inputs
-				for (int i = 0; i < exprList.size(); i++) {
-					if (nodeArgs.get(i).getType() instanceof PrimType) {
-						if (exprList.get(i) instanceof NamedElmExpr) {
-							NamedElmExpr elm = (NamedElmExpr) exprList.get(i);
-							if (elm.getElm() instanceof Arg) {
-								Arg arg = (Arg) elm.getElm();
-								if (!(arg.getType() instanceof PrimType)) {
-									error(inputs,
-											"Argument types must match.");
-								} else {
-									PrimType pTypeExpr = (PrimType) arg.getType();
-									PrimType pTypeNode = (PrimType) nodeArgs.get(i).getType();
-									if (!pTypeExpr.getName().equals(pTypeNode.getName())) {
-										error(inputs,
-												"Argument types must match: " + nodeArgs.get(i).getName()
-														+ " is of type: " + pTypeNode.getName() + " and "
-														+ arg.getName() + " is of type " + pTypeExpr.getName());
-									}
-								}
-							}
-
-						}
-					}
+				if (!checkInputTypes(exprList, nodeArgs)) {
+					error(inputs, "Types of inputs do not match types of node parameters");
 				}
 			} else {
 				// Not a node def expr
@@ -385,28 +352,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 	/**
-	 * Method finds return values of fault node given a fault statement.
-	 * @param fStmt
-	 * @return List<Arg> of return arguments.
-	 */
-	private List<Arg> getNodeReturnArgs(FaultStatement fStmt) {
-		List<Arg> returnArgs = new ArrayList<Arg>();
-		NodeDef nodeDef = null;
-		try {
-			nodeDef = SafetyUtil.getFaultNode(fStmt);
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
-		// Get the return values
-		if (nodeDef != null) {
-			returnArgs = nodeDef.getRets();
-		} else {
-			return null;
-		}
-		return returnArgs;
-	}
-
-	/**
 	 * Check that only permanent is used and no interval is associated with it.
 	 * @param durationStmt
 	 */
@@ -424,303 +369,67 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		}
 	}
 
-//	/*
-//	 *  Trigger Statements:
-//	 *  Calls helper function to check trigger condition.
-//	 *
-//	 *  Make sure probability statement is a valid probability
-//	 *  (real number between 0 and 1 inclusive)
-//	 */
-//	@Check
-//	public void checkTriggerStatement(TriggerStatement triggerStmt){
-//
-//		// First check the trigger condition
-//		checkTriggerCondition(triggerStmt.getCond());
-//
-//	}
-//
-//	/*
-//	 * Trigger Condition:
-//	 * Checks nonempty list and only boolean values in expression list.
-//	 * Expr validity is done primarily through agree
-//	 */
-//	@Check
-//	public void checkTriggerCondition(TriggerCondition tc){
-//		if (tc instanceof EnablerCondition) {
-//			EnablerCondition ec = (EnablerCondition)tc;
-//
-//			// Make sure expression list for trigger conditions is nonempty
-//			EList<Expr> exprList = ec.getExprList();
-//			if(exprList.isEmpty()) {
-//				error(tc, "Enabler trigger condition list cannot be empty.");
-//			}
-//
-//			// For each expression in the list, make sure they are all of type boolean
-//			for(Expr expr : exprList){
-//				if (expr != null) {
-//		            AgreeType exprType = getAgreeType(expr);
-//		            if (!matches(BOOL, exprType)) {
-//		                error(tc, "Expression for trigger condition is of type '" + exprType.toString()
-//		                        + "' but must be of type 'bool'");
-//		            }
-//		        }
-//			}
-//		}
-//	}
-//
-//
-//	/*
-//	 *  EqStatements:
-//	 *  Call agrees checkArg routine for each arg in the statement.
-//	 *  The expressions on the rhs are validated through agree.
-//	 */
-//	@Check
-//	public void checkEqStatement(EqValue eqStmt){
-//
-//		// For each arg in the list, call agree 'checkArg' method for validation
-//		EList<Arg> args = eqStmt.getLhs();
-//		for(Arg arg : args){
-//			checkArg(arg);
-//		}
-//	}
-//
-//	/*
-//	 * IntervalEqStatements:
-//	 * Check the time interval consists of both integer or both real literal values.
-//	 *
-//	 */
-//	@Check
-//	public void checkIntervalEqStatement(IntervalEq intervalEq){
-//
-//		// Check valid real OR integer interval
-//
-//		Interval interval = intervalEq.getInterv();
-//		Expr lower = interval.getLow();
-//	    Expr higher = interval.getHigh();
-//
-//	    AgreeType t = getAgreeType(intervalEq.getLhs_int().getType());
-//
-//	    // Both must be real or both must be integer
-//	    if((!(lower instanceof IntLitExpr &&
-//	    	  higher instanceof IntLitExpr &&
-//	    	  t == AgreeType.INT) ||
-//	        !(lower instanceof RealLitExpr &&
-//	          higher instanceof RealLitExpr &&
-//	          t == AgreeType.REAL))) {
-//	    	error(intervalEq, "Lower and higher interval values must be both real or both integer and match the argument type.");
-//	    }
-//
-//	    // Neither can be named constants (MWW: why?)
-//	    if(isConst(lower) || isConst(higher)){
-//	    	error(intervalEq, "Lower and higher interval values must be real or integer valued literals.");
-//	    }
-//	}
-//
-//	/*
-//	 * SetEqStatements:
-//	 * Check the set eq statements for empty set or non-integer values
-//	 */
-//	@Check
-//	public void checkSetEqStatement(SetEq setEq){
-//
-//		// Check for empty list
-//		if((setEq.getList().isEmpty()) && (setEq.getL1() == null)){
-//			error(setEq, "Set cannot be empty.");
-//		}
-//
-//		// Get the expr and get Agree type from it
-//		Expr lhsExpr = setEq.getL1();
-//		AgreeType lhsType = getAgreeType(lhsExpr);
-//
-//		// Make sure types match (int)
-//		if(!matches(AgreeType.INT, lhsType)){
-//			error(lhsExpr, "Valid integer required in set");
-//		}
-//
-//		// Get the list and do the same to expressions in the list
-//		EList<Expr> exprList = setEq.getList();
-//
-//		if(!exprList.isEmpty()){
-//			for(Expr exp : exprList){
-//				AgreeType expType = getAgreeType(exp);
-//				if(!matches(AgreeType.INT, expType)){
-//					error(exp, "Valid integer required in set");
-//				}
-//			}
-//		}
-//	}
+	/**
+	 * Check that probability defined on fault is valid.
+	 * @param probStmt
+	 */
+	@Check(CheckType.FAST)
+	public void checkProbability(ProbabilityStatement probStmt) {
+		String prob = probStmt.getProbability();
+		if (!testProbabilityString(prob)) {
+			error(probStmt, "Probability must be valid decimal string between 0 and 1 inclusive.");
+		}
 
-	/*
-	 * RangeEqStatments:
-	 * (1) Make sure expressions are constants
-	 * (2) Check for UnaryExpr (negative integers)
-	 * 	   If Unary:
-	 * 		cast to unary expr
-	 * 		call testNegativeInteger
-	 *
-	 * (3) Check for IntLitExpr
-	 * 	   If IntLit:
-	 * 		cast to IntLit
-	 * 		call testPositiveInteger
-	 *
-	 * (4) Else error
-	 *
-	 * (5) If integer results are non-null:
-	 * 		check for strict inequality lhs < rhs
+	}
+
+	/**
+	 * Trigger stmts are not yet supported.
+	 * @param triggerStmt
+	 */
+	@Check(CheckType.FAST)
+	public void checkTriggerStatement(TriggerStatement triggerStmt) {
+		error(triggerStmt, "Trigger statements are currently not supported.");
+	}
+
+	/**
+	 * Utilize Agree validator to check arg of eq statement.
+	 * @param eqStmt
+	 */
+	@Check(CheckType.FAST)
+	public void checkEqStatement(EqValue eqStmt) {
+		// For each arg in the list, call agree 'checkArg' method for validation
+		List<Arg> args = eqStmt.getLhs();
+		for (Arg arg : args) {
+			checkArg(arg);
+		}
+	}
+
+	/**
+	 * Interval eq stmts not yet supported.
+	 * @param intervalEq
+	 */
+	@Check(CheckType.FAST)
+	public void checkIntervalEqStatement(IntervalEq intervalEq) {
+		error(intervalEq, "Interval eq statements are not currently supported.");
+	}
+
+	/**
+	 * Set eq stmts not yet supported.
+	 * @param setEq
+	 */
+	@Check(CheckType.FAST)
+	public void checkSetEqStatement(SetEq setEq) {
+		error(setEq, "Set eq statements are not currently supported.");
+	}
+
+
+	/**
+	 * Range eq stmts not yet supported.
+	 * @param range
 	 */
 	@Check
-	public void checkRangeEqStatement(RangeEq range){
-
-		Expr lhs = range.getL1();
-		Expr rhs = range.getL2();
-
-		Integer intlhs = null;
-		Integer intrhs = null;
-
-		// (1) Check for constants
-		if(!exprIsConst(lhs)){
-			error(lhs, "Range values must be valid integer constants.");
-		}
-		if(!exprIsConst(rhs)){
-			error(rhs, "Range values must be valid integer constants.");
-		}
-
-		// LHS TEST
-		// (2), (3): If lhs UnaryExpr: get op, get val, concat strings, parse int
-		if(lhs instanceof UnaryExpr){
-
-			UnaryExpr lhsUnary = (UnaryExpr) lhs;
-			intlhs = testNegativeInteger(lhsUnary);
-
-			// If return value is null, not a valid negative integer
-			if(intlhs == null){
-				error(lhs, "Must have valid negative or positive integer in range.");
-			}
-
-		} else if(lhs instanceof IntLitExpr){
-			// Else check if lhs IntLitExpr: cast, get val, parse int
-			IntLitExpr lhsIntLit = (IntLitExpr) lhs;
-
-			intlhs = testPositiveInteger(lhsIntLit);
-
-			// If return value null, put out error message
-			if(intlhs == null){
-				error(lhs, "Must have valid positive integer in range.");
-			}
-
-		} else{
-			// else throw validation error
-			error(lhs, "Range values must be valid integers");
-		}
-
-
-
-		// RHS TEST:
-		// (2), (3): If rhs UnaryExpr: call testNegativeInteger on unary expr
-		if(rhs instanceof UnaryExpr){
-
-			UnaryExpr rhsUnary = (UnaryExpr) rhs;
-			intrhs = testNegativeInteger(rhsUnary);
-
-			// If null int returned, put out error message
-			if(intrhs == null){
-				error(rhs, "Must have valid negative or positive integer in range.");
-			}
-
-		} else if(rhs instanceof IntLitExpr){
-			// Else check if rhs IntLitExpr: testPositiveInteger
-			IntLitExpr rhsIntLit = (IntLitExpr) rhs;
-			intrhs = testPositiveInteger(rhsIntLit);
-
-			if(intrhs == null){
-				error(rhs, "Must have valid positive integer in range");
-			}
-
-		} else{
-			// else throw validation error
-			error(rhs, "Range values must be valid integers");
-		}
-
-		// Test for strict inequality lhs<rhs
-		if((intrhs != null) && (intlhs != null)){
-			if(intlhs >= intrhs){
-				error(range, "There must be strict inequality between lhs and rhs range values: lhs < rhs.");
-			}
-		}
-
-
-
-	}
-
-
-	/*
-	 * testNegativeInteger:
-	 * parameter: UnaryExpr
-	 * returns: Integer
-	 * (1): Gets op : should be negative sign
-	 *		If op not '-', return null
-	 * (2): Get Expr which should be IntLitExpr
-	 * 		If not, return null
-	 * (3): Get value (string) from IntLitExpr
-	 * 		Concat '-' with string value
-	 * (4): Parse int: if exception, return null
-	 * (5): Return int
-	 */
-	private Integer testNegativeInteger(UnaryExpr unary){
-
-		Integer intResult = null;
-		String op = unary.getOp();
-
-		if(!op.equals("-")){
-			return null;
-		}
-
-		Expr rhsDeepExpr = unary.getExpr();
-
-		// This expression has to be an IntLit... else error
-		if(rhsDeepExpr instanceof IntLitExpr){
-
-			IntLitExpr rhsDeepInt = (IntLitExpr) rhsDeepExpr;
-			String rhsDeepIntVal = rhsDeepInt.getVal();
-			String totalInt = op.concat(rhsDeepIntVal);
-
-			// Parse int
-			try {
-				intResult = Integer.parseInt(totalInt);
-
-			} catch (NumberFormatException e) {
-			      return null;
-			}
-
-		} else {
-			return null;
-		}
-
-		return intResult;
-	}
-
-
-	/*
-	 * testPositiveInteger:
-	 * parameter: IntLitExpr
-	 * returns: Integer
-	 * (1): Gets val : string
-	 * (2): Parse int: if exception, return null
-	 * (5): Return int
-	 */
-	private Integer testPositiveInteger(IntLitExpr intLit){
-		String lhsIntVal = intLit.getVal();
-		Integer intResult = null;
-
-		// Try to parse int
-		try {
-			intResult = Integer.parseInt(lhsIntVal);
-
-		} catch (NumberFormatException e) {
-		      return null;
-		}
-
-		return intResult;
+	public void checkRangeEqStatement(RangeEq range) {
+		error(range, "Range eq statements are not currently supported.");
 	}
 
 	/**
@@ -874,6 +583,39 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 	/**
+	 * Check that input types between these lists match.
+	 * Assume lists are in order.
+	 * @param exprList
+	 * @param nodeArgs
+	 * @return bool : valid or not
+	 */
+	private boolean checkInputTypes(List<Expr> exprList, List<Arg> nodeArgs) {
+		// Type check inputs
+		for (int i = 0; i < exprList.size(); i++) {
+			if (nodeArgs.get(i).getType() instanceof PrimType) {
+				if (exprList.get(i) instanceof NamedElmExpr) {
+					NamedElmExpr elm = (NamedElmExpr) exprList.get(i);
+					if (elm.getElm() instanceof Arg) {
+						Arg arg = (Arg) elm.getElm();
+						if (!(arg.getType() instanceof PrimType)) {
+							return false;
+						} else {
+							PrimType pTypeExpr = (PrimType) arg.getType();
+							PrimType pTypeNode = (PrimType) nodeArgs.get(i).getType();
+							if (!pTypeExpr.getName().equals(pTypeNode.getName())) {
+								return false;
+							} else {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Collects all agree vars defined in the spec statements parameter.
 	 * @param specs The Agree SpecStatements
 	 * @return List<String> of all agree var names in these specs.
@@ -888,5 +630,65 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		}
 		return agreeVarList;
+	}
+
+	/**
+	 * Method finds return values of fault node given a fault statement.
+	 * @param fStmt
+	 * @return List<Arg> of return arguments.
+	 */
+	private List<Arg> getNodeReturnArgs(FaultStatement fStmt) {
+		List<Arg> returnArgs = new ArrayList<Arg>();
+		NodeDef nodeDef = null;
+		try {
+			nodeDef = SafetyUtil.getFaultNode(fStmt);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+		// Get the return values
+		if (nodeDef != null) {
+			returnArgs = nodeDef.getRets();
+		} else {
+			return null;
+		}
+		return returnArgs;
+	}
+
+	/**
+	 * Tests probability string: returns false if number format exception
+	 * or prob value falls outside [0,1].
+	 * @param prob
+	 * @return bool : valid or not
+	 */
+	private boolean testProbabilityString(String prob) {
+		try {
+			double p = Double.parseDouble(prob);
+			if ((p < 0.0) || (p > 1.0)) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
+
+	/**
+	 * Tests integer string: returns false if number format exception
+	 * or negative integer.
+	 * @param integer
+	 * @return bool : valid or not
+	 */
+	private boolean testIntegerString(String integer) {
+		try {
+			int n = Integer.parseInt(integer);
+			if (n < 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
 	}
 }
