@@ -34,6 +34,7 @@ import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
@@ -272,50 +273,28 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check(CheckType.FAST)
 	public void checkInput(InputStatement inputs) {
-
-		// Get container of inputs (FaultSpecStmt)
 		EObject container = inputs.eContainer();
 		NamedElement defNameSub;
+		List<Expr> exprList = inputs.getNom_conn();
+		EList<String> inputList = inputs.getFault_in();
 
-		// Gather expression list from rhs of '<-'
-		EList<Expr> exprList = inputs.getNom_conn();
-
-		// (1) : if the container is a fault statement:
-		// Grab the nested dot id (fault node name: faults.fail_to) and
-		// get the base of the deepest sub (fail_to)
 		if (container instanceof FaultStatement) {
 			FaultStatement faultStatement = (FaultStatement) container;
 			DoubleDotRef defName = faultStatement.getFaultDefName();
-
-			// This should be fail_to (NodeDefExpr)
 			defNameSub = defName.getElm();
 
 			// Make sure we have a NodeDefExpr
 			if (defNameSub instanceof NodeDef) {
-
-				// Cast to NodeDefExpr
-				NodeDef nodeDef = (NodeDef) defNameSub;
-				// Gather the arguments from node def
-				EList<Arg> args = nodeDef.getArgs();
-				EList<String> inputList = inputs.getFault_in();
-
-				// Make an easy string list to access that contains the argument names
-				// from the node defintion
+				List<Arg> nodeArgs = ((NodeDef) defNameSub).getArgs();
 				ArrayList<String> argNames = new ArrayList<String>();
-
-				for (Arg arg : args) {
+				for (Arg arg : nodeArgs) {
 					argNames.add(arg.getFullName());
 				}
 
-				// (2) : If the sizes are accurate, make sure names match
-				if (args.size() - 1 == (inputList.size())) {
-
+				// If the sizes are accurate, make sure names match
+				if (nodeArgs.size() - 1 == (inputList.size())) {
 					// Go through input list and make sure each name is in the arg list
 					for (String inputName : inputList) {
-
-						// String inputName = input.getFullName();
-
-						// Check to see if the input name is in the arg list
 						if (!argNames.contains(inputName)) {
 							error(inputs,
 									"Input names must match fault node definition names. " + "The input name "
@@ -324,45 +303,44 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 						}
 					}
 				} else {
-					// Wrong number of arguments/inputs
-					// To print list of inputs, I need to remove "trigger" from the list
-					ArrayList<String> noTrigger = new ArrayList<String>();
-					for (String item : argNames) {
-						if (!(item.equals("trigger"))) {
-							noTrigger.add(item);
-						}
-					}
+					argNames.remove("trigger");
 					error(inputs, "With this fault definition, you must have " + (argNames.size() - 1) + " inputs."
-							+ " These are called: " + noTrigger.toString());
+							+ " These are called: " + argNames.toString());
 				}
 
-				// (3) : Type check arguments to node with Expr on rhs
-				// Go through expression list
-//				for(int i = 0; i < exprList.size(); i++){
-//
-//					// Save expr and arg
-//					Expr expr = exprList.get(i);
-//					Arg arg = args.get(i);
-//
-//					// Get agree types of each
-//					AgreeType typeExpr = getAgreeType(expr);
-//					AgreeType typeArg = getAgreeType(arg);
-//
-//					// See if they match using agree "matches" method
-//					if(!(matches(typeExpr, typeArg))){
-//						error(expr, "Left side ("+arg.getName()+") is of type "+typeArg.toString()
-//						+" but right side is of type "+typeExpr.toString());
-//					}
-//				}
+				// Type check inputs
+				for (int i = 0; i < exprList.size(); i++) {
+					if (nodeArgs.get(i).getType() instanceof PrimType) {
+						if (exprList.get(i) instanceof NamedElmExpr) {
+							NamedElmExpr elm = (NamedElmExpr) exprList.get(i);
+							if (elm.getElm() instanceof Arg) {
+								Arg arg = (Arg) elm.getElm();
+								if (!(arg.getType() instanceof PrimType)) {
+									error(inputs,
+											"Argument types must match.");
+								} else {
+									PrimType pTypeExpr = (PrimType) arg.getType();
+									PrimType pTypeNode = (PrimType) nodeArgs.get(i).getType();
+									if (!pTypeExpr.getName().equals(pTypeNode.getName())) {
+										error(inputs,
+												"Argument types must match: " + nodeArgs.get(i).getName()
+														+ " is of type: " + pTypeNode.getName() + " and "
+														+ arg.getName() + " is of type " + pTypeExpr.getName());
+									}
+								}
+							}
 
+						}
+					}
+				}
 			} else {
 				// Not a node def expr
-				error(defName, "Fault definition name must be an instance of NodeDefExpr." + " It is: "
-						+ defNameSub.getFullName() + ".");
+				error(defName, "Fault definition: " + defNameSub.getFullName()
+						+ " must be a valid agree node definition name.");
 			}
 		} else {
 			// Not in fault statement
-			error(inputs, "Fault inputs must be in a fault statement, not a " + container.toString() + ".");
+			error(inputs, "Fault inputs must be defined within a fault statement.");
 		}
 	}
 //
