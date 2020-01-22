@@ -35,6 +35,7 @@ import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
+import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
@@ -207,6 +208,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	/**
 	 * Checks that activation stmt defined in implementation,
 	 * the agree var is defined in agree annex of this implementation,
+	 * the type of agree var is boolean,
 	 * and the faults are defined on the designated components.
 	 * @param actStmt
 	 */
@@ -222,10 +224,22 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(actStmt, "Activation statements can only be defined in component implementation");
 		} else {
 			Map<String, List<String>> mapCompNameToFaultNames = collectFaultsInProgram(compImpl);
-			List<String> agreeVars = collectAgreeVarsInImpl(compImpl);
-
-			// Check AgreeVar name
-			if (!agreeVars.contains(agreeVarName)) {
+			List<Arg> agreeVars = collectAgreeVarsInImpl(compImpl);
+			// Check agree var type and name
+			boolean found = false;
+			for (Arg arg : agreeVars) {
+				if (arg.getName().equals(agreeVarName)) {
+					found = true;
+					if (arg.getType() instanceof PrimType) {
+						if (!((PrimType) arg.getType()).getName().contentEquals("bool")) {
+							error(actStmt, "The agree eq var: " + arg.getName() + " must be of type bool.");
+						}
+					} else {
+						error(actStmt, "The agree eq var: " + arg.getName() + " must be of primitive type bool.");
+					}
+				}
+			}
+			if (found == false) {
 				error(actStmt, "The eq statement: " + agreeVarName
 						+ " does not match an eq statement defined in this Agree annex implementation.");
 			}
@@ -895,8 +909,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * @param compImpl
 	 * @return List<String> of agree var names.
 	 */
-	private List<String> collectAgreeVarsInImpl(ComponentImplementation compImpl) {
-		List<String> agreeVars = new ArrayList<String>();
+	private List<Arg> collectAgreeVarsInImpl(ComponentImplementation compImpl) {
+		List<Arg> agreeVars = new ArrayList<Arg>();
 		if (compImpl instanceof SystemImplementation) {
 			SystemImplementation sysImpl = (SystemImplementation) compImpl;
 			for (AnnexSubclause as : sysImpl.getOwnedAnnexSubclauses()) {
@@ -955,12 +969,12 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * @param specs The Agree SpecStatements
 	 * @return List<String> of all agree var names in these specs.
 	 */
-	private List<String> populateAgreeVarList(List<com.rockwellcollins.atc.agree.agree.SpecStatement> specs) {
-		List<String> agreeVarList = new ArrayList<String>();
+	private List<Arg> populateAgreeVarList(List<com.rockwellcollins.atc.agree.agree.SpecStatement> specs) {
+		List<Arg> agreeVarList = new ArrayList<Arg>();
 		for (com.rockwellcollins.atc.agree.agree.SpecStatement sp : specs) {
 			if (sp instanceof EqStatement) {
 				for (Arg left : ((EqStatement) sp).getLhs()) {
-					agreeVarList.add(left.getName());
+					agreeVarList.add(left);
 				}
 			}
 		}
