@@ -46,6 +46,7 @@ import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
+import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.PropagateStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
@@ -53,6 +54,7 @@ import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 /**
  * This class contains custom validation rules.
@@ -259,16 +261,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 
 
 	/**
-	 * Input Statements
-	 * (1): Get container - check to see if it is a fault statement.
-	 * Then gather the deepest sub of the fault definition name
-	 * and get it's base. For instance: fault.fail_to
-	 * The base of that deepest sub should be "fail_to."
-	 * Make sure this is a valid NodeDefExpr and then collect the arguments.
-	 * These arguments must match all input fault values (by name).
-	 * (2): Make sure the types of arguments match the types of expressions
-	 * passed in as fault inputs (connections or otherwise).
-	 * (3) Type check Expr (right side) with arguments to node (left side)
+	 * Checks fault def name is valid,
+	 * expressions passed into node match parameter types,
+	 * and correct number of arguments passed in.
+	 *
 	 * @param inputs
 	 */
 	@Check(CheckType.FAST)
@@ -343,112 +339,69 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(inputs, "Fault inputs must be defined within a fault statement.");
 		}
 	}
-//
-//	/* Output Statements
-//	 * (1): Get container of the output in order to check the fault node for
-//	 * 		list of return values. This is compared with the list of fault outputs.
-//	 * 		If the sizes of the lists do not match, the names of the return values
-//	 * 		do not match, or the output statement is not in the fault spec, we
-//	 * 		send out an error.
-//	 * (2): Make sure we have valid nominal connections as our output connections.
-//	 * (3): Make sure the nominal connection types match return value types.
-//	 */
-//	@Check
-//	public void checkOutput(OutputStatement outputs){
-//		// List of nominal connections
-//		EList<NestedDotID> nomConns = outputs.getNom_conn();
-//
-//		// Get container of inputs (FaultSpecStmt)
-//		EObject container = outputs.eContainer();
-//		// Make an easy string list to access that contains the return names
-//		// from the node definition
-//		ArrayList<String> retNames = new ArrayList<String>();
-//		// List of return values
-//		EList<Arg> retvals = null;
-//
-//		// if the container is a fault statement:
-//		// Grab the nested dot id (fault node name: defName: faults.fail_to) and
-//		// get the base of the deepest sub (defNameSub: fail_to)
-//		if (container instanceof FaultStatement) {
-//			FaultStatement faultStatement = (FaultStatement) container;
-//			NodeDefExpr nodeDef;
-//			try {
-//				nodeDef = SafetyUtil.getFaultNode(faultStatement);
-//			} catch (IllegalArgumentException e) {
-//				error(faultStatement.getFaultDefName(), e.getMessage());
-//				return;
-//			}
-//
-//			// Gather the return values from node def
-//			retvals = nodeDef.getRets();
-//			EList<String> outputList = outputs.getFault_out();
-//
-//			for(Arg arg : retvals){
-//				retNames.add(arg.getFullName());
-//			}
-//
-//			// If the sizes are accurate, make sure names match
-//			if(retvals.size() == (outputList.size())){
-//
-//				// Go through output list and make sure each name is in the arg list
-//				for(String outputName : outputList){
-//		    		// String outputName = output.getFullName();
-//
-//		    		//Check to see if the input name is in the arg list
-//			   		if(!retNames.contains(outputName)){
-//			   			error(outputs, "Output names must match fault node definition return value names. "
-//			   					+"The output name "+outputName+" is not an return value in the node definition. "
-//			   					+"All possible output names are: "+retNames.toString());
-//			   		}
-//			   	}
-//			}else{
-//			   	// Wrong number of arguments/inputs
-//				error(outputs, "The number of outputs must match the number of return values in the node definition."
-//						+" With the fault"+faultStatement.getFaultDefName()+", this value must be "+retNames.size()+".");
-//			}
-//		}else{
-//			// Not a fault statement
-//			error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
-//		}
-//
-//
-//
-//		// (3) Type check between nominal connections and return values
-//
-//		// Iterate through the list of nominal connections (nomConns)
-//		for(int i = 0; i < nomConns.size(); i++){
-//
-//			// Get the nominal connection
-//			NestedDotID nom = nomConns.get(i);
-//			// Return value from the list of all return values
-//			Arg returnArg = null;
-//			// There is no reason why retvals should still be null.
-//			// If it is, there are other errors that would be shown to the user.
-//			if(retvals != null){
-//				returnArg = retvals.get(i);
-//			}else{
-//				error(outputs, "Return value list is empty.");
-//			}
-//
-//
-//
-//			AgreeType typeReturnArg = getAgreeType(returnArg);
-//
-//			// Get the final nested id of the nominal connection
-//			NamedElement nestedNom = getFinalNestId(nom);
-//			// Get agree type of that nested id
-//			AgreeType typeNom = getAgreeType(nestedNom);
-//
-//			// Use agrees "matches" method to check types
-//			if(!matches(typeNom, typeReturnArg)){
-//				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
-//				+" but right side (return value) is of type "+typeReturnArg.toString());
-//			}
-//		}
-//	}
-//
-//
-//
+
+	/**
+	 * Check return params of fault node against params listed
+	 * in outputs.
+	 * @param outputs
+	 */
+	@Check(CheckType.FAST)
+	public void checkOutput(OutputStatement outputs) {
+		List<String> faultsOut = outputs.getFault_out();
+		EObject container = outputs.eContainer();
+		List<Arg> retValues = new ArrayList<Arg>();
+		List<String> returnNames = new ArrayList<String>();
+
+		if (container instanceof FaultStatement) {
+			retValues = getNodeReturnArgs((FaultStatement) container);
+			if (retValues == null) {
+				error(outputs, "Fault node definition is not valid for these outputs.");
+			}
+
+			for (Arg arg : retValues) {
+				returnNames.add(arg.getFullName());
+			}
+			// Check sizes
+			if (retValues.size() == (faultsOut.size())) {
+				// Check names
+				for (String outputName : faultsOut) {
+					if (!returnNames.contains(outputName)) {
+						error(outputs,
+								"The output name: " + outputName + " is not an return value in the node definition. "
+										+ "All possible output names are: " + returnNames.toString());
+					}
+				}
+			} else {
+				error(outputs, "The number of outputs must match the number of return values in the node definition."
+						+ "No. of outputs must be " + returnNames.size() + ".");
+			}
+		} else {
+			error(outputs, "Fault outputs must be in a fault statement.");
+		}
+	}
+
+	/**
+	 * Method finds return values of fault node given a fault statement.
+	 * @param fStmt
+	 * @return List<Arg> of return arguments.
+	 */
+	private List<Arg> getNodeReturnArgs(FaultStatement fStmt) {
+		List<Arg> returnArgs = new ArrayList<Arg>();
+		NodeDef nodeDef = null;
+		try {
+			nodeDef = SafetyUtil.getFaultNode(fStmt);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+		// Get the return values
+		if (nodeDef != null) {
+			returnArgs = nodeDef.getRets();
+		} else {
+			return null;
+		}
+		return returnArgs;
+	}
+
 //	/*
 //	 * Check Duration:
 //	 * (1) : If transient, check for interval (there must be one).
