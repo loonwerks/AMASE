@@ -420,6 +420,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb NodeBuilder will have nominal vars added to locals.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
+		int outputIndex = 0;
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
 			boolean onlyAsym = true;
@@ -437,8 +438,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							+ " that is not a valid output for this component." + " Valid connections include {"
 							+ node.outputs + "}");
 				} else {
-					nb.addInput(new AgreeVar(createNominalId((faultyId)), getOutputTypeForFaultNode(f),
-							out.reference));
+					Type nominalOutputType = getOutputTypeForFaultNode(f).get(outputIndex);
+					if (nominalOutputType == null) {
+						throw new SafetyException("The fault " + f.name + " defined for " + node.id
+								+ " fail to identify the type for output # " + outputIndex);
+					}
+					nb.addInput(new AgreeVar(createNominalId((faultyId)), nominalOutputType, out.reference));
+					outputIndex++;
 				}
 			}
 		}
@@ -450,20 +456,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param fault Fault defining this fault node.
 	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	protected Type getOutputTypeForFaultNode(Fault fault) {
+	protected List<Type> getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
 		// variable later.
-		Type nominalOutputType = null;
-		if (fault.faultNode.outputs.size() > 1) {
-			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
-		} else {
-			for (VarDecl output : fault.faultNode.outputs) {
-				nominalOutputType = output.type;
-			}
+		List<Type> nominalOutputTypeList = new ArrayList<Type>();
+		for (VarDecl output : fault.faultNode.outputs) {
+			nominalOutputTypeList.add(output.type);
 		}
-		return nominalOutputType;
+		return nominalOutputTypeList;
 	}
 
 	/**
