@@ -420,7 +420,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb NodeBuilder will have nominal vars added to locals.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
-		int outputIndex = 0;
+		List<String> inputIdList = new ArrayList<String>();
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
 			boolean onlyAsym = true;
@@ -438,13 +438,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							+ " that is not a valid output for this component." + " Valid connections include {"
 							+ node.outputs + "}");
 				} else {
-					Type nominalOutputType = getOutputTypeForFaultNode(f).get(outputIndex);
-					if (nominalOutputType == null) {
-						throw new SafetyException("The fault " + f.name + " defined for " + node.id
-								+ " fail to identify the type for output # " + outputIndex);
+					for (Type nominalOutputType : getOutputTypeForFaultNode(f)) {
+						if (!inputIdList.contains(faultyId)) {
+							nb.addInput(new AgreeVar(createNominalId((faultyId)), nominalOutputType, out.reference));
+							inputIdList.add(faultyId);
+						}
+
 					}
-					nb.addInput(new AgreeVar(createNominalId((faultyId)), nominalOutputType, out.reference));
-					outputIndex++;
 				}
 			}
 		}
