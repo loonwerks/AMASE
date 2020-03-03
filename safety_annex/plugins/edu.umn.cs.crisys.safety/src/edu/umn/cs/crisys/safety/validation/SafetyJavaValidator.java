@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -18,17 +19,16 @@ import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentImplementation;
+import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.ModelUnit;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
-import org.osate.aadl2.SystemImplementation;
 import org.osate.aadl2.SystemType;
 import org.osate.aadl2.impl.AadlPackageImpl;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
-import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
@@ -214,40 +214,39 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		NamedElement faultComp = actStmt.getFaultComp_Path();
 		String faultName = actStmt.getFaultName();
 		String agreeVarName = actStmt.getAgreeBoolVarName();
-
 		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(actStmt, ComponentImplementation.class);
+
 		// Test for propagate stmt in non-implementation
 		if (compImpl == null) {
 			error(actStmt, "Activation statements can only be defined in component implementation");
 		} else {
-			Map<String, List<String>> mapCompNameToFaultNames = collectFaultsInProgram(compImpl);
-			List<Arg> agreeVars = collectAgreeVarsInImpl(compImpl);
-			// Check agree var type and name
-			boolean found = false;
-			for (Arg arg : agreeVars) {
-				if (arg.getName().equals(agreeVarName)) {
-					found = true;
-					if (arg.getType() instanceof PrimType) {
-						if (!((PrimType) arg.getType()).getName().contentEquals("bool")) {
-							error(actStmt, "The agree eq var: " + arg.getName() + " must be of type bool.");
+			ComponentType compType = compImpl.getType();
+			if (compType != null) {
+				Map<String, List<String>> mapCompNameToFaultNames = collectFaultsInProgram(compImpl);
+				List<EObject> assignableElements = collectAssignableElementsInImpl(compImpl);
+				boolean found = false;
+				for (EObject assignableElement : assignableElements) {
+					if (assignableElement instanceof NamedElement) {
+						NamedElement namedEl = (NamedElement) assignableElement;
+						if (agreeVarName.contentEquals(namedEl.getName())) {
+							found = true;
+							break;
 						}
-					} else {
-						error(actStmt, "The agree eq var: " + arg.getName() + " must be of primitive type bool.");
 					}
 				}
-			}
-			if (found == false) {
-				error(actStmt, "The eq statement: " + agreeVarName
-						+ " does not match an eq statement defined in this Agree annex implementation.");
-			}
-			// Check fault names and components
-			if (!mapCompNameToFaultNames.containsKey(faultComp.getName())) {
-				error(actStmt, "The fault component: " + faultComp.getName()
-						+ " is not a valid component name for the fault: " + faultName);
-			} else {
-				if (!mapCompNameToFaultNames.get(faultComp.getName()).contains(faultName)) {
-					error(actStmt, "The fault: " + faultName + " does not match a fault defined in component: "
-							+ faultComp.getName());
+				if (found == false) {
+					error(actStmt, "The eq statement: " + agreeVarName
+							+ " does not match an eq statement defined in the Agree annex.");
+				}
+				// Check fault names and components
+				if (!mapCompNameToFaultNames.containsKey(faultComp.getName())) {
+					error(actStmt, "The fault component: " + faultComp.getName()
+							+ " is not a valid component name for the fault: " + faultName);
+				} else {
+					if (!mapCompNameToFaultNames.get(faultComp.getName()).contains(faultName)) {
+						error(actStmt, "The fault: " + faultName + " does not match a fault defined in component: "
+								+ faultComp.getName());
+					}
 				}
 			}
 		}
@@ -527,23 +526,14 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * @param compImpl
 	 * @return List<String> of agree var names.
 	 */
-	private List<Arg> collectAgreeVarsInImpl(ComponentImplementation compImpl) {
-		List<Arg> agreeVars = new ArrayList<Arg>();
-		if (compImpl instanceof SystemImplementation) {
-			SystemImplementation sysImpl = (SystemImplementation) compImpl;
-			for (AnnexSubclause as : sysImpl.getOwnedAnnexSubclauses()) {
-				if (as.getName().contains("agree")) {
-					for (Element child : as.getChildren()) {
-						if (child instanceof AgreeContractSubclause) {
-							AgreeContractSubclause agreeChild = (AgreeContractSubclause) child;
-							agreeVars.addAll(
-									populateAgreeVarList(((AgreeContract) agreeChild.getContract()).getSpecs()));
-						}
-					}
-				}
-			}
+	private List<EObject> collectAssignableElementsInImpl(ComponentImplementation compImpl) {
+		List<EObject> assignableElements = new ArrayList<>();
+		List<AgreeContract> typeContracts = EcoreUtil2.getAllContentsOfType(compImpl, AgreeContract.class);
+		for (AgreeContract ac : typeContracts) {
+			assignableElements.addAll(EcoreUtil2.getAllContentsOfType(ac, EqStatement.class).stream()
+					.map(eq -> eq.getLhs()).flatMap(List::stream).collect(Collectors.toList()));
 		}
-		return agreeVars;
+		return assignableElements;
 	}
 
 	/**
