@@ -30,6 +30,7 @@ public
 					(Env_Pressure > HIGH_PRESSURE_THRESHOLD) and
 					(Env_Radiation > HIGH_RADIATION_THRESHOLD));	
 			
+			
 		**};
 	end Reactor_Ctrl;
 	

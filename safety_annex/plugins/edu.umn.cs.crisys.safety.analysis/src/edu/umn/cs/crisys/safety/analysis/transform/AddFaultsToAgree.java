@@ -15,6 +15,7 @@ import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.GranularityASTVisitor;
 import jkind.api.results.AnalysisResult;
 
 /**
@@ -28,6 +29,8 @@ import jkind.api.results.AnalysisResult;
 public class AddFaultsToAgree implements AgreeAutomater {
 
 	private static int transformFlag = 0;
+	private boolean granularity = true;
+	private GranularityASTVisitor granularityVisitor = new GranularityASTVisitor();
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -76,6 +79,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			case 1:
 			case 2:
 				program = faultVisitor.visit(program);
+				if (granularity) {
+					granularityVisitor.visit(program);
+				}
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
 				break;
