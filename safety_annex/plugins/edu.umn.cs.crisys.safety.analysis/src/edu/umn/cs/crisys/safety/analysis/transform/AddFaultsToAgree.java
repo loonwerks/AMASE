@@ -20,6 +20,7 @@ import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.GranularityASTVisitor;
 import jkind.api.results.AnalysisResult;
 
 /**
@@ -32,9 +33,14 @@ import jkind.api.results.AnalysisResult;
  */
 public class AddFaultsToAgree implements AgreeAutomater {
 
+
 	private static boolean isVerify = false;
 	private static boolean isGenMCS = false;
 	private static boolean isSingleLayer = false;
+
+	private boolean granularity = true;
+	private GranularityASTVisitor granularityVisitor = new GranularityASTVisitor();
+
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -86,6 +92,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 			if (isVerify || isGenMCS) {
 				program = faultVisitor.visit(program);
+				if (granularity) {
+					granularityVisitor.visit(program);
+				}
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
 			} else {
