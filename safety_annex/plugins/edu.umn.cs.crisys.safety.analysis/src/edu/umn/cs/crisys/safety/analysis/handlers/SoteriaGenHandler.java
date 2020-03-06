@@ -277,20 +277,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 				Display display = new Display();
 				Shell shell = createProgressBar(display);
 
-//				// generate soteria model from the result
-//				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
-//				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
-//				try {
-//					File file = File.createTempFile("soteriaMdl_", ".ml");
-//					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-//					bw.write(soteriaModel.toString());
-//					bw.close();
-//					org.eclipse.swt.program.Program.launch(file.toString());
-//				} catch (IOException e) {
-//					Dialog.showError("Unable to open file", e.getMessage());
-//					e.printStackTrace();
-//				}
-
 				// generate fault tree data structure from the result
 				// TODO: if zero max N fault hypothesis and empty fault
 				// combination for probabilistic analysis
