@@ -6,7 +6,7 @@ public
 	    node invert_signal(val_in: bool, trigger: bool) returns (val_out:bool);
 		let
 	  		val_out = if trigger then (not val_in) else val_in;
-		tel;
+		tel; 
 
 		node fail_to_zero(val_in: int, trigger: bool) returns (val_out: int);
 		let
