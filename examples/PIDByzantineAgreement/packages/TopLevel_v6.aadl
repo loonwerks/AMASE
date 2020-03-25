@@ -176,13 +176,12 @@ with AADL_Properties;
 		annex safety {**
 		    fault_activation: n1_failed = Asym_Fail_Any_PID_To_Any_Val@node1;
 		    fault_activation: n2_failed = Asym_Fail_Any_PID_To_Any_Val@node2;
-		    fault_activation: n3_failed = Asym_Fail_Any_PID_To_Any_Val@node3;
+		    fault_activation: n3_failed = Asym_Fail_Any_PID_To_Any_Val@node3;  
 		    fault_activation: n4_failed = Asym_Fail_Any_PID_To_Any_Val@node4;
-
-			analyze: max 2 fault
+ 
+			analyze: max 1 fault
 			--analyze: probability 1.0E-9
-			propagate_from :   
-      		{testFault@Nodes} to {Asym_Fail_Any_PID_To_Any_Val@Nodes};
+			
 		**};
 	end TopLevel.impl;
 end TopLevel_v6;

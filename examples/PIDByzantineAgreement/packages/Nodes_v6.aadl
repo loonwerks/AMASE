@@ -133,12 +133,6 @@ package Nodes_v6
 				duration: permanent;
 				propagate_type: asymmetric;
 			}
-			HW_fault testFault "Testing validation":     
-			{ 
-				duration: transient;
-				probability: 0.1;
-				propagate_type: symmetric;
-			}
 
 		**};
 	end Nodes;

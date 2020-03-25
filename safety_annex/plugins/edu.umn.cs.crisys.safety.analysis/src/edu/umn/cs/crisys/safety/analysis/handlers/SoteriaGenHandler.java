@@ -79,7 +79,6 @@ import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import jkind.JKindException;
-import jkind.api.JKindApi;
 import jkind.api.JRealizabilityApi;
 import jkind.api.KindApi;
 import jkind.api.results.AnalysisResult;
@@ -189,25 +188,12 @@ public class SoteriaGenHandler extends VerifyHandler {
 		try {
 			// Option pane window reminding user to run compositional analysis on model first.
 			// The user can exit out of fault analysis if desired or continue.
-			// If return value is 0, user selected OK and wants to run analysis.
-			// If -1, user closed window and if 1 user canceled operation.
-//			if (showCompositionalAnalysisReminder() != 0) {
-//				return Status.OK_STATUS;
-//			}
-//
-//			// Output reminder that analysis is underway, but it might take a while.
-//			JOptionPane.showMessageDialog(null,
-//					"Fault analysis is underway. \n Depending on how large the model is,\n it could take some time.",
-//					"Fault Analysis Message", JOptionPane.PLAIN_MESSAGE);
-
-			// Make sure the user selected a component implementation
 			ComponentImplementation ci = getComponentImplementation(root, implUtil);
 			SystemInstance si = getSysInstance(ci, implUtil);
 
 			AnalysisResult result;
 			CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
 
-			// SystemType sysType = si.getSystemImplementation().getType();
 			ComponentType sysType = AgreeUtils.getInstanceType(si);
 			EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(sysType,
 					AgreePackage.eINSTANCE.getAgreeContractSubclause());
@@ -263,18 +249,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 					Program program = linker.getProgram(result);
 
-					if (api instanceof JKindApi) {
-						String resultName = result.getName();
-//						String adviceFileName = rerunAdviceMap.get(resultName);
-//						if (adviceFileName == null) {
-//							adviceFileName = "agree_advice" + adviceCount++;
-//							rerunAdviceMap.put(resultName, adviceFileName);
-//						} else {
-//							((JKindApi) api).setReadAdviceFile(adviceFileName);
-//						}
-//						((JKindApi) api).setWriteAdviceFile(adviceFileName);
-					}
-
 					try {
 						if (result instanceof ConsistencyResult) {
 							consistApi.execute(program, result, subMonitor);
@@ -303,27 +277,16 @@ public class SoteriaGenHandler extends VerifyHandler {
 				Display display = new Display();
 				Shell shell = createProgressBar(display);
 
-//				// generate soteria model from the result
-//				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
-//				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
-//				try {
-//					File file = File.createTempFile("soteriaMdl_", ".ml");
-//					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-//					bw.write(soteriaModel.toString());
-//					bw.close();
-//					org.eclipse.swt.program.Program.launch(file.toString());
-//				} catch (IOException e) {
-//					Dialog.showError("Unable to open file", e.getMessage());
-//					e.printStackTrace();
-//				}
-
 				// generate soteria fault tree from the result
 				// TODO: if zero max N fault hypothesis and empty fault combination for probabilistic analysis
 				// generate empty tree
+				// then generate empty tree
 
 				// if no fault hypothesis
 				// or if max fault hypothesis but N = 0
 				// or if probablistic hypothesis but fault combinations above threshold is empty
+				// then print empty min cut set fault tree
+				// threshold is empty
 				// then print empty min cut set fault tree
 				if ((!AddFaultsToNodeVisitor.maxFaultHypothesis && !AddFaultsToNodeVisitor.probabilisticHypothesis)
 						|| (AddFaultsToNodeVisitor.maxFaultHypothesis && (AddFaultsToNodeVisitor.maxFaultCount == 0))
@@ -331,7 +294,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 								&& AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty())) {
 					SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
 					printUtils.printEmptyTree();
-
+					// Try to print the empty tree to file
 					try {
 						File file = File.createTempFile("soteriaResolvedFT_", ".ml");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -345,16 +308,19 @@ public class SoteriaGenHandler extends VerifyHandler {
 				}
 				else {
 					// open progress bar
+
+					// open progress bar
 					shell.open();
+
+					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 					// uncomment to see progress bar until user closes it
 					// (for testing purposes)
+					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 //					while (!shell.isDisposed()) {
 //						if (!display.readAndDispatch()) {
 //							display.sleep();
 //						}
 //					}
-					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 //					try {
 //						File file = File.createTempFile("soteriaFT_", ".ml");
 //						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -363,14 +329,12 @@ public class SoteriaGenHandler extends VerifyHandler {
 //						org.eclipse.swt.program.Program.launch(file.toString());
 //					} catch (IOException e) {
 //						Dialog.showError("Unable to open file", e.getMessage());
-//						e.printStackTrace();
-//					}
-
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
+					// Resolves this tree in order to find cut sets
 					resolveVisitor.visit(soteriaFT);
 
 					/*
-					 * try {
+					// Print min cut set file with details
 					 * File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
 					 * BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
 					 * bw.write(soteriaFT.printMinCutSet());
@@ -395,7 +359,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 						Dialog.showError("Unable to open file", e.getMessage());
 						e.printStackTrace();
 					}
-
+					// Print tally file with numbers and less information
 					try {
 						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
@@ -411,10 +375,8 @@ public class SoteriaGenHandler extends VerifyHandler {
 					}
 
 				}
-
 				deactivateTerminateHandlers();
 				enableRerunHandler(root);
-
 			}
 		};
 		analysisThread.start();
