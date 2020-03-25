@@ -14,4 +14,14 @@ public class SoteriaFTOrNode extends SoteriaFTNonLeafNode {
 		return visitor.visit(this);
 	}
 
+	@Override
+	/** Calculates probability of faults by summation, assuming negligible joint probability */
+	public float getProbability() {
+		float probability = 0;
+		for (SoteriaFTNode childNode : this.childNodes.values()) {
+			probability += childNode.getProbability();
+		}
+		return probability;
+	}
+
 }
