@@ -369,16 +369,18 @@ public class SoteriaGenHandler extends VerifyHandler {
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
 					resolveVisitor.visit(soteriaFT);
 
-					try {
-						File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
-						BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
-						bw.write(soteriaFT.printMinCutSet());
-						bw.close();
-						org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
-					} catch (IOException e) {
-						Dialog.showError("Unable to open file", e.getMessage());
-						e.printStackTrace();
-					}
+					/*
+					 * try {
+					 * File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
+					 * BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
+					 * bw.write(soteriaFT.printMinCutSet());
+					 * bw.close();
+					 * org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
+					 * } catch (IOException e) {
+					 * Dialog.showError("Unable to open file", e.getMessage());
+					 * e.printStackTrace();
+					 * }
+					 */
 
 					try {
 						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
