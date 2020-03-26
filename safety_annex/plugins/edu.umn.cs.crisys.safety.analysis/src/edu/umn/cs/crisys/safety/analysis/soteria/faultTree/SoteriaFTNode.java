@@ -21,4 +21,5 @@ public abstract class SoteriaFTNode extends SoteriaFTAst {
 //		this.parentNode = parentNode;
 //	}
 
+	public abstract float getProbability();
 }

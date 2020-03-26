@@ -1,6 +1,7 @@
 package Alternate
 public
 with Base_Types;
+with faults;
 	system Alternate
 		features
 			-- Main supply
@@ -23,7 +24,7 @@ with Base_Types;
 		**};
 		annex safety {**
 			
-			fault Alt_Mode_Fault "Alt supply at zero." : faults.fail_to{
+			fault Alt_Mode_Fault "Alt supply at zero." : faults::fail_to{
 				
 				eq fail_val : int = 0;
 				

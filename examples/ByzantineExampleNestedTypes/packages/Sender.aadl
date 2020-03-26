@@ -1,6 +1,7 @@
 package Sender
 public
 with Datatypes;
+with Fault_Library;
 	system Sender
 		features
 			in1 : in data port Datatypes::commBus.impl;
@@ -16,7 +17,7 @@ with Datatypes;
 		**}; 
 		
 		annex safety {**
-			fault Sender_Fault "Datatype output is zero": Fault_Library.nested_fault {
+			fault Sender_Fault "Datatype output is zero": Fault_Library::nested_fault {
 				inputs: val_in <- sender_out, alt_val <- 0.0;     
 				outputs: sender_out <- val_out;    
 				duration: permanent;

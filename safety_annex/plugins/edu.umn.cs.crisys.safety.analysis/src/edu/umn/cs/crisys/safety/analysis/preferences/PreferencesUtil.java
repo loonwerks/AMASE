@@ -8,8 +8,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
 
+import com.collins.trustedsystems.z3.Z3Plugin;
 import com.rockwellcollins.atc.agree.analysis.Activator;
-import com.rockwellcollins.atc.z3.Z3Plugin;
+import com.rockwellcollins.atc.agree.analysis.preferences.PreferenceConstants;
 
 import jkind.JKindException;
 import jkind.SolverOption;
@@ -18,6 +19,7 @@ import jkind.api.JRealizabilityApi;
 import jkind.api.Kind2Api;
 import jkind.api.Kind2WebApi;
 import jkind.api.KindApi;
+import jkind.api.SallyApi;
 
 public class PreferencesUtil {
 	public static KindApi getKindApi() {
@@ -25,12 +27,11 @@ public class PreferencesUtil {
 		String modelChecker = prefs.getString(PreferenceConstants.PREF_MODEL_CHECKER);
 		String remoteUrl = prefs.getString(PreferenceConstants.PREF_REMOTE_URL);
 		KindApi api = getKindApi(modelChecker, remoteUrl);
-//		if (prefs.getBoolean(PreferenceConstants.PREF_DEBUG)) {
-//			api.setApiDebug();
-//		}
+		if (prefs.getBoolean(PreferenceConstants.PREF_DEBUG)) {
+			api.setApiDebug();
+		}
 		if (api instanceof JKindApi) {
 			((JKindApi) api).setAllIvcs();
-			((JKindApi) api).setAllIvcsJkindTimeout(30);
 		}
 
 		return api;
@@ -55,6 +56,8 @@ public class PreferencesUtil {
 			return getKind2Api();
 		case PreferenceConstants.MODEL_CHECKER_KIND2WEB:
 			return getKind2WebApi(remoteUrl);
+		case PreferenceConstants.MODEL_CHECKER_SALLY:
+			return getSallyApi();
 		default:
 			throw new IllegalArgumentException("Unknown model checker setting: " + modelChecker);
 		}
@@ -83,6 +86,9 @@ public class PreferencesUtil {
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			// Z3Plugin not present
+		} catch (Exception e) {
+			// Some unknown exception finding Z3
+			e.printStackTrace();
 		}
 
 		String solverString = prefs.getString(PreferenceConstants.PREF_SOLVER).toUpperCase().replaceAll(" ", "");
@@ -95,11 +101,11 @@ public class PreferencesUtil {
 		if (prefs.getBoolean(PreferenceConstants.PREF_SMOOTH_CEX) && solver == SolverOption.YICES) {
 			api.setSmoothCounterexamples();
 		}
-//		if (prefs.getBoolean(PreferenceConstants.PREF_SUPPORT)) {
-//			api.setIvcReduction();
-//		}
+		if (prefs.getBoolean(PreferenceConstants.PREF_SUPPORT)) {
+			api.setIvcReduction();
+		}
 		api.setN(prefs.getInt(PreferenceConstants.PREF_DEPTH));
-		// api.setTimeout(prefs.getInt(PreferenceConstants.PREF_TIMEOUT));
+		api.setTimeout(prefs.getInt(PreferenceConstants.PREF_TIMEOUT));
 		api.setPdrMax(prefs.getInt(PreferenceConstants.PREF_PDR_MAX));
 		// TODO set pdr invariants as preferences option
 		// api.setPdrInvariants();
@@ -118,6 +124,9 @@ public class PreferencesUtil {
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			// Z3Plugin not present
+		} catch (Exception e) {
+			// Some unknown exception finding Z3
+			e.printStackTrace();
 		}
 
 		api.setN(prefs.getInt(PreferenceConstants.PREF_DEPTH));
@@ -147,6 +156,13 @@ public class PreferencesUtil {
 	private static Kind2WebApi getKind2WebApi(String uri) {
 		IPreferenceStore prefs = getPreferenceStore();
 		Kind2WebApi api = new Kind2WebApi(uri);
+		api.setTimeout(prefs.getInt(PreferenceConstants.PREF_TIMEOUT));
+		return api;
+	}
+
+	private static SallyApi getSallyApi() {
+		IPreferenceStore prefs = getPreferenceStore();
+		SallyApi api = new SallyApi();
 		api.setTimeout(prefs.getInt(PreferenceConstants.PREF_TIMEOUT));
 		return api;
 	}

@@ -28,10 +28,6 @@ public interface RangeEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>Lhs range</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Lhs range</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Lhs range</em>' containment reference.
    * @see #setLhs_range(Arg)
@@ -54,10 +50,6 @@ public interface RangeEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>L1</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>L1</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>L1</em>' containment reference.
    * @see #setL1(Expr)
@@ -80,10 +72,6 @@ public interface RangeEq extends SafetyEqStatement
   /**
    * Returns the value of the '<em><b>L2</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>L2</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>L2</em>' containment reference.
    * @see #setL2(Expr)

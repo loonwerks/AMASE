@@ -1,6 +1,7 @@
 package SwitchGate
 public
 with Base_Types;
+with faults;
 
 	system SwitchGate
 		features
@@ -29,13 +30,13 @@ with Base_Types;
 				
 			**};
 		annex safety {**
-			fault SwitchGate_FailedIntermediatePosition "(SwitchGate) Inverted boolean fault: channel selected is incorrect." : faults.inverted_fail {
+			fault SwitchGate_FailedIntermediatePosition "(SwitchGate) Inverted boolean fault: channel selected is incorrect." : faults::inverted_fail {
 				inputs: val_in <- cmd_out; 
 				outputs: cmd_out <- val_out;    
         		probability: 6.5E-7 ;
 				duration: permanent;
 			}
---			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults.fail_to_bool {
+--			fault SwitchGate_FailedLastPosition "(SwitchGate) Gives last valid channel as current valid channel." : faults::fail_to_bool {
 --				inputs: val_in <- cmd_out, alt_val <- pre(cmd_out); 
 --				outputs: cmd_out <- val_out;    
 --        		probability: 1.3E-5 ;

@@ -8,6 +8,8 @@ public
 	renames Reactor_Pressure_Ctrl::all;
 	with Reactor_Radiation_Ctrl;
 	renames Reactor_Radiation_Ctrl::all;
+	with Constants;
+	with Common_Faults;
 	
 	
 	system Reactor_Ctrl
@@ -18,12 +20,15 @@ public
 			Shut_Down_Cmd: out data port Boolean;
 			
 		annex agree{**
-				
+			const HIGH_TEMPERATURE_THRESHOLD	: int = 300; --300 celsius
+ 			const HIGH_PRESSURE_THRESHOLD	: int = 1200; --1200 psi
+ 			const HIGH_RADIATION_THRESHOLD  : int = 400; --400 mSv	
+			
 			guarantee "Shut down when and only when we should": 
 				Shut_Down_Cmd = 
-					((Env_Temp> Constants.HIGH_TEMPERATURE_THRESHOLD)  and 
-					(Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD) and
-					(Env_Radiation > Constants.HIGH_RADIATION_THRESHOLD));	
+					((Env_Temp> HIGH_TEMPERATURE_THRESHOLD)  and 
+					(Env_Pressure > HIGH_PRESSURE_THRESHOLD) and
+					(Env_Radiation > HIGH_RADIATION_THRESHOLD));	
 			
 		**};
 	end Reactor_Ctrl;
@@ -48,8 +53,8 @@ public
 			assign Shut_Down_Cmd = Reactor_Temp_Ctrl.Shut_Down_Cmd and Reactor_Pressure_Ctrl.Shut_Down_Cmd and Reactor_Radiation_Ctrl.Shut_Down_Cmd;		    						
 		**};
 		annex safety {**
-			--analyze : probability 1.0E-10
-      		analyze : max 3 fault
+			analyze : probability 1.0E-10
+      		--analyze : max 3 fault
    		**};
 	end Reactor_Ctrl.No_Voting;
 	
@@ -74,8 +79,8 @@ public
 		**};
 		
 		annex safety {**
-            --analyze : max 3 fault
-      	    analyze : probability 1.0E-10
+            analyze : max 3 fault
+      	    --analyze : probability 1.0E-10
    		**};
    		
 	end Reactor_Ctrl.W_Voting;

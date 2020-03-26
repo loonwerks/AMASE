@@ -30,17 +30,17 @@ ElementSafety returns aadl2::Element:
 
 @Override 
 SpecStatement: 
-		{FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=NestedDotID  
+		{FaultStatement} 'fault' name = ID (str=STRING)? ':'  faultDefName=DoubleDotRef 
 			'{' faultDefinitions+=(FaultSubcomponent)* '}' 
 	|	{AnalysisStatement} 'analyze' ':' behavior = AnalysisBehavior 
 	|   {HWFaultStatement} 'HW_fault' name = ID (str=STRING)? ':' 
 			'{' faultDefinitions+=(HWFaultSubcomponent)* '}'
-	| 	{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+= ID '@' srcComp_path+=NestedDotID (',' 
-			srcFaultList+=ID '@' srcComp_path+=NestedDotID)* '}' 
-			'to' '{' destFaultList+= ID '@' destComp_path+=NestedDotID 
-			(',' destFaultList+=ID '@' destComp_path+=NestedDotID)* '}' ';'
-	|   {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=NestedDotID)?
-					 '=' faultName= ID '@' faultComp_Path=NestedDotID ';'
+	| 	{PropagateStatement} 'propagate_from' ':' '{' srcFaultList+= ID '@' srcComp_path+=[aadl2::NamedElement|DCID] (',' 
+			srcFaultList+=ID '@' srcComp_path+=[aadl2::NamedElement|DCID])* '}' 
+			'to' '{' destFaultList+= ID '@' destComp_path+=[aadl2::NamedElement|DCID] 
+			(',' destFaultList+=ID '@' destComp_path+=[aadl2::NamedElement|DCID])* '}' ';'
+	|   {ActivationStatement} 'fault_activation' ':' agreeBoolVarName=ID ('@' agreeComp_Path=[aadl2::NamedElement|DCID])?
+					 '=' faultName= ID '@' faultComp_Path=[aadl2::NamedElement|DCID] ';'
 ;
 	
 AnalysisBehavior : 
@@ -51,8 +51,8 @@ AnalysisBehavior :
 FaultSubcomponent returns FaultSubcomponent: 
 		{InputStatement} 'inputs' ':' fault_in+=ID '<-' nom_conn+=Expr
 			(','fault_in+=ID '<-' nom_conn+=Expr)*';' 
-	| 	{OutputStatement} 'outputs' ':' nom_conn+=NestedDotID '<-' fault_out+=ID 
-			(','nom_conn+=NestedDotID '<-' fault_out+=ID)*';'
+	| 	{OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID 
+			(','nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)*';'
  	| 	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
  	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
  	|	{TriggerStatement} 'enabled' cond=TriggerCondition  ';'

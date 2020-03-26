@@ -285,11 +285,11 @@ with sensor;
 --						true -> 
 --							(not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ALL_WHEELS_STOPPED and ground_speed > 0));
 					
-		
+		 
 		lemma "(Physical System) It will not occur that all wheels are stopped, ground speed is positive, 
 						wheel brake force is positive, pedals are pressed, brake_as is commanded." :
 						true -> 
-							(not (phys_sys.PEDALS_NOT_PRESSED and phys_sys.BRAKE_AS_NOT_COMMANDED and phys_sys.ALL_WHEELS_BRAKE and phys_sys.ALL_WHEELS_STOPPED and phys_sys.ground_speed > 0));
+							(not (PEDALS_NOT_PRESSED and BRAKE_AS_NOT_COMMANDED and ALL_WHEELS_BRAKE and ALL_WHEELS_STOPPED and phys_sys.ground_speed > 0));
 							
 		--------------------------------------------------------------------------------------------------------------
 		-- S18-WBS-R-0324

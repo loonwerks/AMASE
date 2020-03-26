@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.impl.DataPortImpl;
 import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
@@ -13,9 +14,8 @@ import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
-import com.rockwellcollins.atc.agree.analysis.AgreeTypeUtils;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
+import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -212,7 +212,7 @@ public class FaultASTBuilder {
 			} else if (fs instanceof PropagationTypeStatement) {
 				addPropagationType(fault, (PropagationTypeStatement) fs);
 			} else {
-				throw new SafetyException("Unrecognized Fault Statement type");
+				throw new SafetyException("Unrecognized Fault Statement type.");
 			}
 		}
 	}
@@ -225,21 +225,21 @@ public class FaultASTBuilder {
 	  *
 	*/
 	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
-		NodeDefExpr defExpr = SafetyUtil.getFaultNode(faultStatement);
+		NodeDef defExpr = SafetyUtil.getFaultNode(faultStatement);
 
 		// to keep consistent with AGREE, we will use the AGREE functions
 		// to construct names
-		String fnName = AgreeTypeUtils.getNodeName(defExpr);
+		String fnName = AgreeUtils.getNodeName(defExpr);
 		fault.faultNode = SafetyUtil.findNode(fnName, globalLustreNodes);
 		if (fault.faultNode == null) {
 			// if we can get AgreeASTBuilder to
 			// build us a node, we will add it to our list and return it.
-			builder.caseNodeDefExpr(defExpr);
+			builder.caseNodeDef(defExpr);
 			fault.faultNode = SafetyUtil.findNode(fnName, AgreeASTBuilder.globalNodes);
 			if (fault.faultNode != null) {
 				this.addGlobalLustreNode(fault.faultNode);
 			} else {
-				throw new SafetyException("for fault node: " + defExpr.getFullName() + " unable to find it in AgreeProgram.  As a temporary hack, please add a call to this node somewhere in your AGREE annex.");
+				throw new SafetyException("Fault node: " + defExpr.getFullName() + " unable to find it in model.");
 			}
 		}
 	}
@@ -275,11 +275,11 @@ public class FaultASTBuilder {
 		// Get output that fault statement is linked to
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof OutputStatement) {
-				List<NestedDotID> nominalConns = ((OutputStatement) fs).getNom_conn();
+				List<NamedElement> nominalConns = ((OutputStatement) fs).getNom_conn();
 				if ((nominalConns.isEmpty()) || (nominalConns.size() > 1)) {
-					new SafetyException("Cannot define asymmetric fault on zero OR more than one output.");
+					new SafetyException("Cannot define asymmetric fault on zero outputs OR more than one output.");
 				} else {
-					senderOutput = (DataPortImpl) nominalConns.get(0).getBase();
+					senderOutput = (DataPortImpl) nominalConns.get(0);
 				}
 				break;
 			}
@@ -325,8 +325,8 @@ public class FaultASTBuilder {
 										.eContainer();
 								tempReceive.add(sysReceiver.getName() + "." + ci.getDestination().getName());
 							} else {
-								new SafetyException("Asymmetric fault linked to non-system instance component. "
-										+ "(Debug FaultASTBuilder 377");
+								new SafetyException("Asymmetric fault linked to output " + senderOutput.getName()
+										+ ") must be linked to a system instance component.");
 							}
 						} else {
 							continue;
@@ -392,7 +392,7 @@ public class FaultASTBuilder {
 		newFault.faultInputMap.clear();
 
 		if (!f.triggers.isEmpty()) {
-			throw new SafetyException("Triggers are currently unsupported for translation");
+			throw new SafetyException("User-defined triggers are currently unsupported.");
 		}
 
 		// update the variable declarations
@@ -471,6 +471,7 @@ public class FaultASTBuilder {
 
 			// translating expression HERE.
 			Expr result = builder.doSwitch(input.getNom_conn().get(i));
+			// IdExpr result = new IdExpr(input.getNom_conn().get(i).getElementRoot().getName());
 			fault.faultInputMap.put(param, result);
 		}
 	}
@@ -484,17 +485,14 @@ public class FaultASTBuilder {
 	private void setOutput(Fault fault, OutputStatement output) {
 		for (int i = 0; i < output.getFault_out().size(); i++) {
 			String param = output.getFault_out().get(i);
-			NestedDotID compOut = output.getNom_conn().get(i);
-			Expr result = builder.caseNestedDotID(compOut);
+			NamedElement compOut = output.getNom_conn().get(i);
 
-			if(result instanceof RecordAccessExpr) {
-				Expr resultRecord = ((RecordAccessExpr) result).record;
+			if (compOut == null) {
+				throw new SafetyException(
+						"The component " + agreeNode.id + " with fault " + fault.id + " has undefined output.");
+			} else {
+				IdExpr result = new IdExpr(compOut.getName());
 				fault.faultOutputMap.put(result, param);
-			}else if(result instanceof IdExpr) {
-				fault.faultOutputMap.put(result, param);
-			}
-			else  {
-				throw new SafetyException("for node: " + agreeNode.id + " nestedDotId for output maps to non-IdExpr: " + result.toString());
 			}
 		}
 	}
@@ -599,7 +597,7 @@ public class FaultASTBuilder {
 	 * @param stmt
 	 */
 	private void addSafetyRangeEq(Fault fault, RangeEq stmt) {
-		throw new SafetyException("Error: range equations are not yet implemented in translator!");
+		throw new SafetyException("Error: range equations are not yet implemented.");
 	}
 
 	/**
@@ -609,7 +607,7 @@ public class FaultASTBuilder {
 	 * @param stmt
 	 */
 	private void addSafetySetEq(Fault fault, SetEq stmt) {
-		throw new SafetyException("Error: set equations are not yet implemented in translator!");
+		throw new SafetyException("Error: set equations are not yet implemented.");
 	}
 
 	/**
@@ -619,7 +617,7 @@ public class FaultASTBuilder {
 	 * @param stmt
 	 */
 	private void addTrigger(Fault fault, TriggerStatement stmt) {
-		throw new SafetyException("Error: trigger equations are not yet implemented in translator!");
+		throw new SafetyException("Error: trigger equations are not yet implemented.");
 	}
 
 	/**
@@ -676,7 +674,7 @@ public class FaultASTBuilder {
 		AgreeVar outputOfInterest = null;
 		// Assume asymmetric fault first in list.
 		// Will have to display this to user somewhere.
-		List<NestedDotID> nomFaultConn = new ArrayList<NestedDotID>();
+		List<NamedElement> nomFaultConn = new ArrayList<NamedElement>();
 		// Get the nominal connection
 		for (FaultSubcomponent fs : fstmt.getFaultDefinitions()) {
 			if (fs instanceof OutputStatement) {
@@ -686,7 +684,7 @@ public class FaultASTBuilder {
 		// Get the agree node output that this fault is connected to
 		for (AgreeVar agreeVar : nodeOutputs) {
 			String temp = agreeVar.id;
-			if (temp.contentEquals(nomFaultConn.get(0).getBase().getName())) {
+			if (temp.contentEquals(nomFaultConn.get(0).getName())) {
 				// This agreeVar is the sender var we want to save for the
 				// later mapping to the receiver var.
 				outputOfInterest = agreeVar;
@@ -806,7 +804,8 @@ public class FaultASTBuilder {
 						// locations for the input value from the map.
 						// There must have been an error.
 						if (type == null) {
-							new SafetyException("Error in defining fault node arguments. (debug FaultASTBuilder 563)");
+							new SafetyException(
+									"Error in defining fault node arguments for the fault " + fault.id + ".");
 						}
 						AgreeVar local = new AgreeVar(value.id, type, fault.faultStatement);
 						IdExpr newIdForList = new IdExpr(local.id);
@@ -821,31 +820,38 @@ public class FaultASTBuilder {
 				}
 			}
 		}
+		// Check for any SafetyEqStmts and add these to input
+		if (!fault.safetyEqVars.isEmpty()) {
+			for (AgreeVar eqVar : fault.safetyEqVars) {
+				AgreeVar newIn = new AgreeVar(eqVar.id, eqVar.type, fault.faultStatement);
+				if (!localsForCommNode.contains(newIn)) {
+					localsForCommNode.add(newIn);
+					node.createInput(eqVar.id, eqVar.type);
+				}
+			}
+		}
 		// Lastly, add the trigger
 		nodeArgs.add(new IdExpr("fault__trigger__" + fault.id));
 		return localsForCommNode;
 	}
 
 	/**
-	 * Find named type of output on fault node
+	 * Find type of output on fault node
 	 *
 	 * @param fault Fault defining this fault node.
 	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	protected NamedType getOutputTypeForFaultNode(Fault fault) {
+	protected List<Type> getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
 		// variable later.
-		NamedType nominalOutputType = null;
-		if (fault.faultNode.outputs.size() > 1) {
-			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
-		} else {
-			for (VarDecl output : fault.faultNode.outputs) {
-				nominalOutputType = (NamedType) output.type;
-			}
+		// Type nominalOutputType = null;
+		List<Type> nominalOutputTypeList = new ArrayList<Type>();
+		for (VarDecl output : fault.faultNode.outputs) {
+			nominalOutputTypeList.add(output.type);
 		}
-		return nominalOutputType;
+		return nominalOutputTypeList;
 	}
 
 	/**
@@ -876,8 +882,9 @@ public class FaultASTBuilder {
 		// The type of fault output id is the same as what the fault node
 		// returns as its output. First find this in order to create that
 		// variable later.
-		NamedType nominalOutputType = getOutputTypeForFaultNode(fault);
-		node.createLocal(getFaultNodeOutputId(fault), nominalOutputType);
+		for (Type nominalOutputType : getOutputTypeForFaultNode(fault)) {
+			node.createLocal(getFaultNodeOutputId(fault), nominalOutputType);
+		}
 
 		return node;
 	}
@@ -892,8 +899,7 @@ public class FaultASTBuilder {
 		List<VarDecl> faultNodeOutputs = fault.faultNode.outputs;
 		if ((faultNodeOutputs.size() == 0) || (faultNodeOutputs.size() > 1)) {
 			new SafetyException(
-					"Asymmetric fault definitions (" + fault.id + ") " + "must have one and only one output"
-							+ ". (Debug FaultAST 822)");
+					"Asymmetric fault definition (" + fault.id + ") " + "must have one and only one output");
 		} else {
 			id = fault.id + "__node__" + faultNodeOutputs.get(0).id;
 		}

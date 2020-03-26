@@ -114,6 +114,7 @@ public class HWFaultStatementImpl extends SpecStatementImpl implements HWFaultSt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -124,6 +125,7 @@ public class HWFaultStatementImpl extends SpecStatementImpl implements HWFaultSt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -137,6 +139,7 @@ public class HWFaultStatementImpl extends SpecStatementImpl implements HWFaultSt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getStr()
   {
     return str;
@@ -147,6 +150,7 @@ public class HWFaultStatementImpl extends SpecStatementImpl implements HWFaultSt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setStr(String newStr)
   {
     String oldStr = str;
@@ -160,6 +164,7 @@ public class HWFaultStatementImpl extends SpecStatementImpl implements HWFaultSt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<HWFaultSubcomponent> getFaultDefinitions()
   {
     if (faultDefinitions == null)
@@ -283,7 +288,7 @@ public class HWFaultStatementImpl extends SpecStatementImpl implements HWFaultSt
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(", str: ");

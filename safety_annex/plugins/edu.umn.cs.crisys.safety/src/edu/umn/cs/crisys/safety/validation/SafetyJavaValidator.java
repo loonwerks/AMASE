@@ -3,648 +3,684 @@
  */
 package edu.umn.cs.crisys.safety.validation;
 
-import static com.rockwellcollins.atc.agree.validation.AgreeType.BOOL;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 //import org.osate.aadl2.AadlInteger;
 import org.osate.aadl2.AadlPackage;
-import org.osate.aadl2.Feature;
+import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.Classifier;
+import org.osate.aadl2.ComponentImplementation;
+import org.osate.aadl2.ComponentType;
+import org.osate.aadl2.Element;
+import org.osate.aadl2.ModelUnit;
 import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.PublicPackageSection;
+import org.osate.aadl2.Subcomponent;
+import org.osate.aadl2.SystemType;
+import org.osate.aadl2.impl.AadlPackageImpl;
 
+import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
+import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.IntLitExpr;
-//import com.rockwellcollins.atc.agree.agree.NamedID;
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
-import com.rockwellcollins.atc.agree.agree.RealLitExpr;
-import com.rockwellcollins.atc.agree.agree.RecordType;
-import com.rockwellcollins.atc.agree.agree.UnaryExpr;
-import com.rockwellcollins.atc.agree.validation.AgreeType;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
+import com.rockwellcollins.atc.agree.agree.PrimType;
 
+import edu.umn.cs.crisys.safety.safety.ActivationStatement;
+import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
+import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
-import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
+import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
+import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
+import edu.umn.cs.crisys.safety.safety.SafetyContract;
+import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
+import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
-import edu.umn.cs.crisys.safety.safety.TriggerCondition;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 /**
- * This class contains custom validation rules. 
+ * This class contains custom validation rules.
  *
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
-	
-	/*
+	private List<String> definedHWFaultsInProgram = new ArrayList<String>();
+
+	/**
 	 * (non-Javadoc)
 	 * @see com.rockwellcollins.atc.agree.validation.AgreeJavaValidator#isResponsible(java.util.Map, org.eclipse.emf.ecore.EObject)
 	 */
+	@Override
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 
-	@Check
-	/*
-	 * Puts out a warning if the fault description is an empty string. 
-	 * The description is optional, but shouldn't be ""
-	 * 
-	 * Checks that the nested dot id used as the fault name is a valid
-	 * node definition. 
-	 */
-	public void checkFaultSpecStmt(FaultStatement specStmt){
-		
-		NestedDotID nodeName = specStmt.getFaultDefName();
-		
-		// Check on fault description
-		if(specStmt.getStr().isEmpty()) {
-			warning(specStmt, "Fault description is optional, but should "
-					+ "not be an empty string.");
-		}
-		
-		// Check that the nested dot id (fault node name) is a valid node definition
-		NamedElement finalNodeName = getFinalNestId(nodeName);
-		if(!(finalNodeName instanceof NodeDefExpr)){
-			error(nodeName, "The fault name must be a valid node definition.");
-		}
-		
-		// The check done on node arg list and input list is done in checkInput
-	}
-	
-	
-	/* Input Statements
-	 * (1): Get container - check to see if it is a fault statement.
-	 * 		Then gather the deepest sub of the fault definition name
-	 * 		and get it's base. For instance: fault.fail_to
-	 * 		The base of that deepest sub should be "fail_to."
-	 * 		Make sure this is a valid NodeDefExpr and then collect the arguments.
-	 * 		These arguments must match all input fault values (by name). 
-	 * (2): Make sure the types of arguments match the types of expressions
-	 * 		passed in as fault inputs (connections or otherwise). 
-	 * (3) Type check Expr (right side) with arguments to node (left side)
+
+	/**
+	 * Checks description string, warning if empty, and checks that the
+	 * fault node name is valid.
+	 * @param specStmt
 	 */
 	@Check(CheckType.FAST)
-	public void checkInput(InputStatement inputs){
-		
-		// Get container of inputs (FaultSpecStmt)
-		EObject container = inputs.eContainer();
-		NamedElement defNameSub;
-		NestedDotID defName;
-		
-		// Gather expression list from rhs of '<-'
-		EList<Expr> exprList = inputs.getNom_conn();
-		
-		// (1) : if the container is a fault statement:
-		// Grab the nested dot id (fault node name: faults.fail_to) and 
-		// get the base of the deepest sub (fail_to)
-		if (container instanceof FaultStatement) {
-			FaultStatement faultStatement = (FaultStatement) container;
-			defName = faultStatement.getFaultDefName();
-			
-			while(defName.getSub() != null){
-				defName = defName.getSub();
+	public void checkFaultSpecStmt(FaultStatement specStmt) {
+		DoubleDotRef nodeName = specStmt.getFaultDefName();
+		// Check on fault description
+		if (specStmt.getStr().isEmpty()) {
+			warning(specStmt, "Fault description is optional, but should " + "not be an empty string.");
+		}
+		// Check that the NamedElement (fault node name) is a valid node definition
+		NamedElement finalNodeName = nodeName.getElm();
+		if (!(finalNodeName instanceof NodeDef)) {
+			error(nodeName, "The fault name must be a valid node definition.");
+		}
+	}
+
+	/**
+	 * Check behavior of analysis statements and values for n and
+	 * probability.
+	 * @param analysisStmt
+	 */
+	@Check(CheckType.FAST)
+	public void checkAnalysisStatement(AnalysisStatement analysisStmt) {
+		AnalysisBehavior behavior = analysisStmt.getBehavior();
+		if (behavior instanceof FaultCountBehavior) {
+			FaultCountBehavior fc = (FaultCountBehavior) behavior;
+			if (!testIntegerString(fc.getMaxFaults())) {
+				error(analysisStmt, "Max N value must be a valid string representing a positive integer.");
 			}
-			
-			// This should be fail_to (NodeDefExpr)
-			defNameSub = defName.getBase();
-			
-			// Make sure we have a NodeDefExpr
-			if(defNameSub instanceof NodeDefExpr){
-				
-				// Cast to NodeDefExpr
-				NodeDefExpr nodeDef = (NodeDefExpr) defNameSub;
-				// Gather the arguments from node def
-				EList<Arg> args = nodeDef.getArgs();
-				EList<String> inputList = inputs.getFault_in();
-				
-				// Make an easy string list to access that contains the argument names 
-				// from the node defintion
-				ArrayList<String> argNames = new ArrayList<String>();
-				
-				for(Arg arg : args){
-					argNames.add(arg.getFullName());
-				}
-				
-				// (2) : If the sizes are accurate, make sure names match
-				if(args.size()-1 == (inputList.size())){
-					
-					// Go through input list and make sure each name is in the arg list
-					for(String inputName : inputList){
-			    	
-			    		// String inputName = input.getFullName();
-			    		
-			    		//Check to see if the input name is in the arg list
-			    		if(!argNames.contains(inputName)){
-			    			error(inputs, "Input names must match fault node definition names. "
-			    					+"The input name "+inputName+" is not an input in the node definition. "
-			    					+"All possible input names are: "+argNames.toString());
-			    		}
-			    	}
-				}else{
-			    	// Wrong number of arguments/inputs
-					// To print list of inputs, I need to remove "trigger" from the list
-					ArrayList<String> noTrigger = new ArrayList<String>();
-					for(String item : argNames){
-						if(!(item.equals("trigger"))){
-							noTrigger.add(item);
+		} else if (behavior instanceof ProbabilityBehavior) {
+			ProbabilityBehavior prob = (ProbabilityBehavior) behavior;
+			if (!testProbabilityString(prob.getProbabilty())) {
+				error(analysisStmt, "Probability must be a valid string between 0 and 1 inclusive.");
+			}
+		} else {
+			error(analysisStmt, "Analysis behavior must be either 'max n fault' or 'probability q'.");
+		}
+	}
+
+	/**
+	 * Checks for empty hw fault description string and makes sure hw fault
+	 * is declared in system type, not implementation.
+	 * @param hwStmt
+	 */
+//	@Check(CheckType.FAST)
+//	public void checkHWFaultStmt(HWFaultStatement hwStmt) {
+//		// Check on fault description
+//		if (hwStmt.getStr().isEmpty()) {
+//			warning(hwStmt, "HW fault description is optional, but should not be an empty string.");
+//		}
+//		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(hwStmt, ComponentImplementation.class);
+//		if (!(compImpl == null)) {
+//			error(hwStmt, "HW faults can only be defined in component type, not implementations.");
+//		}
+//	}
+
+	/**
+	 * Checks that propagate stmt defined in implementation,
+	 * source fault names correct for designated component names,
+	 * destination faults correct for designated component names,
+	 * and the source faults are indeed hw faults.
+	 * @param pStmt
+	 */
+//	@Check(CheckType.FAST)
+//	public void checkPropagateStmt(PropagateStatement pStmt) {
+//		List<NamedElement> destinationList = pStmt.getDestComp_path();
+//		List<NamedElement> sourceList = pStmt.getSrcComp_path();
+//		List<String> sourceFaults = pStmt.getSrcFaultList();
+//		List<String> destFaults = pStmt.getDestFaultList();
+//		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(pStmt, ComponentImplementation.class);
+//
+//		// Test for propagate stmt in non-implementation
+//		if (compImpl == null) {
+//			error(pStmt, "Propagation statements can only be defined in component implementation");
+//		} else {
+//			// Get all faults and comp names in program
+//			Map<String, List<String>> mapCompNameToFaultName = collectFaultsInProgram(compImpl);
+//			// Check length of source and dest lists
+//			if (sourceList.size() != sourceFaults.size()) {
+//				error(pStmt, "Each source fault name must have an associated component name.");
+//			} else if (destinationList.size() != destFaults.size()) {
+//				error(pStmt, "Each destination fault name must have an associated component name.");
+//			} else {
+//				for(NamedElement dest : destinationList) {
+//					if (!mapCompNameToFaultName.containsKey(dest.getName())) {
+//						error(pStmt, "Component: " + dest.getName() + " is undefined in program.");
+//					} else {
+//						int i = destinationList.indexOf(dest);
+//						List<String> faultList = mapCompNameToFaultName.get(dest.getName());
+//						if (!faultList.contains(destFaults.get(i))) {
+//							error(pStmt,
+//									"Fault: " + destFaults.get(i) + " is undefined in component: " + dest.getName());
+//						}
+//					}
+//				}
+//				for(NamedElement source : sourceList) {
+//					if (!mapCompNameToFaultName.containsKey(source.getName())) {
+//						error(pStmt, "Component: " + source.getName() + " is undefined in program.");
+//					} else {
+//						int i = sourceList.indexOf(source);
+//						List<String> faultList = mapCompNameToFaultName.get(source.getName());
+//						if (!faultList.contains(sourceFaults.get(i))) {
+//							error(pStmt, "Fault: " + sourceFaults.get(i) + " is undefined in component: "
+//									+ source.getName());
+//						}
+//					}
+//				}
+//			}
+//			// Check that all source faults are hw faults
+//			for (String sf : sourceFaults) {
+//				if (!definedHWFaultsInProgram.contains(sf)) {
+//					error(pStmt,
+//							"The fault: " + sf + " is not a HW fault. All source faults must be defined as HW Faults.");
+//				}
+//			}
+//		}
+//	}
+
+	/**
+	 * Checks that activation stmt defined in implementation,
+	 * the agree var is defined in agree annex of this implementation,
+	 * the type of agree var is boolean,
+	 * and the faults are defined on the designated components.
+	 * @param actStmt
+	 */
+	@Check(CheckType.FAST)
+	public void checkActivationStatement(ActivationStatement actStmt) {
+		NamedElement faultComp = actStmt.getFaultComp_Path();
+		String faultName = actStmt.getFaultName();
+		String agreeVarName = actStmt.getAgreeBoolVarName();
+		ComponentImplementation compImpl = EcoreUtil2.getContainerOfType(actStmt, ComponentImplementation.class);
+
+		// Test for propagate stmt in non-implementation
+		if (compImpl == null) {
+			error(actStmt, "Activation statements can only be defined in component implementation");
+		} else {
+			ComponentType compType = compImpl.getType();
+			if (compType != null) {
+				Map<String, List<String>> mapCompNameToFaultNames = collectFaultsInProgram(compImpl);
+				List<EObject> assignableElements = collectAssignableElementsInTypeAndImpl(compImpl);
+				boolean found = false;
+				for (EObject assignableElement : assignableElements) {
+					if (assignableElement instanceof NamedElement) {
+						NamedElement namedEl = (NamedElement) assignableElement;
+						if (agreeVarName.contentEquals(namedEl.getName())) {
+							found = true;
+							break;
 						}
 					}
-					error(inputs, "With this fault definition, you must have "+(argNames.size()-1)+" inputs."
-							+ " These are called: "+noTrigger.toString());
 				}
-				
-				
-				// (3) : Type check arguments to node with Expr on rhs
-				// Go through expression list
-				for(int i = 0; i < exprList.size(); i++){
-					
-					// Save expr and arg
-					Expr expr = exprList.get(i);
-					Arg arg = args.get(i);
-					
-					// Get agree types of each
-					AgreeType typeExpr = getAgreeType(expr);
-					AgreeType typeArg = getAgreeType(arg);
-					
-					// See if they match using agree "matches" method
-					if(!(matches(typeExpr, typeArg))){
-						error(expr, "Left side ("+arg.getName()+") is of type "+typeArg.toString()
-						+" but right side is of type "+typeExpr.toString());
+				if (found == false) {
+					error(actStmt, "The eq statement: " + agreeVarName
+							+ " does not match an eq statement defined in the Agree annex.");
+				}
+				// Check fault names and components
+				if (!mapCompNameToFaultNames.containsKey(faultComp.getName())) {
+					error(actStmt, "The fault component: " + faultComp.getName()
+							+ " is not a valid component name for the fault: " + faultName);
+				} else {
+					if (!mapCompNameToFaultNames.get(faultComp.getName()).contains(faultName)) {
+						error(actStmt, "The fault: " + faultName + " does not match a fault defined in component: "
+								+ faultComp.getName());
 					}
 				}
-				
-			}else{
-				// Not a node def expr
-				error(defName, "Fault definition name must be an instance of NodeDefExpr."
-						+" It is: "+defNameSub.getFullName()+".");
 			}
-		}else{
-			// Not in fault statement
-			error(inputs, "Fault inputs must be in a fault statement, not a "+container.toString()+".");
 		}
 	}
-	
-	/* Output Statements
-	 * (1): Get container of the output in order to check the fault node for
-	 * 		list of return values. This is compared with the list of fault outputs.
-	 * 		If the sizes of the lists do not match, the names of the return values 
-	 * 		do not match, or the output statement is not in the fault spec, we
-	 * 		send out an error.
-	 * (2): Make sure we have valid nominal connections as our output connections.
-	 * (3): Make sure the nominal connection types match return value types. 
+
+
+	/**
+	 * Checks fault def name is valid,
+	 * expressions passed into node match parameter types,
+	 * and correct number of arguments passed in.
+	 *
+	 * @param inputs
 	 */
-	@Check
-	public void checkOutput(OutputStatement outputs){
-		// List of nominal connections
-		EList<NestedDotID> nomConns = outputs.getNom_conn();
-		
-		// Get container of inputs (FaultSpecStmt)
-		EObject container = outputs.eContainer();
-		// Make an easy string list to access that contains the return names 
-		// from the node definition
-		ArrayList<String> retNames = new ArrayList<String>();
-		// List of return values
-		EList<Arg> retvals = null;
-				
-		// if the container is a fault statement:
-		// Grab the nested dot id (fault node name: defName: faults.fail_to) and 
-		// get the base of the deepest sub (defNameSub: fail_to)
+	@Check(CheckType.FAST)
+	public void checkInput(InputStatement inputs) {
+		EObject container = inputs.eContainer();
+		NamedElement defNameSub;
+		List<Expr> exprList = inputs.getNom_conn();
+		EList<String> inputList = inputs.getFault_in();
+		ArrayList<String> argNames = new ArrayList<String>();
+
 		if (container instanceof FaultStatement) {
 			FaultStatement faultStatement = (FaultStatement) container;
-			NodeDefExpr nodeDef;
-			try {
-				nodeDef = SafetyUtil.getFaultNode(faultStatement);
-			} catch (IllegalArgumentException e) {
-				error(faultStatement.getFaultDefName(), e.getMessage());
-				return;
-			}
-			
-			// Gather the return values from node def
-			retvals = nodeDef.getRets();
-			EList<String> outputList = outputs.getFault_out();
-			
-			for(Arg arg : retvals){
-				retNames.add(arg.getFullName());
-			}
-					
-			// If the sizes are accurate, make sure names match
-			if(retvals.size() == (outputList.size())){
-					
-				// Go through output list and make sure each name is in the arg list
-				for(String outputName : outputList){
-		    		// String outputName = output.getFullName();
-			    		
-		    		//Check to see if the input name is in the arg list
-			   		if(!retNames.contains(outputName)){
-			   			error(outputs, "Output names must match fault node definition return value names. "
-			   					+"The output name "+outputName+" is not an return value in the node definition. "
-			   					+"All possible output names are: "+retNames.toString());
-			   		}
-			   	}
-			}else{
-			   	// Wrong number of arguments/inputs
-				error(outputs, "The number of outputs must match the number of return values in the node definition."
-						+" With the fault"+faultStatement.getFaultDefName()+", this value must be "+retNames.size()+".");
-			}
-		}else{
-			// Not a fault statement
-			error(outputs, "Fault outputs must be in a fault statement, not a "+container.toString()+".");
-		}
-		
+			DoubleDotRef defName = faultStatement.getFaultDefName();
+			defNameSub = defName.getElm();
 
-		
-		// (3) Type check between nominal connections and return values
-		
-		// Iterate through the list of nominal connections (nomConns)
-		for(int i = 0; i < nomConns.size(); i++){
-			
-			// Get the nominal connection
-			NestedDotID nom = nomConns.get(i);
-			// Return value from the list of all return values
-			Arg returnArg = null; 
-			// There is no reason why retvals should still be null.
-			// If it is, there are other errors that would be shown to the user.
-			if(retvals != null){
-				returnArg = retvals.get(i);
-			}else{
-				error(outputs, "Return value list is empty.");
+			// Make sure we have a NodeDefExpr
+			if (defNameSub instanceof NodeDef) {
+				List<Arg> nodeArgs = ((NodeDef) defNameSub).getArgs();
+				for (Arg arg : nodeArgs) {
+					argNames.add(arg.getFullName());
+				}
+
+				// If the sizes are accurate, make sure names match
+				if (nodeArgs.size() - 1 == (inputList.size())) {
+					// Go through input list and make sure each name is in the arg list
+					for (String inputName : inputList) {
+						if (!argNames.contains(inputName)) {
+							error(inputs,
+									"Input names must match fault node definition names. " + "The input name "
+											+ inputName + " is not an input in the node definition. "
+											+ "All possible input names are: " + argNames.toString());
+						}
+					}
+				} else {
+					argNames.remove("trigger");
+					error(inputs, "With this fault definition, you must have " + (argNames.size() - 1) + " inputs."
+							+ " These are called: " + argNames.toString());
+				}
+				if (!checkInputTypes(exprList, nodeArgs)) {
+					error(inputs, "Types of inputs do not match types of node parameters");
+				}
+			} else {
+				// Not a node def expr
+				error(defName, "Fault definition: " + defNameSub.getFullName()
+						+ " must be a valid agree node definition name.");
 			}
-			
-			
-			
-			AgreeType typeReturnArg = getAgreeType(returnArg);
-				
-			// Get the final nested id of the nominal connection
-			NamedElement nestedNom = getFinalNestId(nom);
-			// Get agree type of that nested id
-			AgreeType typeNom = getAgreeType(nestedNom);
-			
-			// Use agrees "matches" method to check types
-			if(!matches(typeNom, typeReturnArg)){
-				error(nom, "Left side (nominal connection) is of type "+typeNom.toString()
-				+" but right side (return value) is of type "+typeReturnArg.toString());
-			}
+		} else {
+			// Not in fault statement
+			error(inputs, "Fault inputs must be defined within a fault statement.");
 		}
 	}
-	
 
-	
-	/*
-	 * Check Duration: 
-	 * (1) : If transient, check for interval (there must be one). 
-	 * 		 Checks for valid integer interval, 
-	 * 		 that the lower and upper integers in the interval are not constants.
-	 * (2) : If permanent, there cannot be an interval associated with it. 
+	/**
+	 * Check return params of fault node against params listed
+	 * in outputs.
+	 * @param outputs
+	 */
+	@Check(CheckType.FAST)
+	public void checkOutput(OutputStatement outputs) {
+		List<String> faultsOut = outputs.getFault_out();
+		EObject container = outputs.eContainer();
+		List<Arg> retValues = new ArrayList<Arg>();
+		List<String> returnNames = new ArrayList<String>();
+
+		if (container instanceof FaultStatement) {
+			retValues = getNodeReturnArgs((FaultStatement) container);
+			if (retValues == null) {
+				error(outputs, "Fault node definition is not valid for these outputs.");
+			}
+
+			for (Arg arg : retValues) {
+				returnNames.add(arg.getFullName());
+			}
+			// Check sizes
+			if (retValues.size() == (faultsOut.size())) {
+				// Check names
+				for (String outputName : faultsOut) {
+					if (!returnNames.contains(outputName)) {
+						error(outputs,
+								"The output name: " + outputName + " is not an return value in the node definition. "
+										+ "All possible output names are: " + returnNames.toString());
+					}
+				}
+			} else {
+				error(outputs, "The number of outputs must match the number of return values in the node definition."
+						+ "No. of outputs must be " + returnNames.size() + ".");
+			}
+		} else {
+			error(outputs, "Fault outputs must be in a fault statement.");
+		}
+	}
+
+	/**
+	 * Check that only permanent is used and no interval is associated with it.
+	 * @param durationStmt
 	 */
 	@Check
-	public void checkDuration(DurationStatement durationStmt){
-		
+	public void checkDuration(DurationStatement durationStmt) {
 		TemporalConstraint tc = durationStmt.getTc();
-		
-		// (1): See if we have a transient duration
-		// If so, there must be a duration interval associated with it. 
-		if(tc instanceof TransientConstraint){
-			// Check for valid integer interval
+		if (tc instanceof TransientConstraint) {
+			error(durationStmt, "Transient faults are currently not supported. Duration must be 'permanent.'");
+
+		} else {
 			Interval interval = durationStmt.getInterv();
-			if(interval != null){
-				Expr lower = interval.getLow();
-			    Expr higher = interval.getHigh();
-			    
-			    // Lower value is integer valued literal and not a const
-			    if(!(lower instanceof IntLitExpr || isConst(lower))){
-			        error(lower, "Lower interval must be an integer valued literal.");
-			    }
-			    
-			    // Higher value is integer valued literal
-			    if(!(higher instanceof IntLitExpr || isConst(higher))){
-		            error(higher, "Higher interval must be an integer valued literal.");
-		        }
-			}else{
-				error(tc, "There must be a duration interval associated with transient faults.");
-			}
-			
-		// (2): Else we have a permanent fault and hence should have no duration interval. 	
-		}else{
-			Interval interval = durationStmt.getInterv();
-			if(interval != null){
+			if (interval != null) {
 				error(tc, "It makes no sense to have a duration interval on a permanent fault.");
 			}
 		}
 	}
-	
-	
-	/*
-	 *  Trigger Statements:
-	 *  Calls helper function to check trigger condition.
-	 *  
-	 *  Make sure probability statement is a valid probability 
-	 *  (real number between 0 and 1 inclusive)
+
+	/**
+	 * Check that probability defined on fault is valid.
+	 * @param probStmt
 	 */
-	@Check
-	public void checkTriggerStatement(TriggerStatement triggerStmt){
-		
-		// First check the trigger condition
-		checkTriggerCondition(triggerStmt.getCond());
-		
-	}
-	
-	/*
-	 * Trigger Condition: 
-	 * Checks nonempty list and only boolean values in expression list.
-	 * Expr validity is done primarily through agree
-	 */
-	@Check
-	public void checkTriggerCondition(TriggerCondition tc){
-		if (tc instanceof EnablerCondition) {
-			EnablerCondition ec = (EnablerCondition)tc;
-			
-			// Make sure expression list for trigger conditions is nonempty
-			EList<Expr> exprList = ec.getExprList();
-			if(exprList.isEmpty()) {
-				error(tc, "Enabler trigger condition list cannot be empty.");
-			}
-			
-			// For each expression in the list, make sure they are all of type boolean
-			for(Expr expr : exprList){
-				if (expr != null) {
-		            AgreeType exprType = getAgreeType(expr);
-		            if (!matches(BOOL, exprType)) {
-		                error(tc, "Expression for trigger condition is of type '" + exprType.toString()
-		                        + "' but must be of type 'bool'");
-		            }
-		        }
-			}
+	@Check(CheckType.FAST)
+	public void checkProbability(ProbabilityStatement probStmt) {
+		String prob = probStmt.getProbability();
+		if (!testProbabilityString(prob)) {
+			error(probStmt, "Probability must be valid decimal string between 0 and 1 inclusive.");
 		}
+
 	}
-	
-	
-	/*
-	 *  EqStatements: 
-	 *  Call agrees checkArg routine for each arg in the statement. 
-	 *  The expressions on the rhs are validated through agree.
+
+	/**
+	 * Trigger stmts are not yet supported.
+	 * @param triggerStmt
 	 */
-	@Check
-	public void checkEqStatement(EqValue eqStmt){
-		
+	@Check(CheckType.FAST)
+	public void checkTriggerStatement(TriggerStatement triggerStmt) {
+		error(triggerStmt, "Trigger statements are currently not supported.");
+	}
+
+	/**
+	 * Utilize Agree validator to check arg of eq statement.
+	 * @param eqStmt
+	 */
+	@Check(CheckType.FAST)
+	public void checkEqStatement(EqValue eqStmt) {
 		// For each arg in the list, call agree 'checkArg' method for validation
-		EList<Arg> args = eqStmt.getLhs();
-		for(Arg arg : args){
+		List<Arg> args = eqStmt.getLhs();
+		for (Arg arg : args) {
 			checkArg(arg);
 		}
 	}
-	
-	/*
-	 * IntervalEqStatements:
-	 * Check the time interval consists of both integer or both real literal values. 
-	 * 
-	 */
-	@Check
-	public void checkIntervalEqStatement(IntervalEq intervalEq){
-		
-		// Check valid real OR integer interval
-		
-		Interval interval = intervalEq.getInterv();
-		Expr lower = interval.getLow();
-	    Expr higher = interval.getHigh();
-	    
-	    AgreeType t = getAgreeType(intervalEq.getLhs_int().getType()); 
-	    
-	    // Both must be real or both must be integer
-	    if((!(lower instanceof IntLitExpr && 
-	    	  higher instanceof IntLitExpr && 
-	    	  t == AgreeType.INT) || 
-	        !(lower instanceof RealLitExpr && 
-	          higher instanceof RealLitExpr && 
-	          t == AgreeType.REAL))) {
-	    	error(intervalEq, "Lower and higher interval values must be both real or both integer and match the argument type.");
-	    }
 
-	    // Neither can be named constants (MWW: why?)
-	    if(isConst(lower) || isConst(higher)){
-	    	error(intervalEq, "Lower and higher interval values must be real or integer valued literals.");
-	    }
+	/**
+	 * Interval eq stmts not yet supported.
+	 * @param intervalEq
+	 */
+	@Check(CheckType.FAST)
+	public void checkIntervalEqStatement(IntervalEq intervalEq) {
+		error(intervalEq, "Interval eq statements are not currently supported.");
 	}
-	
-	/*
-	 * SetEqStatements:
-	 * Check the set eq statements for empty set or non-integer values
+
+	/**
+	 * Set eq stmts not yet supported.
+	 * @param setEq
+	 */
+	@Check(CheckType.FAST)
+	public void checkSetEqStatement(SetEq setEq) {
+		error(setEq, "Set eq statements are not currently supported.");
+	}
+
+
+	/**
+	 * Range eq stmts not yet supported.
+	 * @param range
 	 */
 	@Check
-	public void checkSetEqStatement(SetEq setEq){
-		
-		// Check for empty list
-		if((setEq.getList().isEmpty()) && (setEq.getL1() == null)){
-			error(setEq, "Set cannot be empty.");
-		}
-		
-		// Get the expr and get Agree type from it
-		Expr lhsExpr = setEq.getL1();
-		AgreeType lhsType = getAgreeType(lhsExpr);
-		
-		// Make sure types match (int)
-		if(!matches(AgreeType.INT, lhsType)){
-			error(lhsExpr, "Valid integer required in set");
-		}
-		
-		// Get the list and do the same to expressions in the list
-		EList<Expr> exprList = setEq.getList();
-		
-		if(!exprList.isEmpty()){
-			for(Expr exp : exprList){
-				AgreeType expType = getAgreeType(exp);
-				if(!matches(AgreeType.INT, expType)){
-					error(exp, "Valid integer required in set");
+	public void checkRangeEqStatement(RangeEq range) {
+		error(range, "Range eq statements are not currently supported.");
+	}
+
+	/**
+	 * Collects all faults in the program. First through the subcomponents
+	 * defined for this implementation and then goes through each included package
+	 * and gathers those.
+	 * @param compImpl
+	 * @return Map<String, List<String>> mapping from component instance name
+	 * to a list of associated faults.
+	 */
+	private Map<String, List<String>> collectFaultsInProgram(ComponentImplementation compImpl) {
+		Map<String, List<String>> mapCompNameToFaultNames = new HashMap<String, List<String>>();
+		mapCompNameToFaultNames.putAll(collectFaultsFromSubcomponents(compImpl));
+		mapCompNameToFaultNames.putAll(collectFaultsFromPackages(compImpl));
+		return mapCompNameToFaultNames;
+	}
+
+	/**
+	 * Collect all subcomponents of this component implementation and
+	 * iterate through them finding the faults defined for each.
+	 * @param compImpl
+	 * @return Map<String, List<String>> mapping from component instance name
+	 * to a list of associated faults.
+	 */
+	private Map<String, List<String>> collectFaultsFromSubcomponents(ComponentImplementation compImpl) {
+		Map<String, List<String>> mapCompNameToFaultNames = new HashMap<String, List<String>>();
+		for (Subcomponent sub : compImpl.getAllSubcomponents()) {
+			if (sub.getComponentType() instanceof SystemType) {
+				List<AnnexSubclause> annexes = ((SystemType) sub.getComponentType()).getOwnedAnnexSubclauses();
+				for (AnnexSubclause annex : annexes) {
+					if (annex.getName().contains("safety")) {
+						for (Element child : annex.getChildren()) {
+							List<String> faultNames = new ArrayList<String>();
+							if (child instanceof SafetyContractSubclause) {
+								SafetyContractSubclause safetyChild = (SafetyContractSubclause) child;
+								SafetyContract cont = (SafetyContract) safetyChild.getContract();
+								faultNames.addAll(getFaultNamesFromSpecs(cont.getSpecs()));
+								mapCompNameToFaultNames.put(sub.getName(), faultNames);
+							}
+						}
+					}
 				}
 			}
 		}
-	}
-	
-	/*
-	 * RangeEqStatments:
-	 * (1) Make sure expressions are constants
-	 * (2) Check for UnaryExpr (negative integers)
-	 * 	   If Unary:
-	 * 		cast to unary expr
-	 * 		call testNegativeInteger
-	 * 		
-	 * (3) Check for IntLitExpr
-	 * 	   If IntLit:
-	 * 		cast to IntLit
-	 * 		call testPositiveInteger
-	 * 
-	 * (4) Else error 
-	 * 
-	 * (5) If integer results are non-null:
-	 * 		check for strict inequality lhs < rhs
-	 */
-	@Check
-	public void checkRangeEqStatement(RangeEq range){
-		
-		Expr lhs = range.getL1();
-		Expr rhs = range.getL2();
-		
-		Integer intlhs = null;
-		Integer intrhs = null;
+		return mapCompNameToFaultNames;
 
-		// (1) Check for constants
-		if(!exprIsConst(lhs)){
-			error(lhs, "Range values must be valid integer constants.");
-		}
-		if(!exprIsConst(rhs)){
-			error(rhs, "Range values must be valid integer constants.");
-		}
-		
-		// LHS TEST
-		// (2), (3): If lhs UnaryExpr: get op, get val, concat strings, parse int
-		if(lhs instanceof UnaryExpr){
-			
-			UnaryExpr lhsUnary = (UnaryExpr) lhs;
-			intlhs = testNegativeInteger(lhsUnary);
-			
-			// If return value is null, not a valid negative integer
-			if(intlhs == null){
-				error(lhs, "Must have valid negative or positive integer in range.");
-			}
-			
-		} else if(lhs instanceof IntLitExpr){
-			// Else check if lhs IntLitExpr: cast, get val, parse int
-			IntLitExpr lhsIntLit = (IntLitExpr) lhs;
-			
-			intlhs = testPositiveInteger(lhsIntLit);
-			
-			// If return value null, put out error message
-			if(intlhs == null){
-				error(lhs, "Must have valid positive integer in range.");
-			}
-			
-		} else{
-			// else throw validation error
-			error(lhs, "Range values must be valid integers");
-		}
-		
-		
-		
-		// RHS TEST:
-		// (2), (3): If rhs UnaryExpr: call testNegativeInteger on unary expr
-		if(rhs instanceof UnaryExpr){
-			
-			UnaryExpr rhsUnary = (UnaryExpr) rhs;
-			intrhs = testNegativeInteger(rhsUnary);
-			
-			// If null int returned, put out error message
-			if(intrhs == null){
-				error(rhs, "Must have valid negative or positive integer in range.");
-			}
-			
-		} else if(rhs instanceof IntLitExpr){
-			// Else check if rhs IntLitExpr: testPositiveInteger
-			IntLitExpr rhsIntLit = (IntLitExpr) rhs;
-			intrhs = testPositiveInteger(rhsIntLit);
-			
-			if(intrhs == null){
-				error(rhs, "Must have valid positive integer in range");
-			}
-			
-		} else{
-			// else throw validation error
-			error(rhs, "Range values must be valid integers");
-		}
-		
-		// Test for strict inequality lhs<rhs
-		if((intrhs != null) && (intlhs != null)){
-			if(intlhs >= intrhs){
-				error(range, "There must be strict inequality between lhs and rhs range values: lhs < rhs.");
-			}
-		}
-		
-	
-		
 	}
-	
-	
-	/*
-	 * testNegativeInteger:
-	 * parameter: UnaryExpr
-	 * returns: Integer
-	 * (1): Gets op : should be negative sign
-	 *		If op not '-', return null
-	 * (2): Get Expr which should be IntLitExpr
-	 * 		If not, return null
-	 * (3): Get value (string) from IntLitExpr
-	 * 		Concat '-' with string value
-	 * (4): Parse int: if exception, return null
-	 * (5): Return int
+
+	/**
+	 * Get packages defined in this component impl and collect all faults from
+	 * all included packages.
+	 * @param compImpl
+	 * @return Map<String, List<String>> mapping from component instance name
+	 * to a list of associated faults.
 	 */
-	private Integer testNegativeInteger(UnaryExpr unary){
-	
-		Integer intResult = null;
-		String op = unary.getOp();
-		
-		if(!op.equals("-")){
+	private Map<String, List<String>> collectFaultsFromPackages(ComponentImplementation compImpl) {
+		Map<String, List<String>> mapCompNameToFaultNames = new HashMap<String, List<String>>();
+		List<AadlPackageImpl> packages = new ArrayList<AadlPackageImpl>();
+		AadlPackageImpl aadlPackage = getAadlPackageImpl(compImpl);
+		packages.add(aadlPackage);
+		PublicPackageSection pps = aadlPackage.getOwnedPublicSection();
+		// Collect all imported packages and iterate through
+		// annexes to find safety annexes with faults.
+		List<ModelUnit> imports = pps.getImportedUnits();
+		for (ModelUnit imp : imports) {
+			if (imp instanceof AadlPackageImpl) {
+				packages.add((AadlPackageImpl) imp);
+			}
+		}
+		for (AadlPackageImpl aadlPack : packages) {
+			PublicPackageSection pub = aadlPack.getPublicSection();
+			for (Classifier cl : pub.getOwnedClassifiers()) {
+				if (cl instanceof SystemType) {
+					for (AnnexSubclause sub : cl.getOwnedAnnexSubclauses()) {
+						if (sub.getName().contains("safety")) {
+							for (Element child : sub.getChildren()) {
+								List<String> faultNames = new ArrayList<String>();
+								if (child instanceof SafetyContractSubclause) {
+									SafetyContractSubclause safetyChild = (SafetyContractSubclause) child;
+									SafetyContract cont = (SafetyContract) safetyChild.getContract();
+									faultNames.addAll(getFaultNamesFromSpecs(cont.getSpecs()));
+									mapCompNameToFaultNames.put(cl.getName(), faultNames);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return mapCompNameToFaultNames;
+	}
+
+	/**
+	 * Gets all agree vars defined in this component type and implementation.
+	 * @param compImpl
+	 * @return List<String> of agree var names.
+	 */
+	private List<EObject> collectAssignableElementsInTypeAndImpl(ComponentImplementation compImpl) {
+		List<EObject> assignableElements = new ArrayList<>();
+		// Get impl contract
+		List<AgreeContract> typeContracts = EcoreUtil2.getAllContentsOfType(compImpl, AgreeContract.class);
+		// And now check component type contract
+		typeContracts.addAll(EcoreUtil2.getAllContentsOfType(compImpl.getType(), AgreeContract.class));
+		for (AgreeContract ac : typeContracts) {
+			assignableElements.addAll(EcoreUtil2.getAllContentsOfType(ac, EqStatement.class).stream()
+					.map(eq -> eq.getLhs()).flatMap(List::stream).collect(Collectors.toList()));
+		}
+		return assignableElements;
+	}
+
+	/**
+	 * Collects the AadlPackageImpl of this component impl.
+	 * @param compImpl
+	 * @return AadlPackageImpl of this component impl.
+	 */
+	private AadlPackageImpl getAadlPackageImpl(EObject compImpl) {
+		EObject cont = compImpl.eContainer();
+		if (cont instanceof AadlPackageImpl) {
+			return (AadlPackageImpl) cont;
+		} else {
+			return getAadlPackageImpl(cont);
+		}
+	}
+
+	/**
+	 * Collects fault names from the safety spec statements.
+	 * @param specs Safety SpecStatements
+	 * @return List<String> of all fault names defined in these specs.
+	 */
+	private List<String> getFaultNamesFromSpecs(List<SpecStatement> specs) {
+		List<String> faultNames = new ArrayList<String>();
+		for (SpecStatement sp : specs) {
+			if (sp instanceof FaultStatement) {
+				FaultStatement fs = (FaultStatement) sp;
+				faultNames.add(fs.getName());
+			} else if (sp instanceof HWFaultStatement) {
+				HWFaultStatement hwfs = (HWFaultStatement) sp;
+				faultNames.add(hwfs.getName());
+				if (!definedHWFaultsInProgram.contains(hwfs.getName())) {
+					definedHWFaultsInProgram.add(hwfs.getName());
+				}
+			}
+		}
+		return faultNames;
+	}
+
+	/**
+	 * Check that input types between these lists match.
+	 * Assume lists are in order.
+	 * @param exprList
+	 * @param nodeArgs
+	 * @return bool : valid or not
+	 */
+	private boolean checkInputTypes(List<Expr> exprList, List<Arg> nodeArgs) {
+		// Type check inputs
+		for (int i = 0; i < exprList.size(); i++) {
+			if (nodeArgs.get(i).getType() instanceof PrimType) {
+				if (exprList.get(i) instanceof NamedElmExpr) {
+					NamedElmExpr elm = (NamedElmExpr) exprList.get(i);
+					if (elm.getElm() instanceof Arg) {
+						Arg arg = (Arg) elm.getElm();
+						if (!(arg.getType() instanceof PrimType)) {
+							return false;
+						} else {
+							PrimType pTypeExpr = (PrimType) arg.getType();
+							PrimType pTypeNode = (PrimType) nodeArgs.get(i).getType();
+							if (!pTypeExpr.getName().equals(pTypeNode.getName())) {
+								return false;
+							} else {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Collects all agree vars defined in the spec statements parameter.
+	 * @param specs The Agree SpecStatements
+	 * @return List<String> of all agree var names in these specs.
+	 */
+	private List<Arg> populateAgreeVarList(List<com.rockwellcollins.atc.agree.agree.SpecStatement> specs) {
+		List<Arg> agreeVarList = new ArrayList<Arg>();
+		for (com.rockwellcollins.atc.agree.agree.SpecStatement sp : specs) {
+			if (sp instanceof EqStatement) {
+				for (Arg left : ((EqStatement) sp).getLhs()) {
+					agreeVarList.add(left);
+				}
+			}
+		}
+		return agreeVarList;
+	}
+
+	/**
+	 * Method finds return values of fault node given a fault statement.
+	 * @param fStmt
+	 * @return List<Arg> of return arguments.
+	 */
+	private List<Arg> getNodeReturnArgs(FaultStatement fStmt) {
+		List<Arg> returnArgs = new ArrayList<Arg>();
+		NodeDef nodeDef = null;
+		try {
+			nodeDef = SafetyUtil.getFaultNode(fStmt);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
-		
-		Expr rhsDeepExpr = unary.getExpr();
-		
-		// This expression has to be an IntLit... else error
-		if(rhsDeepExpr instanceof IntLitExpr){
-			
-			IntLitExpr rhsDeepInt = (IntLitExpr) rhsDeepExpr;
-			String rhsDeepIntVal = rhsDeepInt.getVal();
-			String totalInt = op.concat(rhsDeepIntVal);
-			
-			// Parse int
-			try {
-				intResult = Integer.parseInt(totalInt);
-			      
-			} catch (NumberFormatException e) {
-			      return null;
-			}
-			
+		// Get the return values
+		if (nodeDef != null) {
+			returnArgs = nodeDef.getRets();
 		} else {
 			return null;
 		}
-		
-		return intResult;
+		return returnArgs;
 	}
-	
-	
-	/*
-	 * testPositiveInteger:
-	 * parameter: IntLitExpr
-	 * returns: Integer
-	 * (1): Gets val : string
-	 * (2): Parse int: if exception, return null
-	 * (5): Return int
+
+	/**
+	 * Tests probability string: returns false if number format exception
+	 * or prob value falls outside [0,1].
+	 * @param prob
+	 * @return bool : valid or not
 	 */
-	private Integer testPositiveInteger(IntLitExpr intLit){
-		String lhsIntVal = intLit.getVal();
-		Integer intResult = null;
-		
-		// Try to parse int
+	private boolean testProbabilityString(String prob) {
 		try {
-			intResult = Integer.parseInt(lhsIntVal);
-		      
-		} catch (NumberFormatException e) {
-		      return null;
+			double p = Double.parseDouble(prob);
+			if ((p < 0.0) || (p > 1.0)) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NumberFormatException nfe) {
+			return false;
 		}
-		
-		return intResult;
+	}
+
+	/**
+	 * Tests integer string: returns false if number format exception
+	 * or negative integer.
+	 * @param integer
+	 * @return bool : valid or not
+	 */
+	private boolean testIntegerString(String integer) {
+		try {
+			int n = Integer.parseInt(integer);
+			if (n < 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
 	}
 }

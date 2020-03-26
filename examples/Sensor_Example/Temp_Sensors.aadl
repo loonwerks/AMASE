@@ -2,6 +2,8 @@ package Temp_Sensors
 public
 	with Base_Types;
 	renames Base_Types::all;
+	with Constants;
+	with Common_Faults;
 	
 	system Temp_Sensor
 		features
@@ -11,27 +13,21 @@ public
 		annex agree{**
 			guarantee "If env temperature higher than temperature threshold,
 					   then indicate high temperature":
-			High_Temp_Indicator = (Env_Temp > Constants.HIGH_TEMPERATURE_THRESHOLD);
+			High_Temp_Indicator = (Env_Temp > Constants::HIGH_TEMPERATURE_THRESHOLD);
 			
 		**};
 		
 		annex safety {**
 				
---			fault Temp_sensor_nondeterministic "Temp sensor fails": Common_Faults.fail_to_bool {
---				eq fail_to: bool;
---				inputs: val_in <- High_Temp_Indicator, alt_val <- fail_to;     
---				outputs: High_Temp_Indicator <- val_out;   
---         		probability: 1.0E-5 ;
---				duration: permanent;
---			}
-			fault Temp_sensor_stuck_at_high "Temp sensor stuck at high": Common_Faults.stuck_true {
+
+			fault Temp_sensor_stuck_at_high "Temp sensor stuck at high": Common_Faults::stuck_true {
 				inputs: val_in <- High_Temp_Indicator;     
 				outputs: High_Temp_Indicator <- val_out;   
          		probability: 1.0E-5 ;
 				duration: permanent;
 			}
 			
-			fault Temp_sensor_stuck_at_low "Temp sensor stuck at low": Common_Faults.stuck_false {
+			fault Temp_sensor_stuck_at_low "Temp sensor stuck at low": Common_Faults::stuck_false {
 				inputs: val_in <- High_Temp_Indicator;     
 				outputs: High_Temp_Indicator <- val_out;   
          		probability: 1.0E-5 ;

@@ -2,8 +2,10 @@ package Pressure_Sensors
 public
 	with Base_Types;
 	renames Base_Types::all;
+	with Constants;
+	with Common_Faults;
 	
-		system Pressure_Sensor
+	system Pressure_Sensor
 		features
 			Env_Pressure: in data port Integer;
 			High_Pressure_Indicator: out data port Boolean;
@@ -11,33 +13,27 @@ public
 		annex agree{**
 				
 			guarantee "If pressure is above threshold, then indicate high pressure.":
-			High_Pressure_Indicator = (Env_Pressure > Constants.HIGH_PRESSURE_THRESHOLD);
+				High_Pressure_Indicator = 
+					(Env_Pressure > Constants::HIGH_PRESSURE_THRESHOLD);
 			
 		**};
 		
 		annex safety {**
-				
---			fault Pressure_sensor_nondeterministic "Pressure sensor fails": Common_Faults.fail_to_bool {
---				eq fail_to: bool;
---				inputs: val_in <- High_Pressure_Indicator, alt_val <- fail_to;     
---				outputs: High_Pressure_Indicator <- val_out;   
---         		probability: 1.0E-5 ;
---				duration: permanent;
---			}
 			fault Pressure_sensor_stuck_at_low "Pressure sensor stuck low": 
-								Common_Faults.stuck_false {
-				inputs: val_in <- High_Pressure_Indicator;     
-				outputs: High_Pressure_Indicator <- val_out;   
-         		probability: 1.0E-5 ;
-				duration: permanent;
-			}	
-			
-			fault Pressure_sensor_stuck_at_high "Pressure sensor stuck high": Common_Faults.stuck_true {
+								Common_Faults::stuck_false {
 				inputs: val_in <- High_Pressure_Indicator;     
 				outputs: High_Pressure_Indicator <- val_out;   
          		probability: 1.0E-5 ;
 				duration: permanent;
 			}
+			
+			fault Pressure_sensor_stuck_at_high "Pressure sensor stuck high": 
+								Common_Faults::stuck_true {
+				inputs: val_in <- High_Pressure_Indicator;     
+				outputs: High_Pressure_Indicator <- val_out;   
+         		probability: 1.0E-5 ;
+				duration: permanent;
+			}	
 		**};
 		
 	end Pressure_Sensor;

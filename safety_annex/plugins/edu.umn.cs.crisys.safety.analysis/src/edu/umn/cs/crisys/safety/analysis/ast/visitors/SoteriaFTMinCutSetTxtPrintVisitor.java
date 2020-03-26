@@ -1,5 +1,8 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
+import java.util.Comparator;
+import java.util.LinkedList;
+
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNode;
@@ -59,9 +62,13 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 
 	@Override
 	public Void visit(SoteriaFTOrNode orNode) {
-		writeln("Total " + orNode.childNodes.size() + " Minimal Cut Sets");
+		LinkedList<SoteriaFTNode> sortedChildren = new LinkedList<SoteriaFTNode>(orNode.childNodes.values());
+		sortedChildren.sort(Comparator.comparing(SoteriaFTNode::getProbability).reversed());
+		writeln("Total " + orNode.childNodes.size() + " Minimal Cut Sets found for this property");
+		writeln("Probability of failure for the overall property: " + orNode.getProbability());
+		writeln("");
 		int minCutSetNum = 0;
-		for (SoteriaFTNode child : orNode.childNodes.values()) {
+		for (SoteriaFTNode child : sortedChildren) {
 			minCutSetNum++;
 			writeln("Minimal Cut Set # " + minCutSetNum);
 			if (child instanceof SoteriaFTLeafNode) {
@@ -76,6 +83,7 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	@Override
 	public Void visit(SoteriaFTAndNode andNode) {
 		writeln("Cardinality " + andNode.childNodes.size());
+		writeln("Joint probability for this Minimal Cut Set: " + andNode.getProbability());
 		writeln("[");
 		int faultNum = 0;
 		for (SoteriaFTNode child : andNode.childNodes.values()) {
@@ -110,7 +118,7 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 		writeln("original fault name, description: " + leaf.faultUserName + ", \"" + leaf.faultUserExplanation
 				+ "\"");
 		writeln("lustre component, fault name: " + leaf.compName + ", " + leaf.soteriaFaultName);
-		writeln("failure rate, default exposure time: " + leaf.failureRate + ", " + leaf.exposureTime);
+		writeln("probability: " + leaf.getProbability());
 	}
 
 }
