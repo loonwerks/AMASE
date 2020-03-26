@@ -25,6 +25,14 @@ public
 				outputs: High_Pressure_Indicator <- val_out;   
          		probability: 1.0E-5 ;
 				duration: permanent;
+			}
+			
+			fault Pressure_sensor_stuck_at_high "Pressure sensor stuck high": 
+								Common_Faults::stuck_true {
+				inputs: val_in <- High_Pressure_Indicator;     
+				outputs: High_Pressure_Indicator <- val_out;   
+         		probability: 1.0E-5 ;
+				duration: permanent;
 			}	
 		**};
 		
