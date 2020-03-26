@@ -1,6 +1,8 @@
 package ShutoffValve
 public
 with Base_Types;
+with faults;
+
 	system ShutoffValve
 		features
 			-- Inputs
@@ -30,14 +32,14 @@ with Base_Types;
 		**};
 
 		annex safety {**
-			fault ShutoffValve_FailedClosed "(ShutoffValve) Stuck closed fault." : faults.fail_to {
+			fault ShutoffValve_FailedClosed "(ShutoffValve) Stuck closed fault." : faults::fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- 0; 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 5.0E-6 ;
 				duration: permanent;
 			}
 			
-			fault ShutoffValve_FailedOpen "(ShutoffValve) Stuck open fault." : faults.fail_to {
+			fault ShutoffValve_FailedOpen "(ShutoffValve) Stuck open fault." : faults::fail_to {
 				inputs: val_in <- hyd_pressure_out, alt_val <- hyd_pressure_in; 
 				outputs: hyd_pressure_out <- val_out;    
         		probability: 5.0E-6 ;

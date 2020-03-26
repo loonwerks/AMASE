@@ -36,6 +36,19 @@ public class VerifyHandler extends AadlHandler {
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
+//		if (AddFaultsToAgree.getTransformFlag() == 1) {
+//			ICommandService service = null;
+//			try {
+//				service = HandlerUtil.getActiveWorkbenchWindowChecked(event).getService(ICommandService.class);
+//				System.out.println();
+//			} catch (ExecutionException e) {
+//				// TODO Auto-generated catch block
+//				new SafetyException(e.getMessage());
+//			}
+//			service.refreshElements(event.getCommand().getId(), null);
+//
+//		}
+
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
 		return null;

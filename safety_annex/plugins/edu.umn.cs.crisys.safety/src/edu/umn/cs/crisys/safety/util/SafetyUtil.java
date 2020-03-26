@@ -11,8 +11,8 @@ import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 import org.osate.annexsupport.AnnexUtil;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-import com.rockwellcollins.atc.agree.agree.NodeDefExpr;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
+import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
@@ -32,26 +32,20 @@ import jkind.lustre.RecordUpdateExpr;
 
 public class SafetyUtil {
 
-	public static NodeDefExpr getFaultNode(FaultStatement faultStatement) {
+	public static NodeDef getFaultNode(FaultStatement faultStatement) {
+
 		// defName: faults.fail_to
-		NestedDotID defName;
+		DoubleDotRef defName = faultStatement.getFaultDefName();
+
 		// defNameSub: fail_to
-		NamedElement defNameSub;
+		NamedElement defNameField = null;
 
-		defName = faultStatement.getFaultDefName();
-
-		while(defName.getSub() != null){
-			defName = defName.getSub();
+		if (defName != null) {
+			defNameField = defName.getElm();
+		} else {
+			new IllegalArgumentException("Fault definition name in " + faultStatement.getName() + " is not allowed.");
 		}
-
-		defNameSub = defName.getBase();
-
-		if (!(defNameSub instanceof NodeDefExpr)) {
-			throw new IllegalArgumentException("Fault definition name must be an instance of NodeDefExpr."
-					+" It is: "+defNameSub.getFullName()+".");
-		}
-
-		return (NodeDefExpr)defNameSub;
+		return (NodeDef) defNameField;
 	}
 
 

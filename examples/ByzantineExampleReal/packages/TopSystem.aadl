@@ -38,7 +38,7 @@ with Receiver;
 			rec3_to_top : port receiver3.output -> receiver3_output;
 		
 		annex safety {**
-      		analyze : max 1 fault
+      		analyze : max 2 fault
    		**};
 			
 	end TopSystem.impl;

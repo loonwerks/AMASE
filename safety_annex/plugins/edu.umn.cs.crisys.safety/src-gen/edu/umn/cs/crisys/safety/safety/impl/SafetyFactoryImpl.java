@@ -117,6 +117,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AnnexLibrary createAnnexLibrary()
   {
     AnnexLibraryImpl annexLibrary = new AnnexLibraryImpl();
@@ -128,6 +129,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AnnexSubclause createAnnexSubclause()
   {
     AnnexSubclauseImpl annexSubclause = new AnnexSubclauseImpl();
@@ -139,6 +141,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyLibrary createSafetyLibrary()
   {
     SafetyLibraryImpl safetyLibrary = new SafetyLibraryImpl();
@@ -150,6 +153,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetySubclause createSafetySubclause()
   {
     SafetySubclauseImpl safetySubclause = new SafetySubclauseImpl();
@@ -161,6 +165,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Contract createContract()
   {
     ContractImpl contract = new ContractImpl();
@@ -172,6 +177,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SpecStatement createSpecStatement()
   {
     SpecStatementImpl specStatement = new SpecStatementImpl();
@@ -183,6 +189,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AnalysisBehavior createAnalysisBehavior()
   {
     AnalysisBehaviorImpl analysisBehavior = new AnalysisBehaviorImpl();
@@ -194,6 +201,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FaultSubcomponent createFaultSubcomponent()
   {
     FaultSubcomponentImpl faultSubcomponent = new FaultSubcomponentImpl();
@@ -205,6 +213,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public HWFaultSubcomponent createHWFaultSubcomponent()
   {
     HWFaultSubcomponentImpl hwFaultSubcomponent = new HWFaultSubcomponentImpl();
@@ -216,6 +225,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PropagationTypeConstraint createPropagationTypeConstraint()
   {
     PropagationTypeConstraintImpl propagationTypeConstraint = new PropagationTypeConstraintImpl();
@@ -227,6 +237,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TemporalConstraint createTemporalConstraint()
   {
     TemporalConstraintImpl temporalConstraint = new TemporalConstraintImpl();
@@ -238,6 +249,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TriggerCondition createTriggerCondition()
   {
     TriggerConditionImpl triggerCondition = new TriggerConditionImpl();
@@ -249,6 +261,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyEqStatement createSafetyEqStatement()
   {
     SafetyEqStatementImpl safetyEqStatement = new SafetyEqStatementImpl();
@@ -260,6 +273,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Interval createInterval()
   {
     IntervalImpl interval = new IntervalImpl();
@@ -271,6 +285,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyContractLibrary createSafetyContractLibrary()
   {
     SafetyContractLibraryImpl safetyContractLibrary = new SafetyContractLibraryImpl();
@@ -282,6 +297,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyContractSubclause createSafetyContractSubclause()
   {
     SafetyContractSubclauseImpl safetyContractSubclause = new SafetyContractSubclauseImpl();
@@ -293,6 +309,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyContract createSafetyContract()
   {
     SafetyContractImpl safetyContract = new SafetyContractImpl();
@@ -304,6 +321,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FaultStatement createFaultStatement()
   {
     FaultStatementImpl faultStatement = new FaultStatementImpl();
@@ -315,6 +333,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AnalysisStatement createAnalysisStatement()
   {
     AnalysisStatementImpl analysisStatement = new AnalysisStatementImpl();
@@ -326,6 +345,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public HWFaultStatement createHWFaultStatement()
   {
     HWFaultStatementImpl hwFaultStatement = new HWFaultStatementImpl();
@@ -337,6 +357,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PropagateStatement createPropagateStatement()
   {
     PropagateStatementImpl propagateStatement = new PropagateStatementImpl();
@@ -348,6 +369,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ActivationStatement createActivationStatement()
   {
     ActivationStatementImpl activationStatement = new ActivationStatementImpl();
@@ -359,6 +381,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FaultCountBehavior createFaultCountBehavior()
   {
     FaultCountBehaviorImpl faultCountBehavior = new FaultCountBehaviorImpl();
@@ -370,6 +393,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProbabilityBehavior createProbabilityBehavior()
   {
     ProbabilityBehaviorImpl probabilityBehavior = new ProbabilityBehaviorImpl();
@@ -381,6 +405,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public InputStatement createInputStatement()
   {
     InputStatementImpl inputStatement = new InputStatementImpl();
@@ -392,6 +417,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OutputStatement createOutputStatement()
   {
     OutputStatementImpl outputStatement = new OutputStatementImpl();
@@ -403,6 +429,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public DurationStatement createDurationStatement()
   {
     DurationStatementImpl durationStatement = new DurationStatementImpl();
@@ -414,6 +441,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProbabilityStatement createProbabilityStatement()
   {
     ProbabilityStatementImpl probabilityStatement = new ProbabilityStatementImpl();
@@ -425,6 +453,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TriggerStatement createTriggerStatement()
   {
     TriggerStatementImpl triggerStatement = new TriggerStatementImpl();
@@ -436,6 +465,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PropagationTypeStatement createPropagationTypeStatement()
   {
     PropagationTypeStatementImpl propagationTypeStatement = new PropagationTypeStatementImpl();
@@ -447,6 +477,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public asymmetric createasymmetric()
   {
     asymmetricImpl asymmetric = new asymmetricImpl();
@@ -458,6 +489,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public symmetric createsymmetric()
   {
     symmetricImpl symmetric = new symmetricImpl();
@@ -469,6 +501,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PermanentConstraint createPermanentConstraint()
   {
     PermanentConstraintImpl permanentConstraint = new PermanentConstraintImpl();
@@ -480,6 +513,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TransientConstraint createTransientConstraint()
   {
     TransientConstraintImpl transientConstraint = new TransientConstraintImpl();
@@ -491,6 +525,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EnablerCondition createEnablerCondition()
   {
     EnablerConditionImpl enablerCondition = new EnablerConditionImpl();
@@ -502,6 +537,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EqValue createEqValue()
   {
     EqValueImpl eqValue = new EqValueImpl();
@@ -513,6 +549,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IntervalEq createIntervalEq()
   {
     IntervalEqImpl intervalEq = new IntervalEqImpl();
@@ -524,6 +561,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetEq createSetEq()
   {
     SetEqImpl setEq = new SetEqImpl();
@@ -535,6 +573,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RangeEq createRangeEq()
   {
     RangeEqImpl rangeEq = new RangeEqImpl();
@@ -546,6 +585,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ClosedInterval createClosedInterval()
   {
     ClosedIntervalImpl closedInterval = new ClosedIntervalImpl();
@@ -557,6 +597,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OpenLeftInterval createOpenLeftInterval()
   {
     OpenLeftIntervalImpl openLeftInterval = new OpenLeftIntervalImpl();
@@ -568,6 +609,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OpenRightInterval createOpenRightInterval()
   {
     OpenRightIntervalImpl openRightInterval = new OpenRightIntervalImpl();
@@ -579,6 +621,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OpenInterval createOpenInterval()
   {
     OpenIntervalImpl openInterval = new OpenIntervalImpl();
@@ -590,6 +633,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SafetyPackage getSafetyPackage()
   {
     return (SafetyPackage)getEPackage();

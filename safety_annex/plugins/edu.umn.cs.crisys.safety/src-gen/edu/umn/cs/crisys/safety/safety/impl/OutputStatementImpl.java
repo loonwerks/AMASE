@@ -2,23 +2,19 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 
 import java.util.Collection;
 
-import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.EDataTypeEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,14 +33,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class OutputStatementImpl extends FaultSubcomponentImpl implements OutputStatement
 {
   /**
-   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' containment reference list.
+   * The cached value of the '{@link #getNom_conn() <em>Nom conn</em>}' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getNom_conn()
    * @generated
    * @ordered
    */
-  protected EList<NestedDotID> nom_conn;
+  protected EList<NamedElement> nom_conn;
 
   /**
    * The cached value of the '{@link #getFault_out() <em>Fault out</em>}' attribute list.
@@ -82,11 +78,12 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<NestedDotID> getNom_conn()
+  @Override
+  public EList<NamedElement> getNom_conn()
   {
     if (nom_conn == null)
     {
-      nom_conn = new EObjectContainmentEList<NestedDotID>(NestedDotID.class, this, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN);
+      nom_conn = new EObjectResolvingEList<NamedElement>(NamedElement.class, this, SafetyPackage.OUTPUT_STATEMENT__NOM_CONN);
     }
     return nom_conn;
   }
@@ -96,6 +93,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getFault_out()
   {
     if (fault_out == null)
@@ -103,22 +101,6 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
       fault_out = new EDataTypeEList<String>(String.class, this, SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT);
     }
     return fault_out;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
-      case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
-        return ((InternalEList<?>)getNom_conn()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -152,7 +134,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
     {
       case SafetyPackage.OUTPUT_STATEMENT__NOM_CONN:
         getNom_conn().clear();
-        getNom_conn().addAll((Collection<? extends NestedDotID>)newValue);
+        getNom_conn().addAll((Collection<? extends NamedElement>)newValue);
         return;
       case SafetyPackage.OUTPUT_STATEMENT__FAULT_OUT:
         getFault_out().clear();
@@ -210,7 +192,7 @@ public class OutputStatementImpl extends FaultSubcomponentImpl implements Output
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (fault_out: ");
     result.append(fault_out);
     result.append(')');

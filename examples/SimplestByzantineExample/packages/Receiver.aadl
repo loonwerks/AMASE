@@ -1,6 +1,7 @@
 package Receiver
 public
 with Base_Types;
+with Common_Faults;
 	system Receiver
 		features
 			sender_input : in data port Base_Types::Boolean;
@@ -15,7 +16,7 @@ with Base_Types;
 		**}	;
 --		annex safety {**
 --
---			fault Receiver_Fault "Receiver output is inverted": Common_Faults.invert_signal {
+--			fault Receiver_Fault "Receiver output is inverted": Common_Faults::invert_boolean {
 --				inputs: val_in <- output;     
 --				outputs: output <- val_out;    
 --				duration: permanent;

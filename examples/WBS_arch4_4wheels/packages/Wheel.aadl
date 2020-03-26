@@ -1,6 +1,7 @@
 package Wheel
 public
 with Base_Types;
+with faults;
 
 	system Wheel
 		features
@@ -35,7 +36,7 @@ with Base_Types;
 		**};
 		
 		annex safety {**
-			fault Wheel_NoRotation "(Wheel) Inverted boolean (Switch mode) fault." : faults.inverted_fail {
+			fault Wheel_NoRotation "(Wheel) Inverted boolean (Switch mode) fault." : faults::inverted_fail {
 				inputs: val_in <- wheel_status; 
 				outputs: wheel_status <- val_out;    
         		probability: 1.0E-5 ;

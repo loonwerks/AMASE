@@ -1,33 +1,42 @@
 package Test
 public
 	with Base_Types;
-	renames Base_Types::all;
 	with Common_Faults;
 
+--	annex agree{**
+--		node invert_signal(val_in: int, trigger: bool) returns (val_out:int);
+--		let
+--	  		val_out = if trigger then (val_in*(-1)) else val_in;
+--		tel;
+--	**};
 	system C1
 		features
-			in1: in data port Integer;
-			out1: out data port Integer;
+			in1: in data port Base_Types::Integer;
+			out1: out data port Base_Types::Integer;
 		annex agree {**
 			assume "C1 in1 range": (in1 > 0) and (in1 < 10);		
 				
 			guarantee "C1 out1 value":
 			out1 = in1;
+			
+			eq x : int = Common_Faults::invert_signal(0,true);
+			
+			
 		**};
 		annex safety {**
-			fault C1_out_negation "C1 out1 negation fault": Common_Faults.invert_signal {
-			inputs: val_in <- out1;     
-			outputs: out1 <- val_out;  
-         	probability: 1.0E-6 ;  
-			duration: permanent;
+			fault C1_out_negation "C1 out1 negation fault": Common_Faults::invert_signal {
+				inputs: val_in <- out1;     
+				outputs: out1 <- val_out;  
+         		probability: 1.0E-6 ;  
+				duration: permanent;
 			}	
 		**};
 	end C1;
 
 	system C2
 		features 
-			in2: in data port Integer;
-			out2: out data port Integer;
+			in2: in data port Base_Types::Integer;
+			out2: out data port Base_Types::Integer;
 		annex agree{**
 			assume "C2 in2 range": (in2 >0) and (in2 < 10);	
 				
@@ -38,7 +47,7 @@ public
 			eq C2_failed: bool;
 		**};
 		annex safety {**
-			fault C2_out_fail_to_zero "C2 out2 fail to zero fault": Common_Faults.fail_to_zero {
+			fault C2_out_fail_to_zero "C2 out2 fail to zero fault": Common_Faults::fail_to_zero {
 			inputs: val_in <- out2;     
 			outputs: out2 <- val_out;   
          	probability: 1.0E-5 ;
@@ -49,9 +58,9 @@ public
 	
 	system C3
 		features 
-			in13: in data port Integer;
-			in23: in data port Integer;
-			out3: out data port Integer;
+			in13: in data port Base_Types::Integer;
+			in23: in data port Base_Types::Integer;
+			out3: out data port Base_Types::Integer;
 		annex agree{**				
 			guarantee "C3 out3 value":
 			out3 = in13 + in23;
@@ -60,9 +69,9 @@ public
 	
 	system C123
 		features
-			in1: in data port Integer;
-			in2: in data port Integer;
-			out3: out data port Integer;
+			in1: in data port Base_Types::Integer;
+			in2: in data port Base_Types::Integer;
+			out3: out data port Base_Types::Integer;
 		annex agree{**	
 			assume "C123 in1 range": (in1 > 0) and (in1 < 10);	
 			
@@ -100,14 +109,14 @@ public
 	
 	system C0
 		features
-			in0: in data port Integer;
-			out0: out data port Integer;
+			in0: in data port Base_Types::Integer;
+			out0: out data port Base_Types::Integer;
 		annex agree{**
 			guarantee "C0 out0 value":
 			out0 = in0 * 2;
 		**};
 		annex safety {**
-			fault C0_out_fail_to_one "C0 out0 fail to one fault": Common_Faults.fail_to_one {
+			fault C0_out_fail_to_one "C0 out0 fail to one fault": Common_Faults::fail_to_one {
 			inputs: val_in <- out0;     
 			outputs: out0 <- val_out;   
          	probability: 1.0E-7 ;
@@ -118,9 +127,9 @@ public
 	
 	system C0123
 		features
-			in1: in data port Integer;
-			in2: in data port Integer;
-			out0: out data port Integer;
+			in1: in data port Base_Types::Integer;
+			in2: in data port Base_Types::Integer;
+			out0: out data port Base_Types::Integer;
 		annex agree{**
 			assume "C0123 in1 range": (in1 > 0) and (in1 < 10);	
 			
@@ -144,8 +153,8 @@ public
 			C123_to_C0: port C123.out3 -> C0.in0;
 			C0_to_out0: port C0.out0 -> out0;
 		annex safety {**
-      		--analyze : max  3 fault
-      		analyze : probability 1.0E-7
+      		analyze : max 3 fault
+      		--analyze : probability 1.0E-7
    		**};
 	end C0123.impl;
 

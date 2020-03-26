@@ -16,7 +16,7 @@ system A
 	**};	
 	
 	annex safety {**
-		fault stuck_at_fault_A "Component A output stuck" : faults.fail_to {
+		fault stuck_at_fault_A "Component A output stuck" : faults::fail_to {
 			inputs: val_in <- Output, alt_val <- prev(Output, 0); 
 			outputs: Output <- val_out;    
         	probability: 5.0E-9 ;
@@ -36,7 +36,7 @@ system B
 	**};
 	
 	annex safety {**
-		fault stuck_at_fault_B "Component B output stuck nondeterministic" : faults.fail_to {
+		fault stuck_at_fault_B "Component B output stuck nondeterministic" : faults::fail_to {
 			eq nondet_val : int;
 			inputs: val_in <- Output, alt_val <- nondet_val; 
 			outputs: Output <- val_out;    
@@ -90,8 +90,8 @@ system implementation top_level.Impl
 	**};
 	
     annex safety{**
-	  analyze : probability 1.0E-7
-	  --analyze : max 2 fault
+	  --analyze : probability 1.0E-7
+	  analyze : max 2 fault
    **};
 end top_level.Impl;
 	

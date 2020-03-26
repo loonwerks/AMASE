@@ -2,9 +2,9 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
-
 import org.eclipse.emf.common.util.EList;
+
+import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,29 +26,21 @@ import org.eclipse.emf.common.util.EList;
 public interface OutputStatement extends FaultSubcomponent
 {
   /**
-   * Returns the value of the '<em><b>Nom conn</b></em>' containment reference list.
-   * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.NestedDotID}.
+   * Returns the value of the '<em><b>Nom conn</b></em>' reference list.
+   * The list contents are of type {@link org.osate.aadl2.NamedElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Nom conn</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Nom conn</em>' containment reference list.
+   * @return the value of the '<em>Nom conn</em>' reference list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Nom_conn()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  EList<NestedDotID> getNom_conn();
+  EList<NamedElement> getNom_conn();
 
   /**
    * Returns the value of the '<em><b>Fault out</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Fault out</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fault out</em>' attribute list.
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getOutputStatement_Fault_out()

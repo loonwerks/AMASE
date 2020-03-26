@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety.impl;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
+import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
@@ -89,7 +89,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * @generated
    * @ordered
    */
-  protected NestedDotID faultDefName;
+  protected DoubleDotRef faultDefName;
 
   /**
    * The cached value of the '{@link #getFaultDefinitions() <em>Fault Definitions</em>}' containment reference list.
@@ -127,6 +127,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -137,6 +138,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -150,6 +152,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getStr()
   {
     return str;
@@ -160,6 +163,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setStr(String newStr)
   {
     String oldStr = str;
@@ -173,7 +177,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public NestedDotID getFaultDefName()
+  @Override
+  public DoubleDotRef getFaultDefName()
   {
     return faultDefName;
   }
@@ -183,9 +188,9 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFaultDefName(NestedDotID newFaultDefName, NotificationChain msgs)
+  public NotificationChain basicSetFaultDefName(DoubleDotRef newFaultDefName, NotificationChain msgs)
   {
-    NestedDotID oldFaultDefName = faultDefName;
+    DoubleDotRef oldFaultDefName = faultDefName;
     faultDefName = newFaultDefName;
     if (eNotificationRequired())
     {
@@ -200,7 +205,8 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFaultDefName(NestedDotID newFaultDefName)
+  @Override
+  public void setFaultDefName(DoubleDotRef newFaultDefName)
   {
     if (newFaultDefName != faultDefName)
     {
@@ -221,6 +227,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<FaultSubcomponent> getFaultDefinitions()
   {
     if (faultDefinitions == null)
@@ -288,7 +295,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr((String)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((NestedDotID)newValue);
+        setFaultDefName((DoubleDotRef)newValue);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
@@ -315,7 +322,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
         setStr(STR_EDEFAULT);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEF_NAME:
-        setFaultDefName((NestedDotID)null);
+        setFaultDefName((DoubleDotRef)null);
         return;
       case SafetyPackage.FAULT_STATEMENT__FAULT_DEFINITIONS:
         getFaultDefinitions().clear();
@@ -356,7 +363,7 @@ public class FaultStatementImpl extends SpecStatementImpl implements FaultStatem
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(", str: ");

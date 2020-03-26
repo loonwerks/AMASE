@@ -2,7 +2,7 @@
  */
 package edu.umn.cs.crisys.safety.safety;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
+import org.osate.aadl2.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,10 +28,6 @@ public interface ActivationStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Agree Bool Var Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Agree Bool Var Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Agree Bool Var Name</em>' attribute.
    * @see #setAgreeBoolVarName(String)
@@ -52,38 +48,30 @@ public interface ActivationStatement extends SpecStatement
   void setAgreeBoolVarName(String value);
 
   /**
-   * Returns the value of the '<em><b>Agree Comp Path</b></em>' containment reference.
+   * Returns the value of the '<em><b>Agree Comp Path</b></em>' reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Agree Comp Path</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Agree Comp Path</em>' containment reference.
-   * @see #setAgreeComp_Path(NestedDotID)
+   * @return the value of the '<em>Agree Comp Path</em>' reference.
+   * @see #setAgreeComp_Path(NamedElement)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getActivationStatement_AgreeComp_Path()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  NestedDotID getAgreeComp_Path();
+  NamedElement getAgreeComp_Path();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path <em>Agree Comp Path</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getAgreeComp_Path <em>Agree Comp Path</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Agree Comp Path</em>' containment reference.
+   * @param value the new value of the '<em>Agree Comp Path</em>' reference.
    * @see #getAgreeComp_Path()
    * @generated
    */
-  void setAgreeComp_Path(NestedDotID value);
+  void setAgreeComp_Path(NamedElement value);
 
   /**
    * Returns the value of the '<em><b>Fault Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Fault Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fault Name</em>' attribute.
    * @see #setFaultName(String)
@@ -104,29 +92,25 @@ public interface ActivationStatement extends SpecStatement
   void setFaultName(String value);
 
   /**
-   * Returns the value of the '<em><b>Fault Comp Path</b></em>' containment reference.
+   * Returns the value of the '<em><b>Fault Comp Path</b></em>' reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Fault Comp Path</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fault Comp Path</em>' containment reference.
-   * @see #setFaultComp_Path(NestedDotID)
+   * @return the value of the '<em>Fault Comp Path</em>' reference.
+   * @see #setFaultComp_Path(NamedElement)
    * @see edu.umn.cs.crisys.safety.safety.SafetyPackage#getActivationStatement_FaultComp_Path()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  NestedDotID getFaultComp_Path();
+  NamedElement getFaultComp_Path();
 
   /**
-   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path <em>Fault Comp Path</em>}' containment reference.
+   * Sets the value of the '{@link edu.umn.cs.crisys.safety.safety.ActivationStatement#getFaultComp_Path <em>Fault Comp Path</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Fault Comp Path</em>' containment reference.
+   * @param value the new value of the '<em>Fault Comp Path</em>' reference.
    * @see #getFaultComp_Path()
    * @generated
    */
-  void setFaultComp_Path(NestedDotID value);
+  void setFaultComp_Path(NamedElement value);
 
 } // ActivationStatement

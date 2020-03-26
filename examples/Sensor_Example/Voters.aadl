@@ -2,6 +2,7 @@ package Voters
 public
 	with Base_Types;
 	renames Base_Types::all;
+	with Utilities_Lib;
 
 	system Two_Of_Three_Agree_Voter
 		features
@@ -13,7 +14,7 @@ public
 				
 			guarantee "Voter output high if at least 2 out of 3 sensors reported high.":
 				High_Out = 
-					Utilities_Lib.Vote_2_of_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
+					Utilities_Lib::Vote_2_of_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
 		
 		**};
 	end Two_Of_Three_Agree_Voter;
@@ -28,7 +29,7 @@ public
 				
 			guarantee "Voter output high if all 3 sensors reported high.":
 				High_Out = 
-					Utilities_Lib.Vote_all_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
+					Utilities_Lib::Vote_all_3_Sensors(Sensor1_High, Sensor2_High, Sensor3_High);
 		
 		**};
 	end All_Three_Agree_Voter;

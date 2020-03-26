@@ -9,11 +9,12 @@ public class SoteriaFTLeafNode extends SoteriaFTNode {
 	public final String lustreFaultName; // this is the fault name appeared in the original lustre code
 	public final float failureRate;
 	public final float exposureTime;
+	public final float probability;
 	public final String faultUserName; // this is the fault name specified by the user
 	public final String faultUserExplanation; // this is the fault explanation specified by the user
 
 	public SoteriaFTLeafNode(String compName, String faultName, float failureRate, float exposureTime,
-			String originalFaultName, String faultUserName, String faultUserExplanation) {
+			float probability, String originalFaultName, String faultUserName, String faultUserExplanation) {
 		super(faultName);
 		Assert.isNotNull(compName);
 		Assert.isNotNull(faultName);
@@ -25,6 +26,7 @@ public class SoteriaFTLeafNode extends SoteriaFTNode {
 		this.soteriaFaultName = faultName;
 		this.failureRate = failureRate;
 		this.exposureTime = exposureTime;
+		this.probability = probability;
 		this.lustreFaultName = originalFaultName;
 		this.faultUserName = faultUserName;
 		this.faultUserExplanation = faultUserExplanation;
@@ -33,6 +35,11 @@ public class SoteriaFTLeafNode extends SoteriaFTNode {
 	@Override
 	public <T> T accept(SoteriaFTAstVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public float getProbability() {
+		return (this.probability);
 	}
 
 }

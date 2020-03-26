@@ -11,13 +11,13 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
 import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.FeatureInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
-import com.rockwellcollins.atc.agree.agree.NestedDotID;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeAADLConnection;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeConnection;
@@ -70,6 +70,7 @@ import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
 import jkind.lustre.RecordAccessExpr;
+import jkind.lustre.Type;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
@@ -202,7 +203,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faults = renameFaultEqs(faults);
 
 		if (faultMap.containsKey(node.compInst) || hwfaultMap.containsKey(node.compInst)) {
-			throw new SafetyException("Node: " + node.id + " has been visited twice during AddFaultsToNodeVisitor!");
+			throw new SafetyException("Node: " + node.id + " has been visited twice.");
 		}
 		faultMap.put(node.compInst, faults);
 		hwfaultMap.put(node.compInst, hwFaults);
@@ -419,6 +420,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb NodeBuilder will have nominal vars added to locals.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
+		List<String> inputIdList = new ArrayList<String>();
 		for (String faultyId : faultyVarsExpr.keySet()) {
 			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
 			boolean onlyAsym = true;
@@ -433,10 +435,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				AgreeVar out = findVar(node.outputs, (faultyId));
 				if (out == null) {
 					throw new SafetyException("A fault defined for " + node.id + " has a connection"
-							+ " that is not a valid output for this component.");
+							+ " that is not a valid output for this component." + " Valid connections include {"
+							+ node.outputs + "}");
 				} else {
-					nb.addInput(new AgreeVar(createNominalId((faultyId)), getOutputTypeForFaultNode(f),
-							out.reference));
+					for (Type nominalOutputType : getOutputTypeForFaultNode(f)) {
+						if (!inputIdList.contains(faultyId)) {
+							nb.addInput(new AgreeVar(createNominalId((faultyId)), nominalOutputType, out.reference));
+							inputIdList.add(faultyId);
+						}
+
+					}
 				}
 			}
 		}
@@ -448,20 +456,16 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param fault Fault defining this fault node.
 	 * @return NamedType The type on the output the fault is connected to.
 	 */
-	protected NamedType getOutputTypeForFaultNode(Fault fault) {
+	protected List<Type> getOutputTypeForFaultNode(Fault fault) {
 		// The type of __fault__nominal__output is the same as what the fault node
 		// takes as input. Will have statement: fault__nominal = input
 		// First find this in order to create that
 		// variable later.
-		NamedType nominalOutputType = null;
-		if (fault.faultNode.outputs.size() > 1) {
-			new SafetyException("Fault node " + fault.faultNode.id + " can only " + "have one output.");
-		} else {
-			for (VarDecl output : fault.faultNode.outputs) {
-				nominalOutputType = (NamedType) output.type;
-			}
+		List<Type> nominalOutputTypeList = new ArrayList<Type>();
+		for (VarDecl output : fault.faultNode.outputs) {
+			nominalOutputTypeList.add(output.type);
 		}
-		return nominalOutputType;
+		return nominalOutputTypeList;
 	}
 
 	/**
@@ -533,7 +537,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				// Do any name conversions on the stored expression and create nominal id.
 				actual = actual.accept(this);
 				if (actual == null) {
-					throw new SafetyException("fault node input: '" + vd.id + "' is not assigned.");
+					throw new SafetyException("Fault node input: '" + vd.id + "' is not assigned.");
 				}
 			}
 			actuals.add(actual);
@@ -725,12 +729,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// If this expression is not in map, return exception message
 		String outputName = f.faultOutputMap.get(ex);
 		if (outputName == null) {
-			new SafetyException("Cannot find expression in mapping: faultToActual (Debug: AddFaultsToNodeVisitor 484)");
+			new SafetyException("Cannot find fault output for fault " + f.id);
 		}
 		// Use outputName to get value from outputParamToActualMap
 		AgreeVar actual = f.outputParamToActualMap.get(outputName);
 		if (f.outputParamToActualMap.isEmpty()) {
-			new SafetyException("Map is empty. Fault is: " + f.id + " and expr is: " + ex.toString());
+			new SafetyException("Something went wrong with fault output parameter. Fault is: " + f.id + " and expr is: "
+					+ ex.toString());
 		}
 		// Create IdExpr out of actual string
 		return new IdExpr(actual.id);
@@ -785,7 +790,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		newFault.faultInputMap.clear();
 
 		if (!f.triggers.isEmpty()) {
-			throw new SafetyException("Triggers are currently unsupported for translation");
+			throw new SafetyException("User-defined triggers are currently unsupported.");
 		}
 
 		// update the variable declarations
@@ -1077,7 +1082,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 						String outputName = getOutputNameFromFaultStatement(fs);
 						if (outputName.isEmpty()) {
 							new SafetyException(
-									"Error processing asymmetric fault. (Debug: AddFaultsToNodeVisitor 808)");
+									"Error processing asymmetric fault: the output name is undefined for fault statement:"
+											+ fs.getName());
 						} else {
 							List<FaultStatement> tempAsymFaults = new ArrayList<FaultStatement>();
 							tempAsymFaults.add(fs);
@@ -1122,11 +1128,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		String output = "";
 		for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
 			if (fc instanceof OutputStatement) {
-				EList<NestedDotID> outputType = ((OutputStatement) fc).getNom_conn();
+				EList<NamedElement> outputType = ((OutputStatement) fc).getNom_conn();
 				// TODO: Assume the output is first in list. (????)
 				if (outputType.size() > 0) {
-					NestedDotID id = outputType.get(0);
-					output = id.getBase().getName();
+					NamedElement id = outputType.get(0);
+//					output = id.getBase().getName();
+					output = id.toString();
 					return output;
 				}
 				break;
@@ -1188,7 +1195,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					}
 				}
 				if (found) {
-					throw new SafetyException("Multiple analysis specifications found.  Only one can be processed");
+					throw new SafetyException(
+							"Multiple analysis specification statements found.  Only one can be processed");
 				}
 				found = true;
 			}
@@ -1204,26 +1212,26 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * given the fault name and the component path.
 	 *
 	 * @param faultName Name of fault to be found
-	 * @param compPath Component instance path
+	 * @param faultComp_Path Component instance path
 	 * @return Fault with name matching string.
 	 */
-	public BaseFault findFaultInCompInst(String faultName, NestedDotID compPath) {
+	public BaseFault findFaultInCompInst(String faultName, NamedElement faultComp_Path) {
 		List<ComponentInstance> compInsts = new ArrayList<ComponentInstance>(faultMap.keySet());
 
 		for (ComponentInstance compInst : compInsts) {
-			if (compInst.getName().equals(compPath.getBase().getName())) {
+			if (compInst.getName().equals(faultComp_Path.getName())) {
 				List<Fault> faults = new ArrayList<Fault>(faultMap.get(compInst));
 				for (Fault fault : faults) {
 					if (fault.name.equals(faultName)) {
 						return fault;
 					}
 				}
-
 			}
 		}
+
 		compInsts = new ArrayList<ComponentInstance>(hwfaultMap.keySet());
 		for (ComponentInstance compInst : compInsts) {
-			if (compInst.getName().equals(compPath.getBase().getName())) {
+			if (compInst.getName().equals(faultComp_Path.getName())) {
 				List<HWFault> hwfaults = new ArrayList<HWFault>(hwfaultMap.get(compInst));
 				for (HWFault hwfault : hwfaults) {
 					if (hwfault.name.equals(faultName)) {
@@ -1249,23 +1257,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				ActivationStatement as = (ActivationStatement) s;
 				String agreeBoolVarName = as.getAgreeBoolVarName();
 				// the following can be null
-				NestedDotID agreeComp_Path = as.getAgreeComp_Path();
+				NamedElement agreeComp_Path = as.getAgreeComp_Path();
 				String agreeBoolVarPrefix = "";
 				if (agreeComp_Path != null) {
-					agreeBoolVarPrefix = agreeComp_Path.getBase().getName() + "__";
+					agreeBoolVarPrefix = agreeComp_Path.getName() + "__";
 				}
 				// compose agreeBoolVarName in main node input
 				agreeBoolVarName = agreeBoolVarPrefix + agreeBoolVarName;
 				String faultName = as.getFaultName();
 				// the following can be null
-				NestedDotID faultComp_Path = as.getFaultComp_Path();
+				NamedElement faultComp_Path = as.getFaultComp_Path();
 				BaseFault fault = null;
 				if (faultComp_Path != null) {
 					fault = findFaultInCompInst(faultName, faultComp_Path);
 				}
 				if (fault != null) {
 					FaultActivationAssignment faultActAssign = new FaultActivationAssignment(agreeBoolVarName, fault,
-							faultComp_Path.getBase().getName());
+							faultComp_Path.getName());
 					faultActivations.add(faultActAssign);
 				} else {
 					throw new SafetyException("Unable to identify fault in fault activation statement.");
@@ -1286,22 +1294,23 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (s instanceof PropagateStatement) {
 				PropagateStatement ps = (PropagateStatement) s;
 				Iterator<String> srcFaultIt = ps.getSrcFaultList().iterator();
-				Iterator<NestedDotID> srcCompPathIt = ps.getSrcComp_path().iterator();
+				Iterator<NamedElement> srcCompPathIt = ps.getSrcComp_path().iterator();
 
 				// create a SafetyPropagation
 				BaseFault srcFault = null;
 				// for each src fault name and path, locate the fault
 				while (srcFaultIt.hasNext() && srcCompPathIt.hasNext()) {
-					NestedDotID srcCompPath = srcCompPathIt.next();
+					NamedElement srcCompPath = srcCompPathIt.next();
 					String srcFaultName = srcFaultIt.next();
 					srcFault = findFaultInCompInst(srcFaultName, srcCompPath);
 					if (srcFault != null) {
 						// for each destination fault name and path, locate the fault
 						BaseFault destFault = null;
 						Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
-						Iterator<NestedDotID> destCompPathIt = ps.getDestComp_path().iterator();
+						Iterator<NamedElement> destCompPathIt = ps.getDestComp_path()
+								.iterator();
 						while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
-							NestedDotID destCompPath = destCompPathIt.next();
+							NamedElement destCompPath = destCompPathIt.next();
 							String destFaultName = destFaultIt.next();
 							destFault = findFaultInCompInst(destFaultName, destCompPath);
 							SafetyPropagation propagation = new SafetyPropagation(srcFault, destFault);
@@ -1390,7 +1399,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			assertIndependentExpr = createTransientExpr(independentlyActiveExpr, independentEventExpr);
 			assertDependentExpr = createTransientExpr(dependentlyActiveExpr, dependentEventExpr);
 		} else {
-			throw new SafetyException("Unknown constraint type during translation of fault " + f.id);
+			throw new SafetyException("Unknown constraint type during translation of fault " + f.id
+					+ ". Constraint must be 'permanent'.");
 		}
 		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, f.faultStatement));
 		builder.addAssertion(new AgreeStatement("", assertDependentExpr, f.faultStatement));
@@ -1430,7 +1440,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			assertIndependentExpr = createTransientExpr(independentlyActiveExpr, independentEventExpr);
 			assertDependentExpr = createTransientExpr(dependentlyActiveExpr, dependentEventExpr);
 		} else {
-			throw new SafetyException("Unknown constraint type during translation of fault " + hwf.id);
+			throw new SafetyException("Unknown constraint type during translation of fault " + hwf.id
+					+ ". Constraint must be 'permanent'.");
 		}
 		builder.addAssertion(new AgreeStatement("", assertIndependentExpr, hwf.hwFaultStatement));
 		builder.addAssertion(new AgreeStatement("", assertDependentExpr, hwf.hwFaultStatement));
