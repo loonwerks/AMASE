@@ -222,7 +222,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			ComponentType compType = compImpl.getType();
 			if (compType != null) {
 				Map<String, List<String>> mapCompNameToFaultNames = collectFaultsInProgram(compImpl);
-				List<EObject> assignableElements = collectAssignableElementsInImpl(compImpl);
+				List<EObject> assignableElements = collectAssignableElementsInTypeAndImpl(compImpl);
 				boolean found = false;
 				for (EObject assignableElement : assignableElements) {
 					if (assignableElement instanceof NamedElement) {
@@ -521,13 +521,16 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 	/**
-	 * Gets all agree vars defined in this component implementation.
+	 * Gets all agree vars defined in this component type and implementation.
 	 * @param compImpl
 	 * @return List<String> of agree var names.
 	 */
-	private List<EObject> collectAssignableElementsInImpl(ComponentImplementation compImpl) {
+	private List<EObject> collectAssignableElementsInTypeAndImpl(ComponentImplementation compImpl) {
 		List<EObject> assignableElements = new ArrayList<>();
+		// Get impl contract
 		List<AgreeContract> typeContracts = EcoreUtil2.getAllContentsOfType(compImpl, AgreeContract.class);
+		// And now check component type contract
+		typeContracts.addAll(EcoreUtil2.getAllContentsOfType(compImpl.getType(), AgreeContract.class));
 		for (AgreeContract ac : typeContracts) {
 			assignableElements.addAll(EcoreUtil2.getAllContentsOfType(ac, EqStatement.class).stream()
 					.map(eq -> eq.getLhs()).flatMap(List::stream).collect(Collectors.toList()));
