@@ -1,4 +1,4 @@
-Regression Testing Examples
+﻿Regression Testing Examples
 developed by Danielle Stewart and Janet Liu
 
 These are used to occasionally test the Safety Annex when larger changes
@@ -144,10 +144,8 @@ are made to the implementation.
 	---------------------
 	- Verify single layer : passes all contracts
 	- Verify in the presence of faults: 
-		- max 1 fault (compositional or monolithic): ALL NODES AGREE PROPERTY FAILS
-													  ALL NON-FAILED NODES AGREE PASSES
-		- max 2+ fault (compositional or monolithic): ALL NODES AGREE PROPERTY FAILS
-													  ALL NON-FAILED NODES AGREE FAILS
+		- max 1 fault (compositional or monolithic): ALL NODES AGREE PROPERTY FAILS and ALL NON-FAILED NODES AGREE PASSES
+		- max 2+ fault (compositional or monolithic): ALL NODES AGREE PROPERTY FAILS and ALL NON-FAILED NODES AGREE FAILS
 		- probability (monolithic): 
 			all node faults = 1E-5
 			top level threshold = 1E-10
@@ -189,10 +187,8 @@ are made to the implementation.
 	---------------------
 	- Verify single layer : passes all contracts
 	- Verify in the presence of faults: 
-		- max 1 fault (compositional or monolithic): ALL NODES AGREE PROPERTIES FAIL
-													  ALL NON-FAILED NODES AGREE PROPERTIES PASS
-		- max 2+ fault (compositional or monolithic): ALL NODES AGREE PROPERTIES FAIL
-													  ALL NON-FAILED NODES AGREE PROPERTIES FAIL
+		- max 1 fault (compositional or monolithic): ALL NODES AGREE PROPERTIES FAIL and ALL NON-FAILED NODES AGREE PROPERTIES PASS
+		- max 2+ fault (compositional or monolithic): ALL NODES AGREE PROPERTIES FAIL and ALL NON-FAILED NODES AGREE PROPERTIES FAIL
 		- probability (monolithic): 
 			all node faults = 1E-5
 			top level threshold = 1E-10
