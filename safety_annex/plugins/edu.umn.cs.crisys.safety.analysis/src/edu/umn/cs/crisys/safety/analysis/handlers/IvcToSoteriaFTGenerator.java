@@ -219,10 +219,10 @@ public class IvcToSoteriaFTGenerator {
 				}
 			}
 			// TODO: need to have component specify failure rate and exposure time in the future
-			// currently treat exposure time as (float) 1.0
-			// and treat the failure probability from the fault statement as the failure rate
-			SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, failureProb, (float) 1.0,
-					originalFaultName, faultUserName, faultUserExplanation);
+			// currently treat exposure time and failure rate as (float) 1.0
+			// and set the failure probability from the fault statement as the failure rate
+			SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, (float) 1.0, (float) 1.0,
+					failureProb, originalFaultName, faultUserName, faultUserExplanation);
 			soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
 			mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
 			// update intermediate node

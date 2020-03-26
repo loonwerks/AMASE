@@ -50,14 +50,11 @@ public
 			connection Reactor_Pressure_Ctrl_To_Shut_Down: true;	
 			connection Reactor_Radiation_Ctrl_To_Shut_Down: true;
 			
-			lemma "": Shut_Down_Cmd = true;
-			--assign Shut_Down_Cmd = true;
-			
 			assign Shut_Down_Cmd = Reactor_Temp_Ctrl.Shut_Down_Cmd and Reactor_Pressure_Ctrl.Shut_Down_Cmd and Reactor_Radiation_Ctrl.Shut_Down_Cmd;		    						
 		**};
 		annex safety {**
-			--analyze : probability 1.0E-10
-      		analyze : max 3 fault
+			analyze : probability 1.0E-10
+      		--analyze : max 3 fault
    		**};
 	end Reactor_Ctrl.No_Voting;
 	
