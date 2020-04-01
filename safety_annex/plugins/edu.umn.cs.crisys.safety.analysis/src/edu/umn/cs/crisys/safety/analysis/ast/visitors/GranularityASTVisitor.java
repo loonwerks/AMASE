@@ -32,6 +32,8 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 	// Each Eq/Lemma/Guarantee can be split into more - need
 	// to add all to the new node during visit operation.
 	private HashMap<String, List<AgreeStatement>> mapNodeToAgreeStatements = new HashMap<String, List<AgreeStatement>>();
+	// Nodes to replace agree nodes from initial program
+	private List<AgreeNode> newNodes = new ArrayList<AgreeNode>();
 
 	/**
 	 * Call to super class.
@@ -45,9 +47,10 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 		globalLustreNodes = new ArrayList<>(program.globalLustreNodes);
 		this.topNode = program.topNode;
 		AgreeNode topNode = this.visit(program.topNode);
-		program = new AgreeProgram(program.agreeNodes, globalLustreNodes, program.globalTypes, topNode,
+		AgreeProgram newProgram = new AgreeProgram(newNodes, globalLustreNodes, program.globalTypes, topNode,
 				program.containsRealTimePatterns);
-		return program;
+		newNodes.clear();
+		return newProgram;
 	}
 
 	@Override
@@ -131,10 +134,9 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 		builder.addIvcElements(e.ivcElements);
 		builder.setFaultTreeFlag(true);
 
-//		AgreeNode result = builder.build();
-		// visitedNodes.put(e.compInst, result);
-
-		return builder.build();
+		AgreeNode result = builder.build();
+		newNodes.add(result);
+		return result;
 	}
 
 	@Override

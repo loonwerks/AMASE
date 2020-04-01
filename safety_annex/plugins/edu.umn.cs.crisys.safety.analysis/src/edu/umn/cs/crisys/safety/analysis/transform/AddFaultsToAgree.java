@@ -72,6 +72,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 
 		faultVisitor = new AddFaultsToNodeVisitor();
+		AgreeProgram newProgram;
 
 		try{
 
@@ -80,7 +81,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			case 2:
 				program = faultVisitor.visit(program);
 				if (granularity) {
-					granularityVisitor.visit(program);
+					newProgram = granularityVisitor.visit(program);
+					AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
+					pp.visit(newProgram);
+					break;
 				}
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
