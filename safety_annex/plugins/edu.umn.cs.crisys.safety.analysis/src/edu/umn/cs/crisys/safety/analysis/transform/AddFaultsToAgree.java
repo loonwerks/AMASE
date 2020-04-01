@@ -87,13 +87,17 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 
 		faultVisitor = new AddFaultsToNodeVisitor();
+		AgreeProgram newProgram;
 
 		try{
 
 			if (isVerify || isGenMCS) {
 				program = faultVisitor.visit(program);
 				if (granularity) {
-					granularityVisitor.visit(program);
+					newProgram = granularityVisitor.visit(program);
+					AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
+					pp.visit(newProgram);
+					break;
 				}
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
