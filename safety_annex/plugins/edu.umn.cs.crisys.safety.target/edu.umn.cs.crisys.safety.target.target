@@ -65,7 +65,7 @@
       <unit id="com.rockwellcollins.atc.agree.feature.feature.group" version="0.0.0"/>
       <!--Note: the below reposistory is customized to user's local folder structure -->
       <!--Place agree checkout in a local folder and specify the relative path to safety annex below-->
-      <repository location="file:../../../../fm-wkbench/formal-methods-workbench/tools/agree/repository/target/repository//"/>
+      <repository location="file:../../../AGREE/repository/target/repository//"/>
     </location>
   </locations>
 </target>
