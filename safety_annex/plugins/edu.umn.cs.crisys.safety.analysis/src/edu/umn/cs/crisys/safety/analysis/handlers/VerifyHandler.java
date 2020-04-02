@@ -17,6 +17,7 @@ import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 public class VerifyHandler extends AadlHandler {
 
 	private static Element root = null;
+	private static MenuItem item;
 
 	/*
 	 * (non-Javadoc)
@@ -34,8 +35,12 @@ public class VerifyHandler extends AadlHandler {
 	@Override
 	public Object execute(ExecutionEvent event) {
 		Event selEvent = (Event) event.getTrigger();
-		MenuItem item = (MenuItem) selEvent.widget;
+		item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
+
+		if (item.getText().contains("Verify")) {
+			item.setEnabled(false);
+		}
 //		if (AddFaultsToAgree.getTransformFlag() == 1) {
 //			ICommandService service = null;
 //			try {
@@ -105,5 +110,11 @@ public class VerifyHandler extends AadlHandler {
 	 */
 	public static Element getRoot(){
 		return VerifyHandler.root;
+	}
+
+	public static void resetMenuItem() {
+		if (item.getText().contains("Verify")) {
+			item.setEnabled(false);
+		}
 	}
 }

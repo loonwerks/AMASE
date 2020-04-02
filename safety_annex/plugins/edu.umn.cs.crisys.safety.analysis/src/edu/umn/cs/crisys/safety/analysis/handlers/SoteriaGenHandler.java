@@ -187,19 +187,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		handlerService = getWindow().getService(IHandlerService.class);
 
 		try {
-			// Option pane window reminding user to run compositional analysis on model first.
-			// The user can exit out of fault analysis if desired or continue.
-			// If return value is 0, user selected OK and wants to run analysis.
-			// If -1, user closed window and if 1 user canceled operation.
-//			if (showCompositionalAnalysisReminder() != 0) {
-//				return Status.OK_STATUS;
-//			}
-//
-//			// Output reminder that analysis is underway, but it might take a while.
-//			JOptionPane.showMessageDialog(null,
-//					"Fault analysis is underway. \n Depending on how large the model is,\n it could take some time.",
-//					"Fault Analysis Message", JOptionPane.PLAIN_MESSAGE);
-
 			// Make sure the user selected a component implementation
 			ComponentImplementation ci = getComponentImplementation(root, implUtil);
 			SystemInstance si = getSysInstance(ci, implUtil);
@@ -243,6 +230,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 		}
 	}
 
+
 	// The following method is copied and modified from AGREE VerifyHandler
 	private IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor, AnalysisResult result,
 			AgreeResultsLinker linker) {
@@ -265,14 +253,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 					if (api instanceof JKindApi) {
 						String resultName = result.getName();
-//						String adviceFileName = rerunAdviceMap.get(resultName);
-//						if (adviceFileName == null) {
-//							adviceFileName = "agree_advice" + adviceCount++;
-//							rerunAdviceMap.put(resultName, adviceFileName);
-//						} else {
-//							((JKindApi) api).setReadAdviceFile(adviceFileName);
-//						}
-//						((JKindApi) api).setWriteAdviceFile(adviceFileName);
 					}
 
 					try {
@@ -303,20 +283,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 				Display display = new Display();
 				Shell shell = createProgressBar(display);
 
-//				// generate soteria model from the result
-//				IvcToSoteriaGenerator soteriaGenerator = new IvcToSoteriaGenerator();
-//				SoteriaModel soteriaModel = soteriaGenerator.generateModel(result, linker);
-//				try {
-//					File file = File.createTempFile("soteriaMdl_", ".ml");
-//					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-//					bw.write(soteriaModel.toString());
-//					bw.close();
-//					org.eclipse.swt.program.Program.launch(file.toString());
-//				} catch (IOException e) {
-//					Dialog.showError("Unable to open file", e.getMessage());
-//					e.printStackTrace();
-//				}
-
 				// generate soteria fault tree from the result
 				// TODO: if zero max N fault hypothesis and empty fault combination for probabilistic analysis
 				// generate empty tree
@@ -346,41 +312,11 @@ public class SoteriaGenHandler extends VerifyHandler {
 				else {
 					// open progress bar
 					shell.open();
-					// uncomment to see progress bar until user closes it
-					// (for testing purposes)
-//					while (!shell.isDisposed()) {
-//						if (!display.readAndDispatch()) {
-//							display.sleep();
-//						}
-//					}
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-//					try {
-//						File file = File.createTempFile("soteriaFT_", ".ml");
-//						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-//						bw.write(soteriaFT.toString());
-//						bw.close();
-//						org.eclipse.swt.program.Program.launch(file.toString());
-//					} catch (IOException e) {
-//						Dialog.showError("Unable to open file", e.getMessage());
-//						e.printStackTrace();
-//					}
 
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
 					resolveVisitor.visit(soteriaFT);
-
-					/*
-					 * try {
-					 * File soteriaFTFile = File.createTempFile("soteriaResolvedFT_", ".ml");
-					 * BufferedWriter bw = new BufferedWriter(new FileWriter(soteriaFTFile));
-					 * bw.write(soteriaFT.printMinCutSet());
-					 * bw.close();
-					 * org.eclipse.swt.program.Program.launch(soteriaFTFile.toString());
-					 * } catch (IOException e) {
-					 * Dialog.showError("Unable to open file", e.getMessage());
-					 * e.printStackTrace();
-					 * }
-					 */
 
 					try {
 						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
@@ -715,21 +651,4 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
 	}
-
-	/*
-	 * Pop up box for users who select fault tree generation.
-	 * This is a reminder to run compositional analysis on nominal model
-	 * before doing this analysis.
-	 */
-//	private int showCompositionalAnalysisReminder() {
-//
-//		int n = JOptionPane.showConfirmDialog(null,
-//				"When performing fault tree analysis, we assume that the nominal model\n has been "
-//						+ "verified compositionally (AGREE: Verify All Layers).\n"
-//						+ "Select OK to continue with the safety analysis \n or CANCEL to end the process.",
-//				"Compositional verification requirement", JOptionPane.OK_CANCEL_OPTION);
-//
-//		return n;
-//	}
-
 }
