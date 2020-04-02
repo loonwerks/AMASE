@@ -55,6 +55,7 @@ FaultSubcomponent returns FaultSubcomponent:
 			(','nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)*';'
  	| 	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
  	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	|   {DisableStatement} 'disable' ':' cond=BooleanLiteral ';'
  	|	{TriggerStatement} 'enabled' cond=TriggerCondition  ';'
  	| 	{PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
 	| 	SafetyEqStatement 

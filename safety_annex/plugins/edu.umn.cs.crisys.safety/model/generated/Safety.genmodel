@@ -96,6 +96,9 @@
     <genClasses ecoreClass="Safety.ecore#//ProbabilityStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//ProbabilityStatement/probability"/>
     </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//DisableStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//DisableStatement/cond"/>
+    </genClasses>
     <genClasses ecoreClass="Safety.ecore#//TriggerStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerStatement/cond"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Safety.ecore#//TriggerStatement/probability"/>

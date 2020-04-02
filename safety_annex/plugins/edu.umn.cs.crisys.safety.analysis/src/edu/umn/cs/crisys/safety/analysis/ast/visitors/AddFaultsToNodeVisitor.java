@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.BooleanLiteral;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
@@ -43,6 +44,7 @@ import edu.umn.cs.crisys.safety.analysis.transform.HWFaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
@@ -976,12 +978,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Before looping through spec statements, separate out the asymmetric multiple
 		// faults on a single output with the sym/asym single faults on a single output.
 		// 1. Collect all fault statements and put into list.
+		// Do not collect any that are disabled.
 		// 2. Separate out multiple asym faults on one output and single faults on one output.
 		// 3. Perform necessary processing on each of these lists.
 		List<FaultStatement> allFaultStmts = new ArrayList<FaultStatement>();
 		for (SpecStatement s : specs) {
 			if (s instanceof FaultStatement) {
-				allFaultStmts.add((FaultStatement) s);
+				if (!isDisabled((FaultStatement) s)) {
+					allFaultStmts.add((FaultStatement) s);
+				}
 			}
 		}
 		List<FaultStatement> remainderFS = new ArrayList<FaultStatement>();
@@ -1053,6 +1058,26 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return faults;
+	}
+
+	/**
+	 * Checks fault stmt for DisableStatement. If found, returns value
+	 * of disable statement. Else returns false.
+	 * @param fs FaultStatement
+	 * @return bool: isDisabled
+	 */
+	private Boolean isDisabled(FaultStatement fs) {
+		Boolean disableFound = false;
+		List<FaultSubcomponent> subcomps = fs.getFaultDefinitions();
+		for (FaultSubcomponent fsc : subcomps) {
+			if (fsc instanceof DisableStatement) {
+				disableFound = true;
+				DisableStatement ds = (DisableStatement) fsc;
+				BooleanLiteral bl = ds.getCond();
+				return bl.getValue();
+			}
+		}
+		return disableFound;
 	}
 
 	/**
@@ -1276,7 +1301,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							faultComp_Path.getName());
 					faultActivations.add(faultActAssign);
 				} else {
-					throw new SafetyException("Unable to identify fault in fault activation statement.");
+					throw new SafetyException("Unable to identify fault in fault activation statement:"
+							+ " a possibility is that this fault is disabled.");
 				}
 			}
 		}
@@ -1317,7 +1343,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							propagations.add(propagation);
 						}
 					} else {
-						throw new SafetyException("Unable to identify fault in propagation statement.");
+						throw new SafetyException("Unable to identify fault in propagation statement:"
+								+ " a possibility is that the source or destination fault is disabled.");
 					}
 				}
 			}

@@ -11,6 +11,7 @@ import edu.umn.cs.crisys.safety.safety.AnnexLibrary;
 import edu.umn.cs.crisys.safety.safety.AnnexSubclause;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.Contract;
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
@@ -263,6 +264,13 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   private EClass probabilityStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass disableStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1081,6 +1089,28 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
    * @generated
    */
   @Override
+  public EClass getDisableStatement()
+  {
+    return disableStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getDisableStatement_Cond()
+  {
+    return (EReference)disableStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getTriggerStatement()
   {
     return triggerStatementEClass;
@@ -1500,6 +1530,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     probabilityStatementEClass = createEClass(PROBABILITY_STATEMENT);
     createEAttribute(probabilityStatementEClass, PROBABILITY_STATEMENT__PROBABILITY);
 
+    disableStatementEClass = createEClass(DISABLE_STATEMENT);
+    createEReference(disableStatementEClass, DISABLE_STATEMENT__COND);
+
     triggerStatementEClass = createEClass(TRIGGER_STATEMENT);
     createEReference(triggerStatementEClass, TRIGGER_STATEMENT__COND);
 
@@ -1602,6 +1635,7 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
     durationStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
     probabilityStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     probabilityStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
+    disableStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     triggerStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     propagationTypeStatementEClass.getESuperTypes().add(this.getFaultSubcomponent());
     propagationTypeStatementEClass.getESuperTypes().add(this.getHWFaultSubcomponent());
@@ -1705,6 +1739,9 @@ public class SafetyPackageImpl extends EPackageImpl implements SafetyPackage
 
     initEClass(probabilityStatementEClass, ProbabilityStatement.class, "ProbabilityStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getProbabilityStatement_Probability(), theEcorePackage.getEString(), "probability", null, 0, 1, ProbabilityStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(disableStatementEClass, DisableStatement.class, "DisableStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDisableStatement_Cond(), theAadl2Package.getBooleanLiteral(), null, "cond", null, 0, 1, DisableStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(triggerStatementEClass, TriggerStatement.class, "TriggerStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTriggerStatement_Cond(), this.getTriggerCondition(), null, "cond", null, 0, 1, TriggerStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

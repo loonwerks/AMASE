@@ -113,6 +113,7 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_3(), "rule__FaultSubcomponent__Group_3__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_4(), "rule__FaultSubcomponent__Group_4__0");
 					put(grammarAccess.getFaultSubcomponentAccess().getGroup_5(), "rule__FaultSubcomponent__Group_5__0");
+					put(grammarAccess.getFaultSubcomponentAccess().getGroup_6(), "rule__FaultSubcomponent__Group_6__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_0(), "rule__HWFaultSubcomponent__Group_0__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_1(), "rule__HWFaultSubcomponent__Group_1__0");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getGroup_2(), "rule__HWFaultSubcomponent__Group_2__0");
@@ -425,8 +426,9 @@ public class SafetyParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFaultSubcomponentAccess().getTcAssignment_2_3(), "rule__FaultSubcomponent__TcAssignment_2_3");
 					put(grammarAccess.getFaultSubcomponentAccess().getIntervAssignment_2_4(), "rule__FaultSubcomponent__IntervAssignment_2_4");
 					put(grammarAccess.getFaultSubcomponentAccess().getProbabilityAssignment_3_3(), "rule__FaultSubcomponent__ProbabilityAssignment_3_3");
-					put(grammarAccess.getFaultSubcomponentAccess().getCondAssignment_4_2(), "rule__FaultSubcomponent__CondAssignment_4_2");
-					put(grammarAccess.getFaultSubcomponentAccess().getPtyAssignment_5_3(), "rule__FaultSubcomponent__PtyAssignment_5_3");
+					put(grammarAccess.getFaultSubcomponentAccess().getCondAssignment_4_3(), "rule__FaultSubcomponent__CondAssignment_4_3");
+					put(grammarAccess.getFaultSubcomponentAccess().getCondAssignment_5_2(), "rule__FaultSubcomponent__CondAssignment_5_2");
+					put(grammarAccess.getFaultSubcomponentAccess().getPtyAssignment_6_3(), "rule__FaultSubcomponent__PtyAssignment_6_3");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getTcAssignment_0_3(), "rule__HWFaultSubcomponent__TcAssignment_0_3");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getIntervAssignment_0_4(), "rule__HWFaultSubcomponent__IntervAssignment_0_4");
 					put(grammarAccess.getHWFaultSubcomponentAccess().getProbabilityAssignment_1_3(), "rule__HWFaultSubcomponent__ProbabilityAssignment_1_3");

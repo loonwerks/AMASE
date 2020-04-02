@@ -275,6 +275,15 @@ public interface SafetyFactory extends EFactory
   ProbabilityStatement createProbabilityStatement();
 
   /**
+   * Returns a new object of class '<em>Disable Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Disable Statement</em>'.
+   * @generated
+   */
+  DisableStatement createDisableStatement();
+
+  /**
    * Returns a new object of class '<em>Trigger Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
