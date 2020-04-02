@@ -89,6 +89,7 @@ import com.rockwellcollins.atc.agree.serializer.AgreeSemanticSequencer;
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
 import edu.umn.cs.crisys.safety.safety.EqValue;
@@ -508,6 +509,9 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.CLOSED_INTERVAL:
 				sequence_Interval(context, (ClosedInterval) semanticObject); 
 				return; 
+			case SafetyPackage.DISABLE_STATEMENT:
+				sequence_FaultSubcomponent(context, (DisableStatement) semanticObject); 
+				return; 
 			case SafetyPackage.DURATION_STATEMENT:
 				if (rule == grammarAccess.getElementSafetyRule()
 						|| rule == grammarAccess.getFaultSubcomponentRule()) {
@@ -653,6 +657,25 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	
 	/**
 	 * Contexts:
+	 *     ElementSafety returns DisableStatement
+	 *     FaultSubcomponent returns DisableStatement
+	 *
+	 * Constraint:
+	 *     cond=BooleanLiteral
+	 */
+	protected void sequence_FaultSubcomponent(ISerializationContext context, DisableStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.DISABLE_STATEMENT__COND) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.DISABLE_STATEMENT__COND));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getCondBooleanLiteralParserRuleCall_4_3_0(), semanticObject.getCond());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     ElementSafety returns DurationStatement
 	 *     FaultSubcomponent returns DurationStatement
 	 *
@@ -723,7 +746,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.PROPAGATION_TYPE_STATEMENT__PTY));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_5_3_0(), semanticObject.getPty());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_6_3_0(), semanticObject.getPty());
 		feeder.finish();
 	}
 	
@@ -742,7 +765,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.TRIGGER_STATEMENT__COND));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_4_2_0(), semanticObject.getCond());
+		feeder.accept(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_5_2_0(), semanticObject.getCond());
 		feeder.finish();
 	}
 	

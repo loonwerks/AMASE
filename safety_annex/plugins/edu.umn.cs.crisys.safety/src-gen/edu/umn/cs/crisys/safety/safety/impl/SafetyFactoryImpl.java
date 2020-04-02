@@ -92,6 +92,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
       case SafetyPackage.PROBABILITY_STATEMENT: return createProbabilityStatement();
+      case SafetyPackage.DISABLE_STATEMENT: return createDisableStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
       case SafetyPackage.PROPAGATION_TYPE_STATEMENT: return createPropagationTypeStatement();
       case SafetyPackage.ASYMMETRIC: return createasymmetric();
@@ -446,6 +447,18 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
   {
     ProbabilityStatementImpl probabilityStatement = new ProbabilityStatementImpl();
     return probabilityStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public DisableStatement createDisableStatement()
+  {
+    DisableStatementImpl disableStatement = new DisableStatementImpl();
+    return disableStatement;
   }
 
   /**

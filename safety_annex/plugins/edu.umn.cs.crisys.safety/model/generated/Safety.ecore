@@ -94,6 +94,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="ProbabilityStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DisableStatement" eSuperTypes="#//FaultSubcomponent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cond" eType="ecore:EClass platform:/resource/org.osate.aadl2/model/aadl2.ecore#//BooleanLiteral"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerStatement" eSuperTypes="#//FaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cond" eType="#//TriggerCondition"
         containment="true"/>

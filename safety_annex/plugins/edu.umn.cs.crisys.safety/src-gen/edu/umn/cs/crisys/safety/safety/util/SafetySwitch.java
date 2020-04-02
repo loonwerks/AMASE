@@ -332,6 +332,15 @@ public class SafetySwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SafetyPackage.DISABLE_STATEMENT:
+      {
+        DisableStatement disableStatement = (DisableStatement)theEObject;
+        T result = caseDisableStatement(disableStatement);
+        if (result == null) result = caseFaultSubcomponent(disableStatement);
+        if (result == null) result = caseElement(disableStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SafetyPackage.TRIGGER_STATEMENT:
       {
         TriggerStatement triggerStatement = (TriggerStatement)theEObject;
@@ -911,6 +920,22 @@ public class SafetySwitch<T> extends Switch<T>
    * @generated
    */
   public T caseProbabilityStatement(ProbabilityStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Disable Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Disable Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDisableStatement(DisableStatement object)
   {
     return null;
   }

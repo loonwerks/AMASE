@@ -1193,68 +1193,68 @@ ruleFaultSubcomponent returns [EObject current=null]
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getFaultSubcomponentAccess().getTriggerStatementAction_4_0(),
+            grammarAccess.getFaultSubcomponentAccess().getDisableStatementAction_4_0(),
             $current);
     }
 )
-	otherlv_34=Enabled
+	otherlv_34=Disable
     {
-    	newLeafNode(otherlv_34, grammarAccess.getFaultSubcomponentAccess().getEnabledKeyword_4_1());
+    	newLeafNode(otherlv_34, grammarAccess.getFaultSubcomponentAccess().getDisableKeyword_4_1());
+    }
+
+	otherlv_35=Colon
+    {
+    	newLeafNode(otherlv_35, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_4_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_4_2_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondBooleanLiteralParserRuleCall_4_3_0()); 
 	    }
-		lv_cond_35_0=ruleTriggerCondition		{
+		lv_cond_36_0=ruleBooleanLiteral		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"cond",
-        		lv_cond_35_0, 
-        		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
+        		lv_cond_36_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.BooleanLiteral");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_36=Semicolon
+	otherlv_37=Semicolon
     {
-    	newLeafNode(otherlv_36, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_4_3());
+    	newLeafNode(otherlv_37, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_4_4());
     }
 )
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getFaultSubcomponentAccess().getPropagationTypeStatementAction_5_0(),
+            grammarAccess.getFaultSubcomponentAccess().getTriggerStatementAction_5_0(),
             $current);
     }
 )
-	otherlv_38=Propagate_type
+	otherlv_39=Enabled
     {
-    	newLeafNode(otherlv_38, grammarAccess.getFaultSubcomponentAccess().getPropagate_typeKeyword_5_1());
-    }
-
-	otherlv_39=Colon
-    {
-    	newLeafNode(otherlv_39, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_5_2());
+    	newLeafNode(otherlv_39, grammarAccess.getFaultSubcomponentAccess().getEnabledKeyword_5_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_5_3_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_5_2_0()); 
 	    }
-		lv_pty_40_0=rulePropagationTypeConstraint		{
+		lv_cond_40_0=ruleTriggerCondition		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
-       			"pty",
-        		lv_pty_40_0, 
-        		"edu.umn.cs.crisys.safety.Safety.PropagationTypeConstraint");
+       			"cond",
+        		lv_cond_40_0, 
+        		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1262,16 +1262,56 @@ ruleFaultSubcomponent returns [EObject current=null]
 )
 	otherlv_41=Semicolon
     {
-    	newLeafNode(otherlv_41, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_5_4());
+    	newLeafNode(otherlv_41, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_5_3());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getFaultSubcomponentAccess().getPropagationTypeStatementAction_6_0(),
+            $current);
+    }
+)
+	otherlv_43=Propagate_type
+    {
+    	newLeafNode(otherlv_43, grammarAccess.getFaultSubcomponentAccess().getPropagate_typeKeyword_6_1());
+    }
+
+	otherlv_44=Colon
+    {
+    	newLeafNode(otherlv_44, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_6_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_6_3_0()); 
+	    }
+		lv_pty_45_0=rulePropagationTypeConstraint		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"pty",
+        		lv_pty_45_0, 
+        		"edu.umn.cs.crisys.safety.Safety.PropagationTypeConstraint");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_46=Semicolon
+    {
+    	newLeafNode(otherlv_46, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_6_4());
     }
 )
     |
     { 
-        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_6()); 
+        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_7()); 
     }
-    this_SafetyEqStatement_42=ruleSafetyEqStatement
+    this_SafetyEqStatement_47=ruleSafetyEqStatement
     {
-        $current = $this_SafetyEqStatement_42.current;
+        $current = $this_SafetyEqStatement_47.current;
         afterParserOrEnumRuleCall();
     }
 )

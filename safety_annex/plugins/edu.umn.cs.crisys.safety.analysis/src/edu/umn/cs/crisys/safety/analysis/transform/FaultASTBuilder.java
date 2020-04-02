@@ -24,6 +24,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.ReplaceIdVisitor;
 import edu.umn.cs.crisys.safety.safety.ClosedInterval;
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
@@ -211,6 +212,8 @@ public class FaultASTBuilder {
 				addProbability(fault, (ProbabilityStatement) fs);
 			} else if (fs instanceof PropagationTypeStatement) {
 				addPropagationType(fault, (PropagationTypeStatement) fs);
+			} else if (fs instanceof DisableStatement) {
+				addDisableCond(fault, (DisableStatement) fs);
 			} else {
 				throw new SafetyException("Unrecognized Fault Statement type.");
 			}
@@ -639,6 +642,10 @@ public class FaultASTBuilder {
 	private void addPropagationType(Fault fault, PropagationTypeStatement pts) {
 		fault.propType = pts;
 
+	}
+
+	private void addDisableCond(Fault fault, DisableStatement ds) {
+		fault.disable = ds;
 	}
 
 	/**
