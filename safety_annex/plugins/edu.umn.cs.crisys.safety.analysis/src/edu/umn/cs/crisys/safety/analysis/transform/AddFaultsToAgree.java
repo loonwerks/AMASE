@@ -87,7 +87,8 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			new SafetyException("Something went wrong during safety analysis: " + t.toString());
 
 		}
-
+//		VerifyHandler.resetMenuItem();
+//		resetMenuItem();
 		return program;
 	}
 
@@ -98,25 +99,24 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * 1 -> Peform analysis with faults present
 	 * 2 -> Generate minimal cut sets
 	 *
-	 * @param item menu item stating which kind of analysis to perform.
+	 * @param i menu item stating which kind of analysis to perform.
 	 */
-	public static void setTransformFlag(MenuItem item) {
-
-		//
-		if (!item.getSelection()) {
-			if (item.getText().contains("Generate")) {
+	public static void setTransformFlag(MenuItem i) {
+		if (!i.getSelection()) {
+			if (i.getText().contains("Generate")) {
 				transformFlag = 2;
 			} else {
 				transformFlag = 0;
 			}
 		} else {
-			if (item.getText().contains("Verify")) {
+			if (i.getText().contains("Verify")) {
 				transformFlag = 1;
 			} else {
 				transformFlag = 0;
 			}
 		}
 	}
+
 
 	/**
 	 * getTransformFlag
