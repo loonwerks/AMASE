@@ -91,6 +91,32 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.osate.ui.analysesOutlinePopup?after=additions">
+         <menu
+               id="com.rockwellcollins.atc.agree.analysis.menus.main"
+               label="Safety Annex"
+               mnemonic="g">
+            <separator
+                  name="com.rockwellcollins.atc.safety.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.soteriaCommand"
+                  mnemonic="f"
+                  style="push">
+            </command>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
+                  mnemonic="S"
+                  style="toggle">
+            </command>
+         </menu>
+      </menuContribution>
    </extension>
    
    <extension

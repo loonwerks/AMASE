@@ -536,11 +536,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				localFaultTriggerMap.put(f, actual);
 			} else {
 				actual = f.faultInputMap.get(vd.id);
+				if (actual == null) {
+					throw new SafetyException("Fault node (" + f.faultNode.id + ") parameter '" + vd.id
+							+ "' is not assigned anything for fault " + f.id + ". "
+							+ " Check the fault node parameters and the fault definition for any missing assignments.");
+				}
 				// Do any name conversions on the stored expression and create nominal id.
 				actual = actual.accept(this);
-				if (actual == null) {
-					throw new SafetyException("Fault node input: '" + vd.id + "' is not assigned.");
-				}
 			}
 			actuals.add(actual);
 		}
