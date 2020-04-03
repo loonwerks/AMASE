@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
@@ -264,7 +263,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		EObject container = inputs.eContainer();
 		NamedElement defNameSub;
 		List<Expr> exprList = inputs.getNom_conn();
-		EList<String> inputList = inputs.getFault_in();
+		List<String> inputList = inputs.getFault_in();
 		ArrayList<String> argNames = new ArrayList<String>();
 
 		if (container instanceof FaultStatement) {
@@ -294,6 +293,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					argNames.remove("trigger");
 					error(inputs, "With this fault definition, you must have " + (argNames.size() - 1) + " inputs."
 							+ " These are called: " + argNames.toString());
+				}
+				if (inputListHasRepeats(inputList)) {
+					error(inputs, "There is a repeated name in the input list: " + inputList.toString());
 				}
 				if (!checkInputTypes(exprList, nodeArgs)) {
 					error(inputs, "Types of inputs do not match types of node parameters");
@@ -682,5 +684,25 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
+	}
+
+	/**
+	 * Checks to see if any parameters have been repeated when assigning
+	 * inputs in fault definition.
+	 *
+	 * @param inputs to the parameter
+	 * @return bool: true if repeats found, false otherwise
+	 */
+	private boolean inputListHasRepeats(List<String> inputs) {
+		boolean hasRepeats = false;
+		for (int i = 0; i < inputs.size(); i++) {
+			for (int j = i + 1; j < inputs.size(); j++) {
+				if (inputs.get(i).equals(inputs.get(j))) {
+					hasRepeats = true;
+					break;
+				}
+			}
+		}
+		return hasRepeats;
 	}
 }
