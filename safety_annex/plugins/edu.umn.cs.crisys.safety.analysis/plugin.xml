@@ -25,11 +25,21 @@
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
       </handler>
       <!-- New handler for menu item (Soteria) -->
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.SoteriaGenHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
       </handler>
    </extension>
    <extension point="org.eclipse.ui.bindings">
