@@ -264,7 +264,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 							api.execute(program, result, subMonitor);
 						}
 					} catch (JKindException e) {
-						new SafetyException("JKind exception: see console for details.");
+						new SafetyException("JKind exception: " + e.getMessage());
 						System.out.println("******** JKindException Text ********");
 						e.printStackTrace(System.out);
 						System.out.println("******** JKind Output ********");
