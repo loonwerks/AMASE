@@ -87,8 +87,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			new SafetyException("Something went wrong during safety analysis: " + t.toString());
 
 		}
-//		VerifyHandler.resetMenuItem();
-//		resetMenuItem();
 		return program;
 	}
 

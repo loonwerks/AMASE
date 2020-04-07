@@ -26,6 +26,8 @@ import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.SystemType;
 import org.osate.aadl2.impl.AadlPackageImpl;
+import org.osate.aadl2.impl.DataPortImpl;
+import org.osate.aadl2.impl.DataTypeImpl;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.Arg;
@@ -410,7 +412,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 */
 	@Check(CheckType.FAST)
 	public void checkIntervalEqStatement(IntervalEq intervalEq) {
-		error(intervalEq, "Interval eq statements are not currently supported.");
+//		error(intervalEq, "Interval eq statements are not currently supported.");
 	}
 
 	/**
@@ -602,6 +604,24 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 								return true;
 							}
 						}
+					} else if (elm.getElm() instanceof DataPortImpl) {
+						DataPortImpl dataport = (DataPortImpl) elm.getElm();
+						if (dataport.basicGetFeatureClassifier() instanceof DataTypeImpl) {
+							DataTypeImpl type = (DataTypeImpl) dataport.basicGetDataFeatureClassifier();
+							String typePort = type.getName();
+							PrimType pType = (PrimType) nodeArgs.get(i).getType();
+							String typeNode = pType.getName();
+							if (typeNode.equalsIgnoreCase("real") & typePort.equalsIgnoreCase("Float")) {
+								return true;
+							} else if (typeNode.equalsIgnoreCase("bool") & typePort.equalsIgnoreCase("Boolean")) {
+								return true;
+							} else if (typeNode.equalsIgnoreCase("int") & typePort.equalsIgnoreCase("Integer")) {
+								return true;
+							} else {
+								return false;
+							}
+						}
+
 					}
 				}
 			}
