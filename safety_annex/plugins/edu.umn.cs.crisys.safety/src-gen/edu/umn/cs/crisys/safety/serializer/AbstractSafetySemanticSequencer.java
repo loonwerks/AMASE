@@ -88,7 +88,7 @@ import com.rockwellcollins.atc.agree.agree.WheneverOccursStatement;
 import com.rockwellcollins.atc.agree.serializer.AgreeSemanticSequencer;
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
-import edu.umn.cs.crisys.safety.safety.ClosedInterval;
+import edu.umn.cs.crisys.safety.safety.ClosedSafetyInterval;
 import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EnablerCondition;
@@ -97,9 +97,9 @@ import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
-import edu.umn.cs.crisys.safety.safety.OpenInterval;
-import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
-import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
+import edu.umn.cs.crisys.safety.safety.OpenLeftSafetyInterval;
+import edu.umn.cs.crisys.safety.safety.OpenRightSafetyInterval;
+import edu.umn.cs.crisys.safety.safety.OpenSafetyInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.PermanentConstraint;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
@@ -506,8 +506,8 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.ANALYSIS_STATEMENT:
 				sequence_SpecStatement(context, (AnalysisStatement) semanticObject); 
 				return; 
-			case SafetyPackage.CLOSED_INTERVAL:
-				sequence_Interval(context, (ClosedInterval) semanticObject); 
+			case SafetyPackage.CLOSED_SAFETY_INTERVAL:
+				sequence_SafetyInterval(context, (ClosedSafetyInterval) semanticObject); 
 				return; 
 			case SafetyPackage.DISABLE_STATEMENT:
 				sequence_FaultSubcomponent(context, (DisableStatement) semanticObject); 
@@ -544,14 +544,14 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 			case SafetyPackage.INTERVAL_EQ:
 				sequence_SafetyEqStatement(context, (IntervalEq) semanticObject); 
 				return; 
-			case SafetyPackage.OPEN_INTERVAL:
-				sequence_Interval(context, (OpenInterval) semanticObject); 
+			case SafetyPackage.OPEN_LEFT_SAFETY_INTERVAL:
+				sequence_SafetyInterval(context, (OpenLeftSafetyInterval) semanticObject); 
 				return; 
-			case SafetyPackage.OPEN_LEFT_INTERVAL:
-				sequence_Interval(context, (OpenLeftInterval) semanticObject); 
+			case SafetyPackage.OPEN_RIGHT_SAFETY_INTERVAL:
+				sequence_SafetyInterval(context, (OpenRightSafetyInterval) semanticObject); 
 				return; 
-			case SafetyPackage.OPEN_RIGHT_INTERVAL:
-				sequence_Interval(context, (OpenRightInterval) semanticObject); 
+			case SafetyPackage.OPEN_SAFETY_INTERVAL:
+				sequence_SafetyInterval(context, (OpenSafetyInterval) semanticObject); 
 				return; 
 			case SafetyPackage.OUTPUT_STATEMENT:
 				sequence_FaultSubcomponent(context, (OutputStatement) semanticObject); 
@@ -680,7 +680,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     FaultSubcomponent returns DurationStatement
 	 *
 	 * Constraint:
-	 *     (tc=TemporalConstraint interv=Interval?)
+	 *     (tc=TemporalConstraint interv=SafetyInterval?)
 	 */
 	protected void sequence_FaultSubcomponent(ISerializationContext context, DurationStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -775,7 +775,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     HWFaultSubcomponent returns DurationStatement
 	 *
 	 * Constraint:
-	 *     (tc=TemporalConstraint interv=Interval?)
+	 *     (tc=TemporalConstraint interv=SafetyInterval?)
 	 */
 	protected void sequence_HWFaultSubcomponent(ISerializationContext context, DurationStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -814,90 +814,6 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getHWFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_2_3_0(), semanticObject.getPty());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     Interval returns ClosedInterval
-	 *
-	 * Constraint:
-	 *     (low=Expr high=Expr)
-	 */
-	protected void sequence_Interval(ISerializationContext context, ClosedInterval semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__LOW) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__LOW));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_0_0_2_0(), semanticObject.getLow());
-		feeder.accept(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_0_0_4_0(), semanticObject.getHigh());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     Interval returns OpenInterval
-	 *
-	 * Constraint:
-	 *     (low=Expr high=Expr)
-	 */
-	protected void sequence_Interval(ISerializationContext context, OpenInterval semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__LOW) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__LOW));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_3_0_2_0(), semanticObject.getLow());
-		feeder.accept(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_3_0_4_0(), semanticObject.getHigh());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     Interval returns OpenLeftInterval
-	 *
-	 * Constraint:
-	 *     (low=Expr high=Expr)
-	 */
-	protected void sequence_Interval(ISerializationContext context, OpenLeftInterval semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__LOW) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__LOW));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_1_0_2_0(), semanticObject.getLow());
-		feeder.accept(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_1_0_4_0(), semanticObject.getHigh());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     Interval returns OpenRightInterval
-	 *
-	 * Constraint:
-	 *     (low=Expr high=Expr)
-	 */
-	protected void sequence_Interval(ISerializationContext context, OpenRightInterval semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__LOW) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__LOW));
-			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.INTERVAL__HIGH));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_2_0_2_0(), semanticObject.getLow());
-		feeder.accept(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_2_0_4_0(), semanticObject.getHigh());
 		feeder.finish();
 	}
 	
@@ -959,7 +875,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 *     SafetyEqStatement returns IntervalEq
 	 *
 	 * Constraint:
-	 *     (lhs_int=Arg interv=Interval)
+	 *     (lhs_int=Arg interv=SafetyInterval)
 	 */
 	protected void sequence_SafetyEqStatement(ISerializationContext context, IntervalEq semanticObject) {
 		if (errorAcceptor != null) {
@@ -970,7 +886,7 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getLhs_intArgParserRuleCall_1_2_0(), semanticObject.getLhs_int());
-		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getIntervIntervalParserRuleCall_1_4_0(), semanticObject.getInterv());
+		feeder.accept(grammarAccess.getSafetyEqStatementAccess().getIntervSafetyIntervalParserRuleCall_1_4_0(), semanticObject.getInterv());
 		feeder.finish();
 	}
 	
@@ -1012,6 +928,90 @@ public abstract class AbstractSafetySemanticSequencer extends AgreeSemanticSeque
 	 */
 	protected void sequence_SafetyEqStatement(ISerializationContext context, SetEq semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SafetyInterval returns ClosedSafetyInterval
+	 *
+	 * Constraint:
+	 *     (low=Expr high=Expr)
+	 */
+	protected void sequence_SafetyInterval(ISerializationContext context, ClosedSafetyInterval semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_0_0_2_0(), semanticObject.getLow());
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_0_0_4_0(), semanticObject.getHigh());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SafetyInterval returns OpenLeftSafetyInterval
+	 *
+	 * Constraint:
+	 *     (low=Expr high=Expr)
+	 */
+	protected void sequence_SafetyInterval(ISerializationContext context, OpenLeftSafetyInterval semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_1_0_2_0(), semanticObject.getLow());
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_1_0_4_0(), semanticObject.getHigh());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SafetyInterval returns OpenRightSafetyInterval
+	 *
+	 * Constraint:
+	 *     (low=Expr high=Expr)
+	 */
+	protected void sequence_SafetyInterval(ISerializationContext context, OpenRightSafetyInterval semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_2_0_2_0(), semanticObject.getLow());
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_2_0_4_0(), semanticObject.getHigh());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SafetyInterval returns OpenSafetyInterval
+	 *
+	 * Constraint:
+	 *     (low=Expr high=Expr)
+	 */
+	protected void sequence_SafetyInterval(ISerializationContext context, OpenSafetyInterval semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__LOW));
+			if (transientValues.isValueTransient(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SafetyPackage.Literals.SAFETY_INTERVAL__HIGH));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_3_0_2_0(), semanticObject.getLow());
+		feeder.accept(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_3_0_4_0(), semanticObject.getHigh());
+		feeder.finish();
 	}
 	
 	

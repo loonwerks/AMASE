@@ -23,17 +23,13 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.ReplaceIdVisitor;
-import edu.umn.cs.crisys.safety.safety.ClosedInterval;
 import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
-import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
-import edu.umn.cs.crisys.safety.safety.OpenLeftInterval;
-import edu.umn.cs.crisys.safety.safety.OpenRightInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
@@ -534,7 +530,7 @@ public class FaultASTBuilder {
 		if (stmt instanceof EqValue) {
 			addSafetyEqVal(fault, (EqValue) stmt);
 		} else if (stmt instanceof IntervalEq) {
-			addSafetyEqInterval(fault, (IntervalEq) stmt);
+//			addSafetyEqInterval(fault, (IntervalEq) stmt);
 		} else if (stmt instanceof RangeEq) {
 			addSafetyRangeEq(fault, (RangeEq) stmt);
 		} else if (stmt instanceof SetEq) {
@@ -568,30 +564,30 @@ public class FaultASTBuilder {
 	 * @param fault	The fault with these interval eq stmts.
 	 * @param stmt	The IntervalEq statement
 	 */
-	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
-		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
-		Interval iv =stmt.getInterv();
-		BinaryOp leftOp =
-				((iv instanceof ClosedInterval) ||
-				(iv instanceof OpenRightInterval)) ?
-						BinaryOp.GREATEREQUAL :
-						BinaryOp.GREATER;
-		BinaryOp rightOp =
-				((iv instanceof ClosedInterval) ||
-				 (iv instanceof OpenLeftInterval)) ?
-						 BinaryOp.LESSEQUAL :
-						 BinaryOp.LESS;
-		Expr leftSideExpr =
-				new BinaryExpr(lhsIdExpr, leftOp, builder.doSwitch(iv.getLow()));
-		Expr rightSideExpr =
-				new BinaryExpr(lhsIdExpr, rightOp, builder.doSwitch(iv.getHigh()));
-		Expr expr =
-				new BinaryExpr(leftSideExpr, BinaryOp.AND, rightSideExpr);
-		fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
-		fault.safetyEqVars.add(
-			(AgreeVar)builder.agreeVarFromArg(
-				stmt.getLhs_int(), this.agreeNode.compInst));
-	}
+//	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
+//		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
+//		Interval iv =stmt.getInterv();
+//		BinaryOp leftOp =
+//				((iv instanceof ClosedInterval) ||
+//				(iv instanceof OpenRightInterval)) ?
+//						BinaryOp.GREATEREQUAL :
+//						BinaryOp.GREATER;
+//		BinaryOp rightOp =
+//				((iv instanceof ClosedInterval) ||
+//				 (iv instanceof OpenLeftInterval)) ?
+//						 BinaryOp.LESSEQUAL :
+//						 BinaryOp.LESS;
+//		Expr leftSideExpr =
+//				new BinaryExpr(lhsIdExpr, leftOp, builder.doSwitch(iv.getLow()));
+//		Expr rightSideExpr =
+//				new BinaryExpr(lhsIdExpr, rightOp, builder.doSwitch(iv.getHigh()));
+//		Expr expr =
+//				new BinaryExpr(leftSideExpr, BinaryOp.AND, rightSideExpr);
+//		fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
+//		fault.safetyEqVars.add(
+//			(AgreeVar)builder.agreeVarFromArg(
+//				stmt.getLhs_int(), this.agreeNode.compInst));
+//	}
 
 	/**
 	 * Not yet implemented, will throw exception.

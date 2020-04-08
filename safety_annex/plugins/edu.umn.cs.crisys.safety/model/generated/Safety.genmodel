@@ -22,9 +22,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//TriggerCondition/exprList"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SafetyEqStatement"/>
-    <genClasses ecoreClass="Safety.ecore#//Interval">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Interval/low"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Interval/high"/>
+    <genClasses ecoreClass="Safety.ecore#//SafetyInterval">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SafetyInterval/low"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SafetyInterval/high"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SafetyContractLibrary">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SafetyContractLibrary/contract"/>
@@ -120,6 +120,7 @@
     <genClasses ecoreClass="Safety.ecore#//IntervalEq">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/lhs_int"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/interv"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//IntervalEq/type"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//SetEq">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//SetEq/lhs_set"/>
@@ -130,6 +131,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//RangeEq/lhs_range"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//RangeEq/l1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference Safety.ecore#//RangeEq/l2"/>
+    </genClasses>
+    <genClasses ecoreClass="Safety.ecore#//ClosedSafetyInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenLeftSafetyInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenRightSafetyInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//OpenSafetyInterval"/>
+    <genClasses ecoreClass="Safety.ecore#//Interval">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Interval/low"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Safety.ecore#//Interval/high"/>
     </genClasses>
     <genClasses ecoreClass="Safety.ecore#//ClosedInterval"/>
     <genClasses ecoreClass="Safety.ecore#//OpenLeftInterval"/>

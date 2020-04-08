@@ -14,7 +14,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="TemporalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="TriggerCondition"/>
   <eClassifiers xsi:type="ecore:EClass" name="SafetyEqStatement" eSuperTypes="platform:/resource/org.osate.aadl2/model/aadl2.ecore#//Element #//FaultSubcomponent"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Interval">
+  <eClassifiers xsi:type="ecore:EClass" name="SafetyInterval">
     <eStructuralFeatures xsi:type="ecore:EReference" name="low" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="high" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
@@ -88,7 +88,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="DurationStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tc" eType="#//TemporalConstraint"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="interv" eType="#//Interval"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interv" eType="#//SafetyInterval"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ProbabilityStatement" eSuperTypes="#//FaultSubcomponent #//HWFaultSubcomponent">
@@ -124,7 +124,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="IntervalEq" eSuperTypes="#//SafetyEqStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs_int" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Arg"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="interv" eType="#//Interval"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interv" eType="#//SafetyInterval"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SetEq" eSuperTypes="#//SafetyEqStatement">
@@ -143,8 +143,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="l2" eType="ecore:EClass platform:/resource/com.rockwellcollins.atc.agree/model/generated/Agree.ecore#//Expr"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ClosedInterval" eSuperTypes="#//Interval"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OpenLeftInterval" eSuperTypes="#//Interval"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OpenRightInterval" eSuperTypes="#//Interval"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OpenInterval" eSuperTypes="#//Interval"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClosedSafetyInterval" eSuperTypes="#//SafetyInterval"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenLeftSafetyInterval" eSuperTypes="#//SafetyInterval"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenRightSafetyInterval" eSuperTypes="#//SafetyInterval"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenSafetyInterval" eSuperTypes="#//SafetyInterval"/>
 </ecore:EPackage>
