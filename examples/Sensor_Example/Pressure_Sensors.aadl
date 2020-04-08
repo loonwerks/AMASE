@@ -21,11 +21,9 @@ public
 		annex safety {**
 			fault Pressure_sensor_stuck_at_low "Pressure sensor stuck low": 
 								Common_Faults::stuck_false {
-				safety_interval test : real = [1,2];
-				eq test2 : int = 5;
 				inputs: val_in <- High_Pressure_Indicator;     
 				outputs: High_Pressure_Indicator <- val_out;   
-         		disable : true;
+         		disable : false;
          		probability: 1.0E-5 ;
 				duration: permanent;
 			}
@@ -34,7 +32,7 @@ public
 								Common_Faults::stuck_true {
 				inputs: val_in <- High_Pressure_Indicator;     
 				outputs: High_Pressure_Indicator <- val_out;   
-         		disable : true;  
+         		disable : false;  
          		probability: 1.0E-5 ;
 				duration: permanent;
 			}	

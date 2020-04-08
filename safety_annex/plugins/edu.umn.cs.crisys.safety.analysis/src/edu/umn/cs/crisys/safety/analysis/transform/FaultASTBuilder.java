@@ -13,6 +13,7 @@ import org.osate.aadl2.instance.ConnectionInstanceEnd;
 import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
+import com.rockwellcollins.atc.agree.AgreeTypeSystem;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
@@ -23,6 +24,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.ReplaceIdVisitor;
+import edu.umn.cs.crisys.safety.safety.ClosedSafetyInterval;
 import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.EqValue;
@@ -30,11 +32,13 @@ import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
+import edu.umn.cs.crisys.safety.safety.OpenLeftSafetyInterval;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
+import edu.umn.cs.crisys.safety.safety.SafetyInterval;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 import edu.umn.cs.crisys.safety.safety.asymmetric;
@@ -530,7 +534,7 @@ public class FaultASTBuilder {
 		if (stmt instanceof EqValue) {
 			addSafetyEqVal(fault, (EqValue) stmt);
 		} else if (stmt instanceof IntervalEq) {
-//			addSafetyEqInterval(fault, (IntervalEq) stmt);
+			addSafetyEqInterval(fault, (IntervalEq) stmt);
 		} else if (stmt instanceof RangeEq) {
 			addSafetyRangeEq(fault, (RangeEq) stmt);
 		} else if (stmt instanceof SetEq) {
@@ -564,30 +568,53 @@ public class FaultASTBuilder {
 	 * @param fault	The fault with these interval eq stmts.
 	 * @param stmt	The IntervalEq statement
 	 */
-//	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
-//		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
-//		Interval iv =stmt.getInterv();
-//		BinaryOp leftOp =
-//				((iv instanceof ClosedInterval) ||
-//				(iv instanceof OpenRightInterval)) ?
-//						BinaryOp.GREATEREQUAL :
-//						BinaryOp.GREATER;
-//		BinaryOp rightOp =
-//				((iv instanceof ClosedInterval) ||
-//				 (iv instanceof OpenLeftInterval)) ?
-//						 BinaryOp.LESSEQUAL :
-//						 BinaryOp.LESS;
-//		Expr leftSideExpr =
-//				new BinaryExpr(lhsIdExpr, leftOp, builder.doSwitch(iv.getLow()));
-//		Expr rightSideExpr =
-//				new BinaryExpr(lhsIdExpr, rightOp, builder.doSwitch(iv.getHigh()));
-//		Expr expr =
-//				new BinaryExpr(leftSideExpr, BinaryOp.AND, rightSideExpr);
-//		fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
-//		fault.safetyEqVars.add(
-//			(AgreeVar)builder.agreeVarFromArg(
-//				stmt.getLhs_int(), this.agreeNode.compInst));
-//	}
+	private void addSafetyEqInterval(Fault fault, IntervalEq stmt) {
+		Expr lhsIdExpr = new IdExpr(stmt.getLhs_int().getName() );
+		SafetyInterval iv = stmt.getInterv();
+		BinaryOp leftOp =
+				((iv instanceof ClosedSafetyInterval) ||
+				(iv instanceof OpenLeftSafetyInterval)) ?
+						BinaryOp.GREATEREQUAL :
+						BinaryOp.GREATER;
+		BinaryOp rightOp =
+				((iv instanceof ClosedSafetyInterval) ||
+				 (iv instanceof OpenLeftSafetyInterval)) ?
+						 BinaryOp.LESSEQUAL :
+						 BinaryOp.LESS;
+		Expr leftSideExpr =
+				new BinaryExpr(lhsIdExpr, leftOp, builder.doSwitch(iv.getLow()));
+		Expr rightSideExpr =
+				new BinaryExpr(lhsIdExpr, rightOp, builder.doSwitch(iv.getHigh()));
+		Expr expr =
+				new BinaryExpr(leftSideExpr, BinaryOp.AND, rightSideExpr);
+		fault.safetyEqAsserts.add(new AgreeStatement("", expr, stmt));
+
+		// Get type in Lustre/JKind format
+		com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef typeDef = AgreeTypeSystem
+				.typeDefFromType(stmt.getLhs_int().getType());
+		Type type = getLustreType(typeDef);
+
+		// Throw exception if type is neither real nor int
+		if (type == null) {
+			new SafetyException("Interval statement types can only be real or int. The problem interval is called: "
+					+ stmt.getLhs_int().getName() + ".");
+		}
+		// Add to safetyEqVars list
+		fault.safetyEqVars.add(new AgreeVar(stmt.getLhs_int().getName(), type,
+				this.agreeNode.reference, this.agreeNode.compInst));
+	}
+
+	private Type getLustreType(com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef agreeType) {
+		if (agreeType == AgreeTypeSystem.Prim.IntTypeDef) {
+			return NamedType.INT;
+
+		} else if (agreeType == AgreeTypeSystem.Prim.RealTypeDef) {
+			return NamedType.REAL;
+
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * Not yet implemented, will throw exception.

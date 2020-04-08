@@ -40,6 +40,7 @@ import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
+import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.agree.impl.DoubleDotRefImpl;
 
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
@@ -429,7 +430,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		Expr high = interval.getHigh();
 
 		if (arg.getType() instanceof PrimType) {
-			typeName = ((PrimType) arg).getName();
+			typeName = ((PrimType) arg.getType()).getName();
 			if (typeName.equalsIgnoreCase("bool")) {
 				error(arg, "Boolean intervals are not allowed. Only real or int intervals are supported.");
 			}
@@ -437,6 +438,36 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			error(arg, "The only types that are supported for intervals are real and int.");
 		}
 
+		// Negative values are allowed: hence the check for UnaryExpr
+		if (low instanceof UnaryExpr) {
+			UnaryExpr unex_low = (UnaryExpr) low;
+			if (!(unex_low.getExpr() instanceof IntLitExpr) & !(unex_low.getExpr() instanceof RealLitExpr)) {
+				error(low, "Only real and integer types are supported for intervals.");
+			}
+			if (high instanceof UnaryExpr) {
+				UnaryExpr unex_high = (UnaryExpr) high;
+				if (!(unex_high.getExpr() instanceof IntLitExpr) & !(unex_high.getExpr() instanceof RealLitExpr)) {
+					error(high, "Only real and integer types are supported for intervals.");
+				}
+				testLowAndHighTypes(intervalEq, typeName, unex_low.getExpr(), unex_high.getExpr());
+			} else {
+				testLowAndHighTypes(intervalEq, typeName, unex_low.getExpr(), high);
+			}
+		} else {
+			testLowAndHighTypes(intervalEq, typeName, low, high);
+		}
+
+	}
+
+	/**
+	 * Helper method to test high and low vals of interval statements.
+	 *
+	 * @param interval IntervalEq statement to be tested
+	 * @param typeName The name declared as the type of interval
+	 * @param low low parameter of interval
+	 * @param high high parameter of interval
+	 */
+	private void testLowAndHighTypes(IntervalEq interval, String typeName, Expr low, Expr high) {
 		if (low instanceof RealLitExpr & high instanceof RealLitExpr) {
 			if (!typeName.contentEquals("real")) {
 				error(interval, "Type of interval must match high and low parameters of interval.");
@@ -446,7 +477,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(interval, "Type of interval must match high and low parameters of interval.");
 			}
 		} else {
-			error(intervalEq, "Type of interval must match high and low parameters of interval.");
+			error(interval, "Type of interval must match high and low parameters of interval.");
 		}
 	}
 
