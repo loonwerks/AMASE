@@ -144,9 +144,9 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createSafetyEqStatementAdapter();
       }
       @Override
-      public Adapter caseInterval(Interval object)
+      public Adapter caseSafetyInterval(SafetyInterval object)
       {
-        return createIntervalAdapter();
+        return createSafetyIntervalAdapter();
       }
       @Override
       public Adapter caseSafetyContractLibrary(SafetyContractLibrary object)
@@ -279,24 +279,24 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
         return createRangeEqAdapter();
       }
       @Override
-      public Adapter caseClosedInterval(ClosedInterval object)
+      public Adapter caseClosedSafetyInterval(ClosedSafetyInterval object)
       {
-        return createClosedIntervalAdapter();
+        return createClosedSafetyIntervalAdapter();
       }
       @Override
-      public Adapter caseOpenLeftInterval(OpenLeftInterval object)
+      public Adapter caseOpenLeftSafetyInterval(OpenLeftSafetyInterval object)
       {
-        return createOpenLeftIntervalAdapter();
+        return createOpenLeftSafetyIntervalAdapter();
       }
       @Override
-      public Adapter caseOpenRightInterval(OpenRightInterval object)
+      public Adapter caseOpenRightSafetyInterval(OpenRightSafetyInterval object)
       {
-        return createOpenRightIntervalAdapter();
+        return createOpenRightSafetyIntervalAdapter();
       }
       @Override
-      public Adapter caseOpenInterval(OpenInterval object)
+      public Adapter caseOpenSafetyInterval(OpenSafetyInterval object)
       {
-        return createOpenIntervalAdapter();
+        return createOpenSafetyIntervalAdapter();
       }
       @Override
       public Adapter caseElement(Element object)
@@ -546,16 +546,16 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.Interval <em>Interval</em>}'.
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.SafetyInterval <em>Interval</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.Interval
+   * @see edu.umn.cs.crisys.safety.safety.SafetyInterval
    * @generated
    */
-  public Adapter createIntervalAdapter()
+  public Adapter createSafetyIntervalAdapter()
   {
     return null;
   }
@@ -951,61 +951,61 @@ public class SafetyAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ClosedInterval <em>Closed Interval</em>}'.
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.ClosedSafetyInterval <em>Closed Safety Interval</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.ClosedInterval
+   * @see edu.umn.cs.crisys.safety.safety.ClosedSafetyInterval
    * @generated
    */
-  public Adapter createClosedIntervalAdapter()
+  public Adapter createClosedSafetyIntervalAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OpenLeftInterval <em>Open Left Interval</em>}'.
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OpenLeftSafetyInterval <em>Open Left Safety Interval</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.OpenLeftInterval
+   * @see edu.umn.cs.crisys.safety.safety.OpenLeftSafetyInterval
    * @generated
    */
-  public Adapter createOpenLeftIntervalAdapter()
+  public Adapter createOpenLeftSafetyIntervalAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OpenRightInterval <em>Open Right Interval</em>}'.
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OpenRightSafetyInterval <em>Open Right Safety Interval</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.OpenRightInterval
+   * @see edu.umn.cs.crisys.safety.safety.OpenRightSafetyInterval
    * @generated
    */
-  public Adapter createOpenRightIntervalAdapter()
+  public Adapter createOpenRightSafetyIntervalAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OpenInterval <em>Open Interval</em>}'.
+   * Creates a new adapter for an object of class '{@link edu.umn.cs.crisys.safety.safety.OpenSafetyInterval <em>Open Safety Interval</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see edu.umn.cs.crisys.safety.safety.OpenInterval
+   * @see edu.umn.cs.crisys.safety.safety.OpenSafetyInterval
    * @generated
    */
-  public Adapter createOpenIntervalAdapter()
+  public Adapter createOpenSafetyIntervalAdapter()
   {
     return null;
   }

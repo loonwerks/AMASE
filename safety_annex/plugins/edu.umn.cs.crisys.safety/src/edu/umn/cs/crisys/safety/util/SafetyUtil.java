@@ -43,9 +43,18 @@ public class SafetyUtil {
 		if (defName != null) {
 			defNameField = defName.getElm();
 		} else {
-			new IllegalArgumentException("Fault definition name in " + faultStatement.getName() + " is not allowed.");
+			new Exception("Fault definition name in " + faultStatement.getName() + " is not allowed.");
 		}
-		return (NodeDef) defNameField;
+
+		if (!(defNameField instanceof NodeDef)) {
+			new Exception(
+					"Fault node definition is not working correctly. "
+							+ "A possible reason is that the project needs to be cleaned.");
+		} else {
+			return (NodeDef) defNameField;
+		}
+
+		return null;
 	}
 
 
