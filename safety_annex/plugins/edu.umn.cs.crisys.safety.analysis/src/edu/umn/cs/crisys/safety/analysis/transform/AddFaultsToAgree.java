@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.widgets.MenuItem;
+import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout.SigType;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
@@ -66,6 +69,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		// check to make sure we are supposed to transform program
 		if (AddFaultsToAgree.getTransformFlag() == 0) {
 			return program;
+		} else {
+			if (!checkForSafetyAnnex(program.topNode)) {
+				new SafetyException("This component implementation does not contain a safety annex.");
+			}
 		}
 
 		faultVisitor = new AddFaultsToNodeVisitor();
@@ -223,5 +230,18 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			}
 		}
 		return path;
+	}
+
+	private boolean checkForSafetyAnnex(AgreeNode topNode) {
+		boolean hasAnnex = false;
+		if (topNode.compInst instanceof SystemInstanceImpl) {
+			SystemInstanceImpl sysInst = (SystemInstanceImpl) topNode.compInst;
+			for (AnnexSubclause as : sysInst.basicGetComponentImplementation().getOwnedAnnexSubclauses()) {
+				if (as.getName().equalsIgnoreCase("safety")) {
+					return true;
+				}
+			}
+		}
+		return hasAnnex;
 	}
 }
