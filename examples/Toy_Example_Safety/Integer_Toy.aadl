@@ -3,7 +3,7 @@
 package Integer_Toy
 public 
    with Base_Types;
---   with faults;
+   with faults;
    
 system A
 	features
@@ -15,14 +15,14 @@ system A
 		guarantee "A output range" : Output < 2*Input;
 	**};	
 	
---	annex safety {**
---		fault stuck_at_fault_A "Component A output stuck" : faults::fail_to {
---			inputs: val_in <- Output, alt_val <- prev(Output, 0); 
---			outputs: Output <- val_out;    
---        	probability: 5.0E-9 ;
---			duration: permanent;
---		}
---	**};
+	annex safety {**
+		fault stuck_at_fault_A "Component A output stuck" : faults::fail_to {
+			inputs: val_in <- Output, alt_val <- prev(Output, 0); 
+			outputs: Output <- val_out;    
+        	probability: 5.0E-9 ;
+			duration: permanent;
+		}
+	**};
 end A ; 
 
 system B
@@ -35,15 +35,15 @@ system B
 		guarantee "B output range" : Output < Input + 15;
 	**};
 	
---	annex safety {**
---		fault stuck_at_fault_B "Component B output stuck nondeterministic" : faults::fail_to {
---			eq nondet_val : int;
---			inputs: val_in <- Output, alt_val <- nondet_val; 
---			outputs: Output <- val_out;    
---        	probability: 5.0E-5 ;
---			duration: permanent;
---		}
---	**};	
+	annex safety {**
+		fault stuck_at_fault_B "Component B output stuck nondeterministic" : faults::fail_to {
+			eq nondet_val : int;
+			inputs: val_in <- Output, alt_val <- nondet_val; 
+			outputs: Output <- val_out;    
+        	probability: 5.0E-5 ;
+			duration: permanent;
+		}
+	**};	
 end B ; 
 
 system C
@@ -89,10 +89,10 @@ system implementation top_level.Impl
 	  assign mode = C_sub.mode;
 	**};
 	
---    annex safety{**
---	  --analyze : probability 1.0E-7
---	  analyze : max 2 fault
---   **};
+    annex safety{**
+	  --analyze : probability 1.0E-7
+	  analyze : max 2 fault
+   **};
 end top_level.Impl;
 	
 end Integer_Toy;
