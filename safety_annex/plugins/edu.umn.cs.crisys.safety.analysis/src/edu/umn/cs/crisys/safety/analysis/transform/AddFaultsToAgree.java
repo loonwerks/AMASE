@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.eclipse.swt.widgets.MenuItem;
 import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.SystemImplementation;
+import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
@@ -239,6 +241,16 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			for (AnnexSubclause as : sysInst.basicGetComponentImplementation().getOwnedAnnexSubclauses()) {
 				if (as.getName().equalsIgnoreCase("safety")) {
 					return true;
+				}
+			}
+		} else if (topNode.compInst instanceof ComponentInstanceImpl) {
+			ComponentInstanceImpl compInstImpl = (ComponentInstanceImpl) topNode.compInst;
+			if (compInstImpl.basicGetClassifier() instanceof SystemImplementation) {
+				SystemImplementation sysInst = (SystemImplementation) compInstImpl.basicGetClassifier();
+				for (AnnexSubclause as : sysInst.getOwnedAnnexSubclauses()) {
+					if (as.getName().equalsIgnoreCase("safety")) {
+						return true;
+					}
 				}
 			}
 		}
