@@ -75,6 +75,7 @@ import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
+import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import jkind.JKindException;
@@ -97,7 +98,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private IHandlerActivation terminateAllActivation;
 	private IHandlerService handlerService;
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
-	private int adviceCount = 0;
 	private boolean calledFromRerun = false;
 
 	private enum AnalysisType {
@@ -239,11 +239,9 @@ public class SoteriaGenHandler extends VerifyHandler {
 			public void run() {
 
 				activateTerminateHandlers(globalMonitor);
-				KindApi api = com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil.getKindApi();
-				KindApi consistApi = com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil
-						.getConsistencyApi();
-				JRealizabilityApi realApi = com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil
-						.getJRealizabilityApi();
+				KindApi api = PreferencesUtil.getKindApi();
+				KindApi consistApi = PreferencesUtil.getConsistencyApi();
+				JRealizabilityApi realApi = PreferencesUtil.getJRealizabilityApi();
 
 				while (!queue.isEmpty() && !globalMonitor.isCanceled()) {
 					JKindResult result = queue.peek();
@@ -253,7 +251,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 					Program program = linker.getProgram(result);
 
 					if (api instanceof JKindApi) {
-						String resultName = result.getName();
+						result.getName();
 					}
 
 					try {
