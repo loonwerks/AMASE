@@ -23,7 +23,7 @@ public
 			fault Temp_sensor_stuck_at_high "Temp sensor stuck at high": Common_Faults::stuck_true {
 				inputs: val_in <- High_Temp_Indicator;     
 				outputs: High_Temp_Indicator <- val_out;   
-         		disable : true;
+         		disable : false;
          		probability: 1.0E-5 ;
 				duration: permanent;
 			}
@@ -31,7 +31,7 @@ public
 			fault Temp_sensor_stuck_at_low "Temp sensor stuck at low": Common_Faults::stuck_false {
 				inputs: val_in <- High_Temp_Indicator;     
 				outputs: High_Temp_Indicator <- val_out;   
-         		disable : true;
+         		disable : false;
          		probability: 1.0E-5 ;
 				duration: permanent;
 			}	
