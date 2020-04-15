@@ -60,6 +60,7 @@ import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
+import edu.umn.cs.crisys.safety.analysis.generators.IvcToSoteriaFTGenerator;
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
@@ -462,7 +463,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		});
 	}
 
-	@Override
 	protected void disableRerunHandler() {
 		if (rerunActivation != null) {
 			getWindow().getShell().getDisplay().syncExec(() -> {

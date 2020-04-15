@@ -14,7 +14,7 @@ import java.util.Set;
 import org.osate.ui.dialogs.Dialog;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.handlers.UniqueID;
+import edu.umn.cs.crisys.safety.analysis.generators.UniqueID;
 import jkind.JKindException;
 
 /*
@@ -25,7 +25,7 @@ import jkind.JKindException;
 public class MHSUtils {
 
 	private static StringBuilder sourceSetSb = new StringBuilder();
-	private static HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
+	private static HashMap<edu.umn.cs.crisys.safety.analysis.generators.UniqueID, UniqueID> elemIdMap = new HashMap<>();
 	private static final String seperator = System.getProperty("line.separator");
 	private static int varIndex = 0;
 
