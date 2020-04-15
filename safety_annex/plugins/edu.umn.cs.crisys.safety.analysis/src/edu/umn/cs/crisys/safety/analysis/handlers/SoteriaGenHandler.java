@@ -3,15 +3,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,7 +15,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -29,25 +24,17 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.xtext.EcoreUtil2;
-import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexSubclause;
-import org.osate.aadl2.Classifier;
-import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
-import org.osate.aadl2.instantiation.InstantiateModel;
-import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.annexsupport.AnnexUtil;
 import org.osate.ui.dialogs.Dialog;
 
-import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
-import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
 import com.rockwellcollins.atc.agree.analysis.Activator;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
@@ -57,9 +44,7 @@ import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ConsistencyResult;
 import com.rockwellcollins.atc.agree.analysis.EphemeralImplementationUtil;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomaterRegistry;
 import com.rockwellcollins.atc.agree.analysis.extentions.ExtensionRegistry;
@@ -103,75 +88,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private enum AnalysisType {
 		AssumeGuarantee, Consistency, Realizability
 	};
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see edu.umn.cs.crisys.safety.analysis.handlers.AadlHandler#runJob(org.osate.aadl2.Element, org.eclipse.core.runtime.IProgressMonitor)
-	 *
-	 * Check for component implementation, two annexes in that implementation, save
-	 * the safety package instance, and set the transform agree flag.
-	 */
 
-	@Override
-	protected SystemInstance getSysInstance(ComponentImplementation ci, EphemeralImplementationUtil implUtil) {
-		try {
-			return InstantiateModel.buildInstanceModelFile(ci);
-		} catch (Exception e) {
-			Dialog.showError("Model Instantiate", "Error while re-instantiating the model: " + e.getMessage());
-			throw new AgreeException("Error Instantiating model");
-		}
-	}
-
-	private ComponentImplementation getComponentImplementation(Element root, EphemeralImplementationUtil implUtil) {
-		Classifier classifier = getOutermostClassifier(root);
-		if (isRealizability()) {
-			if (!(classifier instanceof ComponentType)) {
-				throw new AgreeException("Must select an AADL Component Type");
-			}
-			ComponentImplementation result;
-			try {
-				result = implUtil.generateEphemeralCompImplFromType((ComponentType) classifier);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new AgreeException("Error creating component implementation.");
-			}
-			return result;
-		} else {
-			if (classifier instanceof ComponentImplementation) {
-				return (ComponentImplementation) classifier;
-			}
-			if (!(classifier instanceof ComponentType)) {
-				throw new AgreeException("Must select an AADL Component Type or Implementation");
-			}
-			ComponentType ct = (ComponentType) classifier;
-			List<ComponentImplementation> cis = getComponentImplementations(ct);
-			if (cis.size() == 0) {
-				throw new AgreeException("AADL Component Type has no implementation to verify");
-			} else if (cis.size() == 1) {
-				ComponentImplementation ci = cis.get(0);
-				Shell shell = getWindow().getShell();
-				String message = "User selected " + ct.getFullName() + ".\nRunning analysis on " + ci.getFullName()
-						+ " instead.";
-				shell.getDisplay()
-						.asyncExec(() -> MessageDialog.openInformation(shell, "Analysis information", message));
-				return ci;
-			} else {
-				throw new AgreeException(
-						"AADL Component Type has multiple implementations to verify: please select just one");
-			}
-		}
-	}
-
-	private List<ComponentImplementation> getComponentImplementations(ComponentType ct) {
-		List<ComponentImplementation> result = new ArrayList<>();
-		AadlPackage pkg = AadlUtil.getContainingPackage(ct);
-		for (ComponentImplementation ci : EcoreUtil2.getAllContentsOfType(pkg, ComponentImplementation.class)) {
-			if (ci.getType().equals(ct)) {
-				result.add(ci);
-			}
-		}
-		return result;
-	}
 
 	@Override
 	protected IStatus runJob(Element root, IProgressMonitor monitor) {
@@ -402,27 +319,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 	}
 
 	/*
-	 * getNestedMessages
-	 *
-	 * @param Throwable : exception
-	 *
-	 * @return String : exception message
-	 */
-	@Override
-	protected String getNestedMessages(Throwable e) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		while (e != null) {
-			if (e.getMessage() != null && !e.getMessage().isEmpty()) {
-				pw.println(e.getMessage());
-			}
-			e = e.getCause();
-		}
-		pw.close();
-		return sw.toString();
-	}
-
-	/*
 	 * setRoot
 	 *
 	 * @param Element root : This sets the component implementation to the current root Element.
@@ -460,8 +356,17 @@ public class SoteriaGenHandler extends VerifyHandler {
 		return false;
 	}
 
-	// The following private methods are copied from AGREE VerifyHandler
-
+	/**
+	 * Copied from AGREE VerifyHandler - allows for min cut set Analysis Type in
+	 * param analysisType
+	 *
+	 * @param resultName
+	 * @param compInst
+	 * @param lustreProgram
+	 * @param agreeProgram
+	 * @param analysisType
+	 * @return
+	 */
 	private AnalysisResult createVerification(String resultName, ComponentInstance compInst, Program lustreProgram,
 			AgreeProgram agreeProgram, AnalysisType analysisType) {
 		AgreeAutomaterRegistry aAReg = (AgreeAutomaterRegistry) ExtensionRegistry
@@ -519,79 +424,9 @@ public class SoteriaGenHandler extends VerifyHandler {
 
 	}
 
-	private void addProperties(AgreeRenaming renaming, List<String> properties, Node mainNode,
-			AgreeProgram agreeProgram) {
-
-		// there is a special case in the AgreeRenaming which handles this
-		// translation
-		if (AgreeUtils.usingKind2()) {
-			addKind2Properties(agreeProgram.topNode, properties, renaming, "_TOP", "");
-		} else {
-			properties.addAll(mainNode.properties);
-		}
-
-		Set<String> strs = new HashSet<>();
-		for (String prop : properties) {
-			String renamed = renaming.rename(prop);
-			if (!strs.add(renamed)) {
-				throw new AgreeException("Multiple properties named \"" + renamed + "\"");
-			}
-		}
-
-	}
-
-	private AgreeSubclause getContract(ComponentImplementation ci) {
-		ComponentType ct = ci.getOwnedRealization().getImplemented();
-		for (AnnexSubclause annex : ct.getOwnedAnnexSubclauses()) {
-			if (annex instanceof AgreeSubclause) {
-				return (AgreeSubclause) annex;
-			}
-		}
-		return null;
-	}
-
-	private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
-		CompositeAnalysisResult result = new CompositeAnalysisResult("Verification for " + name);
-		if (containsAGREEAnnex(ci)) {
-			wrapVerificationResult(ci, result);
-			ComponentImplementation compImpl = AgreeUtils.getInstanceImplementation(ci);
-			for (ComponentInstance subInst : ci.getComponentInstances()) {
-				if (AgreeUtils.getInstanceImplementation(subInst) != null) {
-					AnalysisResult buildAnalysisResult = buildAnalysisResult(subInst.getName(), subInst);
-					if (buildAnalysisResult != null) {
-						result.addChild(buildAnalysisResult);
-					}
-				}
-			}
-
-			if (result.getChildren().size() != 0) {
-				linker.setComponent(result, compImpl);
-				return result;
-			}
-		}
-		return null;
-	}
-
-	private boolean containsAGREEAnnex(ComponentInstance ci) {
-		ComponentClassifier compClass = ci.getComponentClassifier();
-		if (compClass instanceof ComponentImplementation) {
-			compClass = ((ComponentImplementation) compClass).getType();
-		}
-		for (AnnexSubclause annex : AnnexUtil.getAllAnnexSubclauses(compClass,
-				AgreePackage.eINSTANCE.getAgreeContractSubclause())) {
-			if (annex instanceof AgreeContractSubclause) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
+	@Override
+	protected void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
 		AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, isMonolithic());
-
-		// generate different lustre depending on which model checker we are
-		// using
-
 		Program program;
 		if (AgreeUtils.usingKind2()) {
 			if (!isMonolithic()) {
@@ -605,26 +440,6 @@ public class SoteriaGenHandler extends VerifyHandler {
 		wrapper.addChild(
 				createVerification("Contract Guarantees", si, program, agreeProgram, AnalysisType.AssumeGuarantee));
 
-	}
-
-	void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming, String prefix,
-			String userPropPrefix) {
-		int i = 0;
-
-		String propPrefix = (userPropPrefix.equals("")) ? "" : userPropPrefix + ": ";
-		for (AgreeStatement statement : agreeNode.lemmas) {
-			renaming.addExplicitRename(prefix + "[" + (++i) + "]", propPrefix + statement.string);
-			properties.add(prefix.replaceAll("\\.", AgreeASTBuilder.dotChar) + "[" + i + "]");
-		}
-		for (AgreeStatement statement : agreeNode.guarantees) {
-			renaming.addExplicitRename(prefix + "[" + (++i) + "]", propPrefix + statement.string);
-			properties.add(prefix.replaceAll("\\.", AgreeASTBuilder.dotChar) + "[" + i + "]");
-		}
-
-		userPropPrefix = userPropPrefix.equals("") ? "" : userPropPrefix + ".";
-		for (AgreeNode subNode : agreeNode.subNodes) {
-			addKind2Properties(subNode, properties, renaming, prefix + "." + subNode.id, userPropPrefix + subNode.id);
-		}
 	}
 
 	private void activateTerminateHandlers(final IProgressMonitor globalMonitor) {
@@ -649,7 +464,18 @@ public class SoteriaGenHandler extends VerifyHandler {
 		});
 	}
 
+	private void disableRerunHandler() {
+		if (rerunActivation != null) {
+			getWindow().getShell().getDisplay().syncExec(() -> {
+				IHandlerService handlerService = getHandlerService();
+				handlerService.deactivateHandler(rerunActivation);
+				rerunActivation = null;
+			});
+		}
+	}
+
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
 	}
+
 }
