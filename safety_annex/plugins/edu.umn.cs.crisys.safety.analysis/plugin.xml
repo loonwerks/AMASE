@@ -18,11 +18,6 @@
             categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
             id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
       </command> 
-      <command
-            name="Disable Faults Menu"
-            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
-            id="edu.umn.cs.crisys.safety.analysis.commands.faultDisableCommand">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -37,16 +32,7 @@
       </handler>
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.SoteriaGenHandler">
-         <enabledWhen>
-            <reference
-                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
-            </reference>
-         </enabledWhen>
-      </handler>
-      <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultDisableCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.FaultDisableHandler">
+            class="edu.umn.cs.crisys.safety.analysis.handlers.GenMCSHandler">
          <enabledWhen>
             <reference
                   definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
@@ -65,12 +51,6 @@
             commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </key>
-      <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultDisableCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+5"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
    </extension>
@@ -98,12 +78,6 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
                   style="toggle">
             </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultDisableCommand"
-                  mnemonic="f"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.faultDisableCommand"
-                  style="push">
-            </command>
          </menu>
       </menuContribution>
       <menuContribution
@@ -121,12 +95,6 @@
                   icon="icons/sample.gif"
                   tooltip="Safety analysis results are generating."
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyAnalysisCommand">
-            </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultDisableCommand"
-                  icon="icons/sample.gif"
-                  tooltip="Fault menu is being created."
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.faultDisableCommand">
             </command>
          </toolbar>
       </menuContribution>
@@ -153,13 +121,6 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
                   mnemonic="S"
                   style="toggle">
-            </command>
-             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultDisableCommand"
-                  icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.faultDisableCommand"
-                  mnemonic="d"
-                  style="push">
             </command>
          </menu>
       </menuContribution>

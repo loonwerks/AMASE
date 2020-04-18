@@ -75,7 +75,7 @@ import jkind.api.results.JRealizabilityResult;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
 
-public class SoteriaGenHandler extends VerifyHandler {
+public class GenMCSHandler extends VerifyHandler {
 
 	private static Element root = null;
 	private static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
@@ -325,7 +325,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 	 * @return void
 	 */
 	public static void setRoot(Element root) {
-		SoteriaGenHandler.root = root;
+		GenMCSHandler.root = root;
 	}
 
 	/*
@@ -337,7 +337,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 	 * be used in transformAgree in order to access the safety annex.
 	 */
 	public static Element getRoot() {
-		return SoteriaGenHandler.root;
+		return GenMCSHandler.root;
 	}
 
 	@Override
@@ -459,7 +459,7 @@ public class SoteriaGenHandler extends VerifyHandler {
 	private void enableRerunHandler(final Element root) {
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			IHandlerService handlerService = getHandlerService();
-			rerunActivation = handlerService.activateHandler(RERUN_ID, new RerunHandler(root, SoteriaGenHandler.this));
+			rerunActivation = handlerService.activateHandler(RERUN_ID, new RerunHandler(root, GenMCSHandler.this));
 		});
 	}
 
