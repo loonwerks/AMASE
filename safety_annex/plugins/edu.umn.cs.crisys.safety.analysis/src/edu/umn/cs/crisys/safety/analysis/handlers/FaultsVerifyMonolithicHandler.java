@@ -4,12 +4,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
 
-import com.rockwellcollins.atc.agree.analysis.handlers.VerifyAllHandler;
+import com.rockwellcollins.atc.agree.analysis.handlers.VerifySingleHandler;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 
-public class FaultsVerifyAllHandler extends VerifyAllHandler {
+public class FaultsVerifyMonolithicHandler extends VerifySingleHandler {
 
 	private static MenuItem item;
 
@@ -32,6 +32,6 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	 */
 	@Override
 	protected String getJobName() {
-		return "Fault analysis: compositional";
+		return "Fault analysis: monolithic";
 	}
 }
