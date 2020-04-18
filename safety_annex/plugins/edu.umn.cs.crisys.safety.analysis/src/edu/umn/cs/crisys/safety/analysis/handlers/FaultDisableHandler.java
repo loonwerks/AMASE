@@ -3,12 +3,10 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -34,12 +32,18 @@ import edu.umn.cs.crisys.safety.safety.impl.SafetyContractSubclauseImpl;
 
 public class FaultDisableHandler extends VerifyHandler {
 
+	// Map for saving component name -> fault names associated with this component.
+	// Used to populate checkboxes in their appropriate groupings.
 	private HashMap<String, List<String>> mapCompNameToFaults = new HashMap<String, List<String>>();
+	// Used to save selections for later retrieval by analysis runs.
+	// Also checked prior to adding checkboxes: if in this map, populate menu
+	// with that checkbox selected already (from last run).
 	static private HashMap<String, Boolean> mapFaultToSelected = new HashMap<String, Boolean>();
 
 	@Override
 	public Object execute(ExecutionEvent event) {
 		makeMenu();
+		// Clear to avoid faults from other projects appearing in list.
 		mapCompNameToFaults.clear();
 		return event;
 
@@ -64,7 +68,9 @@ public class FaultDisableHandler extends VerifyHandler {
 		if (aadlPackage == null) {
 			return false;
 		}
-
+		// 1. Map component names to their associated faults.
+		// 2. Make dialog and pop up menu.
+		// 3. Save the selected faults for analysis (static map).
 		makeMap(aadlPackage.getOwnedPublicSection().getOwnedClassifiers());
 		makeDialog();
 		saveSelectedFaults();
@@ -153,11 +159,17 @@ public class FaultDisableHandler extends VerifyHandler {
 			List<JCheckBox> faultList = new ArrayList<JCheckBox>();
 			for (String faultName : mapCompNameToFaults.get(compName)) {
 				JCheckBox jc = new JCheckBox(faultName);
-				jc.addActionListener(new CheckboxAction("Selected"));
+				jc.addActionListener(event -> {
+					JCheckBox cb = (JCheckBox) event.getSource();
+					if (cb.isSelected()) {
+						mapFaultToSelected.put(faultName, jc.isSelected());
+					} else {
+						mapFaultToSelected.remove(faultName);
+					}
+				});
 				if (mapFaultToSelected.containsKey(faultName)) {
 					jc.setSelected(true);
 				}
-//				jc.addActionListener(e -> mapFaultToSelected.put(faultName, jc.isSelected()));
 				faultList.add(new JCheckBox(faultName));
 			}
 			p.add(name);
@@ -171,12 +183,12 @@ public class FaultDisableHandler extends VerifyHandler {
 	}
 
 	/**
-	 *
+	 * Save faults that have been selected so that when map is
+	 * repopulated next time menu runs, those same faults are
+	 * still selected.
 	 */
 	private void saveSelectedFaults() {
-		// save faults that have been selected so that when map is
-		// repopulated next time menu runs, those same faults are
-		// still selected.
+
 	}
 
 	@Override
@@ -184,18 +196,5 @@ public class FaultDisableHandler extends VerifyHandler {
 		return "Fault disable menu";
 	}
 
-	class CheckboxAction extends AbstractAction {
-		public CheckboxAction(String text) {
-			super(text);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JCheckBox cbLog = (JCheckBox) e.getSource();
-			if (cbLog.isSelected()) {
-				mapFaultToSelected.put(cbLog.getName(), cbLog.isSelected());
-			}
-		}
-	}
 
 }
