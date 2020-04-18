@@ -32,7 +32,8 @@ import jkind.api.results.AnalysisResult;
  */
 public class AddFaultsToAgree implements AgreeAutomater {
 
-	private static int transformFlag = 0;
+	private static boolean isVerify = false;
+	private static boolean isGenMCS = false;
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -40,13 +41,13 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * For each AgreeProgram:
 	 * (1) AgreeASTBuilder contains the extension point for the program.
 	 * It will call this class (AddFaultsToAgree.transform) and pass in the program.
-	 * If we have the transformFlag selected, then we will make changes to the program
+	 * If fault analysis menu item pressed, then we will make changes to the program
 	 * and send it back. If not, the program is returned unchanged.
 	 *
 	 * (2) AddFaultsToAgree.transform calls AddFaultsToNodeVisitor.visit(program)
 	 * and then visit is called for the node from there.
-	 * The AddFaultsToNodeVisitor.visit(node) method will set the "FaultTreeFlag" for that node
-	 * to true. This tells us in later agree methods that we are generating the soteria model
+	 * The AddFaultsToNodeVisitor.visit(node) method will set the isGenMCS flag for that node
+	 * to true. This tells us in later agree methods that we are generating mcs
 	 * and hence we add the ivcs differently for that node. (Lines 159-161)
 	 */
 
@@ -60,7 +61,8 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	/**
 	 * Transform program.
-	 * If safety analysis selected as menu item, pass program to AddFaultsToNodeVisitor.
+	 * If safety analysis selected as menu item,
+	 * pass program to AddFaultsToNodeVisitor.
 	 * If not, return unchanged program.
 	 *
 	 * @param program The AgreeProgram.
@@ -69,7 +71,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	public AgreeProgram transform(AgreeProgram program) {
 
 		// check to make sure we are supposed to transform program
-		if (AddFaultsToAgree.getTransformFlag() == 0) {
+		if (!(AddFaultsToAgree.getIsVerify()) && !(AddFaultsToAgree.getIsGenMCS())) {
 			return program;
 		} else {
 			if (!checkForSafetyAnnex(program.topNode)) {
@@ -81,14 +83,11 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 		try{
 
-			switch (transformFlag) {
-			case 1:
-			case 2:
+			if (isVerify || isGenMCS) {
 				program = faultVisitor.visit(program);
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
-				break;
-			default:
+			} else {
 				return program;
 			}
 		}
@@ -101,41 +100,30 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	/**
 	 * setTransformFlag:
-	 * Sets the transform flag to int value:
-	 * 0 -> No SA performed
-	 * 1 -> Peform analysis with faults present
-	 * 2 -> Generate minimal cut sets
+	 * Sets the transform flag to bool value:
+	 * isVerify: Verify in the presence of faults
+	 * isGenMCS: generate mcs
 	 *
 	 * @param i menu item stating which kind of analysis to perform.
 	 */
 	public static void setTransformFlag(MenuItem i) {
-		if (!i.getSelection()) {
-			if (i.getText().contains("Generate")) {
-				transformFlag = 2;
-			} else {
-				transformFlag = 0;
-			}
-		} else {
-			if (i.getText().contains("Verify")) {
-				transformFlag = 1;
-			} else {
-				transformFlag = 0;
-			}
+
+		if (i.getText().contains("Generate")) {
+			isGenMCS = true;
+			isVerify = false;
+		} else if (i.getText().contains("Faults")) {
+			isVerify = true;
+			isGenMCS = false;
 		}
 	}
 
 
-	/**
-	 * getTransformFlag
-	 * Returns the value of the flag:
-	 * 0 -> No SA performed
-	 * 1 -> Peform analysis with faults present
-	 * 2 -> Generate minimal cut sets
-	 *
-	 * @param int flag
-	 */
-	public static int getTransformFlag() {
-		return transformFlag;
+	public static boolean getIsVerify() {
+		return isVerify;
+	}
+
+	public static boolean getIsGenMCS() {
+		return isGenMCS;
 	}
 
 	/**

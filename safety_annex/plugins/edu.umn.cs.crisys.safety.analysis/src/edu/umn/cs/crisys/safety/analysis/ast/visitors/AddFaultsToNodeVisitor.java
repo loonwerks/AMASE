@@ -215,7 +215,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		node = super.visit(node);
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
-		if (AddFaultsToAgree.getTransformFlag() == 2) {
+		if (AddFaultsToAgree.getIsGenMCS()) {
 			nb.setFaultTreeFlag(true);
 		}
 		// Go through fault list first.
@@ -282,22 +282,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// add top level fault activation assertions
 		addTopLevelFaultActivationAssertions(nb);
 
-		// This checks if we are doing max faults or probability behavior.
+		// This checks if we are doing max faults or gen mcs behavior.
 		// It will add the assertion to Lustre representing the required behavior.
-		// If we want to generate the fault tree, this method changes in order
+		// If we want to generate mcs, this method changes in order
 		// to not add assertions regarding behavior (i.e. no assertion about
 		// max # faults).
-		// The reason that the maxFault nullity check is here is because when we
-		// are not at a top node (SystemInstanceImpl), we do not care about the
-		// top level analysis constraints and hence maxFaults (the return value
-		// from gatherTopLevelFaultAnalysis) is null.
-		// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
-		if (AddFaultsToAgree.getTransformFlag() == 1) {
+		if (AddFaultsToAgree.getIsVerify()) {
 			// clear static variables for every verification layer
 			// when verifying with AGREE in the presence of faults
 			init();
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
-		} else if (AddFaultsToAgree.getTransformFlag() == 2) {
+		} else if (AddFaultsToAgree.getIsGenMCS()) {
 			nb.setFaultTreeFlag(true);
 
 			// only collect fault hypothesis from the upper most level
@@ -1741,11 +1736,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb Node builder has assertions and locals added
 	 */
 	private void addFaultIndepVarsToLustre(String base, Fault f, AgreeNodeBuilder nb) {
-		if (AddFaultsToAgree.getTransformFlag() == 1) {
-			// If transform flag is 1, that means we are doing the max/prob analysis
+		if (AddFaultsToAgree.getIsVerify()) {
+			// If isVerify is true, that means we are performing verify fault analysis
 			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
-		} else {
-			// If transform flag is 2, then we want to generate fault tree.
+		} else if (AddFaultsToAgree.getIsGenMCS()) {
+			// Else we want to generate mcs.
 			// In this case, we add the indep as a local var.
 			AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement);
 			// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).

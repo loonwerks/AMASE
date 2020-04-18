@@ -295,10 +295,10 @@ public class GenMCSHandler extends VerifyHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
-		// If the transform flag is 2, then the user selected
-		// 'Compositional Fault Analysis for All Layers' option and we should execute event.
+		// If isGenMCS, then the user selected
+		// 'Generate MCS' option and we should execute event.
 		// Else, return null.
-		if (AddFaultsToAgree.getTransformFlag() == 2) {
+		if (AddFaultsToAgree.getIsGenMCS()) {
 			return super.execute(event);
 		} else {
 			return null;
