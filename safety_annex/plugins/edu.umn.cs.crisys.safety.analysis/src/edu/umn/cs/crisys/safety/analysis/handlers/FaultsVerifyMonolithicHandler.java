@@ -4,12 +4,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
 
-import com.rockwellcollins.atc.agree.analysis.handlers.VerifySingleHandler;
+import com.rockwellcollins.atc.agree.analysis.handlers.VerifyMonolithicHandler;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 
-public class FaultsVerifyMonolithicHandler extends VerifySingleHandler {
+public class FaultsVerifyMonolithicHandler extends VerifyMonolithicHandler {
 
 	private static MenuItem item;
 
