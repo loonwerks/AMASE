@@ -9,17 +9,17 @@
             id="edu.umn.cs.crisys.safety.analysis.commands.category">
       </category>
       <command
-           name="Faults Verify Single Layer"
+           name="Verify Single Layer with Faults"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand">
      </command>
      <command
-           name="Faults Verify All Layers"
+           name="Verify All Layers with Faults"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand">
      </command>
      <command
-           name="Faults Verify Monolithically"
+           name="Verify Monolithically with Faults"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand">
      </command>
