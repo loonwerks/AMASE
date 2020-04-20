@@ -34,6 +34,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	private static boolean isVerify = false;
 	private static boolean isGenMCS = false;
+	private static boolean isSingleLayer = false;
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -111,9 +112,15 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		if (i.getText().contains("Generate")) {
 			isGenMCS = true;
 			isVerify = false;
+			isSingleLayer = false;
 		} else if (i.getText().contains("Faults")) {
 			isVerify = true;
 			isGenMCS = false;
+			if (i.getText().contains("Single")) {
+				isSingleLayer = true;
+			} else {
+				isSingleLayer = false;
+			}
 		}
 	}
 
@@ -124,6 +131,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	public static boolean getIsGenMCS() {
 		return isGenMCS;
+	}
+
+	public static boolean getIsSingleLayer() {
+		return isSingleLayer;
 	}
 
 	/**

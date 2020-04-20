@@ -52,7 +52,8 @@ public
 			
 		**};
 		annex safety {**
-      		analyze : max 3 fault
+      		--analyze : max 3 fault
+      		analyze : probability 1.0E-6
    		**};
 	end Reactor_Pressure_Ctrl.No_Voting;
 
@@ -71,8 +72,8 @@ public
 			Pressure_Sensor3_To_Voter: port Pressure_Sensor3.High_Pressure_Indicator -> Pressure_Voter.Sensor3_High;
 			Pressure_Voter_To_Shut_Down: port Pressure_Voter.High_Out -> Shut_Down_Cmd;
 		annex safety {**
-      		analyze : max 3 fault
-      		--analyze : probability 1.0E-10
+      		--analyze : max 3 fault
+      		analyze : probability 1.0E-10
    		**};
 	end Reactor_Pressure_Ctrl.W_Voting;
 	
