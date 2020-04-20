@@ -2288,7 +2288,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 
-		// Add this fault hypothesis as an assertion.
+		// Add this fault hypothesis as an assertion if not null.
+		if (faultHypothesis == null) {
+			new SafetyException("There is a problem with fault hypothesis for component: " + topNode.id
+					+ ". A possible problem is that single layer analysis"
+					+ " is being run with no faults defined in lower layer."
+					+ " Check hypothesis statements and fault defs in this analysis.");
+		}
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 
