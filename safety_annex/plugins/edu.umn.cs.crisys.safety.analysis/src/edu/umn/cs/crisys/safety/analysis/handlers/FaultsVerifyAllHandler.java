@@ -16,9 +16,10 @@ import org.osate.aadl2.impl.DefaultAnnexSubclauseImpl;
 
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifyAllHandler;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
-import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
+import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
@@ -35,12 +36,11 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
-//		if (isProbabilisticAnalysis()) {
-//			new SafetyException(
-//					"Probabilistic behavior cannot be analyzed using "
-//							+ "compositional approach. Either choose monolithic "
-//							+ "analysis or compositionally generate MinCutSets.");
-//		}
+		if (isProbabilisticAnalysis()) {
+			new SafetyException("Probabilistic behavior cannot be analyzed using "
+					+ "this compositional approach. Either choose monolithic "
+					+ "analysis or compositionally generate MinCutSets.");
+		}
 		return super.execute(event);
 	}
 
@@ -75,8 +75,8 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 							// Get analysis stmt
 							List<SpecStatement> specs = ((SafetyContract) safetyAnnex.getContract()).getSpecs();
 							for (SpecStatement spec : specs) {
-								if (spec instanceof AnalysisBehavior) {
-									if (((AnalysisBehavior) spec) instanceof ProbabilityBehavior) {
+								if (spec instanceof AnalysisStatement) {
+									if (((AnalysisStatement) spec).getBehavior() instanceof ProbabilityBehavior) {
 										return true;
 									} else {
 										return false;
