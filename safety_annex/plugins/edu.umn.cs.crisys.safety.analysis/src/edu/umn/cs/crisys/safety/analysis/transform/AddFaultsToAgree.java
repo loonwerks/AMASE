@@ -97,7 +97,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 					newProgram = granularityVisitor.visit(program);
 					AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 					pp.visit(newProgram);
-					break;
 				}
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
