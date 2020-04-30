@@ -11,9 +11,10 @@ public
 			High_Temp_Indicator: out data port Boolean;
 			
 		annex agree{**
+			eq compare : bool = (Env_Temp > Constants::HIGH_TEMPERATURE_THRESHOLD);
 			guarantee "If env temperature higher than temperature threshold,
 					   then indicate high temperature":
-			High_Temp_Indicator = (Env_Temp > Constants::HIGH_TEMPERATURE_THRESHOLD);
+			High_Temp_Indicator = compare;
 			
 		**};
 		

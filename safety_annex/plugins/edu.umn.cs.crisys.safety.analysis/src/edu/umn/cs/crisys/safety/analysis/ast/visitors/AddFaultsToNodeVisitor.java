@@ -30,6 +30,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
+import edu.umn.cs.crisys.safety.analysis.GranularityUtils;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.FaultActivationAssignment;
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyNodeBuilder;
@@ -154,6 +155,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean maxFaultHypothesis = false;
 	public static boolean probabilisticHypothesis = false;
 
+	// Flag to indicate decomposition of contracts and eq stmts.
+	public static boolean granularity = true;
+
 	/**
 	 * Call to super class.
 	 */
@@ -197,6 +201,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public AgreeNode visit(AgreeNode node) {
 		Map<String, List<Pair>> parentFaultyVarsExpr = faultyVarsExpr;
 		boolean isTop = (node == this.topNode);
+
 		// Gather non-hardware (dependent) faults
 		List<Fault> faults = gatherFaults(globalLustreNodes, node, isTop);
 		// Gather HW faults
@@ -214,6 +219,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// this will traverse through the child nodes
 		node = super.visit(node);
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
+
+		// Granularity check
+		if (granularity) {
+			// Send node and nb to granularity util methods
+			nb = GranularityUtils.decomposeNodeContracts(node, nb);
+		}
+
 		// Change this nodes flag to reflect fault tree generation or not.
 		if (AddFaultsToAgree.getIsGenMCS()) {
 			nb.setFaultTreeFlag(true);

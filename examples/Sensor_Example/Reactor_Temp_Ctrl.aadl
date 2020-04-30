@@ -51,8 +51,8 @@ public
 							
 		**};
 		annex safety {**
-      		--analyze : max 1 fault
-      		analyze : probability 1.0E-6
+      		analyze : max 1 fault
+      		--analyze : probability 1.0E-6
    		**};
 	end Reactor_Temp_Ctrl.No_Voting;
 
