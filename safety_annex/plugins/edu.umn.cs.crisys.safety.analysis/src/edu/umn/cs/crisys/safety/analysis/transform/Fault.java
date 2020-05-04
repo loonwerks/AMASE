@@ -8,6 +8,7 @@ import java.util.Map;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
@@ -34,7 +35,7 @@ public class Fault implements BaseFault {
 
 	// Some information about the fault
 	public DurationStatement duration = null;
-
+	public DisableStatement disable = null;
 	public PropagationTypeStatement propType = null;
 
 	// Variables to be added to the agree node related to this fault.
@@ -81,7 +82,7 @@ public class Fault implements BaseFault {
 		this.safetyEqVars = new ArrayList<>(other.safetyEqVars);
 		this.safetyEqAsserts = new ArrayList<>(other.safetyEqAsserts);
 		this.triggers = new ArrayList<>(other.triggers);
-
+		this.disable = other.disable;
 		this.faultStatement = other.faultStatement;
 	}
 

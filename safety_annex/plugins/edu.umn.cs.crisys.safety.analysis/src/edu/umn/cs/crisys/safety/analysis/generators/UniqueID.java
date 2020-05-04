@@ -1,4 +1,4 @@
-package edu.umn.cs.crisys.safety.analysis.handlers;
+package edu.umn.cs.crisys.safety.analysis.generators;
 
 import jkind.Assert;
 

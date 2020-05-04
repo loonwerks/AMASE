@@ -30,6 +30,14 @@ public
          		probability: 1.0E-6 ;  
 				duration: permanent;
 			}	
+			
+			fault C1_out_interval "C1 out1 interval fault": Common_Faults::fail_to_int {
+				safety_interval test : int = (-2, 0);
+				inputs: val_in <- out1, alt_val <- test;       
+				outputs: out1 <- val_out;  
+         		probability: 1.0E-6 ;  
+				duration: permanent;
+			}
 		**};
 	end C1;
 
@@ -101,7 +109,8 @@ public
       		--see C123 out3 value failure with 1E-5 threshold
       		--see both C123 out3 range and out3 value failure with 1E-8 threshold
       		--see both properties pass with 1E-4 threshold
-      		analyze : probability 1.0E-7
+      		--analyze : probability 1.0E-7
+      		analyze : max 3 fault
       		
       		--fault_activation: C2_failed@C2 = C2_out_fail_to_zero@C2;
    		**};

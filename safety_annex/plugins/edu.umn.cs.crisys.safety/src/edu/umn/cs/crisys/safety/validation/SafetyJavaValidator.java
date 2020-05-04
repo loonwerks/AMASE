@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
@@ -27,15 +26,22 @@ import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.SystemType;
 import org.osate.aadl2.impl.AadlPackageImpl;
+import org.osate.aadl2.impl.DataPortImpl;
+import org.osate.aadl2.impl.DataTypeImpl;
+import org.osate.aadl2.impl.PropertyImpl;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
 import com.rockwellcollins.atc.agree.agree.PrimType;
+import com.rockwellcollins.atc.agree.agree.RealLitExpr;
+import com.rockwellcollins.atc.agree.agree.UnaryExpr;
+import com.rockwellcollins.atc.agree.agree.impl.DoubleDotRefImpl;
 
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
@@ -46,7 +52,6 @@ import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.HWFaultStatement;
 import edu.umn.cs.crisys.safety.safety.InputStatement;
-import edu.umn.cs.crisys.safety.safety.Interval;
 import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.OutputStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
@@ -54,6 +59,7 @@ import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.RangeEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyContractSubclause;
+import edu.umn.cs.crisys.safety.safety.SafetyInterval;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.SetEq;
 import edu.umn.cs.crisys.safety.safety.SpecStatement;
@@ -264,7 +270,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		EObject container = inputs.eContainer();
 		NamedElement defNameSub;
 		List<Expr> exprList = inputs.getNom_conn();
-		EList<String> inputList = inputs.getFault_in();
+		List<String> inputList = inputs.getFault_in();
 		ArrayList<String> argNames = new ArrayList<String>();
 
 		if (container instanceof FaultStatement) {
@@ -277,6 +283,13 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				List<Arg> nodeArgs = ((NodeDef) defNameSub).getArgs();
 				for (Arg arg : nodeArgs) {
 					argNames.add(arg.getFullName());
+					if (arg.getType() instanceof DoubleDotRefImpl) {
+						if ((((DoubleDotRefImpl) arg.getType()).getElm() instanceof PropertyImpl)
+								|| (((DoubleDotRefImpl) arg.getType()).getElm() instanceof DataTypeImpl)) {
+							error(inputs,
+									"Fault node parameters are strange: a possible issue is that the keyword 'float' is used instead of 'real.'");
+						}
+					}
 				}
 
 				// If the sizes are accurate, make sure names match
@@ -294,6 +307,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 					argNames.remove("trigger");
 					error(inputs, "With this fault definition, you must have " + (argNames.size() - 1) + " inputs."
 							+ " These are called: " + argNames.toString());
+				}
+				if (inputListHasRepeats(inputList)) {
+					error(inputs, "There is a repeated name in the input list: " + inputList.toString());
 				}
 				if (!checkInputTypes(exprList, nodeArgs)) {
 					error(inputs, "Types of inputs do not match types of node parameters");
@@ -359,11 +375,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if (tc instanceof TransientConstraint) {
 			error(durationStmt, "Transient faults are currently not supported. Duration must be 'permanent.'");
 
-		} else {
-			Interval interval = durationStmt.getInterv();
-			if (interval != null) {
-				error(tc, "It makes no sense to have a duration interval on a permanent fault.");
-			}
 		}
 	}
 
@@ -403,12 +414,71 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 	/**
-	 * Interval eq stmts not yet supported.
+	 * Interval eq stmts:
+	 * Checks:
+	 * - Only primitive types supported for intervals.
+	 * - The interval type matches high and low parameters of interval.
+	 * - High and low parameters of interval are same type.
 	 * @param intervalEq
 	 */
 	@Check(CheckType.FAST)
 	public void checkIntervalEqStatement(IntervalEq intervalEq) {
-		error(intervalEq, "Interval eq statements are not currently supported.");
+		Arg arg = intervalEq.getLhs_int();
+		String typeName = "";
+		SafetyInterval interval = intervalEq.getInterv();
+		Expr low = interval.getLow();
+		Expr high = interval.getHigh();
+
+		if (arg.getType() instanceof PrimType) {
+			typeName = ((PrimType) arg.getType()).getName();
+			if (typeName.equalsIgnoreCase("bool")) {
+				error(arg, "Boolean intervals are not allowed. Only real or int intervals are supported.");
+			}
+		} else {
+			error(arg, "The only types that are supported for intervals are real and int.");
+		}
+
+		// Negative values are allowed: hence the check for UnaryExpr
+		if (low instanceof UnaryExpr) {
+			UnaryExpr unex_low = (UnaryExpr) low;
+			if (!(unex_low.getExpr() instanceof IntLitExpr) & !(unex_low.getExpr() instanceof RealLitExpr)) {
+				error(low, "Only real and integer types are supported for intervals.");
+			}
+			if (high instanceof UnaryExpr) {
+				UnaryExpr unex_high = (UnaryExpr) high;
+				if (!(unex_high.getExpr() instanceof IntLitExpr) & !(unex_high.getExpr() instanceof RealLitExpr)) {
+					error(high, "Only real and integer types are supported for intervals.");
+				}
+				testLowAndHighTypes(intervalEq, typeName, unex_low.getExpr(), unex_high.getExpr());
+			} else {
+				testLowAndHighTypes(intervalEq, typeName, unex_low.getExpr(), high);
+			}
+		} else {
+			testLowAndHighTypes(intervalEq, typeName, low, high);
+		}
+
+	}
+
+	/**
+	 * Helper method to test high and low vals of interval statements.
+	 *
+	 * @param interval IntervalEq statement to be tested
+	 * @param typeName The name declared as the type of interval
+	 * @param low low parameter of interval
+	 * @param high high parameter of interval
+	 */
+	private void testLowAndHighTypes(IntervalEq interval, String typeName, Expr low, Expr high) {
+		if (low instanceof RealLitExpr & high instanceof RealLitExpr) {
+			if (!typeName.contentEquals("real")) {
+				error(interval, "Type of interval must match high and low parameters of interval.");
+			}
+		} else if (low instanceof IntLitExpr & high instanceof IntLitExpr) {
+			if (!typeName.contentEquals("int")) {
+				error(interval, "Type of interval must match high and low parameters of interval.");
+			}
+		} else {
+			error(interval, "Type of interval must match high and low parameters of interval.");
+		}
 	}
 
 	/**
@@ -600,6 +670,24 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 								return true;
 							}
 						}
+					} else if (elm.getElm() instanceof DataPortImpl) {
+						DataPortImpl dataport = (DataPortImpl) elm.getElm();
+						if (dataport.basicGetFeatureClassifier() instanceof DataTypeImpl) {
+							DataTypeImpl type = (DataTypeImpl) dataport.basicGetDataFeatureClassifier();
+							String typePort = type.getName();
+							PrimType pType = (PrimType) nodeArgs.get(i).getType();
+							String typeNode = pType.getName();
+							if (typeNode.equalsIgnoreCase("real") & typePort.equalsIgnoreCase("Float")) {
+								return true;
+							} else if (typeNode.equalsIgnoreCase("bool") & typePort.equalsIgnoreCase("Boolean")) {
+								return true;
+							} else if (typeNode.equalsIgnoreCase("int") & typePort.equalsIgnoreCase("Integer")) {
+								return true;
+							} else {
+								return false;
+							}
+						}
+
 					}
 				}
 			}
@@ -682,5 +770,25 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
+	}
+
+	/**
+	 * Checks to see if any parameters have been repeated when assigning
+	 * inputs in fault definition.
+	 *
+	 * @param inputs to the parameter
+	 * @return bool: true if repeats found, false otherwise
+	 */
+	private boolean inputListHasRepeats(List<String> inputs) {
+		boolean hasRepeats = false;
+		for (int i = 0; i < inputs.size(); i++) {
+			for (int j = i + 1; j < inputs.size(); j++) {
+				if (inputs.get(i).equals(inputs.get(j))) {
+					hasRepeats = true;
+					break;
+				}
+			}
+		}
+		return hasRepeats;
 	}
 }

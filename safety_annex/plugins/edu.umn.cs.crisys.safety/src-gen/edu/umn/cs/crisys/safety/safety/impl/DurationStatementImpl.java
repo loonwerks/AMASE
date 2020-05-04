@@ -3,7 +3,7 @@
 package edu.umn.cs.crisys.safety.safety.impl;
 
 import edu.umn.cs.crisys.safety.safety.DurationStatement;
-import edu.umn.cs.crisys.safety.safety.Interval;
+import edu.umn.cs.crisys.safety.safety.SafetyInterval;
 import edu.umn.cs.crisys.safety.safety.SafetyPackage;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 
@@ -49,7 +49,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * @generated
    * @ordered
    */
-  protected Interval interv;
+  protected SafetyInterval interv;
 
   /**
    * <!-- begin-user-doc -->
@@ -128,7 +128,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * @generated
    */
   @Override
-  public Interval getInterv()
+  public SafetyInterval getInterv()
   {
     return interv;
   }
@@ -138,9 +138,9 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetInterv(Interval newInterv, NotificationChain msgs)
+  public NotificationChain basicSetInterv(SafetyInterval newInterv, NotificationChain msgs)
   {
-    Interval oldInterv = interv;
+    SafetyInterval oldInterv = interv;
     interv = newInterv;
     if (eNotificationRequired())
     {
@@ -156,7 +156,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
    * @generated
    */
   @Override
-  public void setInterv(Interval newInterv)
+  public void setInterv(SafetyInterval newInterv)
   {
     if (newInterv != interv)
     {
@@ -222,7 +222,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
         setTc((TemporalConstraint)newValue);
         return;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
-        setInterv((Interval)newValue);
+        setInterv((SafetyInterval)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -242,7 +242,7 @@ public class DurationStatementImpl extends FaultSubcomponentImpl implements Dura
         setTc((TemporalConstraint)null);
         return;
       case SafetyPackage.DURATION_STATEMENT__INTERV:
-        setInterv((Interval)null);
+        setInterv((SafetyInterval)null);
         return;
     }
     super.eUnset(featureID);

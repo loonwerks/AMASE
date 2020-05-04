@@ -77,7 +77,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.TEMPORAL_CONSTRAINT: return createTemporalConstraint();
       case SafetyPackage.TRIGGER_CONDITION: return createTriggerCondition();
       case SafetyPackage.SAFETY_EQ_STATEMENT: return createSafetyEqStatement();
-      case SafetyPackage.INTERVAL: return createInterval();
+      case SafetyPackage.SAFETY_INTERVAL: return createSafetyInterval();
       case SafetyPackage.SAFETY_CONTRACT_LIBRARY: return createSafetyContractLibrary();
       case SafetyPackage.SAFETY_CONTRACT_SUBCLAUSE: return createSafetyContractSubclause();
       case SafetyPackage.SAFETY_CONTRACT: return createSafetyContract();
@@ -92,6 +92,7 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.OUTPUT_STATEMENT: return createOutputStatement();
       case SafetyPackage.DURATION_STATEMENT: return createDurationStatement();
       case SafetyPackage.PROBABILITY_STATEMENT: return createProbabilityStatement();
+      case SafetyPackage.DISABLE_STATEMENT: return createDisableStatement();
       case SafetyPackage.TRIGGER_STATEMENT: return createTriggerStatement();
       case SafetyPackage.PROPAGATION_TYPE_STATEMENT: return createPropagationTypeStatement();
       case SafetyPackage.ASYMMETRIC: return createasymmetric();
@@ -103,10 +104,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
       case SafetyPackage.INTERVAL_EQ: return createIntervalEq();
       case SafetyPackage.SET_EQ: return createSetEq();
       case SafetyPackage.RANGE_EQ: return createRangeEq();
-      case SafetyPackage.CLOSED_INTERVAL: return createClosedInterval();
-      case SafetyPackage.OPEN_LEFT_INTERVAL: return createOpenLeftInterval();
-      case SafetyPackage.OPEN_RIGHT_INTERVAL: return createOpenRightInterval();
-      case SafetyPackage.OPEN_INTERVAL: return createOpenInterval();
+      case SafetyPackage.CLOSED_SAFETY_INTERVAL: return createClosedSafetyInterval();
+      case SafetyPackage.OPEN_LEFT_SAFETY_INTERVAL: return createOpenLeftSafetyInterval();
+      case SafetyPackage.OPEN_RIGHT_SAFETY_INTERVAL: return createOpenRightSafetyInterval();
+      case SafetyPackage.OPEN_SAFETY_INTERVAL: return createOpenSafetyInterval();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -274,10 +275,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
-  public Interval createInterval()
+  public SafetyInterval createSafetyInterval()
   {
-    IntervalImpl interval = new IntervalImpl();
-    return interval;
+    SafetyIntervalImpl safetyInterval = new SafetyIntervalImpl();
+    return safetyInterval;
   }
 
   /**
@@ -454,6 +455,18 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
+  public DisableStatement createDisableStatement()
+  {
+    DisableStatementImpl disableStatement = new DisableStatementImpl();
+    return disableStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public TriggerStatement createTriggerStatement()
   {
     TriggerStatementImpl triggerStatement = new TriggerStatementImpl();
@@ -586,10 +599,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
-  public ClosedInterval createClosedInterval()
+  public ClosedSafetyInterval createClosedSafetyInterval()
   {
-    ClosedIntervalImpl closedInterval = new ClosedIntervalImpl();
-    return closedInterval;
+    ClosedSafetyIntervalImpl closedSafetyInterval = new ClosedSafetyIntervalImpl();
+    return closedSafetyInterval;
   }
 
   /**
@@ -598,10 +611,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
-  public OpenLeftInterval createOpenLeftInterval()
+  public OpenLeftSafetyInterval createOpenLeftSafetyInterval()
   {
-    OpenLeftIntervalImpl openLeftInterval = new OpenLeftIntervalImpl();
-    return openLeftInterval;
+    OpenLeftSafetyIntervalImpl openLeftSafetyInterval = new OpenLeftSafetyIntervalImpl();
+    return openLeftSafetyInterval;
   }
 
   /**
@@ -610,10 +623,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
-  public OpenRightInterval createOpenRightInterval()
+  public OpenRightSafetyInterval createOpenRightSafetyInterval()
   {
-    OpenRightIntervalImpl openRightInterval = new OpenRightIntervalImpl();
-    return openRightInterval;
+    OpenRightSafetyIntervalImpl openRightSafetyInterval = new OpenRightSafetyIntervalImpl();
+    return openRightSafetyInterval;
   }
 
   /**
@@ -622,10 +635,10 @@ public class SafetyFactoryImpl extends EFactoryImpl implements SafetyFactory
    * @generated
    */
   @Override
-  public OpenInterval createOpenInterval()
+  public OpenSafetyInterval createOpenSafetyInterval()
   {
-    OpenIntervalImpl openInterval = new OpenIntervalImpl();
-    return openInterval;
+    OpenSafetyIntervalImpl openSafetyInterval = new OpenSafetyIntervalImpl();
+    return openSafetyInterval;
   }
 
   /**

@@ -14,7 +14,7 @@ import java.util.Set;
 import org.osate.ui.dialogs.Dialog;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.handlers.UniqueID;
+import edu.umn.cs.crisys.safety.analysis.generators.UniqueID;
 import jkind.JKindException;
 
 /*
@@ -25,7 +25,7 @@ import jkind.JKindException;
 public class MHSUtils {
 
 	private static StringBuilder sourceSetSb = new StringBuilder();
-	private static HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
+	private static HashMap<edu.umn.cs.crisys.safety.analysis.generators.UniqueID, UniqueID> elemIdMap = new HashMap<>();
 	private static final String seperator = System.getProperty("line.separator");
 	private static int varIndex = 0;
 
@@ -54,13 +54,13 @@ public class MHSUtils {
 		}
 	}
 
-	private static File findSHDExe(String path) {
+	private static File findMHSalg(String path) {
 		if (path == null) {
 			return null;
 		}
 
 		for (String element : path.split(File.pathSeparator)) {
-			File executable = new File(element, "shd.exe");
+			File executable = new File(element, "agdmhs.exe");
 			if (executable.exists()) {
 				return executable;
 			}
@@ -69,19 +69,19 @@ public class MHSUtils {
 		return null;
 	}
 
-	private static File findSHDExe() throws Exception {
+	private static File findMHSalg() throws Exception {
 
-		File executable = findSHDExe(System.getenv("SHD_HOME"));
+		File executable = findMHSalg(System.getenv("MHS_HOME"));
 		if (executable != null) {
 			return executable;
 		}
 
-		executable = findSHDExe(System.getenv("PATH"));
+		executable = findMHSalg(System.getenv("PATH"));
 		if (executable != null) {
 			return executable;
 		}
 
-		throw new Exception("Unable to find shd.exe in SHD_HOME or on system PATH");
+		throw new Exception("Unable to find MHS algorithm in MHS_HOME on system PATH");
 	}
 
 	/**
@@ -166,19 +166,15 @@ public class MHSUtils {
 			clearSourceSetSb();
 
 			// get mhs algorithm executable path
-			String shdPath = findSHDExe().getAbsolutePath();
+			String MHSalgPath = findMHSalg().getAbsolutePath();
 
 			// 1.3 write MHS numbers to file
 			File destFile = File.createTempFile("mhs_", ".dat");
 			ProcessBuilder pb;
-			// 1.4 invoke shd.exe to generate minimal hitting sets from the numbered source sets
-			if (mhsLimit > 0) {
-				String mhsLimitStr = String.valueOf(mhsLimit);
-				pb = new ProcessBuilder(shdPath, "0", "-u", mhsLimitStr, sourceSetFile.getAbsolutePath(),
-						destFile.getAbsolutePath());
-			} else {
-				pb = new ProcessBuilder(shdPath, "0", sourceSetFile.getAbsolutePath(), destFile.getAbsolutePath());
-			}
+			// 1.4 invoke MHS algorithm to generate minimal hitting sets from the numbered source sets
+			String mhsLimitStr = ((mhsLimit <= 0) ? "0" : String.valueOf(mhsLimit));
+			pb = new ProcessBuilder(MHSalgPath, sourceSetFile.getAbsolutePath(), destFile.getAbsolutePath(), "-a",
+					"pmmcs", "-c", mhsLimitStr); // Note: mhsLimitStr=="0" means no limit
 
 			// inherit IO
 			// pb.inheritIO();
@@ -225,7 +221,7 @@ public class MHSUtils {
 			ensureDeleted(sourceSetFile);
 			ensureDeleted(destFile);
 		} catch (Exception e) {
-			Dialog.showError("File I/O or SHD algorithm execution exception", e.getMessage());
+			Dialog.showError("File I/O or MHSalg algorithm execution exception", e.getMessage());
 			e.printStackTrace();
 		}
 		return destSets;

@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.BooleanLiteral;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
@@ -43,6 +44,7 @@ import edu.umn.cs.crisys.safety.analysis.transform.HWFaultASTBuilder;
 import edu.umn.cs.crisys.safety.safety.ActivationStatement;
 import edu.umn.cs.crisys.safety.safety.AnalysisBehavior;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
 import edu.umn.cs.crisys.safety.safety.FaultCountBehavior;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
@@ -213,7 +215,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		node = super.visit(node);
 		AgreeNodeBuilder nb = new AgreeNodeBuilder(node);
 		// Change this nodes flag to reflect fault tree generation or not.
-		if (AddFaultsToAgree.getTransformFlag() == 2) {
+		if (AddFaultsToAgree.getIsGenMCS()) {
 			nb.setFaultTreeFlag(true);
 		}
 		// Go through fault list first.
@@ -280,22 +282,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// add top level fault activation assertions
 		addTopLevelFaultActivationAssertions(nb);
 
-		// This checks if we are doing max faults or probability behavior.
+		// This checks if we are doing max faults or gen mcs behavior.
 		// It will add the assertion to Lustre representing the required behavior.
-		// If we want to generate the fault tree, this method changes in order
+		// If we want to generate mcs, this method changes in order
 		// to not add assertions regarding behavior (i.e. no assertion about
 		// max # faults).
-		// The reason that the maxFault nullity check is here is because when we
-		// are not at a top node (SystemInstanceImpl), we do not care about the
-		// top level analysis constraints and hence maxFaults (the return value
-		// from gatherTopLevelFaultAnalysis) is null.
-		// if ((AddFaultsToAgree.getTransformFlag() == 1) && (maxFaults != null)) {
-		if (AddFaultsToAgree.getTransformFlag() == 1) {
+		if (AddFaultsToAgree.getIsVerify()) {
 			// clear static variables for every verification layer
 			// when verifying with AGREE in the presence of faults
 			init();
 			addTopLevelFaultOccurrenceConstraints(maxFaults, node, nb);
-		} else if (AddFaultsToAgree.getTransformFlag() == 2) {
+		} else if (AddFaultsToAgree.getIsGenMCS()) {
 			nb.setFaultTreeFlag(true);
 
 			// only collect fault hypothesis from the upper most level
@@ -534,11 +531,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				localFaultTriggerMap.put(f, actual);
 			} else {
 				actual = f.faultInputMap.get(vd.id);
+				if (actual == null) {
+					throw new SafetyException("Fault node (" + f.faultNode.id + ") parameter '" + vd.id
+							+ "' is not assigned anything for fault " + f.id + ". "
+							+ " Check the fault node parameters and the fault definition for any missing assignments.");
+				}
 				// Do any name conversions on the stored expression and create nominal id.
 				actual = actual.accept(this);
-				if (actual == null) {
-					throw new SafetyException("Fault node input: '" + vd.id + "' is not assigned.");
-				}
 			}
 			actuals.add(actual);
 		}
@@ -976,12 +975,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Before looping through spec statements, separate out the asymmetric multiple
 		// faults on a single output with the sym/asym single faults on a single output.
 		// 1. Collect all fault statements and put into list.
+		// Do not collect any that are disabled.
 		// 2. Separate out multiple asym faults on one output and single faults on one output.
 		// 3. Perform necessary processing on each of these lists.
 		List<FaultStatement> allFaultStmts = new ArrayList<FaultStatement>();
 		for (SpecStatement s : specs) {
 			if (s instanceof FaultStatement) {
-				allFaultStmts.add((FaultStatement) s);
+				if (!isDisabled((FaultStatement) s)) {
+					allFaultStmts.add((FaultStatement) s);
+				}
 			}
 		}
 		List<FaultStatement> remainderFS = new ArrayList<FaultStatement>();
@@ -1053,6 +1055,26 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 		return faults;
+	}
+
+	/**
+	 * Checks fault stmt for DisableStatement. If found, returns value
+	 * of disable statement. Else returns false.
+	 * @param fs FaultStatement
+	 * @return bool: isDisabled
+	 */
+	private Boolean isDisabled(FaultStatement fs) {
+		Boolean disableFound = false;
+		List<FaultSubcomponent> subcomps = fs.getFaultDefinitions();
+		for (FaultSubcomponent fsc : subcomps) {
+			if (fsc instanceof DisableStatement) {
+				disableFound = true;
+				DisableStatement ds = (DisableStatement) fsc;
+				BooleanLiteral bl = ds.getCond();
+				return bl.getValue();
+			}
+		}
+		return disableFound;
 	}
 
 	/**
@@ -1276,7 +1298,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							faultComp_Path.getName());
 					faultActivations.add(faultActAssign);
 				} else {
-					throw new SafetyException("Unable to identify fault in fault activation statement.");
+					throw new SafetyException("Unable to identify fault in fault activation statement:"
+							+ " a possibility is that this fault is disabled.");
 				}
 			}
 		}
@@ -1317,7 +1340,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 							propagations.add(propagation);
 						}
 					} else {
-						throw new SafetyException("Unable to identify fault in propagation statement.");
+						throw new SafetyException("Unable to identify fault in propagation statement:"
+								+ " a possibility is that the source or destination fault is disabled.");
 					}
 				}
 			}
@@ -1712,11 +1736,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * @param nb Node builder has assertions and locals added
 	 */
 	private void addFaultIndepVarsToLustre(String base, Fault f, AgreeNodeBuilder nb) {
-		if (AddFaultsToAgree.getTransformFlag() == 1) {
-			// If transform flag is 1, that means we are doing the max/prob analysis
+		if (AddFaultsToAgree.getIsVerify()) {
+			// If isVerify is true, that means we are performing verify fault analysis
 			nb.addInput(new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement));
-		} else {
-			// If transform flag is 2, then we want to generate fault tree.
+		} else if (AddFaultsToAgree.getIsGenMCS()) {
+			// Else we want to generate mcs.
 			// In this case, we add the indep as a local var.
 			AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement);
 			// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).
@@ -2264,7 +2288,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 		}
 
-		// Add this fault hypothesis as an assertion.
+		// Add this fault hypothesis as an assertion if not null.
+		if (faultHypothesis == null) {
+			new SafetyException("There is a problem with fault hypothesis for component: " + topNode.id
+					+ ". A possible problem is that single layer analysis"
+					+ " is being run with no faults defined in lower layer."
+					+ " Check hypothesis statements and fault defs in this analysis.");
+		}
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}
 

@@ -53,15 +53,16 @@ FaultSubcomponent returns FaultSubcomponent:
 			(','fault_in+=ID '<-' nom_conn+=Expr)*';' 
 	| 	{OutputStatement} 'outputs' ':' nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID 
 			(','nom_conn+=[aadl2::NamedElement|DCID] '<-' fault_out+=ID)*';'
- 	| 	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
+ 	| 	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=SafetyInterval)? ';'  
  	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
+ 	|   {DisableStatement} 'disable' ':' cond=BooleanLiteral ';'
  	|	{TriggerStatement} 'enabled' cond=TriggerCondition  ';'
  	| 	{PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';'
 	| 	SafetyEqStatement 
 ;
 	
 HWFaultSubcomponent returns HWFaultSubcomponent: 
-	  	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=Interval)? ';'  
+	  	{DurationStatement} 'duration' ':' tc=TemporalConstraint (interv=SafetyInterval)? ';'  
  	| 	{ProbabilityStatement} 'probability' ':' probability=REAL_LIT ';'
  	| 	{PropagationTypeStatement} 'propagate_type' ':' pty = PropagationTypeConstraint ';' 
 ;	
@@ -82,15 +83,14 @@ TriggerCondition:
 	
 SafetyEqStatement:
 		{EqValue} 'eq' (lhs+=Arg (',' lhs+=Arg)*) ('=' expr=Expr)? ';'
-	| 	{IntervalEq} 'interval' lhs_int=Arg '=' interv=Interval ';'
-    | 	{SetEq} 'set' lhs_set=Arg '=' '{'l1=Expr (',' list+=Expr)* '}' ';'
-    | 	{RangeEq} 'range' lhs_range=Arg '=' '{'l1=Expr ',' l2=Expr '}' ';'
+	| 	{IntervalEq} 'safety_interval' lhs_int=Arg '=' interv=SafetyInterval ';'
+    | 	{SetEq} 'safety_set' lhs_set=Arg '=' '{'l1=Expr (',' list+=Expr)* '}' ';'
+    | 	{RangeEq} 'safety_range' lhs_range=Arg '=' '{'l1=Expr ',' l2=Expr '}' ';'
 ;
 
-Interval:
-		=>({ClosedInterval} '[' low=Expr ',' high=Expr ']')
-	|   =>({OpenLeftInterval} '(' low=Expr ',' high=Expr']')
-	|   =>({OpenRightInterval} '[' low=Expr ',' high=Expr ')')
-	|   =>({OpenInterval} '(' low=Expr ',' high=Expr ')') 	
+SafetyInterval returns SafetyInterval:
+	=>({ClosedSafetyInterval} '[' low=Expr ',' high=Expr ']')
+|   =>({OpenLeftSafetyInterval} '(' low=Expr ',' high=Expr']')
+|   =>({OpenRightSafetyInterval} '[' low=Expr ',' high=Expr ')')
+|   =>({OpenSafetyInterval} '(' low=Expr ',' high=Expr ')') 
 ;
-

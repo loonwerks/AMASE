@@ -17,6 +17,7 @@ import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 public class VerifyHandler extends AadlHandler {
 
 	private static Element root = null;
+	private static MenuItem item;
 
 	/*
 	 * (non-Javadoc)
@@ -34,21 +35,8 @@ public class VerifyHandler extends AadlHandler {
 	@Override
 	public Object execute(ExecutionEvent event) {
 		Event selEvent = (Event) event.getTrigger();
-		MenuItem item = (MenuItem) selEvent.widget;
+		item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
-//		if (AddFaultsToAgree.getTransformFlag() == 1) {
-//			ICommandService service = null;
-//			try {
-//				service = HandlerUtil.getActiveWorkbenchWindowChecked(event).getService(ICommandService.class);
-//				System.out.println();
-//			} catch (ExecutionException e) {
-//				// TODO Auto-generated catch block
-//				new SafetyException(e.getMessage());
-//			}
-//			service.refreshElements(event.getCommand().getId(), null);
-//
-//		}
-
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
 		return null;
@@ -56,8 +44,9 @@ public class VerifyHandler extends AadlHandler {
 
 
 
-	/*
+	/**
 	 * (non-Javadoc)
+	 *
 	 * @see edu.umn.cs.crisys.safety.analysis.handlers.AadlHandler#getJobName()
 	 *
 	 * Output job name (will see it at the bottom of Osate2 after selected)
@@ -66,9 +55,6 @@ public class VerifyHandler extends AadlHandler {
 	protected String getJobName() {
 		return "Safety Analysis results";
 	}
-
-
-
 
 	/*
 	 * getNestedMessages
