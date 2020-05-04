@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.rockwellcollins.atc.agree.agree.BinaryExpr;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
@@ -12,6 +14,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNodeBuilder;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 
+import jkind.lustre.BinaryOp;
 import jkind.lustre.NamedType;
 
 public class GranularityUtils {
@@ -29,20 +32,71 @@ public class GranularityUtils {
 		for (AgreeStatement stmt : node.lemmas) {
 			transformStatement(stmt, nb);
 		}
-		unique = 0;
+//		unique = 0;
 		return nb;
 	}
 
 	private static void transformStatement(AgreeStatement stmt, AgreeNodeBuilder nb) {
 		if (stmt.reference instanceof GuaranteeStatement) {
-			GuaranteeStatement oldGuar = (GuaranteeStatement) stmt;
-			if (stmt.expr instanceof BinaryExpr) {
-				Expr Rexpr = ((BinaryExpr) stmt).getRight();
-			}
+//			GuaranteeStatement oldGuar = (GuaranteeStatement) stmt;
+			nb.addGuarantee(splitGuaranteeAnd(stmt));
 //			AgreeVar uniqueEq = new AgreeVar("unique"+unique, stmt.expr);
 //			GuaranteeStatement newGuar = new GuaranteeStatement(oldGuar.d)
 		} else if (stmt.reference instanceof LemmaStatement) {
 
+		}
+	}
+
+	private static List<AgreeStatement> splitGuaranteeAnd(AgreeStatement agreeStmt) {
+		List<AgreeStatement> newStmts = new ArrayList<AgreeStatement>();
+
+		// Check for top level operator 'AND'
+		// Create two new guarantees, one for each operand.
+
+		if (agreeStmt.expr instanceof jkind.lustre.BinaryExpr) {
+			jkind.lustre.BinaryExpr binExpr = (jkind.lustre.BinaryExpr) agreeStmt.expr;
+			if (binExpr.op == BinaryOp.AND) {
+				recurseAnd(agreeStmt.expr, newStmts, agreeStmt.string, agreeStmt.reference);
+
+//				String newDescrL = unique + " LEFT %% " + agreeStmt.string;
+//				String newDescrR = unique + " RIGHT %% " + agreeStmt.string;
+//				unique++;
+//				AgreeStatement guarL = new AgreeStatement(newDescrL, binExpr.left,
+//						agreeStmt.reference);
+//				AgreeStatement guarR = new AgreeStatement(newDescrR, binExpr.right,
+//						agreeStmt.reference);
+//				newStmts.add(guarR);
+//				newStmts.add(guarL);
+
+			} else if (binExpr.op == BinaryOp.ARROW) {
+				if (binExpr.right instanceof jkind.lustre.BinaryExpr) {
+					jkind.lustre.BinaryExpr binR = (jkind.lustre.BinaryExpr) binExpr.right;
+					if (binR.op == BinaryOp.AND) {
+						recurseAnd(binExpr.right, newStmts, agreeStmt.string, agreeStmt.reference);
+					}
+				}
+			}
+		}
+
+		return newStmts;
+	}
+
+	private static void recurseAnd(jkind.lustre.Expr expr, List<AgreeStatement> newStmts, String agreeStmtString,
+			EObject ref) {
+		if (expr instanceof jkind.lustre.BinaryExpr) {
+			jkind.lustre.BinaryExpr binExpr = (jkind.lustre.BinaryExpr) expr;
+			String newDescrL = unique + " LEFT %% ";
+			String newDescrR = unique + " RIGHT %% ";
+			unique++;
+			AgreeStatement guarL = new AgreeStatement(newDescrL, binExpr.left, ref);
+			AgreeStatement guarR = new AgreeStatement(newDescrR, binExpr.right, ref);
+			newStmts.add(guarR);
+			newStmts.add(guarL);
+			if (binExpr.left instanceof jkind.lustre.BinaryExpr) {
+				if (((jkind.lustre.BinaryExpr) binExpr.left).op == BinaryOp.AND) {
+					recurseAnd(binExpr.left, newStmts, agreeStmtString, ref);
+				}
+			}
 		}
 	}
 

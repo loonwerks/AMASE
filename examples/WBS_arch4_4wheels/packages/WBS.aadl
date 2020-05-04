@@ -294,7 +294,7 @@ with sensor;
 --   **};
    
    annex safety{**
-	  analyze : max 4 fault
+	  analyze : max 1 fault
 	  --analyze : probability 1.0E-9 
    **};
    
