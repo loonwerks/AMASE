@@ -79,6 +79,7 @@ import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import edu.umn.cs.crisys.safety.safety.EqValue;
 import edu.umn.cs.crisys.safety.safety.FaultStatement;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.IntervalEq;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
 import edu.umn.cs.crisys.safety.safety.SafetyEqStatement;
 
@@ -124,6 +125,9 @@ public class SafetyScopeProvider extends org.osate.xtext.aadl2.properties.scopin
 						if (seq instanceof EqValue) {
 							EqValue eqVal = (EqValue) seq;
 							nelms.addAll(eqVal.getLhs());
+						} else if (seq instanceof IntervalEq) {
+							IntervalEq eqVal = (IntervalEq) seq;
+							nelms.add(eqVal.getLhs_int());
 						}
 					}
 				}

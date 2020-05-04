@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.widgets.MenuItem;
+import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.SystemImplementation;
+import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout.SigType;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTPrettyprinter;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
@@ -27,7 +32,9 @@ import jkind.api.results.AnalysisResult;
  */
 public class AddFaultsToAgree implements AgreeAutomater {
 
-	private static int transformFlag = 0;
+	private static boolean isVerify = false;
+	private static boolean isGenMCS = false;
+	private static boolean isSingleLayer = false;
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -35,13 +42,13 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * For each AgreeProgram:
 	 * (1) AgreeASTBuilder contains the extension point for the program.
 	 * It will call this class (AddFaultsToAgree.transform) and pass in the program.
-	 * If we have the transformFlag selected, then we will make changes to the program
+	 * If fault analysis menu item pressed, then we will make changes to the program
 	 * and send it back. If not, the program is returned unchanged.
 	 *
 	 * (2) AddFaultsToAgree.transform calls AddFaultsToNodeVisitor.visit(program)
 	 * and then visit is called for the node from there.
-	 * The AddFaultsToNodeVisitor.visit(node) method will set the "FaultTreeFlag" for that node
-	 * to true. This tells us in later agree methods that we are generating the soteria model
+	 * The AddFaultsToNodeVisitor.visit(node) method will set the isGenMCS flag for that node
+	 * to true. This tells us in later agree methods that we are generating mcs
 	 * and hence we add the ivcs differently for that node. (Lines 159-161)
 	 */
 
@@ -55,7 +62,8 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 	/**
 	 * Transform program.
-	 * If safety analysis selected as menu item, pass program to AddFaultsToNodeVisitor.
+	 * If safety analysis selected as menu item,
+	 * pass program to AddFaultsToNodeVisitor.
 	 * If not, return unchanged program.
 	 *
 	 * @param program The AgreeProgram.
@@ -64,22 +72,24 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	public AgreeProgram transform(AgreeProgram program) {
 
 		// check to make sure we are supposed to transform program
-		if (AddFaultsToAgree.getTransformFlag() == 0) {
+		if (!(AddFaultsToAgree.getIsVerify()) && !(AddFaultsToAgree.getIsGenMCS())) {
 			return program;
+		} else {
+			if (!checkForSafetyAnnex(program.topNode)) {
+				new SafetyException("This component implementation does not contain a safety annex.");
+			}
 		}
 
 		faultVisitor = new AddFaultsToNodeVisitor();
 
 		try{
 
-			switch (transformFlag) {
-			case 1:
-			case 2:
+			if (isVerify || isGenMCS) {
 				program = faultVisitor.visit(program);
+				resetStaticVars();
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
-				break;
-			default:
+			} else {
 				return program;
 			}
 		}
@@ -87,48 +97,45 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			new SafetyException("Something went wrong during safety analysis: " + t.toString());
 
 		}
-
 		return program;
 	}
 
 	/**
 	 * setTransformFlag:
-	 * Sets the transform flag to int value:
-	 * 0 -> No SA performed
-	 * 1 -> Peform analysis with faults present
-	 * 2 -> Generate minimal cut sets
+	 * Sets the transform flag to bool value:
+	 * isVerify: Verify in the presence of faults
+	 * isGenMCS: generate mcs
 	 *
-	 * @param item menu item stating which kind of analysis to perform.
+	 * @param i menu item stating which kind of analysis to perform.
 	 */
-	public static void setTransformFlag(MenuItem item) {
+	public static void setTransformFlag(MenuItem i) {
 
-		//
-		if (!item.getSelection()) {
-			if (item.getText().contains("Generate")) {
-				transformFlag = 2;
+		if (i.getText().contains("Generate")) {
+			isGenMCS = true;
+			isVerify = false;
+			isSingleLayer = false;
+		} else if (i.getText().contains("Faults")) {
+			isVerify = true;
+			isGenMCS = false;
+			if (i.getText().contains("Single")) {
+				isSingleLayer = true;
 			} else {
-				transformFlag = 0;
-			}
-		} else {
-			if (item.getText().contains("Verify")) {
-				transformFlag = 1;
-			} else {
-				transformFlag = 0;
+				isSingleLayer = false;
 			}
 		}
 	}
 
-	/**
-	 * getTransformFlag
-	 * Returns the value of the flag:
-	 * 0 -> No SA performed
-	 * 1 -> Peform analysis with faults present
-	 * 2 -> Generate minimal cut sets
-	 *
-	 * @param int flag
-	 */
-	public static int getTransformFlag() {
-		return transformFlag;
+
+	public static boolean getIsVerify() {
+		return isVerify;
+	}
+
+	public static boolean getIsGenMCS() {
+		return isGenMCS;
+	}
+
+	public static boolean getIsSingleLayer() {
+		return isSingleLayer;
 	}
 
 	/**
@@ -225,5 +232,34 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			}
 		}
 		return path;
+	}
+
+	private boolean checkForSafetyAnnex(AgreeNode topNode) {
+		boolean hasAnnex = false;
+		if (topNode.compInst instanceof SystemInstanceImpl) {
+			SystemInstanceImpl sysInst = (SystemInstanceImpl) topNode.compInst;
+			for (AnnexSubclause as : sysInst.basicGetComponentImplementation().getOwnedAnnexSubclauses()) {
+				if (as.getName().equalsIgnoreCase("safety")) {
+					return true;
+				}
+			}
+		} else if (topNode.compInst instanceof ComponentInstanceImpl) {
+			ComponentInstanceImpl compInstImpl = (ComponentInstanceImpl) topNode.compInst;
+			if (compInstImpl.basicGetClassifier() instanceof SystemImplementation) {
+				SystemImplementation sysInst = (SystemImplementation) compInstImpl.basicGetClassifier();
+				for (AnnexSubclause as : sysInst.getOwnedAnnexSubclauses()) {
+					if (as.getName().equalsIgnoreCase("safety")) {
+						return true;
+					}
+				}
+			}
+		}
+		return hasAnnex;
+	}
+
+	private void resetStaticVars() {
+		isVerify = false;
+		isGenMCS = false;
+		isSingleLayer = false;
 	}
 }

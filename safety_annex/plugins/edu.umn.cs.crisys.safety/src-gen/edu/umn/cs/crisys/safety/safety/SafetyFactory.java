@@ -146,7 +146,7 @@ public interface SafetyFactory extends EFactory
    * @return a new object of class '<em>Interval</em>'.
    * @generated
    */
-  Interval createInterval();
+  SafetyInterval createSafetyInterval();
 
   /**
    * Returns a new object of class '<em>Contract Library</em>'.
@@ -275,6 +275,15 @@ public interface SafetyFactory extends EFactory
   ProbabilityStatement createProbabilityStatement();
 
   /**
+   * Returns a new object of class '<em>Disable Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Disable Statement</em>'.
+   * @generated
+   */
+  DisableStatement createDisableStatement();
+
+  /**
    * Returns a new object of class '<em>Trigger Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -374,40 +383,40 @@ public interface SafetyFactory extends EFactory
   RangeEq createRangeEq();
 
   /**
-   * Returns a new object of class '<em>Closed Interval</em>'.
+   * Returns a new object of class '<em>Closed Safety Interval</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Closed Interval</em>'.
+   * @return a new object of class '<em>Closed Safety Interval</em>'.
    * @generated
    */
-  ClosedInterval createClosedInterval();
+  ClosedSafetyInterval createClosedSafetyInterval();
 
   /**
-   * Returns a new object of class '<em>Open Left Interval</em>'.
+   * Returns a new object of class '<em>Open Left Safety Interval</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Open Left Interval</em>'.
+   * @return a new object of class '<em>Open Left Safety Interval</em>'.
    * @generated
    */
-  OpenLeftInterval createOpenLeftInterval();
+  OpenLeftSafetyInterval createOpenLeftSafetyInterval();
 
   /**
-   * Returns a new object of class '<em>Open Right Interval</em>'.
+   * Returns a new object of class '<em>Open Right Safety Interval</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Open Right Interval</em>'.
+   * @return a new object of class '<em>Open Right Safety Interval</em>'.
    * @generated
    */
-  OpenRightInterval createOpenRightInterval();
+  OpenRightSafetyInterval createOpenRightSafetyInterval();
 
   /**
-   * Returns a new object of class '<em>Open Interval</em>'.
+   * Returns a new object of class '<em>Open Safety Interval</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Open Interval</em>'.
+   * @return a new object of class '<em>Open Safety Interval</em>'.
    * @generated
    */
-  OpenInterval createOpenInterval();
+  OpenSafetyInterval createOpenSafetyInterval();
 
   /**
    * Returns the package supported by this factory.

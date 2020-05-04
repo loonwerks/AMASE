@@ -8,42 +8,89 @@
             name="Safety Analysis"
             id="edu.umn.cs.crisys.safety.analysis.commands.category">
       </category>
-      <!-- New command for menu item (Soteria) -->
-       <command
+      <command
+           name="Verify Single Layer with Faults"
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           id="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand">
+     </command>
+     <command
+           name="Verify All Layers with Faults"
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           id="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand">
+     </command>
+     <command
+           name="Verify Monolithically with Faults"
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           id="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand">
+     </command>
+     <command
            name="Generate Minimal Cut Sets"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
-           id="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand">
-     </command>
-      <command
-            name="Verify in the presence of faults"
-            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
-            id="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand">
-      </command> 
+           id="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand">
+     </command> 
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.VerifyHandler">
-      </handler>
-      <!-- New handler for menu item (Soteria) -->
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand"
+            class="edu.umn.cs.crisys.safety.analysis.handlers.FaultsVerifySingleHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
+      </handler> 
       <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.SoteriaGenHandler">
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand"
+            class="edu.umn.cs.crisys.safety.analysis.handlers.FaultsVerifyAllHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
+      </handler> 
+      <handler
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
+            class="edu.umn.cs.crisys.safety.analysis.handlers.FaultsVerifyMonolithicHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
+      </handler>  
+      <handler
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
+            class="edu.umn.cs.crisys.safety.analysis.handlers.GenMCSHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
       </handler>
    </extension>
    <extension point="org.eclipse.ui.bindings">
-      <!-- New key for menu item (Soteria) -->
+   	  <key
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+5"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
       <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+7"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
       <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
             contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6"
+            sequence="M1+8"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
    </extension>
@@ -58,18 +105,33 @@
                  name="com.rockwellcollins.atc.safety.separator1"
               visible="true">
            </separator>
-          <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand"
                   mnemonic="f"
-                  icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.soteriaCommand"
+                  icon="icons/layer.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.faultsSingleLayerCommand"
                   style="push">
             </command>
             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
-                  mnemonic="S"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.safetyAnalysisCommand"
-                  style="toggle">
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand"
+                  mnemonic="f"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.faultsAllLayersCommand"
+                  style="push">
+            </command>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
+                  mnemonic="f"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.faultsMonolithicCommand"
+                  style="push">
+            </command>
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
+                  mnemonic="f"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.genMCSCommand"
+                  style="push">
             </command>
          </menu>
       </menuContribution>
@@ -78,18 +140,71 @@
          <toolbar
                id="edu.umn.cs.crisys.safety.analysis.toolbars.sampleToolbar">
            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.soteriaCommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand"
                   icon="icons/sample.gif"
-                  tooltip="Minimal cut set results are generating."
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.soteriaCommand">
+                  tooltip="Fault analysis: single layer."
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsSingleLayerCommand">
             </command>
-            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.safetyAnalysisCommand"
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand"
                   icon="icons/sample.gif"
-                  tooltip="Safety analysis results are generating."
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.safetyAnalysisCommand">
+                  tooltip="Fault analysis: compositional."
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsAllLayersCommand">
+            </command> 
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
+                  icon="icons/sample.gif"
+                  tooltip="Fault analysis: monolithic"
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsMonolithicCommand">
+            </command>
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
+                  icon="icons/sample.gif"
+                  tooltip="Minimal cut set analysis"
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.genMCSCommand">
             </command>
          </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.osate.ui.analysesOutlinePopup?after=additions">
+         <menu
+               id="com.rockwellcollins.atc.agree.analysis.menus.main"
+               label="Safety Annex"
+               mnemonic="g">
+            <separator
+                  name="com.rockwellcollins.atc.safety.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsSingleLayerCommand"
+                  icon="icons/layer.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.faultsSingleLayerCommand"
+                  mnemonic="a"
+                  style="push">
+            </command>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.faultsAllLayersCommand"
+                  mnemonic="b"
+                  style="push">
+            </command>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.faultsMonolithicCommand"
+                  mnemonic="c"
+                  style="push">
+            </command>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.genMCSCommand"
+                  mnemonic="d"
+                  style="push">
+            </command>
+         </menu>
       </menuContribution>
    </extension>
    

@@ -1129,9 +1129,9 @@ ruleFaultSubcomponent returns [EObject current=null]
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIntervIntervalParserRuleCall_2_4_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getIntervSafetyIntervalParserRuleCall_2_4_0()); 
 	    }
-		lv_interv_26_0=ruleInterval		{
+		lv_interv_26_0=ruleSafetyInterval		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
@@ -1139,7 +1139,7 @@ ruleFaultSubcomponent returns [EObject current=null]
        			$current, 
        			"interv",
         		lv_interv_26_0, 
-        		"edu.umn.cs.crisys.safety.Safety.Interval");
+        		"edu.umn.cs.crisys.safety.Safety.SafetyInterval");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1193,68 +1193,68 @@ ruleFaultSubcomponent returns [EObject current=null]
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getFaultSubcomponentAccess().getTriggerStatementAction_4_0(),
+            grammarAccess.getFaultSubcomponentAccess().getDisableStatementAction_4_0(),
             $current);
     }
 )
-	otherlv_34=Enabled
+	otherlv_34=Disable
     {
-    	newLeafNode(otherlv_34, grammarAccess.getFaultSubcomponentAccess().getEnabledKeyword_4_1());
+    	newLeafNode(otherlv_34, grammarAccess.getFaultSubcomponentAccess().getDisableKeyword_4_1());
+    }
+
+	otherlv_35=Colon
+    {
+    	newLeafNode(otherlv_35, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_4_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_4_2_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondBooleanLiteralParserRuleCall_4_3_0()); 
 	    }
-		lv_cond_35_0=ruleTriggerCondition		{
+		lv_cond_36_0=ruleBooleanLiteral		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
        			"cond",
-        		lv_cond_35_0, 
-        		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
+        		lv_cond_36_0, 
+        		"org.osate.xtext.aadl2.properties.Properties.BooleanLiteral");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_36=Semicolon
+	otherlv_37=Semicolon
     {
-    	newLeafNode(otherlv_36, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_4_3());
+    	newLeafNode(otherlv_37, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_4_4());
     }
 )
     |((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getFaultSubcomponentAccess().getPropagationTypeStatementAction_5_0(),
+            grammarAccess.getFaultSubcomponentAccess().getTriggerStatementAction_5_0(),
             $current);
     }
 )
-	otherlv_38=Propagate_type
+	otherlv_39=Enabled
     {
-    	newLeafNode(otherlv_38, grammarAccess.getFaultSubcomponentAccess().getPropagate_typeKeyword_5_1());
-    }
-
-	otherlv_39=Colon
-    {
-    	newLeafNode(otherlv_39, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_5_2());
+    	newLeafNode(otherlv_39, grammarAccess.getFaultSubcomponentAccess().getEnabledKeyword_5_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_5_3_0()); 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getCondTriggerConditionParserRuleCall_5_2_0()); 
 	    }
-		lv_pty_40_0=rulePropagationTypeConstraint		{
+		lv_cond_40_0=ruleTriggerCondition		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
 	        }
        		set(
        			$current, 
-       			"pty",
-        		lv_pty_40_0, 
-        		"edu.umn.cs.crisys.safety.Safety.PropagationTypeConstraint");
+       			"cond",
+        		lv_cond_40_0, 
+        		"edu.umn.cs.crisys.safety.Safety.TriggerCondition");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1262,16 +1262,56 @@ ruleFaultSubcomponent returns [EObject current=null]
 )
 	otherlv_41=Semicolon
     {
-    	newLeafNode(otherlv_41, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_5_4());
+    	newLeafNode(otherlv_41, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_5_3());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getFaultSubcomponentAccess().getPropagationTypeStatementAction_6_0(),
+            $current);
+    }
+)
+	otherlv_43=Propagate_type
+    {
+    	newLeafNode(otherlv_43, grammarAccess.getFaultSubcomponentAccess().getPropagate_typeKeyword_6_1());
+    }
+
+	otherlv_44=Colon
+    {
+    	newLeafNode(otherlv_44, grammarAccess.getFaultSubcomponentAccess().getColonKeyword_6_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getPtyPropagationTypeConstraintParserRuleCall_6_3_0()); 
+	    }
+		lv_pty_45_0=rulePropagationTypeConstraint		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFaultSubcomponentRule());
+	        }
+       		set(
+       			$current, 
+       			"pty",
+        		lv_pty_45_0, 
+        		"edu.umn.cs.crisys.safety.Safety.PropagationTypeConstraint");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_46=Semicolon
+    {
+    	newLeafNode(otherlv_46, grammarAccess.getFaultSubcomponentAccess().getSemicolonKeyword_6_4());
     }
 )
     |
     { 
-        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_6()); 
+        newCompositeNode(grammarAccess.getFaultSubcomponentAccess().getSafetyEqStatementParserRuleCall_7()); 
     }
-    this_SafetyEqStatement_42=ruleSafetyEqStatement
+    this_SafetyEqStatement_47=ruleSafetyEqStatement
     {
-        $current = $this_SafetyEqStatement_42.current;
+        $current = $this_SafetyEqStatement_47.current;
         afterParserOrEnumRuleCall();
     }
 )
@@ -1332,9 +1372,9 @@ ruleHWFaultSubcomponent returns [EObject current=null]
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getIntervIntervalParserRuleCall_0_4_0()); 
+	        newCompositeNode(grammarAccess.getHWFaultSubcomponentAccess().getIntervSafetyIntervalParserRuleCall_0_4_0()); 
 	    }
-		lv_interv_4_0=ruleInterval		{
+		lv_interv_4_0=ruleSafetyInterval		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getHWFaultSubcomponentRule());
 	        }
@@ -1342,7 +1382,7 @@ ruleHWFaultSubcomponent returns [EObject current=null]
        			$current, 
        			"interv",
         		lv_interv_4_0, 
-        		"edu.umn.cs.crisys.safety.Safety.Interval");
+        		"edu.umn.cs.crisys.safety.Safety.SafetyInterval");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1712,9 +1752,9 @@ ruleSafetyEqStatement returns [EObject current=null]
             $current);
     }
 )
-	otherlv_9=Interval
+	otherlv_9=Safety_interval
     {
-    	newLeafNode(otherlv_9, grammarAccess.getSafetyEqStatementAccess().getIntervalKeyword_1_1());
+    	newLeafNode(otherlv_9, grammarAccess.getSafetyEqStatementAccess().getSafety_intervalKeyword_1_1());
     }
 (
 (
@@ -1742,9 +1782,9 @@ ruleSafetyEqStatement returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getIntervIntervalParserRuleCall_1_4_0()); 
+	        newCompositeNode(grammarAccess.getSafetyEqStatementAccess().getIntervSafetyIntervalParserRuleCall_1_4_0()); 
 	    }
-		lv_interv_12_0=ruleInterval		{
+		lv_interv_12_0=ruleSafetyInterval		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getSafetyEqStatementRule());
 	        }
@@ -1752,7 +1792,7 @@ ruleSafetyEqStatement returns [EObject current=null]
        			$current, 
        			"interv",
         		lv_interv_12_0, 
-        		"edu.umn.cs.crisys.safety.Safety.Interval");
+        		"edu.umn.cs.crisys.safety.Safety.SafetyInterval");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1770,9 +1810,9 @@ ruleSafetyEqStatement returns [EObject current=null]
             $current);
     }
 )
-	otherlv_15=Set
+	otherlv_15=Safety_set
     {
-    	newLeafNode(otherlv_15, grammarAccess.getSafetyEqStatementAccess().getSetKeyword_2_1());
+    	newLeafNode(otherlv_15, grammarAccess.getSafetyEqStatementAccess().getSafety_setKeyword_2_1());
     }
 (
 (
@@ -1861,9 +1901,9 @@ ruleSafetyEqStatement returns [EObject current=null]
             $current);
     }
 )
-	otherlv_25=Range
+	otherlv_25=Safety_range
     {
-    	newLeafNode(otherlv_25, grammarAccess.getSafetyEqStatementAccess().getRangeKeyword_3_1());
+    	newLeafNode(otherlv_25, grammarAccess.getSafetyEqStatementAccess().getSafety_rangeKeyword_3_1());
     }
 (
 (
@@ -1951,17 +1991,17 @@ ruleSafetyEqStatement returns [EObject current=null]
 
 
 
-// Entry rule entryRuleInterval
-entryRuleInterval returns [EObject current=null]
+// Entry rule entryRuleSafetyInterval
+entryRuleSafetyInterval returns [EObject current=null]
 	:
-	{ newCompositeNode(grammarAccess.getIntervalRule()); }
-	 iv_ruleInterval=ruleInterval 
-	 { $current=$iv_ruleInterval.current; } 
+	{ newCompositeNode(grammarAccess.getSafetyIntervalRule()); }
+	 iv_ruleSafetyInterval=ruleSafetyInterval 
+	 { $current=$iv_ruleSafetyInterval.current; } 
 	 EOF 
 ;
 
-// Rule Interval
-ruleInterval returns [EObject current=null] 
+// Rule SafetyInterval
+ruleSafetyInterval returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
@@ -1983,22 +2023,22 @@ RightSquareBracket
 ))=>((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getIntervalAccess().getClosedIntervalAction_0_0_0(),
+            grammarAccess.getSafetyIntervalAccess().getClosedSafetyIntervalAction_0_0_0(),
             $current);
     }
 )
 	otherlv_1=LeftSquareBracket
     {
-    	newLeafNode(otherlv_1, grammarAccess.getIntervalAccess().getLeftSquareBracketKeyword_0_0_1());
+    	newLeafNode(otherlv_1, grammarAccess.getSafetyIntervalAccess().getLeftSquareBracketKeyword_0_0_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_0_0_2_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_0_0_2_0()); 
 	    }
 		lv_low_2_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2012,16 +2052,16 @@ RightSquareBracket
 )
 	otherlv_3=Comma
     {
-    	newLeafNode(otherlv_3, grammarAccess.getIntervalAccess().getCommaKeyword_0_0_3());
+    	newLeafNode(otherlv_3, grammarAccess.getSafetyIntervalAccess().getCommaKeyword_0_0_3());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_0_0_4_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_0_0_4_0()); 
 	    }
 		lv_high_4_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2035,7 +2075,7 @@ RightSquareBracket
 )
 	otherlv_5=RightSquareBracket
     {
-    	newLeafNode(otherlv_5, grammarAccess.getIntervalAccess().getRightSquareBracketKeyword_0_0_5());
+    	newLeafNode(otherlv_5, grammarAccess.getSafetyIntervalAccess().getRightSquareBracketKeyword_0_0_5());
     }
 ))
     |((((
@@ -2056,22 +2096,22 @@ RightSquareBracket
 ))=>((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getIntervalAccess().getOpenLeftIntervalAction_1_0_0(),
+            grammarAccess.getSafetyIntervalAccess().getOpenLeftSafetyIntervalAction_1_0_0(),
             $current);
     }
 )
 	otherlv_7=LeftParenthesis
     {
-    	newLeafNode(otherlv_7, grammarAccess.getIntervalAccess().getLeftParenthesisKeyword_1_0_1());
+    	newLeafNode(otherlv_7, grammarAccess.getSafetyIntervalAccess().getLeftParenthesisKeyword_1_0_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_1_0_2_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_1_0_2_0()); 
 	    }
 		lv_low_8_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2085,16 +2125,16 @@ RightSquareBracket
 )
 	otherlv_9=Comma
     {
-    	newLeafNode(otherlv_9, grammarAccess.getIntervalAccess().getCommaKeyword_1_0_3());
+    	newLeafNode(otherlv_9, grammarAccess.getSafetyIntervalAccess().getCommaKeyword_1_0_3());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_1_0_4_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_1_0_4_0()); 
 	    }
 		lv_high_10_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2108,7 +2148,7 @@ RightSquareBracket
 )
 	otherlv_11=RightSquareBracket
     {
-    	newLeafNode(otherlv_11, grammarAccess.getIntervalAccess().getRightSquareBracketKeyword_1_0_5());
+    	newLeafNode(otherlv_11, grammarAccess.getSafetyIntervalAccess().getRightSquareBracketKeyword_1_0_5());
     }
 ))
     |((((
@@ -2129,22 +2169,22 @@ RightParenthesis
 ))=>((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getIntervalAccess().getOpenRightIntervalAction_2_0_0(),
+            grammarAccess.getSafetyIntervalAccess().getOpenRightSafetyIntervalAction_2_0_0(),
             $current);
     }
 )
 	otherlv_13=LeftSquareBracket
     {
-    	newLeafNode(otherlv_13, grammarAccess.getIntervalAccess().getLeftSquareBracketKeyword_2_0_1());
+    	newLeafNode(otherlv_13, grammarAccess.getSafetyIntervalAccess().getLeftSquareBracketKeyword_2_0_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_2_0_2_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_2_0_2_0()); 
 	    }
 		lv_low_14_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2158,16 +2198,16 @@ RightParenthesis
 )
 	otherlv_15=Comma
     {
-    	newLeafNode(otherlv_15, grammarAccess.getIntervalAccess().getCommaKeyword_2_0_3());
+    	newLeafNode(otherlv_15, grammarAccess.getSafetyIntervalAccess().getCommaKeyword_2_0_3());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_2_0_4_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_2_0_4_0()); 
 	    }
 		lv_high_16_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2181,7 +2221,7 @@ RightParenthesis
 )
 	otherlv_17=RightParenthesis
     {
-    	newLeafNode(otherlv_17, grammarAccess.getIntervalAccess().getRightParenthesisKeyword_2_0_5());
+    	newLeafNode(otherlv_17, grammarAccess.getSafetyIntervalAccess().getRightParenthesisKeyword_2_0_5());
     }
 ))
     |((((
@@ -2202,22 +2242,22 @@ RightParenthesis
 ))=>((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getIntervalAccess().getOpenIntervalAction_3_0_0(),
+            grammarAccess.getSafetyIntervalAccess().getOpenSafetyIntervalAction_3_0_0(),
             $current);
     }
 )
 	otherlv_19=LeftParenthesis
     {
-    	newLeafNode(otherlv_19, grammarAccess.getIntervalAccess().getLeftParenthesisKeyword_3_0_1());
+    	newLeafNode(otherlv_19, grammarAccess.getSafetyIntervalAccess().getLeftParenthesisKeyword_3_0_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getLowExprParserRuleCall_3_0_2_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getLowExprParserRuleCall_3_0_2_0()); 
 	    }
 		lv_low_20_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2231,16 +2271,16 @@ RightParenthesis
 )
 	otherlv_21=Comma
     {
-    	newLeafNode(otherlv_21, grammarAccess.getIntervalAccess().getCommaKeyword_3_0_3());
+    	newLeafNode(otherlv_21, grammarAccess.getSafetyIntervalAccess().getCommaKeyword_3_0_3());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIntervalAccess().getHighExprParserRuleCall_3_0_4_0()); 
+	        newCompositeNode(grammarAccess.getSafetyIntervalAccess().getHighExprParserRuleCall_3_0_4_0()); 
 	    }
 		lv_high_22_0=ruleExpr		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getIntervalRule());
+	            $current = createModelElementForParent(grammarAccess.getSafetyIntervalRule());
 	        }
        		set(
        			$current, 
@@ -2254,7 +2294,7 @@ RightParenthesis
 )
 	otherlv_23=RightParenthesis
     {
-    	newLeafNode(otherlv_23, grammarAccess.getIntervalAccess().getRightParenthesisKeyword_3_0_5());
+    	newLeafNode(otherlv_23, grammarAccess.getSafetyIntervalAccess().getRightParenthesisKeyword_3_0_5());
     }
 )))
 ;
