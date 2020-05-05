@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
-
 import com.rockwellcollins.atc.agree.agree.AgreeFactory;
 import com.rockwellcollins.atc.agree.agree.BinaryExpr;
 import com.rockwellcollins.atc.agree.agree.Expr;
@@ -50,30 +48,15 @@ public class GranularityUtils {
 
 	private static List<AgreeStatement> splitGuaranteeAnd(AgreeStatement agreeStmt) {
 		List<AgreeStatement> newStmts = new ArrayList<AgreeStatement>();
-
-		// Check for top level operator 'AND'
-		// Create two new guarantees, one for each operand.
-
 		if (agreeStmt.expr instanceof jkind.lustre.BinaryExpr) {
 			jkind.lustre.BinaryExpr binExpr = (jkind.lustre.BinaryExpr) agreeStmt.expr;
 			if (binExpr.op == BinaryOp.AND) {
-				recurseAnd(agreeStmt.expr, newStmts, agreeStmt.string, agreeStmt.reference);
-
-//				String newDescrL = unique + " LEFT %% " + agreeStmt.string;
-//				String newDescrR = unique + " RIGHT %% " + agreeStmt.string;
-//				unique++;
-//				AgreeStatement guarL = new AgreeStatement(newDescrL, binExpr.left,
-//						agreeStmt.reference);
-//				AgreeStatement guarR = new AgreeStatement(newDescrR, binExpr.right,
-//						agreeStmt.reference);
-//				newStmts.add(guarR);
-//				newStmts.add(guarL);
-
+				recurseAnd(agreeStmt.expr, newStmts, agreeStmt.string);
 			} else if (binExpr.op == BinaryOp.ARROW) {
 				if (binExpr.right instanceof jkind.lustre.BinaryExpr) {
 					jkind.lustre.BinaryExpr binR = (jkind.lustre.BinaryExpr) binExpr.right;
 					if (binR.op == BinaryOp.AND) {
-						recurseAnd(binExpr.right, newStmts, agreeStmt.string, agreeStmt.reference);
+						recurseAndArrow(binExpr.right, newStmts, agreeStmt.string, binExpr.left);
 					}
 				}
 			}
@@ -82,18 +65,15 @@ public class GranularityUtils {
 		return newStmts;
 	}
 
-	private static void recurseAnd(jkind.lustre.Expr expr, List<AgreeStatement> newStmts, String agreeStmtString,
-			EObject ref) {
+	private static void recurseAnd(jkind.lustre.Expr expr, List<AgreeStatement> newStmts, String agreeStmtString) {
 		if (expr instanceof jkind.lustre.BinaryExpr) {
 			jkind.lustre.BinaryExpr binExpr = (jkind.lustre.BinaryExpr) expr;
 			String newDescrL = unique + " LEFT %% ";
 			String newDescrR = unique + " RIGHT %% ";
 			unique++;
 			GuaranteeStatement gsL = AgreeFactory.eINSTANCE.createGuaranteeStatement();
-//			gsL.setExpr((Expr) binExpr.left);
 			gsL.setStr(newDescrL);
 			GuaranteeStatement gsR = AgreeFactory.eINSTANCE.createGuaranteeStatement();
-//			gsR.setExpr((Expr) binExpr.right);
 			gsR.setStr(newDescrR);
 			AgreeStatement guarL = new AgreeStatement(newDescrL, binExpr.left, gsL);
 			AgreeStatement guarR = new AgreeStatement(newDescrR, binExpr.right, gsR);
@@ -101,7 +81,32 @@ public class GranularityUtils {
 			newStmts.add(guarL);
 			if (binExpr.left instanceof jkind.lustre.BinaryExpr) {
 				if (((jkind.lustre.BinaryExpr) binExpr.left).op == BinaryOp.AND) {
-					recurseAnd(binExpr.left, newStmts, agreeStmtString, ref);
+					recurseAnd(binExpr.left, newStmts, agreeStmtString);
+				}
+			}
+		}
+	}
+
+	private static void recurseAndArrow(jkind.lustre.Expr expr, List<AgreeStatement> newStmts, String agreeStmtString,
+			jkind.lustre.Expr arrowExpr) {
+		if (expr instanceof jkind.lustre.BinaryExpr) {
+			jkind.lustre.BinaryExpr binExpr = (jkind.lustre.BinaryExpr) expr;
+			String newDescrL = unique + " LEFT %% ";
+			String newDescrR = unique + " RIGHT %% ";
+			unique++;
+			GuaranteeStatement gsL = AgreeFactory.eINSTANCE.createGuaranteeStatement();
+			gsL.setStr(newDescrL);
+			GuaranteeStatement gsR = AgreeFactory.eINSTANCE.createGuaranteeStatement();
+			gsR.setStr(newDescrR);
+			AgreeStatement guarL = new AgreeStatement(newDescrL,
+					new jkind.lustre.BinaryExpr(arrowExpr, BinaryOp.ARROW, binExpr.left), gsL);
+			AgreeStatement guarR = new AgreeStatement(newDescrR,
+					new jkind.lustre.BinaryExpr(arrowExpr, BinaryOp.ARROW, binExpr.right), gsR);
+			newStmts.add(guarR);
+			newStmts.add(guarL);
+			if (binExpr.left instanceof jkind.lustre.BinaryExpr) {
+				if (((jkind.lustre.BinaryExpr) binExpr.left).op == BinaryOp.AND) {
+					recurseAndArrow(binExpr.left, newStmts, agreeStmtString, arrowExpr);
 				}
 			}
 		}
