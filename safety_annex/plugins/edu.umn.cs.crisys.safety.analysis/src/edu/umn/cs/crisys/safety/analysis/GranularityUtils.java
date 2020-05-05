@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.rockwellcollins.atc.agree.agree.AgreeFactory;
 import com.rockwellcollins.atc.agree.agree.BinaryExpr;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
@@ -88,8 +89,14 @@ public class GranularityUtils {
 			String newDescrL = unique + " LEFT %% ";
 			String newDescrR = unique + " RIGHT %% ";
 			unique++;
-			AgreeStatement guarL = new AgreeStatement(newDescrL, binExpr.left, ref);
-			AgreeStatement guarR = new AgreeStatement(newDescrR, binExpr.right, ref);
+			GuaranteeStatement gsL = AgreeFactory.eINSTANCE.createGuaranteeStatement();
+//			gsL.setExpr((Expr) binExpr.left);
+			gsL.setStr(newDescrL);
+			GuaranteeStatement gsR = AgreeFactory.eINSTANCE.createGuaranteeStatement();
+//			gsR.setExpr((Expr) binExpr.right);
+			gsR.setStr(newDescrR);
+			AgreeStatement guarL = new AgreeStatement(newDescrL, binExpr.left, gsL);
+			AgreeStatement guarR = new AgreeStatement(newDescrR, binExpr.right, gsR);
 			newStmts.add(guarR);
 			newStmts.add(guarL);
 			if (binExpr.left instanceof jkind.lustre.BinaryExpr) {
