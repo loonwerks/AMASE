@@ -16,7 +16,7 @@ environment.
 
 The user's guide for the Safety Annex, including description of the plug-in for
 OSATE, fault modeling concepts, specification language reference
-manual, and examples is contained in the [Safety Annex Github repository](https://github.com/loonwerks/AMASE/tree/master/doc) .
+manual, and examples is contained in the [Safety Annex Github repository](https://github.com/loonwerks/AMASE/tree/master/doc) and also in this directory for ease of access.
 
 ## Development Guide
 
@@ -26,8 +26,11 @@ repository for information regarding developing and maintaining the Safety Annex
 ## Installation
 
 (1)	Install OSATE 2.7.0 found at the following link: https://osate.org/download-and-install.html
+
 (2)	Go to OSATE menu Help -> Install New Software.
+
 (3)	In the update site field, enter the following website: https://raw.githubusercontent.com/loonwerks/AMASE/master/safety-update-site/safety-annex_0.9
+
 (4)	Select “Safety Annex” and accept all licenses. OSATE will request a restart to complete the install. Do this. 
 
 After OSATE has restarted, a new menu item should appear called “AGREE.” The AGREE menu contains the Safety Annex options for fault analysis. The versions installed are: Osate 2.7.0, AGREE 2.4.0, Safety Annex 0.8.2.
