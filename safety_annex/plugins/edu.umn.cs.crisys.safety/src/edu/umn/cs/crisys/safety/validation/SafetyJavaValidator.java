@@ -66,6 +66,7 @@ import edu.umn.cs.crisys.safety.safety.SpecStatement;
 import edu.umn.cs.crisys.safety.safety.TemporalConstraint;
 import edu.umn.cs.crisys.safety.safety.TransientConstraint;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
+import edu.umn.cs.crisys.safety.safety.impl.SafetyContractImpl;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 /**
@@ -106,6 +107,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	}
 
 	/**
+	 * Check for multiple analysis statements in SafetyContractImpl.
 	 * Check behavior of analysis statements and values for n and
 	 * probability.
 	 * @param analysisStmt
@@ -113,6 +115,10 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	@Check(CheckType.FAST)
 	public void checkAnalysisStatement(AnalysisStatement analysisStmt) {
 		AnalysisBehavior behavior = analysisStmt.getBehavior();
+		SafetyContractImpl contract = (SafetyContractImpl) analysisStmt.eContainer();
+		if(contract.getSpecs().size() > 1) {
+			error(analysisStmt, "Only one analysis statement can be defined in the annex.");
+		}
 		if (behavior instanceof FaultCountBehavior) {
 			FaultCountBehavior fc = (FaultCountBehavior) behavior;
 			if (!testIntegerString(fc.getMaxFaults())) {
@@ -124,7 +130,8 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				error(analysisStmt, "Probability must be a valid string between 0 and 1 inclusive.");
 			}
 		} else {
-			error(analysisStmt, "Analysis behavior must be either 'max n fault' or 'probability q'.");
+			error(analysisStmt,
+					"Analysis behavior must be either 'analyze: max n fault' or 'analyze: probability r' for integer n and real number r.");
 		}
 	}
 
