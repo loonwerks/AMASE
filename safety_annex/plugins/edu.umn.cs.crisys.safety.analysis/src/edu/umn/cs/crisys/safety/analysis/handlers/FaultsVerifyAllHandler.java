@@ -3,6 +3,7 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
@@ -40,6 +41,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 			new SafetyException("Probabilistic behavior cannot be analyzed using "
 					+ "this compositional approach. Either choose monolithic "
 					+ "analysis or compositionally generate MinCutSets.");
+			return Status.CANCEL_STATUS;
 		}
 		return super.execute(event);
 	}

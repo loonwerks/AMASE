@@ -86,7 +86,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 
 			if (isVerify || isGenMCS) {
 				program = faultVisitor.visit(program);
-				resetStaticVars();
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
 			} else {
@@ -257,7 +256,8 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return hasAnnex;
 	}
 
-	private void resetStaticVars() {
+
+	public static void resetStaticVars() {
 		isVerify = false;
 		isGenMCS = false;
 		isSingleLayer = false;
