@@ -290,6 +290,7 @@ public class GenMCSHandler extends VerifyHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) {
+		AddFaultsToAgree.resetStaticVars();
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);

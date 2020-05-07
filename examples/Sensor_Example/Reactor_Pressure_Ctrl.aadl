@@ -52,8 +52,8 @@ public
 			
 		**};
 		annex safety {**
-      		--analyze : max 3 fault
-      		analyze : probability 1.0E-6
+      		analyze : max 3 fault
+      		--analyze : probability 1.0E-6
    		**};
 	end Reactor_Pressure_Ctrl.No_Voting;
 
