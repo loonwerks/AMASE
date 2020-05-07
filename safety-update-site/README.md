@@ -25,12 +25,16 @@ repository for information regarding developing and maintaining the Safety Annex
 
 ## Installation
 
-(1)	Install OSATE 2.7.0 found at the following link: https://osate.org/download-and-install.html
+(1)	Download the folder called “mhs_exe” located at https://raw.githubusercontent.com/loonwerks/AMASE/master/safety-update-site/
 
-(2)	Go to OSATE menu Help -> Install New Software.
+(2)	 Create environment variable called “MHS_HOME” and point to the location of the executable “agdmhs.exe” found in “mhs_exe” folder. Add this location to your PATH as well. This algorithm is used as part of the minimal cut set generation and is required to run this analysis.
 
-(3)	In the update site field, enter the following website: https://raw.githubusercontent.com/loonwerks/AMASE/master/safety-update-site/safety-annex_0.9
+(3)	Install OSATE 2.7.0 found at the following link: https://osate.org/download-and-install.html
 
-(4)	Select “Safety Annex” and accept all licenses. OSATE will request a restart to complete the install. Do this. 
+(4)	Go to OSATE menu Help -> Install New Software.
+
+(5)	In the update site field, enter the following website: https://raw.githubusercontent.com/loonwerks/AMASE/master/safety-update-site/safety-annex_0.9
+
+(6)	Select “Safety Annex” and accept all licenses. OSATE will request a restart to complete the install. Do this. 
 
 After OSATE has restarted, a new menu item should appear called “AGREE.” The AGREE menu contains the Safety Annex options for fault analysis. The versions installed are: Osate 2.7.0, AGREE 2.4.0, Safety Annex 0.8.2.
