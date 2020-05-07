@@ -71,8 +71,8 @@ public
 			Temp_Sensor3_To_Voter: port Temp_Sensor3.High_Temp_Indicator -> Temp_Voter.Sensor3_High;
 			Temp_Voter_To_Shut_Down: port Temp_Voter.High_Out -> Shut_Down_Cmd;
 		annex safety {**
-      		--analyze : max 3 fault
-      		analyze : probability 1.0E-10
+      		analyze : max 3 fault
+      		--analyze : probability 1.0E-10
    		**};
 	end Reactor_Temp_Ctrl.W_Voting;
 	

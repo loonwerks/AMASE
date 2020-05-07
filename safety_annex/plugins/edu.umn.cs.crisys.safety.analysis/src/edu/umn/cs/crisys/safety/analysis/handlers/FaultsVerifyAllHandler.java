@@ -32,6 +32,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) {
+		AddFaultsToAgree.resetStaticVars();
 		Event selEvent = (Event) event.getTrigger();
 		item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
@@ -45,6 +46,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		}
 		return super.execute(event);
 	}
+
 
 	/**
 	 * (non-Javadoc)
@@ -63,6 +65,17 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		if (classifiers == null) {
 			return false;
 		}
+		// This is a partial fix on the problem:
+		// If multiple implementations and none have max n behavior,
+		// then error out. If any impl have max n, run analysis.
+		// Doesn't fix the problem, only partially.
+		// Need to access the implementation selected for analysis
+		// and check that spec stmt. To do this is taking more time than
+		// what priority allows for.
+		// VerifyHandler has methods that perform this type of check, but to
+		// implement them, need access to Element root. This access is granted in
+		// runJob method which will need to be overridden from VerifyHandler.
+		// TODO: Finish addressing this issue.
 		for (Classifier cl : classifiers) {
 			// Get impl of this level
 			if (cl instanceof ComponentImplementationImpl) {
@@ -78,9 +91,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 							List<SpecStatement> specs = ((SafetyContract) safetyAnnex.getContract()).getSpecs();
 							for (SpecStatement spec : specs) {
 								if (spec instanceof AnalysisStatement) {
-									if (((AnalysisStatement) spec).getBehavior() instanceof ProbabilityBehavior) {
-										return true;
-									} else {
+									if (!(((AnalysisStatement) spec).getBehavior() instanceof ProbabilityBehavior)) {
 										return false;
 									}
 								}
@@ -90,7 +101,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private List<Classifier> getClassifiers() {

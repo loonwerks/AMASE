@@ -15,6 +15,7 @@ public class FaultsVerifyMonolithicHandler extends VerifyMonolithicHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) {
+		AddFaultsToAgree.resetStaticVars();
 		Event selEvent = (Event) event.getTrigger();
 		item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
