@@ -19,14 +19,14 @@ public
 		**};
 		
 		annex safety {**
-			fault Pressure_sensor_stuck_at_low "Pressure sensor stuck low": 
-								Common_Faults::stuck_false {
-				inputs: val_in <- High_Pressure_Indicator;     
-				outputs: High_Pressure_Indicator <- val_out;   
-         		disable : false;
-         		probability: 1.0E-5 ;
-				duration: permanent;
-			}
+--			fault Pressure_sensor_stuck_at_low "Pressure sensor stuck low": 
+--								Common_Faults::stuck_false {
+--				inputs: val_in <- High_Pressure_Indicator;     
+--				outputs: High_Pressure_Indicator <- val_out;   
+--         		disable : false;
+--         		probability: 1.0E-5 ;
+--				duration: permanent;
+--			}
 			
 			fault Pressure_sensor_stuck_at_high "Pressure sensor stuck high": 
 								Common_Faults::stuck_true {

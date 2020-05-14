@@ -35,6 +35,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	private static boolean isVerify = false;
 	private static boolean isGenMCS = false;
 	private static boolean isSingleLayer = false;
+	private static boolean isMonolithic = false;
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -88,13 +89,15 @@ public class AddFaultsToAgree implements AgreeAutomater {
 				program = faultVisitor.visit(program);
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
+				if (isMonolithic || isSingleLayer) {
+					resetStaticVars();
+				}
 			} else {
 				return program;
 			}
 		}
 		catch (Throwable t) {
 			new SafetyException("Something went wrong during safety analysis: " + t.toString());
-
 		}
 		return program;
 	}
@@ -120,6 +123,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 				isSingleLayer = true;
 			} else {
 				isSingleLayer = false;
+			}
+			if (i.getText().contains("Monolithically")) {
+				isMonolithic = true;
 			}
 		}
 	}
@@ -261,5 +267,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		isVerify = false;
 		isGenMCS = false;
 		isSingleLayer = false;
+		isMonolithic = false;
 	}
 }
