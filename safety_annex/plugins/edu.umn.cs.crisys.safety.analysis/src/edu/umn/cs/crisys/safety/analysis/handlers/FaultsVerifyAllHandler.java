@@ -148,14 +148,13 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 				while (!queue.isEmpty()) {
 					queue.remove().cancel();
 				}
-
+				AddFaultsToAgree.resetStaticVars();
 				deactivateTerminateHandlers();
 				enableRerunHandler(root);
 
 			}
 		};
 		analysisThread.start();
-		AddFaultsToAgree.resetStaticVars();
 		return Status.OK_STATUS;
 	}
 
