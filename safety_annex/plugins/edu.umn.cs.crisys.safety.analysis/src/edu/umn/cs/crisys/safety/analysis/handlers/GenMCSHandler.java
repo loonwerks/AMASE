@@ -196,9 +196,11 @@ public class GenMCSHandler extends VerifyHandler {
 				while (!queue.isEmpty()) {
 					queue.remove().cancel();
 				}
+				// COMMENTED OUT:
+				// This form of display is not platform independent apparently.
 				// Create progress bar to display to users on long analysis runs.
-				Display display = new Display();
-				Shell shell = createProgressBar(display);
+//				Display display = new Display();
+//				Shell shell = createProgressBar(display);
 
 				// generate soteria fault tree from the result
 				// TODO: if zero max N fault hypothesis and empty fault combination for probabilistic analysis
@@ -228,7 +230,7 @@ public class GenMCSHandler extends VerifyHandler {
 				}
 				else {
 					// open progress bar
-					shell.open();
+//					shell.open();
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 
@@ -240,11 +242,11 @@ public class GenMCSHandler extends VerifyHandler {
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
 						bw.write(soteriaFT.printMinCutSetTxt());
 						bw.close();
-						display.dispose();
+//						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
 					} catch (IOException e) {
 						// close progress bar
-						display.dispose();
+//						display.dispose();
 						Dialog.showError("Unable to open file", e.getMessage());
 						e.printStackTrace();
 					}
@@ -254,11 +256,11 @@ public class GenMCSHandler extends VerifyHandler {
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
 						bw.write(soteriaFT.printMinCutSetTally());
 						bw.close();
-						display.dispose();
+//						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetTallyFile.toString());
 					} catch (IOException e) {
 						// close progress bar
-						display.dispose();
+//						display.dispose();
 						Dialog.showError("Unable to open file", e.getMessage());
 						e.printStackTrace();
 					}
@@ -270,6 +272,7 @@ public class GenMCSHandler extends VerifyHandler {
 
 			}
 		};
+		AddFaultsToAgree.resetStaticVars();
 		analysisThread.start();
 		return Status.OK_STATUS;
 	}
@@ -290,6 +293,7 @@ public class GenMCSHandler extends VerifyHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) {
+		AddFaultsToAgree.resetStaticVars();
 		Event selEvent = (Event) event.getTrigger();
 		MenuItem item = (MenuItem) selEvent.widget;
 		AddFaultsToAgree.setTransformFlag(item);
