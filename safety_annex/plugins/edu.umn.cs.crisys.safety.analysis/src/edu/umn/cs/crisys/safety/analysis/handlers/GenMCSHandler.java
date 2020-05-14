@@ -266,13 +266,12 @@ public class GenMCSHandler extends VerifyHandler {
 					}
 
 				}
-
+				AddFaultsToAgree.resetStaticVars();
 				deactivateTerminateHandlers();
 				enableRerunHandler(root);
 
 			}
 		};
-		AddFaultsToAgree.resetStaticVars();
 		analysisThread.start();
 		return Status.OK_STATUS;
 	}
