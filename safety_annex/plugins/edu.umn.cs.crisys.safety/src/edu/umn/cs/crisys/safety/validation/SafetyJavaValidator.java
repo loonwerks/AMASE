@@ -116,7 +116,18 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	public void checkAnalysisStatement(AnalysisStatement analysisStmt) {
 		AnalysisBehavior behavior = analysisStmt.getBehavior();
 		SafetyContractImpl contract = (SafetyContractImpl) analysisStmt.eContainer();
-		if(contract.getSpecs().size() > 1) {
+		boolean fcount = false;
+		boolean probspec = false;
+		for (SpecStatement spec : contract.getSpecs()) {
+			if (spec instanceof AnalysisStatement) {
+				if (((AnalysisStatement) spec).getBehavior() instanceof FaultCountBehavior) {
+					fcount = true;
+				} else if (((AnalysisStatement) spec).getBehavior() instanceof ProbabilityBehavior) {
+					probspec = true;
+				}
+			}
+		}
+		if (fcount && probspec) {
 			error(analysisStmt, "Only one analysis statement can be defined in the annex.");
 		}
 		if (behavior instanceof FaultCountBehavior) {
