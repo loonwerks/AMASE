@@ -3,8 +3,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,7 +220,8 @@ public class GenMCSHandler extends VerifyHandler {
 					printUtils.printEmptyTree();
 
 					try {
-						File file = File.createTempFile("soteriaResolvedFT_", ".ml");
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File file = File.createTempFile("soteriaResolvedFT_" + timeStamp + "_", ".ml");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 						bw.write(printUtils.toString());
 						bw.close();
@@ -238,7 +241,8 @@ public class GenMCSHandler extends VerifyHandler {
 					resolveVisitor.visit(soteriaFT);
 
 					try {
-						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
 						bw.write(soteriaFT.printMinCutSetTxt());
 						bw.close();
@@ -252,7 +256,8 @@ public class GenMCSHandler extends VerifyHandler {
 					}
 
 					try {
-						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_", ".txt");
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
 						bw.write(soteriaFT.printMinCutSetTally());
 						bw.close();
