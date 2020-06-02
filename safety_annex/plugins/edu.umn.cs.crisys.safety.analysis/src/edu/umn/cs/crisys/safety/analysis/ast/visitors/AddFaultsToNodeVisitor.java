@@ -1225,7 +1225,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				found = true;
 			}
 		}
-		if (!found) {
+		if (!found && upperMostLevel) {
 			throw new SafetyException("No analysis statement; unable to run safety analysis");
 		}
 		return ab;

@@ -76,8 +76,9 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		if (!(AddFaultsToAgree.getIsVerify()) && !(AddFaultsToAgree.getIsGenMCS())) {
 			return program;
 		} else {
-			if (!checkForSafetyAnnex(program.topNode)) {
-				new SafetyException("This component implementation does not contain a safety annex.");
+			if (!checkForSafetyAnnex(program.topNode) && !(AddFaultsToAgree.getIsGenMCS())) {
+				new SafetyException(
+						"The component implementation for " + program.topNode.id + " does not contain a safety annex.");
 			}
 		}
 
