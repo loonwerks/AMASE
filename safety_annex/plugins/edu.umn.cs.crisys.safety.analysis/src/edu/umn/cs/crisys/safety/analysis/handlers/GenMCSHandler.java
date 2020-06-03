@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -26,7 +27,11 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.ui.editor.utils.EditorUtils;
+import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Element;
@@ -59,6 +64,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
@@ -303,6 +309,10 @@ public class GenMCSHandler extends VerifyHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
+		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
+			return Status.CANCEL_STATUS;
+		}
 		// If isGenMCS, then the user selected
 		// 'Generate MCS' option and we should execute event.
 		// Else, return null.
@@ -483,6 +493,22 @@ public class GenMCSHandler extends VerifyHandler {
 
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
+	}
+
+	private List<Classifier> getClassifiers() {
+		XtextEditor xtextEditor = EditorUtils.getActiveXtextEditor();
+		if (xtextEditor == null) {
+			return null;
+		}
+		EObject original = xtextEditor.getDocument().readOnly(resource -> resource.getContents().get(0));
+		AadlPackage aadlPackage = null;
+		if (original instanceof AadlPackage) {
+			aadlPackage = (AadlPackage) original;
+		}
+		if (aadlPackage == null) {
+			return null;
+		}
+		return aadlPackage.getOwnedPublicSection().getOwnedClassifiers();
 	}
 
 }

@@ -1,11 +1,21 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
+import java.util.List;
+
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.ui.editor.utils.EditorUtils;
+import org.osate.aadl2.AadlPackage;
+import org.osate.aadl2.Classifier;
 
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifySingleHandler;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 
@@ -21,6 +31,10 @@ public class FaultsVerifySingleHandler extends VerifySingleHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
+		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
+			return Status.CANCEL_STATUS;
+		}
 		return super.execute(event);
 	}
 
@@ -34,5 +48,21 @@ public class FaultsVerifySingleHandler extends VerifySingleHandler {
 	@Override
 	protected String getJobName() {
 		return "Fault analysis: single layer";
+	}
+
+	private List<Classifier> getClassifiers() {
+		XtextEditor xtextEditor = EditorUtils.getActiveXtextEditor();
+		if (xtextEditor == null) {
+			return null;
+		}
+		EObject original = xtextEditor.getDocument().readOnly(resource -> resource.getContents().get(0));
+		AadlPackage aadlPackage = null;
+		if (original instanceof AadlPackage) {
+			aadlPackage = (AadlPackage) original;
+		}
+		if (aadlPackage == null) {
+			return null;
+		}
+		return aadlPackage.getOwnedPublicSection().getOwnedClassifiers();
 	}
 }
