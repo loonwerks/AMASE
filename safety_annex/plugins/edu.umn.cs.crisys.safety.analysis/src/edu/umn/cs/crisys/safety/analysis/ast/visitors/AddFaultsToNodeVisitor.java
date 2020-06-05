@@ -433,7 +433,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (!onlyAsym) {
 				AgreeVar out = findVar(node.outputs, (faultyId));
 				if (out == null) {
-					throw new SafetyException("A fault defined for " + node.id + " has a connection"
+					new SafetyException("A fault defined for " + node.id + " has a connection"
 							+ " that is not a valid output for this component." + " Valid connections include {"
 							+ node.outputs + "}");
 				} else {
