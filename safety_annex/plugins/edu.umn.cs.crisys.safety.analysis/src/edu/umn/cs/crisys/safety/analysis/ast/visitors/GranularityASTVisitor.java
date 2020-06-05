@@ -8,15 +8,19 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 import com.rockwellcollins.atc.agree.agree.LemmaStatement;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTMapVisitor;
 
 import edu.umn.cs.crisys.safety.analysis.ast.SafetyNodeBuilder;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
+import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 
 public class GranularityASTVisitor extends AgreeASTMapVisitor {
@@ -34,6 +38,8 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 	private HashMap<String, List<AgreeStatement>> mapNodeToAgreeStatements = new HashMap<String, List<AgreeStatement>>();
 	// Nodes to replace agree nodes from initial program
 	private List<AgreeNode> newNodes = new ArrayList<AgreeNode>();
+	// Hash from fresh vars to expressions
+	private HashMap<String, Expr> freshVars = new HashMap<String, Expr>();
 
 	/**
 	 * Call to super class.
@@ -110,7 +116,17 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 //		}
 
 //		AgreeNodeBuilder builder = new AgreeNodeBuilder(id);
+
 		SafetyNodeBuilder builder = new SafetyNodeBuilder(id);
+
+		for (String s : freshVars.keySet()) {
+			builder.addLocal(new AgreeVar(s, NamedType.BOOL, topNode.reference));
+
+			builder.addLocalEquation(new AgreeEquation(new IdExpr(s), freshVars.get(s), topNode.reference));
+//			builder.addAssertion(new AgreeStatement("", b, topNode.reference));
+//			// builder.addGuarantee(new AgreeStatement("", b, topNode.reference));
+		}
+
 		builder.addInput(e.inputs);
 		builder.addOutput(e.outputs);
 		builder.addLocal(e.locals);
@@ -154,12 +170,13 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 		// and if it is AND on a guarantee or lemma, create two stmts.
 		List<AgreeStatement> listStmts = new ArrayList<AgreeStatement>();
 
-		if (agreeStmt.reference instanceof LemmaStatement) {
+		if (agreeStmt instanceof LemmaStatement) {
 			listStmts.addAll(splitLemmaAnd(agreeStmt));
 		} else if (agreeStmt.reference instanceof GuaranteeStatement) {
-			listStmts.addAll(splitGuaranteeAnd(agreeStmt));
+			if (agreeStmt.expr instanceof jkind.lustre.Expr) {
+				unInline(agreeStmt.expr);
+			}
 		}
-
 		return listStmts;
 	}
 
@@ -169,8 +186,8 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 		// Check for top level operator 'AND'
 		// Create two new guarantees, one for each operand.
 		Expr expr = agreeStmt.expr;
-		if (expr instanceof BinaryExpr) {
-			BinaryExpr binExpr = (BinaryExpr) expr;
+		if (expr instanceof jkind.lustre.BinaryExpr) {
+			jkind.lustre.BinaryExpr binExpr = (jkind.lustre.BinaryExpr) expr;
 			if (binExpr.op == BinaryOp.AND) {
 				String newDescrL = unique + " LEFT %% " + agreeStmt.string;
 				String newDescrR = unique + " RIGHT %% " + agreeStmt.string;
@@ -191,4 +208,43 @@ public class GranularityASTVisitor extends AgreeASTMapVisitor {
 
 		return newStmts;
 	}
+
+	private void unInline(Expr expr) {
+		if (expr instanceof BinaryExpr) {
+			BinaryExpr exBin = (BinaryExpr) expr;
+			IdExpr id = new IdExpr("freshVar" + unique);
+			freshVars.put(id.id, exBin);
+			unique++;
+
+			if (isBoolOp(exBin.op)) {
+				// Set left to fresh var
+				IdExpr idL = new IdExpr("freshVar" + unique);
+				freshVars.put(idL.id, exBin.left);
+				unique++;
+				// Set right to fresh var
+				IdExpr idR = new IdExpr("freshVar" + unique);
+				freshVars.put(idR.id, exBin.right);
+				unique++;
+				// if left/right binary, recurse
+				if (exBin.left instanceof BinaryExpr) {
+					unInline(exBin.left);
+				}
+				if (exBin.right instanceof BinaryExpr) {
+					unInline(exBin.right);
+				}
+			}
+		}
+	}
+
+	private boolean isBoolOp(BinaryOp op) {
+		if (op.equals(BinaryOp.EQUAL) || op.equals(BinaryOp.NOTEQUAL) || op.equals(BinaryOp.GREATER)
+				|| op.equals(BinaryOp.LESS) || op.equals(BinaryOp.GREATEREQUAL) || op.equals(BinaryOp.LESSEQUAL)
+				|| op.equals(BinaryOp.OR) || op.equals(BinaryOp.AND) || op.equals(BinaryOp.XOR)
+				|| op.equals(BinaryOp.IMPLIES) || op.equals(BinaryOp.ARROW)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
