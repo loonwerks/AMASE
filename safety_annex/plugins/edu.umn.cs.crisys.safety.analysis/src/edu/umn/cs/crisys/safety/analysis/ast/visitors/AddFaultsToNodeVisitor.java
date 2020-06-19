@@ -156,7 +156,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean probabilisticHypothesis = false;
 
 	// Flag to indicate decomposition of contracts and eq stmts.
-	public boolean granularity = true;
+	private boolean granularity = true;
+	private boolean decomposeAnd = false;
+	private boolean uninline = true;
 
 	/**
 	 * Call to super class.
@@ -223,7 +225,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// Granularity check
 		if (granularity) {
 			// Send node and nb to granularity util methods
-			nb = GranularityUtils.decomposeNodeContracts(node, nb);
+			nb = GranularityUtils.decomposeNodeContracts(node, nb, decomposeAnd, uninline);
 		}
 
 		// Change this nodes flag to reflect fault tree generation or not.
