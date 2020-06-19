@@ -14,6 +14,7 @@ system A
 		assume "A input range" : Input < 20;
 		guarantee "A output range" : Output < 2*Input;
 	**};	
+
 	
 	annex safety {**
 		fault stuck_at_fault_A "Component A output stuck" : faults::fail_to {

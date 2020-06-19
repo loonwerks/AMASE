@@ -20,7 +20,7 @@ public class GranularityUtils {
 
 	private static int unique = 0;
 	private static HashMap<String, jkind.lustre.BinaryExpr> freshVars = new HashMap<String, jkind.lustre.BinaryExpr>();
-	private static HashMap<AgreeStatement, AgreeStatement> newGuars = new HashMap<AgreeStatement, AgreeStatement>();
+	private static HashMap<AgreeStatement, AgreeStatement> mapOldGuarsToNew = new HashMap<AgreeStatement, AgreeStatement>();
 	private static List<String> IVCElements = new ArrayList<String>();
 
 	public static AgreeNodeBuilder decomposeNodeContracts(AgreeNode node, AgreeNodeBuilder nb, boolean decomposeAnd,
@@ -38,8 +38,8 @@ public class GranularityUtils {
 			nb.addIvcElements(IVCElements);
 			IVCElements.clear();
 			freshVars.clear();
-			unique = 0;
 		}
+		unique = 0;
 		return nb;
 	}
 
@@ -61,13 +61,22 @@ public class GranularityUtils {
 					nb.addLocal(new AgreeVar(s, NamedType.BOOL, stmt.reference));
 					nb.addLocalEquation(new AgreeEquation(new IdExpr(s), freshVars.get(s), stmt.reference));
 				}
-				for (AgreeStatement as : newGuars.keySet()) {
-					nb.addGuarantee(as);
-					// TODO: remove old guarantee from node builder
-				}
-				newGuars.clear();
+				nb.addGuarantee(replaceGuarantees(nb));
+				mapOldGuarsToNew.clear();
 			}
 		}
+	}
+
+	private static List<AgreeStatement> replaceGuarantees(AgreeNodeBuilder nb) {
+		List<AgreeStatement> newGuarList = new ArrayList<AgreeStatement>();
+		List<AgreeStatement> oldGuarList = nb.getGuarantees();
+		nb.clearGuarantees();
+		for (AgreeStatement old : mapOldGuarsToNew.keySet()) {
+			oldGuarList.remove(old);
+			newGuarList.add(mapOldGuarsToNew.get(old));
+		}
+		newGuarList.addAll(oldGuarList);
+		return newGuarList;
 	}
 
 	/**
@@ -171,7 +180,7 @@ public class GranularityUtils {
 				gs.setStr(descr);
 				AgreeStatement guarNew = new AgreeStatement(descr, id, gs);
 				// Save new guarantee, map to old guarantee for removal
-				newGuars.put(guarNew, stmt);
+				mapOldGuarsToNew.put(stmt, guarNew);
 				// Recurse over guar expr
 				unInline(guarEx, id);
 			}
