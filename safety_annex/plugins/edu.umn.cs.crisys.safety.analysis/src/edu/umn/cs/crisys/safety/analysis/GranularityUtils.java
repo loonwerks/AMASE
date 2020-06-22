@@ -61,22 +61,18 @@ public class GranularityUtils {
 					nb.addLocal(new AgreeVar(s, NamedType.BOOL, stmt.reference));
 					nb.addLocalEquation(new AgreeEquation(new IdExpr(s), freshVars.get(s), stmt.reference));
 				}
-				nb.addGuarantee(replaceGuarantees(nb));
+				replaceGuarantees(nb);
 				mapOldGuarsToNew.clear();
 			}
 		}
 	}
 
-	private static List<AgreeStatement> replaceGuarantees(AgreeNodeBuilder nb) {
-		List<AgreeStatement> newGuarList = new ArrayList<AgreeStatement>();
-		List<AgreeStatement> oldGuarList = nb.getGuarantees();
-		nb.clearGuarantees();
+
+	private static void replaceGuarantees(AgreeNodeBuilder nb) {
 		for (AgreeStatement old : mapOldGuarsToNew.keySet()) {
-			oldGuarList.remove(old);
-			newGuarList.add(mapOldGuarsToNew.get(old));
+			nb.guarantees.remove(old);
+			nb.guarantees.add(mapOldGuarsToNew.get(old));
 		}
-		newGuarList.addAll(oldGuarList);
-		return newGuarList;
 	}
 
 	/**
@@ -313,7 +309,8 @@ public class GranularityUtils {
 	 * @return true if bool
 	 */
 	private static boolean isSafeBoolOp(BinaryOp op) {
-		if (op.equals(BinaryOp.EQUAL) || op.equals(BinaryOp.NOTEQUAL)
+		if (op.equals(BinaryOp.EQUAL) || op.equals(BinaryOp.NOTEQUAL) || op.equals(BinaryOp.GREATER)
+				|| op.equals(BinaryOp.LESS) || op.equals(BinaryOp.GREATEREQUAL) || op.equals(BinaryOp.LESSEQUAL)
 				|| op.equals(BinaryOp.OR) || op.equals(BinaryOp.AND) || op.equals(BinaryOp.XOR)
 				|| op.equals(BinaryOp.IMPLIES) || op.equals(BinaryOp.ARROW)) {
 			return true;
