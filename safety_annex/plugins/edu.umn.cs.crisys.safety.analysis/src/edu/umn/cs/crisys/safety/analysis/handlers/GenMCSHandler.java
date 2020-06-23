@@ -163,7 +163,7 @@ public class GenMCSHandler extends VerifyHandler {
 		Thread analysisThread = new Thread() {
 			@Override
 			public void run() {
-
+				long startNominalTime = System.currentTimeMillis();
 				activateTerminateHandlers(globalMonitor);
 				KindApi api = PreferencesUtil.getKindApi();
 				KindApi consistApi = PreferencesUtil.getConsistencyApi();
@@ -204,6 +204,8 @@ public class GenMCSHandler extends VerifyHandler {
 				while (!queue.isEmpty()) {
 					queue.remove().cancel();
 				}
+				long totalNominalTime = System.currentTimeMillis() - startNominalTime;
+				long startFaultTime = System.currentTimeMillis();
 				// COMMENTED OUT:
 				// This form of display is not platform independent apparently.
 				// Create progress bar to display to users on long analysis runs.
@@ -238,43 +240,38 @@ public class GenMCSHandler extends VerifyHandler {
 					}
 				}
 				else {
-					// open progress bar
-//					shell.open();
-					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
+					AddFaultsToNodeVisitor.maxFaultHypothesis = true;
+					AddFaultsToNodeVisitor.maxFaultCount = 1;
+					for (int i = 1; i < 7; i++) {
+						IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
+						SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 
-					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
-					resolveVisitor.visit(soteriaFT);
+						SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
+						resolveVisitor.visit(soteriaFT);
+						long totalFaultTime = System.currentTimeMillis() - startFaultTime;
 
-					try {
-						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-						File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
-						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
-						bw.write(soteriaFT.printMinCutSetTxt());
-						bw.close();
-//						display.dispose();
-						org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
-					} catch (IOException e) {
-						// close progress bar
-//						display.dispose();
-						Dialog.showError("Unable to open file", e.getMessage());
-						e.printStackTrace();
+						try {
+							String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+							File minCutSetTallyFile = File.createTempFile("MinCutSetTally_" + timeStamp + "_", ".txt");
+							BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
+							bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+							bw.newLine();
+							bw.write("Total nominal time = " + totalNominalTime + "\n\n");
+							bw.newLine();
+							bw.write("Total fault time = " + totalFaultTime + "\n\n");
+							bw.newLine();
+							bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+							bw.newLine();
+							bw.write(soteriaFT.printMinCutSetTally());
+							bw.close();
+							org.eclipse.swt.program.Program.launch(minCutSetTallyFile.toString());
+						} catch (IOException e) {
+							Dialog.showError("Unable to open file", e.getMessage());
+							e.printStackTrace();
+						}
+						AddFaultsToNodeVisitor.maxFaultCount++;
 					}
 
-					try {
-						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_" + timeStamp + "_", ".txt");
-						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
-						bw.write(soteriaFT.printMinCutSetTally());
-						bw.close();
-//						display.dispose();
-						org.eclipse.swt.program.Program.launch(minCutSetTallyFile.toString());
-					} catch (IOException e) {
-						// close progress bar
-//						display.dispose();
-						Dialog.showError("Unable to open file", e.getMessage());
-						e.printStackTrace();
-					}
 
 				}
 				AddFaultsToAgree.resetStaticVars();
