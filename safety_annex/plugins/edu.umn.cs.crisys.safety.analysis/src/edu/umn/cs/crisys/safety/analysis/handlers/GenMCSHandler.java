@@ -155,7 +155,7 @@ public class GenMCSHandler extends VerifyHandler {
 		Thread analysisThread = new Thread() {
 			@Override
 			public void run() {
-
+				long startNominalTime = System.currentTimeMillis();
 				activateTerminateHandlers(globalMonitor);
 				KindApi api = PreferencesUtil.getKindApi();
 				KindApi consistApi = PreferencesUtil.getConsistencyApi();
@@ -196,6 +196,9 @@ public class GenMCSHandler extends VerifyHandler {
 				while (!queue.isEmpty()) {
 					queue.remove().cancel();
 				}
+				long totalNominalTime = System.currentTimeMillis() - startNominalTime;
+				long startFaultTime = System.currentTimeMillis();
+
 				// Create progress bar to display to users on long analysis runs.
 				Display display = new Display();
 				Shell shell = createProgressBar(display);
@@ -234,10 +237,17 @@ public class GenMCSHandler extends VerifyHandler {
 
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
 					resolveVisitor.visit(soteriaFT);
+					long totalFaultTime = System.currentTimeMillis() - startFaultTime;
 
 					try {
 						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
+						bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+						bw.newLine();
+						bw.write("Total nominal time = " + totalNominalTime + "\n\n");
+						bw.newLine();
+						bw.write("Total fault time = " + totalFaultTime + "\n\n");
+						bw.newLine();
 						bw.write(soteriaFT.printMinCutSetTxt());
 						bw.close();
 						display.dispose();
@@ -252,6 +262,12 @@ public class GenMCSHandler extends VerifyHandler {
 					try {
 						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
+						bw.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+						bw.newLine();
+						bw.write("Total nominal time = " + totalNominalTime + "\n\n");
+						bw.newLine();
+						bw.write("Total fault time = " + totalFaultTime + "\n\n");
+						bw.newLine();
 						bw.write(soteriaFT.printMinCutSetTally());
 						bw.close();
 						display.dispose();
