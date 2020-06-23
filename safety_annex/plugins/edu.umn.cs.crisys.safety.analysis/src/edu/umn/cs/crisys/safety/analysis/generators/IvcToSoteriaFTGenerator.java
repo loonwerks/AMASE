@@ -148,6 +148,18 @@ public class IvcToSoteriaFTGenerator {
 						propertyNode.setRoot();
 					}
 					soteriaFT.addIntermediateNode(propertyName, propertyNode);
+				} else {
+					SoteriaFTNonLeafNode propertyNode = new SoteriaFTNonLeafNode(propertyName, "");
+					if (soteriaFT.intermediateNodes.containsKey(propertyName)) {
+						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
+					}
+					propertyNode.resolved = true;
+					propertyNode.nodeValue = false;
+					if (!isLowerLevel) {
+						soteriaFT.addRootNode(propertyName, propertyNode);
+						propertyNode.setRoot();
+					}
+					soteriaFT.addIntermediateNode(propertyName, propertyNode);
 				}
 			}
 

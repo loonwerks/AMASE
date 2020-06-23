@@ -48,10 +48,25 @@ public class SoteriaFaultTree extends SoteriaFTAst {
 					if ((childNode instanceof SoteriaFTOrNode) || (childNode instanceof SoteriaFTAndNode)) {
 						intermediateNode.addChildNode(childName, intermediateNodes.get(childName));
 					}
-					// otherwise remove this child node
 					else {
-						childNodesToRemove.add(childNode);
-						nodesToRemove.add(childNode);
+						// if parent node is an OR node
+						// remove this child
+						if (intermediateNode instanceof SoteriaFTOrNode) {
+							childNodesToRemove.add(childNode);
+							nodesToRemove.add(childNode);
+						}
+						// if parent node is an AND node
+						// remove the parent node and child node
+						// and set their values to false in case they are referenced by other nodes
+						else if (intermediateNode instanceof SoteriaFTAndNode) {
+							nodesToRemove.add(intermediateNode);
+							nodesToRemove.add(childNode);
+							// mark the nodes as they are not getting removed till after the loop
+							intermediateNode.resolved = true;
+							intermediateNode.nodeValue = false;
+							childNode.resolved = true;
+							childNode.nodeValue = false;
+						}
 					}
 				}
 			}
