@@ -1,0 +1,25 @@
+package Basic_Faults
+public
+	annex agree{**
+		node invert_signal(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (not val_in) else val_in;
+		tel;
+		
+		node fail_to_true(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (true) else val_in;
+		tel;
+		
+		node fail_to_false(val_in: bool, trigger: bool) returns (val_out:bool);
+		let
+	  		val_out = if trigger then (false) else val_in;
+		tel;
+		
+		node fail_to_int(val_in: int, alt_val: int, trigger: bool) returns (val_out:int);
+		let
+	  		val_out = if trigger then (alt_val) else val_in;
+		tel;
+		
+	**};
+end Basic_Faults;

@@ -1,6 +1,7 @@
 package Hauptmann
 public
 with Base_Types;
+with Basic_Faults;
 
 	system Hauptmann
 		features 
@@ -20,6 +21,12 @@ with Base_Types;
 			true -> ((out_1 >= 0) and (out_1 <= 10));
 	
 	**};
-	
+	annex safety{**
+			fault output_fails "Output fails." : Basic_Faults::fail_to_int {
+				inputs: val_in <- out_1, alt_val <- 11;
+				outputs: out_1 <- val_out;
+				duration: permanent;
+			}
+	**};
 	end Hauptmann;
 end Hauptmann;
