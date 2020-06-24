@@ -56,6 +56,8 @@ with Hauptmann;
 			lemma "Sub level input equals sub level output." :
 				(sub.out_1 = sub.in_1);
 		**};
-			
+		annex safety{**
+			analyze: max 4 fault
+		**};
 	end Oberst.top;
 end Oberst;

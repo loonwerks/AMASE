@@ -91,7 +91,7 @@ system implementation top_level.Impl
 	
     annex safety{**
 	  --analyze : probability 1.0E-7
-	  analyze : max 2 fault
+	  analyze : max 4 fault
    **};
 end top_level.Impl;
 	
