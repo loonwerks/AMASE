@@ -170,11 +170,11 @@ with sensor;
 	annex agree {**
 			
 		
---		--------------------------------------------------------------------------------------------------------------
---		-- S18-WBS-R-0321 TOP LEVEL CONTRACT REQUIRED: USES BOTH PHYS AND CNTRL SYSTEM INFO
---		--------------------------------------------------------------------------------------------------------------
---		-- Loss of all wheel braking (unannunciated or annunciated) during landing or RTO shall be less than 5E-7 per flight.
---		--------------------------------------------------------------------------------------------------------------
+		--------------------------------------------------------------------------------------------------------------
+		-- S18-WBS-R-0321 TOP LEVEL CONTRACT REQUIRED: USES BOTH PHYS AND CNTRL SYSTEM INFO
+		--------------------------------------------------------------------------------------------------------------
+		-- Loss of all wheel braking (unannunciated or annunciated) during landing or RTO shall be less than 5E-7 per flight.
+		--------------------------------------------------------------------------------------------------------------
 		lemma "(S18-WBS-R-0321) Never loss of all wheel braking" :
 			(true -> (not ((((((((((mechanical_pedal_pos_L and mechanical_pedal_pos_R) and (ground_speed > 0)) and (not (((ctrl_sys.brake_as_cmd_1 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_L and (not ctrl_sys.as_cmd_pair_1_3)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force1 > 0)))) 
 				and (not (((ctrl_sys.brake_as_cmd_2 and ((green_pressure_in_selector_valve > 0) and system_validity)) or ((mechanical_pedal_pos_R and (not ctrl_sys.as_cmd_pair_2_4)) and ((green_pressure_in_selector_valve = 0) or (not system_validity)))) => (wheel_braking_force2 > 0)))) 
@@ -294,8 +294,8 @@ with sensor;
 --   **};
    
    annex safety{**
-	  analyze : max 4 fault
-	  --analyze : probability 1.0E-9 
+	  --analyze : max 1 fault
+	  analyze : probability 1.0E-6 
    **};
    
 end WBS.inst;

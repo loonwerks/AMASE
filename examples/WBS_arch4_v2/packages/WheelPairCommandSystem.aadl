@@ -89,7 +89,7 @@ with faults;
 			brake_as_cmd_2_from_norm_calc_2 : port normal_command_calculator_2.brake_as_cmd -> brake_as_cmd_2;
 			
 	annex safety{**
-	  analyze : max 1 fault 
+	  analyze : max 0 fault 
    **};
 		
 	end WheelPairCommandSystem.inst;

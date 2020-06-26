@@ -205,7 +205,7 @@ public class GenMCSHandler extends VerifyHandler {
 					queue.remove().cancel();
 				}
 				long totalNominalTime = System.currentTimeMillis() - startNominalTime;
-				long startFaultTime = System.currentTimeMillis();
+
 				// COMMENTED OUT:
 				// This form of display is not platform independent apparently.
 				// Create progress bar to display to users on long analysis runs.
@@ -240,9 +240,11 @@ public class GenMCSHandler extends VerifyHandler {
 					}
 				}
 				else {
+
 					AddFaultsToNodeVisitor.maxFaultHypothesis = true;
-					AddFaultsToNodeVisitor.maxFaultCount = 1;
-					for (int i = 1; i < 7; i++) {
+					AddFaultsToNodeVisitor.maxFaultCount = 4;
+					for (int i = 4; i < 5; i++) {
+						long startFaultTime = System.currentTimeMillis();
 						IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 						SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 

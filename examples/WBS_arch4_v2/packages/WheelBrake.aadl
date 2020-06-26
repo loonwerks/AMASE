@@ -48,7 +48,7 @@ with faults;
 			brake_force_out : port brake_actuator.braking_force -> brake_force;
 		annex safety{**
 	
-		analyze : max 2 fault
+		analyze : max 0 fault
 		**}	;		
 		
 	end WheelBrake.inst;
