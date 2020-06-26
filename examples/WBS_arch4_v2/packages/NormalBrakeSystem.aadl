@@ -137,7 +137,7 @@ with Base_Types;
 				
 		
 	annex safety{**
-	  analyze : max 2 fault 
+	  analyze : max 0 fault 
    **};		
 		
 	end NormalBrakeSystem.inst;

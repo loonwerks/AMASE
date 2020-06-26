@@ -32,7 +32,7 @@ with Receiver;
 			rec2_to_top : port receiver2.output -> receiver2_output;
 		
 		annex safety {**
-      		analyze : max 1 fault
+      		analyze : max 4 fault
    		**};
 			
 	end Top_Level.impl;

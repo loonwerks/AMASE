@@ -83,8 +83,4 @@ with faults;
 			
 		**};
 	end MonitorSystem;
-	
-	system implementation MonitorSystem.inst
-		
-	end MonitorSystem.inst;
 end MonitorSystem;
