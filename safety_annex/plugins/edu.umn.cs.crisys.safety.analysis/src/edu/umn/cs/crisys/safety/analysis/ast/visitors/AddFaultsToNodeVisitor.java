@@ -156,9 +156,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean probabilisticHypothesis = false;
 
 	// Flag to indicate decomposition of contracts and eq stmts.
-	private boolean granularity = false;
-	private boolean decomposeAnd = false;
-	private boolean uninline = true;
+	private boolean granularity = true;
+	private boolean decomposeAnd = true;
+	private boolean uninline = false;
 
 	/**
 	 * Call to super class.
