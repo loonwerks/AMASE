@@ -171,6 +171,11 @@ public class IvcToSoteriaFTGenerator {
 			// TODO: throw exception in the GUI
 			throw new SafetyException(
 					"One of the properties is invalid. The model must be valid using AGREE Verify All Layers.");
+		} else if (propertyResult.getStatus().equals(jkind.api.results.Status.UNKNOWN)) {
+			// TODO: throw exception in the GUI
+			throw new SafetyException(
+					"One of the properties is unknown. All properties must be known and valid to generate minimal cut sets"
+							+ " Tip: Set solver to Z3 and set analysis properties PDR = 4.");
 		}
 
 	}
