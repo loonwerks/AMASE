@@ -18,11 +18,13 @@
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand">
      </command>
+     <?ignore
      <command
            name="Verify Monolithically with Faults"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand">
      </command>
+     ?>
      <command
            name="Generate Minimal Cut Sets"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
@@ -48,7 +50,8 @@
                   definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
             </reference>
          </enabledWhen>
-      </handler> 
+      </handler>
+      <?ignore 
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.FaultsVerifyMonolithicHandler">
@@ -57,7 +60,8 @@
                   definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
             </reference>
          </enabledWhen>
-      </handler>  
+      </handler> 
+      ?> 
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.GenMCSHandler">
@@ -81,12 +85,14 @@
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
+      <?ignore
       <key
             commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+7"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
+      ?>
       <key
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
             contextId="org.eclipse.ui.contexts.window"
@@ -119,6 +125,7 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.faultsAllLayersCommand"
                   style="push">
             </command>
+            <?ignore
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
                   mnemonic="f"
@@ -126,6 +133,7 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.faultsMonolithicCommand"
                   style="push">
             </command>
+            ?>
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
                   mnemonic="f"
@@ -151,12 +159,14 @@
                   tooltip="Fault analysis: compositional."
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsAllLayersCommand">
             </command> 
+            <?ignore
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
                   icon="icons/sample.gif"
                   tooltip="Fault analysis: monolithic"
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsMonolithicCommand">
             </command>
+            ?>
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
                   icon="icons/sample.gif"
@@ -190,6 +200,7 @@
                   mnemonic="b"
                   style="push">
             </command>
+            <?ignore
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
                   icon="icons/layers.png"
@@ -197,6 +208,7 @@
                   mnemonic="c"
                   style="push">
             </command>
+            ?>
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
                   icon="icons/layers.png"
