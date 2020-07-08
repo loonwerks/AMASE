@@ -126,11 +126,11 @@ public
 		**};
 		annex safety {**
 			fault C0_out_fail_to_one "C0 out0 fail to one fault": Common_Faults::fail_to_one {
-			inputs: val_in <- out0;     
+			inputs: val_in <- out0;      
 			outputs: out0 <- val_out;   
          	probability: 1.0E-7 ;
 			duration: permanent;
-			}	
+			}
 		**};
 	end C0;
 	

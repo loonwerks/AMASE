@@ -86,6 +86,20 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return (eObject.eClass().getEPackage() == SafetyPackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 
+	@Check(CheckType.FAST)
+	public void checkContractImpl(SafetyContractImpl contract) {
+		List<String> faultNames = new ArrayList<String>();
+		for(SpecStatement spec: contract.getSpecs()) {
+			if(spec instanceof FaultStatement) {
+				if(faultNames.contains(((FaultStatement)spec).getName())){
+					error(spec, "Fault name: " + ((FaultStatement) spec).getName() + " must be unique.");
+				} else {
+					faultNames.add(((FaultStatement)spec).getName());
+				}
+			}
+		}
+
+	}
 
 	/**
 	 * Checks description string, warning if empty, and checks that the
@@ -104,6 +118,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		if (!(finalNodeName instanceof NodeDef)) {
 			error(nodeName, "The fault name must be a valid node definition.");
 		}
+
 	}
 
 	/**
