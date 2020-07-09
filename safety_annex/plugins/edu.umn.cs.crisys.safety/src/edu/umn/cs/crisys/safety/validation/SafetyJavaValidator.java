@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
@@ -32,12 +33,14 @@ import org.osate.aadl2.impl.PropertyImpl;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.BoolLitExpr;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.Expr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.NodeDef;
+import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
@@ -98,7 +101,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -320,7 +322,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 						if ((((DoubleDotRefImpl) arg.getType()).getElm() instanceof PropertyImpl)
 								|| (((DoubleDotRefImpl) arg.getType()).getElm() instanceof DataTypeImpl)) {
 							error(inputs,
-									"Fault node parameters are strange: a possible issue is that the keyword 'float' is used instead of 'real.'");
+									"Fault node parameters are not recognized: a possible issue is that the keyword 'float' is used instead of 'real.'");
 						}
 					}
 				}
@@ -353,7 +355,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 						+ " must be a valid agree node definition name.");
 			}
 		} else {
-			// Not in fault statement
 			error(inputs, "Fault inputs must be defined within a fault statement.");
 		}
 	}
@@ -375,7 +376,6 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			if (retValues == null) {
 				error(outputs, "Fault node definition is not valid for these outputs.");
 			}
-
 			for (Arg arg : retValues) {
 				returnNames.add(arg.getFullName());
 			}
@@ -395,6 +395,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			}
 		} else {
 			error(outputs, "Fault outputs must be in a fault statement.");
+		}
+		if (!checkOutputTypes(faultsOut, outputs.getNom_conn(), retValues)) {
+			error(outputs, "The output types do not match the node return parameter types.");
 		}
 	}
 
@@ -687,45 +690,89 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	private boolean checkInputTypes(List<Expr> exprList, List<Arg> nodeArgs) {
 		// Type check inputs
 		for (int i = 0; i < exprList.size(); i++) {
-			if (nodeArgs.get(i).getType() instanceof PrimType) {
-				if (exprList.get(i) instanceof NamedElmExpr) {
-					NamedElmExpr elm = (NamedElmExpr) exprList.get(i);
-					if (elm.getElm() instanceof Arg) {
-						Arg arg = (Arg) elm.getElm();
-						if (!(arg.getType() instanceof PrimType)) {
-							return false;
-						} else {
-							PrimType pTypeExpr = (PrimType) arg.getType();
-							PrimType pTypeNode = (PrimType) nodeArgs.get(i).getType();
-							if (!pTypeExpr.getName().equals(pTypeNode.getName())) {
-								return false;
-							} else {
-								return true;
-							}
-						}
-					} else if (elm.getElm() instanceof DataPortImpl) {
-						DataPortImpl dataport = (DataPortImpl) elm.getElm();
-						if (dataport.basicGetFeatureClassifier() instanceof DataTypeImpl) {
-							DataTypeImpl type = (DataTypeImpl) dataport.basicGetDataFeatureClassifier();
-							String typePort = type.getName();
-							PrimType pType = (PrimType) nodeArgs.get(i).getType();
-							String typeNode = pType.getName();
-							if (typeNode.equalsIgnoreCase("real") & typePort.equalsIgnoreCase("Float")) {
-								return true;
-							} else if (typeNode.equalsIgnoreCase("bool") & typePort.equalsIgnoreCase("Boolean")) {
-								return true;
-							} else if (typeNode.equalsIgnoreCase("int") & typePort.equalsIgnoreCase("Integer")) {
-								return true;
-							} else {
-								return false;
-							}
-						}
+			String argType = getArgType(nodeArgs.get(i));
+			String exprType = getExprType(exprList.get(i));
+			if (!argType.equals(exprType)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-					}
+	private boolean checkOutputTypes(List<String> faultsOut, EList<NamedElement> nom_conn, List<Arg> retValues) {
+		String type = "";
+		for (int i = 0; i < faultsOut.size(); i++) {
+			if (nom_conn.get(i) instanceof DataPortImpl) {
+				type = getDataPortType((DataPortImpl) nom_conn.get(i));
+				String argType = getArgType(retValues.get(i));
+				if (type.equals(argType) && !type.isEmpty() && !argType.isEmpty()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else if (nom_conn.get(i) instanceof Arg) {
+				type = getArgType((Arg) nom_conn.get(i));
+				String argType = getArgType(retValues.get(i));
+				if (type.equals(argType) && !type.isEmpty() && !argType.isEmpty()) {
+					return true;
+				} else {
+					return false;
 				}
 			}
 		}
 		return true;
+	}
+
+	private String getArgType(Arg arg) {
+		String type = "";
+		if (arg.getType() instanceof PrimType) {
+			type = ((PrimType) arg.getType()).getName();
+		}
+		return type;
+	}
+
+	private String getExprType(Expr ex) {
+		String type = "";
+		if (ex instanceof NamedElmExpr) {
+			NamedElmExpr elm = (NamedElmExpr) ex;
+			if (elm.getElm() instanceof Arg) {
+				return getArgType((Arg) elm.getElm());
+			} else if (elm.getElm() instanceof DataPortImpl) {
+				type = getDataPortType((DataPortImpl) elm.getElm());
+			}
+		} else if (ex instanceof BoolLitExpr) {
+			type = "bool";
+		} else if (ex instanceof RealLitExpr) {
+			type = "real";
+		} else if (ex instanceof IntLitExpr) {
+			type = "int";
+		} else if (ex instanceof PrevExpr) {
+			Expr init = ((PrevExpr) ex).getInit();
+			if (init instanceof BoolLitExpr) {
+				type = "bool";
+			} else if (init instanceof RealLitExpr) {
+				type = "real";
+			} else if (init instanceof IntLitExpr) {
+				type = "int";
+			}
+		}
+		return type;
+	}
+
+	private String getDataPortType(DataPortImpl dataport) {
+		String type = "";
+		if (dataport.basicGetFeatureClassifier() instanceof DataTypeImpl) {
+			DataTypeImpl datatype = (DataTypeImpl) dataport.basicGetDataFeatureClassifier();
+			String typePort = datatype.getName();
+			if (typePort.contains("Float")) {
+				type = "real";
+			} else if (typePort.contains("Bool")) {
+				type = "bool";
+			} else if (typePort.contains("Int")) {
+				type = "int";
+			}
+		}
+		return type;
 	}
 
 	/**

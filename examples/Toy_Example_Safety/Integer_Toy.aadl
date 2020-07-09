@@ -17,10 +17,18 @@ system A
 	
 	annex safety {**
 		fault stuck_at_fault_A "Component A output stuck" : faults::fail_to {
-			inputs: val_in <- Output, alt_val <- prev(Output, 0); 
-			outputs: Output <- val_out;    
+			eq test : int = 0;
+			eq test2 : real = 0;
+			inputs: val_in <- Output, alt_val <- test;--alt_val <- prev(Output, 0); 
+			outputs: Output <- val_out;      
         	probability: 5.0E-9 ;
 			duration: permanent;
+		}
+		fault testing_A "Component A output new fault" : faults::fail_one_two {
+			inputs: val_in <- Output, bool1 <- true, alt_val <- prev(Output, 0); 
+			outputs: Output <- val_out;    
+        	probability: 5.0E-9 ; 
+			duration: permanent; 
 		}
 	**};
 end A ; 
