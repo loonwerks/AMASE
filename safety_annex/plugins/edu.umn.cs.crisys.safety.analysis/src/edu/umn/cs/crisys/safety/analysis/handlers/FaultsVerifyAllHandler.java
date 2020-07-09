@@ -72,8 +72,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		}
 		if (isProbabilisticAnalysis()) {
 			new SafetyException("Probabilistic behavior cannot be analyzed using "
-					+ "this compositional approach. Either choose monolithic "
-					+ "analysis or compositionally generate MinCutSets.");
+					+ "this compositional approach. You will have to compositionally generate minimal cut sets.");
 			return Status.CANCEL_STATUS;
 		}
 		return super.execute(event);
