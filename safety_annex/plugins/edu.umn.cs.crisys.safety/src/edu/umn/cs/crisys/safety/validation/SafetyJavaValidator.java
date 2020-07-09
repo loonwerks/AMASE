@@ -692,7 +692,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		for (int i = 0; i < exprList.size(); i++) {
 			String argType = getArgType(nodeArgs.get(i));
 			String exprType = getExprType(exprList.get(i));
-			if (!argType.equals(exprType)) {
+			if (!argType.equals(exprType) && !exprType.isEmpty()) {
 				return false;
 			}
 		}
