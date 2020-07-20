@@ -133,7 +133,7 @@ public class IvcToSoteriaFTGenerator {
 						int index = 0;
 						for (List<String> mcsSet : mcsSets) {
 							String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
-							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName, "");
+							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName, propertyDescription);
 							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
 							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
 							// mcsSetNode.addParentNode(propertyNode);
@@ -149,7 +149,7 @@ public class IvcToSoteriaFTGenerator {
 					}
 					soteriaFT.addIntermediateNode(propertyName, propertyNode);
 				} else {
-					SoteriaFTNonLeafNode propertyNode = new SoteriaFTNonLeafNode(propertyName, "");
+					SoteriaFTNonLeafNode propertyNode = new SoteriaFTNonLeafNode(propertyName, propertyDescription);
 					if (soteriaFT.intermediateNodes.containsKey(propertyName)) {
 						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
 					}
