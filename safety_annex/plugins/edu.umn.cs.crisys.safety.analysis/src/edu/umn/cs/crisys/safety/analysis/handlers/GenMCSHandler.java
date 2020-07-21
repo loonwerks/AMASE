@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -242,6 +243,23 @@ public class GenMCSHandler extends VerifyHandler {
 //					shell.open();
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
 					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
+					HashMap<String, Set<List<String>>> mapForHFT = soteriaFTGenerator.getMapPropertyToMCSs();
+
+					try {
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File hierarchyFTFile = File.createTempFile("Hierarchy_MinCutSet_" + timeStamp + "_", ".txt");
+						BufferedWriter bw = new BufferedWriter(new FileWriter(hierarchyFTFile));
+						bw.write(SoteriaPrintUtils.printHierarchicalText(mapForHFT));
+						bw.close();
+						SoteriaPrintUtils.resetBuilder();
+//						display.dispose();
+						org.eclipse.swt.program.Program.launch(hierarchyFTFile.toString());
+					} catch (IOException e) {
+						// close progress bar
+//						display.dispose();
+						Dialog.showError("Unable to open file", e.getMessage());
+						e.printStackTrace();
+					}
 
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
 					resolveVisitor.visit(soteriaFT);

@@ -1,5 +1,6 @@
 package edu.umn.cs.crisys.safety.analysis.soteria.faultTree;
 
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.HierarchicalFTPrintVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTAstVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTMinCutSetPrintVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTMinCutSetTallyPrintVisitor;
@@ -28,6 +29,12 @@ public abstract class SoteriaFTAst {
 
 	public String printMinCutSetTally() {
 		SoteriaFTMinCutSetTallyPrintVisitor visitor = new SoteriaFTMinCutSetTallyPrintVisitor();
+		accept(visitor);
+		return visitor.toString();
+	}
+
+	public String printHierarchyTxt() {
+		HierarchicalFTPrintVisitor visitor = new HierarchicalFTPrintVisitor();
 		accept(visitor);
 		return visitor.toString();
 	}
