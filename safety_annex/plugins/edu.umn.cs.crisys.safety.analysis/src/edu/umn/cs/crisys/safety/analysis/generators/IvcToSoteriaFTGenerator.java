@@ -1,9 +1,12 @@
 package edu.umn.cs.crisys.safety.analysis.generators;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.osate.aadl2.ComponentImplementation;
 
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
@@ -31,6 +34,7 @@ public class IvcToSoteriaFTGenerator {
 	boolean isLowerLevel = false;
 	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
 	public HashSet<String> compNameSet = new HashSet<>();
+	private HashMap<String, Set<List<String>>> mapPropertyToMCSs = new HashMap<String, Set<List<String>>>();
 
 	public SoteriaFaultTree generateSoteriaFT(AnalysisResult result, AgreeResultsLinker linker) {
 		// initialize
@@ -60,10 +64,8 @@ public class IvcToSoteriaFTGenerator {
 			}
 		} else if (result instanceof CompositeAnalysisResult) {
 			// get component name
-			String curCompName = result.getName().replaceFirst("Verification for ", "");
-			if (curCompName.contains(".")) {
-				curCompName = curCompName.replaceAll("\\.", "_");
-			}
+			ComponentImplementation comp = linker.getComponent(result);
+			String curCompName = comp.getName();
 			// if (!compNameSet.contains(curCompName)) {
 			// compNameSet.add(curCompName);
 			// build Soteria model for the current component
@@ -96,14 +98,21 @@ public class IvcToSoteriaFTGenerator {
 				String propertyDescription = propertyResult.getName();
 				ValidProperty property = (ValidProperty) propertyResult.getProperty();
 				// check if there is timeout in MIVC analysis
-
 				if (property.getMivcTimedOut()) {
 					new SafetyException("MIVC ANALYSIS TIMEOUT FOR " + lustreName + ": " + origPropertyName);
 				}
 
+				// Create mapPropToMCS for hierarchical ft printout
+				String propName = propertyName + ": " + propertyDescription;
+				Set<List<String>> mcsList = new HashSet<List<String>>();
+
 				// turn MIVC sets to MCS sets
 				// no limit on mhs set size
 				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0, false);
+				// Create list for prop->MCS mapping
+				mcsList = createMCSList(mcsSets, renaming, compName);
+				mapPropertyToMCSs.put(propName, mcsList);
+
 				// create node when mcsSets is not empty
 				if (!mcsSets.isEmpty()) {
 					SoteriaFTNonLeafNode propertyNode;
@@ -180,6 +189,55 @@ public class IvcToSoteriaFTGenerator {
 
 	}
 
+	/**
+	 * Creates a set of lists corresponding to each mcs set for a property.
+	 * Used for hierarchical ft printout.
+	 * @param mcsSets Set of list of strings (all mcss for a property)
+	 * @param renaming AgreeRenaming map
+	 * @param compName component name
+	 * @return Returns new set of lists with new descriptive strings
+	 */
+	private Set<List<String>> createMCSList(Set<List<String>> mcsSets, AgreeRenaming renaming, String compName) {
+		HashSet<List<String>> mcsFullSet = new HashSet<List<String>>();
+		if (!mcsSets.isEmpty()) {
+			for (List<String> mcsSet : mcsSets) {
+				List<String> mcsList = new ArrayList<String>();
+				for (String mcsElem : mcsSet) {
+					mcsList.add(getMCSInfo(mcsElem, renaming, compName));
+				}
+				mcsFullSet.add(mcsList);
+			}
+		}
+		return mcsFullSet;
+	}
+
+	/**
+	 * Gathers details about MCS element and returns descriptive string
+	 * including component name, fault/contract name and description.
+	 * @param mcsElem String of mcs element
+	 * @param renaming AgreeRenaming map
+	 * @param compName component name where this fault/contract can be found
+	 * @return descriptive string for hierarchical ft textual representation
+	 */
+	private String getMCSInfo(String mcsElem, AgreeRenaming renaming, String compName) {
+		String refStr = renaming.getSupportRefString(mcsElem);
+		if (mcsElem.startsWith("__fault")) {
+//			String mcsElemName = MHSUtils.updateElemName(mcsElem);
+//			String refStr = renaming.getSupportRefString(mcsElem);
+			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(refStr);
+			// original fault name specified by the user
+			String faultUserName = faultStmtImpl.getName();
+			// original fault explanation specified by the user
+			String faultUserExplanation = faultStmtImpl.getStr();
+			return "Contributing fault found in component " + stripOutInstanceName(mcsElem) + ": " + faultUserName
+					+ ": " + faultUserExplanation + " (" + mcsElem + ")";
+
+		} else {
+			return "Supporting contract: " + mcsElem + ": " + refStr;
+
+		}
+	}
+
 	private void extractMCSSets(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode,
 			List<String> mcsSet) {
 		for (String mcsElem : mcsSet) {
@@ -252,6 +310,29 @@ public class IvcToSoteriaFTGenerator {
 			// leafNode.addParentNode(mcsSetNode);
 		}
 
+	}
+
+	/**
+	 * Pulls component instance name from lustre fault name.
+	 * @param lustreName __fault__independently__active__instanceName__instanceName__fault_n
+	 * @return instanceName
+	 */
+	public String stripOutInstanceName(String lustreName) {
+		String instanceName = "";
+		String intermed = lustreName.replace("__fault__independently__active__", "");
+		String[] arrOfStr = intermed.split("__", 2);
+		if (arrOfStr.length != 0) {
+			instanceName = arrOfStr[0];
+		}
+		return instanceName;
+	}
+
+	/**
+	 * Public getter for map of property string to its mcs strings.
+	 * @return map of descriptive strings prop -> {MCSs}
+	 */
+	public HashMap<String, Set<List<String>>> getMapPropertyToMCSs() {
+		return mapPropertyToMCSs;
 	}
 
 }
