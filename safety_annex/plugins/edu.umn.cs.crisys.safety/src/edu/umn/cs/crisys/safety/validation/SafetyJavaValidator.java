@@ -27,6 +27,7 @@ import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.SystemType;
 import org.osate.aadl2.impl.AadlPackageImpl;
+import org.osate.aadl2.impl.DataImplementationImpl;
 import org.osate.aadl2.impl.DataPortImpl;
 import org.osate.aadl2.impl.DataTypeImpl;
 import org.osate.aadl2.impl.PropertyImpl;
@@ -705,7 +706,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 			if (nom_conn.get(i) instanceof DataPortImpl) {
 				type = getDataPortType((DataPortImpl) nom_conn.get(i));
 				String argType = getArgType(retValues.get(i));
-				if (type.equals(argType) && !type.isEmpty() && !argType.isEmpty()) {
+				if (type.equals(argType) || (!type.isEmpty() || !argType.isEmpty())) {
 					return true;
 				} else {
 					return false;
@@ -763,6 +764,16 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		String type = "";
 		if (dataport.basicGetFeatureClassifier() instanceof DataTypeImpl) {
 			DataTypeImpl datatype = (DataTypeImpl) dataport.basicGetDataFeatureClassifier();
+			String typePort = datatype.getName();
+			if (typePort.contains("Float")) {
+				type = "real";
+			} else if (typePort.contains("Bool")) {
+				type = "bool";
+			} else if (typePort.contains("Int")) {
+				type = "int";
+			}
+		} else if (dataport.basicGetFeatureClassifier() instanceof DataImplementationImpl) {
+			DataImplementationImpl datatype = (DataImplementationImpl) dataport.basicGetDataFeatureClassifier();
 			String typePort = datatype.getName();
 			if (typePort.contains("Float")) {
 				type = "real";
