@@ -247,7 +247,8 @@ public class GenMCSHandler extends VerifyHandler {
 
 					try {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-						File hierarchyFTFile = File.createTempFile("Hierarchy_MinCutSet_" + timeStamp + "_", ".txt");
+						File hierarchyFTFile = File.createTempFile("HierarchicalCausalFactors_" + timeStamp + "_",
+								".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(hierarchyFTFile));
 						bw.write(SoteriaPrintUtils.printHierarchicalText(mapForHFT));
 						bw.close();
