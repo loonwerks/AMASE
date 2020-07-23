@@ -250,9 +250,9 @@ public class GenMCSHandler extends VerifyHandler {
 						File hierarchyFTFile = File.createTempFile("HierarchicalCausalFactors_" + timeStamp + "_",
 								".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(hierarchyFTFile));
-						bw.write(SoteriaPrintUtils.printHierarchicalText(mapForHFT));
+						SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+						bw.write(printUtils.printHierarchicalText(mapForHFT));
 						bw.close();
-						SoteriaPrintUtils.resetBuilder();
 //						display.dispose();
 						org.eclipse.swt.program.Program.launch(hierarchyFTFile.toString());
 					} catch (IOException e) {

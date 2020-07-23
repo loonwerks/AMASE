@@ -5,25 +5,25 @@ import java.util.List;
 import java.util.Set;
 
 public class SoteriaPrintUtils {
-	private static StringBuilder sb = new StringBuilder();
+	private StringBuilder sb = new StringBuilder();
 
 	@Override
 	public String toString() {
 		return sb.toString();
 	}
 
-	protected static void write(Object o) {
+	protected void write(Object o) {
 		sb.append(o);
 	}
 
-	protected static void writeln(Object o) {
+	protected void writeln(Object o) {
 		sb.append(o);
 		newline();
 	}
 
-	private static final String seperator = System.getProperty("line.separator");
+	private final String seperator = System.getProperty("line.separator");
 
-	protected static void newline() {
+	protected void newline() {
 		write(seperator);
 	}
 
@@ -32,7 +32,7 @@ public class SoteriaPrintUtils {
 		newline();
 	}
 
-	public static String printHierarchicalText(HashMap<String, Set<List<String>>> mapForHFT) {
+	public String printHierarchicalText(HashMap<String, Set<List<String>>> mapForHFT) {
 
 		for (String prop : mapForHFT.keySet()) {
 			writeln(prop);
@@ -54,9 +54,4 @@ public class SoteriaPrintUtils {
 		newline();
 		return sb.toString();
 	}
-
-	public static void resetBuilder() {
-		sb.setLength(0);
-	}
-
 }
