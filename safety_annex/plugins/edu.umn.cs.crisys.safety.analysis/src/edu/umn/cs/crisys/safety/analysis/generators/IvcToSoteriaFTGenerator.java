@@ -3,6 +3,7 @@ package edu.umn.cs.crisys.safety.analysis.generators;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,8 @@ public class IvcToSoteriaFTGenerator {
 	boolean isLowerLevel = false;
 	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
 	public HashSet<String> compNameSet = new HashSet<>();
-	private HashMap<String, Set<List<String>>> mapPropertyToMCSs = new HashMap<String, Set<List<String>>>();
+	private LinkedHashMap<String, Set<List<String>>> mapPropertyToMCSs = new LinkedHashMap<String, Set<List<String>>>();
+	private String componentName = "";
 
 	public SoteriaFaultTree generateSoteriaFT(AnalysisResult result, AgreeResultsLinker linker) {
 		// initialize
@@ -64,12 +66,32 @@ public class IvcToSoteriaFTGenerator {
 			}
 		} else if (result instanceof CompositeAnalysisResult) {
 			// get component name
-			ComponentImplementation comp = linker.getComponent(result);
-			String curCompName = comp.getName();
+			String curCompName = result.getName().replaceFirst("Verification for ", "");
+			if (curCompName.contains(".")) {
+				curCompName = curCompName.replaceAll("\\.", "_");
+			}
+			if (curCompName.equals("agree") || curCompName.equals("safety")) {
+				ComponentImplementation comp = linker.getComponent(result);
+				componentName = comp.getName();
+			} else {
+				componentName = curCompName;
+			}
+			// ---------------------------------------------------------------
+			// TODO: The following two lines of code are commented out because
+			// they cause the resolve visitor to not complete its job.
+			// Need to figure out why the actual component name causes a problem
+			// for resolve visitor.
+			// Currently at the top level of analysis, the component name
+			// is saved as the annex name (agree or safety).
+			// This is incorrect.
+//			ComponentImplementation comp = linker.getComponent(result);
+//			String curCompName = comp.getName();
+			// ----------------------------------------------------------------
+
 			// if (!compNameSet.contains(curCompName)) {
 			// compNameSet.add(curCompName);
 			// build Soteria model for the current component
-			// get currenret component name
+			// get current component name
 			for (AnalysisResult curResult : ((CompositeAnalysisResult) result).getChildren()) {
 				// recursively call walkthroughResults
 				walkthroughResults(curResult, curCompName, linker);
@@ -111,7 +133,7 @@ public class IvcToSoteriaFTGenerator {
 				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0, false);
 				// Create list for prop->MCS mapping
 				mcsList = createMCSList(mcsSets, renaming, compName);
-				mapPropertyToMCSs.put(propName, mcsList);
+				mapPropertyToMCSs.put(componentName + "__" + lustreName, mcsList);
 
 				// create node when mcsSets is not empty
 				if (!mcsSets.isEmpty()) {
@@ -222,18 +244,14 @@ public class IvcToSoteriaFTGenerator {
 	private String getMCSInfo(String mcsElem, AgreeRenaming renaming, String compName) {
 		String refStr = renaming.getSupportRefString(mcsElem);
 		if (mcsElem.startsWith("__fault")) {
-//			String mcsElemName = MHSUtils.updateElemName(mcsElem);
-//			String refStr = renaming.getSupportRefString(mcsElem);
 			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(refStr);
-			// original fault name specified by the user
 			String faultUserName = faultStmtImpl.getName();
-			// original fault explanation specified by the user
 			String faultUserExplanation = faultStmtImpl.getStr();
 			return "Contributing fault found in component " + stripOutInstanceName(mcsElem) + ": " + faultUserName
 					+ ": " + faultUserExplanation + " (" + mcsElem + ")";
 
 		} else {
-			return "Supporting contract: " + mcsElem + ": " + refStr;
+			return "Supporting contract in component " + componentName + ": " + refStr;
 
 		}
 	}
@@ -331,7 +349,7 @@ public class IvcToSoteriaFTGenerator {
 	 * Public getter for map of property string to its mcs strings.
 	 * @return map of descriptive strings prop -> {MCSs}
 	 */
-	public HashMap<String, Set<List<String>>> getMapPropertyToMCSs() {
+	public LinkedHashMap<String, Set<List<String>>> getMapPropertyToMCSs() {
 		return mapPropertyToMCSs;
 	}
 
