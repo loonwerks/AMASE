@@ -53,16 +53,17 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * and hence we add the ivcs differently for that node. (Lines 159-161)
 	 */
 
-	/*
-	 * transform:
-	 * @param AgreeProgram: this is the agree program that comes in from the extension point.
-	 * @return AgreeProgram: this is either the unmodified original program,
-	 * or a transformed program (safety analysis)
+	/**
+	 * Extension point in agree passes program here. If menu item from safety
+	 * analysis is selected, program is passed to AddFaultsToNodeVisitor for
+	 * traversal and transformation.
+	 * @param AgreeProgram: program for traversal
+	 * @return AgreeProgram: unmodified if no safety analysis menu selected,
+	 * modified if selected.
 	 *
 	 */
 
 	/**
-	 * Transform program.
 	 * If safety analysis selected as menu item,
 	 * pass program to AddFaultsToNodeVisitor.
 	 * If not, return unchanged program.
@@ -104,7 +105,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	}
 
 	/**
-	 * setTransformFlag:
 	 * Sets the transform flag to bool value:
 	 * isVerify: Verify in the presence of faults
 	 * isGenMCS: generate mcs
@@ -131,15 +131,30 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		}
 	}
 
-
+	/**
+	 * Getter for static flag isVerify:
+	 * this is true when Faults Verify All Layers or
+	 * Faults Verify Single Layer is true.
+	 * @return class value isVerify
+	 */
 	public static boolean getIsVerify() {
 		return isVerify;
 	}
 
+	/**
+	 * Getter for static flag isGenMCS:
+	 * True if generating minimal cut sets
+	 * @return class value isGenMCS
+	 */
 	public static boolean getIsGenMCS() {
 		return isGenMCS;
 	}
 
+	/**
+	 * Getter for isSingleLayer:
+	 * Only true when verify in presence of faults single layer selected.
+	 * @return class value isSingleLayer
+	 */
 	public static boolean getIsSingleLayer() {
 		return isSingleLayer;
 	}
@@ -240,6 +255,11 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return path;
 	}
 
+	/**
+	 * Check this node instance for a safety annex.
+	 * @param topNode Program node "top" for this layer of analysis
+	 * @return boolean: is safety annex present
+	 */
 	private boolean checkForSafetyAnnex(AgreeNode topNode) {
 		boolean hasAnnex = false;
 		if (topNode.compInst instanceof SystemInstanceImpl) {
@@ -263,7 +283,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		return hasAnnex;
 	}
 
-
+	/**
+	 * Resets all static vars in this class:
+	 * isVerify, isGenMCS, isSingleLayer, isMonolithic
+	 */
 	public static void resetStaticVars() {
 		isVerify = false;
 		isGenMCS = false;

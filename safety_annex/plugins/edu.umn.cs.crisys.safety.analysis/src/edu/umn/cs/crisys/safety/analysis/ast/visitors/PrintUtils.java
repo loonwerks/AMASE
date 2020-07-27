@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class SoteriaPrintUtils {
+public class PrintUtils {
 	private StringBuilder sb = new StringBuilder();
 
 	@Override

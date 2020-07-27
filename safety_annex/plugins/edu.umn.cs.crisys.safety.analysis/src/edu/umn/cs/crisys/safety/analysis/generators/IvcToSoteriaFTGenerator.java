@@ -15,11 +15,11 @@ import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.MHSUtils;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNonLeafNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTOrNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTAndNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTLeafNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTNonLeafNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTOrNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
 import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
 import edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl;
 import edu.umn.cs.crisys.safety.safety.impl.ProbabilityStatementImpl;
@@ -31,14 +31,14 @@ import jkind.api.results.Renaming;
 import jkind.results.ValidProperty;
 
 public class IvcToSoteriaFTGenerator {
-	SoteriaFaultTree soteriaFT = new SoteriaFaultTree();
+	FaultTree soteriaFT = new FaultTree();
 	boolean isLowerLevel = false;
 	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
 	public HashSet<String> compNameSet = new HashSet<>();
 	private LinkedHashMap<String, Set<List<String>>> mapPropertyToMCSs = new LinkedHashMap<String, Set<List<String>>>();
 	private String componentName = "";
 
-	public SoteriaFaultTree generateSoteriaFT(AnalysisResult result, AgreeResultsLinker linker) {
+	public FaultTree generateSoteriaFT(AnalysisResult result, AgreeResultsLinker linker) {
 		// initialize
 		MHSUtils.clearLocals();
 		// get current verification result
@@ -137,23 +137,23 @@ public class IvcToSoteriaFTGenerator {
 
 				// create node when mcsSets is not empty
 				if (!mcsSets.isEmpty()) {
-					SoteriaFTNonLeafNode propertyNode;
+					FTNonLeafNode propertyNode;
 					boolean isNewNode = true;
 					boolean createOrNode = (mcsSets.size() > 1);
 					if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
 						if (createOrNode) {
-							propertyNode = new SoteriaFTOrNode(propertyName, propertyDescription);
+							propertyNode = new FTOrNode(propertyName, propertyDescription);
 						} else {
-							propertyNode = new SoteriaFTAndNode(propertyName, propertyDescription);
+							propertyNode = new FTAndNode(propertyName, propertyDescription);
 						}
 					} else {
 						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
 						// if the no child node has been populated for this node yet
-						if (!(propertyNode instanceof SoteriaFTOrNode) && !(propertyNode instanceof SoteriaFTAndNode)) {
+						if (!(propertyNode instanceof FTOrNode) && !(propertyNode instanceof FTAndNode)) {
 							if (createOrNode) {
-								propertyNode = new SoteriaFTOrNode(propertyName, propertyNode.propertyDescription);
+								propertyNode = new FTOrNode(propertyName, propertyNode.propertyDescription);
 							} else {
-								propertyNode = new SoteriaFTAndNode(propertyName, propertyNode.propertyDescription);
+								propertyNode = new FTAndNode(propertyName, propertyNode.propertyDescription);
 							}
 						} else {
 							isNewNode = false;
@@ -164,7 +164,7 @@ public class IvcToSoteriaFTGenerator {
 						int index = 0;
 						for (List<String> mcsSet : mcsSets) {
 							String mcsSetNodeName = propertyName + "_" + Integer.toString(index);
-							SoteriaFTAndNode mcsSetNode = new SoteriaFTAndNode(mcsSetNodeName, propertyDescription);
+							FTAndNode mcsSetNode = new FTAndNode(mcsSetNodeName, propertyDescription);
 							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
 							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
 							// mcsSetNode.addParentNode(propertyNode);
@@ -180,7 +180,7 @@ public class IvcToSoteriaFTGenerator {
 					}
 					soteriaFT.addIntermediateNode(propertyName, propertyNode);
 				} else {
-					SoteriaFTNonLeafNode propertyNode = new SoteriaFTNonLeafNode(propertyName, propertyDescription);
+					FTNonLeafNode propertyNode = new FTNonLeafNode(propertyName, propertyDescription);
 					if (soteriaFT.intermediateNodes.containsKey(propertyName)) {
 						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
 					}
@@ -256,14 +256,14 @@ public class IvcToSoteriaFTGenerator {
 		}
 	}
 
-	private void extractMCSSets(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode,
+	private void extractMCSSets(String compName, AgreeRenaming renaming, FTAndNode mcsSetNode,
 			List<String> mcsSet) {
 		for (String mcsElem : mcsSet) {
 			extractMCSElem(compName, renaming, mcsSetNode, mcsElem);
 		}
 	}
 
-	private void extractMCSElem(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode, String mcsElem) {
+	private void extractMCSElem(String compName, AgreeRenaming renaming, FTAndNode mcsSetNode, String mcsElem) {
 		String mcsElemName = MHSUtils.updateElemName(mcsElem);
 		// add each mcs element to formulaSubgroup
 		if (mcsElem.startsWith("__fault")) {
@@ -274,10 +274,10 @@ public class IvcToSoteriaFTGenerator {
 		}
 	}
 
-	private void extractContractMCSElem(String compName, SoteriaFTAndNode mcsSetNode, String propertyName) {
-		SoteriaFTNonLeafNode nonLeafNode;
+	private void extractContractMCSElem(String compName, FTAndNode mcsSetNode, String propertyName) {
+		FTNonLeafNode nonLeafNode;
 		if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
-			nonLeafNode = new SoteriaFTNonLeafNode(propertyName, "");
+			nonLeafNode = new FTNonLeafNode(propertyName, "");
 			soteriaFT.addIntermediateNode(propertyName, nonLeafNode);
 		} else {
 			nonLeafNode = soteriaFT.intermediateNodes.get(propertyName);
@@ -290,7 +290,7 @@ public class IvcToSoteriaFTGenerator {
 		// nonLeafNode.addParentNode(mcsSetNode);
 	}
 
-	private void extractFaultMCSElem(String compName, AgreeRenaming renaming, SoteriaFTAndNode mcsSetNode,
+	private void extractFaultMCSElem(String compName, AgreeRenaming renaming, FTAndNode mcsSetNode,
 			String faultName, String faultRefName, String originalFaultName) {
 		// differentiate same fault definitions activated in subcomponents of different parent components
 		String updatedFaultName = MHSUtils.updateElemName(compName + "_" + faultName);
@@ -314,7 +314,7 @@ public class IvcToSoteriaFTGenerator {
 			// TODO: need to have component specify failure rate and exposure time in the future
 			// currently treat exposure time and failure rate as (float) 1.0
 			// and set the failure probability from the fault statement as the failure rate
-			SoteriaFTLeafNode ftLeafNode = new SoteriaFTLeafNode(compName, updatedFaultName, (float) 1.0, (float) 1.0,
+			FTLeafNode ftLeafNode = new FTLeafNode(compName, updatedFaultName, (float) 1.0, (float) 1.0,
 					failureProb, originalFaultName, faultUserName, faultUserExplanation);
 			soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
 			mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
@@ -322,7 +322,7 @@ public class IvcToSoteriaFTGenerator {
 			soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
 			// ftLeafNode.addParentNode(mcsSetNode);
 		} else {
-			SoteriaFTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
+			FTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
 			mcsSetNode.addChildNode(updatedFaultName, leafNode);
 			soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
 			// leafNode.addParentNode(mcsSetNode);

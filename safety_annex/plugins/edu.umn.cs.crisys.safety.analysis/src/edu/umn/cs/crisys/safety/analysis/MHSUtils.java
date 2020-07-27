@@ -18,7 +18,8 @@ import edu.umn.cs.crisys.safety.analysis.generators.UniqueID;
 import jkind.JKindException;
 
 /*
- * This class provides some utility methods:
+ * This class provides some utility methods specific for the
+ * MHS algorithms:
  * typeContainsSafetyAnnex(Subcomponent)
  * containsSafetyAnnex(Subcomponent)
  */
@@ -45,6 +46,10 @@ public class MHSUtils {
 		sourceSetSb.setLength(0);
 	}
 
+	/**
+	 * Ensures file is deleted
+	 * @param file
+	 */
 	private static void ensureDeleted(File file) {
 		if (file != null && file.exists()) {
 			file.delete();
@@ -54,6 +59,11 @@ public class MHSUtils {
 		}
 	}
 
+	/**
+	 * Find adgmhs executable with path string
+	 * @param path to the executable
+	 * @return Exe file
+	 */
 	private static File findMHSalg(String path) {
 		if (path == null) {
 			return null;
@@ -69,6 +79,11 @@ public class MHSUtils {
 		return null;
 	}
 
+	/**
+	 * Find MHS algorithm through MHS_HOME and PATH
+	 * @return executable file
+	 * @throws Exception
+	 */
 	private static File findMHSalg() throws Exception {
 
 		File executable = findMHSalg(System.getenv("MHS_HOME"));
@@ -227,12 +242,20 @@ public class MHSUtils {
 		return destSets;
 	}
 
+	/**
+	 * Clear static vars
+	 */
 	public static void clearLocals() {
 		elemIdMap.clear();
 		clearSourceSetSb();
 		varIndex = 0;
 	}
 
+	/**
+	 * Update name of element for ocaml soteria model
+	 * @param name of element
+	 * @return updated name
+	 */
 	public static String updateElemName(String name) {
 		String updatedName = null;
 		UniqueID originalNameId = new UniqueID(name);
@@ -255,6 +278,11 @@ public class MHSUtils {
 		return updatedName;
 	}
 
+	/**
+	 * Create unique name from string and static counter var.
+	 * @param name original name
+	 * @return unique name
+	 */
 	public static String createUniqueElemName(String name) {
 		String updatedName = name + "_" + varIndex;
 		while (elemIdMap.containsValue(new UniqueID(updatedName))) {

@@ -15,9 +15,9 @@ import org.osate.aadl2.Classifier;
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifySingleHandler;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 
 public class FaultsVerifySingleHandler extends VerifySingleHandler {
 
@@ -31,7 +31,7 @@ public class FaultsVerifySingleHandler extends VerifySingleHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
-		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+		if (!SafetyUtil.containsSafetyAnnex(getClassifiers())) {
 			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
 			return Status.CANCEL_STATUS;
 		}

@@ -66,14 +66,14 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.FTResolveVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.PrintUtils;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
 import edu.umn.cs.crisys.safety.analysis.generators.IvcToSoteriaFTGenerator;
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.JKindException;
 import jkind.api.JKindApi;
 import jkind.api.JRealizabilityApi;
@@ -224,7 +224,7 @@ public class GenMCSHandler extends VerifyHandler {
 						|| (AddFaultsToNodeVisitor.maxFaultHypothesis && (AddFaultsToNodeVisitor.maxFaultCount == 0))
 						|| (AddFaultsToNodeVisitor.probabilisticHypothesis
 								&& AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty())) {
-					SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+					PrintUtils printUtils = new PrintUtils();
 					printUtils.printEmptyTree();
 
 					try {
@@ -243,8 +243,8 @@ public class GenMCSHandler extends VerifyHandler {
 					// open progress bar
 //					shell.open();
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
-					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
+					FTResolveVisitor resolveVisitor = new FTResolveVisitor();
+					FaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 					resolveVisitor.visit(soteriaFT);
 					LinkedHashMap<String, Set<List<String>>> mapForHFT = soteriaFTGenerator.getMapPropertyToMCSs();
 
@@ -253,7 +253,7 @@ public class GenMCSHandler extends VerifyHandler {
 						File hierarchyFTFile = File.createTempFile("HierarchicalCausalFactors_" + timeStamp + "_",
 								".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(hierarchyFTFile));
-						SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+						PrintUtils printUtils = new PrintUtils();
 						bw.write(printUtils.printHierarchicalText(mapForHFT));
 						bw.close();
 //						display.dispose();
@@ -327,7 +327,7 @@ public class GenMCSHandler extends VerifyHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
-		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+		if (!SafetyUtil.containsSafetyAnnex(getClassifiers())) {
 			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
 			return Status.CANCEL_STATUS;
 		}
