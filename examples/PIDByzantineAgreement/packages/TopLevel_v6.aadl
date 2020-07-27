@@ -179,7 +179,7 @@ with AADL_Properties;
 		    fault_activation: n3_failed = Asym_Fail_Any_PID_To_Any_Val@node3;  
 		    fault_activation: n4_failed = Asym_Fail_Any_PID_To_Any_Val@node4;
  
-			analyze: max 2 fault
+			analyze: max 2 fault 
 			--analyze: probability 1.0E-9
 			
 		**};

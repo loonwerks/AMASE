@@ -267,7 +267,9 @@ with sensor;
 		----------------------------------------------------------------------------------------------------------
 		
 		lemma "(S18-WBS-0324) Never inadvertent braking of all wheels." :
-			(true -> (not(POWER) or (not HYD_PRESSURE_MAX) or (mechanical_pedal_pos_L) or (mechanical_pedal_pos_R)
+		   (true -> (not(POWER) or (not HYD_PRESSURE_MAX) 
+								or (mechanical_pedal_pos_L) 
+								or (mechanical_pedal_pos_R)
 				                or (not SPEED)
 				                or (wheel_braking_force1 <= 0) or (wheel_braking_force2 <= 0)
 				                or (wheel_braking_force3 <= 0) or (wheel_braking_force4 <= 0)
@@ -275,6 +277,15 @@ with sensor;
 				                or (wheel_braking_force7 <= 0) or (wheel_braking_force8 <= 0)));	
 		
 	
+	
+--	lemma "(S18-WBS-0324) Never inadvertent braking of all wheels." :
+--		   (true -> ((not(POWER) or (not HYD_PRESSURE_MAX) 
+--								or not(mechanical_pedal_pos_L) 
+--								or not(mechanical_pedal_pos_R))
+--				               => ((wheel_braking_force1 = 0) or (wheel_braking_force2 = 0)
+--				                or (wheel_braking_force3 = 0) or (wheel_braking_force4 = 0)
+--				                or (wheel_braking_force5 = 0) or (wheel_braking_force6 = 0)
+--				                or (wheel_braking_force7 = 0) or (wheel_braking_force8 = 0)));
 		----------------------------------------------------------------------------------------------------------
 		--(S18-WBS-0325) Never inadvertent braking of wheel X
 		----------------------------------------------------------------------------------------------------------

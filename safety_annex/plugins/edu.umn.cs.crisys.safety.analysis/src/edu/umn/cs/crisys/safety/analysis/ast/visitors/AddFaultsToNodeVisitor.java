@@ -154,6 +154,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean maxFaultHypothesis = false;
 	public static boolean probabilisticHypothesis = false;
 
+	private int SAFE_NUM_ELEMENTS = 20000;
+
 	/**
 	 * Call to super class.
 	 */
@@ -431,7 +433,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			if (!onlyAsym) {
 				AgreeVar out = findVar(node.outputs, (faultyId));
 				if (out == null) {
-					throw new SafetyException("A fault defined for " + node.id + " has a connection"
+					new SafetyException("A fault defined for " + node.id + " has a connection"
 							+ " that is not a valid output for this component." + " Valid connections include {"
 							+ node.outputs + "}");
 				} else {
@@ -1223,7 +1225,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				found = true;
 			}
 		}
-		if (!found) {
+		if (!found && upperMostLevel) {
 			throw new SafetyException("No analysis statement; unable to run safety analysis");
 		}
 		return ab;
@@ -2270,14 +2272,30 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		Set<FaultProbability> elementProbabilitySet = new HashSet<>(elementProbabilities);
 		// the default (no-fault) case
 		Expr faultHypothesis = getNoFaultProposition(elementProbabilitySet);
+		// Vars for macros
+		List<BinaryExpr> macroList = new ArrayList<BinaryExpr>();
+		List<String> macroNames = new ArrayList<String>();
+		int noGoodEls = 0;
+		int unique = 0;
 		for (FaultSetProbability fsp : faultCombinationsAboveThreshold) {
 			Set<FaultProbability> goodElements = new HashSet<>(elementProbabilities);
 			goodElements.removeAll(fsp.elements);
 			// if there are only a subset of faults in the current combination
 			// add the assertion that the rest of the faults are not to happen
 			if (!goodElements.isEmpty()) {
+				noGoodEls = noGoodEls + goodElements.size();
 				Expr local = getNoFaultProposition(goodElements);
 				faultHypothesis = new BinaryExpr(local, BinaryOp.OR, faultHypothesis);
+				// Macros
+				if (noGoodEls > SAFE_NUM_ELEMENTS) {
+					IdExpr macro = new IdExpr("GOODELS_" + noGoodEls + unique);
+					macroNames.add("GOODELS_" + noGoodEls + unique);
+					noGoodEls = 0;
+					unique++;
+					BinaryExpr binMacro = new BinaryExpr(macro, BinaryOp.EQUAL, faultHypothesis);
+					macroList.add(binMacro);
+					faultHypothesis = macro;
+				}
 			}
 			// if there are all faults in the current combination
 			// add the assertion that all faults are allowed to happen
@@ -2294,6 +2312,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					+ ". A possible problem is that single layer analysis"
 					+ " is being run with no faults defined in lower layer."
 					+ " Check hypothesis statements and fault defs in this analysis.");
+		}
+		for (String s : macroNames) {
+			builder.addLocal(new AgreeVar(s, NamedType.BOOL, topNode.reference));
+		}
+		for (BinaryExpr b : macroList) {
+			builder.addLocalEquation(new AgreeEquation((IdExpr) b.left, b.right, topNode.reference));
+			builder.addAssertion(new AgreeStatement("", b, topNode.reference));
+			// builder.addGuarantee(new AgreeStatement("", b, topNode.reference));
 		}
 		builder.addAssertion(new AgreeStatement("", faultHypothesis, topNode.reference));
 	}

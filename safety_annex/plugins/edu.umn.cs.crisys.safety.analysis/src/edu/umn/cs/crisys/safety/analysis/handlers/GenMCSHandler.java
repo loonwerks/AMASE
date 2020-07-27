@@ -3,11 +3,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,6 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -24,7 +29,11 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.ui.editor.utils.EditorUtils;
+import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexSubclause;
+import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Element;
@@ -57,6 +66,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
@@ -218,7 +228,8 @@ public class GenMCSHandler extends VerifyHandler {
 					printUtils.printEmptyTree();
 
 					try {
-						File file = File.createTempFile("soteriaResolvedFT_", ".ml");
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File file = File.createTempFile("soteriaResolvedFT_" + timeStamp + "_", ".ml");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 						bw.write(printUtils.toString());
 						bw.close();
@@ -232,13 +243,30 @@ public class GenMCSHandler extends VerifyHandler {
 					// open progress bar
 //					shell.open();
 					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-
 					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
+					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 					resolveVisitor.visit(soteriaFT);
+					LinkedHashMap<String, Set<List<String>>> mapForHFT = soteriaFTGenerator.getMapPropertyToMCSs();
 
 					try {
-						File minCutSetFile = File.createTempFile("MinCutSet_", ".txt");
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File hierarchyFTFile = File.createTempFile("HierarchicalCausalFactors_" + timeStamp + "_",
+								".txt");
+						BufferedWriter bw = new BufferedWriter(new FileWriter(hierarchyFTFile));
+						SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+						bw.write(printUtils.printHierarchicalText(mapForHFT));
+						bw.close();
+//						display.dispose();
+						org.eclipse.swt.program.Program.launch(hierarchyFTFile.toString());
+					} catch (IOException e) {
+						// close progress bar
+//						display.dispose();
+						Dialog.showError("Unable to open file", e.getMessage());
+						e.printStackTrace();
+					}
+					try {
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
 						bw.write(soteriaFT.printMinCutSetTxt());
 						bw.close();
@@ -252,7 +280,8 @@ public class GenMCSHandler extends VerifyHandler {
 					}
 
 					try {
-						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_", ".txt");
+						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
 						bw.write(soteriaFT.printMinCutSetTally());
 						bw.close();
@@ -298,6 +327,10 @@ public class GenMCSHandler extends VerifyHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
+		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
+			return Status.CANCEL_STATUS;
+		}
 		// If isGenMCS, then the user selected
 		// 'Generate MCS' option and we should execute event.
 		// Else, return null.
@@ -478,6 +511,22 @@ public class GenMCSHandler extends VerifyHandler {
 
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
+	}
+
+	private List<Classifier> getClassifiers() {
+		XtextEditor xtextEditor = EditorUtils.getActiveXtextEditor();
+		if (xtextEditor == null) {
+			return null;
+		}
+		EObject original = xtextEditor.getDocument().readOnly(resource -> resource.getContents().get(0));
+		AadlPackage aadlPackage = null;
+		if (original instanceof AadlPackage) {
+			aadlPackage = (AadlPackage) original;
+		}
+		if (aadlPackage == null) {
+			return null;
+		}
+		return aadlPackage.getOwnedPublicSection().getOwnedClassifiers();
 	}
 
 }

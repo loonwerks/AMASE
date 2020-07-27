@@ -33,6 +33,7 @@ import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
@@ -65,10 +66,13 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
+		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
+			return Status.CANCEL_STATUS;
+		}
 		if (isProbabilisticAnalysis()) {
 			new SafetyException("Probabilistic behavior cannot be analyzed using "
-					+ "this compositional approach. Either choose monolithic "
-					+ "analysis or compositionally generate MinCutSets.");
+					+ "this compositional approach. You will have to compositionally generate minimal cut sets.");
 			return Status.CANCEL_STATUS;
 		}
 		return super.execute(event);
@@ -169,6 +173,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	protected String getJobName() {
 		return "Fault analysis: compositional";
 	}
+
 
 	private boolean isProbabilisticAnalysis() {
 		List<Classifier> classifiers = getClassifiers();
