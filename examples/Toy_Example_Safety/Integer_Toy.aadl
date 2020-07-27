@@ -17,8 +17,9 @@ system A
 	
 	annex safety {**
 		fault stuck_at_fault_A "Component A output stuck" : faults::fail_to {
+			eq test : int = 0;
 			inputs: val_in <- Output, alt_val <- prev(Output, 0); 
-			outputs: Output <- val_out;    
+			outputs: Output <- val_out;      
         	probability: 5.0E-9 ;
 			duration: permanent;
 		}

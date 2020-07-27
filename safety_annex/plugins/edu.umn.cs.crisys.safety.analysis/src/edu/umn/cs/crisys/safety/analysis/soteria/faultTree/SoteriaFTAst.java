@@ -32,6 +32,7 @@ public abstract class SoteriaFTAst {
 		return visitor.toString();
 	}
 
+
 	/**
 	 * Accept.
 	 *
