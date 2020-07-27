@@ -79,7 +79,7 @@ public
 		**};
 		
 		annex safety {**
-            analyze : max 3 fault
+            analyze : max 1 fault
       	    --analyze : probability 1.0E-10
    		**};
    		
