@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>edu.umn.cs.crisys.safety</groupId>
 		<artifactId>edu.umn.cs.crisys.safety.parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<name>Target Definition for Safety Annex</name>
