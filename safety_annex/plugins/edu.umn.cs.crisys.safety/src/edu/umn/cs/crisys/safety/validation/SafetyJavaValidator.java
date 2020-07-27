@@ -167,6 +167,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	/**
 	 * Checks for empty hw fault description string and makes sure hw fault
 	 * is declared in system type, not implementation.
+	 *
 	 * @param hwStmt
 	 */
 //	@Check(CheckType.FAST)

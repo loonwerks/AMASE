@@ -146,6 +146,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	// Map sender ("sender.output") to receiver name ("receiver1.input", "receiver2.input",...)
 	private Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
 
+	// Static vars:
+	// For storing true top level information held in safety annex.
+	// Saved for use during compositional mcs generation.
 	public static int maxFaultCount = 0;
 	public static double probabilityThreshold = 0.0;
 	public static boolean upperMostLevel = true;
@@ -154,6 +157,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static boolean maxFaultHypothesis = false;
 	public static boolean probabilisticHypothesis = false;
 
+	// When putting together Lustre assertions, once the number
+	// of literals is above 20,000 there is a chance that JKind
+	// will throw an exception. In this case, we create macros
+	// to handle each group of 20,000 elements.
 	private int SAFE_NUM_ELEMENTS = 20000;
 
 	/**
@@ -188,11 +195,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	//////////////////////////////////////////////////////////////////
 	//
-	// AGREENODE TRAVERSAL STARTS HERE.
-	//
-	// since we don't totally know the traversal order, if we only
-	// want to replace in a single node, we need to store the
-	// 'stacked' inNode, then restore it after a traversal.
+	// AGREE NODE TRAVERSAL STARTS HERE.
 	//
 	///////////////////////////////////////////////////////////////////
 	@Override
@@ -232,9 +235,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			}
 
 		}
-		// Then do the hardware fault inputs
 		addHWFaultInputs(hwFaults, nb);
-
 		addToMutualExclusionList();
 		addNominalVars(node, nb);
 		addFaultNodeEqs(faults, nb);
@@ -322,7 +323,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Visit IdExpr output. If symmetric, change name to fault__nominal.
+	 *  Visit IdExpr output. If symmetric, change name to fault__nominal.
 	 */
 	@Override
 	public Expr visit(IdExpr e) {

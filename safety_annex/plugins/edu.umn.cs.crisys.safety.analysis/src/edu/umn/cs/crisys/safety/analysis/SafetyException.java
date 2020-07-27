@@ -11,6 +11,5 @@ public class SafetyException extends RuntimeException {
 
 	public SafetyException(String message){
 		JOptionPane.showMessageDialog(null, message, "Safety Annex Error", JOptionPane.ERROR_MESSAGE);
-		// super(message);
 	}
 }

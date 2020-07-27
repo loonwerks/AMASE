@@ -37,7 +37,6 @@ import jkind.lustre.builders.NodeBuilder;
  * Main method that performs these actions is:
  * processFaults: takes in list of FaultStatements and returns a list of associated Faults.
  *
- * @author Danielle Stewart
  */
 public class AsymFaultASTBuilder extends FaultASTBuilder {
 	// Local list of expressions used as input for node call expression.
@@ -51,7 +50,6 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 	 */
 	public AsymFaultASTBuilder(List<Node> globalLustreNodes, AgreeNode agreeNode) {
 		super(globalLustreNodes, agreeNode);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -511,7 +509,6 @@ public class AsymFaultASTBuilder extends FaultASTBuilder {
 
 	/**
 	 * Pair: trigger expr, faultOut expr
-	 * @author Danielle Stewart
 	 *
 	 */
 	public class TriggerFaultPair {
