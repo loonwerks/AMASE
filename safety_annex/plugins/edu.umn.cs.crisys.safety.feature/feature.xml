@@ -2,7 +2,7 @@
 <feature
       id="edu.umn.cs.crisys.safety.feature"
       label="Safety Annex"
-      version="0.9.0.qualifier"
+      version="1.0.0.qualifier"
       provider-name="University of Minnesota Critical Systems Group">
 
    <description url="">
@@ -50,7 +50,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    <includes
          id="com.rockwellcollins.atc.agree.feature"
-         version="0.0.0"/>
+         version="2.5.1"/>
 
    <includes
          id="com.collins.trustedsystems.z3.feature"
@@ -62,7 +62,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="edu.umn.cs.crisys.safety.ui"/>
       <import plugin="org.eclipse.xtend"/>
       <import plugin="org.eclipse.xtext"/>
-      <import feature="com.rockwellcollins.atc.agree.feature" version="2.4.0.qualifier"/>
+      <import feature="com.rockwellcollins.atc.agree.feature" version="2.5.1.qualifier"/>
    </requires>
 
    <plugin
