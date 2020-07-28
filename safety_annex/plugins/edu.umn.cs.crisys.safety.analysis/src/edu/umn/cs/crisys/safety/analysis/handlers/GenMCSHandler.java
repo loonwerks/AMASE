@@ -70,7 +70,7 @@ import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.FTResolveVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.PrintUtils;
 import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
-import edu.umn.cs.crisys.safety.analysis.generators.IvcToSoteriaFTGenerator;
+import edu.umn.cs.crisys.safety.analysis.generators.IvcToFTGenerator;
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
@@ -242,7 +242,7 @@ public class GenMCSHandler extends VerifyHandler {
 				else {
 					// open progress bar
 //					shell.open();
-					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
+					IvcToFTGenerator soteriaFTGenerator = new IvcToFTGenerator();
 					FTResolveVisitor resolveVisitor = new FTResolveVisitor();
 					FaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
 					resolveVisitor.visit(soteriaFT);

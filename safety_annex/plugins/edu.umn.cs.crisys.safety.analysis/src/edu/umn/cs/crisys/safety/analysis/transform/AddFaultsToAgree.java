@@ -62,14 +62,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 * modified if selected.
 	 *
 	 */
-
-	/**
-	 * If safety analysis selected as menu item,
-	 * pass program to AddFaultsToNodeVisitor.
-	 * If not, return unchanged program.
-	 *
-	 * @param program The AgreeProgram.
-	 */
 	@Override
 	public AgreeProgram transform(AgreeProgram program) {
 
@@ -86,7 +78,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		faultVisitor = new AddFaultsToNodeVisitor();
 
 		try{
-
+			// Monolithic and single layer can have the
+			// static vars reset right after program is visited.
+			// Compositional must wait until after the analysis
+			// thread is complete (handler.doAnalysis)
 			if (isVerify || isGenMCS) {
 				program = faultVisitor.visit(program);
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();

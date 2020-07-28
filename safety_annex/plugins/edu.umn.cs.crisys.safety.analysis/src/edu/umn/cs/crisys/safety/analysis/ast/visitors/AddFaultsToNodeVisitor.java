@@ -2259,6 +2259,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Method builds combinations of faults that cannot occur
 	 * together based on probability values.
 	 *
+	 * Uses macros to shrink the size of the entire
+	 * formula in case the number of fault combinations
+	 * is too large for the Lustre parser to handle.
+	 *
 	 * @param topNode AgreeNode, top of program
 	 * @param builder Node builder will have assertions added.
 	 * @param elementProbabilities Prob of elements
