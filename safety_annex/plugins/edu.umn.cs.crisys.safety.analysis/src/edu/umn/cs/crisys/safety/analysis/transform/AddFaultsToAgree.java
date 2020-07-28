@@ -94,7 +94,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 			}
 		}
 		catch (Throwable t) {
-			new SafetyException("Something went wrong during safety analysis: " + t.toString());
+			new SafetyException("Something went wrong during safety analysis traversal of program: " + t.toString());
 		}
 		return program;
 	}

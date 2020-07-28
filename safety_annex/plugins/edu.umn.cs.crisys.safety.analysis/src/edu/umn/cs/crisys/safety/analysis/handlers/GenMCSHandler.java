@@ -207,7 +207,7 @@ public class GenMCSHandler extends VerifyHandler {
 					queue.remove().cancel();
 				}
 				// COMMENTED OUT:
-				// This form of display is not platform independent apparently.
+				// TODO: This form of display is not platform independent apparently.
 				// Create progress bar to display to users on long analysis runs.
 //				Display display = new Display();
 //				Shell shell = createProgressBar(display);
