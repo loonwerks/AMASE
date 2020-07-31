@@ -31,14 +31,14 @@ import jkind.api.results.Renaming;
 import jkind.results.ValidProperty;
 
 public class IvcToFTGenerator {
-	FaultTree soteriaFT = new FaultTree();
+	FaultTree faultTree = new FaultTree();
 	boolean isLowerLevel = false;
 	public HashMap<UniqueID, UniqueID> elemIdMap = new HashMap<>();
 	public HashSet<String> compNameSet = new HashSet<>();
 	private LinkedHashMap<String, Set<List<String>>> mapPropertyToMCSs = new LinkedHashMap<String, Set<List<String>>>();
 	private String componentName = "";
 
-	public FaultTree generateSoteriaFT(AnalysisResult result, AgreeResultsLinker linker) {
+	public FaultTree generateFT(AnalysisResult result, AgreeResultsLinker linker) {
 		// initialize
 		MHSUtils.clearLocals();
 		// get current verification result
@@ -46,10 +46,10 @@ public class IvcToFTGenerator {
 		walkthroughResults(curResult, null, linker);
 		// some node's child nodes were added before those child nodes obtained their own child nodes
 		// fix those discrepancies in the traverse
-		soteriaFT.updateChildNodes();
+		faultTree.updateChildNodes();
 		// sort through intermediate nodes to declare before use
-		soteriaFT.sortIntermediateNodes();
-		return soteriaFT;
+		faultTree.sortIntermediateNodes();
+		return faultTree;
 	}
 
 	private void walkthroughResults(AnalysisResult result, String compName, AgreeResultsLinker linker) {
@@ -140,14 +140,14 @@ public class IvcToFTGenerator {
 					FTNonLeafNode propertyNode;
 					boolean isNewNode = true;
 					boolean createOrNode = (mcsSets.size() > 1);
-					if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
+					if (!faultTree.intermediateNodes.containsKey(propertyName)) {
 						if (createOrNode) {
 							propertyNode = new FTOrNode(propertyName, propertyDescription);
 						} else {
 							propertyNode = new FTAndNode(propertyName, propertyDescription);
 						}
 					} else {
-						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
+						propertyNode = faultTree.intermediateNodes.get(propertyName);
 						// if the no child node has been populated for this node yet
 						if (!(propertyNode instanceof FTOrNode) && !(propertyNode instanceof FTAndNode)) {
 							if (createOrNode) {
@@ -168,29 +168,29 @@ public class IvcToFTGenerator {
 							extractMCSSets(compName, renaming, mcsSetNode, mcsSet);
 							propertyNode.addChildNode(mcsSetNodeName, mcsSetNode);
 							// mcsSetNode.addParentNode(propertyNode);
-							soteriaFT.addIntermediateNode(mcsSetNodeName, mcsSetNode);
+							faultTree.addIntermediateNode(mcsSetNodeName, mcsSetNode);
 							// update intermediate node
-							soteriaFT.addIntermediateNode(propertyNode.nodeName, propertyNode);
+							faultTree.addIntermediateNode(propertyNode.nodeName, propertyNode);
 							index++;
 						}
 					}
 					if (!isLowerLevel) {
-						soteriaFT.addRootNode(propertyName, propertyNode);
+						faultTree.addRootNode(propertyName, propertyNode);
 						propertyNode.setRoot();
 					}
-					soteriaFT.addIntermediateNode(propertyName, propertyNode);
+					faultTree.addIntermediateNode(propertyName, propertyNode);
 				} else {
 					FTNonLeafNode propertyNode = new FTNonLeafNode(propertyName, propertyDescription);
-					if (soteriaFT.intermediateNodes.containsKey(propertyName)) {
-						propertyNode = soteriaFT.intermediateNodes.get(propertyName);
+					if (faultTree.intermediateNodes.containsKey(propertyName)) {
+						propertyNode = faultTree.intermediateNodes.get(propertyName);
 					}
 					propertyNode.resolved = true;
 					propertyNode.nodeValue = false;
 					if (!isLowerLevel) {
-						soteriaFT.addRootNode(propertyName, propertyNode);
+						faultTree.addRootNode(propertyName, propertyNode);
 						propertyNode.setRoot();
 					}
-					soteriaFT.addIntermediateNode(propertyName, propertyNode);
+					faultTree.addIntermediateNode(propertyName, propertyNode);
 				}
 			} else if (propertyResult.getStatus().equals(jkind.api.results.Status.CANCELED)) {
 				throw new SafetyException("One of the properties was canceled in the process of model checking."
@@ -272,17 +272,17 @@ public class IvcToFTGenerator {
 
 	private void extractContractMCSElem(String compName, FTAndNode mcsSetNode, String propertyName) {
 		FTNonLeafNode nonLeafNode;
-		if (!soteriaFT.intermediateNodes.containsKey(propertyName)) {
+		if (!faultTree.intermediateNodes.containsKey(propertyName)) {
 			nonLeafNode = new FTNonLeafNode(propertyName, "");
-			soteriaFT.addIntermediateNode(propertyName, nonLeafNode);
+			faultTree.addIntermediateNode(propertyName, nonLeafNode);
 		} else {
-			nonLeafNode = soteriaFT.intermediateNodes.get(propertyName);
+			nonLeafNode = faultTree.intermediateNodes.get(propertyName);
 		}
-		// note: a SoteriaFTNonLeafNode added here as a child node could be updated later with its own child node
+		// note: a FTNonLeafNode added here as a child node could be updated later with its own child node
 		// will walk through all nodes again to fix the discrepancy
 		mcsSetNode.addChildNode(propertyName, nonLeafNode);
 		// update the node in intermediate nodes
-		soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+		faultTree.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
 		// nonLeafNode.addParentNode(mcsSetNode);
 	}
 
@@ -291,7 +291,7 @@ public class IvcToFTGenerator {
 		// differentiate same fault definitions activated in subcomponents of different parent components
 		String updatedFaultName = MHSUtils.updateElemName(compName + "_" + faultName);
 		// if mcsElem is not yet in leaf nodes
-		if (!soteriaFT.leafNodes.containsKey(updatedFaultName)) {
+		if (!faultTree.leafNodes.containsKey(updatedFaultName)) {
 			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(faultRefName);
 			// original fault name specified by the user
 			String faultUserName = faultStmtImpl.getName();
@@ -312,15 +312,15 @@ public class IvcToFTGenerator {
 			// and set the failure probability from the fault statement as the failure rate
 			FTLeafNode ftLeafNode = new FTLeafNode(compName, updatedFaultName, (float) 1.0, (float) 1.0,
 					failureProb, originalFaultName, faultUserName, faultUserExplanation);
-			soteriaFT.addLeafNode(updatedFaultName, ftLeafNode);
+			faultTree.addLeafNode(updatedFaultName, ftLeafNode);
 			mcsSetNode.addChildNode(updatedFaultName, ftLeafNode);
 			// update intermediate node
-			soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+			faultTree.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
 			// ftLeafNode.addParentNode(mcsSetNode);
 		} else {
-			FTLeafNode leafNode = soteriaFT.leafNodes.get(updatedFaultName);
+			FTLeafNode leafNode = faultTree.leafNodes.get(updatedFaultName);
 			mcsSetNode.addChildNode(updatedFaultName, leafNode);
-			soteriaFT.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
+			faultTree.addIntermediateNode(mcsSetNode.nodeName, mcsSetNode);
 			// leafNode.addParentNode(mcsSetNode);
 		}
 

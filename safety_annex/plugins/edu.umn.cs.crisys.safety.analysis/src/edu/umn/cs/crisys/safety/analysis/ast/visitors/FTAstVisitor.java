@@ -7,14 +7,14 @@ import edu.umn.cs.crisys.safety.analysis.faultTree.FTOrNode;
 import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
 
 public interface FTAstVisitor<T> {
-	public T visit(FaultTree soteriaFT);
+	public T visit(FaultTree faultTree);
 
-	public T visit(FTLeafNode soteriaFTLeafNode);
+	public T visit(FTLeafNode ftLeafNode);
 
-	public T visit(FTNonLeafNode soteriaNonLeafNode);
+	public T visit(FTNonLeafNode nonLeafNode);
 
-	public T visit(FTOrNode soteriaOrNode);
+	public T visit(FTOrNode orNode);
 
-	public T visit(FTAndNode soteriaAndNode);
+	public T visit(FTAndNode andNode);
 
 }

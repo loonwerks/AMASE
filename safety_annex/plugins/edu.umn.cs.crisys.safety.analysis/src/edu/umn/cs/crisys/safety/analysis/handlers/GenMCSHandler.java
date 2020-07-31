@@ -212,7 +212,7 @@ public class GenMCSHandler extends VerifyHandler {
 //				Display display = new Display();
 //				Shell shell = createProgressBar(display);
 
-				// generate soteria fault tree from the result
+				// generate fault tree from the result
 				// TODO: if zero max N fault hypothesis and empty fault combination for probabilistic analysis
 				// generate empty tree
 
@@ -229,7 +229,7 @@ public class GenMCSHandler extends VerifyHandler {
 
 					try {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-						File file = File.createTempFile("soteriaResolvedFT_" + timeStamp + "_", ".ml");
+						File file = File.createTempFile("ResolvedFT_" + timeStamp + "_", ".ml");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 						bw.write(printUtils.toString());
 						bw.close();
@@ -242,11 +242,11 @@ public class GenMCSHandler extends VerifyHandler {
 				else {
 					// open progress bar
 //					shell.open();
-					IvcToFTGenerator soteriaFTGenerator = new IvcToFTGenerator();
+					IvcToFTGenerator ftGenerator = new IvcToFTGenerator();
 					FTResolveVisitor resolveVisitor = new FTResolveVisitor();
-					FaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-					resolveVisitor.visit(soteriaFT);
-					LinkedHashMap<String, Set<List<String>>> mapForHFT = soteriaFTGenerator.getMapPropertyToMCSs();
+					FaultTree faultTree = ftGenerator.generateFT(result, linker);
+					resolveVisitor.visit(faultTree);
+					LinkedHashMap<String, Set<List<String>>> mapForHFT = ftGenerator.getMapPropertyToMCSs();
 
 					try {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
@@ -268,7 +268,7 @@ public class GenMCSHandler extends VerifyHandler {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 						File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
-						bw.write(soteriaFT.printMinCutSetTxt());
+						bw.write(faultTree.printMinCutSetTxt());
 						bw.close();
 //						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
@@ -283,7 +283,7 @@ public class GenMCSHandler extends VerifyHandler {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
-						bw.write(soteriaFT.printMinCutSetTally());
+						bw.write(faultTree.printMinCutSetTally());
 						bw.close();
 //						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetTallyFile.toString());
