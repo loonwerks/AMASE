@@ -6,7 +6,7 @@ import jkind.Assert;
 
 public abstract class FTNode extends FTAst {
 	public final String nodeName;
-	// public SoteriaFTNode parentNode = null;
+	// public FTNode parentNode = null;
 	public boolean resolved = false;
 	public boolean nodeValue = true;
 	public HashMap<String, FTNode> childNodes = new HashMap<>();
@@ -17,7 +17,7 @@ public abstract class FTNode extends FTAst {
 		this.nodeName = nodeName;
 	}
 
-//	public void addParentNode(SoteriaFTNode parentNode) {
+//	public void addParentNode(FTNode parentNode) {
 //		this.parentNode = parentNode;
 //	}
 
