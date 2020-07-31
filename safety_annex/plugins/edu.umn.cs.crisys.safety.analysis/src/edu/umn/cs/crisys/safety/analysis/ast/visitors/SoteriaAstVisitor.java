@@ -11,6 +11,11 @@ import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormula;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaFormulaSubgroup;
 import edu.umn.cs.crisys.safety.analysis.soteria.SoteriaModel;
 
+/**
+ * Class visits a soteria model.
+ *
+ * @param <T>
+ */
 public interface SoteriaAstVisitor<T> {
 
 	public T visit(SoteriaFormula soteriaFormula);

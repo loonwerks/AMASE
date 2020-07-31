@@ -167,6 +167,7 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	/**
 	 * Checks for empty hw fault description string and makes sure hw fault
 	 * is declared in system type, not implementation.
+	 *
 	 * @param hwStmt
 	 */
 //	@Check(CheckType.FAST)
@@ -689,7 +690,9 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 	 * @return bool : valid or not
 	 */
 	private boolean checkInputTypes(List<Expr> exprList, List<Arg> nodeArgs) {
-		// Type check inputs
+		// TODO: If I cannot access the type (e.g., complex nested
+		// type), the string remains empty. If string is empty, I let
+		// the type check say "all is well." This needs to be addressed.
 		for (int i = 0; i < exprList.size(); i++) {
 			String argType = getArgType(nodeArgs.get(i));
 			String exprType = getExprType(exprList.get(i));
@@ -700,7 +703,18 @@ public class SafetyJavaValidator extends AbstractSafetyJavaValidator {
 		return true;
 	}
 
+	/**
+	 * Check that output types between these lists match.
+	 * Assume lists are in order.
+	 * @param faultsOut fault node output names
+	 * @param nom_conn nominal output connections
+	 * @param retValues arguments of return values of fault node
+	 * @return valid
+	 */
 	private boolean checkOutputTypes(List<String> faultsOut, EList<NamedElement> nom_conn, List<Arg> retValues) {
+		// TODO: If I cannot access the type (e.g., complex nested
+		// type), the string remains empty. If string is empty, I let
+		// the type check say "all is well." This needs to be addressed.
 		String type = "";
 		for (int i = 0; i < faultsOut.size(); i++) {
 			if (nom_conn.get(i) instanceof DataPortImpl) {

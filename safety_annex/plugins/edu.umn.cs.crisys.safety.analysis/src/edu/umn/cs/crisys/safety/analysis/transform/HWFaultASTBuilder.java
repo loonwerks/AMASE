@@ -12,6 +12,11 @@ import edu.umn.cs.crisys.safety.safety.ProbabilityStatement;
 import edu.umn.cs.crisys.safety.safety.TriggerStatement;
 import jkind.lustre.Node;
 
+/**
+ * Class will probably need to be updated when new hw fault
+ * implementation is created.
+ *
+ */
 public class HWFaultASTBuilder {
 
 	private static int faultCounter = 0;

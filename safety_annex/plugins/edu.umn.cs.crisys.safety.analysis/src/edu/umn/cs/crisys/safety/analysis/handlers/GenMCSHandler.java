@@ -66,14 +66,14 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
-import edu.umn.cs.crisys.safety.analysis.SafetyUtils;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTResolveVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaPrintUtils;
-import edu.umn.cs.crisys.safety.analysis.generators.IvcToSoteriaFTGenerator;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.FTResolveVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.PrintUtils;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
+import edu.umn.cs.crisys.safety.analysis.generators.IvcToFTGenerator;
 import edu.umn.cs.crisys.safety.analysis.preferences.PreferencesUtil;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.JKindException;
 import jkind.api.JKindApi;
 import jkind.api.JRealizabilityApi;
@@ -207,12 +207,12 @@ public class GenMCSHandler extends VerifyHandler {
 					queue.remove().cancel();
 				}
 				// COMMENTED OUT:
-				// This form of display is not platform independent apparently.
+				// TODO: This form of display is not platform independent apparently.
 				// Create progress bar to display to users on long analysis runs.
 //				Display display = new Display();
 //				Shell shell = createProgressBar(display);
 
-				// generate soteria fault tree from the result
+				// generate fault tree from the result
 				// TODO: if zero max N fault hypothesis and empty fault combination for probabilistic analysis
 				// generate empty tree
 
@@ -224,12 +224,12 @@ public class GenMCSHandler extends VerifyHandler {
 						|| (AddFaultsToNodeVisitor.maxFaultHypothesis && (AddFaultsToNodeVisitor.maxFaultCount == 0))
 						|| (AddFaultsToNodeVisitor.probabilisticHypothesis
 								&& AddFaultsToNodeVisitor.faultCombinationsAboveThreshold.isEmpty())) {
-					SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+					PrintUtils printUtils = new PrintUtils();
 					printUtils.printEmptyTree();
 
 					try {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-						File file = File.createTempFile("soteriaResolvedFT_" + timeStamp + "_", ".ml");
+						File file = File.createTempFile("ResolvedFT_" + timeStamp + "_", ".ml");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 						bw.write(printUtils.toString());
 						bw.close();
@@ -242,18 +242,18 @@ public class GenMCSHandler extends VerifyHandler {
 				else {
 					// open progress bar
 //					shell.open();
-					IvcToSoteriaFTGenerator soteriaFTGenerator = new IvcToSoteriaFTGenerator();
-					SoteriaFTResolveVisitor resolveVisitor = new SoteriaFTResolveVisitor();
-					SoteriaFaultTree soteriaFT = soteriaFTGenerator.generateSoteriaFT(result, linker);
-					resolveVisitor.visit(soteriaFT);
-					LinkedHashMap<String, Set<List<String>>> mapForHFT = soteriaFTGenerator.getMapPropertyToMCSs();
+					IvcToFTGenerator ftGenerator = new IvcToFTGenerator();
+					FTResolveVisitor resolveVisitor = new FTResolveVisitor();
+					FaultTree faultTree = ftGenerator.generateFT(result, linker);
+					resolveVisitor.visit(faultTree);
+					LinkedHashMap<String, Set<List<String>>> mapForHFT = ftGenerator.getMapPropertyToMCSs();
 
 					try {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 						File hierarchyFTFile = File.createTempFile("HierarchicalCausalFactors_" + timeStamp + "_",
 								".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(hierarchyFTFile));
-						SoteriaPrintUtils printUtils = new SoteriaPrintUtils();
+						PrintUtils printUtils = new PrintUtils();
 						bw.write(printUtils.printHierarchicalText(mapForHFT));
 						bw.close();
 //						display.dispose();
@@ -268,7 +268,7 @@ public class GenMCSHandler extends VerifyHandler {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 						File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
-						bw.write(soteriaFT.printMinCutSetTxt());
+						bw.write(faultTree.printMinCutSetTxt());
 						bw.close();
 //						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
@@ -283,7 +283,7 @@ public class GenMCSHandler extends VerifyHandler {
 						String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 						File minCutSetTallyFile = File.createTempFile("MinCutSetTally_" + timeStamp + "_", ".txt");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetTallyFile));
-						bw.write(soteriaFT.printMinCutSetTally());
+						bw.write(faultTree.printMinCutSetTally());
 						bw.close();
 //						display.dispose();
 						org.eclipse.swt.program.Program.launch(minCutSetTallyFile.toString());
@@ -327,7 +327,7 @@ public class GenMCSHandler extends VerifyHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
-		if (!SafetyUtils.containsSafetyAnnex(getClassifiers())) {
+		if (!SafetyUtil.containsSafetyAnnex(getClassifiers())) {
 			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
 			return Status.CANCEL_STATUS;
 		}
