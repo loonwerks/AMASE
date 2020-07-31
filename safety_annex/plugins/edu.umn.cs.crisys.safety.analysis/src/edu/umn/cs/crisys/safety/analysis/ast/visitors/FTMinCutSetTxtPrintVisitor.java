@@ -3,14 +3,14 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNonLeafNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTOrNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTAndNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTLeafNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTNonLeafNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTOrNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
 
-public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Void> {
+public class FTMinCutSetTxtPrintVisitor implements FTAstVisitor<Void> {
 	private StringBuilder sb = new StringBuilder();
 
 	@Override
@@ -34,9 +34,9 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	}
 
 	@Override
-	public Void visit(SoteriaFaultTree ft) {
+	public Void visit(FaultTree ft) {
 		// walk through the tree and print from bottom to top
-		for (SoteriaFTNode root : ft.resolvedRootNodes) {
+		for (FTNode root : ft.resolvedRootNodes) {
 			String rootName = root.nodeName;
 			if (root.nodeValue == true) {
 				printRootNode(root, rootName);
@@ -50,28 +50,28 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	}
 
 	@Override
-	public Void visit(SoteriaFTLeafNode leaf) {
+	public Void visit(FTLeafNode leaf) {
 		printLeafNode(leaf);
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaFTNonLeafNode nonLeaf) {
+	public Void visit(FTNonLeafNode nonLeaf) {
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaFTOrNode orNode) {
-		LinkedList<SoteriaFTNode> sortedChildren = new LinkedList<SoteriaFTNode>(orNode.childNodes.values());
-		sortedChildren.sort(Comparator.comparing(SoteriaFTNode::getProbability).reversed());
+	public Void visit(FTOrNode orNode) {
+		LinkedList<FTNode> sortedChildren = new LinkedList<FTNode>(orNode.childNodes.values());
+		sortedChildren.sort(Comparator.comparing(FTNode::getProbability).reversed());
 		writeln("Total " + orNode.childNodes.size() + " Minimal Cut Sets found for this property");
 		writeln("Probability of failure for the overall property: " + orNode.getProbability());
 		writeln("");
 		int minCutSetNum = 0;
-		for (SoteriaFTNode child : sortedChildren) {
+		for (FTNode child : sortedChildren) {
 			minCutSetNum++;
 			writeln("Minimal Cut Set # " + minCutSetNum);
-			if (child instanceof SoteriaFTLeafNode) {
+			if (child instanceof FTLeafNode) {
 				writeln("Cardinality 1");
 			}
 			child.accept(this);
@@ -81,12 +81,12 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 	}
 
 	@Override
-	public Void visit(SoteriaFTAndNode andNode) {
+	public Void visit(FTAndNode andNode) {
 		writeln("Cardinality " + andNode.childNodes.size());
 		writeln("Joint probability for this Minimal Cut Set: " + andNode.getProbability());
 		writeln("[");
 		int faultNum = 0;
-		for (SoteriaFTNode child : andNode.childNodes.values()) {
+		for (FTNode child : andNode.childNodes.values()) {
 			faultNum++;
 			writeln("Fault # " + faultNum);
 			child.accept(this);
@@ -95,26 +95,26 @@ public class SoteriaFTMinCutSetTxtPrintVisitor implements SoteriaFTAstVisitor<Vo
 		return null;
 	}
 
-	private void printNoTreeRootNode(SoteriaFTNode root, String rootName) {
+	private void printNoTreeRootNode(FTNode root, String rootName) {
 		writeln("No Minimal Cut Sets for property violation:");
 		writeln("property lustre name: " + rootName);
-		if (root instanceof SoteriaFTNonLeafNode) {
-			String propertyDescription = ((SoteriaFTNonLeafNode) root).propertyDescription;
+		if (root instanceof FTNonLeafNode) {
+			String propertyDescription = ((FTNonLeafNode) root).propertyDescription;
 			writeln("property description: " + propertyDescription);
 		}
 		newline();
 	}
 
-	private void printRootNode(SoteriaFTNode root, String rootName) {
+	private void printRootNode(FTNode root, String rootName) {
 		writeln("Minimal Cut Sets for property violation:");
 		writeln("property lustre name: " + rootName);
-		if (root instanceof SoteriaFTNonLeafNode) {
-			String propertyDescription = ((SoteriaFTNonLeafNode) root).propertyDescription;
+		if (root instanceof FTNonLeafNode) {
+			String propertyDescription = ((FTNonLeafNode) root).propertyDescription;
 			writeln("property description: " + propertyDescription);
 		}
 	}
 
-	private void printLeafNode(SoteriaFTLeafNode leaf) {
+	private void printLeafNode(FTLeafNode leaf) {
 		writeln("original fault name, description: " + leaf.faultUserName + ", \"" + leaf.faultUserExplanation
 				+ "\"");
 		writeln("lustre component, fault name: " + leaf.compName + ", " + leaf.soteriaFaultName);

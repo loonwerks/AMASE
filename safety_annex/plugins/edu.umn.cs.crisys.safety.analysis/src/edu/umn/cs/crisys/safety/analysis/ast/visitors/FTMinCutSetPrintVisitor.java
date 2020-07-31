@@ -1,13 +1,13 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTAndNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTLeafNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTNonLeafNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFTOrNode;
-import edu.umn.cs.crisys.safety.analysis.soteria.faultTree.SoteriaFaultTree;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTAndNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTLeafNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTNonLeafNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FTOrNode;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
 
-public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void> {
+public class FTMinCutSetPrintVisitor implements FTAstVisitor<Void> {
 	private StringBuilder sb = new StringBuilder();
 
 	@Override
@@ -31,12 +31,12 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 	}
 
 	@Override
-	public Void visit(SoteriaFaultTree ft) {
+	public Void visit(FaultTree ft) {
 		write(ft.includeStr);
 		newline();
 
 		// walk through the tree and print from bottom to top
-		for (SoteriaFTNode root : ft.resolvedRootNodes) {
+		for (FTNode root : ft.resolvedRootNodes) {
 			String rootName = root.nodeName;
 			if (root.nodeValue == true) {
 				root.accept(this);
@@ -50,19 +50,19 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 	}
 
 	@Override
-	public Void visit(SoteriaFTLeafNode leaf) {
+	public Void visit(FTLeafNode leaf) {
 		printLeafNode(leaf);
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaFTNonLeafNode nonLeaf) {
+	public Void visit(FTNonLeafNode nonLeaf) {
 		return null;
 	}
 
 	@Override
-	public Void visit(SoteriaFTOrNode orNode) {
-		for (SoteriaFTNode child : orNode.childNodes.values()) {
+	public Void visit(FTOrNode orNode) {
+		for (FTNode child : orNode.childNodes.values()) {
 			child.accept(this);
 		}
 		printNonLeafNode(orNode.nodeOpStr, orNode);
@@ -70,19 +70,19 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 	}
 
 	@Override
-	public Void visit(SoteriaFTAndNode andNode) {
-		for (SoteriaFTNode child : andNode.childNodes.values()) {
+	public Void visit(FTAndNode andNode) {
+		for (FTNode child : andNode.childNodes.values()) {
 			child.accept(this);
 		}
 		printNonLeafNode(andNode.nodeOpStr, andNode);
 		return null;
 	}
 
-	private void printNonLeafNode(String nodeOpStr, SoteriaFTNonLeafNode nonLeaf) {
+	private void printNonLeafNode(String nodeOpStr, FTNonLeafNode nonLeaf) {
 		writeln("let " + nonLeaf.propertyName + " = ");
 		writeln(nodeOpStr + " [");
 		boolean multipleElem = false;
-		for (SoteriaFTNode node : nonLeaf.childNodes.values()) {
+		for (FTNode node : nonLeaf.childNodes.values()) {
 			if (multipleElem) {
 				writeln(";");
 			}
@@ -111,7 +111,7 @@ public class SoteriaFTMinCutSetPrintVisitor implements SoteriaFTAstVisitor<Void>
 		newline();
 	}
 
-	private void printLeafNode(SoteriaFTLeafNode leaf) {
+	private void printLeafNode(FTLeafNode leaf) {
 		writeln("let " + leaf.soteriaFaultName + " = ");
 		writeln("Leaf");
 		write("    ((\"" + leaf.compName + "\",");

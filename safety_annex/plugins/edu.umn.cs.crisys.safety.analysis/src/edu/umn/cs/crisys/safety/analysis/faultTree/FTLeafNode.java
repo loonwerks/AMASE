@@ -1,9 +1,9 @@
-package edu.umn.cs.crisys.safety.analysis.soteria.faultTree;
+package edu.umn.cs.crisys.safety.analysis.faultTree;
 
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.SoteriaFTAstVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.FTAstVisitor;
 import jkind.Assert;
 
-public class SoteriaFTLeafNode extends SoteriaFTNode {
+public class FTLeafNode extends FTNode {
 	public final String compName;
 	public final String soteriaFaultName; // this is the fault name used in soteria file (no leading "__")
 	public final String lustreFaultName; // this is the fault name appeared in the original lustre code
@@ -13,7 +13,7 @@ public class SoteriaFTLeafNode extends SoteriaFTNode {
 	public final String faultUserName; // this is the fault name specified by the user
 	public final String faultUserExplanation; // this is the fault explanation specified by the user
 
-	public SoteriaFTLeafNode(String compName, String faultName, float failureRate, float exposureTime,
+	public FTLeafNode(String compName, String faultName, float failureRate, float exposureTime,
 			float probability, String originalFaultName, String faultUserName, String faultUserExplanation) {
 		super(faultName);
 		Assert.isNotNull(compName);
@@ -33,7 +33,7 @@ public class SoteriaFTLeafNode extends SoteriaFTNode {
 	}
 
 	@Override
-	public <T> T accept(SoteriaFTAstVisitor<T> visitor) {
+	public <T> T accept(FTAstVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 

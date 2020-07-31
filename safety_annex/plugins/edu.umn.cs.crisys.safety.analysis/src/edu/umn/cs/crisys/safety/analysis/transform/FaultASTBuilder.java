@@ -86,8 +86,8 @@ public class FaultASTBuilder {
 	/**
 	 * Constructor
 	 *
-	 * @param globalLustreNodes		List of global nodes
-	 * @param agreeNode		This agree node
+	 * @param globalLustreNodes	List of global nodes
+	 * @param agreeNode	This agree node
 	 */
 	public FaultASTBuilder(List<Node> globalLustreNodes, AgreeNode agreeNode) {
 		this.globalLustreNodes = globalLustreNodes;
@@ -111,8 +111,8 @@ public class FaultASTBuilder {
 	/** Process a fault given a fault statement:
 	 *  Determine if it is sym or asym and build the fault.
 	 *
-	 * @param fstmt 	Definition from annex of fault that will be built.
-	 * @return Fault	The fault built and processed from this fault stmt.
+	 * @param fstmt Definition from annex of fault that will be built.
+	 * @return The fault built and processed from this fault stmt.
 	 */
 	public Fault processFault(FaultStatement fstmt) {
 
@@ -144,8 +144,8 @@ public class FaultASTBuilder {
 	 * builds the fault node for Lustre, and processes the
 	 * fault subcomponents. Returns symmetric fault.
 	 *
-	 * @param fstmt 	The fault statement used to build this symmetric fault
-	 * @return Fault	The symmetric fault built from this fstmt.
+	 * @param fstmt The fault statement used to build this symmetric fault
+	 * @return Fault The symmetric fault built from this fstmt.
 	 */
 	private Fault buildSymmetricFault(FaultStatement fstmt) {
 
@@ -162,31 +162,24 @@ public class FaultASTBuilder {
 	/**
 	   * Build asymmetric fault from a fault statement
 	   *
-	   * @param	fstmt				The statement defining the fault
-	   * 							to be built.
+	   * @param	fstmt The statement defining the fault
 	   *
 	*/
 	private Fault buildAsymmetricFault(FaultStatement fstmt) {
 
 		DataPortImpl senderOutput = null;
 		List<ConnectionInstanceEnd> senderConnections = new ArrayList<>();
-
 		// 1. Create fault for Sender node
 		Fault fault = createSenderFault(fstmt);
-
 		// 2. Find out how many components the node is connected to.
 		// First, get the output from the sender agree node.
 		senderOutput = findSenderOutput(fstmt);
-
 		// 3. Populate mapSenderToReceiver with fanned out connections.
 		senderConnections = populateMapSenderToReceiver(senderOutput);
-
 		// 4. Rename safety eq stmts in fault
 		Fault newFault = renameFaultEqs(fault);
-
 		// 5. Create the communication nodes and add to Lustre program.
 		createCommNodes(senderConnections, fstmt, newFault, senderOutput);
-
 		return fault;
 	}
 
@@ -223,8 +216,8 @@ public class FaultASTBuilder {
 	/**
 	  * Add the fault node to Lustre program.
 	  *
-	  * @param faultStatement 	the fault statement from the annex
-	  * @param	fault				the fault built using the fault stmt
+	  * @param faultStatement the fault statement from the annex
+	  * @param	fault the fault built using the fault stmt
 	  *
 	*/
 	private void setFaultNode(FaultStatement faultStatement, Fault fault) {
@@ -250,8 +243,8 @@ public class FaultASTBuilder {
 	/**
 	 * Creates fault in asym case for the sender component.
 	 *
-	 * @param fstmt 	the asymmetric fault statement
-	 * @return Fault 	the created fault node
+	 * @param the asymmetric fault statement
+	 * @return Fault the created fault
 	 */
 	protected Fault createSenderFault(FaultStatement fstmt) {
 		// We will use this fault to help define each communication
@@ -270,8 +263,8 @@ public class FaultASTBuilder {
 	/**
 	 * Find the output of the sender component that this fault statement references.
 	 *
-	 * @param fstmt	 	The fault statement that is on the sender component.
-	 * @return	DataTypeImpl	The output of this sender component.
+	 * @param fstmt	The fault statement that is on the sender component.
+	 * @return	DataTypeImpl The output of this sender component.
 	 */
 	protected DataPortImpl findSenderOutput(FaultStatement fstmt) {
 		DataPortImpl senderOutput = null;
@@ -345,9 +338,9 @@ public class FaultASTBuilder {
 	}
 
 	/**
-	 *
-	 * @param faults
-	 * @return
+	 * Renames eq id to lustre name
+	 * @param fault containing eq ids
+	 * @return new fault with renamed eqs
 	 */
 	private Fault renameFaultEqs(Fault f) {
 		Map<String, String> idMap = constructEqIdMap(f, f.safetyEqVars);
@@ -372,20 +365,20 @@ public class FaultASTBuilder {
 	}
 
 	/**
-	 *
-	 * @param fault
-	 * @param var
-	 * @return
+	 * Rename eq ids to lustre names
+	 * @param fault with eq statements
+	 * @param var name
+	 * @return new lustre name for eq id
 	 */
 	private String createFaultEqId(String fault, String var) {
 		return fault + "__" + var;
 	}
 
 	/**
-	 *
-	 * @param f
-	 * @param idMap
-	 * @return
+	 * Make new fault with updated eq stmt ids
+	 * @param f fault to update
+	 * @param idMap map from old id to new
+	 * @return new updated fault
 	 */
 	private Fault renameEqId(Fault f, Map<String, String> idMap) {
 		Fault newFault = new Fault(f);
@@ -427,9 +420,9 @@ public class FaultASTBuilder {
 	 * to receiver.
 	 *
 	 * @param senderConnections	List of all connections from the faulty output.
-	 * @param fstmt		Defines fault and all subcomponents
-	 * @param fault		The fault on the sender output
-	 * @param senderOutput	The DataPortImpl output on sender component
+	 * @param fstmt	Defines fault and all subcomponents
+	 * @param fault	The fault on the sender output
+	 * @param senderOutput The DataPortImpl output on sender component
 	 */
 	private void createCommNodes(List<ConnectionInstanceEnd> senderConnections, FaultStatement fstmt, Fault fault,
 			DataPortImpl senderOutput) {
@@ -465,8 +458,8 @@ public class FaultASTBuilder {
 	/**
 	 * Populate the fault input map
 	 *
-	 * @param fault 	the fault in question
-	 * @param input		the input to be added to the map
+	 * @param the fault in question
+	 * @param the input to be added to the map
 	 */
 	private void setInput(Fault fault, InputStatement input) {
 		for (int i = 0; i < input.getFault_in().size(); i++) {
@@ -482,8 +475,8 @@ public class FaultASTBuilder {
 	/**
 	 * Populate the fault output map
 	 *
-	 * @param fault		the fault in question
-	 * @param output	the output to go into the map
+	 * @param the fault in question
+	 * @param the output to go into the map
 	 */
 	private void setOutput(Fault fault, OutputStatement output) {
 		for (int i = 0; i < output.getFault_out().size(); i++) {
@@ -503,13 +496,18 @@ public class FaultASTBuilder {
 	/**
 	 * Set duration of the fault based on duration stmt
 	 *
-	 * @param fault 	fault in question
-	 * @param duration	duration statement
+	 * @param fault in question
+	 * @param duration statement
 	 */
 	private void setDuration(Fault fault, DurationStatement duration) {
 		fault.duration = duration;
 	}
 
+	/**
+	 * Construct lhs of safety eq var
+	 * @param stmt
+	 * @return lhs expression
+	 */
 	private Expr constructEqLhsExpr(EqValue stmt) {
 		EList<Arg> lhs = stmt.getLhs();
 		if (lhs.size() != 1) {
@@ -546,7 +544,7 @@ public class FaultASTBuilder {
 	 * Add safety eq statements to the safetyEqVars list for this fault
 	 *
 	 * @param fault	The fault with these associated safety eq stmts
-	 * @param stmt	The EqValue statements to be added to the safetyEqVars list.
+	 * @param stmt The EqValue statements to be added to the safetyEqVars list.
 	 */
 	private void addSafetyEqVal(Fault fault, EqValue stmt) {
 		if (stmt.getExpr() != null) {
@@ -592,10 +590,10 @@ public class FaultASTBuilder {
 		// Get type in Lustre/JKind format
 		com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef typeDef = AgreeTypeSystem
 				.typeDefFromType(stmt.getLhs_int().getType());
-		Type type = getLustreType(typeDef);
+		Type type = SafetyUtil.getLustreType(typeDef);
 
 		// Throw exception if type is neither real nor int
-		if (type == null) {
+		if ((type == null) || (type.toString().equals("bool"))) {
 			new SafetyException("Interval statement types can only be real or int. The problem interval is called: "
 					+ stmt.getLhs_int().getName() + ".");
 		}
@@ -604,17 +602,6 @@ public class FaultASTBuilder {
 				this.agreeNode.reference, this.agreeNode.compInst));
 	}
 
-	private Type getLustreType(com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef agreeType) {
-		if (agreeType == AgreeTypeSystem.Prim.IntTypeDef) {
-			return NamedType.INT;
-
-		} else if (agreeType == AgreeTypeSystem.Prim.RealTypeDef) {
-			return NamedType.REAL;
-
-		} else {
-			return null;
-		}
-	}
 
 	/**
 	 * Not yet implemented, will throw exception.
@@ -732,8 +719,13 @@ public class FaultASTBuilder {
 		return newNode.build();
 	}
 
-	/*
+	/**
 	 * creates inputs for new communication node.
+	 * @param node node builder
+	 * @param fault asymm fault
+	 * @param type type of asym output
+	 * @param nodeName name of communication node
+	 * @return node builder with these enhancements
 	 */
 	private NodeBuilder createInputForCommNode(NodeBuilder node, Fault fault, Type type, String nodeName) {
 		// This list is used to map the fault to the top node locals that
@@ -996,6 +988,7 @@ public class FaultASTBuilder {
 	 * Creates expr: (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
 	 *
 	 * @param guar Reference to the guarantee within this statement
+	 * @return BinaryExpr assume hist statement
 	 */
 	protected BinaryExpr createAssumeHistStmt(Expr guar) {
 		// (__ASSUME__HIST => (__GUARANTEE0 and true)) and true)
@@ -1148,6 +1141,5 @@ public class FaultASTBuilder {
 		mapCompNameToCommNodes.clear();
 		mapCommNodeOutputToConnections.clear();
 		mapSenderToReceiver.clear();
-		;
 	}
 }
