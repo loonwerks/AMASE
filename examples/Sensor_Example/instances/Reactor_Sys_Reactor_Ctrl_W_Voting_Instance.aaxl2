@@ -98,7 +98,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Temp_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.0"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Temp_Sensors.aadl#Temp_Sensors.Temp_Sensor"/>
     </componentInstance>
@@ -127,7 +127,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Temp_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.1"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Temp_Sensors.aadl#Temp_Sensors.Temp_Sensor"/>
     </componentInstance>
@@ -156,7 +156,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Temp_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.2"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Temp_Sensors.aadl#Temp_Sensors.Temp_Sensor"/>
     </componentInstance>
@@ -209,26 +209,26 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Voters.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.3"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Voters.aadl#Voters.Two_Of_Three_Agree_Voter"/>
     </componentInstance>
     <connectionInstance name="Temp_Sensor1.High_Temp_Indicator -> Temp_Voter.Sensor1_High" complete="true" kind="portConnection" destination="//@componentInstance.0/@componentInstance.3/@featureInstance.0" source="//@componentInstance.0/@componentInstance.0/@featureInstance.1">
       <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.0/@featureInstance.1" destination="//@componentInstance.0/@componentInstance.3/@featureInstance.0">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.3"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
       </connectionReference>
     </connectionInstance>
     <connectionInstance name="Temp_Sensor2.High_Temp_Indicator -> Temp_Voter.Sensor2_High" complete="true" kind="portConnection" destination="//@componentInstance.0/@componentInstance.3/@featureInstance.1" source="//@componentInstance.0/@componentInstance.1/@featureInstance.1">
       <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.0/@componentInstance.3/@featureInstance.1">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.4"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
       </connectionReference>
     </connectionInstance>
     <connectionInstance name="Temp_Sensor3.High_Temp_Indicator -> Temp_Voter.Sensor3_High" complete="true" kind="portConnection" destination="//@componentInstance.0/@componentInstance.3/@featureInstance.2" source="//@componentInstance.0/@componentInstance.2/@featureInstance.1">
       <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.2/@featureInstance.1" destination="//@componentInstance.0/@componentInstance.3/@featureInstance.2">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.5"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
       </connectionReference>
     </connectionInstance>
-    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.0"/>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
     <index>0</index>
     <classifier xsi:type="aadl2:SystemImplementation" href="../Reactor_Temp_Ctrl.aadl#Reactor_Temp_Ctrl.Reactor_Temp_Ctrl.W_Voting"/>
   </componentInstance>
@@ -282,7 +282,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Pressure_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.0"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Pressure_Sensors.aadl#Pressure_Sensors.Pressure_Sensor"/>
     </componentInstance>
@@ -311,7 +311,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Pressure_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.1"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Pressure_Sensors.aadl#Pressure_Sensors.Pressure_Sensor"/>
     </componentInstance>
@@ -340,7 +340,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Pressure_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.2"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Pressure_Sensors.aadl#Pressure_Sensors.Pressure_Sensor"/>
     </componentInstance>
@@ -393,26 +393,26 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Voters.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.3"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.3"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Voters.aadl#Voters.Two_Of_Three_Agree_Voter"/>
     </componentInstance>
     <connectionInstance name="Pressure_Sensor1.High_Pressure_Indicator -> Pressure_Voter.Sensor1_High" complete="true" kind="portConnection" destination="//@componentInstance.1/@componentInstance.3/@featureInstance.0" source="//@componentInstance.1/@componentInstance.0/@featureInstance.1">
       <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.0/@featureInstance.1" destination="//@componentInstance.1/@componentInstance.3/@featureInstance.0">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.3"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
       </connectionReference>
     </connectionInstance>
     <connectionInstance name="Pressure_Sensor2.High_Pressure_Indicator -> Pressure_Voter.Sensor2_High" complete="true" kind="portConnection" destination="//@componentInstance.1/@componentInstance.3/@featureInstance.1" source="//@componentInstance.1/@componentInstance.1/@featureInstance.1">
       <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.1/@componentInstance.3/@featureInstance.1">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.4"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
       </connectionReference>
     </connectionInstance>
     <connectionInstance name="Pressure_Sensor3.High_Pressure_Indicator -> Pressure_Voter.Sensor3_High" complete="true" kind="portConnection" destination="//@componentInstance.1/@componentInstance.3/@featureInstance.2" source="//@componentInstance.1/@componentInstance.2/@featureInstance.1">
       <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.2/@featureInstance.1" destination="//@componentInstance.1/@componentInstance.3/@featureInstance.2">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.5"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
       </connectionReference>
     </connectionInstance>
-    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.1"/>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
     <index>0</index>
     <classifier xsi:type="aadl2:SystemImplementation" href="../Reactor_Pressure_Ctrl.aadl#Reactor_Pressure_Ctrl.Reactor_Pressure_Ctrl.W_Voting"/>
   </componentInstance>
@@ -466,7 +466,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Radiation_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.0"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.0"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Radiation_Sensors.aadl#Radiation_Sensors.Radiation_Sensor"/>
     </componentInstance>
@@ -495,7 +495,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Radiation_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.1"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.1"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Radiation_Sensors.aadl#Radiation_Sensors.Radiation_Sensor"/>
     </componentInstance>
@@ -524,7 +524,7 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Radiation_Sensors.aadl#/0/@ownedPublicSection/@ownedClassifier.0/@ownedDataPort.1"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.2"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Radiation_Sensors.aadl#Radiation_Sensors.Radiation_Sensor"/>
     </componentInstance>
@@ -577,123 +577,123 @@
         </ownedPropertyAssociation>
         <feature xsi:type="aadl2:DataPort" href="../Voters.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedDataPort.3"/>
       </featureInstance>
-      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.3"/>
+      <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.3"/>
       <index>0</index>
       <classifier xsi:type="aadl2:SystemType" href="../Voters.aadl#Voters.All_Three_Agree_Voter"/>
     </componentInstance>
     <connectionInstance name="Radiation_Sensor1.High_Radiation_Indicator -> Radiation_Voter.Sensor1_High" complete="true" kind="portConnection" destination="//@componentInstance.2/@componentInstance.3/@featureInstance.0" source="//@componentInstance.2/@componentInstance.0/@featureInstance.1">
       <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@componentInstance.0/@featureInstance.1" destination="//@componentInstance.2/@componentInstance.3/@featureInstance.0">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.3"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
       </connectionReference>
     </connectionInstance>
     <connectionInstance name="Radiation_Sensor2.High_Radiation_Indicator -> Radiation_Voter.Sensor2_High" complete="true" kind="portConnection" destination="//@componentInstance.2/@componentInstance.3/@featureInstance.1" source="//@componentInstance.2/@componentInstance.1/@featureInstance.1">
       <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@componentInstance.1/@featureInstance.1" destination="//@componentInstance.2/@componentInstance.3/@featureInstance.1">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.4"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
       </connectionReference>
     </connectionInstance>
     <connectionInstance name="Radiation_Sensor3.High_Radiation_Indicator -> Radiation_Voter.Sensor3_High" complete="true" kind="portConnection" destination="//@componentInstance.2/@componentInstance.3/@featureInstance.2" source="//@componentInstance.2/@componentInstance.2/@featureInstance.1">
       <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@componentInstance.2/@featureInstance.1" destination="//@componentInstance.2/@componentInstance.3/@featureInstance.2">
-        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.5"/>
+        <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
       </connectionReference>
     </connectionInstance>
-    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedSystemSubcomponent.2"/>
+    <subcomponent xsi:type="aadl2:SystemSubcomponent" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedSystemSubcomponent.2"/>
     <index>0</index>
     <classifier xsi:type="aadl2:SystemImplementation" href="../Reactor_Radiation_Ctrl.aadl#Reactor_Radiation_Ctrl.Reactor_Radiation_Ctrl.W_Voting"/>
   </componentInstance>
   <connectionInstance name="Env_Temp -> Reactor_Temp_Ctrl.Temp_Sensor1.Env_Temp" kind="portConnection" destination="//@componentInstance.0/@componentInstance.0/@featureInstance.0" source="//@featureInstance.0">
     <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.0"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@featureInstance.0" destination="//@componentInstance.0/@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.0"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Temp -> Reactor_Temp_Ctrl.Temp_Sensor2.Env_Temp" kind="portConnection" destination="//@componentInstance.0/@componentInstance.1/@featureInstance.0" source="//@featureInstance.0">
     <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.0"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@featureInstance.0" destination="//@componentInstance.0/@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.1"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Temp -> Reactor_Temp_Ctrl.Temp_Sensor3.Env_Temp" kind="portConnection" destination="//@componentInstance.0/@componentInstance.2/@featureInstance.0" source="//@featureInstance.0">
     <connectionReference context="/" source="//@featureInstance.0" destination="//@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.0"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@featureInstance.0" destination="//@componentInstance.0/@componentInstance.2/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.2"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Pressure -> Reactor_Pressure_Ctrl.Pressure_Sensor1.Env_Pressure" kind="portConnection" destination="//@componentInstance.1/@componentInstance.0/@featureInstance.0" source="//@featureInstance.1">
     <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.1"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@featureInstance.0" destination="//@componentInstance.1/@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.0"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Pressure -> Reactor_Pressure_Ctrl.Pressure_Sensor2.Env_Pressure" kind="portConnection" destination="//@componentInstance.1/@componentInstance.1/@featureInstance.0" source="//@featureInstance.1">
     <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.1"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@featureInstance.0" destination="//@componentInstance.1/@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.1"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Pressure -> Reactor_Pressure_Ctrl.Pressure_Sensor3.Env_Pressure" kind="portConnection" destination="//@componentInstance.1/@componentInstance.2/@featureInstance.0" source="//@featureInstance.1">
     <connectionReference context="/" source="//@featureInstance.1" destination="//@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.1"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@featureInstance.0" destination="//@componentInstance.1/@componentInstance.2/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.2"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Radiation -> Reactor_Radiation_Ctrl.Radiation_Sensor1.Env_Radiation" kind="portConnection" destination="//@componentInstance.2/@componentInstance.0/@featureInstance.0" source="//@featureInstance.2">
     <connectionReference context="/" source="//@featureInstance.2" destination="//@componentInstance.2/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.2"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@featureInstance.0" destination="//@componentInstance.2/@componentInstance.0/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.0"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.0"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Radiation -> Reactor_Radiation_Ctrl.Radiation_Sensor2.Env_Radiation" kind="portConnection" destination="//@componentInstance.2/@componentInstance.1/@featureInstance.0" source="//@featureInstance.2">
     <connectionReference context="/" source="//@featureInstance.2" destination="//@componentInstance.2/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.2"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@featureInstance.0" destination="//@componentInstance.2/@componentInstance.1/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.1"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.1"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Env_Radiation -> Reactor_Radiation_Ctrl.Radiation_Sensor3.Env_Radiation" kind="portConnection" destination="//@componentInstance.2/@componentInstance.2/@featureInstance.0" source="//@featureInstance.2">
     <connectionReference context="/" source="//@featureInstance.2" destination="//@componentInstance.2/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.2"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
     <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@featureInstance.0" destination="//@componentInstance.2/@componentInstance.2/@featureInstance.0">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.2"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.2"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Reactor_Temp_Ctrl.Temp_Voter.High_Out -> Shut_Down_Cmd" kind="portConnection" destination="//@featureInstance.3" source="//@componentInstance.0/@componentInstance.3/@featureInstance.3">
     <connectionReference context="//@componentInstance.0" source="//@componentInstance.0/@componentInstance.3/@featureInstance.3" destination="//@componentInstance.0/@featureInstance.1">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.6"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Temp_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.6"/>
     </connectionReference>
     <connectionReference context="/" source="//@componentInstance.0/@featureInstance.1" destination="//@featureInstance.3">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.3"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.3"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Reactor_Pressure_Ctrl.Pressure_Voter.High_Out -> Shut_Down_Cmd" kind="portConnection" destination="//@featureInstance.3" source="//@componentInstance.1/@componentInstance.3/@featureInstance.3">
     <connectionReference context="//@componentInstance.1" source="//@componentInstance.1/@componentInstance.3/@featureInstance.3" destination="//@componentInstance.1/@featureInstance.1">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.6"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Pressure_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.6"/>
     </connectionReference>
     <connectionReference context="/" source="//@componentInstance.1/@featureInstance.1" destination="//@featureInstance.3">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.4"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.4"/>
     </connectionReference>
   </connectionInstance>
   <connectionInstance name="Reactor_Radiation_Ctrl.Radiation_Voter.High_Out -> Shut_Down_Cmd" kind="portConnection" destination="//@featureInstance.3" source="//@componentInstance.2/@componentInstance.3/@featureInstance.3">
     <connectionReference context="//@componentInstance.2" source="//@componentInstance.2/@componentInstance.3/@featureInstance.3" destination="//@componentInstance.2/@featureInstance.1">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.6"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Radiation_Ctrl.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.6"/>
     </connectionReference>
     <connectionReference context="/" source="//@componentInstance.2/@featureInstance.1" destination="//@featureInstance.3">
-      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.2/@ownedPortConnection.5"/>
+      <connection xsi:type="aadl2:PortConnection" href="../Reactor_Sys.aadl#/0/@ownedPublicSection/@ownedClassifier.1/@ownedPortConnection.5"/>
     </connectionReference>
   </connectionInstance>
   <systemOperationMode name="No Modes"/>
