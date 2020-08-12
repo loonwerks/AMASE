@@ -60,7 +60,7 @@ with faults;
 				duration: permanent;
 			}
 			
-			fault SelectorValve_FailedLastPosition "(SelectorValve) Stuck at last position (green line) fault." : faults::fail_to {
+			fault SelectorValve_FailedLastPosition2 "(SelectorValve) Stuck at last position (green line) fault." : faults::fail_to {
 				inputs: val_in <- green_select_out, alt_val <- pre(green_select_out); 
 				outputs: green_select_out <- val_out;    
         		probability: 1.0E-5 ;

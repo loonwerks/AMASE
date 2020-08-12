@@ -31,31 +31,31 @@ public
 		**};
 	end Reactor_Radiation_Ctrl;
 
-	system implementation Reactor_Radiation_Ctrl.No_Voting
-		subcomponents
-			Radiation_Sensor1: system Radiation_Sensor;
-			Radiation_Sensor2: system Radiation_Sensor;
-			Radiation_Sensor3: system Radiation_Sensor;
-		connections
-			Env_Radiation_To_Radiation_Sensor1: port Env_Radiation -> Radiation_Sensor1.Env_Radiation;
-			Env_Radiation_To_Radiation_Sensor2: port Env_Radiation -> Radiation_Sensor2.Env_Radiation;
-			Env_Radiation_To_Radiation_Sensor3: port Env_Radiation -> Radiation_Sensor3.Env_Radiation;
-			Radiation_Sensor1_High_Radiation_To_Shut_Down: port Radiation_Sensor1.High_Radiation_Indicator -> Shut_Down_Cmd;
-			Radiation_Sensor2_High_Radiation_To_Shut_Down: port Radiation_Sensor2.High_Radiation_Indicator -> Shut_Down_Cmd;
-			Radiation_Sensor3_High_Radiation_To_Shut_Down: port Radiation_Sensor3.High_Radiation_Indicator -> Shut_Down_Cmd;
-		annex agree {**
-			connection Radiation_Sensor1_High_Radiation_To_Shut_Down: true;
-			connection Radiation_Sensor2_High_Radiation_To_Shut_Down: true;
-			connection Radiation_Sensor3_High_Radiation_To_Shut_Down: true;
-			
-			assign Shut_Down_Cmd = Radiation_Sensor1.High_Radiation_Indicator or Radiation_Sensor2.High_Radiation_Indicator or Radiation_Sensor3.High_Radiation_Indicator;
-							
-		**};
-		annex safety {**
-      		--analyze : max 2 fault
-      		analyze : probability 1.0E-6
-   		**};
-	end Reactor_Radiation_Ctrl.No_Voting;
+--	system implementation Reactor_Radiation_Ctrl.No_Voting
+--		subcomponents
+--			Radiation_Sensor1: system Radiation_Sensor;
+--			Radiation_Sensor2: system Radiation_Sensor;
+--			Radiation_Sensor3: system Radiation_Sensor;
+--		connections
+--			Env_Radiation_To_Radiation_Sensor1: port Env_Radiation -> Radiation_Sensor1.Env_Radiation;
+--			Env_Radiation_To_Radiation_Sensor2: port Env_Radiation -> Radiation_Sensor2.Env_Radiation;
+--			Env_Radiation_To_Radiation_Sensor3: port Env_Radiation -> Radiation_Sensor3.Env_Radiation;
+--			Radiation_Sensor1_High_Radiation_To_Shut_Down: port Radiation_Sensor1.High_Radiation_Indicator -> Shut_Down_Cmd;
+--			Radiation_Sensor2_High_Radiation_To_Shut_Down: port Radiation_Sensor2.High_Radiation_Indicator -> Shut_Down_Cmd;
+--			Radiation_Sensor3_High_Radiation_To_Shut_Down: port Radiation_Sensor3.High_Radiation_Indicator -> Shut_Down_Cmd;
+--		annex agree {**
+--			connection Radiation_Sensor1_High_Radiation_To_Shut_Down: true;
+--			connection Radiation_Sensor2_High_Radiation_To_Shut_Down: true;
+--			connection Radiation_Sensor3_High_Radiation_To_Shut_Down: true;
+--			
+--			assign Shut_Down_Cmd = Radiation_Sensor1.High_Radiation_Indicator or Radiation_Sensor2.High_Radiation_Indicator or Radiation_Sensor3.High_Radiation_Indicator;
+--							
+--		**};
+--		annex safety {**
+--      		--analyze : max 2 fault
+--      		analyze : probability 1.0E-6
+--   		**};
+--	end Reactor_Radiation_Ctrl.No_Voting;
 
 	system implementation Reactor_Radiation_Ctrl.W_Voting
 		subcomponents
