@@ -8,6 +8,5 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>edu.umn.cs.crisys.safety.analysis</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>
