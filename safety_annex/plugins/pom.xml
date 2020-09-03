@@ -136,7 +136,7 @@
 						<artifact>
 							<groupId>edu.umn.cs.crisys.safety</groupId>
 							<artifactId>edu.umn.cs.crisys.safety.target</artifactId>
-							<version>1.0.0-SNAPSHOT</version>
+							<version>${project.parent.version}</version>
 						</artifact>
 					</target>
 					<environments>
