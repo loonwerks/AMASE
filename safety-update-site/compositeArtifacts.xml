@@ -3,9 +3,11 @@
 <repository name='&quot;Eclipse Project Test Site&quot;'
     type='org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository' version='1.0.0'>
   <properties size='1'>
-    <property name='p2.timestamp' value='1243822503000'/>
+    <property name='p2.timestamp' value='1599660542373'/>
   </properties>
-  <children size='1'>
+  <children size='3'>
     <child location='safety-annex_0.8.2'/>
+    <child location='safety-annex_0.9'/>
+    <child location='safety-annex_1.0.0'/>
   </children>
 </repository>
