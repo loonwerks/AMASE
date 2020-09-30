@@ -28,7 +28,7 @@ script:
 - popd
 before_deploy:
 - rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
-- export RELEASE_PKG_FILE=$(ls safety_annex/plugins/edu.umn.cs.crisys.safety.repository/target/edu.umn.crisys.safety.repository-*.zip)
+- export RELEASE_PKG_FILE=$(ls safety_annex/plugins/edu.umn.cs.crisys.safety.repository/target/edu.umn.cs.crisys.safety.repository-*.zip)
 - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 - export SNAPSHOT_NUMBER=$(ls safety_annex/plugins/edu.umn.cs.crisys.safety.repository/target/repository/plugins/edu.umn.cs.crisys.safety_*.jar
   | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
