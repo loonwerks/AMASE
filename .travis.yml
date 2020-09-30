@@ -5,34 +5,26 @@ services:
 language: java
 jdk:
 - openjdk8
-cache:
-  directories
-  - $HOME/.m2
-
+cache: directories - $HOME/.m2
 addons:
   apt:
     packages:
     - pandoc
     - python3
     - python3-pip
-
 env:
   global:
   - DISPLAY=:99.0
-  - secure: m6iZc/uFRBN1OTPbalMh6c3BxVApQDWVM6yk7J3WPuJgLzs3GlxsXAsTBN+mnB6PxzVhPXCE19O/pr/L3h/fA+kHXwAyd771f77bbCZQgGw5fHaJw/m+oUMqNBd+EBtsAruGqM1dJoNZnb3vaJeBh8r+MX+pr0slrPIoD6tC20LmyIrX9iT1LPvJ9+L4OMNxtkPJQmBoOHtLKeF9CUN3Kjh23GvMYh0iXCRF5Yy2rXOXzQOr9tmsRA3NpDUNYn5CCbad7oPpmJ8gUWhI0cHKDexx2WtHGmy3mulQmhIrKihF/a12x8Re/ufET7bl0DyaXXUx8FEhR806a6AFmGWqYuT2sh95dYp0qR+/2t5QswqSZ6BWiFE9T7OcjpY9WY5KRjQTMZEzW0q4nhYBaerPH60BDTO68O/Dp3/iEy48yNg5cRUFWO7hJpodQBFglgjkoDTnL5R8rPyCl5+PvxnED244/rpknt2LranRB8BtLjTkfO0JW++6i3giByCBSnWmY0XB86wM3VCjI9/QgCHTVqPZ7CI7xfxB4RBIKPL+6/Bn+LAsJ1sdtcknuwG8lGaeyvfFaz11/mvBkrkQ7j5ipkTt8x1b9PzBkma7FGu7P6Huj4uOKphMDImo/tFJzKZCRYInUIkPysZAGCGrZdSuSdc+zwY5vd/HD6dhpcN1W5g=
-
+  - secure: cGnRV+KvwU7VsNoCtNWZgGeK7Zx6RUh8GGC3kducxdnO1OdMwKur4GMp++5lFr3Y/BHQ8pgNyHb0Tu8O772QL0s+6VSwMRHEAriN91ZsEiPghTeZlehjt7Zik1uo97+fNl9Qo4L0PBgkh8rZ/+DRs3q/Cbo/BXCcLDv4a9OGuPO+dEvR9En7k96Tkwo9PEZCucxyMBg48J2z/b6dKLhU2AIwdZUUEjrXRBi1x45GGSM5Y79m7wy9U9dX2lq6LSEs5qGs2HjetE2LHk2AHd4jKVRh/sO6qRZ24ZsELHVufE9V0g26Q0iugCwCIFSojLAYnobI/YSrH9tflkPDZxjNwRNWa7XqjASV9/xyM6KLPjv8Z9Kg3NPXA6/Q/rJ6xDh/GrP2hmRmYhAs02eam6tZElsX1RE53OA+5U6QJCVAL5RIGpwRsPagtbvoD1jZVh/6zfpBXwHkC5ktE9/zcW3IxCVs/bq9sjShMquqjMAlazRpMzGMp+RR2uUlI/HrU6HSofIFOLwiMejUxE9C1abCQ3HmxzGbRb9LVNq4Bb0BeaA2sNLY5+EmdIsCtpzCXgYh8hiTUp24SXnl42hZi1P+IY3zv8LcEec+kQGUIXy3ENWbD+5VpkhuOkAEQ1eFSO7MOrAMjaVPfNb3FhmrKJRlhT6dFiWoUvCN2n1FJlb/o3Q=
 before_install:
 - pip3 install --user --upgrade setuptools
 - pip3 install --user boto3 GitPython github3.py mako pandocfilters
 - "./git-setup.sh"
-
-install: /bin/true
-
+install: "/bin/true"
 script:
 - pushd safety_annex/plugins
 - mvn clean verify
 - popd
-
 before_deploy:
 - rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
 - export RELEASE_PKG_FILE=$(ls safety_annex/plugins/edu.umn.crisys.safety.repository/target/edu.umn.crisys.safety.repository-*.zip)
@@ -40,7 +32,6 @@ before_deploy:
 - export SNAPSHOT_NUMBER=$(ls safety_annex/plugins/edu.umn.crisys.safety.repository/target/repository/plugins/edu.umn.crisys.safety_*.jar
   | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
 - echo "deploying snapshot number $SNAPSHOT_NUMBER"
-
 deploy:
 - provider: releases
   api-key: "$GH_TOKEN"
@@ -60,11 +51,13 @@ deploy:
   on:
     branch: master
 - provider: script
-  script: python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path safety_annex/plugins/edu.umn.crisys.safety.repository/target/repository --prefix p2/snapshots/amase --child-name amase_$SNAPSHOT_NUMBER --logging DEBUG
+  script: python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path safety_annex/plugins/edu.umn.crisys.safety.repository/target/repository
+    --prefix p2/snapshots/amase --child-name amase_$SNAPSHOT_NUMBER --logging DEBUG
   skip_cleanup: true
   on:
     branch: master
 - provider: script
-  script: python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/amase --logging=DEBUG
+  script: python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/amase
+    --logging=DEBUG
   on:
     branch: master
