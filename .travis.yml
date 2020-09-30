@@ -28,9 +28,9 @@ script:
 - popd
 before_deploy:
 - rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
-- export RELEASE_PKG_FILE=$(ls safety_annex/plugins/edu.umn.crisys.safety.repository/target/edu.umn.crisys.safety.repository-*.zip)
+- export RELEASE_PKG_FILE=$(ls safety_annex/plugins/edu.umn.cs.crisys.safety.repository/target/edu.umn.crisys.safety.repository-*.zip)
 - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
-- export SNAPSHOT_NUMBER=$(ls safety_annex/plugins/edu.umn.crisys.safety.repository/target/repository/plugins/edu.umn.crisys.safety_*.jar
+- export SNAPSHOT_NUMBER=$(ls safety_annex/plugins/edu.umn.cs.crisys.safety.repository/target/repository/plugins/edu.umn.cs.crisys.safety_*.jar
   | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
 - echo "deploying snapshot number $SNAPSHOT_NUMBER"
 deploy:
@@ -52,7 +52,7 @@ deploy:
   on:
     branch: master
 - provider: script
-  script: python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path safety_annex/plugins/edu.umn.crisys.safety.repository/target/repository
+  script: python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path safety_annex/plugins/edu.umn.cs.crisys.safety.repository/target/repository
     --prefix p2/snapshots/amase --child-name amase_$SNAPSHOT_NUMBER --logging DEBUG
   skip_cleanup: true
   on:
