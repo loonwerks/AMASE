@@ -17,9 +17,9 @@ GITHUB_RELEASES = 'releases'
 AUTH_TOKEN = os.environ['GH_TOKEN'] if 'GH_TOKEN' in os.environ.keys() else None
 
 REPOSITORY_OWNER = 'loonwerks'
-REPOSITORY_REPO = 'AGREE'
+REPOSITORY_REPO = 'AMASE'
 
-PRODUCT_ASSET_PATTERN = re.compile(r'com.rockwellcollins.atc.agree.repository-\d+\.\d+\.\d+(-(\d{12}))?-.*')
+PRODUCT_ASSET_PATTERN = re.compile(r'edu.umn.cs.crisys.safety.repository-\d+\.\d+\.\d+(-(\d{12}))?-.*')
 
 def manage_daily_builds(sname):
     print('Managing builds matching %s' % (sname))
