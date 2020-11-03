@@ -36,6 +36,7 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	private static boolean isGenMCS = false;
 	private static boolean isSingleLayer = false;
 	private static boolean isMonolithic = false;
+	private static boolean isGenFTA = false;
 
 	private AddFaultsToNodeVisitor faultVisitor = new AddFaultsToNodeVisitor();
 
@@ -78,15 +79,15 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		faultVisitor = new AddFaultsToNodeVisitor();
 
 		try{
-			// Monolithic and single layer can have the
+			// Monolithic and single layer and GenFTA can have the
 			// static vars reset right after program is visited.
 			// Compositional must wait until after the analysis
 			// thread is complete (handler.doAnalysis)
-			if (isVerify || isGenMCS) {
+			if (isVerify || isGenMCS || isGenFTA) {
 				program = faultVisitor.visit(program);
 				AgreeASTPrettyprinter pp = new AgreeASTPrettyprinter();
 				pp.visit(program);
-				if (isMonolithic || isSingleLayer) {
+				if (isMonolithic || isSingleLayer || isGenFTA) {
 					resetStaticVars();
 				}
 			} else {
@@ -108,13 +109,20 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 */
 	public static void setTransformFlag(MenuItem i) {
 
-		if (i.getText().contains("Generate")) {
+		if (i.getText().contains("Generate Minimal")) {
 			isGenMCS = true;
 			isVerify = false;
 			isSingleLayer = false;
+			isGenFTA = false;
+		} else if (i.getText().contains("Generate Fault Tree")) {
+			isGenMCS = false;
+			isVerify = false;
+			isSingleLayer = false;
+			isGenFTA = true;
 		} else if (i.getText().contains("Faults")) {
 			isVerify = true;
 			isGenMCS = false;
+			isGenFTA = false;
 			if (i.getText().contains("Single")) {
 				isSingleLayer = true;
 			} else {
@@ -143,6 +151,15 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	 */
 	public static boolean getIsGenMCS() {
 		return isGenMCS;
+	}
+
+	/**
+	 * Getter for static flag isGenFTA:
+	 * True if generating FTA
+	 * @return class value isGenFTA
+	 */
+	public static boolean getIsGenFTA() {
+		return isGenFTA;
 	}
 
 	/**
@@ -287,5 +304,6 @@ public class AddFaultsToAgree implements AgreeAutomater {
 		isGenMCS = false;
 		isSingleLayer = false;
 		isMonolithic = false;
+		isGenFTA = false;
 	}
 }
