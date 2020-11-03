@@ -30,6 +30,11 @@
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand">
      </command> 
+     <command
+           name="Generate Fault Tree"
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           id="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand">
+     </command> 
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -71,6 +76,15 @@
             </reference>
          </enabledWhen>
       </handler>
+        <handler
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+            class="edu.umn.cs.crisys.safety.analysis.handlers.GenFTAHandler">
+         <enabledWhen>
+            <reference
+                  definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
+            </reference>
+         </enabledWhen>
+      </handler>
    </extension>
    <extension point="org.eclipse.ui.bindings">
    	  <key
@@ -95,6 +109,12 @@
       ?>
       <key
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+8"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+       <key
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+8"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
@@ -141,6 +161,13 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.genMCSCommand"
                   style="push">
             </command>
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+                  mnemonic="f"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.genFTACommand"
+                  style="push">
+            </command>
          </menu>
       </menuContribution>
       <menuContribution
@@ -172,6 +199,12 @@
                   icon="icons/sample.gif"
                   tooltip="Minimal cut set analysis"
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.genMCSCommand">
+            </command>
+           <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+                  icon="icons/sample.gif"
+                  tooltip="Fault tree generation"
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.genFTACommand">
             </command>
          </toolbar>
       </menuContribution>
@@ -214,6 +247,13 @@
                   icon="icons/layers.png"
                   id="edu.umn.cs.crisys.safety.analysis.menus.genMCSCommand"
                   mnemonic="d"
+                  style="push">
+            </command>
+            <command
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+                  icon="icons/layers.png"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.genFTACommand"
+                  mnemonic="t"
                   style="push">
             </command>
          </menu>
