@@ -2077,8 +2077,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 
 	//LinearizationDef:
 	//	'linearization' name=ID '(' args+=Arg (',' args+=Arg)* ')'
-	//	'over' '[' intervals+=LinearizationInterval (',' intervals+=LinearizationInterval)* ']' ('within' precision=Expr)?
-	//	':' exprBody=Expr ';';
+	//	'over' '[' intervals+=LinearizationInterval (',' intervals+=LinearizationInterval)* ']' ('within' precision=Expr)? ':'
+	//	exprBody=Expr ';';
 	public AgreeGrammarAccess.LinearizationDefElements getLinearizationDefAccess() {
 		return gaAgree.getLinearizationDefAccess();
 	}
@@ -2154,8 +2154,8 @@ public class SafetyGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//BaseType Type:
-	//	{PrimType} name=primTypes ('[' lowNeg='-'? rangeLow=(INTEGER_LIT | REAL_LIT) ',' highNeg='-'? rangeHigh=(INTEGER_LIT
-	//	| REAL_LIT) ']')?
+	//	{PrimType} name=primTypes ('[' lowNeg='-'? rangeLow=(INTEGER_LIT | REAL_LIT) ',' highNeg='-'? rangeHigh=(INTEGER_LIT |
+	//	REAL_LIT) ']')?
 	//	| DoubleDotRef;
 	public AgreeGrammarAccess.BaseTypeElements getBaseTypeAccess() {
 		return gaAgree.getBaseTypeAccess();
