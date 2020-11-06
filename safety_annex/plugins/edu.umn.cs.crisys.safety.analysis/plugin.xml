@@ -78,7 +78,7 @@
       </handler>
         <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.GenFTAHandler">
+            class="edu.umn.cs.crisys.safety.analysis.handlers.GenCausationTreeHandler">
          <enabledWhen>
             <reference
                   definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">

@@ -56,6 +56,8 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import edu.umn.cs.crisys.safety.analysis.Activator;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
+import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
+import edu.umn.cs.crisys.safety.analysis.generators.ModelToCTGenerator;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.api.results.AnalysisResult;
@@ -70,7 +72,7 @@ import jkind.lustre.Program;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class GenFTAHandler extends VerifyHandler {
+public class GenCausationTreeHandler extends VerifyHandler {
 
 	private static Element root = null;
 	private static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
@@ -103,19 +105,42 @@ public class GenFTAHandler extends VerifyHandler {
 			ComponentImplementation ci = getComponentImplementation(root, implUtil);
 			SystemInstance si = getSysInstance(ci, implUtil);
 
-//			AnalysisResult result;
-//			CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
-
 			// SystemType sysType = si.getSystemImplementation().getType();
 			ComponentType sysType = AgreeUtils.getInstanceType(si);
 			EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(sysType,
 					AgreePackage.eINSTANCE.getAgreeContractSubclause());
+
+			if (annexSubClauses.size() == 0) {
+				throw new AgreeException("There is not an AGREE annex in the '" + sysType.getName() + "' system type.");
+			}
 
 			AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, false);
 
 			// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
 			// and variable declarations sorted so they are declared before use
 			Node lustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
+
+			ModelToCTGenerator modelToFTGenerator = new ModelToCTGenerator();
+			List<FaultTree> faultTrees = modelToFTGenerator.generateCausationTree(lustreNode, agreeProgram);
+//			resolveVisitor.visit(faultTree);
+//			LinkedHashMap<String, Set<List<String>>> mapForHFT = ftGenerator.getMapPropertyToMCSs();
+
+//			try {
+//				String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+//				File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
+//				BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
+//				bw.write(faultTree.printMinCutSetTxt());
+//				bw.close();
+////				display.dispose();
+//				org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
+//			} catch (IOException e) {
+//				// close progress bar
+////				display.dispose();
+//				Dialog.showError("Unable to open file", e.getMessage());
+//				e.printStackTrace();
+//			}
+
+			AddFaultsToAgree.resetStaticVars();
 
 //			if (annexSubClauses.size() == 0) {
 //				throw new AgreeException("There is not an AGREE annex in the '" + sysType.getName() + "' system type.");
