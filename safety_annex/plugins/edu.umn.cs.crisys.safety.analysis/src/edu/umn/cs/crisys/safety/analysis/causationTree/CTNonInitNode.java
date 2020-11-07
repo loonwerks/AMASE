@@ -2,10 +2,10 @@ package edu.umn.cs.crisys.safety.analysis.causationTree;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTAstVisitor;
 
-public class CTAndNode extends CTNode {
+public class CTNonInitNode extends CTNode {
 
-	public CTAndNode(String nodeName) {
-		super(nodeName);
+	public CTNonInitNode(String nodeName) {
+		super("Non Init Step " + nodeName);
 		// TODO Auto-generated constructor stub
 	}
 

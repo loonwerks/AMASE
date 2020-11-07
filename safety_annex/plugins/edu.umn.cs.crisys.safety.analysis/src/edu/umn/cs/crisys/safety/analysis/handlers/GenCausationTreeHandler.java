@@ -56,7 +56,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import edu.umn.cs.crisys.safety.analysis.Activator;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.faultTree.FaultTree;
+import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
 import edu.umn.cs.crisys.safety.analysis.generators.ModelToCTGenerator;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
@@ -121,7 +121,7 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			Node lustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
 
 			ModelToCTGenerator modelToFTGenerator = new ModelToCTGenerator();
-			List<FaultTree> faultTrees = modelToFTGenerator.generateCausationTree(lustreNode, agreeProgram);
+			List<CT> causationTrees = modelToFTGenerator.generateCausationTree(lustreNode, agreeProgram);
 //			resolveVisitor.visit(faultTree);
 //			LinkedHashMap<String, Set<List<String>>> mapForHFT = ftGenerator.getMapPropertyToMCSs();
 
