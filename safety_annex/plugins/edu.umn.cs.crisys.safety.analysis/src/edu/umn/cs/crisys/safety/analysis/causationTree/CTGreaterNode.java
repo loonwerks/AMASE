@@ -2,9 +2,9 @@ package edu.umn.cs.crisys.safety.analysis.causationTree;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTAstVisitor;
 
-public class CTAndNode extends CTNode {
+public class CTGreaterNode extends CTNode {
 
-	public CTAndNode(String nodeName) {
+	public CTGreaterNode(String nodeName) {
 		super(nodeName);
 		// TODO Auto-generated constructor stub
 	}

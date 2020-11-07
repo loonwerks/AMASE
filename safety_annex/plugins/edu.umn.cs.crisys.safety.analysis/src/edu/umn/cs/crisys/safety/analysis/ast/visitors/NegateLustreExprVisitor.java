@@ -31,94 +31,94 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 
 	@Override
 	public Expr visit(BinaryExpr e) {
-		Expr left = e.left.accept(this);
-		Expr right = e.right.accept(this);
 		String opName = e.op.name();
 		BinaryOp newOp = null;
 		Expr newExpr = null;
 		if (opName.equals("AND")) {
+			// not(a and b) = not(a) or not(b)
 			newOp = BinaryOp.OR;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, visit(e.left), newOp, visit(e.right));
 		}
 		else if (opName.equals("OR")) {
+			// not(a or b) = not(a) and not(b)
 			newOp = BinaryOp.AND;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, visit(e.left), newOp, visit(e.right));
+		}
+		else if (opName.equals("IMPLIES")) {
+			newOp = BinaryOp.AND;
+			// not(a=>b) = not(not(a) or b) = a or not(b)
+			newExpr = new BinaryExpr(e.location, e.left, newOp, visit(e.right));
+		} else if (opName.equals("ARROW")) {
+			newExpr = new BinaryExpr(e.location, visit(e.left), e.op, visit(e.right));
 		}
 		else if (opName.equals("EQUAL")) {
 			newOp = BinaryOp.NOTEQUAL;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, e.left, newOp, e.right);
 		}
 		else if (opName.equals("NOTEQUAL")) {
 			newOp = BinaryOp.EQUAL;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, e.left, newOp, e.right);
 		}
 		else if (opName.equals("GREATER")) {
 			newOp = BinaryOp.LESSEQUAL;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, e.left, newOp, e.right);
 		} else if (opName.equals("LESS")) {
 			newOp = BinaryOp.GREATEREQUAL;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, e.left, newOp, e.right);
 		} else if (opName.equals("GREATEREQUAL")) {
 			newOp = BinaryOp.LESS;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, e.left, newOp, e.right);
 		} else if (opName.equals("LESSEQUAL")) {
 			newOp = BinaryOp.GREATER;
-			newExpr = new BinaryExpr(e.location, left, newOp, right);
+			newExpr = new BinaryExpr(e.location, e.left, newOp, e.right);
 		} else if (opName.equals("PLUS")) {
-			if ((left instanceof IntExpr) && (right instanceof IntExpr)) {
+			if ((e.left instanceof IntExpr) && (e.right instanceof IntExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new IntExpr(e.location, ((IntExpr) left).value.add(((IntExpr) right).value)));
+						new IntExpr(e.location, ((IntExpr) e.left).value.add(((IntExpr) e.right).value)));
 			}
-			else if ((left instanceof RealExpr) && (right instanceof RealExpr)) {
+			else if ((e.left instanceof RealExpr) && (e.right instanceof RealExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new RealExpr(e.location, ((RealExpr) left).value.add(((RealExpr) right).value)));
+						new RealExpr(e.location, ((RealExpr) e.left).value.add(((RealExpr) e.right).value)));
 			}
 			else {
 				// not supported
 				throw new IllegalArgumentException();
 			}
 		} else if (opName.equals("MINUS")) {
-			if ((left instanceof IntExpr) && (right instanceof IntExpr)) {
+			if ((e.left instanceof IntExpr) && (e.right instanceof IntExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new IntExpr(e.location, ((IntExpr) left).value.add(((IntExpr) right).value.negate())));
-			} else if ((left instanceof RealExpr) && (right instanceof RealExpr)) {
+						new IntExpr(e.location, ((IntExpr) e.left).value.add(((IntExpr) e.right).value.negate())));
+			} else if ((e.left instanceof RealExpr) && (e.right instanceof RealExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new RealExpr(e.location, ((RealExpr) left).value.add(((RealExpr) right).value.negate())));
+						new RealExpr(e.location, ((RealExpr) e.left).value.add(((RealExpr) e.right).value.negate())));
 			} else {
 				// not supported
 				throw new IllegalArgumentException();
 			}
 		}
 		else if (opName.equals("MULTIPLY")) {
-			if ((left instanceof IntExpr) && (right instanceof IntExpr)) {
+			if ((e.left instanceof IntExpr) && (e.right instanceof IntExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new IntExpr(e.location, ((IntExpr) left).value.multiply(((IntExpr) right).value)));
-			} else if ((left instanceof RealExpr) && (right instanceof RealExpr)) {
+						new IntExpr(e.location, ((IntExpr) e.left).value.multiply(((IntExpr) e.right).value)));
+			} else if ((e.left instanceof RealExpr) && (e.right instanceof RealExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new RealExpr(e.location, ((RealExpr) left).value.multiply(((RealExpr) right).value)));
+						new RealExpr(e.location, ((RealExpr) e.left).value.multiply(((RealExpr) e.right).value)));
 			} else {
 				// not supported
 				throw new IllegalArgumentException();
 			}
 		}
 		else if (opName.equals("DIVIDE")) {
-			if ((left instanceof IntExpr) && (right instanceof IntExpr)) {
+			if ((e.left instanceof IntExpr) && (e.right instanceof IntExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new IntExpr(e.location, ((IntExpr) left).value.divide(((IntExpr) right).value)));
-			} else if ((left instanceof RealExpr) && (right instanceof RealExpr)) {
+						new IntExpr(e.location, ((IntExpr) e.left).value.divide(((IntExpr) e.right).value)));
+			} else if ((e.left instanceof RealExpr) && (e.right instanceof RealExpr)) {
 				newExpr = new UnaryExpr(e.location, UnaryOp.NOT,
-						new RealExpr(e.location, ((RealExpr) left).value.divide(((RealExpr) right).value)));
+						new RealExpr(e.location, ((RealExpr) e.left).value.divide(((RealExpr) e.right).value)));
 			} else {
 				// not supported
 				throw new IllegalArgumentException();
 			}
-		}
-		else if (opName.equals("IMPLIES")) {
-			newOp = BinaryOp.AND;
-			newExpr = new BinaryExpr(e.location, left, newOp, new UnaryExpr(e.location, UnaryOp.NOT, right));
-		} else if (opName.equals("ARROW")) {
-			newExpr = new BinaryExpr(e.location, new UnaryExpr(e.location, UnaryOp.NOT, left), e.op,
-					new UnaryExpr(e.location, UnaryOp.NOT, right));
 		} else {
 			// not supported
 			throw new IllegalArgumentException();
@@ -129,14 +129,14 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 	@Override
 	public Expr visit(UnaryExpr e) {
 		String opName = e.op.name();
-		Expr newExpr = null;
+		Expr returnExpr = null;
 		if (opName.equals("NEGATIVE") || opName.equals("NOT")) {
-			newExpr = e.expr;
+			returnExpr = visit(e.expr);
 		} else if (opName.equals("PRE")) {
-			newExpr = new UnaryExpr(e.location, e.op, new UnaryExpr(e.location, UnaryOp.NOT, e.expr));
+			returnExpr = new UnaryExpr(e.location, e.op, visit(e.expr));
 		}
 
-		return newExpr;
+		return returnExpr;
 	}
 
 	@Override
@@ -146,8 +146,8 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 		// = not(a=>b) or not(not a=>c)
 		// = (a and (not b)) or (not a and c)
 		BinaryExpr exprLeft = new BinaryExpr(e.location, e.cond, BinaryOp.AND,
-				new UnaryExpr(e.location, UnaryOp.NOT, e.thenExpr));
-		BinaryExpr exprRight = new BinaryExpr(e.location, new UnaryExpr(e.location, UnaryOp.NOT, e.cond), BinaryOp.AND,
+				visit(e.thenExpr));
+		BinaryExpr exprRight = new BinaryExpr(e.location, visit(e.cond), BinaryOp.AND,
 				e.elseExpr);
 		BinaryExpr returnExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.OR, exprRight);
 		return returnExpr;
@@ -155,37 +155,43 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 
 	@Override
 	public Expr visit(BoolExpr e) {
-		return new BoolExpr(!(e.value));
+		return e;
+		// return new BoolExpr(!(e.value));
 	}
 
 	@Override
 	public Expr visit(IdExpr e) {
-		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-		return newExpr;
+		return e;
+		// UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+		// return newExpr;
 	}
 
 	@Override
 	public Expr visit(IntExpr e) {
-		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-		return newExpr;
+		return e;
+//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+//		return newExpr;
 	}
 
 	@Override
 	public Expr visit(RealExpr e) {
-		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-		return newExpr;
+		return e;
+//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+//		return newExpr;
 	}
 
 	@Override
 	public Expr visit(NodeCallExpr e) {
-		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-		return newExpr;
+		return e;
+//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+//		return newExpr;
 	}
 
 	@Override
 	public Expr visit(FunctionCallExpr e) {
-		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-		return newExpr;
+		return e;
+//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+//		return newExpr;
 	}
 
 

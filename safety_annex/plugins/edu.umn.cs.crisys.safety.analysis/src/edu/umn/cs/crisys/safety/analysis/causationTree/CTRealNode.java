@@ -1,11 +1,16 @@
 package edu.umn.cs.crisys.safety.analysis.causationTree;
 
+import java.math.BigDecimal;
+
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTAstVisitor;
 
-public class CTAndNode extends CTNode {
+public class CTRealNode extends CTNode {
 
-	public CTAndNode(String nodeName) {
+	public final BigDecimal value;
+
+	public CTRealNode(String nodeName, BigDecimal value) {
 		super(nodeName);
+		this.value = value;
 		// TODO Auto-generated constructor stub
 	}
 

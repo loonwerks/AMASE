@@ -1,25 +1,28 @@
 package edu.umn.cs.crisys.safety.analysis.causationTree;
 
 import java.util.HashMap;
+import java.util.List;
 
 import jkind.Assert;
 
 public abstract class CTNode extends CTAst {
 	public final String nodeName;
-//	// public FTNode parentNode = null;
-//	public boolean resolved = false;
-//	public boolean nodeValue = true;
-//	public HashMap<String, CausationTreeNode> childNodes = new HashMap<>();
 	public HashMap<String, CTNode> childNodes = new HashMap<>();
+
 
 	public CTNode(String nodeName) {
 		Assert.isNotNull(nodeName);
 		this.nodeName = nodeName;
 	}
 
-//	public void addParentNode(FTNode parentNode) {
-//		this.parentNode = parentNode;
-//	}
+	public void addChildNode(String nodeName, CTNode childNode) {
+		childNodes.put(nodeName, childNode);
+	}
 
-//	public abstract float getProbability();
+	public void addChildNodes(List<CTNode> childNodesToAdd) {
+		for (CTNode child : childNodesToAdd) {
+			childNodes.put(child.nodeName, child);
+		}
+	}
+
 }

@@ -1,11 +1,16 @@
 package edu.umn.cs.crisys.safety.analysis.causationTree;
 
+import java.math.BigInteger;
+
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTAstVisitor;
 
-public class CTAndNode extends CTNode {
+public class CTIntNode extends CTNode {
 
-	public CTAndNode(String nodeName) {
+	public final BigInteger value;
+
+	public CTIntNode(String nodeName, BigInteger value) {
 		super(nodeName);
+		this.value = value;
 		// TODO Auto-generated constructor stub
 	}
 
