@@ -24,7 +24,9 @@ Require-Bundle: org.eclipse.ui,
  com.rockwellcollins.atc.agree.analysis;bundle-version="[2.5.1,2.6.0)",
  org.eclipse.jface,
  org.eclipse.swt,
- com.collins.trustedsystems.jkindapi
+ com.collins.trustedsystems.jkindapi,
+ org.osate.ge,
+ com.google.gson
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.collins.trustedsystems.z3,
