@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -19,8 +20,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.handlers.IHandlerActivation;
-import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.utils.EditorUtils;
 import org.osate.aadl2.AadlPackage;
@@ -46,7 +45,6 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomaterRegistry;
 import com.rockwellcollins.atc.agree.analysis.extentions.ExtensionRegistry;
-import com.rockwellcollins.atc.agree.analysis.handlers.TerminateHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler;
 import com.rockwellcollins.atc.agree.analysis.lustre.visitors.RenamingVisitor;
 import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContract;
@@ -57,6 +55,7 @@ import edu.umn.cs.crisys.safety.analysis.Activator;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
+import edu.umn.cs.crisys.safety.analysis.generators.CTToJsonGenerator;
 import edu.umn.cs.crisys.safety.analysis.generators.ModelToCTGenerator;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
@@ -74,19 +73,12 @@ import jkind.lustre.Program;
  */
 public class GenCausationTreeHandler extends VerifyHandler {
 
-	private static Element root = null;
-	private static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
-	private IHandlerActivation rerunActivation;
-	private IHandlerActivation terminateActivation;
-	private IHandlerActivation terminateAllActivation;
-	private IHandlerService handlerService;
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
 	private boolean calledFromRerun = false;
 
 	private enum AnalysisType {
 		AssumeGuarantee, Consistency, Realizability
 	};
-
 
 	@Override
 	protected IStatus runJob(Element root, IProgressMonitor monitor) {
@@ -97,13 +89,12 @@ public class GenCausationTreeHandler extends VerifyHandler {
 		}
 		calledFromRerun = false;
 
-		disableRerunHandler();
-		handlerService = getWindow().getService(IHandlerService.class);
-
 		try {
 			// Make sure the user selected a component implementation
 			ComponentImplementation ci = getComponentImplementation(root, implUtil);
 			SystemInstance si = getSysInstance(ci, implUtil);
+
+			URI ciURI = ci.eResource().getURI();
 
 			// SystemType sysType = si.getSystemImplementation().getType();
 			ComponentType sysType = AgreeUtils.getInstanceType(si);
@@ -122,49 +113,13 @@ public class GenCausationTreeHandler extends VerifyHandler {
 
 			ModelToCTGenerator modelToFTGenerator = new ModelToCTGenerator();
 			List<CT> causationTrees = modelToFTGenerator.generateCausationTree(lustreNode, agreeProgram);
-//			resolveVisitor.visit(faultTree);
-//			LinkedHashMap<String, Set<List<String>>> mapForHFT = ftGenerator.getMapPropertyToMCSs();
 
-//			try {
-//				String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-//				File minCutSetFile = File.createTempFile("MinCutSet_" + timeStamp + "_", ".txt");
-//				BufferedWriter bw = new BufferedWriter(new FileWriter(minCutSetFile));
-//				bw.write(faultTree.printMinCutSetTxt());
-//				bw.close();
-////				display.dispose();
-//				org.eclipse.swt.program.Program.launch(minCutSetFile.toString());
-//			} catch (IOException e) {
-//				// close progress bar
-////				display.dispose();
-//				Dialog.showError("Unable to open file", e.getMessage());
-//				e.printStackTrace();
-//			}
+			// print each causation tree to a json file
+			for (CT ct : causationTrees) {
+				CTToJsonGenerator.createJson(ciURI, ct);
+			}
 
 			AddFaultsToAgree.resetStaticVars();
-
-//			if (annexSubClauses.size() == 0) {
-//				throw new AgreeException("There is not an AGREE annex in the '" + sysType.getName() + "' system type.");
-//			}
-//
-//			if (isRecursive()) {
-//				if (AgreeUtils.usingKind2()) {
-//					throw new AgreeException("Kind2 only supports monolithic verification");
-//				}
-//				result = buildAnalysisResult(((NamedElement) root).getName(), si);
-//				wrapper.addChild(result);
-//				result = wrapper;
-//			} else if (isRealizability()) {
-//				AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, false);
-//				Program program = LustreAstBuilder.getRealizabilityLustreProgram(agreeProgram);
-//				wrapper.addChild(createVerification("Realizability Check", si, program, agreeProgram,
-//						AnalysisType.Realizability));
-//				result = wrapper;
-//			} else {
-//				wrapVerificationResult(si, wrapper);
-//				result = wrapper;
-//			}
-//			showView(result, linker);
-			// return doAnalysis(root, monitor, result, linker);
 			return Status.OK_STATUS;
 		} catch (Throwable e) {
 			String messages = getNestedMessages(e);
@@ -200,6 +155,7 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
 			return Status.CANCEL_STATUS;
 		}
+
 		// If isGenMCS or isGenFTA, then the user selected
 		// 'Generate MCS' option or 'Generate Fault Tree' option and we should execute event.
 		// Else, return null.
@@ -323,35 +279,6 @@ public class GenCausationTreeHandler extends VerifyHandler {
 
 	}
 
-	private void activateTerminateHandlers(final IProgressMonitor globalMonitor) {
-		getWindow().getShell().getDisplay().syncExec(() -> {
-			terminateActivation = handlerService.activateHandler(TERMINATE_ID, new TerminateHandler(monitorRef));
-			terminateAllActivation = handlerService.activateHandler(TERMINATE_ALL_ID,
-					new TerminateHandler(monitorRef, globalMonitor));
-		});
-	}
-
-	private void deactivateTerminateHandlers() {
-		getWindow().getShell().getDisplay().syncExec(() -> {
-			handlerService.deactivateHandler(terminateActivation);
-			handlerService.deactivateHandler(terminateAllActivation);
-		});
-	}
-
-	protected void disableRerunHandler() {
-		if (rerunActivation != null) {
-			getWindow().getShell().getDisplay().syncExec(() -> {
-				IHandlerService handlerService = getHandlerService();
-				handlerService.deactivateHandler(rerunActivation);
-				rerunActivation = null;
-			});
-		}
-	}
-
-	private IHandlerService getHandlerService() {
-		return getWindow().getService(IHandlerService.class);
-	}
-
 	private List<Classifier> getClassifiers() {
 		XtextEditor xtextEditor = EditorUtils.getActiveXtextEditor();
 		if (xtextEditor == null) {
@@ -369,4 +296,3 @@ public class GenCausationTreeHandler extends VerifyHandler {
 	}
 
 }
-
