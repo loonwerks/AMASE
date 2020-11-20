@@ -1,5 +1,8 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTAndNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTDivideNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTEqualNode;
@@ -44,7 +47,21 @@ import jkind.lustre.visitors.ExprVisitor;
 
 public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 
+//	private Node lustreNode;
+//	private AgreeNode agreeNode;
+//	private ComponentInstance compInst;
+//	private AgreeProgram agreeProgram;
+	public List<CTNode> leafNodes = new ArrayList<CTNode>();
+
 	private NegateLustreExprVisitor negateExprVisitor = new NegateLustreExprVisitor();
+
+//	public LustreExprToCTVisitor(Node lustreNode, AgreeNode agreeNode, ComponentInstance compInst,
+//			AgreeProgram agreeProgram) {
+//		this.lustreNode = lustreNode;
+//		this.agreeNode = agreeNode;
+//		this.compInst = compInst;
+//		this.agreeProgram = agreeProgram;
+//	}
 
 	public CTNode visit(Expr expr) {
 		return expr.accept(this);
@@ -206,10 +223,10 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 		return returnNode;
 	}
 
-
 	@Override
 	public CTNode visit(IdExpr e) {
 		CTIdNode returnNode = new CTIdNode(e.id);
+		leafNodes.add(returnNode);
 		return returnNode;
 	}
 
@@ -288,5 +305,4 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 		// not supported
 		throw new IllegalArgumentException();
 	}
-
 }

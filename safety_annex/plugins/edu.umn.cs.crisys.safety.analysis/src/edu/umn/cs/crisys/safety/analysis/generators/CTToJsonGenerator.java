@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTToJsonVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
 import edu.umn.cs.crisys.safety.util.Filesystem;
 
@@ -69,10 +70,14 @@ public class CTToJsonGenerator {
 
 	public static JsonElement toJson(CT ct) {
 		JsonArray modelsJson = new JsonArray();
+		CTToJsonVisitor ctToJsonVisitor = new CTToJsonVisitor();
+		// convert ct to modelsJson, supporting the following:
+		// 1) directed acyclic graph (DAG) (tree with multiple inheritance)
+		// 2) expansion and contraction of subtree upon user interaction
+		// 3) show and hide detailed node description/information
 
-		// TODO: convert ct to modelsJson
-
-			return modelsJson;
+		modelsJson.addAll(ctToJsonVisitor.visit(ct));
+		return modelsJson;
 	}
 
 }

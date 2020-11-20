@@ -1,14 +1,12 @@
 package edu.umn.cs.crisys.safety.analysis.causationTree;
 
-import java.util.HashMap;
-
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTAstVisitor;
 
 public class CT extends CTAst {
-	public HashMap<String, CTNode> rootNodes = new HashMap<>();
+	public CTNode rootNode = null;
 
-	public void addRootNode(String nodeName, CTNode rootNode) {
-		rootNodes.put(nodeName, rootNode);
+	public void setRootNode(CTNode rootNode) {
+		this.rootNode = rootNode;
 	}
 
 	@Override

@@ -41,6 +41,7 @@ import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ConsistencyResult;
 import com.rockwellcollins.atc.agree.analysis.EphemeralImplementationUtil;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
 import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomaterRegistry;
@@ -106,13 +107,14 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			}
 
 			AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, false);
+			AgreeNode topNode = agreeProgram.topNode;
 
 			// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
 			// and variable declarations sorted so they are declared before use
-			Node lustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
+			Node lustreNode = AgreeNodeToLustreContract.translate(topNode, agreeProgram);
 
 			ModelToCTGenerator modelToFTGenerator = new ModelToCTGenerator();
-			List<CT> causationTrees = modelToFTGenerator.generateCausationTree(lustreNode, agreeProgram);
+			List<CT> causationTrees = modelToFTGenerator.generateCausationTree(lustreNode, topNode, si, agreeProgram);
 
 			// print each causation tree to a json file
 			for (CT ct : causationTrees) {

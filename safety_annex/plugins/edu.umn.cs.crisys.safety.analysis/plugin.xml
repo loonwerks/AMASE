@@ -31,7 +31,7 @@
            id="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand">
      </command> 
      <command
-           name="Generate Fault Tree"
+           name="Generate Causation Tree"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand">
      </command> 
@@ -203,7 +203,7 @@
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
                   icon="icons/sample.gif"
-                  tooltip="Fault tree generation"
+                  tooltip="Causation tree generation"
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.genFTACommand">
             </command>
          </toolbar>
