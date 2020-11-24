@@ -144,11 +144,11 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 		// if a then b else c = (a=>b) and (not a => c)
 		// not(if a then b else c)
 		// = not(a=>b) or not(not a=>c)
-		// = (a and (not b)) or (not a and c)
+		// = (a and (not b)) or (not a and not c)
 		BinaryExpr exprLeft = new BinaryExpr(e.location, e.cond, BinaryOp.AND,
 				visit(e.thenExpr));
 		BinaryExpr exprRight = new BinaryExpr(e.location, visit(e.cond), BinaryOp.AND,
-				e.elseExpr);
+				visit(e.elseExpr));
 		BinaryExpr returnExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.OR, exprRight);
 		return returnExpr;
 	}
