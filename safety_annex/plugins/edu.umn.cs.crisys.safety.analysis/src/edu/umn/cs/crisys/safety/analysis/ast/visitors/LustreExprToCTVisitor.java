@@ -190,23 +190,20 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 	@Override
 	public CTNode visit(IfThenElseExpr e) {
 		// if a then b else c = (a=>b) and (not a => c)
-		// not(if a then b else c)
-		// = not(a=>b) or not(not a=>c)
-		// = (a and (not b)) or (not a and c)
+		// = (not a or b) and (a or c)
 		CTNode returnNode = null;
 		CTNode condNode = visit(e.cond);
 		Expr negCondExpr = negateExprVisitor.visit(e.cond);
 		CTNode negCondNode = visit(negCondExpr);
-		Expr negThenCondExpr = negateExprVisitor.visit(e.thenExpr);
-		CTNode negThenCondNode = visit(negThenCondExpr);
+		CTNode thenCondNode = visit(e.thenExpr);
 		CTNode elseCondNode = visit(e.elseExpr);
-		CTAndNode leftNode = new CTAndNode(condNode.nodeName + " AND " + negThenCondNode.nodeName);
-		leftNode.addChildNode(condNode.nodeName, condNode);
-		leftNode.addChildNode(negThenCondNode.nodeName, negThenCondNode);
-		CTAndNode rightNode = new CTAndNode(negCondNode.nodeName + " AND " + elseCondNode.nodeName);
-		rightNode.addChildNode(negCondNode.nodeName, negCondNode);
+		CTOrNode leftNode = new CTOrNode(negCondNode.nodeName + " OR " + thenCondNode.nodeName);
+		leftNode.addChildNode(negCondNode.nodeName, negCondNode);
+		leftNode.addChildNode(thenCondNode.nodeName, thenCondNode);
+		CTOrNode rightNode = new CTOrNode(condNode.nodeName + " OR " + elseCondNode.nodeName);
+		rightNode.addChildNode(condNode.nodeName, condNode);
 		rightNode.addChildNode(elseCondNode.nodeName, elseCondNode);
-		returnNode = new CTOrNode(leftNode.nodeName + " OR " + rightNode.nodeName);
+		returnNode = new CTAndNode(leftNode.nodeName + " AND " + rightNode.nodeName);
 		rightNode.addChildNode(leftNode.nodeName, leftNode);
 		rightNode.addChildNode(rightNode.nodeName, rightNode);
 		return returnNode;
