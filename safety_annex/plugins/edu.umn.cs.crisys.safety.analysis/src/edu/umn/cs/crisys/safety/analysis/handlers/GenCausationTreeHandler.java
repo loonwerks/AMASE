@@ -1,5 +1,6 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,13 +14,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.ProgressBar;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.utils.EditorUtils;
 import org.osate.aadl2.AadlPackage;
@@ -129,20 +125,6 @@ public class GenCausationTreeHandler extends VerifyHandler {
 		} finally {
 			implUtil.cleanup();
 		}
-	}
-
-	private Shell createProgressBar(Display display) {
-		Shell shell = new Shell();
-		shell.setText("Compositional Safety Analysis");
-		shell.setSize(450, 200);
-
-		ProgressBar progressBar = new ProgressBar(shell, SWT.INDETERMINATE);
-		progressBar.setBounds(50, 80, 250, 20);
-		Label label = new Label(shell, SWT.NULL);
-		label.setText("Minimal Cut Set Generation");
-		label.setAlignment(SWT.LEFT);
-		label.setBounds(50, 30, 450, 20);
-		return shell;
 	}
 
 	@Override
