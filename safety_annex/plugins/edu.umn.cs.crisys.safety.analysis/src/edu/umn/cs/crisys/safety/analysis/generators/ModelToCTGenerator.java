@@ -15,6 +15,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprToCTVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
+import edu.umn.cs.crisys.safety.analysis.causationTree.CTAndNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTIdNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTNode;
 import edu.umn.cs.crisys.safety.util.Util;
@@ -24,68 +25,82 @@ import jkind.lustre.UnaryOp;
 
 public class ModelToCTGenerator {
 	List<CT> causationTrees = new ArrayList<CT>();
+	LustreExprToCTVisitor lustreExprToFTVisitor = new LustreExprToCTVisitor();
 
 	public List<CT> generateCausationTree(Node lustreNode, AgreeNode agreeNode, ComponentInstance compInst,
 			AgreeProgram agreeProgram) {
-		//generate FT for each top level guarantee
+		// generate FT for each top level guarantee
 		for (AgreeStatement topLevelGuarantee : agreeProgram.topNode.guarantees) {
 			CT causationTree = new CT();
 			// Step 1: negate the top level guarantee expression and turn it into a causation tree
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
 			// CTRootNode rootNode = new CTRootNode(topLevelGuarantee.string);
-			LustreExprToCTVisitor lustreExprToFTVisitor = new LustreExprToCTVisitor();
 			// TODO: mark leaf nodes in the tree as the expr to CT translation goes
 			CTNode rootNode = lustreExprToFTVisitor.visit(topLevelEvent);
 			// TODO: expand the leaf nodes in the current tree
-			for (CTNode leafNode : lustreExprToFTVisitor.leafNodes) {
-				if (leafNode instanceof CTIdNode) {
-					// get all top level system inputs
-					// if the ID is one of the inputs, stop
-					if (inputsContainId(agreeNode, leafNode.nodeName)) {
-						break;
-					}
-					// TODO: get all top level system failures
-					// if the ID is one of the failures, stop
-
-					// if the ID is not one of the above, need to develop further
-					else if (outputsContainId(agreeNode, leafNode.nodeName)) {
-						// get all top level system outputs
-						// if the ID is one of the outputs
-						// go through all connections
-						// and find all the components producing the output
-						// for each component, find the agree node for that component
-						// and develop a causation tree for the signal in that component based on the agree guarantees
-						for (AgreeNode curNode : getProducingNodes(leafNode.nodeName, compInst, agreeProgram)) {
-							// TODO: check AGREE annex for both comp and comp impl
-							// for the signal of interest, identify all AGREE guarantees and failure behavioral definitions that are relevant
-							for (AgreeStatement currentGuarantee : curNode.guarantees) {
-								// transform each specifications into a logical formula
-								// showing the implication relationship connecting
-								// disjunction or conjunction of
-								// input signals and failures
-								// with the constraint of the output signal as appeared in the current leaf node
-
-								// prune any implication relationships that do not involve the constraint of the signal of interest
-								// as appeared in the current leaf node
-
-								// expand the current leaf node by turning the left side of the implications into child nodes
-								// connected by logical AND/OR operators
-							}
-							// Use AND operator to connect all the nodes created above to the original leaf node as parent node
-							// make sure it extends the leaf node in the original tree
+			while (!lustreExprToFTVisitor.leafNodes.isEmpty()) {
+				List<CTNode> currentLeafNodes = new ArrayList<CTNode>(lustreExprToFTVisitor.leafNodes);
+				for (CTNode leafNode : currentLeafNodes) {
+					if (leafNode instanceof CTIdNode) {
+						// get all top level system inputs
+						// if the ID is one of the inputs, stop
+						if (inputsContainId(agreeNode, leafNode.nodeName)) {
+							continue;
 						}
-						// TODO: if more than one, find the assertion in the top level component implementation
-						// for the relationship between the multiple outputs
-					}
-					// TODO: if the ID is one of the internal variables, go find the definition of the internal variable until
-					// reaching one of the category of signals identified above
-					else {
+						// TODO: get all top level system failures
+						// if the ID is one of the failures, stop
 
+						// if the ID is not one of the above, need to develop further
+						else if (outputsContainId(agreeNode, leafNode.nodeName)) {
+							// get all top level system outputs
+							// if the ID is one of the outputs
+							// go through all connections
+							// and find all the components producing the output
+							// for each component, find the agree node for that component
+							// and develop a causation tree for the signal in that component based on the agree guarantees
+							for (AgreeNode curAgreeNode : getProducingNodes(leafNode.nodeName, compInst,
+									agreeProgram)) {
+								// TODO: check AGREE annex for both comp and comp impl
+								// for the signal of interest, identify all AGREE guarantees and failure behavioral definitions that are relevant
+
+								// Use AND operator to connect all the nodes created above to the original leaf node as parent node
+								// make sure it extends the leaf node in the original tree
+								CTAndNode andNode = new CTAndNode("AND");
+								for (AgreeStatement currentGuarantee : curAgreeNode.guarantees) {
+									// for each guarantee formula
+									// see if it's the final form
+									// TODO: create a new visitor that returns boolean for each type of expr
+									// to check if it's the final form
+									// i.e., the implication relationship connecting
+									// disjunction or conjunction of
+									// input signals and failures
+									// with the constraint of the output signal as appeared in the current leaf node
+									// if not, transform to the final form
+									// TODO: create a new visitor for the transformation
+									// if yes,
+									// TODO: create a new visitor to see if the right side of the implication
+									// involve the constraint of the signal of interest as appeared in the current leaf node
+									// if not, move on to the next guarantee
+									// if yes, turn the left side of the implication into a new CT node
+									// CTNode curCTNode = lustreExprToFTVisitor.visit(left_side_of_implication_expr);
+									// andNode.addChildNode(curCTNode.nodeName, curCTNode);
+								}
+								// TODO: add andNode as child node of the current leaf node only if andNode has child node(s)
+								// leafNode.addChildNode(andNode.nodeName, andNode);
+							}
+							// TODO: if more than one, find the assertion in the top level component implementation
+							// for the relationship between the multiple outputs
+						}
+						// TODO: if the ID is one of the internal variables, go find the definition of the internal variable until
+						// reaching one of the category of signals identified above
+						else {
+
+						}
 					}
+					// TODO: handle other types of leaf nodes that are not CTIdNode
+					lustreExprToFTVisitor.leafNodes.remove(leafNode);
 				}
-				// TODO: handle other types of leaf nodes that are not CTIdNode
 			}
-
 			// rootNode.addChildNode(rootNode.nodeName, childNode);
 			causationTree.setRootNode(rootNode);
 			// Walk through the fault tree code to mark all failure nodes

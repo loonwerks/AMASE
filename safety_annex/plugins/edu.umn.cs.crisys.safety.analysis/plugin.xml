@@ -33,7 +33,7 @@
      <command
            name="Generate Causation Tree"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
-           id="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand">
+           id="edu.umn.cs.crisys.safety.analysis.commands.genCTCommand">
      </command> 
    </extension>
    <extension
@@ -69,15 +69,16 @@
       ?> 
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
-            class="edu.umn.cs.crisys.safety.analysis.handlers.GenMCSHandler">
+            class="edu.umn.cs.crisys.safety.analysis.handlers.GenCausationTreeHandler">
+            <?ignore class="edu.umn.cs.crisys.safety.analysis.handlers.GenMCSHandler">?>
          <enabledWhen>
             <reference
                   definitionId="com.rockwellcollins.atc.agree.analysis.expressions.eObjectSelected">
             </reference>
          </enabledWhen>
       </handler>
-        <handler
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+       <handler
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.genCTCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.GenCausationTreeHandler">
          <enabledWhen>
             <reference
@@ -113,10 +114,10 @@
             sequence="M1+8"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
-       <key
-            commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+      <key
+            commandId="edu.umn.cs.crisys.safety.analysis.commands.genCTCommand"
             contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+8"
+            sequence="M1+9"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
    </extension>
@@ -162,10 +163,10 @@
                   style="push">
             </command>
            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genCTCommand"
                   mnemonic="f"
                   icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.genFTACommand"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.genCTCommand"
                   style="push">
             </command>
          </menu>
@@ -201,10 +202,10 @@
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.genMCSCommand">
             </command>
            <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genCTCommand"
                   icon="icons/sample.gif"
-                  tooltip="Causation tree generation"
-                  id="edu.umn.cs.crisys.safety.analysis.toolbars.genFTACommand">
+                  tooltip="Minimal cut set analysis"
+                  id="edu.umn.cs.crisys.safety.analysis.toolbars.genCTCommand">
             </command>
          </toolbar>
       </menuContribution>
@@ -250,10 +251,10 @@
                   style="push">
             </command>
             <command
-                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand"
+                  commandId="edu.umn.cs.crisys.safety.analysis.commands.genCTCommand"
                   icon="icons/layers.png"
-                  id="edu.umn.cs.crisys.safety.analysis.menus.genFTACommand"
-                  mnemonic="t"
+                  id="edu.umn.cs.crisys.safety.analysis.menus.genCTCommand"
+                  mnemonic="d"
                   style="push">
             </command>
          </menu>
