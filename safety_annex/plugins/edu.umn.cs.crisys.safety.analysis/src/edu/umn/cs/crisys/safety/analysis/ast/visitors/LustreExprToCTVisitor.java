@@ -47,21 +47,9 @@ import jkind.lustre.visitors.ExprVisitor;
 
 public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 
-//	private Node lustreNode;
-//	private AgreeNode agreeNode;
-//	private ComponentInstance compInst;
-//	private AgreeProgram agreeProgram;
 	public List<CTNode> leafNodes = new ArrayList<CTNode>();
 
 	private NegateLustreExprVisitor negateExprVisitor = new NegateLustreExprVisitor();
-
-//	public LustreExprToCTVisitor(Node lustreNode, AgreeNode agreeNode, ComponentInstance compInst,
-//			AgreeProgram agreeProgram) {
-//		this.lustreNode = lustreNode;
-//		this.agreeNode = agreeNode;
-//		this.compInst = compInst;
-//		this.agreeProgram = agreeProgram;
-//	}
 
 	public CTNode visit(Expr expr) {
 		return expr.accept(this);
