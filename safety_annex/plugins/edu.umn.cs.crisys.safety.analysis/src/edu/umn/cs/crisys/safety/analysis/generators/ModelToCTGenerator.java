@@ -19,7 +19,13 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTAndNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTIdNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTNode;
 import edu.umn.cs.crisys.safety.util.Util;
+import jkind.lustre.BinaryExpr;
+import jkind.lustre.BoolExpr;
+import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
+import jkind.lustre.IntExpr;
 import jkind.lustre.Node;
+import jkind.lustre.RealExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 
@@ -42,6 +48,7 @@ public class ModelToCTGenerator {
 				List<CTNode> currentLeafNodes = new ArrayList<CTNode>(lustreExprToFTVisitor.leafNodes);
 				for (CTNode leafNode : currentLeafNodes) {
 					if (leafNode instanceof CTIdNode) {
+						String curId = leafNode.nodeName;
 						// get all top level system inputs
 						// if the ID is one of the inputs, stop
 						if (inputsContainId(agreeNode, leafNode.nodeName)) {
@@ -51,6 +58,8 @@ public class ModelToCTGenerator {
 						// if the ID is one of the failures, stop
 
 						// if the ID is not one of the above, need to develop further
+						// TODO: to handle multiple verification layers
+						// need to change from top level agreeNode to current level agreeNode
 						else if (outputsContainId(agreeNode, leafNode.nodeName)) {
 							// get all top level system outputs
 							// if the ID is one of the outputs
@@ -69,21 +78,18 @@ public class ModelToCTGenerator {
 								for (AgreeStatement currentGuarantee : curAgreeNode.guarantees) {
 									// for each guarantee formula
 									// see if it's the final form
-									// TODO: create a new visitor that returns boolean for each type of expr
-									// to check if it's the final form
-									// i.e., the implication relationship connecting
-									// disjunction or conjunction of
-									// input signals and failures
-									// with the constraint of the output signal as appeared in the current leaf node
-									// if not, transform to the final form
-									// TODO: create a new visitor for the transformation
-									// if yes,
-									// TODO: create a new visitor to see if the right side of the implication
-									// involve the constraint of the signal of interest as appeared in the current leaf node
-									// if not, move on to the next guarantee
-									// if yes, turn the left side of the implication into a new CT node
-									// CTNode curCTNode = lustreExprToFTVisitor.visit(left_side_of_implication_expr);
-									// andNode.addChildNode(curCTNode.nodeName, curCTNode);
+									if (exprReadyForCTNode(currentGuarantee.expr, curId)) {
+										// if yes,
+										// TODO: create a new visitor to see if the right side of the implication
+										// involve the constraint of the signal of interest as appeared in the current leaf node
+										// if not, move on to the next guarantee
+										// if yes, turn the left side of the implication into a new CT node
+										// CTNode curCTNode = lustreExprToFTVisitor.visit(left_side_of_implication_expr);
+										// andNode.addChildNode(curCTNode.nodeName, curCTNode);
+									} else {
+										// if not, transform to the final form
+										// TODO: create a new visitor for the transformation
+									}
 								}
 								// TODO: add andNode as child node of the current leaf node only if andNode has child node(s)
 								// leafNode.addChildNode(andNode.nodeName, andNode);
@@ -164,6 +170,84 @@ public class ModelToCTGenerator {
 			}
 		}
 		return null;
+	}
+
+	private Boolean exprReadyForCTNode(Expr expr, String leafNodeId) {
+		Boolean result = false;
+		// the expr is in a form ready for CT node if
+		// it is an implication expr
+		// whose left expr is
+		// disjunction or conjunction of
+		// input signals and failures
+		// and right expr is the constraint of the output signal as appeared in the current leaf node
+		Boolean isRightExprOk = false;
+		Boolean isLeftExprOk = false;
+		if (expr instanceof BinaryExpr) {
+			if (((BinaryExpr) expr).op.name().equals("IMPLIES")) {
+				Expr rightExpr = ((BinaryExpr) expr).right;
+				// The right expr is ok if it's the target IdExpr
+				// or negation of the IdExpr
+				// or IdExpr with relation to a constant
+				if (rightExpr instanceof IdExpr) {
+					isRightExprOk = idExprMatchingLeafNodeId((IdExpr) rightExpr, leafNodeId);
+				} else if (rightExpr instanceof UnaryExpr) {
+					if (((UnaryExpr) rightExpr).expr instanceof IdExpr) {
+						isRightExprOk = idExprMatchingLeafNodeId((IdExpr) rightExpr, leafNodeId);
+					}
+				} else if (rightExpr instanceof BinaryExpr) {
+					String opName = ((BinaryExpr) rightExpr).op.name();
+					Expr rightExpr1 = ((BinaryExpr) rightExpr).left;
+					Expr rightExpr2 = ((BinaryExpr) rightExpr).right;
+
+					if (opName.equals("AND") || opName.equals("OR") || opName.equals("IMPLIES")
+							|| opName.equals("ARROW") || opName.equals("EQUAL") || opName.equals("NOTEQUAL")
+							|| opName.equals("GREATER") || opName.equals("LESS") || opName.equals("GREATEREQUAL")
+							|| opName.contentEquals("LESSEQUAL")) {
+						if (exprMatchingIdExpr(rightExpr1, leafNodeId) && isConstantExpr(rightExpr2)) {
+							isRightExprOk = true;
+						} else if (exprMatchingIdExpr(rightExpr2, leafNodeId) && isConstantExpr(rightExpr1)) {
+							isRightExprOk = true;
+						}
+					}
+				}
+			}
+		}
+		// TODO: think if it's not binary expr would it be acceptible
+		result = isRightExprOk && isLeftExprOk;
+		return result;
+	}
+
+	private Boolean exprMatchingIdExpr(Expr expr, String leafNodeId) {
+		Boolean result = false;
+		if (expr instanceof IdExpr) {
+			result = idExprMatchingLeafNodeId((IdExpr) expr, leafNodeId);
+		}
+		return result;
+	}
+
+	private Boolean isConstantExpr(Expr expr) {
+		Boolean result = false;
+		if (expr instanceof BoolExpr) {
+			result = true;
+		} else if (expr instanceof IntExpr) {
+			result = true;
+		} else if (expr instanceof RealExpr) {
+			result = true;
+		}
+		// TODO: think for IdExpr, if it's constant
+		else if (expr instanceof IdExpr) {
+			result = true;
+		}
+		return result;
+	}
+
+	private Boolean idExprMatchingLeafNodeId(IdExpr idExpr, String leafNodeId) {
+		if (idExpr.id.equals(leafNodeId)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }
