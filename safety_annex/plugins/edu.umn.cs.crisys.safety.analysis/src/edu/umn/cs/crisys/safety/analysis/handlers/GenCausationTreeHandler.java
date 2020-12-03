@@ -116,7 +116,6 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			for (CT ct : causationTrees) {
 				CTToJsonGenerator.createJson(ciURI, ct);
 			}
-
 			AddFaultsToAgree.resetStaticVars();
 			return Status.OK_STATUS;
 		} catch (Throwable e) {

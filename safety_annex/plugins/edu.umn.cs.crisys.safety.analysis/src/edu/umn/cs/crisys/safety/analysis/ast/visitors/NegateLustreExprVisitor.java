@@ -45,8 +45,8 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 			newExpr = new BinaryExpr(e.location, visit(e.left), newOp, visit(e.right));
 		}
 		else if (opName.equals("IMPLIES")) {
+			// not(a=>b) = not(not(a) or b) = a and not(b)
 			newOp = BinaryOp.AND;
-			// not(a=>b) = not(not(a) or b) = a or not(b)
 			newExpr = new BinaryExpr(e.location, e.left, newOp, visit(e.right));
 		} else if (opName.equals("ARROW")) {
 			newExpr = new BinaryExpr(e.location, visit(e.left), e.op, visit(e.right));
@@ -131,7 +131,7 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 		String opName = e.op.name();
 		Expr returnExpr = null;
 		if (opName.equals("NEGATIVE") || opName.equals("NOT")) {
-			returnExpr = visit(e.expr);
+			returnExpr = e.expr;
 		} else if (opName.equals("PRE")) {
 			returnExpr = new UnaryExpr(e.location, e.op, visit(e.expr));
 		}
@@ -155,43 +155,43 @@ public class NegateLustreExprVisitor extends ExprMapVisitor {
 
 	@Override
 	public Expr visit(BoolExpr e) {
-		return e;
-		// return new BoolExpr(!(e.value));
+		// return e;
+		return new BoolExpr(!(e.value));
 	}
 
 	@Override
 	public Expr visit(IdExpr e) {
-		return e;
-		// UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-		// return newExpr;
+//		return e;
+		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+		return newExpr;
 	}
 
 	@Override
 	public Expr visit(IntExpr e) {
-		return e;
-//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-//		return newExpr;
+//		return e;
+		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+		return newExpr;
 	}
 
 	@Override
 	public Expr visit(RealExpr e) {
-		return e;
-//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-//		return newExpr;
+//		return e;
+		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+		return newExpr;
 	}
 
 	@Override
 	public Expr visit(NodeCallExpr e) {
-		return e;
-//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-//		return newExpr;
+//		return e;
+		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+		return newExpr;
 	}
 
 	@Override
 	public Expr visit(FunctionCallExpr e) {
-		return e;
-//		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
-//		return newExpr;
+//		return e;
+		UnaryExpr newExpr = new UnaryExpr(e.location, UnaryOp.NOT, e);
+		return newExpr;
 	}
 
 
