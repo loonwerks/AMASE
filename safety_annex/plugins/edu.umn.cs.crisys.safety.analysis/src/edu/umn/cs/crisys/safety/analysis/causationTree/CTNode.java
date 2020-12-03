@@ -1,27 +1,40 @@
 package edu.umn.cs.crisys.safety.analysis.causationTree;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import jkind.Assert;
+import java.util.Set;
 
 public abstract class CTNode extends CTAst {
-	public final String nodeName;
-	public HashMap<String, CTNode> childNodes = new HashMap<>();
+	public boolean isFailure = false;
+	public ArrayList<CTNode> childNodes = new ArrayList<>();
+	public HashSet<String> idSet = new HashSet<>();
 
-
-	public CTNode(String nodeName) {
-		Assert.isNotNull(nodeName);
-		this.nodeName = nodeName;
-	}
-
-	public void addChildNode(String nodeName, CTNode childNode) {
-		childNodes.put(nodeName, childNode);
+	public void addChildNode(CTNode childNode) {
+		childNodes.add(childNode);
 	}
 
 	public void addChildNodes(List<CTNode> childNodesToAdd) {
 		for (CTNode child : childNodesToAdd) {
-			childNodes.put(child.nodeName, child);
+			childNodes.add(child);
+		}
+	}
+
+	public void addId(String id) {
+		idSet.add(id);
+	}
+
+	public void addIds(Set<String> ids) {
+		for (String id : ids) {
+			idSet.add(id);
+		}
+	}
+
+	public Boolean containsChildNodes() {
+		if (childNodes.isEmpty()) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 

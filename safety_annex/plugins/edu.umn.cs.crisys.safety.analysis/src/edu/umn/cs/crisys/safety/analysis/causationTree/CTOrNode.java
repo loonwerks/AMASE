@@ -2,17 +2,15 @@ package edu.umn.cs.crisys.safety.analysis.causationTree;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTAstVisitor;
 
-public class CTOrNode extends CTNode {
+public class CTOrNode extends CTNonBottomNode {
 
-	public CTOrNode(String nodeName) {
-		super(nodeName);
+	public CTOrNode(CTNodeBinaryOp op) {
+		super(op);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public <T> T accept(CTAstVisitor<T> visitor) {
-		// TODO Auto-generated method stub
-		return null;
+		return visitor.visit(this);
 	}
-
 }
