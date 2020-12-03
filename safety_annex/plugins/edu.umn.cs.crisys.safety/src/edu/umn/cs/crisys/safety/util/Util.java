@@ -11,4 +11,5 @@ public class Util {
 	public static List<String> getIds(List<AgreeVar> agreeVars) {
 		return agreeVars.stream().map(agreeVar -> agreeVar.id).collect(toList());
 	}
+
 }
