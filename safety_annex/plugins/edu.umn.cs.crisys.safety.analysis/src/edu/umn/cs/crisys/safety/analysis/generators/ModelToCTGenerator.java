@@ -36,7 +36,7 @@ public class ModelToCTGenerator {
 	List<CT> causationTrees = new ArrayList<CT>();
 	LustreExprToCTVisitor lustreExprToCTVisitor = new LustreExprToCTVisitor();
 
-	public List<CT> generateCausationTree(Node lustreNode, AgreeNode agreeNode, ComponentInstance compInst,
+	public List<CT> generateCausationTree(Node topLustreNode, AgreeNode topAgreeNode, ComponentInstance compInst,
 			AgreeProgram agreeProgram) {
 		// generate FT for each top level guarantee
 		for (AgreeStatement topLevelGuarantee : agreeProgram.topNode.guarantees) {
@@ -44,6 +44,7 @@ public class ModelToCTGenerator {
 			// Step 1: negate the top level guarantee expression
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
 			// turn it into a causation tree
+
 			// CTRootNode rootNode = new CTRootNode(topLevelGuarantee.string);
 			// TODO: mark leaf nodes in the tree as the expr to CT translation goes
 			CTNode rootNode = lustreExprToCTVisitor.visit(topLevelEvent);
@@ -63,7 +64,7 @@ public class ModelToCTGenerator {
 					for (String id : bottomIdNode.idSet) {
 						// for each Id
 						// if the ID is one of the inputs, stop developing further, set isLeaf true for that node
-						if (AgreeUtil.inputsContainId(agreeNode, id)) {
+						if (AgreeUtil.inputsContainId(topAgreeNode, id)) {
 							bottomIdNode.isLeaf = true;
 							continue;
 						}
@@ -73,7 +74,7 @@ public class ModelToCTGenerator {
 						// if the ID contained in that expression is an output produced by other components
 						// TODO: to handle multiple verification layers
 						// need to change from top level agreeNode to current level agreeNode
-						else if (AgreeUtil.outputsContainId(agreeNode, id)) {
+						else if (AgreeUtil.outputsContainId(topAgreeNode, id)) {
 							HashSet<CTNode> childNodes = new HashSet<CTNode>();
 
 							// TODO: check AGREE annex for both comp and comp impl
