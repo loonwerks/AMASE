@@ -1,6 +1,9 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTAndNode;
@@ -14,8 +17,20 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTOrNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTUnaryIdNode;
 
 public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
+	private AgreeNode curAgreeNode;
+	public Map<CTBottomNode, AgreeNode> bottomIdNodeAgreeNodeMap = new HashMap<CTBottomNode, AgreeNode>();
 
-	public HashSet<CTBottomNode> bottomNodesWithId = new HashSet<CTBottomNode>();
+	public CTBottomIdNodeVisitor(AgreeNode agreeNode) {
+		this.curAgreeNode = agreeNode;
+	}
+
+	public void setCurAgreeNode(AgreeNode agreeNode) {
+		this.curAgreeNode = agreeNode;
+	}
+
+	public AgreeNode getCurAgreeNode() {
+		return curAgreeNode;
+	}
 
 	public Void visit(CTAst ast) {
 		return ast.accept(this);
@@ -46,7 +61,7 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 	@Override
 	public Void visit(CTBinaryIdNode node) {
 		if (!node.visited) {
-			bottomNodesWithId.add(node);
+			bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
 		}
 		for (CTNode child : node.childNodes) {
 			visit(child);
@@ -57,7 +72,7 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 	@Override
 	public Void visit(CTUnaryIdNode node) {
 		if (!node.visited) {
-			bottomNodesWithId.add(node);
+			bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
 		}
 		for (CTNode child : node.childNodes) {
 			visit(child);
@@ -73,7 +88,7 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 	@Override
 	public Void visit(CTIdNode node) {
 		if (!node.visited) {
-			bottomNodesWithId.add(node);
+			bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
 		}
 		for (CTNode child : node.childNodes) {
 			visit(child);

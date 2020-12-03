@@ -116,8 +116,10 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 			if (e.expr instanceof IdExpr) {
 				//if e.expr is an Id expression
 				//create an UnaryIdNode
+				String id = ((IdExpr) e.expr).id;
 				CTNodeUnaryOp notOp = CTNodeUnaryOp.fromName("NOT");
 				returnNode = new CTUnaryIdNode(notOp, e);
+				returnNode.idSet.add(id);
 			} else {
 				// if e.expr is not an Id expression
 				// distribute the negation to associate with individual Id node
