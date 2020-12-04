@@ -18,7 +18,6 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContract;
 
-import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTBottomIdNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprToCTVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
@@ -67,6 +66,7 @@ public class ModelToCTGenerator {
 					bottomIdNodeVisitor.bottomIdNodeAgreeNodeMap);
 			// Expand the bottom nodes in the current tree
 			// Loop around and stop the above process until no more bottom node to develop
+			// Be sure to cover all situations of bottomIdNode to be able to exit the loop eventually
 			while (!bottomIdNodeVisitor.bottomIdNodeAgreeNodeMap.isEmpty()) {
 				bottomIdNodeAgreeNodeMap = deepCopy(bottomIdNodeVisitor.bottomIdNodeAgreeNodeMap);
 				// for each such bottom node and associated agree node
@@ -141,46 +141,49 @@ public class ModelToCTGenerator {
 		// find the assertion in the top level component implementation
 		// for the relationship between the multiple outputs
 		for (AgreeNode nextAgreeNode : getProducingNodes(id, topCompInst, agreeProgram)) {
-			// for each component, get the agree node and lustre node for that component
-			// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
-			// and variable declarations sorted so they are declared before use
-			Node curLustreNode = AgreeNodeToLustreContract.translate(nextAgreeNode, agreeProgram);
-			// go through all equation expr in the lustre node
-			for (Equation equation : curLustreNode.equations) {
-				Expr expr = equation.expr;
-				if (expr instanceof BinaryExpr) {
-					String opName = ((BinaryExpr) expr).op.name();
-					// if the expr is of form =>
-					if (opName.equals("IMPLIES")) {
-						// if the right side expression of => matches the bottom node expression
-						Expr rightExpr = ((BinaryExpr) expr).right;
-						if (rightExpr.toString().equals(bottomIdNode.expr.toString())) {
-							// develop the left side expression to CT node
-							// by applying lustreExprToCTVisitor to the left side expression
-							Expr leftExpr = ((BinaryExpr) expr).left;
-							CTNode curNode = lustreExprToCTVisitor.visit(leftExpr);
-							bottomIdNodeVisitor.setCurAgreeNode(nextAgreeNode);
-							bottomIdNodeVisitor.visit(curNode);
-							childNodes.add(curNode);
+			if (isTopNode(nextAgreeNode)) {
+				bottomIdNode.isLeaf = true;
+				continue;
+			} else {
+				// for each component, get the agree node and lustre node for that component
+				// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
+				// and variable declarations sorted so they are declared before use
+				Node curLustreNode = AgreeNodeToLustreContract.translate(nextAgreeNode, agreeProgram);
+				// go through all equation expr in the lustre node
+				for (Equation equation : curLustreNode.equations) {
+					Expr expr = equation.expr;
+					if (expr instanceof BinaryExpr) {
+						String opName = ((BinaryExpr) expr).op.name();
+						// if the expr is of form =>
+						if (opName.equals("IMPLIES")) {
+							// if the right side expression of => matches the bottom node expression
+							Expr rightExpr = ((BinaryExpr) expr).right;
+							if (exprsEqual(rightExpr, bottomIdNode.expr)) {
+								// develop the left side expression to CT node
+								// by applying lustreExprToCTVisitor to the left side expression
+								Expr leftExpr = ((BinaryExpr) expr).left;
+								CTNode curNode = lustreExprToCTVisitor.visit(leftExpr);
+								bottomIdNodeVisitor.setCurAgreeNode(nextAgreeNode);
+								bottomIdNodeVisitor.visit(curNode);
+								childNodes.add(curNode);
+							}
+							// if the right side expression of => does not match the bottom node expression
+							// print it, and skip it
+							else {
+								System.out.println("Right side expression: " + rightExpr.toString()
+										+ " does not match bottomIdNode expr: " + bottomIdNode.expr.toString());
+							}
 						}
-						// if the right side expression of => does not match the bottom node expression
-						// print it, and skip it
+						// if the exp is not of the form =>, flag an exception
 						else {
-							System.out.println("Right side expression: " + rightExpr.toString()
-									+ " does not match bottomIdNode expr: "
-									+ bottomIdNode.expr.toString());
+							System.err.println("Expr not supported " + expr.toString());
 						}
+					} else {
+						// if the exp is not of the form =>, flag an exception
+						System.err.println("Expr not supported " + expr.toString());
 					}
-					// if the exp is not of the form =>, flag an exception
-					else {
-						throw new SafetyException("Expr not supported " + expr.toString());
-					}
-				} else {
-					// if the exp is not of the form =>, flag an exception
-					throw new SafetyException("Expr not supported " + expr.toString());
 				}
 			}
-
 			// TODO: go through all failure behavioral definitions for that component
 			// TODO: develop CT for the failure behavior definition
 
@@ -250,5 +253,36 @@ public class ModelToCTGenerator {
 		} else {
 			return false;
 		}
+	}
+
+	private Boolean exprsEqual(Expr expr1, Expr expr2) {
+		Boolean result = false;
+		if(expr1.toString().equals(expr2.toString())){
+			result = true;
+		}
+		//TODO:
+		//for boolean expressions one in the form of Id and the other in the form of Id = true
+		//or one in the form of not(Id) and the other in the form of Id = false
+		//they should be considered equal
+		//but for now, require modelers to write those expressions in the consistent fashion
+//		else {
+//			if(expr1 instanceof IdExpr) {
+//				if(expr2 instanceof BinaryExpr) {
+//					Expr leftExpr = ((BinaryExpr)expr2).left;
+//					Expr rightExpr = ((BinaryExpr)expr2).right;
+//					String opName = ((BinaryExpr)expr2).op.name();
+//					if(leftExpr.toString().equals(expr1.toString())){
+//						if(opName.equals("EQUAL")) {
+//							if(rightExpr instanceof BoolExpr) {
+//								if(((BoolExpr)rightExpr).value){
+//									result = true;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+		return result;
 	}
 }
