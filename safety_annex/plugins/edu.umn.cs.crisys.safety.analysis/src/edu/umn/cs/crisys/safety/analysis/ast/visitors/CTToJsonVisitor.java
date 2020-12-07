@@ -2,6 +2,7 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTAndNode;
@@ -9,79 +10,160 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTAst;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTBinaryIdNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTConstantNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTIdNode;
+import edu.umn.cs.crisys.safety.analysis.causationTree.CTNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTOrNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTUnaryIdNode;
 
-public class CTToJsonVisitor implements CTAstVisitor<JsonArray> {
+public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 
-	public JsonArray visit(CTAst ast) {
+	public JsonObject visit(CTAst ast) {
 		return ast.accept(this);
 	}
 
 	@Override
-	public JsonArray visit(CT ct) {
-		JsonArray resultArray = new JsonArray();
-		JsonObject rootObj = new JsonObject();
-//		rootObj.add("name", new JsonPrimitive(ct.rootNode.nodeName));
-//		rootObj.add("node_type", new JsonPrimitive("ROOT Node"));
-//
-//		for (CTNode child : ct.rootNode.childNodes.values()) {
-//			visit(child);
-//		}
-		resultArray.add(rootObj);
-		return resultArray;
+	public JsonObject visit(CT ct) {
+		JsonObject resultObj = new JsonObject();
+		resultObj.add("tree", visit(ct.rootNode));
+		return resultObj;
 	}
 
 	@Override
-	public JsonArray visit(CTAndNode node) {
-		JsonArray resultArray = new JsonArray();
-		JsonObject rootObj = new JsonObject();
-//		rootObj.add("node_name", new JsonPrimitive(node.nodeName));
-//		rootObj.add("node_type", new JsonPrimitive("AND Node"));
-//
-//		for (CTNode child : node.childNodes.values()) {
-//			visit(child);
-//		}
-		resultArray.add(rootObj);
-		return null;
+	public JsonObject visit(CTAndNode node) {
+		// For non bottom node: add op, is failure or not, child nodes
+		JsonObject resultObj = new JsonObject();
+		JsonArray linkArray = new JsonArray();
+
+		resultObj.add("op", new JsonPrimitive(node.op.toString()));
+		if (node.isFailure) {
+			resultObj.add("type", new JsonPrimitive("failure"));
+		} else {
+			resultObj.add("type", new JsonPrimitive("non-failure"));
+		}
+		resultObj.add("expr", new JsonPrimitive(""));
+		resultObj.add("description", new JsonPrimitive(node.op.toString()));
+		resultObj.add("link", linkArray);
+		JsonArray childArray = new JsonArray();
+		for (CTNode child : node.childNodes) {
+			childArray.add(visit(child));
+		}
+		resultObj.add("children", childArray);
+		return resultObj;
+
 	}
 
 	@Override
-	public JsonArray visit(CTOrNode node) {
-		JsonArray resultArray = new JsonArray();
-		JsonObject rootObj = new JsonObject();
-//		rootObj.add("node_name", new JsonPrimitive(node.nodeName));
-//		rootObj.add("node_type", new JsonPrimitive("AND Node"));
-//
-//		for (CTNode child : node.childNodes.values()) {
-//			visit(child);
-//		}
-		resultArray.add(rootObj);
-		return null;
+	public JsonObject visit(CTOrNode node) {
+		// For non bottom node: add op, is failure or not, child nodes
+		JsonObject resultObj = new JsonObject();
+		JsonArray linkArray = new JsonArray();
+
+		resultObj.add("op", new JsonPrimitive(node.op.toString()));
+		if (node.isFailure) {
+			resultObj.add("type", new JsonPrimitive("failure"));
+		} else {
+			resultObj.add("type", new JsonPrimitive("non-failure"));
+		}
+		resultObj.add("expr", new JsonPrimitive(""));
+		resultObj.add("description", new JsonPrimitive(node.op.toString()));
+		resultObj.add("link", linkArray);
+		JsonArray childArray = new JsonArray();
+		for (CTNode child : node.childNodes) {
+			childArray.add(visit(child));
+		}
+		resultObj.add("children", childArray);
+		return resultObj;
 	}
 
 	@Override
-	public JsonArray visit(CTBinaryIdNode node) {
-		// TODO Auto-generated method stub
-		return null;
+	public JsonObject visit(CTBinaryIdNode node) {
+		// For bottom node: show expr, is failure or not, child nodes
+		JsonObject resultObj = new JsonObject();
+		JsonArray linkArray = new JsonArray();
+
+		resultObj.add("op", new JsonPrimitive(""));
+		if (node.isFailure) {
+			resultObj.add("type", new JsonPrimitive("failure"));
+		} else {
+			resultObj.add("type", new JsonPrimitive("non-failure"));
+		}
+		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("link", linkArray);
+		JsonArray childArray = new JsonArray();
+		for (CTNode child : node.childNodes) {
+			childArray.add(visit(child));
+		}
+		resultObj.add("children", childArray);
+		return resultObj;
 	}
 
 	@Override
-	public JsonArray visit(CTUnaryIdNode node) {
-		// TODO Auto-generated method stub
-		return null;
+	public JsonObject visit(CTUnaryIdNode node) {
+		// For bottom node: show expr, is failure or not, child nodes
+		JsonObject resultObj = new JsonObject();
+		JsonArray linkArray = new JsonArray();
+
+		resultObj.add("op", new JsonPrimitive(""));
+		if (node.isFailure) {
+			resultObj.add("type", new JsonPrimitive("failure"));
+		} else {
+			resultObj.add("type", new JsonPrimitive("non-failure"));
+		}
+		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("link", linkArray);
+		JsonArray childArray = new JsonArray();
+		for (CTNode child : node.childNodes) {
+			childArray.add(visit(child));
+		}
+		resultObj.add("children", childArray);
+		return resultObj;
 	}
 
 	@Override
-	public JsonArray visit(CTConstantNode node) {
-		// TODO Auto-generated method stub
-		return null;
+	public JsonObject visit(CTConstantNode node) {
+		// For bottom node: show expr, is failure or not, child nodes
+		JsonObject resultObj = new JsonObject();
+		JsonArray linkArray = new JsonArray();
+
+		resultObj.add("op", new JsonPrimitive(""));
+		if (node.isFailure) {
+			resultObj.add("type", new JsonPrimitive("failure"));
+		} else {
+			resultObj.add("type", new JsonPrimitive("non-failure"));
+		}
+		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("link", linkArray);
+		JsonArray childArray = new JsonArray();
+		for (CTNode child : node.childNodes) {
+			childArray.add(visit(child));
+		}
+		resultObj.add("children", childArray);
+		return resultObj;
 	}
 
 	@Override
-	public JsonArray visit(CTIdNode node) {
-		// TODO Auto-generated method stub
-		return null;
+	public JsonObject visit(CTIdNode node) {
+		// For bottom node: show expr, is failure or not, child nodes
+		JsonObject resultObj = new JsonObject();
+		JsonArray linkArray = new JsonArray();
+
+		resultObj.add("op", new JsonPrimitive(""));
+		if (node.isFailure) {
+			resultObj.add("type", new JsonPrimitive("failure"));
+		} else {
+			resultObj.add("type", new JsonPrimitive("non-failure"));
+		}
+		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
+		resultObj.add("link", linkArray);
+		JsonArray childArray = new JsonArray();
+		for (CTNode child : node.childNodes) {
+			childArray.add(visit(child));
+		}
+		resultObj.add("children", childArray);
+		return resultObj;
 	}
 
 }

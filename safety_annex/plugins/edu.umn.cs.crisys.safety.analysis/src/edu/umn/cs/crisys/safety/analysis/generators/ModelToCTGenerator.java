@@ -121,7 +121,10 @@ public class ModelToCTGenerator {
 					}
 				}
 			}
-			// TODO: Walk through the created CT tree from bottom up and update isFailure field for each node
+			// TODO: Walk through the created CT tree from bottom up
+			// prune any impossible branches, e.g.,
+			// and update isFailure field for each node
+
 			causationTree.setRootNode(rootNode);
 			causationTrees.add(causationTree);
 		}
