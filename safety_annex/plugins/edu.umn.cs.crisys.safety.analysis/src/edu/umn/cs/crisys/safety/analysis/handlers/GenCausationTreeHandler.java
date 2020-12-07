@@ -108,6 +108,8 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			List<CT> causationTrees = modelToFTGenerator.generateCausationTree();
 
 			// print each causation tree to a json file
+			// TODO: make sure that different causation trees get generated to different json files
+			// TODO: generate a confirmation message when tree is generated
 			for (CT ct : causationTrees) {
 				CTToJsonGenerator.createJson(ciURI, ct);
 			}

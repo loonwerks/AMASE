@@ -60,9 +60,9 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 
 	@Override
 	public Void visit(CTBinaryIdNode node) {
-		if (!node.visited) {
-			bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
-		}
+
+		bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
+
 		for (CTNode child : node.childNodes) {
 			visit(child);
 		}
@@ -71,9 +71,9 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 
 	@Override
 	public Void visit(CTUnaryIdNode node) {
-		if (!node.visited) {
-			bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
-		}
+
+		bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
+
 		for (CTNode child : node.childNodes) {
 			visit(child);
 		}
@@ -87,9 +87,9 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 
 	@Override
 	public Void visit(CTIdNode node) {
-		if (!node.visited) {
-			bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
-		}
+
+		bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
+
 		for (CTNode child : node.childNodes) {
 			visit(child);
 		}

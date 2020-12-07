@@ -11,7 +11,6 @@ import org.osate.aadl2.NamedElement;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTToJsonVisitor;
@@ -69,15 +68,8 @@ public class CTToJsonGenerator {
 	}
 
 	public static JsonElement toJson(CT ct) {
-		JsonArray modelsJson = new JsonArray();
 		CTToJsonVisitor ctToJsonVisitor = new CTToJsonVisitor();
-		// convert ct to modelsJson, supporting the following:
-		// 1) directed acyclic graph (DAG) (tree with multiple inheritance)
-		// 2) expansion and contraction of subtree upon user interaction
-		// 3) show and hide detailed node description/information
-
-		modelsJson.addAll(ctToJsonVisitor.visit(ct));
-		return modelsJson;
+		return ctToJsonVisitor.visit(ct);
 	}
 
 }
