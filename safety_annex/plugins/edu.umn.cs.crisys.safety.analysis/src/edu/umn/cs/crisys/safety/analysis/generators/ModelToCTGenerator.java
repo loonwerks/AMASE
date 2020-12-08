@@ -122,8 +122,10 @@ public class ModelToCTGenerator {
 				}
 			}
 			// TODO: Walk through the created CT tree from bottom up
-			// prune any impossible branches, e.g.,
+			// mark any impossible branches, e.g., the ones that contradict the top node assumptions
 			// and update isFailure field for each node
+
+			// TODO: check that at the end all the bottom nodes are marked isLeaf
 
 			causationTree.setRootNode(rootNode);
 			causationTrees.add(causationTree);

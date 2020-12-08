@@ -67,10 +67,10 @@ public class AddFaultsToAgree implements AgreeAutomater {
 	public AgreeProgram transform(AgreeProgram program) {
 
 		// check to make sure we are supposed to transform program
-		if (!(AddFaultsToAgree.getIsVerify()) && !(AddFaultsToAgree.getIsGenMCS())) {
+		if (!(isVerify || isGenMCS || isGenFTA)) {
 			return program;
 		} else {
-			if (!checkForSafetyAnnex(program.topNode) && !(AddFaultsToAgree.getIsGenMCS())) {
+			if (!checkForSafetyAnnex(program.topNode) && !isGenMCS) {
 				new SafetyException(
 						"The component implementation for " + program.topNode.id + " does not contain a safety annex.");
 			}
