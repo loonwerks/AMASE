@@ -13,6 +13,7 @@ import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
 
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -20,6 +21,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContr
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTBottomIdNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CausingExprFinder;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultyOutputFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprToCTVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTBottomNode;
@@ -27,9 +29,12 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTNodeBinaryOp;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTOrNode;
 import edu.umn.cs.crisys.safety.util.AgreeUtil;
+import jkind.lustre.BinaryExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
+import jkind.lustre.NodeCallExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 
@@ -85,7 +90,8 @@ public class ModelToCTGenerator {
 								continue;
 							}
 
-							// TODO: if the ID is one of the failures, stop developing further, set isLeaf true for that node
+							// TODO: In AMASE, fault behaviors are only checked for components, not top level sys
+							// this needs to be communicated with users of Safety Annex
 
 							// if the ID contained in that expression is an output produced by other components
 							// TODO: to handle multiple verification layers
@@ -94,29 +100,49 @@ public class ModelToCTGenerator {
 								handleOutputId(bottomIdNodeVisitor, bottomIdNode, id);
 							}
 
+							// TODO: if the ID is one of the failures, stop developing further, set isLeaf true for that node
+
 							// TODO: if the ID is one of the internal variables
 							// go find the definition of the internal variable until
 							// reaching one of the category of signals identified above
-							else {
-
-							}
+//							else {
+//
+//							}
 						}
 						// if not top level node
 						else {
-							// TODO: if the ID is one of the failures, stop developing further, set isLeaf true for that node
-
 							// if the ID contained in that expression is an input produced by other components
 							// TODO: to handle multiple verification layers
 							// need to change from top level agreeNode to current level agreeNode
 							if (AgreeUtil.inputsContainId(currentAgreeNode, id)) {
 								handleOutputId(bottomIdNodeVisitor, bottomIdNode, id);
+							} else {
+								// if the ID contained is an output of the current component
+								if (AgreeUtil.outputsContainId(currentAgreeNode, id)) {
+									// find the agree node with faulty behavior added
+									AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes,
+											currentAgreeNode);
+									if (!faultyNode.assertions.isEmpty()) {
+										// TODO: if the ID is affected by a fault node
+										// extract the causing expr from the fault node definition
+										System.out.println("id: " + id);
+										// if the Id appears in the currentAgreeNode's assertions
+										// get the node name
+										// look for the node definition in agreeProgram's global lustre nodes
+										// and extract the causing expr from the fault node definition
+									}
+								}
+
 							}
+
+							// TODO: if the ID is one of the failures, stop developing further, set isLeaf true for that node
+
 							// TODO: if the ID is one of the internal variables
 							// go find the definition of the internal variable until
 							// reaching one of the category of signals identified above
-							else {
-
-							}
+//							else {
+//
+//							}
 						}
 					}
 				}
@@ -178,9 +204,52 @@ public class ModelToCTGenerator {
 						childNodes.add(curNode);
 					}
 				}
+
+				// TODO: go through all failure behavioral definitions for that component
+				// TODO: develop CT for the failure behavior definition
+
+				// find the agree node with faulty behavior added
+				AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes, nextAgreeNode);
+				// when there are faulty behavior definitions, faultyNode assertions exist
+				if (!faultyNode.assertions.isEmpty()) {
+					// for each assertion expr
+					for (AgreeStatement assertion : faultyNode.assertions) {
+						if (assertion.expr instanceof BinaryExpr) {
+							Expr leftExpr = ((BinaryExpr) assertion.expr).left;
+							Expr rightExpr = ((BinaryExpr) assertion.expr).right;
+							if (leftExpr instanceof IdExpr) {
+								// if the left IdExpr matches the output id
+								if (((IdExpr) leftExpr).id.equals(id)) {
+									// find the faulty outputs for the corresponding output id
+									FaultyOutputFinder faultyOutputFinder = new FaultyOutputFinder();
+									List<String> faultyOutputs = faultyOutputFinder.visit(rightExpr);
+									// for each faulty output
+									for (String faultyOutput : faultyOutputs) {
+										// identify the node call from localEquations for the faulty output
+										for (AgreeEquation localEquation : faultyNode.localEquations) {
+											if (localEquation.lhs.get(0).id.equals(faultyOutput)) {
+												Expr localEquationExpr = localEquation.expr;
+												if (localEquationExpr instanceof NodeCallExpr) {
+													String nodeName = ((NodeCallExpr) localEquationExpr).node;
+													for (Node node : agreeProgram.globalLustreNodes) {
+														// find the node call in agreeProgram.globalLustreNodes
+														if (node.id.equals(nodeName)) {
+															// TODO: get the equations from the node call
+															// extract the causal expr
+															// construct CT nodes from it
+															System.out.println("id: " + id);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
-			// TODO: go through all failure behavioral definitions for that component
-			// TODO: develop CT for the failure behavior definition
 
 			// if there are more than one child nodes
 			// use OR operator to connect them and add the OR node as a child node to the original bottomIdNode
@@ -201,7 +270,7 @@ public class ModelToCTGenerator {
 	}
 
 	// go through all connections
-	// and find all the components producing the output
+	// and find all the components producing the output and the associated norminal agree node with that
 	private List<AgreeNode> getProducingNodes(String idStr, ComponentInstance compInst, AgreeProgram agreeProgram) {
 		List<AgreeNode> sourceNodes = new ArrayList<>();
 		// go through all connection instances
@@ -234,6 +303,18 @@ public class ModelToCTGenerator {
 		return null;
 	}
 
+	private AgreeNode faultyAgreeNodeFromNominalNode(List<AgreeNode> nodes, AgreeNode sourceNode) {
+		if (sourceNode == null) {
+			return null;
+		}
+		for (AgreeNode node : nodes) {
+			if (sourceNode.id.equals(node.id)) {
+				return node;
+			}
+		}
+		return null;
+	}
+
 	private Map<CTBottomNode, AgreeNode> deepCopy(Map<CTBottomNode, AgreeNode> bottomIdNodeAgreeNodeMap) {
 		Map<CTBottomNode, AgreeNode> copy = new HashMap<CTBottomNode, AgreeNode>();
 		for (Map.Entry<CTBottomNode, AgreeNode> entry : bottomIdNodeAgreeNodeMap.entrySet()) {
@@ -250,34 +331,4 @@ public class ModelToCTGenerator {
 		}
 	}
 
-//	private Boolean exprsEqual(Expr expr1, Expr expr2) {
-//		Boolean result = false;
-//		if(expr1.toString().equals(expr2.toString())){
-//			result = true;
-//		}
-//		//TODO:
-//		//for boolean expressions one in the form of Id and the other in the form of Id = true
-//		//or one in the form of not(Id) and the other in the form of Id = false
-//		//they should be considered equal
-//		//but for now, require modelers to write those expressions in the consistent fashion
-////		else {
-////			if(expr1 instanceof IdExpr) {
-////				if(expr2 instanceof BinaryExpr) {
-////					Expr leftExpr = ((BinaryExpr)expr2).left;
-////					Expr rightExpr = ((BinaryExpr)expr2).right;
-////					String opName = ((BinaryExpr)expr2).op.name();
-////					if(leftExpr.toString().equals(expr1.toString())){
-////						if(opName.equals("EQUAL")) {
-////							if(rightExpr instanceof BoolExpr) {
-////								if(((BoolExpr)rightExpr).value){
-////									result = true;
-////								}
-////							}
-////						}
-////					}
-////				}
-////			}
-////		}
-//		return result;
-//	}
 }
