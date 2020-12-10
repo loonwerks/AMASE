@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.osate.aadl2.BooleanLiteral;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstance;
@@ -19,8 +20,11 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContract;
 
+import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AgreeGuaranteeCausingExprFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTBottomIdNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.ast.visitors.CausingExprFinder;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultNodeCausingExprFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultyOutputFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprToCTVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
@@ -28,7 +32,17 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTBottomNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTNodeBinaryOp;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTOrNode;
+import edu.umn.cs.crisys.safety.analysis.transform.Fault;
+import edu.umn.cs.crisys.safety.analysis.transform.FaultASTBuilder;
+import edu.umn.cs.crisys.safety.safety.DisableStatement;
+import edu.umn.cs.crisys.safety.safety.FaultStatement;
+import edu.umn.cs.crisys.safety.safety.FaultSubcomponent;
+import edu.umn.cs.crisys.safety.safety.OutputStatement;
+import edu.umn.cs.crisys.safety.safety.PropagationTypeStatement;
+import edu.umn.cs.crisys.safety.safety.SpecStatement;
+import edu.umn.cs.crisys.safety.safety.asymmetric;
 import edu.umn.cs.crisys.safety.util.AgreeUtil;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
@@ -187,17 +201,18 @@ public class ModelToCTGenerator {
 					Expr srcExpr = equation.expr;
 					Expr targetExpr = bottomIdNode.expr;
 					// Set target expr
-					CausingExprFinder causingExprFinder = new CausingExprFinder(targetExpr);
+					AgreeGuaranteeCausingExprFinder agreeGuaranteeCausingExprFinder = new AgreeGuaranteeCausingExprFinder(
+							targetExpr);
 					// look for the => operator
 					// Once found the expr with the => operator
 					// see if the target expr is
 					// contained on the right side of that => operator
 					// if yes
 					// return the left side expression of that => operator
-					List<Expr> causingExprs = causingExprFinder.visit(srcExpr);
+					List<Expr> agreeGuaranteeCausingExprs = agreeGuaranteeCausingExprFinder.visit(srcExpr);
 					// develop the left side expressions to CT node
 					// by applying lustreExprToCTVisitor to the left side expression
-					for (Expr expr : causingExprs) {
+					for (Expr expr : agreeGuaranteeCausingExprs) {
 						CTNode curNode = lustreExprToCTVisitor.visit(expr);
 						bottomIdNodeVisitor.setCurAgreeNode(nextAgreeNode);
 						bottomIdNodeVisitor.visit(curNode);
@@ -225,6 +240,11 @@ public class ModelToCTGenerator {
 									List<String> faultyOutputs = faultyOutputFinder.visit(rightExpr);
 									// for each faulty output
 									for (String faultyOutput : faultyOutputs) {
+										// TODO: identify the fault associated with the faulty output
+										List<Fault> faults = gatherFaults(agreeProgram.globalLustreNodes,
+												nextAgreeNode, isTopNode(nextAgreeNode));
+										Fault fault = AddFaultsToNodeVisitor.triggerToFaultMap.get(faultyOutput);
+										// TODO: need to differentiate between enabled and disabled faults
 										// identify the node call from localEquations for the faulty output
 										for (AgreeEquation localEquation : faultyNode.localEquations) {
 											if (localEquation.lhs.get(0).id.equals(faultyOutput)) {
@@ -234,10 +254,29 @@ public class ModelToCTGenerator {
 													for (Node node : agreeProgram.globalLustreNodes) {
 														// find the node call in agreeProgram.globalLustreNodes
 														if (node.id.equals(nodeName)) {
-															// TODO: get the equations from the node call
-															// extract the causal expr
-															// construct CT nodes from it
-															System.out.println("id: " + id);
+															// go through the equations from the node call
+															for (Equation faultNodeEquation : node.equations) {
+																// TODO: handle the situation when there are multiple equations
+																// in a fault node
+																// we need to find the equation that matches specific output
+//																if (faultNodeEquation.lhs.get(0).id
+//																		.equals(node.outputs)) {
+																// get the expression from that equation
+																// identify the value assignment from the thenExpr and elseExpr
+																// to find the one that matches the bottomIdNode expr
+																// then get the conjunction of the condExprs
+																FaultNodeCausingExprFinder faultNodeCausingExprFinder = new FaultNodeCausingExprFinder(
+																		bottomIdNode.expr, id, fault.id);
+																Expr faultNodeCausingExpr = faultNodeCausingExprFinder
+																		.visit(faultNodeEquation.expr);
+																CTNode curNode = lustreExprToCTVisitor
+																		.visit(faultNodeCausingExpr);
+																// construct CT nodes from it
+																bottomIdNodeVisitor.visit(curNode);
+																childNodes.add(curNode);
+																// TODO: add fault description and probability info to be built into the CT node
+
+															}
 														}
 													}
 												}
@@ -250,21 +289,21 @@ public class ModelToCTGenerator {
 					}
 				}
 			}
+		}
 
-			// if there are more than one child nodes
-			// use OR operator to connect them and add the OR node as a child node to the original bottomIdNode
-			// otherwise, add the child node to the original bottomIdNode
-			if (childNodes.size() > 1) {
-				CTNodeBinaryOp orOp = CTNodeBinaryOp.fromName("OR");
-				CTOrNode orNode = new CTOrNode(orOp);
-				List<CTNode> childNodesList = new ArrayList<CTNode>(childNodes);
-				orNode.addChildNodes(childNodesList);
-				bottomIdNode.addChildNode(orNode);
-			} else {
-				Iterator<CTNode> setIterator = childNodes.iterator();
-				while (setIterator.hasNext()) {
-					bottomIdNode.addChildNode(setIterator.next());
-				}
+		// if there are more than one child nodes
+		// use OR operator to connect them and add the OR node as a child node to the original bottomIdNode
+		// otherwise, add the child node to the original bottomIdNode
+		if (childNodes.size() > 1) {
+			CTNodeBinaryOp orOp = CTNodeBinaryOp.fromName("OR");
+			CTOrNode orNode = new CTOrNode(orOp);
+			List<CTNode> childNodesList = new ArrayList<CTNode>(childNodes);
+			orNode.addChildNodes(childNodesList);
+			bottomIdNode.addChildNode(orNode);
+		} else {
+			Iterator<CTNode> setIterator = childNodes.iterator();
+			while (setIterator.hasNext()) {
+				bottomIdNode.addChildNode(setIterator.next());
 			}
 		}
 	}
@@ -329,6 +368,153 @@ public class ModelToCTGenerator {
 		} else {
 			return false;
 		}
+	}
+
+	private List<Fault> gatherFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
+		List<SpecStatement> specs = SafetyUtil.collapseAnnexes(SafetyUtil.getSafetyAnnexes(node, isTop));
+
+		List<Fault> faults = new ArrayList<>();
+
+		// Before looping through spec statements, separate out the asymmetric multiple
+		// faults on a single output with the sym/asym single faults on a single output.
+		// 1. Collect all fault statements and put into list.
+		// Do not collect any that are disabled.
+		// 2. Separate out multiple asym faults on one output and single faults on one output.
+		// 3. Perform necessary processing on each of these lists.
+		List<FaultStatement> allFaultStmts = new ArrayList<FaultStatement>();
+		for (SpecStatement s : specs) {
+			if (s instanceof FaultStatement) {
+				if (!isDisabled((FaultStatement) s)) {
+
+					allFaultStmts.add((FaultStatement) s);
+				}
+			}
+		}
+		List<FaultStatement> remainderFS = new ArrayList<FaultStatement>();
+		Map<String, List<FaultStatement>> multipleAsymFS = new HashMap<String, List<FaultStatement>>();
+		// separate symmetric and asymetric faults
+		separateFaultStmts(allFaultStmts, remainderFS, multipleAsymFS);
+
+		// Currently only process symmetric faults
+		for (SpecStatement s : remainderFS) {
+			if (s instanceof FaultStatement) {
+				FaultStatement fs = (FaultStatement) s;
+				FaultASTBuilder builder = new FaultASTBuilder(globalLustreNodes, node);
+				// Process fault determines if we have a
+				// symmetric or asymmetric fault and builds it accordingly.
+				Fault safetyFault = builder.processFault(fs);
+				faults.add(safetyFault);
+			}
+		}
+		return faults;
+	}
+
+	/**
+	 * Given a fault statement, returns the string name of the
+	 * output this fault stmt is connected to.
+	 *
+	 * @param fs FaultStatement in question
+	 * @return String name of the output
+	 */
+	private String getOutputNameFromFaultStatement(FaultStatement fs) {
+		String output = "";
+		for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
+			if (fc instanceof OutputStatement) {
+				EList<NamedElement> outputType = ((OutputStatement) fc).getNom_conn();
+				// TODO: Assume the output is first in list. (????)
+				if (outputType.size() > 0) {
+					NamedElement id = outputType.get(0);
+//					output = id.getBase().getName();
+					output = id.toString();
+					return output;
+				}
+				break;
+			}
+		}
+
+		return output;
+	}
+
+	/**
+	 * This method uses a list of fault statements and divides them into multiple asym faults on
+	 * a single output and everything else.
+	 *
+	 * @param allFS List<FaultStatement> All fault statements in this agree node
+	 * @param remainderFS List<FaultStatement> List to add all single asym faults on single output AND
+	 * 							sym faults.
+	 * @param multipleAsymFS List<FaultStatement> List to add all multiple asym faults on single output.
+	 */
+	private void separateFaultStmts(List<FaultStatement> allFS, List<FaultStatement> remainderFS,
+			Map<String, List<FaultStatement>> asymMap) {
+
+		// 1. Add sym faults to remainder list and process asym faults such that they
+		// are inserted into a map from outputName -> List(fault statements).
+		// 2. If the list of fault statements associated with an output is of size 1,
+		// append these to remainderFS list.
+		// Else append to multipleAsymFS list.
+		for (FaultStatement fs : allFS) {
+			int count = fs.getFaultDefinitions().size();
+			for (FaultSubcomponent fc : fs.getFaultDefinitions()) {
+				count--;
+				if (fc instanceof PropagationTypeStatement) {
+					if (((PropagationTypeStatement) fc).getPty() instanceof asymmetric) {
+						// Asym fault needs to be processed further and added to map.
+						String outputName = getOutputNameFromFaultStatement(fs);
+						if (outputName.isEmpty()) {
+							new SafetyException(
+									"Error processing asymmetric fault: the output name is undefined for fault statement:"
+											+ fs.getName());
+						} else {
+							List<FaultStatement> tempAsymFaults = new ArrayList<FaultStatement>();
+							tempAsymFaults.add(fs);
+							if (asymMap.containsKey(outputName)) {
+								asymMap.get(outputName).addAll(tempAsymFaults);
+							} else {
+								asymMap.put(outputName, tempAsymFaults);
+							}
+							break;
+						}
+					} else {
+						// symmetric faults added to remainderFS list
+						remainderFS.add(fs);
+						break;
+					}
+				}
+				// If we haven't broken out of the loop and we have traversed
+				// all definitions, then we have no prop type stmt. It is sym.
+				if (count == 0) {
+					remainderFS.add(fs);
+				}
+			}
+		}
+		// Now all sym faults in remainder list and all asym faults in map.
+		// Process map and add single asym faults to remainder list.
+		// Add multiples to multiple list.
+		for (String key : asymMap.keySet()) {
+			if (asymMap.get(key).size() == 1) {
+				remainderFS.addAll(asymMap.get(key));
+			}
+		}
+	}
+
+	/**
+	 * Checks fault stmt for DisableStatement. If found, returns value
+	 * of disable statement. Else returns false.
+	 * @param fs FaultStatement
+	 * @return bool: isDisabled
+	 */
+	private Boolean isDisabled(FaultStatement fs) {
+		Boolean disableFound = false;
+		List<FaultSubcomponent> subcomps = fs.getFaultDefinitions();
+		for (FaultSubcomponent fsc : subcomps) {
+			if (fsc instanceof DisableStatement) {
+				disableFound = true;
+				DisableStatement ds = (DisableStatement) fsc;
+				BooleanLiteral bl = ds.getCond();
+				return bl.getValue();
+			}
+		}
+		return disableFound;
 	}
 
 }
