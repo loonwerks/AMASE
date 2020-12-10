@@ -25,12 +25,12 @@ import jkind.lustre.TupleExpr;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.visitors.ExprVisitor;
 
-public class CausingExprFinder implements ExprVisitor<List<Expr>> {
+public class AgreeGuaranteeCausingExprFinder implements ExprVisitor<List<Expr>> {
 
 	private Expr targetExpr;
 	private ExprFinder exprFinder;
 
-	public CausingExprFinder(Expr targetExpr) {
+	public AgreeGuaranteeCausingExprFinder(Expr targetExpr) {
 		this.targetExpr = targetExpr;
 		exprFinder = new ExprFinder(targetExpr);
 	}
