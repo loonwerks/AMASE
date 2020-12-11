@@ -18,7 +18,7 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTUnaryIdNode;
 
 public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 	private AgreeNode curAgreeNode;
-	public Map<CTBottomNode, AgreeNode> bottomIdNodeAgreeNodeMap = new HashMap<CTBottomNode, AgreeNode>();
+	private Map<CTBottomNode, AgreeNode> bottomIdNodeAgreeNodeMap = new HashMap<CTBottomNode, AgreeNode>();
 
 	public CTBottomIdNodeVisitor(AgreeNode agreeNode) {
 		this.curAgreeNode = agreeNode;
@@ -30,6 +30,22 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 
 	public AgreeNode getCurAgreeNode() {
 		return curAgreeNode;
+	}
+
+	public void removeBottomIdNodeFromMap(CTBottomNode newNode) {
+		bottomIdNodeAgreeNodeMap.remove(newNode);
+	}
+
+	public Boolean isBottomIdMapEmpty() {
+		return bottomIdNodeAgreeNodeMap.isEmpty();
+	}
+
+	public Map<CTBottomNode, AgreeNode> deepCopyOfBottomIdNodeMap() {
+		Map<CTBottomNode, AgreeNode> copy = new HashMap<CTBottomNode, AgreeNode>();
+		for (Map.Entry<CTBottomNode, AgreeNode> entry : bottomIdNodeAgreeNodeMap.entrySet()) {
+			copy.put(entry.getKey(), entry.getValue());
+		}
+		return copy;
 	}
 
 	public Void visit(CTAst ast) {
@@ -60,8 +76,8 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 
 	@Override
 	public Void visit(CTBinaryIdNode node) {
-
-		bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
+		addToBottomIdNodeAgreeNodeMap(node);
+		// bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
 
 		for (CTNode child : node.childNodes) {
 			visit(child);
@@ -72,8 +88,8 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 	@Override
 	public Void visit(CTUnaryIdNode node) {
 
-		bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
-
+		// bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
+		addToBottomIdNodeAgreeNodeMap(node);
 		for (CTNode child : node.childNodes) {
 			visit(child);
 		}
@@ -88,12 +104,26 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 	@Override
 	public Void visit(CTIdNode node) {
 
-		bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
-
+		// bottomIdNodeAgreeNodeMap.put(node, curAgreeNode);
+		addToBottomIdNodeAgreeNodeMap(node);
 		for (CTNode child : node.childNodes) {
 			visit(child);
 		}
 		return null;
+	}
+
+	private void addToBottomIdNodeAgreeNodeMap(CTBottomNode newNode) {
+		Boolean toAdd = true;
+		for (Map.Entry<CTBottomNode, AgreeNode> entry : bottomIdNodeAgreeNodeMap.entrySet()) {
+			CTBottomNode bottomIdNode = entry.getKey();
+			if (bottomIdNode.equalsNode(newNode)) {
+				toAdd = false;
+				break;
+			}
+		}
+		if (toAdd) {
+			bottomIdNodeAgreeNodeMap.put(newNode, curAgreeNode);
+		}
 	}
 
 }

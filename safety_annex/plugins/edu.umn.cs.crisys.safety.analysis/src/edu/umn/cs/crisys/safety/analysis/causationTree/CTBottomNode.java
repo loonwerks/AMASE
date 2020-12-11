@@ -12,4 +12,6 @@ public abstract class CTBottomNode extends CTNode {
 		this.expr = expr;
 	}
 
+	public abstract Boolean equalsNode(CTNode node);
+
 }

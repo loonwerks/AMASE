@@ -1,5 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
+import java.util.Map;
+
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.util.AgreeUtil;
 import jkind.lustre.ArrayAccessExpr;
@@ -35,11 +37,14 @@ public class FaultNodeCausingExprFinder implements ExprVisitor<Expr> {
 	private Expr targetExpr;
 	private String outputId;
 	private String faultId;
+	private Map<String, String> faultNodeInputToOriginalSignalMap;
 
-	public FaultNodeCausingExprFinder(Expr targetExpr, String outputId, String faultId) {
+	public FaultNodeCausingExprFinder(Expr targetExpr, String outputId, String faultId,
+			Map<String, String> faultNodeInputToOriginalSignalMap) {
 		this.targetExpr = targetExpr;
 		this.outputId = outputId;
 		this.faultId = faultId;
+		this.faultNodeInputToOriginalSignalMap = faultNodeInputToOriginalSignalMap;
 	}
 
 	public void setTargetExpr(Expr targetExpr) {
@@ -66,6 +71,14 @@ public class FaultNodeCausingExprFinder implements ExprVisitor<Expr> {
 		return faultId;
 	}
 
+	public void setFaultNodeSignalMap(Map<String, String> map) {
+		this.faultNodeInputToOriginalSignalMap = map;
+	}
+
+	public Map<String, String> getFaultNodeSignalMap() {
+		return faultNodeInputToOriginalSignalMap;
+	}
+
 	public Expr visit(Expr expr) {
 		return expr.accept(this);
 	}
@@ -81,12 +94,19 @@ public class FaultNodeCausingExprFinder implements ExprVisitor<Expr> {
 		Boolean toEvalElseExpr = true;
 
 		if (condExpr instanceof IdExpr) {
-			if (((IdExpr) condExpr).id.equals("trigger")) {
+			String condExprId = ((IdExpr) condExpr).id;
+			if (condExprId.equals("trigger")) {
 				// find the corresponding fault in the triggerFaultMap
 				condExpr = new IdExpr(faultId);
 				// no need to evaluate elseExpr here as it's when the fault trigger is not activated
 				toEvalElseExpr = false;
 			}
+			else {
+				condExpr = visit(condExpr);
+			}
+		}
+		else {
+			condExpr = visit(condExpr);
 		}
 
 		if (thenExpr instanceof IfThenElseExpr) {
@@ -123,38 +143,35 @@ public class FaultNodeCausingExprFinder implements ExprVisitor<Expr> {
 
 	@Override
 	public Expr visit(BinaryExpr e) {
-		// not expected
-		throw new SafetyException("Expr not expected " + e.toString());
+		Expr returnExpr = new BinaryExpr(e.location, visit(e.left), e.op, visit(e.right));
+		return returnExpr;
 	}
 
 	@Override
 	public Expr visit(UnaryExpr e) {
-		// not expected
-		throw new SafetyException("Expr not expected " + e.toString());
+		Expr returnExpr = new UnaryExpr(e.location, e.op, visit(e.expr));
+		return returnExpr;
 	}
 
 	@Override
 	public Expr visit(BoolExpr e) {
-		// not expected
-		throw new SafetyException("Expr not expected " + e.toString());
+		return e;
 	}
 
 	@Override
 	public Expr visit(IdExpr e) {
-		// not expected
-		throw new SafetyException("Expr not expected " + e.toString());
+		Expr returnExpr = new IdExpr(faultNodeInputToOriginalSignalMap.get(e.id));
+		return returnExpr;
 	}
 
 	@Override
 	public Expr visit(IntExpr e) {
-		// not expected
-		throw new SafetyException("Expr not expected " + e.toString());
+		return e;
 	}
 
 	@Override
 	public Expr visit(RealExpr e) {
-		// not expected
-		throw new SafetyException("Expr not expected " + e.toString());
+		return e;
 	}
 
 	@Override
