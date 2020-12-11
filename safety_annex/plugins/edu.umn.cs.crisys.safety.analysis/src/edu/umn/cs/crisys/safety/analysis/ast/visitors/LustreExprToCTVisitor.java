@@ -12,6 +12,7 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTNodeUnaryOp;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTNonBottomNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTOrNode;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTUnaryIdNode;
+import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.ArrayExpr;
 import jkind.lustre.ArrayUpdateExpr;
@@ -36,6 +37,15 @@ import jkind.lustre.visitors.ExprVisitor;
 public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 
 	private NegateLustreExprVisitor negateExprVisitor = new NegateLustreExprVisitor();
+	private Fault curFault = null;
+
+	public void setCurrentFault(Fault fault) {
+		this.curFault = fault;
+	}
+
+	public Fault getCurrentFault() {
+		return curFault;
+	}
 
 	public CTNode visit(Expr expr) {
 		return expr.accept(this);
@@ -114,8 +124,8 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 		String opName = e.op.name();
 		if (opName.equals("NEGATIVE") || opName.equals("NOT")) {
 			if (e.expr instanceof IdExpr) {
-				//if e.expr is an Id expression
-				//create an UnaryIdNode
+				// if e.expr is an Id expression
+				// create an UnaryIdNode
 				String id = ((IdExpr) e.expr).id;
 				CTNodeUnaryOp notOp = CTNodeUnaryOp.fromName("NOT");
 				returnNode = new CTUnaryIdNode(notOp, e);
@@ -166,6 +176,13 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 	@Override
 	public CTNode visit(IdExpr e) {
 		CTIdNode returnNode = new CTIdNode(e, e.id);
+		if (curFault != null) {
+			if (e.id.equals(curFault.id)) {
+				returnNode.setFault(curFault);
+				returnNode.isFailure = true;
+				returnNode.isLeaf = true;
+			}
+		}
 		return returnNode;
 	}
 
