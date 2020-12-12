@@ -114,13 +114,17 @@ public class CTBottomIdNodeVisitor implements CTAstVisitor<Void> {
 
 	private void addToBottomIdNodeAgreeNodeMap(CTBottomNode newNode) {
 		Boolean toAdd = true;
-		for (Map.Entry<CTBottomNode, AgreeNode> entry : bottomIdNodeAgreeNodeMap.entrySet()) {
-			CTBottomNode bottomIdNode = entry.getKey();
-			if (bottomIdNode.equalsNode(newNode)) {
-				toAdd = false;
-				break;
-			}
-		}
+		// TODO: in the future, if bottomIdNodes that are equivalent appear at different places of CT
+		// try to have them link to common child nodes
+		// however, those equivalent bottomIdNodes all need to be expanded/connected with child nodes
+		// simply removing the duplicate ones will result in some bottomIdNodes not developed to the end
+//		for (Map.Entry<CTBottomNode, AgreeNode> entry : bottomIdNodeAgreeNodeMap.entrySet()) {
+//			CTBottomNode bottomIdNode = entry.getKey();
+//			if (bottomIdNode.equalsNode(newNode)) {
+//				toAdd = false;
+//				break;
+//			}
+//		}
 		if (toAdd) {
 			bottomIdNodeAgreeNodeMap.put(newNode, curAgreeNode);
 		}
