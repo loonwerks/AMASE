@@ -12,6 +12,8 @@ import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
+import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeEquation;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -49,6 +51,7 @@ public class ModelToCTGenerator {
 	AgreeProgram agreeProgram;
 	List<CT> causationTrees = new ArrayList<CT>();
 	LustreExprToCTVisitor lustreExprToCTVisitor = new LustreExprToCTVisitor();
+	// Map<AgreeNode, HashSet<CTNode>> agreeNodeCTNodesMap = new HashMap<AgreeNode, HashSet<CTNode>>();
 
 	public ModelToCTGenerator(AgreeNode topAgreeNode, ComponentInstance topCompInst, AgreeProgram agreeProgram) {
 		this.topAgreeNode = topAgreeNode;
@@ -104,7 +107,7 @@ public class ModelToCTGenerator {
 							// TODO: to handle multiple verification layers
 							// need to change from top level agreeNode to current level agreeNode
 							else if (AgreeUtil.outputsContainId(currentAgreeNode, id)) {
-								handleOutputId(bottomIdNodeVisitor, bottomIdNode, id);
+								handleOutputId(currentAgreeNode, bottomIdNodeVisitor, bottomIdNode, id);
 							}
 
 							// TODO: if the ID is one of the failures, stop developing further, set isLeaf true for that node
@@ -122,7 +125,7 @@ public class ModelToCTGenerator {
 							// TODO: to handle multiple verification layers
 							// need to change from top level agreeNode to current level agreeNode
 							if (AgreeUtil.inputsContainId(currentAgreeNode, id)) {
-								handleOutputId(bottomIdNodeVisitor, bottomIdNode, id);
+								handleOutputId(currentAgreeNode, bottomIdNodeVisitor, bottomIdNode, id);
 							} else {
 								// if the ID contained is an output of the current component
 								if (AgreeUtil.outputsContainId(currentAgreeNode, id)) {
@@ -166,10 +169,9 @@ public class ModelToCTGenerator {
 		return causationTrees;
 	}
 
-	private void handleOutputId(CTBottomIdNodeVisitor bottomIdNodeVisitor, CTBottomNode bottomIdNode, String id) {
+	private void handleOutputId(AgreeNode curAgreeNode, CTBottomIdNodeVisitor bottomIdNodeVisitor,
+			CTBottomNode bottomIdNode, String id) {
 		HashSet<CTNode> childNodes = new HashSet<CTNode>();
-		Map<AgreeNode, HashSet<CTNode>> agreeNodeCTNodesMap = new HashMap<AgreeNode, HashSet<CTNode>>();
-
 		// TODO: check AGREE annex for both comp and comp impl
 
 		// go through all connections
@@ -182,12 +184,12 @@ public class ModelToCTGenerator {
 
 		// TODO: save the CT node/tree generated for a given agree node
 		// so if the same agree node being visited again, the saved CT node can be used
-		for (AgreeNode nextAgreeNode : getProducingNodes(id, topCompInst, agreeProgram)) {
-			HashSet<CTNode> storedChildNodes = agreeNodeCTNodesMap.get(nextAgreeNode);
-			if (storedChildNodes != null) {
-				addChildNodes(bottomIdNode, storedChildNodes);
-				return;
-			}
+		for (AgreeNode nextAgreeNode : getProducingNodes(curAgreeNode, id, topCompInst, agreeProgram)) {
+//			HashSet<CTNode> storedChildNodes = localAgreeNodeCTNodesMap.get(nextAgreeNode);
+//			if (storedChildNodes != null) {
+//				addChildNodes(bottomIdNode, storedChildNodes);
+//				return;
+//			}
 
 			if (isTopNode(nextAgreeNode)) {
 				bottomIdNode.isLeaf = true;
@@ -315,7 +317,7 @@ public class ModelToCTGenerator {
 					}
 				}
 			}
-			agreeNodeCTNodesMap.put(nextAgreeNode, childNodes);
+			// localAgreeNodeCTNodesMap.put(nextAgreeNode, childNodes);
 		}
 
 		addChildNodes(bottomIdNode, childNodes);
@@ -341,7 +343,8 @@ public class ModelToCTGenerator {
 
 	// go through all connections
 	// and find all the components producing the output and the associated norminal agree node with that
-	private List<AgreeNode> getProducingNodes(String idStr, ComponentInstance compInst, AgreeProgram agreeProgram) {
+	private List<AgreeNode> getProducingNodes(AgreeNode destAgreeNode, String idStr, ComponentInstance compInst,
+			AgreeProgram agreeProgram) {
 		List<AgreeNode> sourceNodes = new ArrayList<>();
 		// go through all connection instances
 		EList<ConnectionInstance> connectionInstances = compInst.getAllEnclosingConnectionInstances();
@@ -349,13 +352,24 @@ public class ModelToCTGenerator {
 			// find the connection that produces the output
 			// TODO: connectionReference is currently null; in the future, check that also
 			if (connectionInstance.getSource().getName().equals(idStr)) {
-				// find the agree node for that component instance
-				// TODO: if supporting extend AGREE, go to the predecessor
-				// using getExtended() method
-				ConnectionInstanceEnd sourceEndInstance = connectionInstance.getSource();
-				ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
-				AgreeNode sourceNode = agreeNodeFromNamedEl(agreeProgram.agreeNodes, sourceComponentInstance);
-				sourceNodes.add(sourceNode);
+				// get destination name
+				String destName = "";
+				if (connectionInstance.getDestination().eContainer() instanceof ComponentInstanceImpl) {
+					destName = ((ComponentInstanceImpl) connectionInstance.getDestination().eContainer()).getName();
+				}
+				else if (connectionInstance.getDestination().eContainer() instanceof SystemInstanceImpl) {
+					destName = ((SystemInstanceImpl) connectionInstance.getDestination().eContainer()).getName();
+				}
+				// if the destination matches the destAgreeNode name
+				// add it to sourceNodes
+				if (destName.equals(destAgreeNode.id)) {
+					// TODO: if supporting extend AGREE, go to the predecessor
+					// using getExtended() method
+					ConnectionInstanceEnd sourceEndInstance = connectionInstance.getSource();
+					ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
+					AgreeNode sourceNode = agreeNodeFromNamedEl(agreeProgram.agreeNodes, sourceComponentInstance);
+					sourceNodes.add(sourceNode);
+				}
 			}
 		}
 		return sourceNodes;
