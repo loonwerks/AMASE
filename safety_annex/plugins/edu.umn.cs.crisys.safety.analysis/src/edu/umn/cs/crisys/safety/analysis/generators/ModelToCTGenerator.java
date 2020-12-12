@@ -24,6 +24,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContr
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AgreeGuaranteeCausingExprFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTBottomIdNodeVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTWalker;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultNodeCausingExprFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultyOutputFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprToCTVisitor;
@@ -157,10 +158,12 @@ public class ModelToCTGenerator {
 					}
 				}
 			}
-			// TODO: Walk through the created CT tree from bottom up
-			// mark any impossible branches, e.g., the ones that contradict the top node assumptions
-			// and update isFailure field for each node
-
+			// Walk through the created CT tree from bottom up
+			// update isFailure field for each node
+			CTWalker ctWalker = new CTWalker();
+			ctWalker.visit(rootNode);
+			// TODO: mark any impossible branches, e.g., the ones that contradict the top node assumptions
+			// prune nodes and parent nodes if they contradict any of the top level assumptions, e.g., prune not(critical_takeoff_phase) from child nodes
 			// TODO: check that at the end all the bottom nodes are marked isLeaf
 
 			causationTree.setRootNode(rootNode);
@@ -324,19 +327,23 @@ public class ModelToCTGenerator {
 	}
 
 	private void addChildNodes(CTBottomNode bottomIdNode, HashSet<CTNode> childNodes) {
-		// if there are more than one child nodes
-		// use OR operator to connect them and add the OR node as a child node to the original bottomIdNode
-		// otherwise, add the child node to the original bottomIdNode
-		if (childNodes.size() > 1) {
-			CTNodeBinaryOp orOp = CTNodeBinaryOp.fromName("OR");
-			CTOrNode orNode = new CTOrNode(orOp);
-			List<CTNode> childNodesList = new ArrayList<CTNode>(childNodes);
-			orNode.addChildNodes(childNodesList);
-			bottomIdNode.addChildNode(orNode);
+		if (childNodes.isEmpty()) {
+			bottomIdNode.isLeaf = true;
 		} else {
-			Iterator<CTNode> setIterator = childNodes.iterator();
-			while (setIterator.hasNext()) {
-				bottomIdNode.addChildNode(setIterator.next());
+			// if there are more than one child nodes
+			// use OR operator to connect them and add the OR node as a child node to the original bottomIdNode
+			// otherwise, add the child node to the original bottomIdNode
+			if (childNodes.size() > 1) {
+				CTNodeBinaryOp orOp = CTNodeBinaryOp.fromName("OR");
+				CTOrNode orNode = new CTOrNode(orOp);
+				List<CTNode> childNodesList = new ArrayList<CTNode>(childNodes);
+				orNode.addChildNodes(childNodesList);
+				bottomIdNode.addChildNode(orNode);
+			} else {
+				Iterator<CTNode> setIterator = childNodes.iterator();
+				while (setIterator.hasNext()) {
+					bottomIdNode.addChildNode(setIterator.next());
+				}
 			}
 		}
 	}
@@ -356,8 +363,7 @@ public class ModelToCTGenerator {
 				String destName = "";
 				if (connectionInstance.getDestination().eContainer() instanceof ComponentInstanceImpl) {
 					destName = ((ComponentInstanceImpl) connectionInstance.getDestination().eContainer()).getName();
-				}
-				else if (connectionInstance.getDestination().eContainer() instanceof SystemInstanceImpl) {
+				} else if (connectionInstance.getDestination().eContainer() instanceof SystemInstanceImpl) {
 					destName = ((SystemInstanceImpl) connectionInstance.getDestination().eContainer()).getName();
 				}
 				// if the destination matches the destAgreeNode name
