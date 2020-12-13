@@ -160,7 +160,8 @@ public class ModelToCTGenerator {
 			}
 			// Walk through the created CT tree from bottom up
 			// update isFailure field for each node
-			CTWalker ctWalker = new CTWalker();
+			// update isFeasiable field for each node
+			CTWalker ctWalker = new CTWalker(agreeProgram.topNode.assumptions);
 			ctWalker.visit(rootNode);
 			// TODO: mark any impossible branches, e.g., the ones that contradict the top node assumptions
 			// prune nodes and parent nodes if they contradict any of the top level assumptions, e.g., prune not(critical_takeoff_phase) from child nodes

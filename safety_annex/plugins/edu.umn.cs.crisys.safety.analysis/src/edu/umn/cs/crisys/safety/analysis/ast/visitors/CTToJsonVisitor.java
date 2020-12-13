@@ -37,7 +37,11 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 		if (node.isFailure) {
 			resultObj.add("type", new JsonPrimitive("failure"));
 		} else {
-			resultObj.add("type", new JsonPrimitive("non-failure"));
+			if (!node.isFeasible) {
+				resultObj.add("type", new JsonPrimitive("not-feasible"));
+			} else {
+				resultObj.add("type", new JsonPrimitive("non-failure"));
+			}
 		}
 		resultObj.add("expr", new JsonPrimitive(""));
 		resultObj.add("description", new JsonPrimitive(node.op.toString()));
@@ -47,6 +51,7 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 			childArray.add(visit(child));
 		}
 		resultObj.add("children", childArray);
+
 		return resultObj;
 
 	}
@@ -61,7 +66,11 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 		if (node.isFailure) {
 			resultObj.add("type", new JsonPrimitive("failure"));
 		} else {
-			resultObj.add("type", new JsonPrimitive("non-failure"));
+			if (!node.isFeasible) {
+				resultObj.add("type", new JsonPrimitive("not-feasible"));
+			} else {
+				resultObj.add("type", new JsonPrimitive("non-failure"));
+			}
 		}
 		resultObj.add("expr", new JsonPrimitive(""));
 		resultObj.add("description", new JsonPrimitive(node.op.toString()));
@@ -71,6 +80,7 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 			childArray.add(visit(child));
 		}
 		resultObj.add("children", childArray);
+
 		return resultObj;
 	}
 
@@ -84,7 +94,11 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 		if (node.isFailure) {
 			resultObj.add("type", new JsonPrimitive("failure"));
 		} else {
-			resultObj.add("type", new JsonPrimitive("non-failure"));
+			if (!node.isFeasible) {
+				resultObj.add("type", new JsonPrimitive("not-feasible"));
+			} else {
+				resultObj.add("type", new JsonPrimitive("non-failure"));
+			}
 		}
 		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
 		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
@@ -94,7 +108,9 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 			childArray.add(visit(child));
 		}
 		resultObj.add("children", childArray);
+
 		return resultObj;
+
 	}
 
 	@Override
@@ -107,7 +123,11 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 		if (node.isFailure) {
 			resultObj.add("type", new JsonPrimitive("failure"));
 		} else {
-			resultObj.add("type", new JsonPrimitive("non-failure"));
+			if (!node.isFeasible) {
+				resultObj.add("type", new JsonPrimitive("not-feasible"));
+			} else {
+				resultObj.add("type", new JsonPrimitive("non-failure"));
+			}
 		}
 		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
 		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
@@ -117,7 +137,9 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 			childArray.add(visit(child));
 		}
 		resultObj.add("children", childArray);
+
 		return resultObj;
+
 	}
 
 	@Override
@@ -130,7 +152,11 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 		if (node.isFailure) {
 			resultObj.add("type", new JsonPrimitive("failure"));
 		} else {
-			resultObj.add("type", new JsonPrimitive("non-failure"));
+			if (!node.isFeasible) {
+				resultObj.add("type", new JsonPrimitive("not-feasible"));
+			} else {
+				resultObj.add("type", new JsonPrimitive("non-failure"));
+			}
 		}
 		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
 		resultObj.add("description", new JsonPrimitive(node.expr.toString()));
@@ -140,7 +166,9 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 			childArray.add(visit(child));
 		}
 		resultObj.add("children", childArray);
+
 		return resultObj;
+
 	}
 
 	@Override
@@ -153,7 +181,11 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 		if (node.isFailure) {
 			resultObj.add("type", new JsonPrimitive("failure"));
 		} else {
-			resultObj.add("type", new JsonPrimitive("non-failure"));
+			if (!node.isFeasible) {
+				resultObj.add("type", new JsonPrimitive("not-feasible"));
+			} else {
+				resultObj.add("type", new JsonPrimitive("non-failure"));
+			}
 		}
 		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
 
@@ -170,7 +202,9 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 			childArray.add(visit(child));
 		}
 		resultObj.add("children", childArray);
+
 		return resultObj;
+
 	}
 
 }
