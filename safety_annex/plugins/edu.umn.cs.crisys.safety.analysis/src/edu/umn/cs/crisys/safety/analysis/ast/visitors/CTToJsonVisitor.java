@@ -187,12 +187,15 @@ public class CTToJsonVisitor implements CTAstVisitor<JsonObject> {
 				resultObj.add("type", new JsonPrimitive("non-failure"));
 			}
 		}
-		resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
+
 
 		// if fault associated with node, add fault description and probability info
 		String description = node.expr.toString();
 		if (node.fault != null) {
 			description = "Fault: " + node.fault.explanitoryText + ", Probability: " + node.fault.probability;
+			resultObj.add("expr", new JsonPrimitive(node.fault.name));
+		} else {
+			resultObj.add("expr", new JsonPrimitive(node.expr.toString()));
 		}
 
 		resultObj.add("description", new JsonPrimitive(description));
