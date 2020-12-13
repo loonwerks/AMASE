@@ -7,6 +7,7 @@ import java.util.Set;
 
 public abstract class CTNode extends CTAst {
 	public boolean isFailure = false;
+	public boolean isFeasible = true;
 	public ArrayList<CTNode> childNodes = new ArrayList<>();
 	public HashSet<String> idSet = new HashSet<>();
 
