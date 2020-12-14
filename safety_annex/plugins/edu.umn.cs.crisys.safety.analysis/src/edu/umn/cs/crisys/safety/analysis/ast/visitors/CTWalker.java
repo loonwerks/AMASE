@@ -62,7 +62,7 @@ public class CTWalker implements CTAstVisitor<Void> {
 
 	// marking isFailure for OR node:
 	// by default isFailure is false
-	// if one of its child node isFailure false, mark it isFailure false
+	// if one of its child node isFailure false and isFeasible, mark it isFailure false
 	// if all of its child nodes isFailure true, mark it isFailure true
 	// however, we should still visit every node from bottomup, to update its isFailure field
 	// for accurate visualization
@@ -76,7 +76,7 @@ public class CTWalker implements CTAstVisitor<Void> {
 		Boolean allNotFeasible = true;
 		for (CTNode child : node.childNodes) {
 			visit(child);
-			if (!child.isFailure) {
+			if (!child.isFailure && child.isFeasible) {
 				node.isFailure = false;
 				allFailure = false;
 			}
