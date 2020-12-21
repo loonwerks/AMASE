@@ -38,9 +38,9 @@ public class CTWalker implements CTAstVisitor<Void> {
 
 	// marking isFailure for AND node:
 	// by default isFailure is false
-	// if all child nodes has isFailure false, then mark it isFailure false
-	// if any of its child nodes isFailure true, then mark it isFailure true
-	// however, we should still visit every node from bottomup, to update its isFailure field
+	// if all child nodes has isFailure true, then parent node isFailure true
+	// if any child node is isFailure false and isFeasible, then mark this node isFailure false
+	// we should still visit every node from bottomup, to update its isFailure field
 	// for accurate visualization
 	// marking isFeasible for AND node:
 	// by default isFeasible is true
@@ -48,23 +48,28 @@ public class CTWalker implements CTAstVisitor<Void> {
 	// if all of child nodes have isFeasible true, then mark it isFeasible true
 	@Override
 	public Void visit(CTAndNode node) {
+		Boolean allFailure = true;
 		for (CTNode child : node.childNodes) {
 			visit(child);
-			if (child.isFailure) {
-				node.isFailure = true;
+			if (!child.isFailure && child.isFeasible) {
+				node.isFailure = false;
+				allFailure = false;
 			}
 			if (!child.isFeasible) {
 				node.isFeasible = false;
 			}
+		}
+		if (allFailure) {
+			node.isFailure = true;
 		}
 		return null;
 	}
 
 	// marking isFailure for OR node:
 	// by default isFailure is false
-	// if one of its child node isFailure false and isFeasible, mark it isFailure false
-	// if all of its child nodes isFailure true, mark it isFailure true
-	// however, we should still visit every node from bottomup, to update its isFailure field
+	// if any child node isFailure true, then mark parent node isFailure true
+	// if all child nodes isFailure false, then mark parent node isFailure false
+	// we should still visit every node from bottomup, to update its isFailure field
 	// for accurate visualization
 	// marking isFeasible for OR node:
 	// by default isFeasible is true
@@ -72,21 +77,16 @@ public class CTWalker implements CTAstVisitor<Void> {
 	// if all of child nodes have isFeasible false, then mark it isFeasible false
 	@Override
 	public Void visit(CTOrNode node) {
-		Boolean allFailure = true;
 		Boolean allNotFeasible = true;
 		for (CTNode child : node.childNodes) {
 			visit(child);
-			if (!child.isFailure && child.isFeasible) {
-				node.isFailure = false;
-				allFailure = false;
+			if (child.isFailure) {
+				node.isFailure = true;
 			}
 			if (child.isFeasible) {
 				node.isFeasible = true;
 				allNotFeasible = false;
 			}
-		}
-		if (allFailure) {
-			node.isFailure = true;
 		}
 		if (allNotFeasible) {
 			node.isFeasible = false;
