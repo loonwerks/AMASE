@@ -4,7 +4,7 @@
   <parent>
     <groupId>edu.umn.cs.crisys.safety</groupId>
     <artifactId>edu.umn.cs.crisys.safety.parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.1.0</version>
   </parent>
   <artifactId>edu.umn.cs.crisys.safety.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
