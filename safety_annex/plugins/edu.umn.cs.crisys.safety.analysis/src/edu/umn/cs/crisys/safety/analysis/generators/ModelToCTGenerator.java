@@ -27,6 +27,7 @@ import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTBottomIdNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.CTWalker;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultNodeCausingExprFinder;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.FaultyOutputFinder;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprIdReplacer;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.LustreExprToCTVisitor;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTBottomNode;
@@ -100,7 +101,6 @@ public class ModelToCTGenerator {
 								bottomIdNode.isLeaf = true;
 								continue;
 							}
-
 							// TODO: In AMASE, fault behaviors are only checked for components, not top level sys
 							// this needs to be communicated with users of Safety Annex
 
@@ -108,17 +108,23 @@ public class ModelToCTGenerator {
 							// TODO: to handle multiple verification layers
 							// need to change from top level agreeNode to current level agreeNode
 							else if (AgreeUtil.outputsContainId(currentAgreeNode, id)) {
-								handleOutputId(currentAgreeNode, bottomIdNodeVisitor, bottomIdNode, id);
+								// TODO: if the ID is one of the eq variables
+								// go find the assertions for the eq variable
+								if (AgreeUtil.isEqVar(currentAgreeNode, id)) {
+									handleEqId(currentAgreeNode, bottomIdNodeVisitor, bottomIdNode, id);
+								}
+								// otherwise, handle output ID
+								else {
+									handleOutputId(currentAgreeNode, bottomIdNodeVisitor, bottomIdNode, id);
+								}
 							}
+//							// else it could be one of the subcomponents output assigned to eq variables
+//							else {
+//								handleOutputId(currentAgreeNode, bottomIdNodeVisitor, bottomIdNode, id);
+//							}
 
 							// TODO: if the ID is one of the failures, stop developing further, set isLeaf true for that node
 
-							// TODO: if the ID is one of the internal variables
-							// go find the definition of the internal variable until
-							// reaching one of the category of signals identified above
-//							else {
-//
-//							}
 						}
 						// if not top level node
 						else {
@@ -130,18 +136,24 @@ public class ModelToCTGenerator {
 							} else {
 								// if the ID contained is an output of the current component
 								if (AgreeUtil.outputsContainId(currentAgreeNode, id)) {
-									// find the agree node with faulty behavior added
-									AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes,
-											currentAgreeNode);
-									if (!faultyNode.assertions.isEmpty()) {
-										// TODO: if the ID is affected by a fault node
-										// extract the causing expr from the fault node definition
-										System.out.println("id: " + id);
-										// if the Id appears in the currentAgreeNode's assertions
-										// get the node name
-										// look for the node definition in agreeProgram's global lustre nodes
-										// and extract the causing expr from the fault node definition
-									}
+									Expr bottomIdNodeExpr = bottomIdNode.expr;
+									HashSet<CTNode> childNodes = new HashSet<CTNode>();
+									createContributingNodesToOutput(bottomIdNodeVisitor, id, childNodes,
+											bottomIdNodeExpr, currentAgreeNode);
+									addChildNodes(bottomIdNode, childNodes);
+
+//									// find the agree node with faulty behavior added
+//									AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes,
+//											currentAgreeNode);
+//									if (!faultyNode.assertions.isEmpty()) {
+//										// TODO: if the ID is affected by a fault node
+//										// extract the causing expr from the fault node definition
+//										System.out.println("id: " + id);
+//										// if the Id appears in the currentAgreeNode's assertions
+//										// get the node name
+//										// look for the node definition in agreeProgram's global lustre nodes
+//										// and extract the causing expr from the fault node definition
+//									}
 								}
 
 							}
@@ -173,9 +185,35 @@ public class ModelToCTGenerator {
 		return causationTrees;
 	}
 
+	private void handleEqId(AgreeNode curAgreeNode, CTBottomIdNodeVisitor bottomIdNodeVisitor,
+			CTBottomNode bottomIdNode, String id) {
+		// find the id in the assertions
+		for (AgreeStatement assertion : curAgreeNode.assertions) {
+			if (assertion.expr instanceof BinaryExpr) {
+				BinaryExpr curExpr = (BinaryExpr) assertion.expr;
+				Expr leftExpr = curExpr.left;
+				if (leftExpr instanceof IdExpr) {
+					if (((IdExpr) leftExpr).id.equals(id)) {
+						// get the right side of the expression
+						Expr rightExpr = curExpr.right;
+						CTNode curNode = lustreExprToCTVisitor.visit(rightExpr);
+						bottomIdNodeVisitor.setCurAgreeNode(curAgreeNode);
+						bottomIdNodeVisitor.visit(curNode);
+						HashSet<CTNode> childNodes = new HashSet<CTNode>();
+						childNodes.add(curNode);
+						addChildNodes(bottomIdNode, childNodes);
+					}
+				}
+			}
+		}
+	}
+
 	private void handleOutputId(AgreeNode curAgreeNode, CTBottomIdNodeVisitor bottomIdNodeVisitor,
 			CTBottomNode bottomIdNode, String id) {
 		HashSet<CTNode> childNodes = new HashSet<CTNode>();
+		Expr bottomIdNodeExpr = bottomIdNode.expr;
+		// reaching one of the category of signals identified above
+
 		// TODO: check AGREE annex for both comp and comp impl
 
 		// go through all connections
@@ -188,127 +226,142 @@ public class ModelToCTGenerator {
 
 		// TODO: save the CT node/tree generated for a given agree node
 		// so if the same agree node being visited again, the saved CT node can be used
-		for (AgreeNode nextAgreeNode : getProducingNodes(curAgreeNode, id, topCompInst, agreeProgram)) {
+		// TODO: get producint node and Id here
+		for (CompIdPair compIdPair : getProducingNodes(curAgreeNode, id, topCompInst, agreeProgram)) {
 //			HashSet<CTNode> storedChildNodes = localAgreeNodeCTNodesMap.get(nextAgreeNode);
 //			if (storedChildNodes != null) {
 //				addChildNodes(bottomIdNode, storedChildNodes);
 //				return;
 //			}
-
+			AgreeNode nextAgreeNode = compIdPair.node;
+			if (!compIdPair.id.equals(id)) {
+				// replace the id used in bottomIdNode
+				LustreExprIdReplacer idReplacer = new LustreExprIdReplacer(id, compIdPair.id);
+				bottomIdNodeExpr = idReplacer.visit(bottomIdNode.expr);
+				id = compIdPair.id;
+			}
 			if (isTopNode(nextAgreeNode)) {
 				bottomIdNode.isLeaf = true;
 				continue;
 			} else {
-				// for each component, get the agree node and lustre node for that component
-				// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
-				// and variable declarations sorted so they are declared before use
-				Node curLustreNode = AgreeNodeToLustreContract.translate(nextAgreeNode, agreeProgram);
-				// go through all equation expr in the lustre node
-				// and identify the causing expr for the target expr in bottomIdNode.expr
+				createContributingNodesToOutput(bottomIdNodeVisitor, id, childNodes, bottomIdNodeExpr, nextAgreeNode);
+			}
+			// localAgreeNodeCTNodesMap.put(nextAgreeNode, childNodes);
+		}
 
-				for (Equation equation : curLustreNode.equations) {
-					Expr srcExpr = equation.expr;
-					Expr targetExpr = bottomIdNode.expr;
-					// Set target expr
-					AgreeGuaranteeCausingExprFinder agreeGuaranteeCausingExprFinder = new AgreeGuaranteeCausingExprFinder(
-							targetExpr);
-					// look for the => operator
-					// Once found the expr with the => operator
-					// see if the target expr is
-					// contained on the right side of that => operator
-					// if yes
-					// return the left side expression of that => operator
-					List<Expr> agreeGuaranteeCausingExprs = agreeGuaranteeCausingExprFinder.visit(srcExpr);
-					// develop the left side expressions to CT node
-					// by applying lustreExprToCTVisitor to the left side expression
-					for (Expr expr : agreeGuaranteeCausingExprs) {
-						CTNode curNode = lustreExprToCTVisitor.visit(expr);
-						bottomIdNodeVisitor.setCurAgreeNode(nextAgreeNode);
-						bottomIdNodeVisitor.visit(curNode);
-						childNodes.add(curNode);
-					}
-				}
+		addChildNodes(bottomIdNode, childNodes);
+	}
 
-				// TODO: go through all failure behavioral definitions for that component
-				// TODO: develop CT for the failure behavior definition
+	private void createContributingNodesToOutput(CTBottomIdNodeVisitor bottomIdNodeVisitor, String id,
+			HashSet<CTNode> childNodes, Expr bottomIdNodeExpr, AgreeNode nextAgreeNode) {
+		// for each component, get the agree node and lustre node for that component
+		// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
+		// and variable declarations sorted so they are declared before use
+		Node curLustreNode = AgreeNodeToLustreContract.translate(nextAgreeNode, agreeProgram);
+		// go through all equation expr in the lustre node
+		// and identify the causing expr for the target expr in bottomIdNodeExpr
 
-				// find the agree node with faulty behavior added
-				AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes, nextAgreeNode);
-				if (faultyNode == null) {
-					System.out.println("null faulty node " + nextAgreeNode.id);
-				}
-				// when there are faulty behavior definitions, faultyNode assertions exist
-				else if (!faultyNode.assertions.isEmpty()) {
-					// for each assertion expr
-					for (AgreeStatement assertion : faultyNode.assertions) {
-						if (assertion.expr instanceof BinaryExpr) {
-							Expr leftExpr = ((BinaryExpr) assertion.expr).left;
-							Expr rightExpr = ((BinaryExpr) assertion.expr).right;
-							if (leftExpr instanceof IdExpr) {
-								// if the left IdExpr matches the output id
-								if (((IdExpr) leftExpr).id.equals(id)) {
-									// find the faulty outputs for the corresponding output id
-									FaultyOutputFinder faultyOutputFinder = new FaultyOutputFinder();
-									List<String> faultyOutputs = faultyOutputFinder.visit(rightExpr);
-									// for each faulty output
-									for (String faultyOutput : faultyOutputs) {
-										// identify the fault associated with the faulty output
-										Fault fault = AddFaultsToNodeVisitor.triggerToFaultMap.get(faultyOutput);
-										// TODO: need to differentiate between enabled and disabled faults
-										// identify the node call from localEquations for the faulty output
-										for (AgreeEquation localEquation : faultyNode.localEquations) {
-											if (localEquation.lhs.get(0).id.equals(faultyOutput)) {
-												Expr localEquationExpr = localEquation.expr;
-												if (localEquationExpr instanceof NodeCallExpr) {
-													String nodeName = ((NodeCallExpr) localEquationExpr).node;
-													for (Node node : agreeProgram.globalLustreNodes) {
-														// find the node call in agreeProgram.globalLustreNodes
-														if (node.id.equals(nodeName)) {
-															// go through the equations from the node call
-															for (Equation faultNodeEquation : node.equations) {
-																// TODO: handle the situation when there are multiple equations
-																// in a fault node
-																// we need to find the equation that matches specific output
+		for (Equation equation : curLustreNode.equations) {
+			Expr srcExpr = equation.expr;
+			Expr targetExpr = bottomIdNodeExpr;
+			// Set target expr
+			AgreeGuaranteeCausingExprFinder agreeGuaranteeCausingExprFinder = new AgreeGuaranteeCausingExprFinder(
+					targetExpr);
+			// look for the => operator
+			// Once found the expr with the => operator
+			// see if the target expr is
+			// contained on the right side of that => operator
+			// if yes
+			// return the left side expression of that => operator
+			List<Expr> agreeGuaranteeCausingExprs = agreeGuaranteeCausingExprFinder.visit(srcExpr);
+			// develop the left side expressions to CT node
+			// by applying lustreExprToCTVisitor to the left side expression
+			for (Expr expr : agreeGuaranteeCausingExprs) {
+				CTNode curNode = lustreExprToCTVisitor.visit(expr);
+				bottomIdNodeVisitor.setCurAgreeNode(nextAgreeNode);
+				bottomIdNodeVisitor.visit(curNode);
+				childNodes.add(curNode);
+			}
+		}
+
+		// TODO: go through all failure behavioral definitions for that component
+		// TODO: develop CT for the failure behavior definition
+
+		// find the agree node with faulty behavior added
+		AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes, nextAgreeNode);
+		if (faultyNode == null) {
+			System.out.println("null faulty node " + nextAgreeNode.id);
+		}
+		// when there are faulty behavior definitions, faultyNode assertions exist
+		else if (!faultyNode.assertions.isEmpty()) {
+			// for each assertion expr
+			for (AgreeStatement assertion : faultyNode.assertions) {
+				if (assertion.expr instanceof BinaryExpr) {
+					Expr leftExpr = ((BinaryExpr) assertion.expr).left;
+					Expr rightExpr = ((BinaryExpr) assertion.expr).right;
+					if (leftExpr instanceof IdExpr) {
+						// if the left IdExpr matches the output id
+						if (((IdExpr) leftExpr).id.equals(id)) {
+							// find the faulty outputs for the corresponding output id
+							FaultyOutputFinder faultyOutputFinder = new FaultyOutputFinder();
+							List<String> faultyOutputs = faultyOutputFinder.visit(rightExpr);
+							// for each faulty output
+							for (String faultyOutput : faultyOutputs) {
+								// identify the fault associated with the faulty output
+								Fault fault = AddFaultsToNodeVisitor.triggerToFaultMap.get(faultyOutput);
+								// TODO: need to differentiate between enabled and disabled faults
+								// identify the node call from localEquations for the faulty output
+								for (AgreeEquation localEquation : faultyNode.localEquations) {
+									if (localEquation.lhs.get(0).id.equals(faultyOutput)) {
+										Expr localEquationExpr = localEquation.expr;
+										if (localEquationExpr instanceof NodeCallExpr) {
+											String nodeName = ((NodeCallExpr) localEquationExpr).node;
+											for (Node node : agreeProgram.globalLustreNodes) {
+												// find the node call in agreeProgram.globalLustreNodes
+												if (node.id.equals(nodeName)) {
+													// go through the equations from the node call
+													for (Equation faultNodeEquation : node.equations) {
+														// TODO: handle the situation when there are multiple equations
+														// in a fault node
+														// we need to find the equation that matches specific output
 //																if (faultNodeEquation.lhs.get(0).id
 //																		.equals(node.outputs)) {
 
-																// build a translation map
-																// between list of inputs passed to localEquationExpr (original system signals)
-																// and fault node arguments
-																Map<String, String> faultNodeInputToOriginalSignalMap = new HashMap<String, String>();
-																int i = 0;
-																for (VarDecl nodeInput : node.inputs) {
-																	faultNodeInputToOriginalSignalMap.put(nodeInput.id,
-																			((IdExpr) ((NodeCallExpr) localEquationExpr).args
-																					.get(i)).id);
-																	i++;
-																}
-																// get the expression from that equation
-																// identify the value assignment from the thenExpr and elseExpr
-																// to find the one that matches the bottomIdNode expr
-																// then get the conjunction of the condExprs
-																// pass the fault id and the translation map so to use the original signal name
-																// in the expr returned
-																FaultNodeCausingExprFinder faultNodeCausingExprFinder = new FaultNodeCausingExprFinder(
-																		bottomIdNode.expr, id, fault.id,
-																		faultNodeInputToOriginalSignalMap);
-																Expr faultNodeCausingExpr = faultNodeCausingExprFinder
-																		.visit(faultNodeEquation.expr);
-																// if no faultNodeCausingExpr found
-																// meaning no fault expr causing the bottomIdNode expr
-																// not creating CT node for it
-																if (faultNodeCausingExpr == null) {
-																	System.out.println(
-																			"no fault node causing expr found");
-																} else {
-																	lustreExprToCTVisitor.setCurrentFault(fault);
-																	CTNode curNode = lustreExprToCTVisitor
-																			.visit(faultNodeCausingExpr);
-																	// construct CT nodes from it
-																	bottomIdNodeVisitor.visit(curNode);
-																	childNodes.add(curNode);
-																}
-															}
+														// build a translation map
+														// between list of inputs passed to localEquationExpr (original system signals)
+														// and fault node arguments
+														Map<String, String> faultNodeInputToOriginalSignalMap = new HashMap<String, String>();
+														int i = 0;
+														for (VarDecl nodeInput : node.inputs) {
+															faultNodeInputToOriginalSignalMap.put(nodeInput.id,
+																	((IdExpr) ((NodeCallExpr) localEquationExpr).args
+																			.get(i)).id);
+															i++;
+														}
+														// get the expression from that equation
+														// identify the value assignment from the thenExpr and elseExpr
+														// to find the one that matches the bottomIdNode expr
+														// then get the conjunction of the condExprs
+														// pass the fault id and the translation map so to use the original signal name
+														// in the expr returned
+														FaultNodeCausingExprFinder faultNodeCausingExprFinder = new FaultNodeCausingExprFinder(
+																bottomIdNodeExpr, id, fault.id,
+																faultNodeInputToOriginalSignalMap);
+														Expr faultNodeCausingExpr = faultNodeCausingExprFinder
+																.visit(faultNodeEquation.expr);
+														// if no faultNodeCausingExpr found
+														// meaning no fault expr causing the bottomIdNode expr
+														// not creating CT node for it
+														if (faultNodeCausingExpr == null) {
+															System.out.println(
+																	"no fault node causing expr found");
+														} else {
+															lustreExprToCTVisitor.setCurrentFault(fault);
+															CTNode curNode = lustreExprToCTVisitor
+																	.visit(faultNodeCausingExpr);
+															// construct CT nodes from it
+															bottomIdNodeVisitor.visit(curNode);
+															childNodes.add(curNode);
 														}
 													}
 												}
@@ -321,10 +374,7 @@ public class ModelToCTGenerator {
 					}
 				}
 			}
-			// localAgreeNodeCTNodesMap.put(nextAgreeNode, childNodes);
 		}
-
-		addChildNodes(bottomIdNode, childNodes);
 	}
 
 	private void addChildNodes(CTBottomNode bottomIdNode, HashSet<CTNode> childNodes) {
@@ -351,15 +401,18 @@ public class ModelToCTGenerator {
 
 	// go through all connections
 	// and find all the components producing the output and the associated norminal agree node with that
-	private List<AgreeNode> getProducingNodes(AgreeNode destAgreeNode, String idStr, ComponentInstance compInst,
+	private List<CompIdPair> getProducingNodes(AgreeNode destAgreeNode, String idStr, ComponentInstance compInst,
 			AgreeProgram agreeProgram) {
-		List<AgreeNode> sourceNodes = new ArrayList<>();
+		List<CompIdPair> compIdPairs = new ArrayList<>();
 		// go through all connection instances
 		EList<ConnectionInstance> connectionInstances = compInst.getAllEnclosingConnectionInstances();
 		for (ConnectionInstance connectionInstance : connectionInstances) {
 			// find the connection that produces the output
 			// TODO: connectionReference is currently null; in the future, check that also
-			if (connectionInstance.getSource().getName().equals(idStr)) {
+			if (connectionInstance.getDestination().getName().equals(idStr)) {
+//
+//			}
+//			if (connectionInstance.getSource().getName().equals(idStr)) {
 				// get destination name
 				String destName = "";
 				if (connectionInstance.getDestination().eContainer() instanceof ComponentInstanceImpl) {
@@ -375,11 +428,12 @@ public class ModelToCTGenerator {
 					ConnectionInstanceEnd sourceEndInstance = connectionInstance.getSource();
 					ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
 					AgreeNode sourceNode = agreeNodeFromNamedEl(agreeProgram.agreeNodes, sourceComponentInstance);
-					sourceNodes.add(sourceNode);
+					CompIdPair compIdPair = new CompIdPair(sourceNode, sourceEndInstance.getName());
+					compIdPairs.add(compIdPair);
 				}
 			}
 		}
-		return sourceNodes;
+		return compIdPairs;
 	}
 
 	private AgreeNode agreeNodeFromNamedEl(List<AgreeNode> nodes, NamedElement comp) {
@@ -411,6 +465,16 @@ public class ModelToCTGenerator {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public class CompIdPair {
+		private AgreeNode node;
+		private String id;
+
+		public CompIdPair(AgreeNode node, String id) {
+			this.node = node;
+			this.id = id;
 		}
 	}
 
