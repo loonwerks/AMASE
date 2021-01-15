@@ -2,7 +2,10 @@ package edu.umn.cs.crisys.safety.util;
 
 import java.util.List;
 
+import com.rockwellcollins.atc.agree.agree.impl.ArgImpl;
+import com.rockwellcollins.atc.agree.agree.impl.EqStatementImpl;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BoolExpr;
@@ -19,6 +22,25 @@ public class AgreeUtil {
 			containsId = true;
 		}
 		return containsId;
+	}
+
+	public static boolean isEqVar(AgreeNode curNode, String idStr) {
+		boolean isEq = false;
+		List<String> outputs = Util.getIds(curNode.outputs);
+		if (outputs.contains(idStr)) {
+			for (AgreeVar outputVar : curNode.outputs) {
+				if (outputVar.id.equals(idStr)) {
+					if (outputVar.reference instanceof ArgImpl) {
+						if (((ArgImpl) outputVar.reference).eContainer() instanceof EqStatementImpl) {
+							isEq = true;
+							break;
+						}
+
+					}
+				}
+			}
+		}
+		return isEq;
 	}
 
 	public static boolean outputsContainId(AgreeNode curNode, String idStr) {

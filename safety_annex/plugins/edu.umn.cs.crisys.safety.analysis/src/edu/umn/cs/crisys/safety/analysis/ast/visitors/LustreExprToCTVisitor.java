@@ -184,6 +184,31 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 			}
 		}
 		return returnNode;
+		// TODO: the following code were used where id from eq variables
+		// got updated to turn comp_name___id_name to id_name
+//		// For non fault Ids
+//		// An ID string replaced "." with "__" so find the last id that's after the last "__" if any
+//		// and find the component name before the last "__"
+//		// TODO: extract the original comp name and use it to extend the causation tree
+//		int lastIdStartIndex = e.id.lastIndexOf("__");
+//		String originalId = e.id;
+//		String originalCompName = "";
+//		// if found
+//		if (lastIdStartIndex != -1) {
+//			originalId = e.id.substring(lastIdStartIndex + 2).trim();
+//			originalCompName = e.id.substring(0, lastIdStartIndex);
+//		}
+//
+//		IdExpr originalIdExpr = new IdExpr(e.location, originalId);
+//		CTIdNode returnNode = new CTIdNode(originalIdExpr, originalId);
+//		if (curFault != null) {
+//			if (originalId.equals(curFault.id)) {
+//				returnNode.setFault(curFault);
+//				returnNode.isFailure = true;
+//				returnNode.isLeaf = true;
+//			}
+//		}
+//		return returnNode;
 	}
 
 	@Override
@@ -325,6 +350,21 @@ public class LustreExprToCTVisitor implements ExprVisitor<CTNode> {
 				returnNode = new CTConstantNode(e);
 			} else {
 				returnNode = new CTBinaryIdNode(e);
+				// TODO: the following code were used where id from eq variables
+				// got updated to turn comp_name___id_name to id_name
+//				Expr leftExpr = e.left;
+//				Expr rightExpr = e.right;
+//				BinaryOp op = e.op;
+//				// The Id nodes may get updated from the above visit
+//				// Need to use the updated IdStr in the expression for the node to return
+//				if (leftNode instanceof CTIdNode) {
+//					leftExpr = ((CTIdNode) leftNode).expr;
+//				}
+//				if (rightNode instanceof CTIdNode) {
+//					rightExpr = ((CTIdNode) rightNode).expr;
+//				}
+//				BinaryExpr updatedExpr = new BinaryExpr(leftExpr, op, rightExpr);
+//				returnNode = new CTBinaryIdNode(updatedExpr);
 				returnNode.addIds(leftNode.idSet);
 				returnNode.addIds(rightNode.idSet);
 			}
