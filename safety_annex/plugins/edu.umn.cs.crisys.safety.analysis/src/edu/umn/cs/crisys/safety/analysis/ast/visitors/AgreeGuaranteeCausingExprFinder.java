@@ -3,11 +3,14 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
+
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.ArrayExpr;
 import jkind.lustre.ArrayUpdateExpr;
 import jkind.lustre.BinaryExpr;
+import jkind.lustre.BinaryOp;
 import jkind.lustre.BoolExpr;
 import jkind.lustre.CastExpr;
 import jkind.lustre.CondactExpr;
@@ -29,10 +32,12 @@ public class AgreeGuaranteeCausingExprFinder implements ExprVisitor<List<Expr>> 
 
 	private Expr targetExpr;
 	private ExprFinder exprFinder;
+	private AgreeNode agreeNode;
 
-	public AgreeGuaranteeCausingExprFinder(Expr targetExpr) {
+	public AgreeGuaranteeCausingExprFinder(Expr targetExpr, AgreeNode agreeNode) {
 		this.targetExpr = targetExpr;
-		exprFinder = new ExprFinder(targetExpr);
+		this.agreeNode = agreeNode;
+		exprFinder = new ExprFinder(targetExpr, agreeNode);
 	}
 
 	public void setTargetExpr(Expr targetExpr) {
@@ -56,10 +61,16 @@ public class AgreeGuaranteeCausingExprFinder implements ExprVisitor<List<Expr>> 
 			// then add the left expr to the resultList
 			// otherwise skip
 			if (exprFinder.visit(e.right)) {
-				resultList.add(e.left);
+				Expr returnExpr = null;
+				if (exprFinder.getSrcExpr() != null) {
+					returnExpr = new BinaryExpr(e.location, exprFinder.getSrcExpr(), BinaryOp.AND, e.left);
+				}
+				else {
+					returnExpr = e.left;
+				}
+				resultList.add(returnExpr);
 			}
-		}
-		else {
+		} else {
 			resultList.addAll(visit(e.left));
 			resultList.addAll(visit(e.right));
 		}

@@ -266,7 +266,7 @@ public class ModelToCTGenerator {
 			Expr targetExpr = bottomIdNodeExpr;
 			// Set target expr
 			AgreeGuaranteeCausingExprFinder agreeGuaranteeCausingExprFinder = new AgreeGuaranteeCausingExprFinder(
-					targetExpr);
+					targetExpr, nextAgreeNode);
 			// look for the => operator
 			// Once found the expr with the => operator
 			// see if the target expr is

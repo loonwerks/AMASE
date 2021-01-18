@@ -1,6 +1,9 @@
 package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
+
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.util.AgreeUtil;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.ArrayExpr;
 import jkind.lustre.ArrayUpdateExpr;
@@ -26,9 +29,17 @@ public class ExprFinder implements ExprVisitor<Boolean> {
 
 	// look for the given expr, if found, return true
 	private Expr targetExpr;
+	private AgreeNode agreeNode;
+	private Expr sourceExpr;
 
-	public ExprFinder(Expr targetExpr) {
+	public Expr getSrcExpr() {
+		return sourceExpr;
+	}
+
+	public ExprFinder(Expr targetExpr, AgreeNode agreeNode) {
 		this.targetExpr = targetExpr;
+		this.agreeNode = agreeNode;
+		this.sourceExpr = null;
 	}
 
 	public void setTargetExpr(Expr targetExpr) {
@@ -44,8 +55,86 @@ public class ExprFinder implements ExprVisitor<Boolean> {
 		Boolean result = false;
 		if (e.toString().equals(targetExpr.toString())) {
 			result = true;
-		} else if (visit(e.left) || visit(e.right)) {
-			result = true;
+		} else {
+			if (targetExpr instanceof BinaryExpr) {
+				String targetOpName = ((BinaryExpr) targetExpr).op.name();
+				String srcOpName = e.op.name();
+				if (targetOpName.equals("EQUAL")) {
+					if (srcOpName.equals("EQUAL")) {
+						Expr originalTargetExpr = targetExpr;
+						Expr targetLeftExpr = ((BinaryExpr)targetExpr).left;
+						Expr targetRightExpr = ((BinaryExpr)targetExpr).right;
+						Expr sourceLeftExpr = e.left;
+						Expr sourceRightExpr = e.right;
+						setTargetExpr(targetLeftExpr);
+						// if left target and left source match
+						if(visit(sourceLeftExpr)) {
+							setTargetExpr(targetRightExpr);
+							// if right target and right source match
+							if(visit(sourceRightExpr)) {
+								// return true
+								result = true;
+							}
+							// if right target and right source do not match
+							else {
+								// check if right target is constant and right source is input
+								// if yes, set sourceExpr as input = constant and return true
+								result = checkTargetConstSourceInput(e, result, targetRightExpr, sourceRightExpr);
+							}
+						}
+						// if left target and left source do not match
+						// and left target and right source match
+						else if(visit(sourceRightExpr)) {
+							// check if right target is constant and left source is input
+							// if yes, set sourceExpr as input = constant and return true
+							result = checkTargetConstSourceInput(e, result, targetRightExpr, sourceLeftExpr);
+						} else {
+							setTargetExpr(targetRightExpr);
+							// if left target and left source do not match
+							// and right target and left source match
+							if (visit(sourceLeftExpr)) {
+								setTargetExpr(targetLeftExpr);
+								// check if left target and right source match
+								if (visit(sourceRightExpr)) {
+									// return true
+									result = true;
+								}
+								// if left target and right source do not match
+								else {
+									// check if left target is constant and right source is input
+									// if yes, set sourceExpr as input = constant and return true
+									result = checkTargetConstSourceInput(e, result, targetLeftExpr, sourceRightExpr);
+								}
+							}
+							// if left target and left source do not match
+							// and right target and left source do not match
+							// and right target and right source match
+							else if (visit(sourceRightExpr)) {
+								// check if left target is constant and left source is input
+								// if yes, set sourceExpr as input = constant and return true
+								result = checkTargetConstSourceInput(e, result, targetLeftExpr, sourceLeftExpr);
+							}
+						}
+					}
+				}
+			}
+			// TODO: verify if the following branch is still accurate after the above code
+			else if (visit(e.left) || visit(e.right)) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	private Boolean checkTargetConstSourceInput(BinaryExpr e, Boolean result, Expr targetExpr, Expr sourceExpr) {
+		if ((targetExpr instanceof IntExpr) || (targetExpr instanceof BoolExpr) || (targetExpr instanceof RealExpr)) {
+			if (sourceExpr instanceof IdExpr) {
+				String id = ((IdExpr) sourceExpr).id;
+				if (AgreeUtil.inputsContainId(agreeNode, id)) {
+					this.sourceExpr = new BinaryExpr(e.location, sourceExpr, e.op, targetExpr);
+					result = true;
+				}
+			}
 		}
 		return result;
 	}
@@ -56,8 +145,7 @@ public class ExprFinder implements ExprVisitor<Boolean> {
 		Boolean result = false;
 		if (e.toString().equals(targetExpr.toString())) {
 			result = true;
-		}
-		else if (visit(e.cond) || visit(e.thenExpr) || visit(e.elseExpr)) {
+		} else if (visit(e.cond) || visit(e.thenExpr) || visit(e.elseExpr)) {
 			result = true;
 		}
 		return result;
@@ -110,7 +198,7 @@ public class ExprFinder implements ExprVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(IdExpr e) {
-		// returns true if targetExpr is of matching Id, or of Id = true
+		// returns true if targetExpr is of matching Id, or of Id = true, or Id = another input id
 		Boolean result = false;
 		if (targetExpr instanceof IdExpr) {
 			if (((IdExpr) targetExpr).id.equals(e.id)) {
