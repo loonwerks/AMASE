@@ -105,7 +105,7 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		write("Constraint " + exprConstraintDef.constraintId + " = ");
 		write("(");
 		visit(exprConstraintDef.expr);
-		write(")");
+		writeln(");");
 		return null;
 	}
 

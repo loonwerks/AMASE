@@ -114,9 +114,13 @@ public class GenCausationTreeHandler extends VerifyHandler {
 					agreeProgram);
 			List<MistralConstraint> constraints = modelConstraintGenerator.generateConstraints();
 
-			// TODO: optimize the following code
-			// 1) to store all constraints to one string then write to file
-			// 2) to print to separate folder like json generate file folder in the project folder
+			// TODO:
+			// Major:
+			// 1. need to generate one tree per top level guarantee, into a separate file
+			// 2. need to handle multiple verification layers
+			// Minor:
+			// 1. store all constraints to one string then write to file
+			// 2. print to separate folder like json generate file folder in the project folder
 			try {
 				String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 				File constraintFile = File.createTempFile("Constraint_" + timeStamp + "_", ".cpp");
