@@ -352,6 +352,7 @@ public class ModelToCTGenerator {
 														// if no faultNodeCausingExpr found
 														// meaning no fault expr causing the bottomIdNode expr
 														// not creating CT node for it
+
 														if (faultNodeCausingExpr == null) {
 															System.out.println(
 																	"no fault node causing expr found");

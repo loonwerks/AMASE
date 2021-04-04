@@ -1,8 +1,14 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +33,7 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
 import org.osate.annexsupport.AnnexUtil;
+import org.osate.ui.dialogs.Dialog;
 
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
@@ -50,9 +57,8 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import edu.umn.cs.crisys.safety.analysis.Activator;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
-import edu.umn.cs.crisys.safety.analysis.causationTree.CT;
-import edu.umn.cs.crisys.safety.analysis.generators.CTToJsonGenerator;
-import edu.umn.cs.crisys.safety.analysis.generators.ModelToCTGenerator;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
+import edu.umn.cs.crisys.safety.analysis.generators.ModelToConstraintsGenerator;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.api.results.AnalysisResult;
@@ -104,15 +110,36 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, false);
 			AgreeNode topNode = agreeProgram.topNode;
 
-			ModelToCTGenerator modelToFTGenerator = new ModelToCTGenerator(topNode, si, agreeProgram);
-			List<CT> causationTrees = modelToFTGenerator.generateCausationTree();
+			ModelToConstraintsGenerator modelConstraintGenerator = new ModelToConstraintsGenerator(topNode, si,
+					agreeProgram);
+			List<MistralConstraint> constraints = modelConstraintGenerator.generateConstraints();
 
-			// print each causation tree to a json file
-			// TODO: make sure that different causation trees get generated to different json files
-			// TODO: generate a confirmation message when tree is generated
-			for (CT ct : causationTrees) {
-				CTToJsonGenerator.createJson(ciURI, ct);
+			// TODO: optimize the following code
+			// 1) to store all constraints to one string then write to file
+			// 2) to print to separate folder like json generate file folder in the project folder
+			try {
+				String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+				File constraintFile = File.createTempFile("Constraint_" + timeStamp + "_", ".cpp");
+				BufferedWriter bw = new BufferedWriter(new FileWriter(constraintFile));
+				for (MistralConstraint constraint : constraints) {
+					bw.write(constraint.toString());
+				}
+				bw.close();
+				org.eclipse.swt.program.Program.launch(constraintFile.toString());
+			} catch (IOException e) {
+				Dialog.showError("Unable to open file", e.getMessage());
+				e.printStackTrace();
 			}
+
+//			ModelToCTGenerator modelToCTGenerator = new ModelToCTGenerator(topNode, si, agreeProgram);
+//			List<CT> causationTrees = modelToCTGenerator.generateCausationTree();
+//
+//			// print each causation tree to a json file
+//			// TODO: make sure that different causation trees get generated to different json files
+//			// TODO: generate a confirmation message when tree is generated
+//			for (CT ct : causationTrees) {
+//				CTToJsonGenerator.createJson(ciURI, ct);
+//			}
 			AddFaultsToAgree.resetStaticVars();
 			return Status.OK_STATUS;
 		} catch (Throwable e) {
