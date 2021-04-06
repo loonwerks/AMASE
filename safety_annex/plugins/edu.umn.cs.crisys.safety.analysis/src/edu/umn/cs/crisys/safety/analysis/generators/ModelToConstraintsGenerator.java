@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.osate.aadl2.instance.ComponentInstance;
 
+import com.rockwellcollins.atc.agree.agree.impl.AssignStatementImpl;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -15,6 +16,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.SingleConstraintExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.visitors.LustreExprToConstraintsVisitor;
+import jkind.lustre.BinaryExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
 import jkind.lustre.Node;
@@ -43,21 +45,30 @@ public class ModelToConstraintsGenerator {
 			resetVisitor("Top");
 			// Step 1: negate the top level guarantee expression and create constraints
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
-			ConstraintListCombo topReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
-			constraints.addAll(topReturnCombo.constraintList);
+			ConstraintListCombo topGuaranteeReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
+			constraints.addAll(topGuaranteeReturnCombo.constraintList);
 			// create constraint def for TLE
-			SingleConstraintExpr tleConstraintExpr = new SingleConstraintExpr(topReturnCombo.lastConstraint);
+			SingleConstraintExpr tleConstraintExpr = new SingleConstraintExpr(topGuaranteeReturnCombo.lastConstraint);
 			ExprConstraintDef tleConstraintDef = new ExprConstraintDef("TLE", tleConstraintExpr);
 			constraints.add(tleConstraintDef);
 
-			// TODO: need to revisit what to do with top node
-			// as we can get guarantees from top node in the following for-loop too
+			// TODO: translate all eq variables created for the top node
+			for (AgreeStatement assertion : topAgreeNode.assertions) {
+				if (assertion instanceof AgreeStatement) {
+					if (assertion.reference instanceof AssignStatementImpl) {
+						if (assertion.expr instanceof BinaryExpr) {
+							BinaryExpr curExpr = (BinaryExpr) assertion.expr;
+							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
+							constraints.addAll(topEqReturnCombo.constraintList);
+						}
+					}
+				}
+			}
 
 			// Step 2: for each agree node in this verification layer
 			// translate the guarantee into constraints
-			// TODO: feed the component prefix so to create unique terms and constraints for each one
 			for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
-				// if top node, skip it as we have already generated TLE
+				// only check non top node here
 				if (!isTopNode(agreeNode)) {
 					// get agreeNode name
 					String agreeNodeName = agreeNode.id;
