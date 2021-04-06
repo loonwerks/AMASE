@@ -27,6 +27,7 @@ import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.ArrayExpr;
 import jkind.lustre.ArrayUpdateExpr;
 import jkind.lustre.BinaryExpr;
+import jkind.lustre.BinaryOp;
 import jkind.lustre.BoolExpr;
 import jkind.lustre.CastExpr;
 import jkind.lustre.CondactExpr;
@@ -101,7 +102,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				Expr newLeft = negateExprVisitor.visit(e.left);
 				return createBinaryExprConstraint("OR", e, newLeft, e.right, constraints);
 			} else if (opName.equals("ARROW")) {
-				throw new SafetyException("Expr not supported " + e.toString());
+				// TODO: for now for arrow operator, only visit the left expression (initial value)
+				return visit(e.left);
 			} else if (opName.equals("EQUAL") || opName.equals("NOTEQUAL") || opName.equals("GREATER")
 					|| opName.equals("LESS") || opName.equals("GREATEREQUAL") || opName.equals("LESSEQUAL")) {
 				return createBinaryExprConstraint(opName, e, e.left, e.right, constraints);
@@ -117,27 +119,18 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	@Override
 	public ConstraintListCombo visit(IfThenElseExpr e) {
-		List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
-//		// if a then b else c = (a=>b) and (not a => c)
-//		// = (not a or b) and (a or c)
-//		CTNode returnNode = null;
-//		CTNode condNode = visit(e.cond);
-//		Expr negCondExpr = negateExprVisitor.visit(e.cond);
-//		CTNode negCondNode = visit(negCondExpr);
-//		CTNode thenCondNode = visit(e.thenExpr);
-//		CTNode elseCondNode = visit(e.elseExpr);
-//		CTNodeBinaryOp orOp = CTNodeBinaryOp.fromName("OR");
-//		CTNodeBinaryOp andOp = CTNodeBinaryOp.fromName("AND");
-//		CTOrNode leftNode = new CTOrNode(orOp);
-//		leftNode.addChildNode(negCondNode);
-//		leftNode.addChildNode(thenCondNode);
-//		CTOrNode rightNode = new CTOrNode(orOp);
-//		rightNode.addChildNode(condNode);
-//		rightNode.addChildNode(elseCondNode);
-//		returnNode = new CTAndNode(andOp);
-//		rightNode.addChildNode(leftNode);
-//		rightNode.addChildNode(rightNode);
-		throw new SafetyException("Expr not supported " + e.toString());
+		// if a then b else c <=>(a=>b) and (not a => c) <=> (not a or b) and (a or c)
+		Expr condExpr = e.cond;
+		Expr thenExpr = e.thenExpr;
+		Expr elseExpr = e.elseExpr;
+		Expr negCondExpr = negateExprVisitor.visit(condExpr);
+
+		BinaryExpr exprLeft = new BinaryExpr(e.location, negCondExpr, BinaryOp.OR,
+				thenExpr);
+		BinaryExpr exprRight = new BinaryExpr(e.location, condExpr, BinaryOp.OR,
+		elseExpr);
+		BinaryExpr newExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.AND, exprRight);
+		return visit(newExpr);
 	}
 
 	@Override
@@ -151,7 +144,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		// otherwise create the constraint
 		else {
 			String opName = e.op.name();
-			if (opName.equals("NEGATIVE") || opName.equals("NOT")) {
+			if (opName.equals("NOT")) {
 				if (e.expr instanceof IdExpr) {
 					// if e.expr is an Id expression
 					// visit the Id expression
@@ -184,6 +177,13 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				}
 			} else if (opName.equals("PRE")) {
 				throw new SafetyException("Expr not supported " + e.toString());
+			} else if (opName.equals("NEGATIVE")) {
+				if (e.expr instanceof IntExpr) {
+					int value = ((IntExpr)e.expr).value.intValue() * -1;
+					return createIntConstantTermConstraint(e, value, constraints);
+				} else {
+					throw new SafetyException("Expr not supported " + e.toString());
+				}
 			} else {
 				throw new SafetyException("Expr not supported " + e.toString());
 			}
@@ -254,12 +254,22 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	@Override
 	public ConstraintListCombo visit(IntExpr e) {
 		List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
-		throw new SafetyException("Expr not supported " + e.toString());
+
+		// if expr already defined for within this node, just retrieve the constraint
+		if (compExprConstraintMap.containsKey(e.toString())) {
+			ConstraintListCombo combo = new ConstraintListCombo(compExprConstraintMap.get(e.toString()), constraints);
+			return combo;
+		}
+		// otherwise create term & constraint def and assignments
+		else {
+			return createIntConstantTermConstraint(e, e.value.intValue(), constraints);
+		}
 	}
+
+
 
 	@Override
 	public ConstraintListCombo visit(RealExpr e) {
-		List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
 		throw new SafetyException("Expr not supported " + e.toString());
 	}
 
@@ -356,4 +366,33 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		ConstraintListCombo combo = new ConstraintListCombo(binaryConstraint, constraints);
 		return combo;
 	}
+
+	private ConstraintListCombo createIntConstantTermConstraint(Expr e, int value,
+			List<MistralConstraint> constraints) {
+		// example:
+		// Term* f1_ = VariableTerm::make("f1");
+		// Constraint f1(f1_, ConstantTerm::make(1), ATOM_EQ);
+		// create unique names with agree node name prefix if the name doesn't exist
+		String idName = createUniqueConstraintName(nodeNamePrefix + value);
+		String termName = createUniqueConstraintName(nodeNamePrefix + value + "_term");
+		// create term def
+		VariableTermDef varTermDef = new VariableTermDef(termName, idName);
+		constraints.add(varTermDef);
+		// create term for reference
+		Term varTerm = new Term(termName);
+
+		IntConstantTermDef intConstTermDef = new IntConstantTermDef(String.valueOf(value), value);
+		// create constraint for the term
+		BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(idName, varTerm, intConstTermDef,
+				BinaryTermConstraintOp.fromName("ATOM_EQ"));
+		constraints.add(binaryTermConstraintDef);
+		// create constraint for reference
+		Constraint varConstraint = new Constraint(idName);
+		// add to map
+		compExprConstraintMap.put(e.toString(), varConstraint);
+
+		ConstraintListCombo combo = new ConstraintListCombo(varConstraint, constraints);
+		return combo;
+	}
+
 }
