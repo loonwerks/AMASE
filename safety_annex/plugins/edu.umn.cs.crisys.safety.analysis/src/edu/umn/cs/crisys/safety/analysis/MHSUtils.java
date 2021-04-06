@@ -46,6 +46,10 @@ public class MHSUtils {
 		sourceSetSb.setLength(0);
 	}
 
+	public static void resetNameIndex() {
+		varIndex = 0;
+	}
+
 	/**
 	 * Ensures file is deleted
 	 * @param file
@@ -284,7 +288,7 @@ public class MHSUtils {
 	 * @return unique name
 	 */
 	public static String createUniqueElemName(String name) {
-		String updatedName = name + "_" + varIndex;
+		String updatedName = name; // + "_" + varIndex;
 		while (elemIdMap.containsValue(new UniqueID(updatedName))) {
 			varIndex++;
 			updatedName = name + "_" + varIndex;

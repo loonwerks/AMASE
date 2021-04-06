@@ -9,7 +9,6 @@ public class BooleanConstantConstraintDef extends ConstantConstraintDef {
 	public BooleanConstantConstraintDef(String constraintId, boolean val) {
 		super(constraintId);
 		this.val = val;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

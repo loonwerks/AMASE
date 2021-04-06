@@ -89,8 +89,16 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(BooleanConstantConstraintDef booleanConstantConstraintDef) {
-		// TODO Auto-generated method stub
+	public Void visit(BooleanConstantConstraintDef constraintDef) {
+		write("Constraint ");
+		write(constraintDef.constraintId);
+		write("(");
+		if (constraintDef.val) {
+			writeln("true");
+		} else {
+			write("false");
+		}
+		write(")");
 		return null;
 	}
 
