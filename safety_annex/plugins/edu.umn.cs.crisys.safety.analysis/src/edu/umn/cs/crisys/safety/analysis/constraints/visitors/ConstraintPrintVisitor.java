@@ -94,11 +94,11 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		write(constraintDef.constraintId);
 		write("(");
 		if (constraintDef.val) {
-			writeln("true");
+			write("true");
 		} else {
 			write("false");
 		}
-		write(")");
+		writeln(");");
 		return null;
 	}
 
