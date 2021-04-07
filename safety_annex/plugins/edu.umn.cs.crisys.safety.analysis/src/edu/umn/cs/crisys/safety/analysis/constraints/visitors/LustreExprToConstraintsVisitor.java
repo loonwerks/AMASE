@@ -57,8 +57,12 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		nameIndex = 0;
 	}
 
-	private String createUniqueConstraintName(String name) {
-		String updatedName = name; // + "_" + varIndex;
+	private String createValidAndUniqueName(String name) {
+		// first update the name to make it valid
+		// replace all non-alphanumeric characters with "_"
+		// remove leading _
+		String updatedName = name.replaceAll("\\P{Alnum}", "_").replaceAll("^_+", "");
+		// second make sure it's unique
 		while (constraintNames.contains(updatedName)) {
 			nameIndex++;
 			updatedName = name + "_" + nameIndex;
@@ -152,7 +156,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 					Constraint returnConstraint = returnCombo.lastConstraint;
 					List<MistralConstraint> returanConstraintList = returnCombo.constraintList;
 					// create unique name
-					String notConstraintName = createUniqueConstraintName("not_" + returnConstraint.constraintId);
+					String notConstraintName = createValidAndUniqueName("not_" + returnConstraint.constraintId);
 
 					SingleConstraintExpr returnConstraintExpr = new SingleConstraintExpr(returnConstraint);
 
@@ -202,7 +206,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		// otherwise create term & constraint def and assignments
 		else {
 			// create unique names with agree node name prefix if the name doesn't exist
-			String constantConstraintName = createUniqueConstraintName(nodeNamePrefix + e.value);
+			String constantConstraintName = createValidAndUniqueName(nodeNamePrefix + e.value);
 			//create a BooleanConstantConstraintDef
 			BooleanConstantConstraintDef constantConstraintDef = new BooleanConstantConstraintDef(constantConstraintName, e.value);
 			constraints.add(constantConstraintDef);
@@ -227,8 +231,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		// otherwise create term & constraint def and assignments
 		else {
 			// create unique names with agree node name prefix if the name doesn't exist
-			String idName = createUniqueConstraintName(nodeNamePrefix + e.id);
-			String termName = createUniqueConstraintName(nodeNamePrefix + e.id + "_term");
+			String idName = createValidAndUniqueName(nodeNamePrefix + e.id);
+			String termName = createValidAndUniqueName(nodeNamePrefix + e.id + "_term");
 			// create term def
 			VariableTermDef varTermDef = new VariableTermDef(termName, idName);
 			constraints.add(varTermDef);
@@ -347,7 +351,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		List<MistralConstraint> leftConstraintList = leftReturnCombo.constraintList;
 		List<MistralConstraint> rightConstraintList = rightReturnCombo.constraintList;
 
-		String binaryConstraintName = createUniqueConstraintName(nodeNamePrefix + "Constraint");
+		String binaryConstraintName = createValidAndUniqueName(nodeNamePrefix + "Constraint");
 
 		SingleConstraintExpr leftConstraintExpr = new SingleConstraintExpr(leftConstraint);
 		SingleConstraintExpr rightConstraintExpr = new SingleConstraintExpr(rightConstraint);
@@ -373,8 +377,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		// Term* f1_ = VariableTerm::make("f1");
 		// Constraint f1(f1_, ConstantTerm::make(1), ATOM_EQ);
 		// create unique names with agree node name prefix if the name doesn't exist
-		String idName = createUniqueConstraintName(nodeNamePrefix + value);
-		String termName = createUniqueConstraintName(nodeNamePrefix + value + "_term");
+		String idName = createValidAndUniqueName(nodeNamePrefix + value);
+		String termName = createValidAndUniqueName(nodeNamePrefix + value + "_term");
 		// create term def
 		VariableTermDef varTermDef = new VariableTermDef(termName, idName);
 		constraints.add(varTermDef);
