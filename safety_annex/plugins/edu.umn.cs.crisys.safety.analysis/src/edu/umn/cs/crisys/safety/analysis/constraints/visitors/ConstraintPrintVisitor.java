@@ -10,6 +10,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.VariableTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintBinaryExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintUnaryExpr;
@@ -148,4 +149,18 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		return null;
 	}
 
+	@Override
+	public Void visit(TopConstraintDef topConstraintDef) {
+		write("Constraint " + topConstraintDef.constraintId + " = ");
+		boolean multipleElem = false;
+		for (Constraint constraint : topConstraintDef.constraintList) {
+			if (multipleElem) {
+				write(" & ");
+			}
+			visit(constraint);
+			multipleElem = true;
+		}
+		writeln(";");
+		return null;
+	}
 }

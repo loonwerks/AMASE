@@ -9,6 +9,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.VariableTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintBinaryExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintUnaryExpr;
@@ -16,17 +17,19 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.SingleConstraintEx
 
 public interface ConstraintAstVisitor<T> {
 
-	public T visit(ArithmeticTermDef arithmeticTermDef);
-
 	public T visit(BinaryTermConstraintDef binaryTermConstraintDef);
 
 	public T visit(BooleanConstantConstraintDef booleanConstantConstraintDef);
 
-	public T visit(BooleanConstantTermDef booleanConstantTermDef);
+	public T visit(ExprConstraintDef exprConstraintDef);
+
+	public T visit(TopConstraintDef topConstraintDef);
 
 	public T visit(Constraint constraint);
 
-	public T visit(ExprConstraintDef exprConstraintDef);
+	public T visit(ArithmeticTermDef arithmeticTermDef);
+
+	public T visit(BooleanConstantTermDef booleanConstantTermDef);
 
 	public T visit(FunctionTermDef functionTermDef);
 

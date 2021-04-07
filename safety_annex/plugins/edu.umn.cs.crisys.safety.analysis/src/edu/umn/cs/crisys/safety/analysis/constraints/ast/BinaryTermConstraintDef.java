@@ -21,19 +21,4 @@ public class BinaryTermConstraintDef extends ConstraintDef {
 		return visitor.visit(this);
 	}
 
-//	String idName = e.id;
-//	String termName = e.id + "_";
-//	//create term def
-//	VariableTermDef varTermDef = new VariableTermDef(termName, idName);
-//	constraints.add(varTermDef);
-//	//create term for reference
-//	Term varTerm = new Term(termName);
-//	// TODO: create a map for the type of the Id, to know what value to assign in the constraint
-//	// for now assign it to 1
-//	IntConstantTermDef intConstTermDef = new IntConstantTermDef("1", 1);
-//	// create constraint for the term
-//	BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(idName, varTerm,
-//			intConstTermDef,
-//			BinaryTermConstraintOp.fromName("ATOM_EQ"));
-
 }
