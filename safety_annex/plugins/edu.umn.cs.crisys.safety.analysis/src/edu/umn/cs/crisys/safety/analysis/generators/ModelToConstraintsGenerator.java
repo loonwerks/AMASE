@@ -11,9 +11,11 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContract;
 
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintListCombo;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.SingleConstraintExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.visitors.LustreExprToConstraintsVisitor;
 import jkind.lustre.BinaryExpr;
@@ -52,7 +54,7 @@ public class ModelToConstraintsGenerator {
 			ExprConstraintDef tleConstraintDef = new ExprConstraintDef("TLE", tleConstraintExpr);
 			constraints.add(tleConstraintDef);
 
-			// TODO: translate all eq variables created for the top node
+			// translate all eq variables created for the top node
 			for (AgreeStatement assertion : topAgreeNode.assertions) {
 				if (assertion instanceof AgreeStatement) {
 					if (assertion.reference instanceof AssignStatementImpl) {
@@ -65,7 +67,10 @@ public class ModelToConstraintsGenerator {
 				}
 			}
 
-			// Step 2: for each agree node in this verification layer
+			// overall top constraint def
+			TopConstraintDef topConstraintDef = new TopConstraintDef("all_guarantees");
+
+			// For each agree node in this verification layer
 			// translate the guarantee into constraints
 			for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
 				// only check non top node here
@@ -74,6 +79,9 @@ public class ModelToConstraintsGenerator {
 					String agreeNodeName = agreeNode.id;
 					// reset visitor per component
 					resetVisitor(agreeNodeName);
+					// create top constraint def for this node
+					String nodeTopConstraintName = agreeNodeName + "_Guarantees";
+					TopConstraintDef nodeTopConstraintDef = new TopConstraintDef(nodeTopConstraintName);
 					// for each component, get the agree node and lustre node for that component
 					// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
 					// and variable declarations sorted so they are declared before use
@@ -83,15 +91,24 @@ public class ModelToConstraintsGenerator {
 						Expr srcExpr = equation.expr;
 						ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
 						constraints.addAll(nodeReturnCombo.constraintList);
+						// check if it's a guarantee, if yes, store the constraint generated to save to the top level constraint
+						if (equation.lhs.get(0).id.contains("__GUARANTEE")) {
+							nodeTopConstraintDef.addConstraint(nodeReturnCombo.lastConstraint);
+						}
 					}
+					constraints.add(nodeTopConstraintDef);
+					// create constraint for reference
+					Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
+					// add node top constraint to overall top constraint def
+					topConstraintDef.addConstraint(nodeTopConstraint);
 				}
-				// TODO: create a constraint to and all constraints for this node
 			}
 
-			// TODO: Step 3: for all connections in this verification layer
+			// TODO: For all connections in this verification layer
 			// add to connectivity map connecting the input and output constraints created
 
-			// TODO: Step 4: create a overall constraint that is the AND of all component constraints
+			// Add overall constraint def
+			constraints.add(topConstraintDef);
 		}
 		return constraints;
 	}
