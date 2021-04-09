@@ -184,21 +184,47 @@ public class ModelToConstraintsGenerator {
 		for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
 			// go through all input ids and load the id and type to map
 			Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
-			// go through all ids and load the id and type to map
+			// go through all input and output ids and load the id and type to map
 			for (VarDecl varDecl : curLustreNode.inputs) {
 				if (varDecl instanceof AgreeVar) {
-					// exclude fault ids for now
-					// TODO: revisit this
-					if (((AgreeVar) varDecl).reference != null) {
-						if ((((AgreeVar) varDecl).reference instanceof FaultStatementImpl)) {
-							continue;
-						}
-					}
-					String id = ((AgreeVar) varDecl).id;
-					Type type = ((AgreeVar) varDecl).type;
-					lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+				}
+			}
+			// go through all eq var ids and load the id and type to map
+			for (VarDecl varDecl : curLustreNode.locals) {
+				if (varDecl instanceof AgreeVar) {
+					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
 				}
 			}
 		}
+		// TODO: need to make sure ids added to map has no duplicate
+		// add input ids from agree nodes
+		for (Node globalLustreNode : agreeProgram.globalLustreNodes) {
+			// go through all input ids for each node and load the id and type to map
+			for (VarDecl varDecl : globalLustreNode.inputs) {
+				if (varDecl instanceof AgreeVar) {
+					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+				}
+			}
+			// go through all local ids for each node and load the id and type to map
+			for (VarDecl varDecl : globalLustreNode.locals) {
+				if (varDecl instanceof AgreeVar) {
+					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+				}
+			}
+		}
+	}
+
+	private void addIdTypeToMap(AgreeVar agreeVar, LustreExprToConstraintsVisitor lustreExprToConstraintVisitor) {
+		if (agreeVar.reference != null) {
+			// exclude fault ids for now
+			// TODO: revisit this
+			if (!(agreeVar.reference instanceof FaultStatementImpl)) {
+				String id = agreeVar.id;
+				Type type = agreeVar.type;
+				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+			}
+		}
+
 	}
 }

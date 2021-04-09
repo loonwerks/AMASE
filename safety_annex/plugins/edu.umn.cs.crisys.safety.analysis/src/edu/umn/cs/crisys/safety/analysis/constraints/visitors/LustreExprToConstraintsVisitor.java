@@ -125,40 +125,42 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				// visit the left and the right expression
 				ConstraintListCombo leftReturnCombo = visit(e.left);
 				ConstraintListCombo rightReturnCombo = visit(e.right);
-				return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo, rightReturnCombo);
+				return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
+						rightReturnCombo);
 			} else if (opName.equals("IMPLIES")) {
 				// (a => b) <=> (not a or b)
 				Expr newLeft = negateExprVisitor.visit(e.left);
 				ConstraintListCombo leftReturnCombo = visit(newLeft);
 				ConstraintListCombo rightReturnCombo = visit(e.right);
-				return createBinaryLogicalConstraint("OR", e, newLeft, e.right, constraints, leftReturnCombo, rightReturnCombo);
+				return createBinaryLogicalConstraint("OR", e, newLeft, e.right, constraints, leftReturnCombo,
+						rightReturnCombo);
 			} else if (opName.equals("ARROW")) {
 				// TODO: for now for arrow operator, only visit the left expression (initial value)
 				return visit(e.left);
-			}
-			else if(opName.equals("EQUAL") || opName.equals("NOTEQUAL") ) {
+			} else if (opName.equals("EQUAL") || opName.equals("NOTEQUAL")) {
 				ConstraintListCombo leftReturnCombo = visit(e.left);
 				ConstraintListCombo rightReturnCombo = visit(e.right);
 				MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
 				MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
 				if ((leftConstraint instanceof Term) && (rightConstraint instanceof Term)) {
-					return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo, rightReturnCombo);
-				}
-				else if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
-					return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo, rightReturnCombo);
+					return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints,
+							leftReturnCombo, rightReturnCombo);
+				} else if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
+					return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
+							rightReturnCombo);
 				}
 				// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
 				else {
 					// not supported
 					throw new SafetyException("Expr not supported " + e.toString());
 				}
-			}
-			else if (opName.equals("GREATER")
-					|| opName.equals("LESS") || opName.equals("GREATEREQUAL") || opName.equals("LESSEQUAL")) {
+			} else if (opName.equals("GREATER") || opName.equals("LESS") || opName.equals("GREATEREQUAL")
+					|| opName.equals("LESSEQUAL")) {
 				// visit the left and the right expression
 				ConstraintListCombo leftReturnCombo = visit(e.left);
 				ConstraintListCombo rightReturnCombo = visit(e.right);
-				return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo, rightReturnCombo);
+				return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
+						rightReturnCombo);
 			} else if (opName.equals("PLUS") || opName.equals("MINUS") || opName.equals("MULTIPLY")
 					|| opName.equals("DIVIDE")) {
 				return createArithmeticTerm(opName, e, e.left, e.right, constraints);
@@ -345,23 +347,31 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			// find the type of the id
 			if (compIdTypeMap.get(e.id) != null) {
 				type = compIdTypeMap.get(e.id);
-			}
-			// since lustre node translation does add component id in front of variable ids in the expression
-			// check if after stripping the prefix before the first "__" from the id
-			// see if it can be found in the map
-			else {
-				int index = e.id.indexOf("__");
-				if (index != -1) {
-					String updatedId = e.id.substring(index + 2);
+			} else {
+				// since lustre node translation does add component id in front of variable ids in the expression
+				// check if after stripping the prefix before the first "__" from the id
+				// see if it can be found in the map
+				int underscoreIndex = e.id.indexOf("__");
+				if (underscoreIndex != -1) {
+					String updatedId = e.id.substring(underscoreIndex + 2);
 					if (compIdTypeMap.get(updatedId) != null) {
 						type = compIdTypeMap.get(updatedId);
 					} else {
-						throw new SafetyException(updatedId + " type not found");
+						// also lustre node translation does add agree node name + "." to the id name
+						// check if after stripping the prefix before the first "." from the id
+						// see if it can be found in the map
+						int dotIndex = updatedId.indexOf(".");
+						if (dotIndex != -1) {
+							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
+							if (compIdTypeMap.get(furtherUpdatedId) != null) {
+								type = compIdTypeMap.get(furtherUpdatedId);
+							}
+						}
 					}
 				}
-				else {
-					throw new SafetyException(e.id + " type not found");
-				}
+			}
+			if (type == null) {
+				throw new SafetyException("Type not found for " + e.toString());
 			}
 			if (type instanceof NamedType) {
 				NamedType namedType = (NamedType) type;
