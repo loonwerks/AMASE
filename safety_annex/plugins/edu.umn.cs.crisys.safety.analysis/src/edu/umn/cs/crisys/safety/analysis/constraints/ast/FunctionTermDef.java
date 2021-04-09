@@ -6,7 +6,6 @@ public class FunctionTermDef extends TermDef {
 
 	public FunctionTermDef(String termId) {
 		super(termId);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -9,7 +9,6 @@ public class IntConstantTermDef extends TermDef {
 	public IntConstantTermDef(String termId, int val) {
 		super(termId);
 		this.val = val;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

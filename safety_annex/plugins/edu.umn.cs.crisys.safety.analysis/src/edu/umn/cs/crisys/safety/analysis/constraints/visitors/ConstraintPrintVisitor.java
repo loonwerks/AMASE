@@ -1,15 +1,17 @@
 package edu.umn.cs.crisys.safety.analysis.constraints.visitors;
 
+import java.util.Map;
+
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ArithmeticTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantConstraintDef;
-import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermIntegerMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.VariableTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintBinaryExpr;
@@ -45,13 +47,7 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 
 	@Override
 	public Void visit(ArithmeticTermDef termDef) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Void visit(BooleanConstantTermDef termDef) {
-		// TODO Auto-generated method stub
+		writeln("Term* " + termDef.termId + " = Arithmetic(Term::make(" + termDef.termIntegerMapDef.termId + ")");
 		return null;
 	}
 
@@ -84,7 +80,7 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		write(", ");
 		visit(constraintDef.rightTerm);
 		write(", ");
-		write(constraintDef.binaryOp.toString());
+		write(constraintDef.binaryOp.name());
 		writeln(");");
 		return null;
 	}
@@ -161,6 +157,17 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 			multipleElem = true;
 		}
 		writeln(";");
+		return null;
+	}
+
+	@Override
+	public Void visit(TermIntegerMapDef termIntegerMapDef) {
+		String mapName = termIntegerMapDef.termId;
+		writeln("map<Ter*, long int> " + mapName + ";");
+
+		for (Map.Entry<Term, Integer> entry : termIntegerMapDef.termMap.entrySet()) {
+			writeln(mapName + "[" + visit(entry.getKey()) + "] = " + entry.getValue() + ";");
+		}
 		return null;
 	}
 }

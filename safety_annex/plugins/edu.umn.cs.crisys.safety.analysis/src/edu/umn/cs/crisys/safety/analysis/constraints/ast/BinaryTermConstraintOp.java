@@ -1,8 +1,8 @@
 package edu.umn.cs.crisys.safety.analysis.constraints.ast;
 
 public enum BinaryTermConstraintOp {
-	ATOM_EQ("ATOM_EQ"), ATOM_NEQ("ATOM_NEQ"), ATOM_LEQ("ATOM_LEQ"), ATOM_LT("ATOM_LT"), ATOM_GT("ATOM_GT"), ATOM_GEQ(
-			"ATOM_GEQ"), ATOM_MOD("ATOM_MOD");
+	ATOM_EQ("EQUAL"), ATOM_NEQ("NOTEQUAL"), ATOM_LEQ("LESSEQUAL"), ATOM_LT("LESS"), ATOM_GT("GREATER"), ATOM_GEQ(
+			"GREATEREQUAL");
 
 	private String str;
 
@@ -18,6 +18,15 @@ public enum BinaryTermConstraintOp {
 	public static BinaryTermConstraintOp fromName(String name) {
 		for (BinaryTermConstraintOp op : BinaryTermConstraintOp.values()) {
 			if (op.name().equals(name)) {
+				return op;
+			}
+		}
+		return null;
+	}
+
+	public static BinaryTermConstraintOp fromStr(String str) {
+		for (BinaryTermConstraintOp op : BinaryTermConstraintOp.values()) {
+			if (op.str.equals(str)) {
 				return op;
 			}
 		}

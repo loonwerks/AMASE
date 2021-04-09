@@ -1,8 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.constraints.ast.expr;
 
 public enum ConstraintBinaryOp {
-	PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"), GREATER(">"), LESS("<"), GREATEREQUAL(">="), EQUAL(
-			"=="), LESSEQUAL("<="), NOTEQUAL("!="), OR("|"), AND("&");
+	EQUAL("=="), NOTEQUAL("!="), OR("|"), AND("&");
 
 	private String str;
 
@@ -18,6 +17,15 @@ public enum ConstraintBinaryOp {
 	public static ConstraintBinaryOp fromName(String name) {
 		for (ConstraintBinaryOp op : ConstraintBinaryOp.values()) {
 			if (op.name().equals(name)) {
+				return op;
+			}
+		}
+		return null;
+	}
+
+	public static ConstraintBinaryOp fromStr(String str) {
+		for (ConstraintBinaryOp op : ConstraintBinaryOp.values()) {
+			if (op.str.equals(str)) {
 				return op;
 			}
 		}
