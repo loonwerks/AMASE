@@ -1,12 +1,16 @@
 package edu.umn.cs.crisys.safety.analysis.constraints.ast;
 
 import edu.umn.cs.crisys.safety.analysis.constraints.visitors.ConstraintAstVisitor;
+import jkind.Assert;
 
 public class ArithmeticTermDef extends TermDef {
 
-	public ArithmeticTermDef(String termId) {
+	public final TermIntegerMapDef termIntegerMapDef;
+
+	public ArithmeticTermDef(String termId, TermIntegerMapDef termIntegerMapDef) {
 		super(termId);
-		// TODO Auto-generated constructor stub
+		Assert.isNotNull(termIntegerMapDef);
+		this.termIntegerMapDef = termIntegerMapDef;
 	}
 
 	@Override
