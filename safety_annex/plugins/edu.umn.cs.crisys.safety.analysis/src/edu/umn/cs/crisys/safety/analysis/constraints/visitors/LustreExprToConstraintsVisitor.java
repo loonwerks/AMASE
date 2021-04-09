@@ -172,6 +172,9 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	}
 
 	@Override
+	// TODO: var = (if a then b else c)
+	// has to be translated to
+	// (not a or (var = b)) and (a or (var = c))
 	public ConstraintListCombo visit(IfThenElseExpr e) {
 		// if a then b else c <=>(a=>b) and (not a => c) <=> (not a or b) and (a or c)
 		Expr condExpr = e.cond;
