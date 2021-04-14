@@ -3,7 +3,11 @@ package edu.umn.cs.crisys.safety.analysis.generators;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.ConnectionInstance;
+import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
+import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.impl.AssignStatementImpl;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
@@ -17,6 +21,8 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintListCombo;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermTermMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.SingleConstraintExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.visitors.LustreExprToConstraintsVisitor;
@@ -51,7 +57,7 @@ public class ModelToConstraintsGenerator {
 		// generate FT for each top level guarantee
 		for (AgreeStatement topLevelGuarantee : agreeProgram.topNode.guarantees) {
 			// reset visitor per component
-			resetVisitor("Top", topAgreeNode);
+			resetVisitor(topAgreeNode.id, topAgreeNode);
 			// Step 1: negate the top level guarantee expression and create constraints
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
 			ConstraintListCombo topGuaranteeReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
@@ -128,9 +134,13 @@ public class ModelToConstraintsGenerator {
 				}
 			}
 
-			// TODO: For all connections in this verification layer
+			// For all connections in this verification layer
 			// add to connectivity map connecting the input and output constraints created
-
+			// add connectivitiy(dest) = source
+			String termTermMapDefName = lustreExprToConstraintVisitor.createValidAndUniqueName("connectivity");
+			TermTermMapDef termTermMapDef = new TermTermMapDef(termTermMapDefName);
+			addConnections(termTermMapDef);
+			constraints.add(termTermMapDef);
 			// Add overall constraint def
 			constraints.add(topConstraintDef);
 		}
@@ -147,7 +157,7 @@ public class ModelToConstraintsGenerator {
 
 	private void resetVisitor(String agreeNodeName, AgreeNode agreeNode) {
 		// set node name prefix for constraint naming
-		lustreExprToConstraintVisitor.setNodeNamePrefix(agreeNodeName + "_");
+		lustreExprToConstraintVisitor.setNodeNamePrefix(agreeNodeName);
 		// clear index for constraint naming
 		lustreExprToConstraintVisitor.resetNameIndex();
 		// clear component constraint map
@@ -187,13 +197,13 @@ public class ModelToConstraintsGenerator {
 			// go through all input and output ids and load the id and type to map
 			for (VarDecl varDecl : curLustreNode.inputs) {
 				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+					addIdTypeToMap((AgreeVar) varDecl);
 				}
 			}
 			// go through all eq var ids and load the id and type to map
 			for (VarDecl varDecl : curLustreNode.locals) {
 				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+					addIdTypeToMap((AgreeVar) varDecl);
 				}
 			}
 		}
@@ -203,19 +213,19 @@ public class ModelToConstraintsGenerator {
 			// go through all input ids for each node and load the id and type to map
 			for (VarDecl varDecl : globalLustreNode.inputs) {
 				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+					addIdTypeToMap((AgreeVar) varDecl);
 				}
 			}
 			// go through all local ids for each node and load the id and type to map
 			for (VarDecl varDecl : globalLustreNode.locals) {
 				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl, lustreExprToConstraintVisitor);
+					addIdTypeToMap((AgreeVar) varDecl);
 				}
 			}
 		}
 	}
 
-	private void addIdTypeToMap(AgreeVar agreeVar, LustreExprToConstraintsVisitor lustreExprToConstraintVisitor) {
+	private void addIdTypeToMap(AgreeVar agreeVar) {
 		if (agreeVar.reference != null) {
 			// exclude fault ids for now
 			// TODO: revisit this
@@ -224,6 +234,41 @@ public class ModelToConstraintsGenerator {
 				Type type = agreeVar.type;
 				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
 			}
+		}
+
+	}
+
+	// For all connections in this verification layer
+	// add to connectivity map connecting the input and output constraints created
+	private void addConnections(TermTermMapDef termTermMapDef) {
+		// go through all connection instances
+		EList<ConnectionInstance> connectionInstances = topCompInst.getAllEnclosingConnectionInstances();
+		for (ConnectionInstance connectionInstance : connectionInstances) {
+			// get src comp name
+			String srcCompName = "";
+			if (connectionInstance.getSource().eContainer() instanceof ComponentInstanceImpl) {
+				srcCompName = ((ComponentInstanceImpl) connectionInstance.getSource().eContainer()).getName();
+			} else if (connectionInstance.getSource().eContainer() instanceof SystemInstanceImpl) {
+				srcCompName = ((SystemInstanceImpl) connectionInstance.getSource().eContainer()).getName();
+			}
+			// get src id name
+			String srcIdName = connectionInstance.getSource().getName();
+			// look up to get the term
+			Term srcTerm = lustreExprToConstraintVisitor.getTermFromCompIdTermMap(srcCompName, srcIdName);
+
+			// get dest comp name
+			String destCompName = "";
+			if (connectionInstance.getDestination().eContainer() instanceof ComponentInstanceImpl) {
+				destCompName = ((ComponentInstanceImpl) connectionInstance.getDestination().eContainer()).getName();
+			} else if (connectionInstance.getDestination().eContainer() instanceof SystemInstanceImpl) {
+				destCompName = ((SystemInstanceImpl) connectionInstance.getDestination().eContainer()).getName();
+			}
+			// get dest id name
+			String destIdName = connectionInstance.getDestination().getName();
+			// look up to get the term
+			Term destTerm = lustreExprToConstraintVisitor.getTermFromCompIdTermMap(destCompName, destIdName);
+			// add connectivitiy(dest) = source
+			termTermMapDef.addEntry(destTerm, srcTerm);
 		}
 
 	}

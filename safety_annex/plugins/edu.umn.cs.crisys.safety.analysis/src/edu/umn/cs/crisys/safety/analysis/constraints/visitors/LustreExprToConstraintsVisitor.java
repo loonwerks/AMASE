@@ -12,6 +12,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ArithmeticTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintOp;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantConstraintDef;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.CompIdPair;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintListCombo;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
@@ -65,12 +66,14 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	private HashSet<String> constraintNames = new HashSet<>();
 	// store the id and type
 	private Map<String, Type> compIdTypeMap = new HashMap<>();
+	// store the component id and term map
+	private Map<CompIdPair, Term> compIdTermMap = new HashMap<>();
 
 	public void resetNameIndex() {
 		nameIndex = 0;
 	}
 
-	private String createValidAndUniqueName(String name) {
+	public String createValidAndUniqueName(String name) {
 		// first update the name to make it valid
 		// replace all non-alphanumeric characters with "_"
 		// remove leading _
@@ -111,6 +114,11 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	public void addEntryToCompIdTypeMap(String id, Type type) {
 		compIdTypeMap.put(id, type);
 	}
+
+	public Term getTermFromCompIdTermMap(String compName, String idName) {
+		return compIdTermMap.get(new CompIdPair(compName, idName));
+	}
+
 
 	@Override
 	public ConstraintListCombo visit(BinaryExpr e) {
@@ -317,7 +325,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		// create a bool constraint out of it and return the constraint
 		else {
 			// create unique names with agree node name prefix if the name doesn't exist
-			String constantConstraintName = createValidAndUniqueName(nodeNamePrefix + e.value);
+			String constantConstraintName = createValidAndUniqueName(nodeNamePrefix + "_" + e.value);
 			// create a BooleanConstantConstraintDef
 			BooleanConstantConstraintDef constantConstraintDef = new BooleanConstantConstraintDef(
 					constantConstraintName, e.value);
@@ -848,7 +856,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	private ConstraintListCombo createIntConstantTermfromIntExpr(IntExpr e, List<MistralConstraint> constraints) {
 		int value = e.value.intValue();
 		// create unique names with agree node name prefix if the name doesn't exist
-		String termName = createValidAndUniqueName(nodeNamePrefix + value + "_term");
+		String termName = createValidAndUniqueName(nodeNamePrefix + "_" + value + "_term");
 		// create int constant term def
 		IntConstantTermDef intConstTermDef = new IntConstantTermDef("", value);
 		// add to constraint list
@@ -867,8 +875,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// if Boolean type, create a variable term and a constraint out of it and return the constraint
 	private ConstraintListCombo createVarTermFromBoolTypeIdVar(IdExpr e, List<MistralConstraint> constraints) {
 		// create unique names with agree node name prefix if the name doesn't exist
-		String idName = createValidAndUniqueName(nodeNamePrefix + e.id);
-		String termName = createValidAndUniqueName(nodeNamePrefix + e.id + "_term");
+		String idName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id);
+		String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
 		// create term def
 		VariableTermDef varTermDef = new VariableTermDef(termName, idName);
 		constraints.add(varTermDef);
@@ -876,6 +884,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		Term varTerm = new Term(termName);
 		// add to compTermDefMap
 		compTermDefMap.put(varTerm, varTermDef);
+		// add to compIdTermMap
+		compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), varTerm);
 
 		// assign the value to 1
 		IntConstantTermDef intConstTermDef = new IntConstantTermDef("", 1);
@@ -885,7 +895,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		constraints.add(binaryTermConstraintDef);
 		// create constraint for reference
 		Constraint varConstraint = new Constraint(idName);
-		// add to compExprConstraint map
+		// add to compIdTermMap map
 		compExprConstraintMap.put(e.toString(), varConstraint);
 
 		ConstraintListCombo combo = new ConstraintListCombo(varConstraint, constraints);
@@ -895,8 +905,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// if Integer type, create a variable term out of it and return the term
 	private ConstraintListCombo createVarTermfromIntTypeIdExpr(IdExpr e, List<MistralConstraint> constraints) {
 		// create unique names with agree node name prefix if the name doesn't exist
-		String idName = createValidAndUniqueName(nodeNamePrefix + e.id);
-		String termName = createValidAndUniqueName(nodeNamePrefix + e.id + "_term");
+		String idName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id);
+		String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
 		// create term def
 		VariableTermDef varTermDef = new VariableTermDef(termName, idName);
 		constraints.add(varTermDef);
@@ -904,6 +914,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		Term varTerm = new Term(termName);
 		// add to compTermDefMap
 		compTermDefMap.put(varTerm, varTermDef);
+		// add to compIdTermMap
+		compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), varTerm);
 
 		ConstraintListCombo combo = new ConstraintListCombo(varTerm, constraints);
 		return combo;

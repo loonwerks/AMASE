@@ -9,6 +9,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermIntegerMapDef;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermTermMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.VariableTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintBinaryExpr;
@@ -34,6 +35,8 @@ public interface ConstraintAstVisitor<T> {
 	public T visit(IntConstantTermDef intConstantTermDef);
 
 	public T visit(TermIntegerMapDef termIntegerMap);
+
+	public T visit(TermTermMapDef termTermMapDef);
 
 	public T visit(Term term);
 
