@@ -12,6 +12,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermIntegerMapDef;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermTermMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.VariableTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.ConstraintBinaryExpr;
@@ -163,10 +164,21 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 	@Override
 	public Void visit(TermIntegerMapDef termIntegerMapDef) {
 		String mapName = termIntegerMapDef.termId;
-		writeln("map<Ter*, long int> " + mapName + ";");
+		writeln("map<Term*, long int> " + mapName + ";");
 
 		for (Map.Entry<Term, Integer> entry : termIntegerMapDef.termMap.entrySet()) {
 			writeln(mapName + "[" + visit(entry.getKey()) + "] = " + entry.getValue() + ";");
+		}
+		return null;
+	}
+
+	@Override
+	public Void visit(TermTermMapDef termTermMapDef) {
+		String mapName = termTermMapDef.termId;
+		writeln("map<Term*, Term*> " + mapName + ";");
+
+		for (Map.Entry<Term, Term> entry : termTermMapDef.termMap.entrySet()) {
+			writeln(mapName + "[" + entry.getKey() + "] = " + entry.getValue() + ";");
 		}
 		return null;
 	}

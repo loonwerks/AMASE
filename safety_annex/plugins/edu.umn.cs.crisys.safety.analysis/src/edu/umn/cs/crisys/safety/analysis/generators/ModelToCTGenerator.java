@@ -227,7 +227,7 @@ public class ModelToCTGenerator {
 		// TODO: save the CT node/tree generated for a given agree node
 		// so if the same agree node being visited again, the saved CT node can be used
 		// TODO: get producint node and Id here
-		for (CompIdPair compIdPair : getProducingNodes(curAgreeNode, id, topCompInst, agreeProgram)) {
+		for (NodeIdPair compIdPair : getProducingNodes(curAgreeNode, id, topCompInst, agreeProgram)) {
 //			HashSet<CTNode> storedChildNodes = localAgreeNodeCTNodesMap.get(nextAgreeNode);
 //			if (storedChildNodes != null) {
 //				addChildNodes(bottomIdNode, storedChildNodes);
@@ -402,9 +402,9 @@ public class ModelToCTGenerator {
 
 	// go through all connections
 	// and find all the components producing the output and the associated norminal agree node with that
-	private List<CompIdPair> getProducingNodes(AgreeNode destAgreeNode, String idStr, ComponentInstance compInst,
+	private List<NodeIdPair> getProducingNodes(AgreeNode destAgreeNode, String idStr, ComponentInstance compInst,
 			AgreeProgram agreeProgram) {
-		List<CompIdPair> compIdPairs = new ArrayList<>();
+		List<NodeIdPair> compIdPairs = new ArrayList<>();
 		// go through all connection instances
 		EList<ConnectionInstance> connectionInstances = compInst.getAllEnclosingConnectionInstances();
 		for (ConnectionInstance connectionInstance : connectionInstances) {
@@ -429,7 +429,7 @@ public class ModelToCTGenerator {
 					ConnectionInstanceEnd sourceEndInstance = connectionInstance.getSource();
 					ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
 					AgreeNode sourceNode = agreeNodeFromNamedEl(agreeProgram.agreeNodes, sourceComponentInstance);
-					CompIdPair compIdPair = new CompIdPair(sourceNode, sourceEndInstance.getName());
+					NodeIdPair compIdPair = new NodeIdPair(sourceNode, sourceEndInstance.getName());
 					compIdPairs.add(compIdPair);
 				}
 			}
@@ -469,11 +469,11 @@ public class ModelToCTGenerator {
 		}
 	}
 
-	public class CompIdPair {
+	private class NodeIdPair {
 		private AgreeNode node;
 		private String id;
 
-		public CompIdPair(AgreeNode node, String id) {
+		public NodeIdPair(AgreeNode node, String id) {
 			this.node = node;
 			this.id = id;
 		}
