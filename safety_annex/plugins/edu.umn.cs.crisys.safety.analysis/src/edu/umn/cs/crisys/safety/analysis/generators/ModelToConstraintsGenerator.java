@@ -26,11 +26,16 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermTermMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.SingleConstraintExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.visitors.LustreExprToConstraintsVisitor;
-import edu.umn.cs.crisys.safety.safety.impl.FaultStatementImpl;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
+import jkind.Assert;
 import jkind.lustre.BinaryExpr;
+import jkind.lustre.BinaryOp;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
+import jkind.lustre.IdExpr;
+import jkind.lustre.IfThenElseExpr;
 import jkind.lustre.Node;
+import jkind.lustre.Program;
 import jkind.lustre.Type;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
@@ -41,23 +46,29 @@ public class ModelToConstraintsGenerator {
 	AgreeNode topAgreeNode;
 	ComponentInstance topCompInst;
 	AgreeProgram agreeProgram;
+	Program lustreProgram;
 	LustreExprToConstraintsVisitor lustreExprToConstraintVisitor = new LustreExprToConstraintsVisitor();
 	List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
 
-	public ModelToConstraintsGenerator(AgreeNode topAgreeNode, ComponentInstance topCompInst,
-			AgreeProgram agreeProgram) {
+	public ModelToConstraintsGenerator(AgreeNode topAgreeNode, ComponentInstance topCompInst, AgreeProgram agreeProgram,
+			Program lustreProgram) {
+		Assert.isNotNull(topAgreeNode);
+		Assert.isNotNull(topCompInst);
+		Assert.isNotNull(agreeProgram);
+		Assert.isNotNull(lustreProgram);
 		this.topAgreeNode = topAgreeNode;
 		this.topCompInst = topCompInst;
 		this.agreeProgram = agreeProgram;
+		this.lustreProgram = lustreProgram;
 	}
 
 	public List<MistralConstraint> generateConstraints() {
 		// update idType map
-		updateNodeIdTypeMap();
 		// generate FT for each top level guarantee
 		for (AgreeStatement topLevelGuarantee : agreeProgram.topNode.guarantees) {
-			// reset visitor per component
 			resetVisitor(topAgreeNode.id, topAgreeNode);
+			Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
+			updateNodeIdTypeMap(topLustreNode);
 			// Step 1: negate the top level guarantee expression and create constraints
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
 			ConstraintListCombo topGuaranteeReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
@@ -97,40 +108,102 @@ public class ModelToConstraintsGenerator {
 			for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
 				// only check non top node here
 				if (!isTopNode(agreeNode)) {
-					// get agreeNode name
-					String agreeNodeName = agreeNode.id;
-					// reset visitor per component
-					resetVisitor(agreeNodeName, agreeNode);
-					// create top constraint def for this node
-					String nodeTopConstraintName = agreeNodeName + "_Guarantees";
-					TopConstraintDef nodeTopConstraintDef = new TopConstraintDef(nodeTopConstraintName);
-					// for each component, get the agree node and lustre node for that component
-					// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
-					// and variable declarations sorted so they are declared before use
-					Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
-					// go through all equation expr in the lustre node and translate to constraints
-					for (Equation equation : curLustreNode.equations) {
-						Expr srcExpr = equation.expr;
-						ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
-						constraints.addAll(nodeReturnCombo.constraintList);
-						// check if it's a guarantee, if yes, store the constraint generated to save to the top level constraint
-						if (equation.lhs.get(0).id.contains("__GUARANTEE")) {
-							// get the last constraint created
-							// if the last construct is a constraint, proceed
-							// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
-							MistralConstraint nodeLastConstraint = nodeReturnCombo.lastConstraint;
-							if (nodeLastConstraint instanceof Constraint) {
-								nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
+					// for node with fault definitions
+					if (nodeWithFaultDefinitions(agreeNode)) {
+						// get agreeNode name
+						String agreeNodeName = agreeNode.id;
+						// get the lustre node
+						Node lustreNode = getOriginalLustreNode(agreeNodeName);
+						// reset visitor per component
+						resetVisitor(agreeNodeName, agreeNode);
+						// create top constraint def for this node
+						String nodeTopConstraintName = agreeNodeName + "_Guarantees";
+						TopConstraintDef nodeTopConstraintDef = new TopConstraintDef(nodeTopConstraintName);
+
+						// for each node, inline node calls and flatten pre of the lustre node that contains the fault definitions
+						Node updatedLustreNode = SafetyUtil.inlineNodeCallsFlattenPres(lustreNode, lustreProgram);
+
+						// add inputs and locals to idTypeMap
+						updateNodeIdTypeMap(updatedLustreNode);
+
+						// translate the equations
+						for (Equation equation : updatedLustreNode.equations) {
+							Expr leftExpr = equation.lhs.get(0);
+							Expr rightExpr = equation.expr;
+							// if right expr is an IdExpr or If-Then-Else expression
+							// create an assign boolean expression of left expression and right expression
+							// and pass to the visitor
+							if ((rightExpr instanceof IdExpr) || (rightExpr instanceof IfThenElseExpr)) {
+								createAssignExpr(leftExpr, rightExpr);
 							} else {
-								throw new SafetyException("No constraint created for " + topLevelEvent.toString());
+								// check if it's a guarantee or assert, store the constraint generated from the rightExpr o save to the top level constraint
+								// and no need to translate the leftExpr
+								// TODO: assign __ASSUME__HIST to true that appears in the assert expr
+								if (((IdExpr) leftExpr).id.contains("__GUARANTEE")
+										|| equation.lhs.get(0).id.contains("__ASSERT")) {
+									ConstraintListCombo rightReturnCombo = lustreExprToConstraintVisitor
+											.visit(rightExpr);
+									constraints.addAll(rightReturnCombo.constraintList);
+
+									// get the last constraint created
+									// if the last construct is a constraint, proceed
+									// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
+									MistralConstraint nodeLastConstraint = rightReturnCombo.lastConstraint;
+									if (nodeLastConstraint instanceof Constraint) {
+										nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
+									} else {
+										throw new SafetyException("No constraint created for " + equation.toString());
+									}
+								}
 							}
 						}
+						constraints.add(nodeTopConstraintDef);
+						// create constraint for reference
+						Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
+						// add node top constraint to overall top constraint def
+						topConstraintDef.addConstraint(nodeTopConstraint);
 					}
-					constraints.add(nodeTopConstraintDef);
-					// create constraint for reference
-					Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
-					// add node top constraint to overall top constraint def
-					topConstraintDef.addConstraint(nodeTopConstraint);
+					// for node without fault definitions
+					else {
+						// get agreeNode name
+						String agreeNodeName = agreeNode.id;
+						// reset visitor per component
+						resetVisitor(agreeNodeName, agreeNode);
+						// create top constraint def for this node
+						String nodeTopConstraintName = agreeNodeName + "_Guarantees";
+						TopConstraintDef nodeTopConstraintDef = new TopConstraintDef(nodeTopConstraintName);
+						// for each component, get the agree node and lustre node for that component
+						// Translate Agree Node to Lustre Node with pre-statement flatten, helper nodes inlined,
+						// and variable declarations sorted so they are declared before use
+						Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
+
+						// add inputs and locals to idTypeMap
+						updateNodeIdTypeMap(curLustreNode);
+						// go through all equation expr in the lustre node and translate to constraints
+						for (Equation equation : curLustreNode.equations) {
+							Expr srcExpr = equation.expr;
+							ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
+							constraints.addAll(nodeReturnCombo.constraintList);
+							// check if it's a guarantee, if yes, store the constraint generated to save to the top level constraint
+							if (equation.lhs.get(0).id.contains("__GUARANTEE")) {
+								// get the last constraint created
+								// if the last construct is a constraint, proceed
+								// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
+								MistralConstraint nodeLastConstraint = nodeReturnCombo.lastConstraint;
+								if (nodeLastConstraint instanceof Constraint) {
+									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
+								} else {
+									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
+								}
+							}
+						}
+
+						constraints.add(nodeTopConstraintDef);
+						// create constraint for reference
+						Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
+						// add node top constraint to overall top constraint def
+						topConstraintDef.addConstraint(nodeTopConstraint);
+					}
 				}
 			}
 
@@ -139,12 +212,20 @@ public class ModelToConstraintsGenerator {
 			// add connectivitiy(dest) = source
 			String termTermMapDefName = lustreExprToConstraintVisitor.createValidAndUniqueName("connectivity");
 			TermTermMapDef termTermMapDef = new TermTermMapDef(termTermMapDefName);
+
 			addConnections(termTermMapDef);
 			constraints.add(termTermMapDef);
 			// Add overall constraint def
 			constraints.add(topConstraintDef);
 		}
 		return constraints;
+
+	}
+
+	private void createAssignExpr(Expr leftExpr, Expr rightExpr) {
+		BinaryExpr assignExpr = new BinaryExpr(rightExpr.location, leftExpr, BinaryOp.EQUAL, rightExpr);
+		ConstraintListCombo returnCombo = lustreExprToConstraintVisitor.visit(assignExpr);
+		constraints.addAll(returnCombo.constraintList);
 	}
 
 	private Boolean isTopNode(AgreeNode agreeNode) {
@@ -153,6 +234,15 @@ public class ModelToConstraintsGenerator {
 		} else {
 			return false;
 		}
+	}
+
+	private Node getOriginalLustreNode(String agreeNodeName) {
+		for (Node node : lustreProgram.nodes) {
+			if (lustreAndAgreeNodeNamesMatch(node.id, agreeNodeName)) {
+				return node;
+			}
+		}
+		return null;
 	}
 
 	private void resetVisitor(String agreeNodeName, AgreeNode agreeNode) {
@@ -170,72 +260,117 @@ public class ModelToConstraintsGenerator {
 		// updateNodeIdTypeMap(agreeNode);
 	}
 
-	private void updateNodeIdTypeMap(AgreeNode agreeNode) {
-		// go through all input ids and load the id and type to map
-		Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
-		// go through all ids and load the id and type to map
-		for (VarDecl varDecl : curLustreNode.inputs) {
-			if (varDecl instanceof AgreeVar) {
-				// exclude fault ids for now
-				// TODO: revisit this
-				if (((AgreeVar) varDecl).reference != null) {
-					if ((((AgreeVar) varDecl).reference instanceof FaultStatementImpl)) {
-						continue;
-					}
-				}
-				String id = ((AgreeVar) varDecl).id;
-				Type type = ((AgreeVar) varDecl).type;
-				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
-			}
+//	private void updateNodeIdTypeMap(AgreeNode agreeNode) {
+//		// go through all input ids and load the id and type to map
+//		Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
+//		// go through all ids and load the id and type to map
+//		for (VarDecl varDecl : curLustreNode.inputs) {
+//			if (varDecl instanceof AgreeVar) {
+//				// exclude fault ids for now
+//				// TODO: revisit this
+//				if (((AgreeVar) varDecl).reference != null) {
+//					if ((((AgreeVar) varDecl).reference instanceof FaultStatementImpl)) {
+//						continue;
+//					}
+//				}
+//				String id = ((AgreeVar) varDecl).id;
+//				Type type = ((AgreeVar) varDecl).type;
+//				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+//			}
+//		}
+//	}
+
+	private void updateNodeIdTypeMap(Node lustreNode) {
+		// go through all input and output ids and load the id and type to map
+		for (VarDecl varDecl : lustreNode.inputs) {
+			String id = varDecl.id;
+			Type type = varDecl.type;
+			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+		}
+		// go through all eq var ids and load the id and type to map
+		for (VarDecl varDecl : lustreNode.locals) {
+			String id = varDecl.id;
+			Type type = varDecl.type;
+			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
 		}
 	}
 
-	private void updateNodeIdTypeMap() {
-		for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
-			// go through all input ids and load the id and type to map
-			Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
-			// go through all input and output ids and load the id and type to map
-			for (VarDecl varDecl : curLustreNode.inputs) {
-				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl);
-				}
-			}
-			// go through all eq var ids and load the id and type to map
-			for (VarDecl varDecl : curLustreNode.locals) {
-				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl);
-				}
-			}
-		}
-		// TODO: need to make sure ids added to map has no duplicate
-		// add input ids from agree nodes
-		for (Node globalLustreNode : agreeProgram.globalLustreNodes) {
-			// go through all input ids for each node and load the id and type to map
-			for (VarDecl varDecl : globalLustreNode.inputs) {
-				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl);
-				}
-			}
-			// go through all local ids for each node and load the id and type to map
-			for (VarDecl varDecl : globalLustreNode.locals) {
-				if (varDecl instanceof AgreeVar) {
-					addIdTypeToMap((AgreeVar) varDecl);
-				}
-			}
-		}
-	}
+//	private void updateNodeIdTypeMap() {
+//		for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
+//			// go through all input ids and load the id and type to map
+//			Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
+//			// go through all input and output ids and load the id and type to map
+//			for (VarDecl varDecl : curLustreNode.inputs) {
+//				if (varDecl instanceof AgreeVar) {
+//					addIdTypeToMap((AgreeVar) varDecl);
+//				}
+//			}
+//			// go through all eq var ids and load the id and type to map
+//			for (VarDecl varDecl : curLustreNode.locals) {
+//				if (varDecl instanceof AgreeVar) {
+//					addIdTypeToMap((AgreeVar) varDecl);
+//				}
+//			}
+//		}
+//		// TODO: need to make sure ids added to map has no duplicate
+//		// add input ids from agree nodes
+//		for (Node globalLustreNode : agreeProgram.globalLustreNodes) {
+//			// go through all input ids for each node and load the id and type to map
+//			for (VarDecl varDecl : globalLustreNode.inputs) {
+//				if (varDecl instanceof AgreeVar) {
+//					addIdTypeToMap((AgreeVar) varDecl);
+//				}
+//			}
+//			// go through all local ids for each node and load the id and type to map
+//			for (VarDecl varDecl : globalLustreNode.locals) {
+//				if (varDecl instanceof AgreeVar) {
+//					addIdTypeToMap((AgreeVar) varDecl);
+//				}
+//			}
+//		}
+//	}
 
 	private void addIdTypeToMap(AgreeVar agreeVar) {
-		if (agreeVar.reference != null) {
-			// exclude fault ids for now
-			// TODO: revisit this
-			if (!(agreeVar.reference instanceof FaultStatementImpl)) {
-				String id = agreeVar.id;
-				Type type = agreeVar.type;
-				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+		String id = agreeVar.id;
+		Type type = agreeVar.type;
+//		if (agreeVar.reference != null) {
+//			// exclude fault ids for now
+//			// TODO: revisit this
+//			if (!(agreeVar.reference instanceof FaultStatementImpl)) {
+//				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+//			}
+//		}
+//		else {
+			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+//		}
+	}
+
+	private void addIdTypeToMap(VarDecl varDecl) {
+		Type type = varDecl.type;
+		lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(varDecl.id, type);
+	}
+
+	private boolean nodeWithFaultDefinitions(AgreeNode agreeNode) {
+		boolean result = false;
+		AgreeNode faultyNode = SafetyUtil.faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes, agreeNode);
+		if (faultyNode != null) {
+			if (!faultyNode.assertions.isEmpty()) {
+				result = true;
 			}
 		}
+		return result;
+	}
 
+	private boolean lustreAndAgreeNodeNamesMatch(String lustreNodeName, String agreeNodeName) {
+		boolean result = false;
+
+		if (lustreNodeName != null && lustreNodeName.startsWith("_TOP__")) {
+			String newLustreNodeName = lustreNodeName.split("_TOP__")[1];
+			if (newLustreNodeName.equals(agreeNodeName)) {
+				result = true;
+			}
+		}
+		return result;
 	}
 
 	// For all connections in this verification layer

@@ -36,6 +36,7 @@ import edu.umn.cs.crisys.safety.analysis.causationTree.CTNodeBinaryOp;
 import edu.umn.cs.crisys.safety.analysis.causationTree.CTOrNode;
 import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.util.AgreeUtil;
+import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
@@ -288,7 +289,7 @@ public class ModelToCTGenerator {
 		// TODO: develop CT for the failure behavior definition
 
 		// find the agree node with faulty behavior added
-		AgreeNode faultyNode = faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes, nextAgreeNode);
+		AgreeNode faultyNode = SafetyUtil.faultyAgreeNodeFromNominalNode(agreeProgram.topNode.subNodes, nextAgreeNode);
 		if (faultyNode == null) {
 			System.out.println("null faulty node " + nextAgreeNode.id);
 		}
@@ -443,18 +444,6 @@ public class ModelToCTGenerator {
 		}
 		for (AgreeNode node : nodes) {
 			if (comp.getName().equals(node.id)) {
-				return node;
-			}
-		}
-		return null;
-	}
-
-	private AgreeNode faultyAgreeNodeFromNominalNode(List<AgreeNode> nodes, AgreeNode sourceNode) {
-		if (sourceNode == null) {
-			return null;
-		}
-		for (AgreeNode node : nodes) {
-			if (sourceNode.id.equals(node.id)) {
 				return node;
 			}
 		}

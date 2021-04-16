@@ -110,8 +110,10 @@ public class GenCausationTreeHandler extends VerifyHandler {
 			AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, false);
 			AgreeNode topNode = agreeProgram.topNode;
 
+			Program lustreProgram = LustreAstBuilder.getAssumeGuaranteeLustreProgram(agreeProgram);
+
 			ModelToConstraintsGenerator modelConstraintGenerator = new ModelToConstraintsGenerator(topNode, si,
-					agreeProgram);
+					agreeProgram, lustreProgram);
 			List<MistralConstraint> constraints = modelConstraintGenerator.generateConstraints();
 
 			// TODO:
