@@ -34,9 +34,15 @@ import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
+import jkind.lustre.Program;
 import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.RecordUpdateExpr;
 import jkind.lustre.Type;
+import jkind.lustre.builders.ProgramBuilder;
+import jkind.translation.DistributePres;
+import jkind.translation.FlattenPres;
+import jkind.translation.InlineNodeCalls;
+import jkind.translation.OrderEquations;
 
 public class SafetyUtil {
 
@@ -285,5 +291,43 @@ public class SafetyUtil {
 		} else {
 			return null;
 		}
+	}
+
+	public static AgreeNode faultyAgreeNodeFromNominalNode(List<AgreeNode> nodes, AgreeNode sourceNode) {
+		if (sourceNode == null) {
+			return null;
+		}
+		for (AgreeNode node : nodes) {
+			if (sourceNode.id.equals(node.id)) {
+				return node;
+			}
+		}
+		return null;
+	}
+
+	public static Node inlineNodeCallsFlattenPres(Node lustreNode, Program lustreProgram) {
+
+		List<Node> nodes = new ArrayList<>();
+
+		// add all nodes except for the given lustreNode
+		for (Node node : lustreProgram.nodes) {
+			if (!node.id.equals(lustreNode.id)) {
+				nodes.add(node);
+			}
+		}
+
+		// this node needs to be the last in the list
+		// so that it is set as the main node in the program
+		nodes.add(lustreNode);
+
+		Program program = new ProgramBuilder().addTypes(lustreProgram.types).addNodes(nodes).build();
+
+		program = InlineNodeCalls.program(program);
+		program = FlattenPres.program(program);
+
+		Node main = DistributePres.node(program.getMainNode());
+		main = OrderEquations.node(main);
+
+		return main;
 	}
 }

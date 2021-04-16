@@ -65,7 +65,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// store all MistralConstraintNames created to help create unique names
 	private HashSet<String> constraintNames = new HashSet<>();
 	// store the id and type
-	private Map<String, Type> compIdTypeMap = new HashMap<>();
+	private Map<String, Type> idTypeMap = new HashMap<>();
 	// store the component id and term map
 	private Map<CompIdPair, Term> compIdTermMap = new HashMap<>();
 
@@ -108,17 +108,16 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	}
 
 	public void clearCompIdTypeMap() {
-		this.compIdTypeMap.clear();
+		this.idTypeMap.clear();
 	}
 
 	public void addEntryToCompIdTypeMap(String id, Type type) {
-		compIdTypeMap.put(id, type);
+		idTypeMap.put(id, type);
 	}
 
 	public Term getTermFromCompIdTermMap(String compName, String idName) {
 		return compIdTermMap.get(new CompIdPair(compName, idName));
 	}
-
 
 	@Override
 	public ConstraintListCombo visit(BinaryExpr e) {
@@ -145,23 +144,33 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			} else if (opName.equals("ARROW")) {
 				// TODO: for now for arrow operator, only visit the left expression (initial value)
 				return visit(e.left);
-			} else if (opName.equals("EQUAL") || opName.equals("NOTEQUAL")) {
-				ConstraintListCombo leftReturnCombo = visit(e.left);
-				ConstraintListCombo rightReturnCombo = visit(e.right);
-				MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
-				MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
-				if ((leftConstraint instanceof Term) && (rightConstraint instanceof Term)) {
-					return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints,
-							leftReturnCombo, rightReturnCombo);
-				} else if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
-					return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
-							rightReturnCombo);
+			} else if (opName.equals("NOTEQUAL")) {
+				return createBinaryTermOrConstraint(e, constraints, opName);
+			} else if (opName.equals("EQUAL")) {
+				// check if the right expression is if-then-else
+				// if yes, translate to the following:
+				// left = (if a then b else c)
+				// <=>
+				// (not a or (left = b)) and (a or (left = c))
+				if (e.right instanceof IfThenElseExpr) {
+					Expr condExpr = ((IfThenElseExpr) e.right).cond;
+					Expr thenExpr = ((IfThenElseExpr) e.right).thenExpr;
+					Expr elseExpr = ((IfThenElseExpr) e.right).elseExpr;
+					Expr negCondExpr = negateExprVisitor.visit(condExpr);
+
+					BinaryExpr assignLeftToThenExpr = new BinaryExpr(e.location, e.left, BinaryOp.EQUAL, thenExpr);
+					BinaryExpr assignLeftToElseExpr = new BinaryExpr(e.location, e.left, BinaryOp.EQUAL, elseExpr);
+
+					BinaryExpr exprLeft = new BinaryExpr(e.location, negCondExpr, BinaryOp.OR, assignLeftToThenExpr);
+					BinaryExpr exprRight = new BinaryExpr(e.location, condExpr, BinaryOp.OR, assignLeftToElseExpr);
+					BinaryExpr newExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.AND, exprRight);
+					return visit(newExpr);
 				}
-				// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
+				// else, treat it the same way as the != operator expression
 				else {
-					// not supported
-					throw new SafetyException("Expr not supported " + e.toString());
+					return createBinaryTermOrConstraint(e, constraints, opName);
 				}
+
 			} else if (opName.equals("GREATER") || opName.equals("LESS") || opName.equals("GREATEREQUAL")
 					|| opName.equals("LESSEQUAL")) {
 				// visit the left and the right expression
@@ -180,20 +189,9 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	}
 
 	@Override
-	// TODO: var = (if a then b else c)
-	// has to be translated to
-	// (not a or (var = b)) and (a or (var = c))
 	public ConstraintListCombo visit(IfThenElseExpr e) {
-		// if a then b else c <=>(a=>b) and (not a => c) <=> (not a or b) and (a or c)
-		Expr condExpr = e.cond;
-		Expr thenExpr = e.thenExpr;
-		Expr elseExpr = e.elseExpr;
-		Expr negCondExpr = negateExprVisitor.visit(condExpr);
-
-		BinaryExpr exprLeft = new BinaryExpr(e.location, negCondExpr, BinaryOp.OR, thenExpr);
-		BinaryExpr exprRight = new BinaryExpr(e.location, condExpr, BinaryOp.OR, elseExpr);
-		BinaryExpr newExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.AND, exprRight);
-		return visit(newExpr);
+		// throw an exception, as it needs to be handled in the assign binary expression above it
+		throw new SafetyException("Expr not supported " + e.toString());
 	}
 
 	@Override
@@ -356,8 +354,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		else {
 			Type type = null;
 			// find the type of the id
-			if (compIdTypeMap.get(e.id) != null) {
-				type = compIdTypeMap.get(e.id);
+			if (idTypeMap.get(e.id) != null) {
+				type = idTypeMap.get(e.id);
 			} else {
 				// since lustre node translation does add component id in front of variable ids in the expression
 				// check if after stripping the prefix before the first "__" from the id
@@ -365,8 +363,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				int underscoreIndex = e.id.indexOf("__");
 				if (underscoreIndex != -1) {
 					String updatedId = e.id.substring(underscoreIndex + 2);
-					if (compIdTypeMap.get(updatedId) != null) {
-						type = compIdTypeMap.get(updatedId);
+					if (idTypeMap.get(updatedId) != null) {
+						type = idTypeMap.get(updatedId);
 					} else {
 						// also lustre node translation does add agree node name + "." to the id name
 						// check if after stripping the prefix before the first "." from the id
@@ -374,15 +372,15 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 						int dotIndex = updatedId.indexOf(".");
 						if (dotIndex != -1) {
 							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
-							if (compIdTypeMap.get(furtherUpdatedId) != null) {
-								type = compIdTypeMap.get(furtherUpdatedId);
+							if (idTypeMap.get(furtherUpdatedId) != null) {
+								type = idTypeMap.get(furtherUpdatedId);
 							}
 						}
 					}
 				}
 			}
 			if (type == null) {
-				throw new SafetyException("Type not found for " + e.toString());
+				throw new SafetyException("Type not found for " + e.id);
 			}
 			if (type instanceof NamedType) {
 				NamedType namedType = (NamedType) type;
@@ -533,7 +531,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	private ConstraintListCombo createBinaryTermComparisonConstraint(String opName, Expr originalExpr, Expr left,
 			Expr right, List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
 			ConstraintListCombo rightReturnCombo) {
-		// given a Boolean expression connected by comparison operators (==, !=, >, <, >=, <=)
+		// given a Boolean expression connected by comparison operators (>, <, >=, <=)
 		MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
 		MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
 
@@ -563,6 +561,27 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		else {
 			// not supported
 			throw new SafetyException("Expr not supported " + originalExpr.toString());
+		}
+	}
+
+	private ConstraintListCombo createBinaryTermOrConstraint(BinaryExpr e, List<MistralConstraint> constraints,
+			String opName) {
+		// given a Boolean expression connected by comparison operators (==, !=)
+		ConstraintListCombo leftReturnCombo = visit(e.left);
+		ConstraintListCombo rightReturnCombo = visit(e.right);
+		MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
+		MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
+		if ((leftConstraint instanceof Term) && (rightConstraint instanceof Term)) {
+			return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
+					rightReturnCombo);
+		} else if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
+			return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
+					rightReturnCombo);
+		}
+		// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
+		else {
+			// not supported
+			throw new SafetyException("Expr not supported " + e.toString());
 		}
 	}
 
