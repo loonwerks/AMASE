@@ -81,7 +81,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		// second make sure it's unique
 		while (constraintNames.contains(updatedName)) {
 			nameIndex++;
-			updatedName = name + "_" + nameIndex;
+			updatedName = updatedName + "_" + nameIndex;
 		}
 		constraintNames.add(updatedName);
 		return updatedName;

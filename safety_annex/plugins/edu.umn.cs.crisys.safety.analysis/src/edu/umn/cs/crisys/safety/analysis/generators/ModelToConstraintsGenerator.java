@@ -341,7 +341,7 @@ public class ModelToConstraintsGenerator {
 //			}
 //		}
 //		else {
-			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+		lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
 //		}
 	}
 
@@ -402,8 +402,11 @@ public class ModelToConstraintsGenerator {
 			String destIdName = connectionInstance.getDestination().getName();
 			// look up to get the term
 			Term destTerm = lustreExprToConstraintVisitor.getTermFromCompIdTermMap(destCompName, destIdName);
-			// add connectivitiy(dest) = source
-			termTermMapDef.addEntry(destTerm, srcTerm);
+			// if src or dest term is null, don't add it
+			if ((srcTerm != null) && (destTerm != null)) {
+				// add connectivitiy(dest) = source
+				termTermMapDef.addEntry(destTerm, srcTerm);
+			}
 		}
 
 	}
