@@ -68,6 +68,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	private Map<String, Type> idTypeMap = new HashMap<>();
 	// store the component id and term map
 	private Map<CompIdPair, Term> compIdTermMap = new HashMap<>();
+	// store the constant and term map
+	private Map<Integer, Term> intTermMap = new HashMap<>();
 
 	public void resetNameIndex() {
 		nameIndex = 0;
@@ -874,43 +876,81 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	private ConstraintListCombo createIntConstantTermfromIntExpr(IntExpr e, List<MistralConstraint> constraints) {
 		int value = e.value.intValue();
-		// create unique names with agree node name prefix if the name doesn't exist
-		String termName = createValidAndUniqueName(nodeNamePrefix + "_" + value + "_term");
-		// create int constant term def
-		IntConstantTermDef intConstTermDef = new IntConstantTermDef("", value);
-		// add to constraint list
-		constraints.add(intConstTermDef);
-		// create term for reference
-		Term intConstTerm = new Term(termName);
-		// add to compTermDefMap
-		compTermDefMap.put(intConstTerm, intConstTermDef);
-		// add to compExprConstraint map
-		compExprConstraintMap.put(e.toString(), intConstTerm);
 
-		ConstraintListCombo combo = new ConstraintListCombo(intConstTerm, constraints);
+		// check if constant term already exists, if yes, retrieve it
+		Term constantTerm = null;
+		if (intTermMap.containsKey(new Integer(value))) {
+			constantTerm = intTermMap.get(new Integer(value));
+		}
+		// otherwise, create it
+		else {
+			// create unique names with agree node name prefix if the name doesn't exist
+			String intTermName = createValidAndUniqueName("Constant_" + value + "_term");
+			// create int constant term def
+			IntConstantTermDef intConstTermDef = new IntConstantTermDef(intTermName, value);
+			// add to constraint list
+			constraints.add(intConstTermDef);
+			// create term for reference
+			constantTerm = new Term(intTermName);
+			// add to compTermDefMap
+			compTermDefMap.put(constantTerm, intConstTermDef);
+			// add to compExprConstraint map
+			compExprConstraintMap.put(e.toString(), constantTerm);
+			// add to intTermMap
+			intTermMap.put(new Integer(value), constantTerm);
+		}
+		ConstraintListCombo combo = new ConstraintListCombo(constantTerm, constraints);
 		return combo;
 	}
 
-	// if Boolean type, create a variable term and a constraint out of it and return the constraint
+	// if Boolean type, create a variable term out of it and return the term
+	// and a constraint out of it and return the constraint
 	private ConstraintListCombo createVarTermFromBoolTypeIdVar(IdExpr e, List<MistralConstraint> constraints) {
-		// create unique names with agree node name prefix if the name doesn't exist
-		String idName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id);
-		String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
-		// create term def
-		VariableTermDef varTermDef = new VariableTermDef(termName, idName);
-		constraints.add(varTermDef);
-		// create term for reference
-		Term varTerm = new Term(termName);
-		// add to compTermDefMap
-		compTermDefMap.put(varTerm, varTermDef);
-		// add to compIdTermMap
-		compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), varTerm);
+		Term boolTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
+		String idName = null;
+		if (boolTypeTerm == null) {
+			// create unique names with agree node name prefix if the name doesn't exist
+			idName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id);
+			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
+			// create term def
+			VariableTermDef varTermDef = new VariableTermDef(termName, idName);
+			constraints.add(varTermDef);
+			// create term for reference
+			boolTypeTerm = new Term(termName);
+			// add to compTermDefMap
+			compTermDefMap.put(boolTypeTerm, varTermDef);
+			// add to compIdTermMap
+			compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), boolTypeTerm);
+		} else {
+			TermDef termDef = compTermDefMap.get(boolTypeTerm);
+			if (termDef != null) {
+				if (termDef instanceof VariableTermDef) {
+					idName = ((VariableTermDef) termDef).varId;
+				}
+			}
+		}
+		// check if constant term already exists, if yes, retrieve it
+		Term constantTerm = null;
+		if (intTermMap.containsKey(new Integer(1))) {
+			constantTerm = intTermMap.get(new Integer(1));
+		}
+		// otherwise, create it
+		else {
+			// create unique name
+			String intTermName = createValidAndUniqueName("Constant_" + "1" + "_term");
+			IntConstantTermDef intConstTermDef = new IntConstantTermDef(intTermName, 1);
+			constraints.add(intConstTermDef);
+			// create term for reference
+			constantTerm = new Term(intTermName);
+			// add to compTermDefMap
+			compTermDefMap.put(constantTerm, intConstTermDef);
+			// add to intTermMap
+			intTermMap.put(new Integer(1), constantTerm);
+		}
 
-		// assign the value to 1
-		IntConstantTermDef intConstTermDef = new IntConstantTermDef("", 1);
 		// create constraint for the term
-		BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(idName, varTerm, intConstTermDef,
-				BinaryTermConstraintOp.fromName("ATOM_EQ"));
+		BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(idName, boolTypeTerm,
+				constantTerm, BinaryTermConstraintOp.fromName("ATOM_EQ"));
 		constraints.add(binaryTermConstraintDef);
 		// create constraint for reference
 		Constraint varConstraint = new Constraint(idName);
@@ -923,20 +963,24 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	// if Integer type, create a variable term out of it and return the term
 	private ConstraintListCombo createVarTermfromIntTypeIdExpr(IdExpr e, List<MistralConstraint> constraints) {
-		// create unique names with agree node name prefix if the name doesn't exist
-		String idName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id);
-		String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
-		// create term def
-		VariableTermDef varTermDef = new VariableTermDef(termName, idName);
-		constraints.add(varTermDef);
-		// create term for reference
-		Term varTerm = new Term(termName);
-		// add to compTermDefMap
-		compTermDefMap.put(varTerm, varTermDef);
-		// add to compIdTermMap
-		compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), varTerm);
-
-		ConstraintListCombo combo = new ConstraintListCombo(varTerm, constraints);
+		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
+		if (intTypeTerm == null) {
+			// create unique names with agree node name prefix if the name doesn't exist
+			String idName = e.id;
+			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
+			// create term def
+			VariableTermDef varTermDef = new VariableTermDef(termName, idName);
+			constraints.add(varTermDef);
+			// create term for reference
+			intTypeTerm = new Term(termName);
+			// add to compTermDefMap
+			compTermDefMap.put(intTypeTerm, varTermDef);
+			// add to compIdTermMap
+			compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), intTypeTerm);
+			// add to compExprConstraint map
+			compExprConstraintMap.put(e.toString(), intTypeTerm);
+		}
+		ConstraintListCombo combo = new ConstraintListCombo(intTypeTerm, constraints);
 		return combo;
 	}
 
