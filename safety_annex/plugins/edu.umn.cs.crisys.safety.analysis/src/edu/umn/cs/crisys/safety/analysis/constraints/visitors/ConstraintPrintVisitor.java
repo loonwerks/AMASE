@@ -48,13 +48,13 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 
 	@Override
 	public Void visit(ArithmeticTermDef termDef) {
-		writeln("Term* " + termDef.termId + " = Arithmetic(Term::make(" + termDef.termIntegerMapDef.termId + ")");
+		writeln("Term* " + termDef.termId + " = Arithmetic(Term::make(" + termDef.termIntegerMapDef.termId + ");");
 		return null;
 	}
 
 	@Override
 	public Void visit(IntConstantTermDef termDef) {
-		write("ConstantTerm::make(" + termDef.val + ")");
+		writeln("Term* " + termDef.termId + " = ConstantTerm::make(" + termDef.val + ");");
 		return null;
 	}
 
