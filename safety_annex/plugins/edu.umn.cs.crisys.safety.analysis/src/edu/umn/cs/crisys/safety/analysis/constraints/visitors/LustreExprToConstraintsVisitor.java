@@ -910,7 +910,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		String idName = null;
 		if (boolTypeTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
-			idName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id);
+			idName = e.id;
 			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
 			// create term def
 			VariableTermDef varTermDef = new VariableTermDef(termName, idName);
