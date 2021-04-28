@@ -32,8 +32,6 @@ import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
-import jkind.lustre.IdExpr;
-import jkind.lustre.IfThenElseExpr;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
 import jkind.lustre.Type;
@@ -130,31 +128,23 @@ public class ModelToConstraintsGenerator {
 						for (Equation equation : updatedLustreNode.equations) {
 							Expr leftExpr = equation.lhs.get(0);
 							Expr rightExpr = equation.expr;
-							// if right expr is an IdExpr or If-Then-Else expression
-							// create an assign boolean expression of left expression and right expression
-							// and pass to the visitor
-							if ((rightExpr instanceof IdExpr) || (rightExpr instanceof IfThenElseExpr)) {
-								createAssignExpr(leftExpr, rightExpr);
-							} else {
-								// check if it's a guarantee or assert, store the constraint generated from the rightExpr o save to the top level constraint
-								// and no need to translate the leftExpr
-								// TODO: assign __ASSUME__HIST to true that appears in the assert expr
-								if (((IdExpr) leftExpr).id.contains("__GUARANTEE")
-										|| equation.lhs.get(0).id.contains("__ASSERT")) {
-									ConstraintListCombo rightReturnCombo = lustreExprToConstraintVisitor
-											.visit(rightExpr);
-									constraints.addAll(rightReturnCombo.constraintList);
+							// check if it's an assert, store the constraint generated from the rightExpr to save to the top level constraint
+							// and no need to translate the leftExpr
+							if (equation.lhs.get(0).id.contains("__ASSERT")) {
+								ConstraintListCombo rightReturnCombo = lustreExprToConstraintVisitor.visit(rightExpr);
+								constraints.addAll(rightReturnCombo.constraintList);
 
-									// get the last constraint created
-									// if the last construct is a constraint, proceed
-									// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
-									MistralConstraint nodeLastConstraint = rightReturnCombo.lastConstraint;
-									if (nodeLastConstraint instanceof Constraint) {
-										nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
-									} else {
-										throw new SafetyException("No constraint created for " + equation.toString());
-									}
+								// get the last constraint created
+								// if the last construct is a constraint, proceed
+								// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
+								MistralConstraint nodeLastConstraint = rightReturnCombo.lastConstraint;
+								if (nodeLastConstraint instanceof Constraint) {
+									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
+								} else {
+									throw new SafetyException("No constraint created for " + equation.toString());
 								}
+							} else {
+								createAssignExpr(leftExpr, rightExpr);
 							}
 						}
 						constraints.add(nodeTopConstraintDef);
