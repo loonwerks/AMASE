@@ -48,7 +48,7 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 
 	@Override
 	public Void visit(ArithmeticTermDef termDef) {
-		writeln("Term* " + termDef.termId + " = Arithmetic(Term::make(" + termDef.termIntegerMapDef.termId + ");");
+		writeln("Term* " + termDef.termId + " = ArithmeticTerm::make(" + termDef.termIntegerMapDef.termId + ");");
 		return null;
 	}
 
@@ -167,7 +167,9 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		writeln("map<Term*, long int> " + mapName + ";");
 
 		for (Map.Entry<Term, Integer> entry : termIntegerMapDef.termMap.entrySet()) {
-			writeln(mapName + "[" + visit(entry.getKey()) + "] = " + entry.getValue() + ";");
+			write(mapName + "[");
+			visit(entry.getKey());
+			writeln("] = " + entry.getValue() + ";");
 		}
 		return null;
 	}
@@ -178,7 +180,9 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		writeln("map<Term*, Term*> " + mapName + ";");
 
 		for (Map.Entry<Term, Term> entry : termTermMapDef.termMap.entrySet()) {
-			writeln(mapName + "[" + entry.getKey() + "] = " + entry.getValue() + ";");
+			write(mapName + "[");
+			visit(entry.getKey());
+			writeln("] = " + entry.getValue() + ";");
 		}
 		return null;
 	}
