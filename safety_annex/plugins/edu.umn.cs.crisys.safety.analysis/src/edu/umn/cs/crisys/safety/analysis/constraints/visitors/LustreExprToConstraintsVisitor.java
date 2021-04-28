@@ -948,12 +948,15 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			intTermMap.put(new Integer(1), constantTerm);
 		}
 
+		// create constraint name
+		String binaryConstraintName = createValidAndUniqueName(nodeNamePrefix + "_Constraint");
 		// create constraint for the term
-		BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(idName, boolTypeTerm,
+		BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(binaryConstraintName,
+				boolTypeTerm,
 				constantTerm, BinaryTermConstraintOp.fromName("ATOM_EQ"));
 		constraints.add(binaryTermConstraintDef);
 		// create constraint for reference
-		Constraint varConstraint = new Constraint(idName);
+		Constraint varConstraint = new Constraint(binaryConstraintName);
 		// add to compIdTermMap map
 		compExprConstraintMap.put(e.toString(), varConstraint);
 
