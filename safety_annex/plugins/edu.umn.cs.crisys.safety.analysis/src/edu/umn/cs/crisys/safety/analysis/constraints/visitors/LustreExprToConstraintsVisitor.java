@@ -612,6 +612,10 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				return createArithmeticTermforTwoInts(opName, originalExpr, constraints, leftConstraintList,
 						rightConstraintList, leftTerm, rightTerm, leftTermDef, rightTermDef);
 			}
+			else if ((leftTermDef instanceof VariableTermDef) && (rightTermDef instanceof VariableTermDef)) {
+				return createArithmeticTermForTwoVars(opName, originalExpr, constraints, leftConstraintList,
+						rightConstraintList, leftTerm, rightTerm, leftTermDef, rightTermDef);
+			}
 			// else if one is an Int Constant Term, one is a Variable Term
 			// create an arithmetic term and return
 			else if (((leftTermDef instanceof IntConstantTermDef) && (rightTermDef instanceof VariableTermDef))
@@ -697,6 +701,29 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			}
 		} else {
 			// not supporting DIVIDE operator
+			throw new SafetyException("Expr not supported " + originalExpr.toString());
+		}
+
+		return storeArithmeticTermTwoConstraintLists(originalExpr, constraints, leftConstraintList, rightConstraintList,
+				termIntegerMapDef);
+	}
+
+	private ConstraintListCombo createArithmeticTermForTwoVars(String opName, Expr originalExpr,
+			List<MistralConstraint> constraints, List<MistralConstraint> leftConstraintList,
+			List<MistralConstraint> rightConstraintList, Term leftTerm, Term rightTerm, TermDef leftTermDef,
+			TermDef rightTermDef) {
+		String termIntegerMapDefName = createValidAndUniqueName(nodeNamePrefix + "_TermIntegerMap");
+
+		TermIntegerMapDef termIntegerMapDef = new TermIntegerMapDef(termIntegerMapDefName);
+		if (opName.equals("PLUS") || opName.equals("MINUS")) {
+			termIntegerMapDef.addEntry(leftTerm, 1);
+			if (opName.equals("PLUS")) {
+				termIntegerMapDef.addEntry(rightTerm, 1);
+			} else {
+				termIntegerMapDef.addEntry(rightTerm, -1);
+			}
+		} else {
+			// not supporting MULTIPLE or DIVIDE operator between two vars
 			throw new SafetyException("Expr not supported " + originalExpr.toString());
 		}
 
