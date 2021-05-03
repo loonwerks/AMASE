@@ -18,6 +18,7 @@ import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContr
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintComment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintListCombo;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
@@ -69,6 +70,10 @@ public class ModelToConstraintsGenerator {
 			updateNodeIdTypeMap(topLustreNode);
 			// Step 1: negate the top level guarantee expression and create constraints
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
+			// add topLevelEvent to comment
+			ConstraintComment comment = new ConstraintComment(topLevelEvent.toString());
+			constraints.add(comment);
+			// translate topLevelEvent to constraint
 			ConstraintListCombo topGuaranteeReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
 			constraints.addAll(topGuaranteeReturnCombo.constraintList);
 			// create constraint def for TLE
@@ -90,7 +95,12 @@ public class ModelToConstraintsGenerator {
 				if (assertion instanceof AgreeStatement) {
 					if (assertion.reference instanceof AssignStatementImpl) {
 						if (assertion.expr instanceof BinaryExpr) {
+							// get current assertion
 							BinaryExpr curExpr = (BinaryExpr) assertion.expr;
+							// add assertion to comment
+							comment = new ConstraintComment(curExpr.toString());
+							constraints.add(comment);
+							// translate to constraint
 							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
 							constraints.addAll(topEqReturnCombo.constraintList);
 						}
@@ -128,6 +138,11 @@ public class ModelToConstraintsGenerator {
 						for (Equation equation : updatedLustreNode.equations) {
 							Expr leftExpr = equation.lhs.get(0);
 							Expr rightExpr = equation.expr;
+							// add expression from equation to comment
+							BinaryExpr assignExpr = new BinaryExpr(rightExpr.location, leftExpr, BinaryOp.EQUAL,
+									rightExpr);
+							comment = new ConstraintComment(assignExpr.toString());
+							constraints.add(comment);
 							// check if it's an assert, store the constraint generated from the rightExpr to save to the top level constraint
 							// and no need to translate the leftExpr
 							if (equation.lhs.get(0).id.contains("__ASSERT")) {
@@ -172,6 +187,13 @@ public class ModelToConstraintsGenerator {
 						// go through all equation expr in the lustre node and translate to constraints
 						for (Equation equation : curLustreNode.equations) {
 							Expr srcExpr = equation.expr;
+							// add equation to comment
+							BinaryExpr assignExpr = new BinaryExpr(srcExpr.location, equation.lhs.get(0),
+									BinaryOp.EQUAL, srcExpr);
+							comment = new ConstraintComment(assignExpr.toString());
+							constraints.add(comment);
+
+							// translate expr to constraint
 							ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
 							constraints.addAll(nodeReturnCombo.constraintList);
 							// check if it's a guarantee, if yes, store the constraint generated to save to the top level constraint
@@ -392,6 +414,12 @@ public class ModelToConstraintsGenerator {
 			String destIdName = connectionInstance.getDestination().getName();
 			// look up to get the term
 			Term destTerm = lustreExprToConstraintVisitor.getTermFromCompIdTermMap(destCompName, destIdName);
+
+			// add connection to comment
+			ConstraintComment comment = new ConstraintComment(
+					srcCompName + "." + srcIdName + " -> " + destCompName + "." + destIdName);
+			constraints.add(comment);
+
 			// if src or dest term is null, don't add it
 			if ((srcTerm != null) && (destTerm != null)) {
 				// add connectivitiy(dest) = source

@@ -4,6 +4,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ArithmeticTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintComment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
@@ -47,5 +48,7 @@ public interface ConstraintAstVisitor<T> {
 	public T visit(ConstraintUnaryExpr unaryExpr);
 
 	public T visit(SingleConstraintExpr singleExpr);
+
+	public T visit(ConstraintComment comment);
 
 }
