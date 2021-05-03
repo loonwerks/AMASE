@@ -6,6 +6,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ArithmeticTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintComment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
@@ -109,9 +110,10 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 	@Override
 	public Void visit(ExprConstraintDef exprConstraintDef) {
 		write("Constraint " + exprConstraintDef.constraintId + " = ");
-		write("(");
+		// write("(");
 		visit(exprConstraintDef.expr);
-		writeln(");");
+		// writeln(");");
+		writeln(";");
 		return null;
 	}
 
@@ -123,11 +125,11 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 
 	@Override
 	public Void visit(ConstraintBinaryExpr binaryExpr) {
-		write("(");
+		// write("(");
 		visit(binaryExpr.left);
 		write(" " + binaryExpr.op.toString() + " ");
 		visit(binaryExpr.right);
-		write(")");
+		// write(")");
 		return null;
 	}
 
@@ -184,6 +186,13 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 			visit(entry.getKey());
 			writeln("] = " + entry.getValue() + ";");
 		}
+		return null;
+	}
+
+	@Override
+	public Void visit(ConstraintComment comment) {
+		writeln("/* Translation for */");
+		writeln("/*" + comment.codeStr + "*/");
 		return null;
 	}
 }
