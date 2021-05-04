@@ -1,7 +1,7 @@
 package edu.umn.cs.crisys.safety.analysis.constraints.ast.expr;
 
 public enum ConstraintBinaryOp {
-	EQUAL("=="), NOTEQUAL("!="), OR("|"), AND("&");
+	OR("|"), AND("&");
 
 	private String str;
 

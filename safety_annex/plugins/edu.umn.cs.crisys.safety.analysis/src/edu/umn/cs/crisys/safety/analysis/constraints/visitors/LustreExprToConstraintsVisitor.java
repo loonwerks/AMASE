@@ -530,6 +530,72 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		}
 	}
 
+	private ConstraintListCombo createBinaryEqualityConstraint(String opName, Expr originalExpr, Expr left, Expr right,
+			List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
+			ConstraintListCombo rightReturnCombo) {
+		// For expressions connected by logical operators (!=, ==),
+		MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
+		MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
+
+		// if both return a constraint, create a constraint that combines the two and return
+		if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
+			List<MistralConstraint> leftConstraintList = leftReturnCombo.constraintList;
+			List<MistralConstraint> rightConstraintList = rightReturnCombo.constraintList;
+
+			String binaryConstraintName = createValidAndUniqueName(nodeNamePrefix + "_Constraint");
+
+			SingleConstraintExpr leftConstraintExpr = new SingleConstraintExpr((Constraint) leftConstraint);
+			SingleConstraintExpr rightConstraintExpr = new SingleConstraintExpr((Constraint) rightConstraint);
+
+			ConstraintUnaryExpr notLeftConstraintExpr = new ConstraintUnaryExpr(ConstraintUnaryOp.fromName("NOT"),
+					leftConstraintExpr);
+			ConstraintUnaryExpr notRightConstraintExpr = new ConstraintUnaryExpr(ConstraintUnaryOp.fromName("NOT"),
+					rightConstraintExpr);
+
+			ConstraintBinaryExpr binaryConstraintExpr = null;
+			// for a == b where a and b are both constraints, translate to
+			// (a => b) and (b => a), which is the same as (!a or b) and (a or !b)
+			if (opName.equals("EQUAL")) {
+				ConstraintBinaryExpr newLeftConstraintExpr = new ConstraintBinaryExpr(notLeftConstraintExpr,
+						ConstraintBinaryOp.fromName("OR"), rightConstraintExpr);
+				ConstraintBinaryExpr newRightConstraintExpr = new ConstraintBinaryExpr(leftConstraintExpr,
+						ConstraintBinaryOp.fromName("OR"), notRightConstraintExpr);
+				binaryConstraintExpr = new ConstraintBinaryExpr(newLeftConstraintExpr,
+						ConstraintBinaryOp.fromName("AND"), newRightConstraintExpr);
+			}
+			// for a != b where a and b are both constraints, translate to
+			// !(a=>b) or !(b => a), which is the same as (a and !b) or (!a and b)
+			else if (opName.equals("NOTEQUAL")) {
+				ConstraintBinaryExpr newLeftConstraintExpr = new ConstraintBinaryExpr(leftConstraintExpr,
+						ConstraintBinaryOp.fromName("AND"), notRightConstraintExpr);
+				ConstraintBinaryExpr newRightConstraintExpr = new ConstraintBinaryExpr(notLeftConstraintExpr,
+						ConstraintBinaryOp.fromName("AND"), rightConstraintExpr);
+				binaryConstraintExpr = new ConstraintBinaryExpr(newLeftConstraintExpr,
+						ConstraintBinaryOp.fromName("OR"), newRightConstraintExpr);
+			} else {
+				// not supported
+				throw new SafetyException("Expr not supported " + originalExpr.toString());
+			}
+
+			// create constraint def
+			ExprConstraintDef exprConstraintDef = new ExprConstraintDef(binaryConstraintName, binaryConstraintExpr);
+			constraints.addAll(leftConstraintList);
+			constraints.addAll(rightConstraintList);
+			constraints.add(exprConstraintDef);
+			// create constraint for reference
+			Constraint binaryConstraint = new Constraint(binaryConstraintName);
+			// add to compExprConstraint map
+			compExprConstraintMap.put(originalExpr.toString(), binaryConstraint);
+			ConstraintListCombo combo = new ConstraintListCombo(binaryConstraint, constraints);
+			return combo;
+		}
+		// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
+		else {
+			// not supported
+			throw new SafetyException("Expr not supported " + originalExpr.toString());
+		}
+	}
+
 	private ConstraintListCombo createBinaryTermComparisonConstraint(String opName, Expr originalExpr, Expr left,
 			Expr right, List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
 			ConstraintListCombo rightReturnCombo) {
@@ -577,7 +643,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			return createBinaryTermComparisonConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
 					rightReturnCombo);
 		} else if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
-			return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
+			return createBinaryEqualityConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
 					rightReturnCombo);
 		}
 		// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)

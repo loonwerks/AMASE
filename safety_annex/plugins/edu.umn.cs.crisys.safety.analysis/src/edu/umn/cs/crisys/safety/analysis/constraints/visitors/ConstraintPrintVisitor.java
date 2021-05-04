@@ -125,11 +125,11 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 
 	@Override
 	public Void visit(ConstraintBinaryExpr binaryExpr) {
-		// write("(");
+		write("(");
 		visit(binaryExpr.left);
 		write(" " + binaryExpr.op.toString() + " ");
 		visit(binaryExpr.right);
-		// write(")");
+		write(")");
 		return null;
 	}
 
