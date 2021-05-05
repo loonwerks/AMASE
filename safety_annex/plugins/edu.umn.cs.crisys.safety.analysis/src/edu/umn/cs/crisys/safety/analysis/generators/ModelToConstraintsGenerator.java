@@ -143,9 +143,11 @@ public class ModelToConstraintsGenerator {
 									rightExpr);
 							comment = new ConstraintComment(assignExpr.toString());
 							constraints.add(comment);
-							// check if it's an assert, store the constraint generated from the rightExpr to save to the top level constraint
+							// check if it's an assert or guarantee
+							// if yes, store the constraint generated from the rightExpr to save to the top level constraint
 							// and no need to translate the leftExpr
-							if (equation.lhs.get(0).id.contains("__ASSERT")) {
+							if (equation.lhs.get(0).id.contains("__ASSERT")
+									|| equation.lhs.get(0).id.contains("__GUARANTEE")) {
 								ConstraintListCombo rightReturnCombo = lustreExprToConstraintVisitor.visit(rightExpr);
 								constraints.addAll(rightReturnCombo.constraintList);
 
@@ -158,8 +160,16 @@ public class ModelToConstraintsGenerator {
 								} else {
 									throw new SafetyException("No constraint created for " + equation.toString());
 								}
-							} else {
-								createAssignExpr(leftExpr, rightExpr);
+							}
+							// else create assign expression and create constraint out of it
+							// and add to component top level constraint
+							else {
+								MistralConstraint nodeLastConstraint = createAssignExpr(leftExpr, rightExpr);
+								if (nodeLastConstraint instanceof Constraint) {
+									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
+								} else {
+									throw new SafetyException("No constraint created for " + equation.toString());
+								}
 							}
 						}
 						constraints.add(nodeTopConstraintDef);
@@ -196,7 +206,7 @@ public class ModelToConstraintsGenerator {
 							// translate expr to constraint
 							ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
 							constraints.addAll(nodeReturnCombo.constraintList);
-							// check if it's a guarantee, if yes, store the constraint generated to save to the top level constraint
+							// check if it's a guarantee, if yes, store the constraint generated to save to the component top level constraint
 							if (equation.lhs.get(0).id.contains("__GUARANTEE")) {
 								// get the last constraint created
 								// if the last construct is a constraint, proceed
@@ -234,10 +244,11 @@ public class ModelToConstraintsGenerator {
 
 	}
 
-	private void createAssignExpr(Expr leftExpr, Expr rightExpr) {
+	private MistralConstraint createAssignExpr(Expr leftExpr, Expr rightExpr) {
 		BinaryExpr assignExpr = new BinaryExpr(rightExpr.location, leftExpr, BinaryOp.EQUAL, rightExpr);
 		ConstraintListCombo returnCombo = lustreExprToConstraintVisitor.visit(assignExpr);
 		constraints.addAll(returnCombo.constraintList);
+		return returnCombo.lastConstraint;
 	}
 
 	private Boolean isTopNode(AgreeNode agreeNode) {

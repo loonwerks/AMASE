@@ -137,6 +137,14 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				return createBinaryLogicalConstraint(opName, e, e.left, e.right, constraints, leftReturnCombo,
 						rightReturnCombo);
 			} else if (opName.equals("IMPLIES")) {
+				// first check if the left expression contains __ASSUME__HIST
+				// if yes, return true constraint
+				if (e.left instanceof IdExpr) {
+					if (((IdExpr) e.left).id.contains("__ASSUME__HIST")) {
+						return visit(new BoolExpr(true));
+					}
+				}
+				// else
 				// (a => b) <=> (not a or b)
 				Expr newLeft = negateExprVisitor.visit(e.left);
 				ConstraintListCombo leftReturnCombo = visit(newLeft);
