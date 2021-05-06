@@ -6,12 +6,14 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ArithmeticTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintAssignment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintComment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermAssignment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermIntegerMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermTermMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
@@ -193,6 +195,27 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 	public Void visit(ConstraintComment comment) {
 		writeln("/* Translation for */");
 		writeln("/*" + comment.codeStr + "*/");
+		return null;
+	}
+
+	@Override
+	public Void visit(ConstraintAssignment constraintAssignment) {
+		write("Constraint ");
+		visit(constraintAssignment.leftConstraint);
+		write(" = ");
+		visit(constraintAssignment.rightConstraint);
+		writeln(";");
+		return null;
+	}
+
+	@Override
+	public Void visit(TermAssignment termAssignment) {
+		// Term* C2___fault__nominal__out2_term = Constant_3_term;
+		write("Term* ");
+		visit(termAssignment.leftTerm);
+		write(" = ");
+		visit(termAssignment.rightTerm);
+		writeln(";");
 		return null;
 	}
 }
