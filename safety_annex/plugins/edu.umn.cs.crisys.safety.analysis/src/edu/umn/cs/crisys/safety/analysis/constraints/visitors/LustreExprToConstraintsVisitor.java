@@ -1079,12 +1079,11 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// if Boolean type, create a variable term out of it and return the term
 	// and a constraint out of it and return the constraint
 	private ConstraintListCombo createVarTermFromBoolTypeIdVarWithDef(IdExpr e, List<MistralConstraint> constraints) {
-		Term boolTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
-		String idName = null;
+		String idName = nodeNamePrefix + "_" + e.id;
+		Term boolTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, idName));
 		if (boolTypeTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
-			idName = e.id;
-			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
+			String termName = createValidAndUniqueName(idName + "_term");
 			// create term def
 			VariableTermDef varTermDef = new VariableTermDef(termName, idName);
 			constraints.add(varTermDef);
@@ -1093,6 +1092,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			// add to compTermDefMap
 			compTermDefMap.put(boolTypeTerm, varTermDef);
 			// add to compIdTermMap
+			// use the original id to add to the map
 			compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), boolTypeTerm);
 		} else {
 			TermDef termDef = compTermDefMap.get(boolTypeTerm);
@@ -1138,11 +1138,11 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	// if Integer type, create a variable term out of it and return the term
 	private ConstraintListCombo createVarTermfromIntTypeIdExprWithDef(IdExpr e, List<MistralConstraint> constraints) {
-		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
+		String idName = nodeNamePrefix + "_" + e.id;
+		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, idName));
 		if (intTypeTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
-			String idName = e.id;
-			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
+			String termName = createValidAndUniqueName(idName + "_term");
 			// create term def
 			VariableTermDef varTermDef = new VariableTermDef(termName, idName);
 			constraints.add(varTermDef);
@@ -1150,7 +1150,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			intTypeTerm = new Term(termName);
 			// add to compTermDefMap
 			compTermDefMap.put(intTypeTerm, varTermDef);
-			// add to compIdTermMap
+			// use the original id to add to compIdTermMap
 			compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), intTypeTerm);
 			// add to compExprConstraint map
 			compExprConstraintMap.put(e.toString(), intTypeTerm);
@@ -1162,20 +1162,22 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// if Integer type, create a term reference without definition as it will be used in term assignment
 	private ConstraintListCombo createVarTermfromIntTypeIdExprWithoutDef(IdExpr e,
 			List<MistralConstraint> constraints) {
-		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
+		String idName = nodeNamePrefix + "_" + e.id;
+		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, idName));
 		if (intTypeTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
-			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
+			String termName = createValidAndUniqueName(idName + "_term");
 			// create term for reference
 			intTypeTerm = new Term(termName);
 			// add to compIdTermMap
+			// use the original id to add to the map
 			compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), intTypeTerm);
 			// add to compExprConstraint map
 			compExprConstraintMap.put(e.toString(), intTypeTerm);
 		} else {
 			// if it's already defined, then it's being reassigned
 			// throw an exception
-			throw new SafetyException(e.id + " being reassigned");
+			throw new SafetyException(idName + " being reassigned");
 		}
 		ConstraintListCombo combo = new ConstraintListCombo(intTypeTerm, constraints);
 		return combo;

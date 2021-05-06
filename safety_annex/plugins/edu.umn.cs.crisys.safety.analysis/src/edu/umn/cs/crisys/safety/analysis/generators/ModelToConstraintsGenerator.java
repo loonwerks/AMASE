@@ -13,7 +13,6 @@ import com.rockwellcollins.atc.agree.agree.impl.AssignStatementImpl;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContract;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
@@ -285,31 +284,7 @@ public class ModelToConstraintsGenerator {
 		lustreExprToConstraintVisitor.clearCompExprConstraintMap();
 		// clear component term def map
 		lustreExprToConstraintVisitor.clearCompTermDefMap();
-		// clear component id type map
-		// lustreExprToConstraintVisitor.clearCompIdTypeMap();
-		// populate node component id type map
-		// updateNodeIdTypeMap(agreeNode);
 	}
-
-//	private void updateNodeIdTypeMap(AgreeNode agreeNode) {
-//		// go through all input ids and load the id and type to map
-//		Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
-//		// go through all ids and load the id and type to map
-//		for (VarDecl varDecl : curLustreNode.inputs) {
-//			if (varDecl instanceof AgreeVar) {
-//				// exclude fault ids for now
-//				// TODO: revisit this
-//				if (((AgreeVar) varDecl).reference != null) {
-//					if ((((AgreeVar) varDecl).reference instanceof FaultStatementImpl)) {
-//						continue;
-//					}
-//				}
-//				String id = ((AgreeVar) varDecl).id;
-//				Type type = ((AgreeVar) varDecl).type;
-//				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
-//			}
-//		}
-//	}
 
 	private void updateNodeIdTypeMap(Node lustreNode) {
 		// go through all input and output ids and load the id and type to map
@@ -324,61 +299,6 @@ public class ModelToConstraintsGenerator {
 			Type type = varDecl.type;
 			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
 		}
-	}
-
-//	private void updateNodeIdTypeMap() {
-//		for (AgreeNode agreeNode : agreeProgram.agreeNodes) {
-//			// go through all input ids and load the id and type to map
-//			Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
-//			// go through all input and output ids and load the id and type to map
-//			for (VarDecl varDecl : curLustreNode.inputs) {
-//				if (varDecl instanceof AgreeVar) {
-//					addIdTypeToMap((AgreeVar) varDecl);
-//				}
-//			}
-//			// go through all eq var ids and load the id and type to map
-//			for (VarDecl varDecl : curLustreNode.locals) {
-//				if (varDecl instanceof AgreeVar) {
-//					addIdTypeToMap((AgreeVar) varDecl);
-//				}
-//			}
-//		}
-//		// TODO: need to make sure ids added to map has no duplicate
-//		// add input ids from agree nodes
-//		for (Node globalLustreNode : agreeProgram.globalLustreNodes) {
-//			// go through all input ids for each node and load the id and type to map
-//			for (VarDecl varDecl : globalLustreNode.inputs) {
-//				if (varDecl instanceof AgreeVar) {
-//					addIdTypeToMap((AgreeVar) varDecl);
-//				}
-//			}
-//			// go through all local ids for each node and load the id and type to map
-//			for (VarDecl varDecl : globalLustreNode.locals) {
-//				if (varDecl instanceof AgreeVar) {
-//					addIdTypeToMap((AgreeVar) varDecl);
-//				}
-//			}
-//		}
-//	}
-
-	private void addIdTypeToMap(AgreeVar agreeVar) {
-		String id = agreeVar.id;
-		Type type = agreeVar.type;
-//		if (agreeVar.reference != null) {
-//			// exclude fault ids for now
-//			// TODO: revisit this
-//			if (!(agreeVar.reference instanceof FaultStatementImpl)) {
-//				lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
-//			}
-//		}
-//		else {
-		lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
-//		}
-	}
-
-	private void addIdTypeToMap(VarDecl varDecl) {
-		Type type = varDecl.type;
-		lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(varDecl.id, type);
 	}
 
 	private boolean nodeWithFaultDefinitions(AgreeNode agreeNode) {
