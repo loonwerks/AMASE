@@ -64,7 +64,7 @@ public class ModelToConstraintsGenerator {
 		// update idType map
 		// generate FT for each top level guarantee
 		for (AgreeStatement topLevelGuarantee : agreeProgram.topNode.guarantees) {
-			resetVisitor(topAgreeNode.id, topAgreeNode);
+			resetVisitorPerNode(topAgreeNode.id);
 			Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
 			updateNodeIdTypeMap(topLustreNode);
 			// add comment for node name
@@ -75,8 +75,9 @@ public class ModelToConstraintsGenerator {
 			// add topLevelEvent to comment
 			comment = new ConstraintComment(topLevelEvent.toString());
 			constraints.add(comment);
+			// reset flags per equation
+			resetVisitorPerEquation();
 			// translate topLevelEvent to constraint
-			lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 			ConstraintListCombo topGuaranteeReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
 			constraints.addAll(topGuaranteeReturnCombo.constraintList);
 			// create constraint def for TLE
@@ -84,7 +85,7 @@ public class ModelToConstraintsGenerator {
 			// if the last construct is a constraint, proceed
 			// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
 			MistralConstraint tleLastConstraint = topGuaranteeReturnCombo.lastConstraint;
-			if (tleLastConstraint instanceof Constraint) {
+			if ((tleLastConstraint instanceof Constraint) && !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 				SingleConstraintExpr tleConstraintExpr = new SingleConstraintExpr((Constraint) tleLastConstraint);
 				ExprConstraintDef tleConstraintDef = new ExprConstraintDef("TLE", tleConstraintExpr);
 				constraints.add(tleConstraintDef);
@@ -103,8 +104,9 @@ public class ModelToConstraintsGenerator {
 							// add assertion to comment
 							comment = new ConstraintComment(curExpr.toString());
 							constraints.add(comment);
+							// reset flags per equation
+							resetVisitorPerEquation();
 							// translate to constraint
-							lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
 							constraints.addAll(topEqReturnCombo.constraintList);
 						}
@@ -130,7 +132,7 @@ public class ModelToConstraintsGenerator {
 						// get the lustre node
 						Node lustreNode = getOriginalLustreNode(agreeNodeName);
 						// reset visitor per component
-						resetVisitor(agreeNodeName, agreeNode);
+						resetVisitorPerNode(agreeNodeName);
 						// create top constraint def for this node
 						String nodeTopConstraintName = agreeNodeName + "_Guarantees";
 						TopConstraintDef nodeTopConstraintDef = new TopConstraintDef(nodeTopConstraintName);
@@ -155,7 +157,8 @@ public class ModelToConstraintsGenerator {
 							// and no need to translate the leftExpr
 							if (equation.lhs.get(0).id.contains("__ASSERT")
 									|| equation.lhs.get(0).id.contains("__GUARANTEE")) {
-								lustreExprToConstraintVisitor.setTranslateToAssignment(true);
+								// reset flags per equation
+								resetVisitorPerEquation();
 								ConstraintListCombo rightReturnCombo = lustreExprToConstraintVisitor.visit(rightExpr);
 								constraints.addAll(rightReturnCombo.constraintList);
 
@@ -163,7 +166,8 @@ public class ModelToConstraintsGenerator {
 								// if the last construct is a constraint, proceed
 								// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
 								MistralConstraint nodeLastConstraint = rightReturnCombo.lastConstraint;
-								if (nodeLastConstraint instanceof Constraint) {
+								if ((nodeLastConstraint instanceof Constraint)
+										&& !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
 								}
 //								else {
@@ -174,7 +178,8 @@ public class ModelToConstraintsGenerator {
 							// and add to component top level constraint
 							else {
 								MistralConstraint nodeLastConstraint = createAssignExpr(leftExpr, rightExpr);
-								if (nodeLastConstraint instanceof Constraint) {
+								if ((nodeLastConstraint instanceof Constraint)
+										&& !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
 								}
 //								else {
@@ -195,7 +200,7 @@ public class ModelToConstraintsGenerator {
 						comment = new ConstraintComment("component: " + agreeNodeName);
 						constraints.add(comment);
 						// reset visitor per component
-						resetVisitor(agreeNodeName, agreeNode);
+						resetVisitorPerNode(agreeNodeName);
 						// create top constraint def for this node
 						String nodeTopConstraintName = agreeNodeName + "_Guarantees";
 						TopConstraintDef nodeTopConstraintDef = new TopConstraintDef(nodeTopConstraintName);
@@ -215,8 +220,9 @@ public class ModelToConstraintsGenerator {
 							comment = new ConstraintComment(assignExpr.toString());
 							constraints.add(comment);
 
+							// reset flags per equation
+							resetVisitorPerEquation();
 							// translate expr to constraint
-							lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 							ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
 							constraints.addAll(nodeReturnCombo.constraintList);
 							// check if it's a guarantee, if yes, store the constraint generated to save to the component top level constraint
@@ -225,7 +231,8 @@ public class ModelToConstraintsGenerator {
 								// if the last construct is a constraint, proceed
 								// otherwise, thrown an exception as we need to return constraint for each AGREE guarantee
 								MistralConstraint nodeLastConstraint = nodeReturnCombo.lastConstraint;
-								if (nodeLastConstraint instanceof Constraint) {
+								if ((nodeLastConstraint instanceof Constraint)
+										&& !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
 								}
 //								else {
@@ -260,7 +267,8 @@ public class ModelToConstraintsGenerator {
 
 	private MistralConstraint createAssignExpr(Expr leftExpr, Expr rightExpr) {
 		BinaryExpr assignExpr = new BinaryExpr(rightExpr.location, leftExpr, BinaryOp.EQUAL, rightExpr);
-		lustreExprToConstraintVisitor.setTranslateToAssignment(true);
+		// reset flags per equation
+		resetVisitorPerEquation();
 		ConstraintListCombo returnCombo = lustreExprToConstraintVisitor.visit(assignExpr);
 		constraints.addAll(returnCombo.constraintList);
 		return returnCombo.lastConstraint;
@@ -283,7 +291,7 @@ public class ModelToConstraintsGenerator {
 		return null;
 	}
 
-	private void resetVisitor(String agreeNodeName, AgreeNode agreeNode) {
+	private void resetVisitorPerNode(String agreeNodeName) {
 		// set node name prefix for constraint naming
 		lustreExprToConstraintVisitor.setNodeNamePrefix(agreeNodeName);
 		// clear index for constraint naming
@@ -292,6 +300,13 @@ public class ModelToConstraintsGenerator {
 		lustreExprToConstraintVisitor.clearCompExprConstraintMap();
 		// clear component term def map
 		lustreExprToConstraintVisitor.clearCompTermDefMap();
+	}
+
+	private void resetVisitorPerEquation() {
+		// by default translate to assignment
+		lustreExprToConstraintVisitor.setTranslateToAssignment(true);
+		// by default not yet translated to assignment
+		lustreExprToConstraintVisitor.setAssignmentTranslated(false);
 	}
 
 	private void updateNodeIdTypeMap(Node lustreNode) {
