@@ -77,6 +77,9 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// by default translate to assignment unless it's overridden
 	private boolean translateToAssignment = true;
 
+	// indicate if translated to an assignment
+	private boolean assignmentTranslated = false;
+
 	public void resetNameIndex() {
 		nameIndex = 0;
 	}
@@ -133,6 +136,14 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	public void setTranslateToAssignment(boolean createAssignment) {
 		translateToAssignment = createAssignment;
+	}
+
+	public boolean getAssignmentTranslated() {
+		return assignmentTranslated;
+	}
+
+	public void setAssignmentTranslated(boolean translated) {
+		assignmentTranslated = translated;
 	}
 
 	@Override
@@ -530,6 +541,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			// use the leftConstraint as reference to return
 			// add to compExprConstraint map
 			compExprConstraintMap.put(originalExpr.toString(), leftConstraint);
+			// set assignmentTranslated true to indicate the constraint returned is a constraint reference for an assignment
+			assignmentTranslated = true;
 
 			ConstraintListCombo combo = new ConstraintListCombo(leftConstraint, constraints);
 			return combo;
@@ -624,6 +637,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			// use the leftConstraint as reference to return
 			// add to compExprConstraint map
 			compExprConstraintMap.put(originalExpr.toString(), leftConstraint);
+			// set assignmentTranslated true to indicate the term returned is a term reference for an assignment
+			assignmentTranslated = true;
 
 			ConstraintListCombo combo = new ConstraintListCombo(leftConstraint, constraints);
 			return combo;
