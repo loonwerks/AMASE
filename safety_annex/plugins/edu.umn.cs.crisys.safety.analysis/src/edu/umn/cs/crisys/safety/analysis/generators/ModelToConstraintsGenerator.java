@@ -67,10 +67,13 @@ public class ModelToConstraintsGenerator {
 			resetVisitor(topAgreeNode.id, topAgreeNode);
 			Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
 			updateNodeIdTypeMap(topLustreNode);
+			// add comment for node name
+			ConstraintComment comment = new ConstraintComment("component: " + topAgreeNode.id);
+			constraints.add(comment);
 			// Step 1: negate the top level guarantee expression and create constraints
 			UnaryExpr topLevelEvent = new UnaryExpr(UnaryOp.NOT, topLevelGuarantee.expr);
 			// add topLevelEvent to comment
-			ConstraintComment comment = new ConstraintComment(topLevelEvent.toString());
+			comment = new ConstraintComment(topLevelEvent.toString());
 			constraints.add(comment);
 			// translate topLevelEvent to constraint
 			lustreExprToConstraintVisitor.setTranslateToAssignment(true);
@@ -121,6 +124,9 @@ public class ModelToConstraintsGenerator {
 					if (nodeWithFaultDefinitions(agreeNode)) {
 						// get agreeNode name
 						String agreeNodeName = agreeNode.id;
+						// add comment for node name
+						comment = new ConstraintComment("component: " + agreeNodeName);
+						constraints.add(comment);
 						// get the lustre node
 						Node lustreNode = getOriginalLustreNode(agreeNodeName);
 						// reset visitor per component
@@ -186,6 +192,8 @@ public class ModelToConstraintsGenerator {
 					else {
 						// get agreeNode name
 						String agreeNodeName = agreeNode.id;
+						comment = new ConstraintComment("component: " + agreeNodeName);
+						constraints.add(comment);
 						// reset visitor per component
 						resetVisitor(agreeNodeName, agreeNode);
 						// create top constraint def for this node
