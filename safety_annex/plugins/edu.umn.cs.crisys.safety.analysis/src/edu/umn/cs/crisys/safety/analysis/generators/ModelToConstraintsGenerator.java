@@ -74,6 +74,7 @@ public class ModelToConstraintsGenerator {
 			ConstraintComment comment = new ConstraintComment(topLevelEvent.toString());
 			constraints.add(comment);
 			// translate topLevelEvent to constraint
+			lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 			ConstraintListCombo topGuaranteeReturnCombo = lustreExprToConstraintVisitor.visit(topLevelEvent);
 			constraints.addAll(topGuaranteeReturnCombo.constraintList);
 			// create constraint def for TLE
@@ -101,6 +102,7 @@ public class ModelToConstraintsGenerator {
 							comment = new ConstraintComment(curExpr.toString());
 							constraints.add(comment);
 							// translate to constraint
+							lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
 							constraints.addAll(topEqReturnCombo.constraintList);
 						}
@@ -148,6 +150,7 @@ public class ModelToConstraintsGenerator {
 							// and no need to translate the leftExpr
 							if (equation.lhs.get(0).id.contains("__ASSERT")
 									|| equation.lhs.get(0).id.contains("__GUARANTEE")) {
+								lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 								ConstraintListCombo rightReturnCombo = lustreExprToConstraintVisitor.visit(rightExpr);
 								constraints.addAll(rightReturnCombo.constraintList);
 
@@ -157,9 +160,10 @@ public class ModelToConstraintsGenerator {
 								MistralConstraint nodeLastConstraint = rightReturnCombo.lastConstraint;
 								if (nodeLastConstraint instanceof Constraint) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
-								} else {
-									throw new SafetyException("No constraint created for " + equation.toString());
 								}
+//								else {
+//									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
+//								}
 							}
 							// else create assign expression and create constraint out of it
 							// and add to component top level constraint
@@ -167,9 +171,10 @@ public class ModelToConstraintsGenerator {
 								MistralConstraint nodeLastConstraint = createAssignExpr(leftExpr, rightExpr);
 								if (nodeLastConstraint instanceof Constraint) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
-								} else {
-									throw new SafetyException("No constraint created for " + equation.toString());
 								}
+//								else {
+//									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
+//								}
 							}
 						}
 						constraints.add(nodeTopConstraintDef);
@@ -204,6 +209,7 @@ public class ModelToConstraintsGenerator {
 							constraints.add(comment);
 
 							// translate expr to constraint
+							lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 							ConstraintListCombo nodeReturnCombo = lustreExprToConstraintVisitor.visit(srcExpr);
 							constraints.addAll(nodeReturnCombo.constraintList);
 							// check if it's a guarantee, if yes, store the constraint generated to save to the component top level constraint
@@ -214,9 +220,10 @@ public class ModelToConstraintsGenerator {
 								MistralConstraint nodeLastConstraint = nodeReturnCombo.lastConstraint;
 								if (nodeLastConstraint instanceof Constraint) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
-								} else {
-									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
 								}
+//								else {
+//									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
+//								}
 							}
 						}
 
@@ -246,6 +253,7 @@ public class ModelToConstraintsGenerator {
 
 	private MistralConstraint createAssignExpr(Expr leftExpr, Expr rightExpr) {
 		BinaryExpr assignExpr = new BinaryExpr(rightExpr.location, leftExpr, BinaryOp.EQUAL, rightExpr);
+		lustreExprToConstraintVisitor.setTranslateToAssignment(true);
 		ConstraintListCombo returnCombo = lustreExprToConstraintVisitor.visit(assignExpr);
 		constraints.addAll(returnCombo.constraintList);
 		return returnCombo.lastConstraint;

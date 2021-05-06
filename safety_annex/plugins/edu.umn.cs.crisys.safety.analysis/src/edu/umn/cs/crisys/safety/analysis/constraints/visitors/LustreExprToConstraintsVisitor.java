@@ -14,11 +14,13 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintOp;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BooleanConstantConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.CompIdPair;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintAssignment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintListCombo;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermAssignment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermIntegerMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.VariableTermDef;
@@ -71,6 +73,10 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// store the constant and term map
 	private Map<Integer, Term> intTermMap = new HashMap<>();
 
+	// indicate if it's the translation to assignment or not
+	// by default translate to assignment unless it's overridden
+	private boolean translateToAssignment = true;
+
 	public void resetNameIndex() {
 		nameIndex = 0;
 	}
@@ -121,6 +127,14 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		return compIdTermMap.get(new CompIdPair(compName, idName));
 	}
 
+	public boolean getTranslateToAssignment() {
+		return translateToAssignment;
+	}
+
+	public void setTranslateToAssignment(boolean createAssignment) {
+		translateToAssignment = createAssignment;
+	}
+
 	@Override
 	public ConstraintListCombo visit(BinaryExpr e) {
 		List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
@@ -155,9 +169,10 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				// TODO: for now for arrow operator, only visit the left expression (initial value)
 				return visit(e.left);
 			} else if (opName.equals("NOTEQUAL")) {
-				return createBinaryTermOrConstraint(e, constraints, opName);
+				return createEqualityBinaryTermOrConstraint(e, constraints, opName);
 			} else if (opName.equals("EQUAL")) {
-				// check if the right expression is if-then-else
+				// EQUAL operator can mean equality or assignment, need to differentiate the two
+				// first check if the right expression is if-then-else
 				// if yes, translate to the following:
 				// left = (if a then b else c)
 				// <=>
@@ -174,13 +189,31 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 					BinaryExpr exprLeft = new BinaryExpr(e.location, negCondExpr, BinaryOp.OR, assignLeftToThenExpr);
 					BinaryExpr exprRight = new BinaryExpr(e.location, condExpr, BinaryOp.OR, assignLeftToElseExpr);
 					BinaryExpr newExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.AND, exprRight);
+					translateToAssignment = false;
 					return visit(newExpr);
 				}
-				// else, treat it the same way as the != operator expression
+				// else
 				else {
-					return createBinaryTermOrConstraint(e, constraints, opName);
-				}
+					// if not translate to assignment
+					if (!translateToAssignment) {
+						// treat it the same way as the != operator expression
+						// and create equality constraint expression
+						return createEqualityBinaryTermOrConstraint(e, constraints, opName);
+					} else {
+						// if left is an IdExpr and right is an IdExpr, or BoolExpr, or IntExpr, create assignment
+						if ((e.left instanceof IdExpr) && ((e.right instanceof IdExpr) || (e.right instanceof BoolExpr)
+								|| (e.right instanceof IntExpr))) {
+							// treat the EQUAL operator as an assignment
+							return createAssignmentBinaryTermOrConstraint(e, constraints, opName);
+						} else {
+							translateToAssignment = false;
+							// treat it the same way as the != operator expression
+							// and create equality constraint expression
+							return createEqualityBinaryTermOrConstraint(e, constraints, opName);
+						}
+					}
 
+				}
 			} else if (opName.equals("GREATER") || opName.equals("LESS") || opName.equals("GREATEREQUAL")
 					|| opName.equals("LESSEQUAL")) {
 				// visit the left and the right expression
@@ -350,68 +383,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	@Override
 	public ConstraintListCombo visit(IdExpr e) {
-		List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
-		// if expr already defined for within this node, just retrieve the constraint
-		if (compExprConstraintMap.containsKey(e.toString())) {
-			ConstraintListCombo combo = new ConstraintListCombo(compExprConstraintMap.get(e.toString()), constraints);
-			return combo;
-		}
-		// otherwise
-		// find the type of the id
-		// if Boolean type, create a variable term and a constraint out of it and return the constraint
-		// if Integer type, create a variable term out of it and return the term
-		// for other types, throw an exception (as we don't support other types yet)
-		else {
-			Type type = null;
-			// find the type of the id
-			if (idTypeMap.get(e.id) != null) {
-				type = idTypeMap.get(e.id);
-			} else {
-				// since lustre node translation does add component id in front of variable ids in the expression
-				// check if after stripping the prefix before the first "__" from the id
-				// see if it can be found in the map
-				int underscoreIndex = e.id.indexOf("__");
-				if (underscoreIndex != -1) {
-					String updatedId = e.id.substring(underscoreIndex + 2);
-					if (idTypeMap.get(updatedId) != null) {
-						type = idTypeMap.get(updatedId);
-					} else {
-						// also lustre node translation does add agree node name + "." to the id name
-						// check if after stripping the prefix before the first "." from the id
-						// see if it can be found in the map
-						int dotIndex = updatedId.indexOf(".");
-						if (dotIndex != -1) {
-							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
-							if (idTypeMap.get(furtherUpdatedId) != null) {
-								type = idTypeMap.get(furtherUpdatedId);
-							}
-						}
-					}
-				}
-			}
-			if (type == null) {
-				throw new SafetyException("Type not found for " + e.id);
-			}
-			if (type instanceof NamedType) {
-				NamedType namedType = (NamedType) type;
-				String typeName = namedType.name;
-				// if Boolean type, create a variable term and a constraint out of it and return the constraint
-				if (typeName.equals("bool")) {
-					return createVarTermFromBoolTypeIdVar(e, constraints);
-				}
-				// if Integer type, create a variable term out of it and return the term
-				else if (typeName.equals("int")) {
-					return createVarTermfromIntTypeIdExpr(e, constraints);
-				}
-				// for other types, throw an exception (as we don't support other types yet)
-				else {
-					throw new SafetyException(e.id + " type " + type.toString() + " not supported");
-				}
-
-			} else {
-				throw new SafetyException(e.id + " type " + type.toString() + " not supported");
-			}
-		}
+		// visit IdExpr and create def
+		return visitIdExpr(e, true);
 	}
 
 	@Override
@@ -538,6 +511,36 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		}
 	}
 
+	private ConstraintListCombo createConstraintAssignment(String opName, Expr originalExpr, Expr left, Expr right,
+			List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
+			ConstraintListCombo rightReturnCombo) {
+		MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
+		MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
+
+		// if both return a constraint, create a constraint assignment out of it and return
+		if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
+			List<MistralConstraint> leftConstraintList = leftReturnCombo.constraintList;
+			List<MistralConstraint> rightConstraintList = rightReturnCombo.constraintList;
+
+			ConstraintAssignment constraintAssignment = new ConstraintAssignment((Constraint) leftConstraint,
+					(Constraint) rightConstraint);
+			constraints.addAll(leftConstraintList);
+			constraints.addAll(rightConstraintList);
+			constraints.add(constraintAssignment);
+			// use the leftConstraint as reference to return
+			// add to compExprConstraint map
+			compExprConstraintMap.put(originalExpr.toString(), leftConstraint);
+
+			ConstraintListCombo combo = new ConstraintListCombo(leftConstraint, constraints);
+			return combo;
+		}
+		// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
+		else {
+			// not supported
+			throw new SafetyException("Expr not supported " + originalExpr.toString());
+		}
+	}
+
 	private ConstraintListCombo createBinaryEqualityConstraint(String opName, Expr originalExpr, Expr left, Expr right,
 			List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
 			ConstraintListCombo rightReturnCombo) {
@@ -604,6 +607,34 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		}
 	}
 
+	private ConstraintListCombo createTermAssignment(String opName, Expr originalExpr, Expr left, Expr right,
+			List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
+			ConstraintListCombo rightReturnCombo) {
+		MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
+		MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
+
+		// if both return a term, create a term assignment out of it and return
+		if ((leftConstraint instanceof Term) && (rightConstraint instanceof Term)) {
+			List<MistralConstraint> leftConstraintList = leftReturnCombo.constraintList;
+			List<MistralConstraint> rightConstraintList = rightReturnCombo.constraintList;
+			TermAssignment termAssignment = new TermAssignment((Term) leftConstraint, (Term) rightConstraint);
+			constraints.addAll(leftConstraintList);
+			constraints.addAll(rightConstraintList);
+			constraints.add(termAssignment);
+			// use the leftConstraint as reference to return
+			// add to compExprConstraint map
+			compExprConstraintMap.put(originalExpr.toString(), leftConstraint);
+
+			ConstraintListCombo combo = new ConstraintListCombo(leftConstraint, constraints);
+			return combo;
+		}
+		// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
+		else {
+			// not supported
+			throw new SafetyException("Expr not supported " + originalExpr.toString());
+		}
+	}
+
 	private ConstraintListCombo createBinaryTermComparisonConstraint(String opName, Expr originalExpr, Expr left,
 			Expr right, List<MistralConstraint> constraints, ConstraintListCombo leftReturnCombo,
 			ConstraintListCombo rightReturnCombo) {
@@ -640,7 +671,35 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		}
 	}
 
-	private ConstraintListCombo createBinaryTermOrConstraint(BinaryExpr e, List<MistralConstraint> constraints,
+	private ConstraintListCombo createAssignmentBinaryTermOrConstraint(BinaryExpr e,
+			List<MistralConstraint> constraints, String opName) {
+		// visit the right expression
+		ConstraintListCombo rightReturnCombo = visit(e.right);
+		MistralConstraint rightConstraint = rightReturnCombo.lastConstraint;
+		// visit the left Id expression
+		if (e.left instanceof IdExpr) {
+			// visit Id expression and don't create def
+			ConstraintListCombo leftReturnCombo = visitIdExpr((IdExpr) e.left, false);
+			MistralConstraint leftConstraint = leftReturnCombo.lastConstraint;
+			// assign right to left
+			if ((leftConstraint instanceof Term) && (rightConstraint instanceof Term)) {
+				return createTermAssignment(opName, e, e.left, e.right, constraints, leftReturnCombo, rightReturnCombo);
+			} else if ((leftConstraint instanceof Constraint) && (rightConstraint instanceof Constraint)) {
+				return createConstraintAssignment(opName, e, e.left, e.right, constraints, leftReturnCombo,
+						rightReturnCombo);
+			}
+			// otherwise throw an exception (as it means there it involves a boolean and non-boolean construct)
+			else {
+				// not supported
+				throw new SafetyException("Expr not supported " + e.toString());
+			}
+		} else {
+			// not supported
+			throw new SafetyException("Expr not supported " + e.toString());
+		}
+	}
+
+	private ConstraintListCombo createEqualityBinaryTermOrConstraint(BinaryExpr e, List<MistralConstraint> constraints,
 			String opName) {
 		// given a Boolean expression connected by comparison operators (==, !=)
 		ConstraintListCombo leftReturnCombo = visit(e.left);
@@ -685,8 +744,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			if ((leftTermDef instanceof IntConstantTermDef) && (rightTermDef instanceof IntConstantTermDef)) {
 				return createArithmeticTermforTwoInts(opName, originalExpr, constraints, leftConstraintList,
 						rightConstraintList, leftTerm, rightTerm, leftTermDef, rightTermDef);
-			}
-			else if ((leftTermDef instanceof VariableTermDef) && (rightTermDef instanceof VariableTermDef)) {
+			} else if ((leftTermDef instanceof VariableTermDef) && (rightTermDef instanceof VariableTermDef)) {
 				return createArithmeticTermForTwoVars(opName, originalExpr, constraints, leftConstraintList,
 						rightConstraintList, leftTerm, rightTerm, leftTermDef, rightTermDef);
 			}
@@ -1004,9 +1062,23 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		return combo;
 	}
 
+	// if Boolean type, create a constraint reference without definition as it'll be used in constraint assignment
+	private ConstraintListCombo createConstraintRefFromBoolTypeIdVarWithoutDef(IdExpr e,
+			List<MistralConstraint> constraints) {
+		// create constraint name
+		String binaryConstraintName = createValidAndUniqueName(nodeNamePrefix + "_Constraint");
+		// create constraint for reference
+		Constraint varConstraint = new Constraint(binaryConstraintName);
+		// add to compExprConstraintMap
+		compExprConstraintMap.put(e.toString(), varConstraint);
+
+		ConstraintListCombo combo = new ConstraintListCombo(varConstraint, constraints);
+		return combo;
+	}
+
 	// if Boolean type, create a variable term out of it and return the term
 	// and a constraint out of it and return the constraint
-	private ConstraintListCombo createVarTermFromBoolTypeIdVar(IdExpr e, List<MistralConstraint> constraints) {
+	private ConstraintListCombo createVarTermFromBoolTypeIdVarWithDef(IdExpr e, List<MistralConstraint> constraints) {
 		Term boolTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
 		String idName = null;
 		if (boolTypeTerm == null) {
@@ -1053,12 +1125,11 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		String binaryConstraintName = createValidAndUniqueName(nodeNamePrefix + "_Constraint");
 		// create constraint for the term
 		BinaryTermConstraintDef binaryTermConstraintDef = new BinaryTermConstraintDef(binaryConstraintName,
-				boolTypeTerm,
-				constantTerm, BinaryTermConstraintOp.fromName("ATOM_EQ"));
+				boolTypeTerm, constantTerm, BinaryTermConstraintOp.fromName("ATOM_EQ"));
 		constraints.add(binaryTermConstraintDef);
 		// create constraint for reference
 		Constraint varConstraint = new Constraint(binaryConstraintName);
-		// add to compIdTermMap map
+		// add to compExprConstraintMap
 		compExprConstraintMap.put(e.toString(), varConstraint);
 
 		ConstraintListCombo combo = new ConstraintListCombo(varConstraint, constraints);
@@ -1066,7 +1137,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	}
 
 	// if Integer type, create a variable term out of it and return the term
-	private ConstraintListCombo createVarTermfromIntTypeIdExpr(IdExpr e, List<MistralConstraint> constraints) {
+	private ConstraintListCombo createVarTermfromIntTypeIdExprWithDef(IdExpr e, List<MistralConstraint> constraints) {
 		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
 		if (intTypeTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
@@ -1086,6 +1157,101 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		}
 		ConstraintListCombo combo = new ConstraintListCombo(intTypeTerm, constraints);
 		return combo;
+	}
+
+	// if Integer type, create a term reference without definition as it will be used in term assignment
+	private ConstraintListCombo createVarTermfromIntTypeIdExprWithoutDef(IdExpr e,
+			List<MistralConstraint> constraints) {
+		Term intTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, e.id));
+		if (intTypeTerm == null) {
+			// create unique names with agree node name prefix if the name doesn't exist
+			String termName = createValidAndUniqueName(nodeNamePrefix + "_" + e.id + "_term");
+			// create term for reference
+			intTypeTerm = new Term(termName);
+			// add to compIdTermMap
+			compIdTermMap.put(new CompIdPair(nodeNamePrefix, e.id), intTypeTerm);
+			// add to compExprConstraint map
+			compExprConstraintMap.put(e.toString(), intTypeTerm);
+		} else {
+			// if it's already defined, then it's being reassigned
+			// throw an exception
+			throw new SafetyException(e.id + " being reassigned");
+		}
+		ConstraintListCombo combo = new ConstraintListCombo(intTypeTerm, constraints);
+		return combo;
+	}
+
+	private ConstraintListCombo visitIdExpr(IdExpr e, boolean createDef) {
+		List<MistralConstraint> constraints = new ArrayList<MistralConstraint>();
+		// if expr already defined for within this node, just retrieve the constraint
+		if (compExprConstraintMap.containsKey(e.toString())) {
+			ConstraintListCombo combo = new ConstraintListCombo(compExprConstraintMap.get(e.toString()), constraints);
+			return combo;
+		}
+		// otherwise
+		// find the type of the id
+		// if Boolean type, create a variable term and a constraint out of it and return the constraint
+		// if Integer type, create a variable term out of it and return the term
+		// for other types, throw an exception (as we don't support other types yet)
+		else {
+			Type type = null;
+			// find the type of the id
+			if (idTypeMap.get(e.id) != null) {
+				type = idTypeMap.get(e.id);
+			} else {
+				// since lustre node translation does add component id in front of variable ids in the expression
+				// check if after stripping the prefix before the first "__" from the id
+				// see if it can be found in the map
+				int underscoreIndex = e.id.indexOf("__");
+				if (underscoreIndex != -1) {
+					String updatedId = e.id.substring(underscoreIndex + 2);
+					if (idTypeMap.get(updatedId) != null) {
+						type = idTypeMap.get(updatedId);
+					} else {
+						// also lustre node translation does add agree node name + "." to the id name
+						// check if after stripping the prefix before the first "." from the id
+						// see if it can be found in the map
+						int dotIndex = updatedId.indexOf(".");
+						if (dotIndex != -1) {
+							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
+							if (idTypeMap.get(furtherUpdatedId) != null) {
+								type = idTypeMap.get(furtherUpdatedId);
+							}
+						}
+					}
+				}
+			}
+			if (type == null) {
+				throw new SafetyException("Type not found for " + e.id);
+			}
+			if (type instanceof NamedType) {
+				NamedType namedType = (NamedType) type;
+				String typeName = namedType.name;
+				// if Boolean type, create a variable term and a constraint out of it and return the constraint
+				if (typeName.equals("bool")) {
+					if (createDef) {
+						return createVarTermFromBoolTypeIdVarWithDef(e, constraints);
+					} else {
+						return createConstraintRefFromBoolTypeIdVarWithoutDef(e, constraints);
+					}
+				}
+				// if Integer type, create a variable term out of it and return the term
+				else if (typeName.equals("int")) {
+					if (createDef) {
+						return createVarTermfromIntTypeIdExprWithDef(e, constraints);
+					} else {
+						return createVarTermfromIntTypeIdExprWithoutDef(e, constraints);
+					}
+				}
+				// for other types, throw an exception (as we don't support other types yet)
+				else {
+					throw new SafetyException(e.id + " type " + type.toString() + " not supported");
+				}
+
+			} else {
+				throw new SafetyException(e.id + " type " + type.toString() + " not supported");
+			}
+		}
 	}
 
 }
