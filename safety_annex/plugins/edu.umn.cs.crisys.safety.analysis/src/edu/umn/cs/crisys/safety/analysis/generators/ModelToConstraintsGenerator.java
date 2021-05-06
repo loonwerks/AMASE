@@ -87,6 +87,10 @@ public class ModelToConstraintsGenerator {
 			MistralConstraint tleLastConstraint = topGuaranteeReturnCombo.lastConstraint;
 			if ((tleLastConstraint instanceof Constraint) && !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 				SingleConstraintExpr tleConstraintExpr = new SingleConstraintExpr((Constraint) tleLastConstraint);
+				// add comment for TLE
+				comment = new ConstraintComment("TLE constraint");
+				constraints.add(comment);
+				// add TLE constraint
 				ExprConstraintDef tleConstraintDef = new ExprConstraintDef("TLE", tleConstraintExpr);
 				constraints.add(tleConstraintDef);
 
@@ -170,9 +174,6 @@ public class ModelToConstraintsGenerator {
 										&& !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
 								}
-//								else {
-//									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
-//								}
 							}
 							// else create assign expression and create constraint out of it
 							// and add to component top level constraint
@@ -182,11 +183,13 @@ public class ModelToConstraintsGenerator {
 										&& !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
 								}
-//								else {
-//									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
-//								}
 							}
 						}
+						// add comment for nodeTopConstraint
+						comment = new ConstraintComment(
+								"component top level constraint for component " + agreeNode.id);
+						constraints.add(comment);
+						// add component top level constraint def
 						constraints.add(nodeTopConstraintDef);
 						// create constraint for reference
 						Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
@@ -235,12 +238,14 @@ public class ModelToConstraintsGenerator {
 										&& !lustreExprToConstraintVisitor.getAssignmentTranslated()) {
 									nodeTopConstraintDef.addConstraint((Constraint) nodeLastConstraint);
 								}
-//								else {
-//									throw new SafetyException("No constraint created for " + topLevelEvent.toString());
-//								}
 							}
 						}
 
+						// add comment for nodeTopConstraint
+						comment = new ConstraintComment(
+								"component top level constraint for component " + agreeNode.id);
+						constraints.add(comment);
+						// add component top level constraint def
 						constraints.add(nodeTopConstraintDef);
 						// create constraint for reference
 						Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
@@ -258,6 +263,9 @@ public class ModelToConstraintsGenerator {
 
 			addConnections(termTermMapDef);
 			constraints.add(termTermMapDef);
+			// add comment for overall constraint
+			comment = new ConstraintComment("overall top level constraint");
+			constraints.add(comment);
 			// Add overall constraint def
 			constraints.add(topConstraintDef);
 		}
