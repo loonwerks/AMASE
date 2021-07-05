@@ -10,6 +10,7 @@ import org.osate.aadl2.instance.impl.ComponentInstanceImpl;
 import org.osate.aadl2.instance.impl.SystemInstanceImpl;
 
 import com.rockwellcollins.atc.agree.agree.impl.AssignStatementImpl;
+import com.rockwellcollins.atc.agree.agree.impl.EqStatementImpl;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
@@ -62,11 +63,17 @@ public class ModelToConstraintsGenerator {
 
 	public List<MistralConstraint> generateConstraints() {
 		// update idType map
-		// generate FT for each top level guarantee
-		for (AgreeStatement topLevelGuarantee : agreeProgram.topNode.guarantees) {
+		// generate FT for each top level guarantee and lemma
+		List<AgreeStatement> topLevelProperties = new ArrayList<AgreeStatement>();
+		topLevelProperties.addAll(agreeProgram.topNode.guarantees);
+		topLevelProperties.addAll(agreeProgram.topNode.lemmas);
+
+
+		for (AgreeStatement topLevelGuarantee : topLevelProperties) {
 			resetVisitorPerNode(topAgreeNode.id);
 			Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
-			updateNodeIdTypeMap(topLustreNode);
+			// add inputs and locals to compIdTypeMap
+			updateNodeIdTypeMap(topAgreeNode.id, topLustreNode);
 			// add comment for node name
 			ConstraintComment comment = new ConstraintComment("component: " + topAgreeNode.id);
 			constraints.add(comment);
@@ -98,26 +105,6 @@ public class ModelToConstraintsGenerator {
 				throw new SafetyException("No constraint created for " + topLevelEvent.toString());
 			}
 
-			// translate all eq variables created for the top node
-			for (AgreeStatement assertion : topAgreeNode.assertions) {
-				if (assertion instanceof AgreeStatement) {
-					if (assertion.reference instanceof AssignStatementImpl) {
-						if (assertion.expr instanceof BinaryExpr) {
-							// get current assertion
-							BinaryExpr curExpr = (BinaryExpr) assertion.expr;
-							// add assertion to comment
-							comment = new ConstraintComment(curExpr.toString());
-							constraints.add(comment);
-							// reset flags per equation
-							resetVisitorPerEquation();
-							// translate to constraint
-							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
-							constraints.addAll(topEqReturnCombo.constraintList);
-						}
-					}
-				}
-			}
-
 			// overall top constraint def
 			TopConstraintDef topConstraintDef = new TopConstraintDef("all_guarantees");
 
@@ -144,8 +131,8 @@ public class ModelToConstraintsGenerator {
 						// for each node, inline node calls and flatten pre of the lustre node that contains the fault definitions
 						Node updatedLustreNode = SafetyUtil.inlineNodeCallsFlattenPres(lustreNode, lustreProgram);
 
-						// add inputs and locals to idTypeMap
-						updateNodeIdTypeMap(updatedLustreNode);
+						// add inputs and locals to compIdTypeMap
+						updateNodeIdTypeMap(agreeNodeName, updatedLustreNode);
 
 						// translate the equations
 						for (Equation equation : updatedLustreNode.equations) {
@@ -213,7 +200,7 @@ public class ModelToConstraintsGenerator {
 						Node curLustreNode = AgreeNodeToLustreContract.translate(agreeNode, agreeProgram);
 
 						// add inputs and locals to idTypeMap
-						updateNodeIdTypeMap(curLustreNode);
+						updateNodeIdTypeMap(agreeNodeName, curLustreNode);
 						// go through all equation expr in the lustre node and translate to constraints
 						for (Equation equation : curLustreNode.equations) {
 							Expr srcExpr = equation.expr;
@@ -251,6 +238,28 @@ public class ModelToConstraintsGenerator {
 						Constraint nodeTopConstraint = new Constraint(nodeTopConstraintName);
 						// add node top constraint to overall top constraint def
 						topConstraintDef.addConstraint(nodeTopConstraint);
+					}
+				}
+			}
+
+			// translate all eq variables created for the top node
+			// Note: do this after translating all subnodes as the top node eq may reference subnode variables
+			for (AgreeStatement assertion : topAgreeNode.assertions) {
+				if (assertion instanceof AgreeStatement) {
+					if ((assertion.reference instanceof AssignStatementImpl)
+							|| (assertion.reference instanceof EqStatementImpl)) {
+						if (assertion.expr instanceof BinaryExpr) {
+							// get current assertion
+							BinaryExpr curExpr = (BinaryExpr) assertion.expr;
+							// add assertion to comment
+							comment = new ConstraintComment(curExpr.toString());
+							constraints.add(comment);
+							// reset flags per equation
+							resetVisitorPerEquation();
+							// translate to constraint
+							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
+							constraints.addAll(topEqReturnCombo.constraintList);
+						}
 					}
 				}
 			}
@@ -317,18 +326,18 @@ public class ModelToConstraintsGenerator {
 		lustreExprToConstraintVisitor.setAssignmentTranslated(false);
 	}
 
-	private void updateNodeIdTypeMap(Node lustreNode) {
+	private void updateNodeIdTypeMap(String agreeNodeName, Node lustreNode) {
 		// go through all input and output ids and load the id and type to map
 		for (VarDecl varDecl : lustreNode.inputs) {
 			String id = varDecl.id;
 			Type type = varDecl.type;
-			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(agreeNodeName, id, type);
 		}
 		// go through all eq var ids and load the id and type to map
 		for (VarDecl varDecl : lustreNode.locals) {
 			String id = varDecl.id;
 			Type type = varDecl.type;
-			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(id, type);
+			lustreExprToConstraintVisitor.addEntryToCompIdTypeMap(agreeNodeName, id, type);
 		}
 	}
 

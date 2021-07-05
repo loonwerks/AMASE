@@ -66,8 +66,9 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	private int nameIndex = 0;
 	// store all MistralConstraintNames created to help create unique names
 	private HashSet<String> constraintNames = new HashSet<>();
-	// store the id and type
-	private Map<String, Type> idTypeMap = new HashMap<>();
+	// store the component id and type
+//	private Map<String, Type> idTypeMap = new HashMap<>();
+	private Map<CompIdPair, Type> compIdTypeMap = new HashMap<>();
 	// store the component id and term map
 	private Map<CompIdPair, Term> compIdTermMap = new HashMap<>();
 	// store the constant and term map
@@ -119,11 +120,15 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	}
 
 	public void clearCompIdTypeMap() {
-		this.idTypeMap.clear();
+		this.compIdTypeMap.clear();
 	}
 
-	public void addEntryToCompIdTypeMap(String id, Type type) {
-		idTypeMap.put(id, type);
+	public void addEntryToCompIdTypeMap(String compName, String idName, Type type) {
+		compIdTypeMap.put(new CompIdPair(compName, idName), type);
+	}
+
+	public Type getTypeFromCompIdTypeMap(String compName, String idName) {
+		return compIdTypeMap.get(new CompIdPair(compName, idName));
 	}
 
 	public Term getTermFromCompIdTermMap(String compName, String idName) {
@@ -211,9 +216,11 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 						// and create equality constraint expression
 						return createEqualityBinaryTermOrConstraint(e, constraints, opName);
 					} else {
-						// if left is an IdExpr and right is an IdExpr, or BoolExpr, or IntExpr, create assignment
-						if ((e.left instanceof IdExpr) && ((e.right instanceof IdExpr) || (e.right instanceof BoolExpr)
-								|| (e.right instanceof IntExpr))) {
+						System.out.println("yes");
+						if (e.left instanceof IdExpr) {
+//						// if left is an IdExpr and right is an IdExpr, or BoolExpr, or IntExpr, or BinaryExpr create assignment
+//						if ((e.left instanceof IdExpr) && ((e.right instanceof IdExpr) || (e.right instanceof BoolExpr)
+//								|| (e.right instanceof IntExpr))) {
 							// treat the EQUAL operator as an assignment
 							return createAssignmentBinaryTermOrConstraint(e, constraints, opName);
 						} else {
@@ -1213,31 +1220,34 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		else {
 			Type type = null;
 			// find the type of the id
-			if (idTypeMap.get(e.id) != null) {
-				type = idTypeMap.get(e.id);
-			} else {
-				// since lustre node translation does add component id in front of variable ids in the expression
-				// check if after stripping the prefix before the first "__" from the id
-				// see if it can be found in the map
-				int underscoreIndex = e.id.indexOf("__");
-				if (underscoreIndex != -1) {
-					String updatedId = e.id.substring(underscoreIndex + 2);
-					if (idTypeMap.get(updatedId) != null) {
-						type = idTypeMap.get(updatedId);
-					} else {
-						// also lustre node translation does add agree node name + "." to the id name
-						// check if after stripping the prefix before the first "." from the id
-						// see if it can be found in the map
-						int dotIndex = updatedId.indexOf(".");
-						if (dotIndex != -1) {
-							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
-							if (idTypeMap.get(furtherUpdatedId) != null) {
-								type = idTypeMap.get(furtherUpdatedId);
-							}
-						}
-					}
-				}
-			}
+			//if (idTypeMap.get(e.id) != null) {
+			type = getTypeFromCompIdTypeMap(nodeNamePrefix, e.id);
+			//if (getTypeFromCompIdTypeMap(nodeNamePrefix, e.id) != null){
+			//	type = idTypeMap.get(e.id);
+			//} else {
+//			if(type == null){
+//				// since lustre node translation does add component id in front of variable ids in the expression
+//				// check if after stripping the prefix before the first "__" from the id
+//				// see if it can be found in the map
+//				int underscoreIndex = e.id.indexOf("__");
+//				if (underscoreIndex != -1) {
+//					String updatedId = e.id.substring(underscoreIndex + 2);
+//					if (idTypeMap.get(updatedId) != null) {
+//						type = idTypeMap.get(updatedId);
+//					} else {
+//						// also lustre node translation does add agree node name + "." to the id name
+//						// check if after stripping the prefix before the first "." from the id
+//						// see if it can be found in the map
+//						int dotIndex = updatedId.indexOf(".");
+//						if (dotIndex != -1) {
+//							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
+//							if (idTypeMap.get(furtherUpdatedId) != null) {
+//								type = idTypeMap.get(furtherUpdatedId);
+//							}
+//						}
+//					}
+//				}
+//			}
 			if (type == null) {
 				throw new SafetyException("Type not found for " + e.id);
 			}
