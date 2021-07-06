@@ -67,11 +67,10 @@ public class ModelToConstraintsGenerator {
 		List<AgreeStatement> topLevelProperties = new ArrayList<AgreeStatement>();
 		topLevelProperties.addAll(agreeProgram.topNode.guarantees);
 		topLevelProperties.addAll(agreeProgram.topNode.lemmas);
-
+		Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
 
 		for (AgreeStatement topLevelGuarantee : topLevelProperties) {
 			resetVisitorPerNode(topAgreeNode.id);
-			Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
 			// add inputs and locals to compIdTypeMap
 			updateNodeIdTypeMap(topAgreeNode.id, topLustreNode);
 			// add comment for node name
