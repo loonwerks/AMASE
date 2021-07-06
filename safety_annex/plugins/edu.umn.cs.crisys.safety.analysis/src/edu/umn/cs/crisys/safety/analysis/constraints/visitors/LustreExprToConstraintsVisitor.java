@@ -161,6 +161,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		} else {
 			String opName = e.op.name();
 			if (opName.equals("AND") || opName.equals("OR")) {
+				//logical expression, set translateToAssignment to false
+				translateToAssignment = false;
 				// visit the left and the right expression
 				ConstraintListCombo leftReturnCombo = visit(e.left);
 				ConstraintListCombo rightReturnCombo = visit(e.right);
@@ -176,6 +178,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				}
 				// else
 				// (a => b) <=> (not a or b)
+				//logical expression, set translateToAssignment to false
+				translateToAssignment = false;
 				Expr newLeft = negateExprVisitor.visit(e.left);
 				ConstraintListCombo leftReturnCombo = visit(newLeft);
 				ConstraintListCombo rightReturnCombo = visit(e.right);
@@ -205,6 +209,7 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 					BinaryExpr exprLeft = new BinaryExpr(e.location, negCondExpr, BinaryOp.OR, assignLeftToThenExpr);
 					BinaryExpr exprRight = new BinaryExpr(e.location, condExpr, BinaryOp.OR, assignLeftToElseExpr);
 					BinaryExpr newExpr = new BinaryExpr(e.location, exprLeft, BinaryOp.AND, exprRight);
+					//logical expression, set translateToAssignment to false
 					translateToAssignment = false;
 					return visit(newExpr);
 				}
@@ -216,7 +221,6 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 						// and create equality constraint expression
 						return createEqualityBinaryTermOrConstraint(e, constraints, opName);
 					} else {
-						System.out.println("yes");
 						if (e.left instanceof IdExpr) {
 //						// if left is an IdExpr and right is an IdExpr, or BoolExpr, or IntExpr, or BinaryExpr create assignment
 //						if ((e.left instanceof IdExpr) && ((e.right instanceof IdExpr) || (e.right instanceof BoolExpr)
@@ -331,33 +335,36 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 					List<MistralConstraint> constraintList = returnCombo.constraintList;
 					Term term = (Term) constraint;
 					TermDef termDef = compTermDefMap.get(term);
-
-					// if it's an ArithmeticTerm, update the map
-					if (termDef instanceof ArithmeticTermDef) {
-						String termIntegerMapDefName = createValidAndUniqueName(nodeNamePrefix + "_TermIntegerMap");
-						TermIntegerMapDef termIntegerMapDef = new TermIntegerMapDef(termIntegerMapDefName);
-						// multiply left value to every entry's value in the rightTerm map
-						for (Map.Entry<Term, Integer> entry : ((ArithmeticTermDef) termDef).termIntegerMapDef.termMap
-								.entrySet()) {
-							termIntegerMapDef.termMap.put(entry.getKey(), entry.getValue() * (-1));
+					if (termDef == null) {
+						throw new SafetyException("Term Def not found for " + term.toString());
+					} else {
+						// if it's an ArithmeticTerm, update the map
+						if (termDef instanceof ArithmeticTermDef) {
+							String termIntegerMapDefName = createValidAndUniqueName(nodeNamePrefix + "_TermIntegerMap");
+							TermIntegerMapDef termIntegerMapDef = new TermIntegerMapDef(termIntegerMapDefName);
+							// multiply left value to every entry's value in the rightTerm map
+							for (Map.Entry<Term, Integer> entry : ((ArithmeticTermDef) termDef).termIntegerMapDef.termMap
+									.entrySet()) {
+								termIntegerMapDef.termMap.put(entry.getKey(), entry.getValue() * (-1));
+							}
+							return storeArithmeticTermSingleConstraintList(e, constraints, constraintList,
+									termIntegerMapDef);
 						}
-						return storeArithmeticTermSingleConstraintList(e, constraints, constraintList,
-								termIntegerMapDef);
-					}
-					// else if it's an IntConstantTerm
-					// create an arithmetic term out of it using the map construct, and return the term
-					else if (termDef instanceof IntConstantTermDef) {
-						String termIntegerMapDefName = createValidAndUniqueName(nodeNamePrefix + "_TermIntegerMap");
+						// else if it's an IntConstantTerm
+						// create an arithmetic term out of it using the map construct, and return the term
+						else if (termDef instanceof IntConstantTermDef) {
+							String termIntegerMapDefName = createValidAndUniqueName(nodeNamePrefix + "_TermIntegerMap");
 
-						TermIntegerMapDef termIntegerMapDef = new TermIntegerMapDef(termIntegerMapDefName);
-						termIntegerMapDef.addEntry(term, (-1));
+							TermIntegerMapDef termIntegerMapDef = new TermIntegerMapDef(termIntegerMapDefName);
+							termIntegerMapDef.addEntry(term, (-1));
 
-						return storeArithmeticTermSingleConstraintList(e, constraints, constraintList,
-								termIntegerMapDef);
-					}
-					// otherwise throw an exception
-					else {
-						throw new SafetyException("Expr not supported " + e.toString());
+							return storeArithmeticTermSingleConstraintList(e, constraints, constraintList,
+									termIntegerMapDef);
+						}
+						// otherwise throw an exception
+						else {
+							throw new SafetyException("Expr not supported " + e.toString());
+						}
 					}
 				}
 				// otherwise throw an exception (as it means there it involves a boolean construct)
@@ -1063,8 +1070,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		if (intTermMap.containsKey(new Integer(value))) {
 			constantTerm = intTermMap.get(new Integer(value));
 		}
-		// otherwise, create it
-		else {
+		// if does not exist, create it
+		if (constantTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
 			String intTermName = createValidAndUniqueName("Constant_" + value + "_term");
 			// create int constant term def
@@ -1080,6 +1087,22 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			// add to intTermMap
 			intTermMap.put(new Integer(value), constantTerm);
 		}
+		//if it's in the verification's intTermMap but not in this node's compTermDefMap, add it to compTermDefMap
+		else {
+			if (compTermDefMap.get(constantTerm) == null) {
+				// create unique names with agree node name prefix if the name doesn't exist
+				String intTermName = createValidAndUniqueName("Constant_" + value + "_term");
+				// create int constant term def
+				IntConstantTermDef intConstTermDef = new IntConstantTermDef(intTermName, value);
+				// add to constraint list
+				constraints.add(intConstTermDef);
+				// add to compTermDefMap
+				compTermDefMap.put(constantTerm, intConstTermDef);
+				// add to compExprConstraint map
+				compExprConstraintMap.put(e.toString(), constantTerm);
+			}
+		}
+
 		ConstraintListCombo combo = new ConstraintListCombo(constantTerm, constraints);
 		return combo;
 	}
@@ -1129,8 +1152,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		if (intTermMap.containsKey(new Integer(1))) {
 			constantTerm = intTermMap.get(new Integer(1));
 		}
-		// otherwise, create it
-		else {
+		// if does not exist, create it
+		if (constantTerm == null) {
 			// create unique name
 			String intTermName = createValidAndUniqueName("Constant_" + "1" + "_term");
 			IntConstantTermDef intConstTermDef = new IntConstantTermDef(intTermName, 1);
@@ -1141,6 +1164,18 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			compTermDefMap.put(constantTerm, intConstTermDef);
 			// add to intTermMap
 			intTermMap.put(new Integer(1), constantTerm);
+		}
+		else {
+			// if it's in the verification's intTermMap but not in this node's compTermDefMap
+			// add it to compTermDefMap
+			if (compTermDefMap.get(constantTerm) == null) {
+				// create unique name
+				String intTermName = createValidAndUniqueName("Constant_" + "1" + "_term");
+				IntConstantTermDef intConstTermDef = new IntConstantTermDef(intTermName, 1);
+				constraints.add(intConstTermDef);
+				// add to compTermDefMap
+				compTermDefMap.put(constantTerm, intConstTermDef);
+			}
 		}
 
 		// create constraint name
@@ -1220,36 +1255,29 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 		else {
 			Type type = null;
 			// find the type of the id
-			//if (idTypeMap.get(e.id) != null) {
 			type = getTypeFromCompIdTypeMap(nodeNamePrefix, e.id);
-			//if (getTypeFromCompIdTypeMap(nodeNamePrefix, e.id) != null){
-			//	type = idTypeMap.get(e.id);
-			//} else {
-//			if(type == null){
-//				// since lustre node translation does add component id in front of variable ids in the expression
-//				// check if after stripping the prefix before the first "__" from the id
-//				// see if it can be found in the map
-//				int underscoreIndex = e.id.indexOf("__");
-//				if (underscoreIndex != -1) {
-//					String updatedId = e.id.substring(underscoreIndex + 2);
-//					if (idTypeMap.get(updatedId) != null) {
-//						type = idTypeMap.get(updatedId);
-//					} else {
-//						// also lustre node translation does add agree node name + "." to the id name
-//						// check if after stripping the prefix before the first "." from the id
-//						// see if it can be found in the map
-//						int dotIndex = updatedId.indexOf(".");
-//						if (dotIndex != -1) {
-//							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
-//							if (idTypeMap.get(furtherUpdatedId) != null) {
-//								type = idTypeMap.get(furtherUpdatedId);
-//							}
-//						}
-//					}
-//				}
-//			}
-			if (type == null) {
-				throw new SafetyException("Type not found for " + e.id);
+			if(type == null){
+				// since lustre node translation does add component id in front of variable ids in the expression
+				// check if after stripping the prefix before the first "__" from the id
+				// see if it can be found in the map
+				int underscoreIndex = e.id.indexOf("__");
+				if (underscoreIndex != -1) {
+					String updatedId = e.id.substring(underscoreIndex + 2);
+					type = getTypeFromCompIdTypeMap(nodeNamePrefix, updatedId);
+					if (type == null) {
+						// also lustre node translation does add agree node name + "." to the id name
+						// check if after stripping the prefix before the first "." from the id
+						// see if it can be found in the map
+						int dotIndex = updatedId.indexOf(".");
+						if (dotIndex != -1) {
+							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
+							type = getTypeFromCompIdTypeMap(nodeNamePrefix, furtherUpdatedId);
+							if (type == null) {
+								throw new SafetyException("Type not found for " + e.id);
+							}
+						}
+					}
+				}
 			}
 			if (type instanceof NamedType) {
 				NamedType namedType = (NamedType) type;
@@ -1280,5 +1308,4 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 			}
 		}
 	}
-
 }
