@@ -68,6 +68,8 @@ public class ModelToConstraintsGenerator {
 		topLevelProperties.addAll(agreeProgram.topNode.guarantees);
 		topLevelProperties.addAll(agreeProgram.topNode.lemmas);
 		Node topLustreNode = AgreeNodeToLustreContract.translate(agreeProgram.topNode, agreeProgram);
+		// set node name prefix for constraint naming
+		lustreExprToConstraintVisitor.setTopNodeNamePrefix(agreeProgram.topNode.id);
 
 		for (AgreeStatement topLevelGuarantee : topLevelProperties) {
 			resetVisitorPerNode(topAgreeNode.id);

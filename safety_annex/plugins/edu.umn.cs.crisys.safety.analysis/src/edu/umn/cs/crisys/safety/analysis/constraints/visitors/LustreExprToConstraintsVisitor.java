@@ -62,6 +62,8 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	private Map<Term, TermDef> compTermDefMap = new HashMap<>();
 	// used to add node name prefix to MistralConstraint names created
 	private String nodeNamePrefix = "";
+	// used to check top node name
+	private String topNodeNamePrefix = "";
 	// use index to help create unique names
 	private int nameIndex = 0;
 	// store all MistralConstraintNames created to help create unique names
@@ -109,6 +111,14 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 
 	public String getNodeNamePrefix() {
 		return nodeNamePrefix;
+	}
+
+	public void setTopNodeNamePrefix(String topNamePrefix) {
+		this.topNodeNamePrefix = topNamePrefix;
+	}
+
+	public String getTopNodeNamePrefix() {
+		return topNodeNamePrefix;
 	}
 
 	public void clearCompExprConstraintMap() {
@@ -1263,22 +1273,18 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 				int underscoreIndex = e.id.indexOf("__");
 				if (underscoreIndex != -1) {
 					String updatedId = e.id.substring(underscoreIndex + 2);
-					type = getTypeFromCompIdTypeMap(nodeNamePrefix, updatedId);
-					if (type == null) {
-						// also lustre node translation does add agree node name + "." to the id name
-						// check if after stripping the prefix before the first "." from the id
-						// see if it can be found in the map
-						int dotIndex = updatedId.indexOf(".");
-						if (dotIndex != -1) {
-							String furtherUpdatedId = updatedId.substring(dotIndex + 1);
-							type = getTypeFromCompIdTypeMap(nodeNamePrefix, furtherUpdatedId);
-							if (type == null) {
-								throw new SafetyException("Type not found for " + e.id);
-							}
-						}
-					}
+					String updatedNodeName = e.id.substring(0, underscoreIndex);
+					type = getTypeFromCompIdTypeMap(updatedNodeName, updatedId);
+				}
+				// see if it's a variable that belongs to the top level node
+				else {
+					type = getTypeFromCompIdTypeMap(topNodeNamePrefix, e.id);
 				}
 			}
+			if (type == null) {
+				throw new SafetyException("Type not found for " + e.id);
+			}
+
 			if (type instanceof NamedType) {
 				NamedType namedType = (NamedType) type;
 				String typeName = namedType.name;
