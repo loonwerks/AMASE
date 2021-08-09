@@ -72,6 +72,7 @@ public class ModelToConstraintsGenerator {
 		lustreExprToConstraintVisitor.setTopNodeNamePrefix(agreeProgram.topNode.id);
 
 		for (AgreeStatement topLevelGuarantee : topLevelProperties) {
+			// reset visitor per node
 			resetVisitorPerNode(topAgreeNode.id);
 			// add inputs and locals to compIdTypeMap
 			updateNodeIdTypeMap(topAgreeNode.id, topLustreNode);
@@ -255,8 +256,9 @@ public class ModelToConstraintsGenerator {
 							// add assertion to comment
 							comment = new ConstraintComment(curExpr.toString());
 							constraints.add(comment);
+							// reset visitor per node
+							resetVisitorPerNode(topAgreeNode.id);
 							// reset flags per equation
-							resetVisitorPerEquation();
 							// translate to constraint
 							ConstraintListCombo topEqReturnCombo = lustreExprToConstraintVisitor.visit(curExpr);
 							constraints.addAll(topEqReturnCombo.constraintList);
