@@ -25,7 +25,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface,
  org.eclipse.swt,
  com.collins.trustedsystems.jkindapi
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Import-Package: com.collins.trustedsystems.z3,
  com.rockwellcollins.atc.agree.agree,
@@ -53,5 +53,4 @@ Import-Package: com.collins.trustedsystems.z3,
  org.osate.annexsupport,
  org.osate.ui.dialogs
 Export-Package: edu.umn.cs.crisys.safety.analysis.transform
-
-
+Automatic-Module-Name: edu.umn.cs.crisys.safety.analysis
