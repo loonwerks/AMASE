@@ -33,7 +33,6 @@ Import-Package: com.rockwellcollins.atc.agree.analysis,
  org.osate.annexsupport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: edu.umn.cs.crisys.safety,
- edu.umn.cs.crisys.safety.formatting,
  edu.umn.cs.crisys.safety.generator,
  edu.umn.cs.crisys.safety.linking,
  edu.umn.cs.crisys.safety.parser.antlr,
