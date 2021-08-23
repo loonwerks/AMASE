@@ -25,7 +25,9 @@
 		<module>edu.umn.cs.crisys.safety</module>
 		<module>edu.umn.cs.crisys.safety.analysis</module>
 		<module>edu.umn.cs.crisys.safety.feature</module>
+		<module>edu.umn.cs.crisys.safety.tests</module>
 		<module>edu.umn.cs.crisys.safety.ui</module>
+		<module>edu.umn.cs.crisys.safety.ui.tests</module>
 		<module>edu.umn.cs.crisys.safety.repository</module>
 		<module>edu.umn.cs.crisys.safety.target</module>
 	</modules>
@@ -329,6 +331,25 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.eclipse.tycho
+										</groupId>
+										<artifactId>
+											target-platform-configuration
+										</artifactId>
+										<versionRange>
+											[0.0.1,)
+										</versionRange>
+										<goals>
+											<goal>target-platform</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -352,8 +373,7 @@
 					<version>${tycho.version}</version>
 					<configuration>
 						<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->
-						<argLine>${tycho.testArgLine} ${platformSystemProperties}
-							${systemProperties} ${moduleProperties}</argLine>
+						<argLine>${tycho.testArgLine} ${platformSystemProperties} ${systemProperties} ${moduleProperties}</argLine>
 						<failIfNoTests>false</failIfNoTests>
 						<useUIHarness>false</useUIHarness>
 					</configuration>
