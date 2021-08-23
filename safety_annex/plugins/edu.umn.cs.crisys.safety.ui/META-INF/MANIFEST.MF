@@ -24,12 +24,12 @@ Import-Package: org.apache.log4j,
  org.osate.aadl2,
  org.osate.aadl2.modelsupport.errorreporting,
  org.osate.annexsupport
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: edu.umn.cs.crisys.safety.ui.quickfix,
  edu.umn.cs.crisys.safety.ui.contentassist,
- edu.umn.cs.crisys.safety.ui.contentassist.antlr,
  edu.umn.cs.crisys.safety.ui.internal,
  edu.umn.cs.crisys.safety.ide.contentassist.antlr.lexer,
  edu.umn.cs.crisys.safety.ide.contentassist.antlr.internal,
  edu.umn.cs.crisys.safety.ide.contentassist.antlr
 Bundle-Activator: edu.umn.cs.crisys.safety.ui.internal.SafetyActivator
+Automatic-Module-Name: edu.umn.cs.crisys.safety.ui

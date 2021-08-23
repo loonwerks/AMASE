@@ -8,4 +8,5 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: edu.umn.cs.crisys.safety,
  org.eclipse.xtext.ide,
  org.eclipse.xtext.xbase.ide
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: edu.umn.cs.crisys.safety.ide
