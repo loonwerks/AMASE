@@ -309,7 +309,7 @@ public class ModelToCTGenerator {
 							// for each faulty output
 							for (String faultyOutput : faultyOutputs) {
 								// identify the fault associated with the faulty output
-								Fault fault = AddFaultsToNodeVisitor.triggerToFaultMap.get(faultyOutput);
+								Fault fault = AddFaultsToNodeVisitor.faultOutToFaultMap.get(faultyOutput);
 								// TODO: need to differentiate between enabled and disabled faults
 								// identify the node call from localEquations for the faulty output
 								for (AgreeEquation localEquation : faultyNode.localEquations) {

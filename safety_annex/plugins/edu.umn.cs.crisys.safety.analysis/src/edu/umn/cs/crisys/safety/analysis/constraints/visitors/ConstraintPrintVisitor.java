@@ -12,6 +12,7 @@ import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.FunctionTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.IntConstantTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.StringStringMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermAssignment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermIntegerMapDef;
@@ -216,6 +217,19 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 		write(" = ");
 		visit(termAssignment.rightTerm);
 		writeln(";");
+		return null;
+	}
+
+	@Override
+	public Void visit(StringStringMapDef stringStringMapDef) {
+		String mapName = stringStringMapDef.termId;
+		writeln("map<string, string> " + mapName + ";");
+
+		for (Map.Entry<String, String> entry : stringStringMapDef.stringMap.entrySet()) {
+			write(mapName + "[\"");
+			writeln(entry.getKey());
+			writeln("\"] = " + "\"" + entry.getValue() + "\"" + ";");
+		}
 		return null;
 	}
 }

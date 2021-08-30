@@ -2,6 +2,7 @@ package edu.umn.cs.crisys.safety.analysis.generators;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.osate.aadl2.instance.ComponentInstance;
@@ -17,16 +18,19 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.translation.AgreeNodeToLustreContract;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Constraint;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintComment;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ConstraintListCombo;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ExprConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.MistralConstraint;
+import edu.umn.cs.crisys.safety.analysis.constraints.ast.StringStringMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.Term;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TermTermMapDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.TopConstraintDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.expr.SingleConstraintExpr;
 import edu.umn.cs.crisys.safety.analysis.constraints.visitors.LustreExprToConstraintsVisitor;
+import edu.umn.cs.crisys.safety.analysis.transform.Fault;
 import edu.umn.cs.crisys.safety.util.SafetyUtil;
 import jkind.Assert;
 import jkind.lustre.BinaryExpr;
@@ -109,6 +113,15 @@ public class ModelToConstraintsGenerator {
 
 			// overall top constraint def
 			TopConstraintDef topConstraintDef = new TopConstraintDef("all_guarantees");
+
+			// For all faults in this verification layer
+			// add to faultInfoMap connecting the fault trigger and probability from fault definition
+			// add fault_probabilities(fault_trigger_string) = fault_probability_string
+			String faultInfoMapName = lustreExprToConstraintVisitor.createValidAndUniqueName("fault_probabilities");
+			StringStringMapDef faultInfoMapDef = new StringStringMapDef(faultInfoMapName);
+
+			addFaultInfo(faultInfoMapDef);
+			constraints.add(faultInfoMapDef);
 
 			// For each agree node in this verification layer
 			// translate the guarantee into constraints
@@ -270,11 +283,12 @@ public class ModelToConstraintsGenerator {
 			// For all connections in this verification layer
 			// add to connectivity map connecting the input and output constraints created
 			// add connectivitiy(dest) = source
-			String termTermMapDefName = lustreExprToConstraintVisitor.createValidAndUniqueName("connectivity");
-			TermTermMapDef termTermMapDef = new TermTermMapDef(termTermMapDefName);
+			String connectionMapDefName = lustreExprToConstraintVisitor.createValidAndUniqueName("connectivity");
+			TermTermMapDef connectionMapDef = new TermTermMapDef(connectionMapDefName);
 
-			addConnections(termTermMapDef);
-			constraints.add(termTermMapDef);
+			addConnections(connectionMapDef);
+			constraints.add(connectionMapDef);
+
 			// add comment for overall constraint
 			comment = new ConstraintComment("overall top level constraint");
 			constraints.add(comment);
@@ -369,7 +383,7 @@ public class ModelToConstraintsGenerator {
 
 	// For all connections in this verification layer
 	// add to connectivity map connecting the input and output constraints created
-	private void addConnections(TermTermMapDef termTermMapDef) {
+	private void addConnections(TermTermMapDef connectionMapDef) {
 		// go through all connection instances
 		EList<ConnectionInstance> connectionInstances = topCompInst.getAllEnclosingConnectionInstances();
 		for (ConnectionInstance connectionInstance : connectionInstances) {
@@ -405,9 +419,25 @@ public class ModelToConstraintsGenerator {
 			// if src or dest term is null, don't add it
 			if ((srcTerm != null) && (destTerm != null)) {
 				// add connectivitiy(dest) = source
-				termTermMapDef.addEntry(destTerm, srcTerm);
+				connectionMapDef.addEntry(destTerm, srcTerm);
 			}
 		}
+	}
 
+	// For all faults in this verification layer
+	// add to faultInfoMap connecting the fault trigger and probability from fault definition
+	// add fault_probabilities(fault_trigger_string) = fault_probability_string
+	private void addFaultInfo(StringStringMapDef faultInfoMapDef) {
+		for (Map.Entry<String, Fault> entry : AddFaultsToNodeVisitor.faultTriggerToFaultMap.entrySet()) {
+			String faultTrigger = entry.getKey();
+			Fault fault = entry.getValue();
+			String probability = Double.toString(fault.probability);
+
+			// add fault to comment
+			ConstraintComment comment = new ConstraintComment(
+					faultTrigger + ":" + probability);
+			constraints.add(comment);
+			faultInfoMapDef.addEntry(faultTrigger, probability);
+		}
 	}
 }

@@ -156,8 +156,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	public static Set<Set<String>> faultCombinationAboveThresholdStrs = new HashSet<Set<String>>();
 	public static boolean maxFaultHypothesis = false;
 	public static boolean probabilisticHypothesis = false;
-	public static Map<String, Fault> triggerToFaultMap = new HashMap<String, Fault>();
-
+	public static Map<String, Fault> faultOutToFaultMap = new HashMap<String, Fault>();
+	public static Map<String, Fault> faultTriggerToFaultMap = new HashMap<String, Fault>();
 	// When putting together Lustre assertions, once the number
 	// of literals is above 20,000 there is a chance that JKind
 	// will throw an exception. In this case, we create macros
@@ -182,7 +182,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		faultCombinationAboveThresholdStrs.clear();
 		maxFaultHypothesis = false;
 		probabilisticHypothesis = false;
-		triggerToFaultMap.clear();
+		faultOutToFaultMap.clear();
+		faultTriggerToFaultMap.clear();
 	}
 
 	@Override
@@ -655,8 +656,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// Collect elements to build the nested if then else stmt described above.
 			Expr ftTrigger = localFaultTriggerMap.get(pair.f);
 			triggerList.add(new TriggerFaultOutPair(ftTrigger, faultNodeOut));
-			// add to global trigger to fault map for creating causation trees elsewhere
-			triggerToFaultMap.put(((IdExpr) faultNodeOut).id, pair.f);
+			// add to global fault output to fault map for creating causation trees elsewhere
+			faultOutToFaultMap.put(((IdExpr) faultNodeOut).id, pair.f);
+			// add to global fault trigger to fault map for creating causation trees elsewhere
+			faultTriggerToFaultMap.put(((IdExpr) ftTrigger).id, pair.f);
 		}
 		// Send the list of triggers with associated fault out statements
 		// to a recursive function that builds the nested if-then-else statement.
