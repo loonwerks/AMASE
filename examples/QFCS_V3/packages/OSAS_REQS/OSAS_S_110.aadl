@@ -3,6 +3,7 @@ public
 	with OSAS_S_100;
 	with RUN_LENGTH;
 	with BASE_TYPES;
+	with DATA_TYPES;
 	
 annex agree {**
 	

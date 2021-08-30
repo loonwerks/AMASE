@@ -2,6 +2,9 @@ package OSAS
 public
   with DATA_TYPES;
   with Base_Types;
+  with OSAS_S_100;
+  with OSAS_S_170;
+  with OSAS_S_110;
 
 system OSAS_Sys
   features

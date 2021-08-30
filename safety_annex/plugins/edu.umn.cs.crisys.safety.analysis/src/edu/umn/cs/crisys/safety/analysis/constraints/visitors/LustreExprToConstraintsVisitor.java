@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.NegateLustreExprVisitor;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.ArithmeticTermDef;
 import edu.umn.cs.crisys.safety.analysis.constraints.ast.BinaryTermConstraintDef;
@@ -1134,7 +1135,14 @@ public class LustreExprToConstraintsVisitor implements ExprVisitor<ConstraintLis
 	// if Boolean type, create a variable term out of it and return the term
 	// and a constraint out of it and return the constraint
 	private ConstraintListCombo createVarTermFromBoolTypeIdVarWithDef(IdExpr e, List<MistralConstraint> constraints) {
-		String idName = nodeNamePrefix + "_" + e.id;
+		// add nodeNamePrefix except for fault triggers
+		// fault triggers are globally unique and we want to keep that way
+		String idName = "";
+		if (AddFaultsToNodeVisitor.faultTriggerToFaultMap.containsKey(e.id)) {
+			idName = e.id;
+		} else {
+			idName = nodeNamePrefix + "_" + e.id;
+		}
 		Term boolTypeTerm = compIdTermMap.get(new CompIdPair(nodeNamePrefix, idName));
 		if (boolTypeTerm == null) {
 			// create unique names with agree node name prefix if the name doesn't exist
