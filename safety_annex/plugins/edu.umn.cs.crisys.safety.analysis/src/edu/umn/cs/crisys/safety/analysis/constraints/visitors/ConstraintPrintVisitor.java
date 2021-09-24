@@ -227,7 +227,7 @@ public class ConstraintPrintVisitor implements ConstraintAstVisitor<Void> {
 
 		for (Map.Entry<String, String> entry : stringStringMapDef.stringMap.entrySet()) {
 			write(mapName + "[\"");
-			writeln(entry.getKey());
+			write(entry.getKey());
 			writeln("\"] = " + "\"" + entry.getValue() + "\"" + ";");
 		}
 		return null;
