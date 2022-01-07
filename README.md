@@ -1,6 +1,8 @@
 # AMASE
 This is the repository for Architectural Modeling and Analysis for Safety Engineering (AMASE). 
 
+![master](https://github.com/loonwerks/AMASE/actions/workflows/maven.yml/badge.svg)
+
 Directories:
 -----------
 	doc : For published papers, the users guide, and other documentation. 
