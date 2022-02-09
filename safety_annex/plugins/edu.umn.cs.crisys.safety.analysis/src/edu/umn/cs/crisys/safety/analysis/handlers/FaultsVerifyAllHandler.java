@@ -3,6 +3,8 @@ package edu.umn.cs.crisys.safety.analysis.handlers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -23,7 +25,9 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.impl.ComponentImplementationImpl;
 import org.osate.aadl2.impl.DefaultAnnexSubclauseImpl;
 
+import com.google.common.collect.Lists;
 import com.rockwellcollins.atc.agree.analysis.Activator;
+import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ConsistencyResult;
 import com.rockwellcollins.atc.agree.analysis.handlers.RerunHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.TerminateHandler;
@@ -33,6 +37,7 @@ import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
@@ -45,9 +50,13 @@ import jkind.JKindException;
 import jkind.api.JKindApi;
 import jkind.api.JRealizabilityApi;
 import jkind.api.KindApi;
+import jkind.api.results.AnalysisResult;
+import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
 import jkind.api.results.JRealizabilityResult;
+import jkind.api.results.PropertyResult;
 import jkind.lustre.Program;
+import jkind.results.InvalidProperty;
 
 public class FaultsVerifyAllHandler extends VerifyAllHandler {
 
@@ -58,6 +67,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	private IHandlerService handlerService;
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
 	private int adviceCount = 0;
+
 	@Override
 	public Object execute(ExecutionEvent event) {
 		AddFaultsToAgree.resetStaticVars();
@@ -76,6 +86,51 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 			return Status.CANCEL_STATUS;
 		}
 		return super.execute(event);
+	}
+
+	protected List<JKindResult> getChildContractResults(JKindResult result) {
+		AnalysisResult parent = result.getParent();
+		List<JKindResult> children = Lists.newArrayList();
+		if (parent instanceof CompositeAnalysisResult) {
+			((CompositeAnalysisResult) parent).getChildren()
+					.stream()
+					.filter(r -> r instanceof CompositeAnalysisResult)
+					.forEach(c -> children.addAll(((CompositeAnalysisResult) c).getChildren()
+							.stream()
+							// WARNING: the string literal "Contract Guarantees" in the line below needs to match that in
+							// com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler#wrapVerificationResult(ComponentInstance, CompositeAnalysisResult)
+							.filter(r -> (r instanceof JKindResult && "Contract Guarantees".equals(r.getName())))
+							.map(JKindResult.class::cast)
+							.collect(Collectors.toList())));
+		}
+		return children;
+	}
+
+	protected Program doFaultPropagationInjection(JKindResult result, Program program) {
+		List<JKindResult> childVerifications = getChildContractResults(result);
+		// WARNING: the string literal "Contract Guarantees" in the line below needs to match that in
+		// com.rockwellcollins.atc.agree.analysis.VerifyHandler#wrapVerificationResult(ComponentInstance, CompositeAnalysisResult)
+		if ("Contract Guarantees".equals(result.getName())) {
+			for (JKindResult childResult : childVerifications) {
+				for (PropertyResult propertyResult : childResult.getPropertyResults()) {
+					if (propertyResult.getProperty() instanceof InvalidProperty) {
+						AgreeRenaming childRenaming = (AgreeRenaming) linker.getRenaming(childResult);
+						String guaranteeName = propertyResult.getProperty().getName();
+						String lustreVarName = childRenaming.getLustreNameFromAgreeVar(guaranteeName);
+						// WARNING: Here we assume that the subnode id of interest is named as given below.
+						// We need to introduce this literal "_TOP__" here because the computation is hidden in AGREE
+						// literals in com.rockwellcollins.atc.agree.analysis.LustreAstBuilder#getAssumeGuaranteeLustreProgram(AgreeProgram)
+						// WARNING: the string literal "Verification for " in the line below needs to match that in
+						// com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler#runJob(Element, IProgressMonitor) and
+						// com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler#buildAnalysisResult(String, ComponentInstance)
+						String subnodeName = "_TOP__"
+								+ childResult.getParent().getName().replaceFirst("Verification for ", "");
+						program = new AddFaultDriverVisitor(subnodeName, lustreVarName).visit(program);
+					}
+				}
+			}
+		}
+		return program;
 	}
 
 	@Override
@@ -104,12 +159,27 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 				KindApi consistApi = PreferencesUtil.getConsistencyApi();
 				JRealizabilityApi realApi = PreferencesUtil.getJRealizabilityApi();
 
+				// Due to the way the queue is constructed in traversal,
+				// reversing the queue will result in subcomponent instances
+				// being analyzed prior to their enclosing component instance.
+				// Reverse the queue using a stack.
+				{
+					Stack<JKindResult> stack = new Stack<>();
+					while (!queue.isEmpty()) {
+						stack.push(queue.remove());
+					}
+					while (!stack.empty()) {
+						queue.add(stack.pop());
+					}
+				}
+
 				while (!queue.isEmpty() && !globalMonitor.isCanceled()) {
 					JKindResult result = queue.peek();
 					NullProgressMonitor subMonitor = new NullProgressMonitor();
 					monitorRef.set(subMonitor);
 
-					Program program = linker.getProgram(result);
+					Program program = doFaultPropagationInjection(result, linker.getProgram(result));
+					linker.setProgram(result, program);
 
 					if (api instanceof JKindApi) {
 						String resultName = result.getName();
@@ -173,7 +243,6 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	protected String getJobName() {
 		return "Fault analysis: compositional";
 	}
-
 
 	private boolean isProbabilisticAnalysis() {
 		List<Classifier> classifiers = getClassifiers();
@@ -239,8 +308,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			IHandlerService handlerService = getHandlerService();
-			handlerService.activateHandler(RERUN_ID,
-					new RerunHandler(root, FaultsVerifyAllHandler.this));
+			handlerService.activateHandler(RERUN_ID, new RerunHandler(root, FaultsVerifyAllHandler.this));
 		});
 	}
 
