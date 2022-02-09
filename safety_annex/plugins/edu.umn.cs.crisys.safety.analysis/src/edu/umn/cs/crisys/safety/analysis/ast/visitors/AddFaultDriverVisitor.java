@@ -16,6 +16,8 @@ import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
 import jkind.lustre.Program;
+import jkind.lustre.UnaryExpr;
+import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
 import jkind.lustre.visitors.AstMapVisitor;
 
@@ -42,7 +44,8 @@ public class AddFaultDriverVisitor extends AstMapVisitor {
 	public NodeCallExpr visit(NodeCallExpr nodeCall) {
 		List<Expr> args = visitExprs(nodeCall.args);
 		if (nodeCall.node.equals(targetSubnodeName)) {
-			liftedTargetSubnodeInputs.stream().forEach(a -> args.add(new IdExpr(targetSubnodeName + a)));
+			liftedTargetSubnodeInputs.stream()
+					.forEach(a -> args.add(new IdExpr(targetSubnodeName + a)));
 		}
 		return new NodeCallExpr(nodeCall.location, nodeCall.node, args);
 	}
@@ -81,7 +84,8 @@ public class AddFaultDriverVisitor extends AstMapVisitor {
 	public Equation visit(Equation equation) {
 		if (equation.lhs.stream().anyMatch(v -> v.id.equals(targetVarName))) {
 			return new Equation(equation.lhs,
-					new BinaryExpr(new IdExpr(getFaultDriverId(targetVarName)), BinaryOp.IMPLIES, equation.expr));
+					new BinaryExpr(new UnaryExpr(UnaryOp.NOT, new IdExpr(getFaultDriverId(targetVarName))),
+							BinaryOp.IMPLIES, equation.expr));
 		}
 		return equation;
 	}
