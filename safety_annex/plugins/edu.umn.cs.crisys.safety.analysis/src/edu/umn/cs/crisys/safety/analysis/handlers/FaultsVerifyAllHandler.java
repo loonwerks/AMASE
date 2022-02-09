@@ -1,8 +1,10 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,7 @@ import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddPairwiseFaultDriverWitnesses;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
@@ -111,6 +114,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		// WARNING: the string literal "Contract Guarantees" in the line below needs to match that in
 		// com.rockwellcollins.atc.agree.analysis.VerifyHandler#wrapVerificationResult(ComponentInstance, CompositeAnalysisResult)
 		if ("Contract Guarantees".equals(result.getName())) {
+			Set<String> accumulatedFaultDrivers = new LinkedHashSet<>();
 			for (JKindResult childResult : childVerifications) {
 				for (PropertyResult propertyResult : childResult.getPropertyResults()) {
 					if (propertyResult.getProperty() instanceof InvalidProperty) {
@@ -125,10 +129,17 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 						// com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler#buildAnalysisResult(String, ComponentInstance)
 						String subnodeName = "_TOP__"
 								+ childResult.getParent().getName().replaceFirst("Verification for ", "");
+						// TODO: The string concatenation is also done in the AddFaultDriverVisitor; unify them
+						accumulatedFaultDrivers
+								.add(subnodeName + AddFaultDriverVisitor.getFaultDriverId(lustreVarName));
 						program = new AddFaultDriverVisitor(subnodeName, lustreVarName).visit(program);
 					}
 				}
 			}
+			AddPairwiseFaultDriverWitnesses pairwiseFaultVisitor = new AddPairwiseFaultDriverWitnesses(
+					Lists.newArrayList(accumulatedFaultDrivers));
+			program = pairwiseFaultVisitor.visit(program);
+			result.addProperties(pairwiseFaultVisitor.getProperties());
 		}
 		return program;
 	}
