@@ -2,11 +2,14 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 
+import jkind.Assert;
 import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.Equation;
@@ -25,19 +28,25 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 	public static final String FAULT_DRIVER_PAIR_WITNESS_BASENAME = AgreeASTBuilder.dotChar
 			+ "fault_driver_pair_witness__nodeLemma";
 
-	private final List<Equation> faultDriverPairWitnesses;
+	/**
+	 * Note: due to the way this is constructed in {@link #AddPairwiseFaultDriverWitnesses(List)}
+	 * it is guaranteed that each value in the map will contain exactly two elements.  Further,
+	 * we can assume that in the code in this class.
+	 */
+	private final Map<String, List<String>> faultDriverPairWitnesses;
 
 	public AddPairwiseFaultDriverWitnesses(List<String> faultDrivers) {
+		Assert.isNotNull(faultDrivers);
+		Assert.isTrue(faultDrivers.stream().allMatch(it -> it != null));
 		int count = 0;
-		List<Equation> workingList = Lists.newArrayList();
+		final Map<String, List<String>> workingMap = Maps.newLinkedHashMap();
 		for (int i = 0; i < faultDrivers.size(); ++i) {
 			for (int j = i + 1; j < faultDrivers.size(); ++j) {
-				workingList.add(new Equation(
-						Lists.newArrayList(new IdExpr(FAULT_DRIVER_PAIR_WITNESS_BASENAME + count++)),
-						new BinaryExpr(new IdExpr(faultDrivers.get(i)), BinaryOp.OR, new IdExpr(faultDrivers.get(j)))));
+				workingMap.put(FAULT_DRIVER_PAIR_WITNESS_BASENAME + count++,
+						Lists.newArrayList(faultDrivers.get(i), faultDrivers.get(j)));
 			}
 		}
-		this.faultDriverPairWitnesses = Collections.unmodifiableList(workingList);
+		this.faultDriverPairWitnesses = Collections.unmodifiableMap(workingMap);
 	}
 
 	@Override
@@ -47,12 +56,10 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 				List<VarDecl> locals = Lists.newArrayList(n.locals);
 				List<Equation> equations = Lists.newArrayList(n.equations);
 				List<String> properties = Lists.newArrayList(n.properties);
-				locals.addAll(faultDriverPairWitnesses.stream()
-						.map(eq -> new VarDecl(eq.lhs.get(0).id, NamedType.BOOL))
-								.collect(Collectors.toList()));
-				equations.addAll(faultDriverPairWitnesses);
-				properties.addAll(
-						faultDriverPairWitnesses.stream().map(eq -> eq.lhs.get(0).id).collect(Collectors.toList()));
+				locals.addAll(faultDriverPairWitnesses.keySet().stream()
+						.map(id -> new VarDecl(id, NamedType.BOOL)).collect(Collectors.toList()));
+				equations.addAll(getEquations());
+				properties.addAll(faultDriverPairWitnesses.keySet());
 				return new Node(n.location, n.id, n.inputs, n.outputs, locals, equations, properties, n.assertions,
 						n.realizabilityInputs, n.contract, n.ivc);
 			}
@@ -62,8 +69,19 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 	}
 
 	public List<String> getProperties() {
-		return Lists.newArrayList(
-				faultDriverPairWitnesses.stream().map(eq -> eq.lhs.get(0).id).collect(Collectors.toList()));
+		return Collections.unmodifiableList(faultDriverPairWitnesses.keySet().stream().collect(Collectors.toList()));
+	}
+
+	public Map<String, List<String>> getPairwiseWitnesses() {
+		return Collections.unmodifiableMap(faultDriverPairWitnesses);
+	}
+
+	public List<Equation> getEquations() {
+		return Collections.unmodifiableList(faultDriverPairWitnesses.entrySet()
+				.stream()
+				.map(e -> new Equation(new IdExpr(e.getKey()),
+						new BinaryExpr(new IdExpr(e.getValue().get(0)), BinaryOp.OR, new IdExpr(e.getValue().get(1)))))
+				.collect(Collectors.toList()));
 	}
 
 }

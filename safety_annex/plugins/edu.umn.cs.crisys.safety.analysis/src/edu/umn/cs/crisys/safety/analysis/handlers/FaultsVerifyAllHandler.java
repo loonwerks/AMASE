@@ -1,10 +1,8 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -28,6 +26,8 @@ import org.osate.aadl2.impl.ComponentImplementationImpl;
 import org.osate.aadl2.impl.DefaultAnnexSubclauseImpl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 import com.rockwellcollins.atc.agree.analysis.Activator;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
 import com.rockwellcollins.atc.agree.analysis.ConsistencyResult;
@@ -39,6 +39,7 @@ import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
+import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverGuardAssertionVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddPairwiseFaultDriverWitnesses;
@@ -60,6 +61,7 @@ import jkind.api.results.JRealizabilityResult;
 import jkind.api.results.PropertyResult;
 import jkind.lustre.Program;
 import jkind.results.InvalidProperty;
+import jkind.results.ValidProperty;
 
 public class FaultsVerifyAllHandler extends VerifyAllHandler {
 
@@ -71,6 +73,8 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
 	private int adviceCount = 0;
 
+	protected Map<AnalysisResult, Map<String, List<String>>> pairwiseFaultDriverProperties = new HashMap<>();
+
 	@Override
 	public Object execute(ExecutionEvent event) {
 		AddFaultsToAgree.resetStaticVars();
@@ -79,6 +83,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		AddFaultsToAgree.setTransformFlag(item);
 		// clear static variables before each run
 		AddFaultsToNodeVisitor.init();
+		pairwiseFaultDriverProperties.clear();
 		if (!SafetyUtil.containsSafetyAnnex(getClassifiers())) {
 			new SafetyException("A safety annex in the implementation is required to run the fault analysis.");
 			return Status.CANCEL_STATUS;
@@ -114,11 +119,14 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		// WARNING: the string literal "Contract Guarantees" in the line below needs to match that in
 		// com.rockwellcollins.atc.agree.analysis.VerifyHandler#wrapVerificationResult(ComponentInstance, CompositeAnalysisResult)
 		if ("Contract Guarantees".equals(result.getName())) {
-			Set<String> accumulatedFaultDrivers = new LinkedHashSet<>();
 			for (JKindResult childResult : childVerifications) {
+				AgreeRenaming childRenaming = (AgreeRenaming) linker.getRenaming(childResult);
 				for (PropertyResult propertyResult : childResult.getPropertyResults()) {
-					if (propertyResult.getProperty() instanceof InvalidProperty) {
-						AgreeRenaming childRenaming = (AgreeRenaming) linker.getRenaming(childResult);
+					// WARNING: The string literal "__GUARANTEE" comes from
+					// com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder
+					// where it is protected and we need to duplicate the literal here.
+					if (propertyResult.getProperty() instanceof InvalidProperty && childRenaming.getRefMap()
+							.get(propertyResult.getProperty().getName()) instanceof GuaranteeStatement) {
 						String guaranteeName = propertyResult.getProperty().getName();
 						String lustreVarName = childRenaming.getLustreNameFromAgreeVar(guaranteeName);
 						// WARNING: Here we assume that the subnode id of interest is named as given below.
@@ -130,17 +138,64 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 						String subnodeName = "_TOP__"
 								+ childResult.getParent().getName().replaceFirst("Verification for ", "");
 						// TODO: The string concatenation is also done in the AddFaultDriverVisitor; unify them
-						accumulatedFaultDrivers
-								.add(subnodeName + AddFaultDriverVisitor.getFaultDriverId(lustreVarName));
 						program = new AddFaultDriverVisitor(subnodeName, lustreVarName).visit(program);
+					} else if (propertyResult.getProperty() instanceof ValidProperty && propertyResult.getProperty()
+							.getName()
+							.contains(childRenaming
+									.forceRename(AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_BASENAME))
+							&& pairwiseFaultDriverProperties.containsKey(childResult)
+							&& pairwiseFaultDriverProperties.get(childResult).containsKey(propertyResult.getName())) {
+						program = new AddFaultDriverGuardAssertionVisitor(program.main,
+								pairwiseFaultDriverProperties.get(childResult).get(propertyResult.getName()))
+										.visit(program);
+					} else if (propertyResult.getProperty() instanceof InvalidProperty
+							&& propertyResult.getProperty()
+									.getName()
+									.contains(childRenaming.forceRename(
+											AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_BASENAME))
+							&& pairwiseFaultDriverProperties.containsKey(childResult)
+							&& pairwiseFaultDriverProperties.get(childResult).containsKey(propertyResult.getName())) {
+						// TODO: Just for testing... take this elseif branch out later...
+						program = new AddFaultDriverGuardAssertionVisitor(program.main,
+								pairwiseFaultDriverProperties.get(childResult).get(propertyResult.getName()))
+										.visit(program);
 					}
 				}
 			}
-			AddPairwiseFaultDriverWitnesses pairwiseFaultVisitor = new AddPairwiseFaultDriverWitnesses(
-					Lists.newArrayList(accumulatedFaultDrivers));
-			program = pairwiseFaultVisitor.visit(program);
-			result.addProperties(pairwiseFaultVisitor.getProperties());
+
+			/* if (not top verification) */ {
+				Map<PropertyResult, String> accumulatedGuarantees = Maps.newLinkedHashMap();
+				for (PropertyResult propertyResult : result.getPropertyResults()) {
+					AgreeRenaming renaming = (AgreeRenaming) linker.getRenaming(result);
+					if (renaming.getRefMap()
+							.get(propertyResult.getName()) instanceof GuaranteeStatement) {
+						String guaranteeName = propertyResult.getName();
+						String lustreVarName = renaming.getLustreNameFromAgreeVar(guaranteeName);
+						accumulatedGuarantees.put(propertyResult, lustreVarName);
+					}
+				}
+				AddPairwiseFaultDriverWitnesses pairwiseFaultVisitor = new AddPairwiseFaultDriverWitnesses(
+						Lists.newArrayList(accumulatedGuarantees.values()));
+				program = pairwiseFaultVisitor.visit(program);
+				result.addProperties(pairwiseFaultVisitor.getProperties());
+				// WARNING: the string literal "Verification for " in the line below needs to match that in
+				// com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler#runJob(Element, IProgressMonitor) and
+				// com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler#buildAnalysisResult(String, ComponentInstance)
+				// TODO: the concatenation of nodeName with fault driver is done elsewhere too, unify
+				String nodeName = "_TOP__" + result.getParent().getName().replaceFirst("Verification for ", "");
+				pairwiseFaultDriverProperties.put(result,
+						pairwiseFaultVisitor.getPairwiseWitnesses()
+								.entrySet()
+								.stream()
+								.collect(Collectors.toMap(
+										e -> ((AgreeRenaming) linker.getRenaming(result)).forceRename(e.getKey()),
+										e -> e.getValue()
+												.stream()
+												.map(id -> nodeName + AddFaultDriverVisitor.getFaultDriverId(id))
+												.collect(Collectors.toList()))));
+			}
 		}
+
 		return program;
 	}
 
