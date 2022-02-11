@@ -148,17 +148,6 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 						program = new AddFaultDriverGuardAssertionVisitor(program.main,
 								pairwiseFaultDriverProperties.get(childResult).get(propertyResult.getName()))
 										.visit(program);
-					} else if (propertyResult.getProperty() instanceof InvalidProperty
-							&& propertyResult.getProperty()
-									.getName()
-									.contains(childRenaming.forceRename(
-											AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_BASENAME))
-							&& pairwiseFaultDriverProperties.containsKey(childResult)
-							&& pairwiseFaultDriverProperties.get(childResult).containsKey(propertyResult.getName())) {
-						// TODO: Just for testing... take this elseif branch out later...
-						program = new AddFaultDriverGuardAssertionVisitor(program.main,
-								pairwiseFaultDriverProperties.get(childResult).get(propertyResult.getName()))
-										.visit(program);
 					}
 				}
 			}
