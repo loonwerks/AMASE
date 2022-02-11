@@ -132,7 +132,7 @@ public class IvcToFTGenerator {
 				// no limit on mhs set size
 				Set<List<String>> mcsSets = MHSUtils.computeMHS(property.getIvcSets(), 0, false);
 				// Create list for prop->MCS mapping
-				mcsList = createMCSList(mcsSets, renaming, compName);
+				mcsList = createMCSList(mcsSets, renaming);
 				mapPropertyToMCSs.put(componentName + "__" + lustreName, mcsList);
 
 				// create node when mcsSets is not empty
@@ -215,13 +215,13 @@ public class IvcToFTGenerator {
 	 * @param compName component name
 	 * @return Returns new set of lists with new descriptive strings
 	 */
-	private Set<List<String>> createMCSList(Set<List<String>> mcsSets, AgreeRenaming renaming, String compName) {
+	private Set<List<String>> createMCSList(Set<List<String>> mcsSets, AgreeRenaming renaming) {
 		HashSet<List<String>> mcsFullSet = new HashSet<List<String>>();
 		if (!mcsSets.isEmpty()) {
 			for (List<String> mcsSet : mcsSets) {
 				List<String> mcsList = new ArrayList<String>();
 				for (String mcsElem : mcsSet) {
-					mcsList.add(getMCSInfo(mcsElem, renaming, compName));
+					mcsList.add(getMCSInfo(mcsElem, renaming));
 				}
 				mcsFullSet.add(mcsList);
 			}
@@ -237,7 +237,7 @@ public class IvcToFTGenerator {
 	 * @param compName component name where this fault/contract can be found
 	 * @return descriptive string for hierarchical ft textual representation
 	 */
-	private String getMCSInfo(String mcsElem, AgreeRenaming renaming, String compName) {
+	private String getMCSInfo(String mcsElem, AgreeRenaming renaming) {
 		String refStr = renaming.getSupportRefString(mcsElem);
 		if (mcsElem.startsWith("__fault")) {
 			FaultStatementImpl faultStmtImpl = (FaultStatementImpl) renaming.getRefMap().get(refStr);
@@ -247,7 +247,8 @@ public class IvcToFTGenerator {
 					+ ": " + faultUserExplanation + " (" + mcsElem + ")";
 
 		} else {
-			return "Supporting contract in component " + componentName + ": " + refStr;
+			String name = mcsElem.substring(0,mcsElem.indexOf("."));
+			return "Supporting contract in component " + name + ": " + refStr;
 
 		}
 	}
