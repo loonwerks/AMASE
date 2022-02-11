@@ -17,6 +17,8 @@ import jkind.lustre.IdExpr;
 import jkind.lustre.NamedType;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
+import jkind.lustre.UnaryExpr;
+import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
 import jkind.lustre.visitors.AstMapVisitor;
 
@@ -80,7 +82,9 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 		return Collections.unmodifiableList(faultDriverPairWitnesses.entrySet()
 				.stream()
 				.map(e -> new Equation(new IdExpr(e.getKey()),
-						new BinaryExpr(new IdExpr(e.getValue().get(0)), BinaryOp.OR, new IdExpr(e.getValue().get(1)))))
+						new UnaryExpr(UnaryOp.NOT,
+								new BinaryExpr(new IdExpr(e.getValue().get(0)), BinaryOp.OR,
+										new IdExpr(e.getValue().get(1))))))
 				.collect(Collectors.toList()));
 	}
 
