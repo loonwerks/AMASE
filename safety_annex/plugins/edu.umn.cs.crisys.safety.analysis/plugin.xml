@@ -2,6 +2,18 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+   <extension point="org.eclipse.ui.views">
+      <category
+            id="edu.umn.cs.crisys.safety.analysis"
+            name="SafetyAnnex">
+      </category>
+        <view
+              category="edu.umn.cs.crisys.safety.analysis"
+              class="edu.umn.cs.crisys.safety.analysis.views.SafetyResultsView"
+              icon="icons/layers.png"
+              id="edu.umn.cs.crisys.safety.analysis.views.safetyResultsView"
+              name="Safety Results"/>
+   </extension>
    <extension
          point="org.eclipse.ui.commands">
       <category

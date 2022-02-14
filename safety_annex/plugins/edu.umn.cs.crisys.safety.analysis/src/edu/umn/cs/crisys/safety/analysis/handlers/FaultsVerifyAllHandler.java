@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -37,6 +39,7 @@ import com.rockwellcollins.atc.agree.analysis.handlers.VerifyAllHandler;
 import com.rockwellcollins.atc.agree.analysis.preferences.PreferenceConstants;
 import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
+import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverGuardAssertionVisitor;
@@ -44,6 +47,7 @@ import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddPairwiseFaultDriverWitnesses;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
+import edu.umn.cs.crisys.safety.analysis.views.SafetyResultsView;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
 import edu.umn.cs.crisys.safety.safety.ProbabilityBehavior;
 import edu.umn.cs.crisys.safety.safety.SafetyContract;
@@ -385,4 +389,50 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	private IHandlerService getHandlerService() {
 		return getWindow().getService(IHandlerService.class);
 	}
+
+	@Override
+	protected void showView(final AnalysisResult result, final AgreeResultsLinker linker) {
+		/*
+		 * This command is executed while the xtext document is locked. Thus it must be async
+		 * otherwise we can get a deadlock condition if the UI tries to lock the document,
+		 * e.g., to pull up hover information.
+		 */
+		getWindow().getShell().getDisplay().asyncExec(() -> {
+			try {
+				SafetyResultsView page = (SafetyResultsView) getWindow().getActivePage().showView(SafetyResultsView.ID);
+				page.setInput(result, linker);
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	@Override
+	protected void clearView() {
+		getWindow().getShell().getDisplay().syncExec(() -> {
+			try {
+				SafetyResultsView page = (SafetyResultsView) getWindow().getActivePage().showView(SafetyResultsView.ID);
+				page.setInput(new CompositeAnalysisResult("empty"), null);
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	@Override
+	protected SafetyResultsView findView() {
+		SafetyResultsView result = null;
+		IViewPart part = getWindow().getActivePage().findView(SafetyResultsView.ID);
+		if (part instanceof SafetyResultsView) {
+			result = (SafetyResultsView) part;
+		} else {
+			try {
+				result = (SafetyResultsView) getWindow().getActivePage().showView(SafetyResultsView.ID);
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 }
