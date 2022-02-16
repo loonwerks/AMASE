@@ -156,7 +156,8 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 				}
 			}
 
-			/* if (not top verification) */ {
+			/* If not the top analysis, that is the parent of the composite parent of the composite parent of this result is not null */
+			if (result.getParent().getParent().getParent() != null) {
 				Map<PropertyResult, String> accumulatedGuarantees = Maps.newLinkedHashMap();
 				for (PropertyResult propertyResult : result.getPropertyResults()) {
 					AgreeRenaming renaming = (AgreeRenaming) linker.getRenaming(result);
