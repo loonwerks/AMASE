@@ -3,11 +3,11 @@ package edu.umn.cs.crisys.safety.analysis.ast.visitors;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
 
 import jkind.Assert;
 import jkind.lustre.BinaryExpr;
@@ -27,8 +27,9 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 	// WARNING: THe name must contain the substring "__nodeLemma" to get past
 	// the renaming when the property is added to the result. This isn't so bad
 	// as these witnesses can rightly be described as node lemmas.
-	public static final String FAULT_DRIVER_PAIR_WITNESS_BASENAME = AgreeASTBuilder.dotChar
-			+ "fault_driver_pair_witness__nodeLemma";
+	public static final String FAULT_DRIVER_PAIR_WITNESS_BASENAME = "__fault_driver_pair_witness__nodeLemma";
+	public static final Pattern FAULT_DRIVER_PAIR_WITNESS_PATTERN = Pattern
+			.compile("(\\.|__)fault_driver_pair_witness(\\.|__)nodeLemma\\d+");
 
 	/**
 	 * Note: due to the way this is constructed in {@link #AddPairwiseFaultDriverWitnesses(List)}
