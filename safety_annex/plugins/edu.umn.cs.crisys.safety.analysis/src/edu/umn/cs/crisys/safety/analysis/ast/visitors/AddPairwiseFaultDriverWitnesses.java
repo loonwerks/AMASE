@@ -27,9 +27,13 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 	// WARNING: THe name must contain the substring "__nodeLemma" to get past
 	// the renaming when the property is added to the result. This isn't so bad
 	// as these witnesses can rightly be described as node lemmas.
-	public static final String FAULT_DRIVER_PAIR_WITNESS_BASENAME = "__fault_driver_pair_witness__nodeLemma";
+	public static final String FAULT_DRIVER_PAIR_WITNESS_BASENAME = "__cannot_fail_together__nodeLemma";
 	public static final Pattern FAULT_DRIVER_PAIR_WITNESS_PATTERN = Pattern
-			.compile("(\\.|__)fault_driver_pair_witness(\\.|__)nodeLemma\\d+");
+			.compile("(\\.|__)cannot_fail_together(\\.|__)nodeLemma");
+
+	public static String getPairwiseWitnessName(String left, String right) {
+		return left + "__and__" + right + FAULT_DRIVER_PAIR_WITNESS_BASENAME;
+	}
 
 	/**
 	 * Note: due to the way this is constructed in {@link #AddPairwiseFaultDriverWitnesses(List)}
@@ -41,11 +45,10 @@ public class AddPairwiseFaultDriverWitnesses extends AstMapVisitor {
 	public AddPairwiseFaultDriverWitnesses(List<String> faultDrivers) {
 		Assert.isNotNull(faultDrivers);
 		Assert.isTrue(faultDrivers.stream().allMatch(it -> it != null));
-		int count = 0;
 		final Map<String, List<String>> workingMap = Maps.newLinkedHashMap();
 		for (int i = 0; i < faultDrivers.size(); ++i) {
 			for (int j = i + 1; j < faultDrivers.size(); ++j) {
-				workingMap.put(FAULT_DRIVER_PAIR_WITNESS_BASENAME + count++,
+				workingMap.put(getPairwiseWitnessName(faultDrivers.get(i), faultDrivers.get(j)),
 						Lists.newArrayList(faultDrivers.get(i), faultDrivers.get(j)));
 			}
 		}

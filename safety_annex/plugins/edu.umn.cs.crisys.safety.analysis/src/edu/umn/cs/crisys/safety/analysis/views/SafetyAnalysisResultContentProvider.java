@@ -28,7 +28,7 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 			return result.getPropertyResults()
 					.stream()
 					.filter(p -> !AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_PATTERN.matcher(p.getName())
-							.matches() || p.getStatus().equals(Status.VALID))
+							.find() || p.getStatus().equals(Status.VALID))
 					.collect(Collectors.toList())
 					.toArray();
 		} else {
@@ -45,7 +45,7 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 			return result.getPropertyResults()
 					.stream()
 					.filter(p -> !AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_PATTERN.matcher(p.getName())
-							.matches() || p.getStatus().equals(Status.VALID))
+							.find() || p.getStatus().equals(Status.VALID))
 					.collect(Collectors.toList())
 					.toArray();
 		} else if (parentElement instanceof CompositeAnalysisResult) {
@@ -61,7 +61,7 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 		Object newValue = event.getNewValue();
 		if (newValue instanceof PropertyResult && AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_PATTERN
 				.matcher(((PropertyResult) newValue).getName())
-				.matches()) {
+				.find()) {
 			if (((PropertyResult) newValue).getStatus().equals(Status.VALID)) {
 				super.propertyChange(event);
 			}
