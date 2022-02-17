@@ -77,7 +77,7 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
 	private int adviceCount = 0;
 
-	protected Map<AnalysisResult, Map<String, List<String>>> pairwiseFaultDriverProperties = new HashMap<>();
+	protected Map<AnalysisResult, Map<String, Map<String, String>>> pairwiseFaultDriverProperties = new HashMap<>();
 
 	@Override
 	public Object execute(ExecutionEvent event) {
@@ -148,9 +148,21 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 							.contains(childRenaming
 									.forceRename(AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_BASENAME))
 							&& pairwiseFaultDriverProperties.containsKey(childResult)
-							&& pairwiseFaultDriverProperties.get(childResult).containsKey(propertyResult.getName())) {
+							&& pairwiseFaultDriverProperties.get(childResult).containsKey(propertyResult.getName())
+					// Need to also check that both the guarantees referred to by this pairwise check are
+					// invalidated and have corresponding fault drivers that are present in this verification
+							&& pairwiseFaultDriverProperties.get(childResult)
+									.get(propertyResult.getName())
+									.entrySet()
+									.stream()
+									.allMatch(e -> {
+										PropertyResult p = childResult
+												.getPropertyResult(childRenaming.rename(e.getKey()));
+										return (p != null) ? p.getProperty() instanceof InvalidProperty : false;
+									})
+					) {
 						program = new AddFaultDriverGuardAssertionVisitor(program.main,
-								pairwiseFaultDriverProperties.get(childResult).get(propertyResult.getName()))
+								pairwiseFaultDriverProperties.get(childResult).get(propertyResult.getName()).values().stream().collect(Collectors.toList()))
 										.visit(program);
 					}
 				}
@@ -185,8 +197,8 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 										e -> ((AgreeRenaming) linker.getRenaming(result)).forceRename(e.getKey()),
 										e -> e.getValue()
 												.stream()
-												.map(id -> nodeName + AddFaultDriverVisitor.getFaultDriverId(id))
-												.collect(Collectors.toList()))));
+												.collect(Collectors.toMap(id -> id, id -> nodeName
+														+ AddFaultDriverVisitor.getFaultDriverId(id))))));
 			}
 		}
 
