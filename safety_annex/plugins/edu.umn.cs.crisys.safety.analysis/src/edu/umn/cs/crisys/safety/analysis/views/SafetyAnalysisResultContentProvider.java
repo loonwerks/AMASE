@@ -1,7 +1,11 @@
 package edu.umn.cs.crisys.safety.analysis.views;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.Lists;
 
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddPairwiseFaultDriverWitnesses;
 import jkind.api.results.CompositeAnalysisResult;
@@ -18,6 +22,9 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 		super(viewer);
 	}
 
+	private final static List<Status> goodStatuses = Collections
+			.unmodifiableList(Lists.newArrayList(Status.VALID, Status.VALID_REFINED, Status.WAITING, Status.WORKING));
+
 	@Override
 	public Object[] getElements(Object inputElement) {
 		if (inputElement instanceof JRealizabilityResult) {
@@ -25,10 +32,13 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 			return result.getPropertyResults().toArray();
 		} else if (inputElement instanceof JKindResult) {
 			JKindResult result = (JKindResult) inputElement;
+			final boolean allParentResultsValid = result.getPropertyResults()
+					.stream()
+					.allMatch(p -> goodStatuses.contains(p.getStatus()));
 			return result.getPropertyResults()
 					.stream()
 					.filter(p -> !AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_PATTERN.matcher(p.getName())
-							.find() || p.getStatus().equals(Status.VALID))
+							.find() || !allParentResultsValid)
 					.collect(Collectors.toList())
 					.toArray();
 		} else {
@@ -42,10 +52,13 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 			return new Object[0];
 		} else if (parentElement instanceof JKindResult) {
 			JKindResult result = (JKindResult) parentElement;
+			final boolean allParentResultsValid = result.getPropertyResults()
+					.stream()
+					.allMatch(p -> goodStatuses.contains(p.getStatus()));
 			return result.getPropertyResults()
 					.stream()
 					.filter(p -> !AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_PATTERN.matcher(p.getName())
-							.find() || p.getStatus().equals(Status.VALID))
+							.find() || !allParentResultsValid)
 					.collect(Collectors.toList())
 					.toArray();
 		} else if (parentElement instanceof CompositeAnalysisResult) {
@@ -62,7 +75,7 @@ public class SafetyAnalysisResultContentProvider extends AnalysisResultContentPr
 		if (newValue instanceof PropertyResult && AddPairwiseFaultDriverWitnesses.FAULT_DRIVER_PAIR_WITNESS_PATTERN
 				.matcher(((PropertyResult) newValue).getName())
 				.find()) {
-			if (((PropertyResult) newValue).getStatus().equals(Status.VALID)) {
+			if (!goodStatuses.contains(((PropertyResult) newValue).getStatus())) {
 				super.propertyChange(event);
 			}
 		} else {
