@@ -1,5 +1,9 @@
 package edu.umn.cs.crisys.safety.analysis.handlers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,32 +24,51 @@ import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.utils.EditorUtils;
+import org.eclipse.xtext.util.Pair;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Classifier;
+import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.impl.ComponentImplementationImpl;
 import org.osate.aadl2.impl.DefaultAnnexSubclauseImpl;
+import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.SystemInstance;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 import com.rockwellcollins.atc.agree.analysis.Activator;
+import com.rockwellcollins.atc.agree.analysis.AgreeException;
+import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
+import com.rockwellcollins.atc.agree.analysis.AgreeLogger;
 import com.rockwellcollins.atc.agree.analysis.AgreeRenaming;
+import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
 import com.rockwellcollins.atc.agree.analysis.ConsistencyResult;
+import com.rockwellcollins.atc.agree.analysis.EphemeralImplementationUtil;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
+import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomater;
+import com.rockwellcollins.atc.agree.analysis.extentions.AgreeAutomaterRegistry;
+import com.rockwellcollins.atc.agree.analysis.extentions.ExtensionRegistry;
 import com.rockwellcollins.atc.agree.analysis.handlers.RerunHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.TerminateHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifyAllHandler;
+import com.rockwellcollins.atc.agree.analysis.lustre.visitors.RenamingVisitor;
 import com.rockwellcollins.atc.agree.analysis.preferences.PreferenceConstants;
 import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
 import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
+import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
+import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
+import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsView;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverGuardAssertionVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultsToNodeVisitor;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddPairwiseFaultDriverWitnesses;
+import edu.umn.cs.crisys.safety.analysis.results.SafetyJKindResult;
 import edu.umn.cs.crisys.safety.analysis.transform.AddFaultsToAgree;
 import edu.umn.cs.crisys.safety.analysis.views.SafetyResultsView;
 import edu.umn.cs.crisys.safety.safety.AnalysisStatement;
@@ -63,6 +86,7 @@ import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
 import jkind.api.results.JRealizabilityResult;
 import jkind.api.results.PropertyResult;
+import jkind.lustre.Node;
 import jkind.lustre.Program;
 import jkind.results.InvalidProperty;
 import jkind.results.ValidProperty;
@@ -76,6 +100,11 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 	private IHandlerService handlerService;
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
 	private int adviceCount = 0;
+	private boolean calledFromRerun = false;
+
+	private enum AnalysisType {
+		AssumeGuarantee, Consistency, Realizability
+	};
 
 	protected Map<AnalysisResult, Map<String, Map<String, String>>> pairwiseFaultDriverProperties = new HashMap<>();
 
@@ -304,6 +333,160 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		return Status.OK_STATUS;
 	}
 
+	private AnalysisResult createVerification(String resultName, ComponentInstance compInst, Program lustreProgram,
+			AgreeProgram agreeProgram, AnalysisType analysisType) {
+
+		AgreeAutomaterRegistry aAReg = (AgreeAutomaterRegistry) ExtensionRegistry
+				.getRegistry(ExtensionRegistry.AGREE_AUTOMATER_EXT_ID);
+		List<AgreeAutomater> automaters = aAReg.getAgreeAutomaters();
+		AgreeRenaming renaming = new AgreeRenaming();
+		AgreeLayout layout = new AgreeLayout();
+		Node mainNode = null;
+		for (Node node : lustreProgram.nodes) {
+			if (node.id.equals(lustreProgram.main)) {
+				mainNode = node;
+				break;
+			}
+		}
+
+		if (mainNode == null) {
+			throw new AgreeException("Could not find main lustre node after translation");
+		}
+
+		List<String> properties = new ArrayList<>();
+
+		RenamingVisitor.addRenamings(lustreProgram, renaming, compInst, layout);
+		addProperties(renaming, properties, mainNode, agreeProgram);
+
+		for (AgreeAutomater aa : automaters) {
+			renaming = aa.rename(renaming);
+			layout = aa.transformLayout(layout);
+		}
+
+		JKindResult result;
+		switch (analysisType) {
+		case Consistency:
+			result = new ConsistencyResult(resultName, mainNode.properties, Collections.singletonList(true), renaming);
+			break;
+		case Realizability:
+			result = new JRealizabilityResult(resultName, renaming);
+			break;
+		case AssumeGuarantee:
+			result = new SafetyJKindResult(resultName, properties, renaming);
+			break;
+		default:
+			throw new AgreeException("Unhandled Analysis Type");
+		}
+
+		queue.add(result);
+
+		ComponentImplementation compImpl = AgreeUtils.getInstanceImplementation(compInst);
+		linker.setProgram(result, lustreProgram);
+		linker.setComponent(result, compImpl);
+		linker.setContract(result, getContract(compImpl));
+		linker.setLayout(result, layout);
+		linker.setReferenceMap(result, renaming.getRefMap());
+		linker.setLog(result, AgreeLogger.getLog());
+		linker.setRenaming(result, renaming);
+
+		// System.out.println(program);
+		return result;
+
+	}
+
+	@Override
+	protected IStatus runJob(Element root, IProgressMonitor monitor) {
+		EphemeralImplementationUtil implUtil = new EphemeralImplementationUtil(monitor);
+		// this flag is set by the rerun handler to prevent clearing the advice map
+		if (!calledFromRerun) {
+			rerunAdviceMap.clear();
+		}
+		calledFromRerun = false;
+
+		disableRerunHandler();
+		handlerService = getWindow().getService(IHandlerService.class);
+
+		try {
+
+			// Make sure the user selected a component implementation
+			ComponentImplementation ci = getComponentImplementation(root, implUtil);
+
+			SystemInstance si = getSysInstance(ci, implUtil);
+
+			AnalysisResult result;
+			CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
+
+			if (isRecursive()) {
+				if (AgreeUtils.usingKind2()) {
+					throw new AgreeException("Kind2 only supports monolithic verification");
+				}
+				result = buildAnalysisResult(ci.getName(), si);
+				wrapper.addChild(result);
+				result = wrapper;
+			} else if (isRealizability()) {
+				AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, false);
+
+				Program program = LustreAstBuilder.getRealizabilityLustreProgram(agreeProgram);
+				wrapper.addChild(createVerification("Realizability Check", si, program, agreeProgram,
+						AnalysisType.Realizability));
+				result = wrapper;
+			} else {
+				CompositeAnalysisResult wrapperTop = new CompositeAnalysisResult("Verification for " + ci.getName());
+				wrapVerificationResult(si, wrapperTop);
+				wrapper.addChild(wrapperTop);
+				result = wrapper;
+			}
+
+			showView(result, linker);
+			return doAnalysis(ci, monitor);
+		} catch (Throwable e) {
+			String messages = getNestedMessages(e);
+			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, messages, e);
+		} finally {
+			implUtil.cleanup();
+		}
+	}
+
+	@Override
+	protected void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
+		AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, isMonolithic());
+
+		// generate different lustre depending on which model checker we are
+		// using
+
+		Program program;
+		if (AgreeUtils.usingKind2()) {
+			if (!isMonolithic()) {
+				throw new AgreeException("Kind2 now only supports monolithic verification");
+			}
+			program = LustreContractAstBuilder.getContractLustreProgram(agreeProgram);
+		} else {
+			program = LustreAstBuilder.getAssumeGuaranteeLustreProgram(agreeProgram);
+		}
+		List<Pair<String, Program>> consistencies = LustreAstBuilder.getConsistencyChecks(agreeProgram);
+
+		wrapper.addChild(
+				createVerification("Contract Guarantees", si, program, agreeProgram, AnalysisType.AssumeGuarantee));
+		for (Pair<String, Program> consistencyAnalysis : consistencies) {
+			wrapper.addChild(createVerification(consistencyAnalysis.getFirst(), si, consistencyAnalysis.getSecond(),
+					agreeProgram, AnalysisType.Consistency));
+		}
+	}
+
+	@Override
+	protected String getNestedMessages(Throwable e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		while (e != null) {
+			if (e.getMessage() != null && !e.getMessage().isEmpty()) {
+				pw.println(e.getMessage());
+			}
+			e = e.getCause();
+		}
+		pw.close();
+		return sw.toString();
+	}
+
 	/**
 	 * (non-Javadoc)
 	 *
@@ -381,6 +564,15 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			IHandlerService handlerService = getHandlerService();
 			handlerService.activateHandler(RERUN_ID, new RerunHandler(root, FaultsVerifyAllHandler.this));
+		});
+	}
+
+	private void disableRerunHandler() {
+		getWindow().getShell().getDisplay().syncExec(() -> {
+			AgreeResultsView agreeResultsView = findView();
+			if (agreeResultsView != null) {
+				agreeResultsView.disableRerunHandler();
+			}
 		});
 	}
 

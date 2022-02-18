@@ -32,7 +32,7 @@ public class SafetyAnalysisResultTree extends AnalysisResultTree {
 		TreeViewerColumn propertyColumn = new TreeViewerColumn(treeViewer, SWT.None);
 		propertyColumn.getColumn().setText("Property");
 		propertyColumn.getColumn().setWidth(400);
-		propertyColumn.setLabelProvider(new AnalysisResultLabelProvider(Column.PROPERTY, treeViewer));
+		propertyColumn.setLabelProvider(new SafetyAnalysisResultLabelProvider(Column.PROPERTY, treeViewer));
 
 		TreeViewerColumn resultColumn = new TreeViewerColumn(treeViewer, SWT.None);
 		resultColumn.getColumn().setText("Result");
