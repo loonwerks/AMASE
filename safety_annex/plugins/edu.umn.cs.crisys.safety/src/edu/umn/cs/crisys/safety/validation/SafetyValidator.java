@@ -96,6 +96,7 @@ import edu.umn.cs.crisys.safety.util.SafetyUtil;
  * This class contains custom validation rules.
  *
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
+ * @since 2.0
  */
 public class SafetyValidator extends AbstractSafetyValidator {
 
