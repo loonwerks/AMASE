@@ -51,6 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    <requires>
       <import plugin="edu.umn.cs.crisys.safety"/>
       <import plugin="edu.umn.cs.crisys.safety.analysis"/>
+      <import plugin="edu.umn.cs.crisys.safety.ide"/>
       <import plugin="edu.umn.cs.crisys.safety.ui"/>
       <import plugin="org.eclipse.xtend"/>
       <import plugin="org.eclipse.xtext"/>
@@ -66,6 +67,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    <plugin
          id="edu.umn.cs.crisys.safety.analysis"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.umn.cs.crisys.safety.ide"
          download-size="0"
          install-size="0"
          version="0.0.0"
