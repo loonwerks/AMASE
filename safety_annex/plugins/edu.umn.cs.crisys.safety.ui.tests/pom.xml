@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>edu.umn.cs.crisys.safety</groupId>
 		<artifactId>edu.umn.cs.crisys.safety.parent</artifactId>
-		<version>1.1.1</version>
+		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>edu.umn.cs.crisys.safety.ui.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>

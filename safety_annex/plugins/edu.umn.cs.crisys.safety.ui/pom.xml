@@ -4,9 +4,9 @@
   <parent>
     <groupId>edu.umn.cs.crisys.safety</groupId>
     <artifactId>edu.umn.cs.crisys.safety.parent</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2-SNAPSHOT</version>
   </parent>
   <artifactId>edu.umn.cs.crisys.safety.ui</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>
