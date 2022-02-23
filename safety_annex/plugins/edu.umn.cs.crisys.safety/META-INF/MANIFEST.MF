@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: edu.umn.cs.crisys.safety
 Bundle-Vendor: UMN Critical Systems Group
-Bundle-Version: 2.0.0
+Bundle-Version: 2.0.1.qualifier
 Bundle-SymbolicName: edu.umn.cs.crisys.safety;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="[2.25.0,3.0.0)";visibility:=reexport,
