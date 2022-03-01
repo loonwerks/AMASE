@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -1937,6 +1937,7 @@ public class SafetyGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//    | {GuaranteeStatement} 'guarantee' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 	//    | {AssertStatement} 'assert' ((name=ID)? str=STRING ':')? (expr=Expr | pattern=PatternStatement) ';'
 	//    | {LemmaStatement} 'lemma' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+	//    | {ReachableStatement} 'reachable' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 	//    ;
 	public AgreeGrammarAccess.NamedSpecStatementElements getNamedSpecStatementAccess() {
 		return gaAgree.getNamedSpecStatementAccess();
