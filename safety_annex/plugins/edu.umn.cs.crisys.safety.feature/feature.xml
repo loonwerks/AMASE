@@ -2,7 +2,7 @@
 <feature
       id="edu.umn.cs.crisys.safety.feature"
       label="Safety Annex"
-      version="1.2.1.qualifier"
+      version="1.3.0.qualifier"
       provider-name="University of Minnesota Critical Systems Group">
 
    <description url="">
