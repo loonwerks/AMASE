@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.umn.cs.crisys.safety</groupId>
 	<artifactId>edu.umn.cs.crisys.safety.parent</artifactId>
-	<version>1.1.2-SNAPSHOT</version>
+	<version>1.1.2</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -428,7 +428,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:loonwerks/AMASE.git</connection>
 		<developerConnection>scm:git:git@github.com:loonwerks/AMASE.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v1.3.0</tag>
 	</scm>
 
 </project>
