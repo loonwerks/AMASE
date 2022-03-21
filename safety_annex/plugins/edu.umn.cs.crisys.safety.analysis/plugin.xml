@@ -40,6 +40,12 @@
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand">
      </command> 
+     <command
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           description="Re-run previous safety analysis"
+           id="edu.umn.cs.crisys.safety.analysis.commands.rerunSafety"
+           name="Re-run Safety Analysis"> 
+     </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

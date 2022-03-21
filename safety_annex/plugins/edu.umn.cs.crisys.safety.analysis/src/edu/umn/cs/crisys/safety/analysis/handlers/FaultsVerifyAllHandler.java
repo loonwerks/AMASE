@@ -61,7 +61,6 @@ import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
-import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsView;
 
 import edu.umn.cs.crisys.safety.analysis.SafetyException;
 import edu.umn.cs.crisys.safety.analysis.ast.visitors.AddFaultDriverGuardAssertionVisitor;
@@ -94,7 +93,7 @@ import jkind.results.ValidProperty;
 public class FaultsVerifyAllHandler extends VerifyAllHandler {
 
 	private static MenuItem item;
-	private static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
+	private static final String RERUN_ID = "edu.umn.cs.crisys.safety.analysis.commands.rerunSafety";
 	private IHandlerActivation terminateActivation;
 	private IHandlerActivation terminateAllActivation;
 	private IHandlerService handlerService;
@@ -569,9 +568,9 @@ public class FaultsVerifyAllHandler extends VerifyAllHandler {
 
 	private void disableRerunHandler() {
 		getWindow().getShell().getDisplay().syncExec(() -> {
-			AgreeResultsView agreeResultsView = findView();
-			if (agreeResultsView != null) {
-				agreeResultsView.disableRerunHandler();
+			SafetyResultsView safetyResultsView = findView();
+			if (safetyResultsView != null) {
+				safetyResultsView.disableRerunHandler();
 			}
 		});
 	}
