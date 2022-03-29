@@ -77,16 +77,14 @@ import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
 
-
 /**
- * AddFaultsToNodeVisitor visits each agree node and adds fault information
- * to the lustre code. This is accomplished by creating a NodeBuilder object and
- * adding the extra fault information here. That node builder is then inserted into
- * the program. After this visit is called, the agree node visitor has added all
- * necessary fault information to each node.
- * If the node visited is the top node, additional information is added to the main
- * lustre node. This includes assertions that restrict behavior based on the fault
- * information.
+ * AddFaultsToNodeVisitor visits each agree node and adds fault information to
+ * the lustre code. This is accomplished by creating a NodeBuilder object and
+ * adding the extra fault information here. That node builder is then inserted
+ * into the program. After this visit is called, the agree node visitor has
+ * added all necessary fault information to each node. If the node visited is
+ * the top node, additional information is added to the main lustre node. This
+ * includes assertions that restrict behavior based on the fault information.
  *
  * @author Danielle Stewart, Janet Liu, Mike Whalen
  *
@@ -124,15 +122,19 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	// Per node data structures: must be stored when visiting new node:
 
-	// This maps output id to a pair consisting of the output expression and a fault.
+	// This maps output id to a list of pairs each consists of the output expression and a
+	// fault, e.g.,  output1 -> {(outputExpr, fault1),(outputExpr, fault2)...}
 	private Map<String, List<Pair>> faultyVarsExpr = new HashMap<String, List<Pair>>();
-	// List of fault pairs that cannot occur together (i.e. they are on the same output).
+	// List of fault pairs that cannot occur together (i.e. they are on the same
+	// output).
 	private List<FaultPair> mutualExclusiveFaults = new ArrayList<FaultPair>();
 	// Map from asymmetric fault to associated connections -
 	// ex: sender.out -> receiver1.in, receiver2.in, receiver3.in.
 	private Map<String, List<String>> mapAsymCompOutputToCommNodeIn = new HashMap<String, List<String>>();
-	// Map the name of the communication node for asymmetric faults to its list of local
-	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main lustre node.
+	// Map the name of the communication node for asymmetric faults to its list of
+	// local
+	// variables in Lustre. Used in AddFaultsToAgreeNode to add assert stmts to main
+	// lustre node.
 	private Map<String, List<AgreeVar>> mapCommNodeToInputs = new HashMap<String, List<AgreeVar>>();
 	// Map asym faults to their corresponding commNodes.
 	private Map<Fault, List<String>> mapAsymFaultToCommNodes = new HashMap<Fault, List<String>>();
@@ -143,7 +145,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	private Map<String, List<String>> mapCompNameToCommNodes = new HashMap<String, List<String>>();
 	// map comm node outputs to AADL connections
 	private Map<String, ConnectionInstanceEnd> mapCommNodeOutputToConnections = new HashMap<String, ConnectionInstanceEnd>();
-	// Map sender ("sender.output") to receiver name ("receiver1.input", "receiver2.input",...)
+	// Map sender ("sender.output") to receiver name ("receiver1.input",
+	// "receiver2.input",...)
 	private Map<String, List<String>> mapSenderToReceiver = new HashMap<String, List<String>>();
 
 	// Static vars:
@@ -263,7 +266,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Visit tasks for the top node.
 	 *
-	 * @param nb NodeBuilder : fault info added here.
+	 * @param nb   NodeBuilder : fault info added here.
 	 * @param node Agree node that is the top node.
 	 */
 	private void topNodeVisit(AgreeNodeBuilder nb, AgreeNode node) {
@@ -317,7 +320,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 					probabilityThreshold = Double.parseDouble(((ProbabilityBehavior) maxFaults).getProbabilty());
 				}
 			}
-			// if probabilistic fault hypothesis, need to collect valid fault combinations from every verification level
+			// if probabilistic fault hypothesis, need to collect valid fault combinations
+			// from every verification level
 			// but using the probability threshold from the upper most level
 			if (probabilisticHypothesis) {
 				collectTopLevelMaxFaultOccurrenceConstraint(probabilityThreshold, topNode, nb);
@@ -326,7 +330,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 *  Visit IdExpr output. If symmetric, change name to fault__nominal.
+	 * Visit IdExpr output. If symmetric, change name to fault__nominal.
 	 */
 	@Override
 	public Expr visit(IdExpr e) {
@@ -347,12 +351,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * Method changes top level connections to reflect communication nodes for
-	 * asymmetric faults.
-	 * Finds old connections from sender to receiver and removes them.
-	 * Then adds new connections from sender to communication nodes and from
+	 * asymmetric faults. Finds old connections from sender to receiver and removes
+	 * them. Then adds new connections from sender to communication nodes and from
 	 * communication nodes to receivers.
 	 *
-	 * @param nb NodeBuilder for this top node.
+	 * @param nb   NodeBuilder for this top node.
 	 * @param node The top node of the program.
 	 * @return SafetyNodeBuilder with connections changed.
 	 */
@@ -397,8 +400,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Use faultyVarsExpr list to create mutual exclusion between all
-	 * faults on a single output.
+	 * Use faultyVarsExpr list to create mutual exclusion between all faults on a
+	 * single output.
 	 *
 	 */
 	private void addToMutualExclusionList() {
@@ -415,43 +418,48 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Creates fault nominal input to the lustre node. Only add this if there is
-	 * at least one symmetric fault defined for this node. If only asymmetric,
-	 * then fault nominal does not exist in the agree node, only in comm nodes.
+	 * Creates fault nominal input to the lustre node. Only add this if there is at
+	 * least one symmetric fault defined for this node. If only asymmetric, then
+	 * fault nominal does not exist in the agree node, only in comm nodes.
 	 *
 	 * @param node Agree node with these faults.
-	 * @param nb NodeBuilder will have nominal vars added to locals.
+	 * @param nb   NodeBuilder will have nominal vars added to locals.
 	 */
 	public void addNominalVars(AgreeNode node, AgreeNodeBuilder nb) {
 		List<String> inputIdList = new ArrayList<String>();
-		for (String faultyId : faultyVarsExpr.keySet()) {
-			List<Pair> faultPairs = faultyVarsExpr.get(faultyId);
+		for (Map.Entry<String, List<Pair>> faultyVarsExprEntry : faultyVarsExpr.entrySet()) {
+			//get the specific output
+			String outputId = faultyVarsExprEntry.getKey();
+			List<Pair> faultPairs = faultyVarsExprEntry.getValue();
 			boolean onlyAsym = true;
 			Fault f = null;
+			//for list of fault pairs associated with the specific output
 			for (Pair p : faultPairs) {
 				if (!isAsymmetric(p.f)) {
 					onlyAsym = false;
 				}
 				f = p.f;
-			}
-			if (!onlyAsym) {
-				AgreeVar out = findVar(node.outputs, (faultyId));
-				if (out == null) {
-					new SafetyException("A fault defined for " + node.id + " has a connection"
-							+ " that is not a valid output for this component." + " Valid connections include {"
-							+ node.outputs + "}");
-				} else {
-					for (Type nominalOutputType : getOutputTypeForFaultNode(f)) {
-						if (!inputIdList.contains(faultyId)) {
-							nb.addInput(new AgreeVar(createNominalId((faultyId)), nominalOutputType, out.reference));
-							inputIdList.add(faultyId);
-						}
-
+				//if the current fault is not asymmetric, add the nominal output id to the node input list
+				if (!onlyAsym) {
+					AgreeVar out = findVar(node.outputs, (outputId));
+					if (out == null) {
+						new SafetyException("A fault defined for " + node.id + " has a connection"
+								+ " that is not a valid output for this component." + " Valid connections include {"
+								+ node.outputs + "}");
+					} else {
+						//Note that since each output may have a list of fault pairs associated with it
+						//we only add to the input list once for the nominal var for each output
+						if (!inputIdList.contains(outputId)) {
+							nb.addInput(
+								new AgreeVar(createNominalId((outputId)), out.type, out.reference));
+							inputIdList.add(outputId);
+						}	
 					}
 				}
 			}
 		}
 	}
+
 
 	/**
 	 * Find named type of output on fault node
@@ -474,7 +482,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Adds trigger statements to inputs for this node.
 	 *
-	 * @param f Fault defined on the node.
+	 * @param f  Fault defined on the node.
 	 * @param nb NodeBuilder has this input added.
 	 */
 	public void addFaultInputs(Fault f, AgreeNodeBuilder nb) {
@@ -485,7 +493,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Create trigger stmts for hardware faults.
 	 *
 	 * @param hwfaults List of hardware faults for this node.
-	 * @param nb NodeBuilder will have triggers added to inputs.
+	 * @param nb       NodeBuilder will have triggers added to inputs.
 	 */
 	public void addHWFaultInputs(List<HWFault> hwfaults, AgreeNodeBuilder nb) {
 		for (HWFault hwf : hwfaults) {
@@ -494,9 +502,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Add inputs and assert statements for any SafetyEqVars or SafetyEqAsserts in this fault.
+	 * Add inputs and assert statements for any SafetyEqVars or SafetyEqAsserts in
+	 * this fault.
 	 *
-	 * @param f Fault with (possibly) eq stmts.
+	 * @param f  Fault with (possibly) eq stmts.
 	 * @param nb NodeBuilder has this info added.
 	 */
 	public void addFaultLocalEqsAndAsserts(Fault f, AgreeNodeBuilder nb) {
@@ -507,18 +516,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Create fault nominal, trigger, and other input expressions for agree node.
 	 * Ex: Lustre fault node has input args: {val_out, alt_val, trigger}
-	 * 	   f.faultInputMap contains:
-	 * 			val_out = sender_out (agree node output),
-	 * 			alt_val = 1.0 (fail to value)
-	 * This method will create the list "actuals" which contains:
-	 *  [__fault__nominal__val_out, 1.0, __fault__trigger__sender__fault_1]
+	 * f.faultInputMap contains: val_out = sender_out (agree node output), alt_val =
+	 * 1.0 (fail to value) This method will create the list "actuals" which
+	 * contains: [__fault__nominal__val_out, 1.0, __fault__trigger__sender__fault_1]
 	 *
 	 * These are the actual lustre values that are passed to the fault node call.
 	 *
 	 *
-	 * @param f The fault for this agree node - uses inputs for this fault node
-	 * 			to construct lustre names.
-	 * @param localFaultTriggerMap Map<Fault, Expr> from fault to trigger expression.
+	 * @param f                    The fault for this agree node - uses inputs for
+	 *                             this fault node to construct lustre names.
+	 * @param localFaultTriggerMap Map<Fault, Expr> from fault to trigger
+	 *                             expression.
 	 * @return List of expressions for trigger, nominal, etc.
 	 */
 	public List<Expr> constructNodeInputs(Fault f, Map<Fault, Expr> localFaultTriggerMap) {
@@ -551,20 +559,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Adds fault node eqs to agree node. Will add the fault node call and
-	 * the nested trigger statement to the node builder.
-	 * Ex fault node call:
+	 * Adds fault node eqs to agree node. Will add the fault node call and the
+	 * nested trigger statement to the node builder. Ex fault node call:
 	 * Sender__fault_1__node__val_out =
-	 * 	Common_Faults__fail_to_real(__fault__nominal__sender_out, 1.0, fault__trigger__Sender__fault_1);
+	 * Common_Faults__fail_to_real(__fault__nominal__sender_out, 1.0,
+	 * fault__trigger__Sender__fault_1);
 	 *
-	 * Ex nested trigger expr:
-	 * agree_node_output =
-	 * 				if fault__trigger_1 then fault__node_1__val_out
-	 * 				else if fault__trigger_2 then fault__node_2__val_out
-	 * 				...
-	 * 				else __fault__nominal__output)
+	 * Ex nested trigger expr: agree_node_output = if fault__trigger_1 then
+	 * fault__node_1__val_out else if fault__trigger_2 then fault__node_2__val_out
+	 * ... else __fault__nominal__output)
+	 * 
 	 * @param faults List of faults for this agree node.
-	 * @param nb NodeBuilder that will have these things added.
+	 * @param nb     NodeBuilder that will have these things added.
 	 */
 	public void addFaultNodeEqs(List<Fault> faults, AgreeNodeBuilder nb) {
 		Map<Fault, Expr> faultTriggerMap = new HashMap<>();
@@ -584,20 +590,17 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds fault node call and nested trigger expression to the node builder.
-	 * Ex fault node call:
-	 * Sender__fault_1__node__val_out =
-	 * 	Common_Faults__fail_to_real(__fault__nominal__sender_out, 1.0, fault__trigger__Sender__fault_1);
+	 * Method adds fault node call and nested trigger expression to the node
+	 * builder. Ex fault node call: Sender__fault_1__node__val_out =
+	 * Common_Faults__fail_to_real(__fault__nominal__sender_out, 1.0,
+	 * fault__trigger__Sender__fault_1);
 	 *
-	 * Ex nested trigger expr:
-	 * agree_node_output =
-	 * 				if fault__trigger_1 then fault__node_1__val_out
-	 * 				else if fault__trigger_2 then fault__node_2__val_out
-	 * 				...
-	 * 				else __fault__nominal__output)
+	 * Ex nested trigger expr: agree_node_output = if fault__trigger_1 then
+	 * fault__node_1__val_out else if fault__trigger_2 then fault__node_2__val_out
+	 * ... else __fault__nominal__output)
 	 *
 	 * @param nb NodeBuilder has these expressions added in assert stmts.
-	 * @param f Fault that holds this fault node call information.
+	 * @param f  Fault that holds this fault node call information.
 	 */
 	private void addNodeCall(AgreeNodeBuilder nb, Fault f, Map<Fault, Expr> localFaultTriggerMap) {
 		List<IdExpr> lhsOfNodeCall = new ArrayList<IdExpr>();
@@ -617,22 +620,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Adds the nested lustre stmt that constrains agree node output based
-	 * on which fault trigger is active. Thus, the agree node output reflects
-	 * the fault node call linked to a specific trigger.
-	 * Ex nested trigger expr:
-	 * agree_node_output =
-	 * 				if fault__trigger_1 then fault__node_1__val_out
-	 * 				else if fault__trigger_2 then fault__node_2__val_out
-	 * 				...
-	 * 				else __fault__nominal__output)
+	 * Adds the nested lustre stmt that constrains agree node output based on which
+	 * fault trigger is active. Thus, the agree node output reflects the fault node
+	 * call linked to a specific trigger. Ex nested trigger expr: agree_node_output
+	 * = if fault__trigger_1 then fault__node_1__val_out else if fault__trigger_2
+	 * then fault__node_2__val_out ... else __fault__nominal__output)
 	 *
-	 * @param nb NodeBuilder that will have this assertion added to it.
+	 * @param nb                   NodeBuilder that will have this assertion added
+	 *                             to it.
 	 * @param localFaultTriggerMap Map<Fault, Expr> from fault to trigger expr.
-	 * @param lhsWithStmtName String of agree_node_output.
+	 * @param lhsWithStmtName      String of agree_node_output.
 	 */
-	private void addTriggerExpr(AgreeNodeBuilder nb, Map<Fault, Expr> localFaultTriggerMap,
-			String lhsWithStmtName) {
+	private void addTriggerExpr(AgreeNodeBuilder nb, Map<Fault, Expr> localFaultTriggerMap, String lhsWithStmtName) {
 		List<Pair> list = faultyVarsExpr.get(lhsWithStmtName);
 		String nomId = createNominalId(lhsWithStmtName);
 		Expr defaultExpr = new IdExpr(nomId);
@@ -649,9 +648,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// base : replace the expression with nominal expression
 			// repl : go from the fault to the actual
 			// toAssign: createNestedUpdateExpr using base, repl
-			//Expr base = replPathIdExpr(pair.ex, defaultExpr);
-			//Expr repl = faultToActual(pair.f, pair.ex);
-			//defaultExpr = SafetyUtil.createNestedUpdateExpr(base, repl);
+			// Expr base = replPathIdExpr(pair.ex, defaultExpr);
+			// Expr repl = faultToActual(pair.f, pair.ex);
+			// defaultExpr = SafetyUtil.createNestedUpdateExpr(base, repl);
 			Expr faultNodeOut = faultToActual(pair.f, pair.ex);
 			// Collect elements to build the nested if then else stmt described above.
 			Expr ftTrigger = localFaultTriggerMap.get(pair.f);
@@ -667,15 +666,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// anything in the sender node regarding fault nominal.
 		if (!isOnlyAsym) {
 			nb.addAssertion(new AgreeStatement("Adding new safety analysis BinaryExpr",
-					new BinaryExpr(outputExpr, BinaryOp.EQUAL,
-							createNestedIfThenElseExpr(triggerList, defaultExpr, 0)),
+					new BinaryExpr(outputExpr, BinaryOp.EQUAL, createNestedIfThenElseExpr(triggerList, defaultExpr, 0)),
 					null));
 		}
 	}
 
 	/**
-	 * Replaces original expression with a nested record update expr.
-	 * ex: fault__nominal -> output{val:= fault__nominal}
+	 * Replaces original expression with a nested record update expr. ex:
+	 * fault__nominal -> output{val:= fault__nominal}
 	 *
 	 * @param original Original expression
 	 * @param toAssign What needs to be replaced and assigned in original
@@ -699,18 +697,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Recursive function creates nested if-then-else expression given a list of pairs
-	 * linking the trigger and fault output.
-	 * agree_node_output =
-	 * 				if fault__trigger_1 then fault__node_1__val_out
-	 * 				else if fault__trigger_2 then fault__node_2__val_out
-	 * 				...
-	 * 				else __fault__nominal__output)
+	 * Recursive function creates nested if-then-else expression given a list of
+	 * pairs linking the trigger and fault output. agree_node_output = if
+	 * fault__trigger_1 then fault__node_1__val_out else if fault__trigger_2 then
+	 * fault__node_2__val_out ... else __fault__nominal__output)
 	 *
-	 * @param list List<TriggerFaultOutPair> links the trigger stmt with the
-	 * 				fault node output.
+	 * @param list    List<TriggerFaultOutPair> links the trigger stmt with the
+	 *                fault node output.
 	 * @param nominal Expr of __fault__nominal__output for the "else" portion.
-	 * @param index Recursive function begins at index 0.
+	 * @param index   Recursive function begins at index 0.
 	 * @return Expr holding nested IfThenElseExpr.
 	 */
 	private Expr createNestedIfThenElseExpr(List<TriggerFaultOutPair> list, Expr nominal, int index) {
@@ -725,11 +720,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Finds the lustre expr for output that fault is attached to.
-	 * Ex:
-	 * val_out -> Sender__fault_3__node__val_out
+	 * Finds the lustre expr for output that fault is attached to. Ex: val_out ->
+	 * Sender__fault_3__node__val_out
 	 *
-	 * @param f Fault in question
+	 * @param f  Fault in question
 	 * @param ex Expression of output
 	 * @return Lustre expression with id set correctly.
 	 */
@@ -753,7 +747,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Returns mapping from eq vars to lustre names.
 	 *
-	 * @param f Fault in question.
+	 * @param f      Fault in question.
 	 * @param eqVars safety eq vars in this fault statement
 	 * @return Map<String, String> maps the fault id to the safetyEqVars
 	 */
@@ -766,8 +760,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Renames safety eq stmts to lustre names. Uses renameEqId
-	 * as helper method.
+	 * Renames safety eq stmts to lustre names. Uses renameEqId as helper method.
 	 *
 	 * @param faults List of faults on this node that need eq stmts renamed.
 	 * @return List of faults with eq stmts renamed.
@@ -782,12 +775,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Renames eq var id to match lustre name.
-	 * Ex:
-	 * eq some_var : bool;
+	 * Renames eq var id to match lustre name. Ex: eq some_var : bool;
 	 * Sender_fault_1_some_var : bool;
 	 *
-	 * @param f Fault with safety eq var stmts.
+	 * @param f     Fault with safety eq var stmts.
 	 * @param idMap Map<String, String> from user defined var to lustre name.
 	 * @return Returns fault with var renamed.
 	 */
@@ -827,11 +818,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Used by addNominalVars: Finds var of interest in list with the id
-	 * matching the string sent in. Returns this var.
+	 * Used by addNominalVars: Finds var of interest in list with the id matching
+	 * the string sent in. Returns this var.
 	 *
 	 * @param vars List of AgreeVar
-	 * @param id String of the id needed to find in list.
+	 * @param id   String of the id needed to find in list.
 	 * @return Returns AgreeVar with id matching that of string.
 	 */
 	public static AgreeVar findVar(List<AgreeVar> vars, String id) {
@@ -844,13 +835,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method populates faultyVarsExpr map with faults associated with outputs
-	 * they are attached to.
-	 * Return map is :
-	 * 		output1 -> {(outputExpr, fault1), (outputExpr, fault2)...}
+	 * Method populates faultyVarsExpr map with faults associated with outputs they
+	 * are attached to. Return map is : output1 -> {(outputExpr, fault1),
+	 * (outputExpr, fault2)...}
 	 *
 	 * @param faults List of all faults in this agree node.
-	 * @param node The agree node.
+	 * @param node   The agree node.
 	 * @return HashMap<String, List<Pair>> faultyVarsExpr map.
 	 */
 	private HashMap<String, List<Pair>> gatherFaultyOutputs(List<Fault> faults, AgreeNode node) {
@@ -866,13 +856,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds the output expression to the output map pair list.
-	 * (output1 -> {(outputExpr, fault1), (outputExpr, fault2)...})
+	 * Method adds the output expression to the output map pair list. (output1 ->
+	 * {(outputExpr, fault1), (outputExpr, fault2)...})
 	 *
 	 * @param outputMap The map to populate.
-	 * @param ex Output expression
-	 * @param id String "output"
-	 * @param f Fault that will be in pair for this output.
+	 * @param ex        Output expression
+	 * @param id        String "output"
+	 * @param f         Fault that will be in pair for this output.
 	 */
 	private void addIdToMap(HashMap<String, List<Pair>> outputMap, Expr ex, String id, Fault f) {
 		Pair pair = new Pair(ex, f);
@@ -886,8 +876,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Create fault event id given base.
-	 * The base corresponds to agreeNodeName__faultName
+	 * Create fault event id given base. The base corresponds to
+	 * agreeNodeName__faultName
 	 *
 	 * @param base nodeName__faultName
 	 * @return __fault__event__nodeName__faultName
@@ -897,8 +887,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Create indep active given base.
-	 * The base corresponds to agreeNodeName__faultName
+	 * Create indep active given base. The base corresponds to
+	 * agreeNodeName__faultName
 	 *
 	 * @param base nodeName__faultName
 	 * @return __fault__independently__active__nodeName__faultName
@@ -908,8 +898,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Create dep active given base.
-	 * The base corresponds to agreeNodeName__faultName
+	 * Create dep active given base. The base corresponds to
+	 * agreeNodeName__faultName
 	 *
 	 * @param base nodeName__faultName
 	 * @return __fault__dependently__active__nodeName__faultName
@@ -919,8 +909,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Create trigger given base.
-	 * The base corresponds to agreeNodeName__faultName
+	 * Create trigger given base. The base corresponds to agreeNodeName__faultName
 	 *
 	 * @param base nodeName__faultName
 	 * @return fault__trigger__nodeName__faultName
@@ -930,8 +919,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Create nominal id given base.
-	 * The base corresponds to agreeNodeName__faultName
+	 * Create nominal id given base. The base corresponds to
+	 * agreeNodeName__faultName
 	 *
 	 * @param output of the Agree node
 	 * @return __fault__nominal__output string
@@ -944,7 +933,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Create new safety eq var name given fault name and variable name.
 	 *
 	 * @param fault Fault this eq stmt is in.
-	 * @param var Var name of this eq stmt.
+	 * @param var   Var name of this eq stmt.
 	 * @return faultName__varName
 	 */
 	public String createFaultEqId(String fault, String var) {
@@ -955,7 +944,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Create fault node eq id stmt.
 	 *
 	 * @param fault Name of fault
-	 * @param var name of var
+	 * @param var   name of var
 	 * @return faultName__node__varName
 	 */
 	public String createFaultNodeEqId(String fault, String var) {
@@ -964,15 +953,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method gathers fault statements within this agree node and
-	 * begins processing.
-	 * Creates FaultASTBuilder object, creates faults for each fault
-	 * stmt, populates asym maps, separates asym/sym faults for
-	 * separate processing, and returns processed faults.
+	 * Method gathers fault statements within this agree node and begins processing.
+	 * Creates FaultASTBuilder object, creates faults for each fault stmt, populates
+	 * asym maps, separates asym/sym faults for separate processing, and returns
+	 * processed faults.
 	 *
 	 * @param globalLustreNodes List of Nodes
-	 * @param node This agree node
-	 * @param isTop flag to determine if this is the top node of the program.
+	 * @param node              This agree node
+	 * @param isTop             flag to determine if this is the top node of the
+	 *                          program.
 	 * @return list of faults associated with the fault stmts in this node.
 	 */
 	public List<Fault> gatherFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
@@ -986,7 +975,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		// faults on a single output with the sym/asym single faults on a single output.
 		// 1. Collect all fault statements and put into list.
 		// Do not collect any that are disabled.
-		// 2. Separate out multiple asym faults on one output and single faults on one output.
+		// 2. Separate out multiple asym faults on one output and single faults on one
+		// output.
 		// 3. Perform necessary processing on each of these lists.
 		List<FaultStatement> allFaultStmts = new ArrayList<FaultStatement>();
 		for (SpecStatement s : specs) {
@@ -1068,8 +1058,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Checks fault stmt for DisableStatement. If found, returns value
-	 * of disable statement. Else returns false.
+	 * Checks fault stmt for DisableStatement. If found, returns value of disable
+	 * statement. Else returns false.
+	 * 
 	 * @param fs FaultStatement
 	 * @return bool: isDisabled
 	 */
@@ -1088,13 +1079,15 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * This method uses a list of fault statements and divides them into multiple asym faults on
-	 * a single output and everything else.
+	 * This method uses a list of fault statements and divides them into multiple
+	 * asym faults on a single output and everything else.
 	 *
-	 * @param allFS List<FaultStatement> All fault statements in this agree node
-	 * @param remainderFS List<FaultStatement> List to add all single asym faults on single output AND
-	 * 							sym faults.
-	 * @param multipleAsymFS List<FaultStatement> List to add all multiple asym faults on single output.
+	 * @param allFS          List<FaultStatement> All fault statements in this agree
+	 *                       node
+	 * @param remainderFS    List<FaultStatement> List to add all single asym faults
+	 *                       on single output AND sym faults.
+	 * @param multipleAsymFS List<FaultStatement> List to add all multiple asym
+	 *                       faults on single output.
 	 */
 	private void separateFaultStmts(List<FaultStatement> allFS, List<FaultStatement> remainderFS,
 			Map<String, List<FaultStatement>> asymMap) {
@@ -1150,8 +1143,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Given a fault statement, returns the string name of the
-	 * output this fault stmt is connected to.
+	 * Given a fault statement, returns the string name of the output this fault
+	 * stmt is connected to.
 	 *
 	 * @param fs FaultStatement in question
 	 * @return String name of the output
@@ -1176,11 +1169,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Gather hardware faults (dep faults) from the agree node fault
-	 * statements and process them.
+	 * Gather hardware faults (dep faults) from the agree node fault statements and
+	 * process them.
+	 * 
 	 * @param globalLustreNodes List of Nodes
-	 * @param node Agree node
-	 * @param isTop flag states if this agree node is top of program.
+	 * @param node              Agree node
+	 * @param isTop             flag states if this agree node is top of program.
 	 * @return List of hardware faults in the agree node annex.
 	 */
 	public List<HWFault> gatherHWFaults(List<Node> globalLustreNodes, AgreeNode node, boolean isTop) {
@@ -1200,8 +1194,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method gets the analysis statement located in the top node
-	 * system implementation. Determines if max no. faults or prob.
+	 * Method gets the analysis statement located in the top node system
+	 * implementation. Determines if max no. faults or prob.
 	 *
 	 * @param node Top agree node.
 	 * @return Analysis behavior stated in the annex.
@@ -1240,10 +1234,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Identify the fault associated with a ComponentInstance
-	 * given the fault name and the component path.
+	 * Identify the fault associated with a ComponentInstance given the fault name
+	 * and the component path.
 	 *
-	 * @param faultName Name of fault to be found
+	 * @param faultName      Name of fault to be found
 	 * @param faultComp_Path Component instance path
 	 * @return Fault with name matching string.
 	 */
@@ -1276,8 +1270,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Gathers list of fault activations for hardware faults.
-	 * Adds to faultActivations list.
+	 * Gathers list of fault activations for hardware faults. Adds to
+	 * faultActivations list.
 	 *
 	 * @param node Agree node with these spec statements.
 	 */
@@ -1316,8 +1310,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method gathers source and destination faults for hardware
-	 * (dependent) faults. Adds these to propagations list.
+	 * Method gathers source and destination faults for hardware (dependent) faults.
+	 * Adds these to propagations list.
 	 *
 	 * @param node Agree Node with these spec statements.
 	 */
@@ -1340,8 +1334,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 						// for each destination fault name and path, locate the fault
 						BaseFault destFault = null;
 						Iterator<String> destFaultIt = ps.getDestFaultList().iterator();
-						Iterator<NamedElement> destCompPathIt = ps.getDestComp_path()
-								.iterator();
+						Iterator<NamedElement> destCompPathIt = ps.getDestComp_path().iterator();
 						while (destFaultIt.hasNext() && destCompPathIt.hasNext()) {
 							NamedElement destCompPath = destCompPathIt.next();
 							String destFaultName = destFaultIt.next();
@@ -1362,7 +1355,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Adds "__" for path delimiters - replace "."
 	 *
 	 * @param path The path to be delimited.
-	 * @param var Name of var
+	 * @param var  Name of var
 	 * @return new path name for var.
 	 */
 	public String addPathDelimiters(List<String> path, String var) {
@@ -1376,7 +1369,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Method latches the event of a fault so that it becomes permanent.
 	 *
-	 * @param varId Id of fault to be latched.
+	 * @param varId     Id of fault to be latched.
 	 * @param eventExpr The event expression of this fault.
 	 * @return Returns binary expression that latches this fault (now perm.)
 	 */
@@ -1392,7 +1385,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Method creates transient fault - not permanently latched.
 	 *
 	 * @param varId Id of fault
-	 * @param expr Expression of transience.
+	 * @param expr  Expression of transience.
 	 * @return Return id = transExpr
 	 */
 	public Expr createTransientExpr(Expr varId, Expr expr) {
@@ -1401,12 +1394,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Constrains fault activity to permanent expression.
-	 * If user attempts to create transient, exception is thrown.
+	 * Constrains fault activity to permanent expression. If user attempts to create
+	 * transient, exception is thrown.
 	 *
-	 * @param f Fault
+	 * @param f        Fault
 	 * @param nameBase Lustre name of fault
-	 * @param builder The node builder that will have these assertions added.
+	 * @param builder  The node builder that will have these assertions added.
 	 */
 	public void constrainFaultActive(Fault f, String nameBase, AgreeNodeBuilder builder) {
 		IdExpr independentlyActiveExpr = new IdExpr(this.createFaultIndependentActiveId(nameBase));
@@ -1443,9 +1436,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Method constrains hardware faults to be permanent.
 	 *
-	 * @param hwf HardwareFault to be constrained.
+	 * @param hwf      HardwareFault to be constrained.
 	 * @param nameBase Name of fault.
-	 * @param builder AgreeNodeBuilder will have assertions added.
+	 * @param builder  AgreeNodeBuilder will have assertions added.
 	 */
 	public void constrainFaultActive(HWFault hwf, String nameBase, AgreeNodeBuilder builder) {
 		IdExpr independentlyActiveExpr = new IdExpr(this.createFaultIndependentActiveId(nameBase));
@@ -1484,14 +1477,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Method links trigger with indep/dep active stmt.
 	 *
-	 * Ex:
-	 *   assert (Sender__fault__trigger__Sender__fault_1 =
-	 *   	(__fault__independently__active__Sender__Sender__fault_1
-	 *   or  __fault__dependently__active__Sender__Sender__fault_1));
-
+	 * Ex: assert (Sender__fault__trigger__Sender__fault_1 =
+	 * (__fault__independently__active__Sender__Sender__fault_1 or
+	 * __fault__dependently__active__Sender__Sender__fault_1));
 	 *
-	 * @param f Fault
-	 * @param path path of fault (where in program it is located)
+	 * 
+	 * @param f       Fault
+	 * @param path    path of fault (where in program it is located)
 	 * @param base
 	 * @param builder Node builder that will have these assertions added
 	 */
@@ -1511,13 +1503,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method maps the trigger to dep/indep active ids.
-	 * Ex:
-	 *   assert (Sender__fault__trigger__Sender__fault_2 =
-	 *   (__fault__independently__active__Sender__Sender__fault_2
-	 *   or __fault__dependently__active__Sender__Sender__fault_2));
-
+	 * Method maps the trigger to dep/indep active ids. Ex: assert
+	 * (Sender__fault__trigger__Sender__fault_2 =
+	 * (__fault__independently__active__Sender__Sender__fault_2 or
+	 * __fault__dependently__active__Sender__Sender__fault_2));
 	 *
+	 * 
 	 * @param hwf
 	 * @param path
 	 * @param base
@@ -1534,11 +1525,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method updates fault map with the path, also sets path for each
-	 * fault. (Path corresponds to agree node.)
+	 * Method updates fault map with the path, also sets path for each fault. (Path
+	 * corresponds to agree node.)
 	 *
 	 * @param currentNode Agree node with this fault.
-	 * @param path Path name (node name)
+	 * @param path        Path name (node name)
 	 */
 	public void collectFaultPath(AgreeNode currentNode, List<String> path) {
 
@@ -1579,13 +1570,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds all top level fault information to main node.
-	 * Assume hist stmts
-	 * Locals
-	 * Count constraints
-	 * Fault assertions
-	 * Fault node calls
-	 * Changes connections for communication nodes.
+	 * Method adds all top level fault information to main node. Assume hist stmts
+	 * Locals Count constraints Fault assertions Fault node calls Changes
+	 * connections for communication nodes.
 	 *
 	 * @param nb Node builder will hold all this new info.
 	 */
@@ -1599,8 +1586,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds activation assertions for hardware faults.
-	 * If source is active, then sink is also active.
+	 * Method adds activation assertions for hardware faults. If source is active,
+	 * then sink is also active.
 	 *
 	 * @param nb Node builder will have this assertion added to main.
 	 */
@@ -1611,13 +1598,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds fault activations to lower levels.
-	 * AgreeVar = fault_trigger
+	 * Method adds fault activations to lower levels. AgreeVar = fault_trigger
 	 *
-	 * @param agreeVarName Name of agree var
-	 * @param f Fault def
+	 * @param agreeVarName  Name of agree var
+	 * @param f             Fault def
 	 * @param faultCompName Name of component with fault
-	 * @param nb Node builder will have assertion added
+	 * @param nb            Node builder will have assertion added
 	 */
 	private void addFaultActivationAssertion(String agreeVarName, BaseFault f, String faultCompName,
 			AgreeNodeBuilder nb) {
@@ -1628,13 +1614,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds fault information to main node.
-	 * This includes locals and inputs. It also checks to see if IVC
-	 * analysis is being performed. If so, the fault indep vars are added
-	 * to lustre (set equal to false) and given the IVC command.
+	 * Method adds fault information to main node. This includes locals and inputs.
+	 * It also checks to see if IVC analysis is being performed. If so, the fault
+	 * indep vars are added to lustre (set equal to false) and given the IVC
+	 * command.
 	 *
 	 * @param currentNode Top node
-	 * @param nb Node builder has assertions, locals, etc added.
+	 * @param nb          Node builder has assertions, locals, etc added.
 	 */
 	public void addTopLevelFaultDeclarations(AgreeNode currentNode, AgreeNodeBuilder nb) {
 
@@ -1674,11 +1660,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds unconstrained input and constrained local to represent fault event and
-	 * whether or not fault is currently active.
+	 * Method adds unconstrained input and constrained local to represent fault
+	 * event and whether or not fault is currently active.
 	 *
 	 * @param hwfaults List of hardware faults to loop through.
-	 * @param nb Node builder has inputs added.
+	 * @param nb       Node builder has inputs added.
 	 */
 	private void addLocalsAndInputForHWFaults(List<HWFault> hwfaults, AgreeNodeBuilder nb) {
 		for (HWFault hwf : hwfaults) {
@@ -1700,7 +1686,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Method adds fault to lustre names mapping for later use.
 	 *
 	 * @param base nodeName__faultName used to make lustre name.
-	 * @param f Fault to add to map.
+	 * @param f    Fault to add to map.
 	 */
 	private void addToLustreFaultMap(String base, Fault f) {
 		// add to lustre fault map with the explanatory text (string given for fault
@@ -1720,7 +1706,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Method adds hw fault to lustre names mapping for later use.
 	 *
 	 * @param base nodeName__hwfaultName used to make lustre name.
-	 * @param f HWFault to add to map.
+	 * @param f    HWFault to add to map.
 	 */
 	private void addToLustreHWFaultMap(String base, HWFault f) {
 		// add to lustre fault map with the explanatory text (string given for fault
@@ -1737,13 +1723,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Here is where fault indep variables are added to lustre.
-	 * For fault tree generation, this must be added locally,
-	 * assigned to false, and given the --%IVC command.
+	 * Here is where fault indep variables are added to lustre. For fault tree
+	 * generation, this must be added locally, assigned to false, and given the
+	 * --%IVC command.
 	 *
 	 * @param base String nodeName__faultName
-	 * @param f Fault in question
-	 * @param nb Node builder has assertions and locals added
+	 * @param f    Fault in question
+	 * @param nb   Node builder has assertions and locals added
 	 */
 	private void addFaultIndepVarsToLustre(String base, Fault f, AgreeNodeBuilder nb) {
 		if (AddFaultsToAgree.getIsVerify()) {
@@ -1753,7 +1739,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 			// Else we want to generate mcs.
 			// In this case, we add the indep as a local var.
 			AgreeVar newVar = new AgreeVar(this.createFaultIndependentActiveId(base), NamedType.BOOL, f.faultStatement);
-			// Add this as a local variable to the node builder (and hence later it will be local in the lustre program).
+			// Add this as a local variable to the node builder (and hence later it will be
+			// local in the lustre program).
 			nb.addLocal(newVar);
 
 			// Then equate this to false
@@ -1774,13 +1761,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 ******************************************************************/
 
 	/**
-	 * Method creates sum expression to count no. of occurrences.
-	 * Ex:
-	 *   ((if __fault__independently__active__Sender__Sender__fault_1
-	 *     then 1 else 0)
-	 *  + (if __fault__independently__active__Sender__Sender__fault_2
-	 *      then 1 else 0)));
-
+	 * Method creates sum expression to count no. of occurrences. Ex: ((if
+	 * __fault__independently__active__Sender__Sender__fault_1 then 1 else 0) + (if
+	 * __fault__independently__active__Sender__Sender__fault_2 then 1 else 0)));
+	 * 
 	 * @param cond indep active stmt.
 	 * @return Returns if-then-else expr
 	 */
@@ -1792,7 +1776,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Get the list of faults that will contribute to the count.
 	 *
 	 * @param currentNode This agree node.
-	 * @param sumExprs Expressions to be summed.
+	 * @param sumExprs    Expressions to be summed.
 	 */
 	public void getFaultCountExprList(AgreeNode currentNode, List<Expr> sumExprs) {
 		List<Fault> faults = this.faultMap.get(currentNode.compInst);
@@ -1813,10 +1797,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method collect the list of expressions for the source faults
-	 * in the propagations whose target fault is the current fault.
+	 * Method collect the list of expressions for the source faults in the
+	 * propagations whose target fault is the current fault.
 	 *
-	 * @param f Fault in question (base fault)
+	 * @param f          Fault in question (base fault)
 	 * @param faultExprs List of all fault expressions.
 	 */
 	public void getSrcFaultExprList(BaseFault f, List<Expr> faultExprs) {
@@ -1840,15 +1824,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Recursive method builds expression for constraining fault
-	 * count in lustre.
-	 * Base case 1: list is empty: returns integer expr (0)
-	 * Base case 2: list has one element: returns list
-	 * Recursive case: create nested binary expr and call this method
-	 * to create next iteration.
+	 * Recursive method builds expression for constraining fault count in lustre.
+	 * Base case 1: list is empty: returns integer expr (0) Base case 2: list has
+	 * one element: returns list Recursive case: create nested binary expr and call
+	 * this method to create next iteration.
 	 *
 	 * @param exprList list of expressions for the count
-	 * @param index begins at 0
+	 * @param index    begins at 0
 	 * @return Expr of the full count.
 	 */
 	public Expr buildFaultCountExpr(List<Expr> exprList, int index) {
@@ -1862,14 +1844,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Recursive method builds disjunctive expr for everything in list.
-	 * Base case 1: list is empty: returns false
-	 * Base case 2: list has one element: returns list
-	 * Recursive case: create nested disjunctive binary expr and
-	 * call this method to create next iteration.
+	 * Recursive method builds disjunctive expr for everything in list. Base case 1:
+	 * list is empty: returns false Base case 2: list has one element: returns list
+	 * Recursive case: create nested disjunctive binary expr and call this method to
+	 * create next iteration.
 	 *
 	 * @param exprList list of disjuncts
-	 * @param index begins at 0
+	 * @param index    begins at 0
 	 * @return nested disjunctive expr of all items in list.
 	 */
 	public Expr buildFaultDisjunctionExpr(List<Expr> exprList, int index) {
@@ -1897,8 +1878,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Method adds count constraints to top level assertions.
 	 *
 	 * @param maxFaults No. of faults allowed in count.
-	 * @param topNode This node (main)
-	 * @param builder node builder will have constraints added.
+	 * @param topNode   This node (main)
+	 * @param builder   node builder will have constraints added.
 	 */
 	public void addTopLevelMaxFaultOccurrenceConstraint(int maxFaults, AgreeNode topNode, AgreeNodeBuilder builder) {
 		// add a global fault count
@@ -1933,8 +1914,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Get probabilities of all faults.
 	 *
-	 * @param currentNode Agree node we are visiting currently
-	 * @param path path to this agree node
+	 * @param currentNode   Agree node we are visiting currently
+	 * @param path          path to this agree node
 	 * @param probabilities prob list
 	 */
 	public void getFaultProbExprList(AgreeNode currentNode, List<String> path, List<FaultProbability> probabilities) {
@@ -1993,12 +1974,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method collects max fault occurrance constraints then builds
-	 * the associated assertions for the node.
+	 * Method collects max fault occurrance constraints then builds the associated
+	 * assertions for the node.
 	 *
 	 * @param minProbability threshold
-	 * @param topNode top agree node
-	 * @param builder node builder will have assertions added
+	 * @param topNode        top agree node
+	 * @param builder        node builder will have assertions added
 	 */
 	public void addTopLevelMaxFaultOccurrenceConstraint(double minProbability, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
@@ -2013,15 +1994,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method gathers possible fault combinations given probabilities
-	 * on them (and top level threshold).
-	 * Will adjust for dependent faults as well.
+	 * Method gathers possible fault combinations given probabilities on them (and
+	 * top level threshold). Will adjust for dependent faults as well.
 	 *
-	 * @param minProbability Threshold
-	 * @param topNode Top agree node
-	 * @param elementProbabilities prob of all fault elements
+	 * @param minProbability                  Threshold
+	 * @param topNode                         Top agree node
+	 * @param elementProbabilities            prob of all fault elements
 	 * @param faultCombinationsAboveThreshold allowable combinations
-	 * @param pq priority queue of faults
+	 * @param pq                              priority queue of faults
 	 */
 	private void collectFaultOccurrenceConstraint(double minProbability, AgreeNode topNode,
 			ArrayList<FaultProbability> elementProbabilities,
@@ -2045,14 +2025,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	/**
 	 * Method adjusts allowable combinations for the dependent faults.
 	 *
-	 * If the propagations set is not empty, then for each fault in
-	 * each valid fault combination, see if it appears as a source
-	 * fault in the propagations. If yes, insert the destination fault
-	 * in the same valid fault combination (fault set)
+	 * If the propagations set is not empty, then for each fault in each valid fault
+	 * combination, see if it appears as a source fault in the propagations. If yes,
+	 * insert the destination fault in the same valid fault combination (fault set)
 	 * without changing the fault set's probability.
 	 *
 	 * @param faultCombinationsAboveThreshold Allowable combinations
-	 * @param elementProbabilities Prob of elements
+	 * @param elementProbabilities            Prob of elements
 	 */
 	private void adjustForDependentFaults(ArrayList<FaultSetProbability> faultCombinationsAboveThreshold,
 			ArrayList<FaultProbability> elementProbabilities) {
@@ -2093,18 +2072,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * So...now we have a priority queue with remaining fault combinations to be
-	 * checked for addition. The PQ preserves the invariant that
-	 * highest probability elements are first.
-	 * We attempt to combine with remainder (also in priority order).
-	 * If unable to combine because combination below threshold,
-	 * remove rest of elementProbability list (the rest will be
-	 * below threshold for all subsequent elements).
-	 * Complete when either the PQ or the element list is empty.
+	 * checked for addition. The PQ preserves the invariant that highest probability
+	 * elements are first. We attempt to combine with remainder (also in priority
+	 * order). If unable to combine because combination below threshold, remove rest
+	 * of elementProbability list (the rest will be below threshold for all
+	 * subsequent elements). Complete when either the PQ or the element list is
+	 * empty.
 	 *
-	 * @param pq Priority queue
-	 * @param remainder Leftovers
+	 * @param pq                              Priority queue
+	 * @param remainder                       Leftovers
 	 * @param faultCombinationsAboveThreshold Allowed combinations
-	 * @param minProbability min prob value between 0 and 1 inclusive
+	 * @param minProbability                  min prob value between 0 and 1
+	 *                                        inclusive
 	 */
 	private void checkFaultCombinations(PriorityQueue<FaultSetProbability> pq, ArrayList<FaultProbability> remainder,
 			ArrayList<FaultSetProbability> faultCombinationsAboveThreshold, double minProbability) {
@@ -2120,9 +2099,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				if (setProbability < minProbability) {
 					remainder.subList(i, remainder.size()).clear();
 				}
-				//add to faultCombinationAboveThreshold only when
-				//fp is not a subset of fsp
-				// and fsp, fp are not an existing set (disregard the order of faults) in faultCombinationAboveThreshold
+				// add to faultCombinationAboveThreshold only when
+				// fp is not a subset of fsp
+				// and fsp, fp are not an existing set (disregard the order of faults) in
+				// faultCombinationAboveThreshold
 				else if (!fsp.elements.contains(fp)) {
 					FaultSetProbability newSet = new FaultSetProbability(setProbability, fsp, fp);
 					if (!isContained(newSet, faultCombinationsAboveThreshold)) {
@@ -2136,12 +2116,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Checks to see if fault combination is an allowed combination
-	 * based on combined probabilities.
+	 * Checks to see if fault combination is an allowed combination based on
+	 * combined probabilities.
 	 *
-	 * @param newSet FaultSetProbability to check if allowed combination
-	 * @param faultCombinationsAboveThreshold List of FaultSetProbability
-	 * 		  elements that are allowed combinations.
+	 * @param newSet                          FaultSetProbability to check if
+	 *                                        allowed combination
+	 * @param faultCombinationsAboveThreshold List of FaultSetProbability elements
+	 *                                        that are allowed combinations.
 	 * @return boolean - is contained or not.
 	 */
 	private boolean isContained(FaultSetProbability newSet,
@@ -2165,8 +2146,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Arranges priority queue of faults based on prob calculations.
 	 *
 	 * @param elementProbabilities Prob of all elements in fault list.
-	 * @param pq Priority queue of these fault set probs
-	 * @param minProbability double value of minimum prob.
+	 * @param pq                   Priority queue of these fault set probs
+	 * @param minProbability       double value of minimum prob.
 	 */
 	private ArrayList<FaultProbability> arrangePriorityQueue(ArrayList<FaultProbability> elementProbabilities,
 			PriorityQueue<FaultSetProbability> pq, double minProbability) {
@@ -2187,8 +2168,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Converts the fault combinations that are above threshold
-	 * to a hash set of strings.
+	 * Converts the fault combinations that are above threshold to a hash set of
+	 * strings.
 	 */
 	private void convertFaultCombinationToStrSet() {
 		for (FaultSetProbability faultCombination : faultCombinationsAboveThreshold) {
@@ -2199,15 +2180,13 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * Method calls will collect max fault behavior or probability behavior
-	 * depending on what is entered in the top level annex.
-	 * If fault tree generation is chosen by user,
-	 * we do not add the assertions for the max/prob behavior,
+	 * depending on what is entered in the top level annex. If fault tree generation
+	 * is chosen by user, we do not add the assertions for the max/prob behavior,
 	 * but instead add fault indep vars in the IVC commands.
 	 *
-	 * This method calls helpers depending on which analysis behavior
-	 * is required.
+	 * This method calls helpers depending on which analysis behavior is required.
 	 *
-	 * @param ab Top level analysis behavior
+	 * @param ab      Top level analysis behavior
 	 * @param topNode top level agree node
 	 * @param builder node builder will have these constraints added
 	 */
@@ -2227,7 +2206,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Checks analysis behavior and sets local static vars to reflect this.
 	 * (maxFaultHypothesis, maxFaultCount, or probabilisticHypothesis)
 	 *
-	 * @param ab Top level analysis behavior
+	 * @param ab      Top level analysis behavior
 	 * @param topNode top level agree node
 	 * @param builder node builder will have these constraints added
 	 */
@@ -2245,12 +2224,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method collects occurrance constraints for top level given
-	 * fault probabilities.
+	 * Method collects occurrance constraints for top level given fault
+	 * probabilities.
 	 *
 	 * @param minProbability Min prob value
-	 * @param topNode Top agree node
-	 * @param builder node builder has these assertions added
+	 * @param topNode        Top agree node
+	 * @param builder        node builder has these assertions added
 	 */
 	private void collectTopLevelMaxFaultOccurrenceConstraint(double minProbability, AgreeNode topNode,
 			AgreeNodeBuilder builder) {
@@ -2263,18 +2242,18 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method builds combinations of faults that cannot occur
-	 * together based on probability values.
+	 * Method builds combinations of faults that cannot occur together based on
+	 * probability values.
 	 *
-	 * Uses macros to shrink the size of the entire
-	 * formula in case the number of fault combinations
-	 * is too large for the Lustre parser to handle.
+	 * Uses macros to shrink the size of the entire formula in case the number of
+	 * fault combinations is too large for the Lustre parser to handle.
 	 *
-	 * @param topNode AgreeNode, top of program
-	 * @param builder Node builder will have assertions added.
-	 * @param elementProbabilities Prob of elements
-	 * @param faultCombinationsAboveThreshold Which FaultSetProbabilities
-	 * are above threshold given in top level annex.
+	 * @param topNode                         AgreeNode, top of program
+	 * @param builder                         Node builder will have assertions
+	 *                                        added.
+	 * @param elementProbabilities            Prob of elements
+	 * @param faultCombinationsAboveThreshold Which FaultSetProbabilities are above
+	 *                                        threshold given in top level annex.
 	 */
 	private void buildNonFaultCombinationAssertions(AgreeNode topNode, AgreeNodeBuilder builder,
 			ArrayList<FaultProbability> elementProbabilities,
@@ -2376,10 +2355,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method is used to assert that the assume hist statements
-	 * for each comm node is true. This is added to main.
-	 * Ex:
-	 * assert (asym_node_0__Sender__sender_out____ASSUME__HIST = __HIST(true));
+	 * Method is used to assert that the assume hist statements for each comm node
+	 * is true. This is added to main. Ex: assert
+	 * (asym_node_0__Sender__sender_out____ASSUME__HIST = __HIST(true));
 	 *
 	 * @param nb NodeBuilder that will have these assertions added.
 	 */
@@ -2398,12 +2376,10 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method is used when asymmetric fault is being added to the top node.
-	 * It adds all locals to the top node that are present in new comm nodes.
-	 * Ex:
-	 * asym_node_1__Sender__input : Base_Types__Float;
-	 * asym_node_1__Sender__output : Base_Types__Float;
-	 * asym_node_1__Sender____ASSUME__HIST : bool;
+	 * Method is used when asymmetric fault is being added to the top node. It adds
+	 * all locals to the top node that are present in new comm nodes. Ex:
+	 * asym_node_1__Sender__input : Base_Types__Float; asym_node_1__Sender__output :
+	 * Base_Types__Float; asym_node_1__Sender____ASSUME__HIST : bool;
 	 *
 	 * ... etc
 	 *
@@ -2436,16 +2412,14 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * Method adds the local variable for the count of asymmetric faults.
-	 * Constraints for this count are added in assertions.
-	 * Ex:
-	 * 	__fault__Sender__fault_1_count : int; (as local in main)
+	 * Constraints for this count are added in assertions. Ex:
+	 * __fault__Sender__fault_1_count : int; (as local in main)
 	 *
-	 * assert (__fault__Sender__fault_1_count =
-	 * 		((if asym_node_0__fault__trigger__Sender__fault_1
-	 * 		  then 1
-	 * 		  else 0)
+	 * assert (__fault__Sender__fault_1_count = ((if
+	 * asym_node_0__fault__trigger__Sender__fault_1 then 1 else 0)
 	 *
-	 * assert (__fault__Sender__fault_1_count <= 3); (where 3 is total no. of connections)
+	 * assert (__fault__Sender__fault_1_count <= 3); (where 3 is total no. of
+	 * connections)
 	 *
 	 * @param nb NodeBuilder that will have this information added.
 	 */
@@ -2474,14 +2448,11 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method adds assertions associated with the asym fault event.
-	 * Adds triggers for the communication node faults:
-	 * 		__fault__trigger__Sender__fault_1 : bool;
+	 * Method adds assertions associated with the asym fault event. Adds triggers
+	 * for the communication node faults: __fault__trigger__Sender__fault_1 : bool;
 	 * Adds trigger expression linking fault of sender node to the comm node
-	 * behavior:
-	 * 		output = if __fault__trigger__Sender__fault_1
-	 * 				 then Sender__fault_1__node__val_out
-	 * 				 else __fault__nominal__output
+	 * behavior: output = if __fault__trigger__Sender__fault_1 then
+	 * Sender__fault_1__node__val_out else __fault__nominal__output
 	 *
 	 * @param nb NodeBuilder that will have these assertions added.
 	 */
@@ -2494,7 +2465,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 				IdExpr trigger = new IdExpr(nodeName + "__fault__trigger__" + fault.id);
 				triggerList.add(trigger);
 			}
-			// Create trigger expression that links fault of sender node to comm node trigger.
+			// Create trigger expression that links fault of sender node to comm node
+			// trigger.
 			String compName = mapAsymFaultToCompName.get(fault);
 			IdExpr trigger = new IdExpr(compName + "__fault__trigger__" + fault.id);
 			Expr bigOrExpr = buildBigOrExpr(triggerList, 0);
@@ -2526,20 +2498,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method will remove the previous connections in the main lustre node
-	 * from sender to receivers and add in the new connections from sender
-	 * to commNode and from commNode to receiver.
-	 * Ex: What used to be:
-	 * 	   Sender_out = reciever1.in
-	 * 	   Sender_out = reciever2.in
-	 * 	   Sender_out = reciever3.in
-	 * Is now:
-	 * 	   Sender_out = asym0.in
-	 * 	   Sender_out = asym1.in
-	 * 	   Sender_out = asym2.in
-	 * 	   asym0.out = reciever1.in
-	 * 	   asym1.out = reciever2.in
-	 * 	   asym2.out = reciever3.in
+	 * Method will remove the previous connections in the main lustre node from
+	 * sender to receivers and add in the new connections from sender to commNode
+	 * and from commNode to receiver. Ex: What used to be: Sender_out = reciever1.in
+	 * Sender_out = reciever2.in Sender_out = reciever3.in Is now: Sender_out =
+	 * asym0.in Sender_out = asym1.in Sender_out = asym2.in asym0.out = reciever1.in
+	 * asym1.out = reciever2.in asym2.out = reciever3.in
 	 *
 	 * @param nb NodeBuilder for the main lustre node.
 	 */
@@ -2580,13 +2544,12 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Method builds an OR expression of all things in list.
-	 * Base case: list is empty : append false to or list
-	 * Base case 2: list has one element : return that element.
-	 * Recursive case: make or of element of list with recursive call.
+	 * Method builds an OR expression of all things in list. Base case: list is
+	 * empty : append false to or list Base case 2: list has one element : return
+	 * that element. Recursive case: make or of element of list with recursive call.
 	 *
 	 * @param exprList List of expressions for disjunction.
-	 * @param index Recursive function begins with 0 as index.
+	 * @param index    Recursive function begins with 0 as index.
 	 * @return Expr: disjunction of all expr in list.
 	 */
 	private Expr buildBigOrExpr(List<Expr> exprList, int index) {
@@ -2600,7 +2563,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Public accessor for the mapping from a fault to its corresponding lustre name.
+	 * Public accessor for the mapping from a fault to its corresponding lustre
+	 * name.
+	 * 
 	 * @return Map<Fault, List<String>> faultToLustreNameMap
 	 */
 	public Map<Fault, List<String>> getFaultToLustreNameMap() {
@@ -2608,8 +2573,9 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Public accessor for the mapping from a hwfault to its
-	 * corresponding lustre name.
+	 * Public accessor for the mapping from a hwfault to its corresponding lustre
+	 * name.
+	 * 
 	 * @return Map<HWFault, List<String>> faultToLustreNameMap
 	 */
 	public Map<HWFault, List<String>> getHWFaultToLustreNameMap() {
@@ -2629,6 +2595,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	 * Public accessor for faultMap: faultMap is used to properly set up the
 	 * top-level node for triggering faults - faultMap stores the faults associated
 	 * with a node.
+	 * 
 	 * @return Map<ComponentInstance, List<Fault>> faultMap
 	 */
 	public Map<ComponentInstance, List<Fault>> getFaultMap() {
@@ -2665,6 +2632,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * Class used to define probabilitiy over elements in a set.
+	 * 
 	 * @author Danielle Stewart, Mike Whalen, Janet Liu
 	 *
 	 */
@@ -2678,7 +2646,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		 * Constructor method.
 		 *
 		 * @param probability double prob value (btwn 0 and 1 inclusive)
-		 * @param fp Fault probability
+		 * @param fp          Fault probability
 		 */
 		public FaultSetProbability(double probability, FaultProbability fp) {
 			this.probability = probability;
@@ -2716,8 +2684,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 		}
 
 		/**
-		 * Method takes fault prob elements and returns them as a
-		 * hash set of strings.
+		 * Method takes fault prob elements and returns them as a hash set of strings.
 		 *
 		 * @return HashSet<String> of element fault names.
 		 */
@@ -2732,6 +2699,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * Class defines pair Expr, Fault
+	 * 
 	 * @author Danielle Stewart
 	 *
 	 */
@@ -2747,6 +2715,7 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 
 	/**
 	 * Class defines pair Fault, Fault
+	 * 
 	 * @author Danielle Stewart
 	 *
 	 */
@@ -2761,8 +2730,8 @@ public class AddFaultsToNodeVisitor extends AgreeASTMapVisitor {
 	}
 
 	/**
-	 * Class defines pair of Expr, Expr
-	 * used for trigger stmt and fault output stmt.
+	 * Class defines pair of Expr, Expr used for trigger stmt and fault output stmt.
+	 * 
 	 * @author Danielle Stewart
 	 *
 	 */

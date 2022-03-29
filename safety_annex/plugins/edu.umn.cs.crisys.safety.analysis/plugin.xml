@@ -2,6 +2,18 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+   <extension point="org.eclipse.ui.views">
+      <category
+            id="edu.umn.cs.crisys.safety.analysis"
+            name="SafetyAnnex">
+      </category>
+        <view
+              category="edu.umn.cs.crisys.safety.analysis"
+              class="edu.umn.cs.crisys.safety.analysis.views.SafetyResultsView"
+              icon="icons/layers.png"
+              id="edu.umn.cs.crisys.safety.analysis.views.safetyResultsView"
+              name="Safety Results"/>
+   </extension>
    <extension
          point="org.eclipse.ui.commands">
       <category
@@ -18,13 +30,11 @@
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsAllLayersCommand">
      </command>
-     <?ignore
      <command
            name="Verify Monolithically with Faults"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand">
      </command>
-     ?>
      <command
            name="Generate Minimal Cut Sets"
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
@@ -35,6 +45,12 @@
            categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
            id="edu.umn.cs.crisys.safety.analysis.commands.genFTACommand">
      </command> 
+     <command
+           categoryId="edu.umn.cs.crisys.safety.analysis.commands.category"
+           description="Re-run previous safety analysis"
+           id="edu.umn.cs.crisys.safety.analysis.commands.rerunSafety"
+           name="Re-run Safety Analysis"> 
+     </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -56,7 +72,6 @@
             </reference>
          </enabledWhen>
       </handler>
-      <?ignore 
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.FaultsVerifyMonolithicHandler">
@@ -66,7 +81,6 @@
             </reference>
          </enabledWhen>
       </handler> 
-      ?> 
       <handler
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
             class="edu.umn.cs.crisys.safety.analysis.handlers.GenMCSHandler">
@@ -99,14 +113,12 @@
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
-      <?ignore
       <key
             commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+7"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
-      ?>
       <key
             commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
             contextId="org.eclipse.ui.contexts.window"
@@ -145,7 +157,6 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.faultsAllLayersCommand"
                   style="push">
             </command>
-            <?ignore
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
                   mnemonic="f"
@@ -153,7 +164,6 @@
                   id="edu.umn.cs.crisys.safety.analysis.menus.faultsMonolithicCommand"
                   style="push">
             </command>
-            ?>
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
                   mnemonic="f"
@@ -186,14 +196,12 @@
                   tooltip="Fault analysis: compositional."
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsAllLayersCommand">
             </command> 
-            <?ignore
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
                   icon="icons/sample.gif"
                   tooltip="Fault analysis: monolithic"
                   id="edu.umn.cs.crisys.safety.analysis.toolbars.faultsMonolithicCommand">
             </command>
-            ?>
            <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
                   icon="icons/sample.gif"
@@ -233,7 +241,6 @@
                   mnemonic="b"
                   style="push">
             </command>
-            <?ignore
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.faultsMonolithicCommand"
                   icon="icons/layers.png"
@@ -241,7 +248,6 @@
                   mnemonic="c"
                   style="push">
             </command>
-            ?>
             <command
                   commandId="edu.umn.cs.crisys.safety.analysis.commands.genMCSCommand"
                   icon="icons/layers.png"

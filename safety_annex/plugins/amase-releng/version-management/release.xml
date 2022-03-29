@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<release>
+	<feature name="edu.umn.cs.crisys.safety.feature" version="1.2.0">
+		<plugin name="edu.umn.cs.crisys.safety" version="2.0.0"/>
+		<plugin name="edu.umn.cs.crisys.safety.analysis" version="1.2.0"/>
+		<plugin name="edu.umn.cs.crisys.safety.ide" version="1.1.1"/>
+		<plugin name="edu.umn.cs.crisys.safety.ui" version="2.0.0"/>
+	</feature>
+	<plugin name="com.collins.trustedsystems.jkindapi" version="4.5.1"/>
+	<plugin name="com.collins.trustedsystems.z3" version="4.8.12"/>
+	<plugin name="edu.umn.cs.crisys.safety" version="2.0.0"/>
+	<plugin name="edu.umn.cs.crisys.safety.analysis" version="1.2.0"/>
+	<plugin name="edu.umn.cs.crisys.safety.ide" version="1.1.1"/>
+	<plugin name="edu.umn.cs.crisys.safety.ui" version="2.0.0"/>
+</release>

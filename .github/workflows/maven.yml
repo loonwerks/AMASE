@@ -1,0 +1,38 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: safety_annex/plugins
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        cache: maven
+    - name: Install needed apt packages
+      run: sudo apt-get install -y pandoc python3 python3-pip
+    - name: Install needed python packages
+      run: |
+        pip3 install --user --upgrade pip
+        pip3 install --user testresources
+        pip3 install --user --upgrade setuptools setuptools_rust
+        pip3 install --user boto3 GitPython github3.py mako pandocfilters
+    - name: Build with Maven
+      run: mvn clean verify
