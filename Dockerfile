@@ -1,5 +1,4 @@
-ARG BASE_IMG=maven:3.6.0-jdk-8
-#ARG BASE_IMG=ubuntu:18.04
+ARG BASE_IMG=maven:3-eclipse-temurin-17-focal
 FROM $BASE_IMG
 
 ARG UID
