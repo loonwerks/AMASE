@@ -17,8 +17,10 @@ RUN groupadd -fg "${GID}" "${GROUP}" \
 VOLUME /home/${UNAME}
 
 RUN apt-get -q update \
-  && apt-get -y -q install curl sudo vim wget \
+  && apt-get -y -q install curl libswt-gtk* sudo vim wget \
   && apt-get clean autoclean \
   && apt-get autoremove --purge --yes \
   && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /host/safety_annex/plugins
 
