@@ -7,8 +7,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
 		<!-- Tycho settings -->
 		<tycho.version>2.7.3</tycho.version>
 		<tycho-extras.version>2.7.3</tycho-extras.version>
@@ -156,7 +154,6 @@
 							<version>${project.parent.version}</version>
 						</artifact>
 					</target>
-					<ignoreTychoRepositories>true</ignoreTychoRepositories>
  					<environments>
 						<environment>
 							<os>win32</os>
