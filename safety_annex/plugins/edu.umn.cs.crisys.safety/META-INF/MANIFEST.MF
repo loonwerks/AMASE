@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: edu.umn.cs.crisys.safety
 Bundle-Vendor: UMN Critical Systems Group
-Bundle-Version: 3.0.1.qualifier
+Bundle-Version: 3.1.0.qualifier
 Bundle-SymbolicName: edu.umn.cs.crisys.safety;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="[2.25.0,3.0.0)";visibility:=reexport,
@@ -28,19 +28,19 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.25.0,3.0.0)";visibility:=re
  com.collins.trustedsystems.jkindapi;bundle-version="[4.5.0,5.0.0)"
 Import-Package: org.apache.log4j;version="[1.2.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: edu.umn.cs.crisys.safety,
- edu.umn.cs.crisys.safety.generator,
- edu.umn.cs.crisys.safety.linking,
- edu.umn.cs.crisys.safety.parser.antlr,
- edu.umn.cs.crisys.safety.parser.antlr.internal,
- edu.umn.cs.crisys.safety.parser.antlr.lexer,
- edu.umn.cs.crisys.safety.safety,
- edu.umn.cs.crisys.safety.safety.impl,
- edu.umn.cs.crisys.safety.safety.util,
- edu.umn.cs.crisys.safety.scoping,
- edu.umn.cs.crisys.safety.serializer,
- edu.umn.cs.crisys.safety.services,
- edu.umn.cs.crisys.safety.util,
- edu.umn.cs.crisys.safety.validation,
- edu.umn.cs.crisys.safety.formatting2
+Export-Package: edu.umn.cs.crisys.safety;version=3.1.0,
+ edu.umn.cs.crisys.safety.generator;version=3.1.0,
+ edu.umn.cs.crisys.safety.linking;version=3.1.0,
+ edu.umn.cs.crisys.safety.parser.antlr;version=3.1.0,
+ edu.umn.cs.crisys.safety.parser.antlr.internal;version=3.1.0,
+ edu.umn.cs.crisys.safety.parser.antlr.lexer;version=3.1.0,
+ edu.umn.cs.crisys.safety.safety;version=3.1.0,
+ edu.umn.cs.crisys.safety.safety.impl;version=3.1.0,
+ edu.umn.cs.crisys.safety.safety.util;version=3.1.0,
+ edu.umn.cs.crisys.safety.scoping;version=3.1.0,
+ edu.umn.cs.crisys.safety.serializer;version=3.1.0,
+ edu.umn.cs.crisys.safety.services;version=3.1.0,
+ edu.umn.cs.crisys.safety.util;version=3.1.0,
+ edu.umn.cs.crisys.safety.validation;version=3.1.0,
+ edu.umn.cs.crisys.safety.formatting2;version=3.1.0
 Automatic-Module-Name: edu.umn.cs.crisys.safety
