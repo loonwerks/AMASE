@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: edu.umn.cs.crisys.safety.ui.tests
 Bundle-Vendor: My Company
-Bundle-Version: 1.1.3.qualifier
+Bundle-Version: 1.1.3
 Bundle-SymbolicName: edu.umn.cs.crisys.safety.ui.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: edu.umn.cs.crisys.safety.ui,
