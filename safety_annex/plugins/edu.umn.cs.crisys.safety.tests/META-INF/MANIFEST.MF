@@ -28,7 +28,7 @@ Require-Bundle: edu.umn.cs.crisys.safety,
  org.eclipse.emf.mwe.utils;bundle-version="[1.5.0,2.0.0)",
  org.apache.log4j,
  org.junit;bundle-version="4.13.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: edu.umn.cs.crisys.safety.tests
 Export-Package: edu.umn.cs.crisys.safety.tests,
  edu.umn.cs.crisys.safety.tests.testsupport

@@ -24,7 +24,7 @@ Import-Package: org.apache.log4j;version="[1.2.0,2.0.0)",
  org.osate.aadl2,
  org.osate.aadl2.modelsupport.errorreporting,
  org.osate.annexsupport
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: edu.umn.cs.crisys.safety.ui.quickfix,
  edu.umn.cs.crisys.safety.ui.contentassist,
  edu.umn.cs.crisys.safety.ui.internal,

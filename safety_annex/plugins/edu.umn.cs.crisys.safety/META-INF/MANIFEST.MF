@@ -31,7 +31,7 @@ Import-Package: com.rockwellcollins.atc.agree.analysis,
  jkind.lustre.builders,
  org.apache.log4j;version="[1.2.0,2.0.0)",
  org.osate.annexsupport
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: edu.umn.cs.crisys.safety,
  edu.umn.cs.crisys.safety.generator,
  edu.umn.cs.crisys.safety.linking,
