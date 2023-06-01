@@ -24,7 +24,6 @@
 		<module>edu.umn.cs.crisys.safety.analysis</module>
 		<module>edu.umn.cs.crisys.safety.feature</module>
 		<module>edu.umn.cs.crisys.safety.tests</module>
-		<module>edu.umn.cs.crisys.safety.ide</module>
 		<module>edu.umn.cs.crisys.safety.ui</module>
 		<module>edu.umn.cs.crisys.safety.ui.tests</module>
 		<module>edu.umn.cs.crisys.safety.repository</module>
